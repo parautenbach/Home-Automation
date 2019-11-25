@@ -1,0 +1,38 @@
+ambient_sensor:
+  name: Environment
+  control: hidden
+  entities:
+    - sensor.ambient_temperature
+    - sensor.ambient_humidity
+    - sensor.ambient_pressure
+
+security:
+  name: Security
+  control: hidden
+  entities:
+    - camera.security_camera
+    - switch.motion_led
+    - automation.motion_snapshots
+
+devices:
+  name: Devices
+  control: hidden
+  entities:
+    - device_tracker.ceres
+    - sensor.ceres_battery_level
+    - sensor.ceres_battery_state
+
+server:
+  name: Server
+  control: hidden
+  entities:
+    - sensor.disk_use_percent
+    - sensor.memory_use_percent
+    - sensor.processor_use
+    - sensor.load_1m
+    - sensor.load_5m
+    - sensor.load_15m
+    - sensor.server_cpu_temp
+    - sensor.network_throughput_in_wlan0
+    - sensor.network_throughput_out_wlan0
+    - sensor.last_boot

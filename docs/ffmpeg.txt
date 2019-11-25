@@ -1,0 +1,40 @@
+ffmpeg -i rtsp://localhost:8554/unicast -f image2 -frames:v 1 test.jpg
+
+https://stackoverflow.com/questions/25360470/ffmpeg-capture-current-frame-and-overwrite-the-image-output-file
+
+ffmpeg -i rtsp://localhost:8554/unicast -f image2 -frames:v 1 -strftime 1 "test_%Y-%m-%d_%H-%M-%S.jpg"
+
+v4l2rtspserver /dev/video0,default
+
+https://www.ffmpeg.org/ffmpeg-formats.html#Options-3
+
+ffmpeg -i rtsp://localhost:8554/unicast -f image2 -frames:v 1 -strftime 1 "test_%Y-%m-%d_%H-%M-%S.jpg"
+
+
+ffmpeg -i rtsp://localhost:8554/unicast -vf fps=1 -f image2 -frames:v 5 -strftime 1 "test_%Y-%m-%d_%H-%M-%S.jpg"
+
+multicast?
+
+https://hmbd.wordpress.com/2016/08/01/raspberry-pi-video-and-audio-recording-and-streaming-guide/
+
+https://kevinsaye.wordpress.com/2018/10/17/making-a-rtsp-server-out-of-a-raspberry-pi-in-15-minutes-or-less/
+
+v4l2rtspserver /dev/video0,plughw:1,0
+
+
+--enable-shared
+
+pi@securitypi:~ $ ffmpeg --help
+ffmpeg version git-2019-10-23-ac0f5f4 Copyright (c) 2000-2019 the FFmpeg developers
+  built with gcc 8 (Raspbian 8.3.0-6+rpi1)
+  configuration: --arch=armel --target-os=linux --enable-omx-rpi --enable-nonfree --enable-gpl --enable-libfdk-aac --enable-mmal --enable-libx264 --enable-decoder=h264 --enable-network --enable-protocol=tcp --enable-demuxer=rtsp
+  libavutil      56. 35.101 / 56. 35.101
+  libavcodec     58. 59.102 / 58. 59.102
+  libavformat    58. 33.100 / 58. 33.100
+  libavdevice    58.  9.100 / 58.  9.100
+  libavfilter     7. 64.100 /  7. 64.100
+  libswscale      5.  6.100 /  5.  6.100
+  libswresample   3.  6.100 /  3.  6.100
+  libpostproc    55.  6.100 / 55.  6.100
+
+https://trac.ffmpeg.org/wiki/CompilationGuide/RaspberryPi

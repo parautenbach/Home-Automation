@@ -1,0 +1,49 @@
+{
+  "bridge": {
+    "name": "Homebridge",
+    "username": "CC:22:3D:E3:CE:31",
+    "port": 51826,
+    "pin": "031-45-155"
+  },
+  
+  "description": "Main config.",
+  "ports": {
+    "start": 52100,
+    "end": 52150,
+    "comment": "This section is used to control the range of ports that separate accessory (like camera or television) should be bind to."
+  },
+
+  "accessories": [
+    {
+      "accessory": "BME280",
+      "name": "Conditions",
+      "name_temperature": "Temperature",
+      "name_humidity": "Humidity",
+      "options": {
+        "i2cBusNo": 1,
+        "i2cAddress": "0x76"
+      }
+    },
+    {
+      "accessory": "GPIODevice",
+      "type": "MotionSensor",
+      "name": "Motion Sensor",
+      "pin": 4,
+      "inverted": true,
+      "occupancy": {
+        "name": "Occupancy Detector",
+	"timeout": 5
+      }
+    },
+    {
+      "accessory": "GPIODevice",
+      "type": "Lightbulb",
+      "name": "LED",
+      "pin": 5
+    }
+  ],
+
+  "platforms": [
+  ]
+}
+

@@ -11,60 +11,9 @@ tts:
   - platform: google_translate
 
 group: !include groups.yaml
-#automation: !include automations.yaml
+automation: !include automations.yaml
 script: !include scripts.yaml
-
-#discovery:
-#  ignore:
-#    - homekit
-
-sensor:
-  - platform: bme280
-    name: Ambient
-    i2c_address: 0x76
-    operation_mode: 2  # forced mode
-    time_standby: 5
-    oversampling_temperature: 1
-    oversampling_pressure: 1
-    oversampling_humidity: 1
-    delta_temperature: -0.5
-    monitored_conditions:
-      - temperature
-      - humidity
-      - pressure
-    scan_interval: 40
-  - platform: template
-    sensors:
-      battery_phone:
-        friendly_name: Ceres Battery
-        unit_of_measurement: '%'
-        value_template: >-
-            {%- if state_attr('device_tracker.ceres', 'battery') %}
-                {{ state_attr('device_tracker.ceres', 'battery')|round }}
-            {% else %}
-                {{ states('sensor.ceres_battery_level') }}
-            {%- endif %}
-        device_class: battery
-  - platform: systemmonitor
-    resources:
-      - type: disk_use_percent
-        arg: /
-      - type: memory_use_percent
-      - type: processor_use
-      - type: load_1m
-      - type: load_5m
-      - type: load_15m
-      - type: throughput_network_in
-        arg: wlan0
-      - type: throughput_network_out
-        arg: wlan0
-      - type: last_boot
-  - platform: command_line
-    name: server_cpu_temp
-    command: "cat /sys/class/thermal/thermal_zone0/temp"
-    unit_of_measurement: "°C"
-    value_template: '{{ value | multiply(0.001) | round(2)  }}'
-    scan_interval: 60
+sensor: !include sensors.yaml
 
 homeassistant:
   name: Home
@@ -88,40 +37,10 @@ homeassistant:
       friendly_name: "Motion Sensor"
     switch.motion_led:
       friendly_name: "Motion LED"
-    device_tracker.5c_96_9d_6f_84_e4:
-      hidden: true
-    device_tracker.00_90_a9_3f_c8_55:
-      hidden: true
-    device_tracker.88_ce_fa_98_e5_d5:
-      hidden: true
-    device_tracker.c8_3a_35_c2_0a_75:
-      hidden: true
-    device_tracker.50_32_37_81_6b_83:
-      hidden: true
-    device_tracker.fc_b6_d8_84_6e_67:
-      hidden: true
-    device_tracker.a8_66_7f_1f_a6_36:
-      hidden: true
-    device_tracker.dc_4f_22_fa_02_75:
-      hidden: true
-    device_tracker.c8_f7_42_40_01_f8:
-      hidden: true
-    device_tracker.00_00_00_00_00_00:
-      hidden: true
-    device_tracker.b8_27_eb_45_4f_ff:
-      hidden: true
-    device_tracker.e4_e0_a6_9e_cf_32:
-      hidden: true
-    device_tracker.20_78_f0_8a_e4_9f:
-      hidden: true
-    sensor.server_cpu_temp:
-      friendly_name: "CPU Temperature"
-    sensor.ceres_battery_level:
-      hidden: true
-    sensor.ceres_battery_state:
-      hidden: true
-    sensor.battery_phone:
-      hidden: true
+
+#discovery:
+#  ignore:
+#    - homekit
 
 #homekit:
 #  auto_start: true
@@ -137,85 +56,12 @@ camera:
     name: security_camera
     input: -rtsp_transport tcp -i rtsp://localhost:8554/unicast
 
-#automation:
-#  alias: "Test 1"
-#  action:
-#    service: camera.record
-#    data: 
-#      entity_id: camera.security_camera
-#      filename: /tmp/test.mp4 #'/tmp/{{ entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
-
 notify:
   - name: family
     platform: group
     services:
       - service: ios_ceres
   
-automation:
-  - alias: "Motion Snapshots"
-    id: motion_snapshots
-    initial_state: false
-    trigger:
-      platform: state
-      entity_id: binary_sensor.motion_sensor
-      to: "on"
-    action:
-      - service: camera.snapshot
-        data: 
-          entity_id: camera.security_camera
-          filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
-      - service: notify.family
-        data: 
-          message: "Motion detected!"
-  - alias: "Motion Indicator On"
-    initial_state: true
-    hide_entity: true
-    trigger:
-      platform: state
-      entity_id: binary_sensor.motion_sensor
-      to: "on"
-    action:
-      - service: switch.turn_on
-        entity_id: switch.motion_led
-  - alias: "Motion Indicator Off"
-    initial_state: true
-    hide_entity: true
-    trigger:
-      platform: state
-      entity_id: binary_sensor.motion_sensor
-      to: "off"
-    action:
-      - service: switch.turn_off
-        entity_id: switch.motion_led
-#  - alias: "Living Room Lamp"
-#    initial_state: true
-#    hide_entity: true
-#    trigger:
-#      - platform: sun
-#        event: sunset
-#        offset: "-01:00:00"
-#      - platform: state
-#        entity_id: group.anyone
-#        to: "home"
-#    condition:
-#      - condition: state
-#        entity_id: group.anyone
-#        state: "home"
-#      - condition: time
-#        after: "16:00:00"
-#        before: "23:00:00"
-#    action:
-#      service: homeassistant.turn_on
-#      entity_id: xxx
-#  - alias: "Away Mode"
-#    trigger:
-#      platform: state
-#      entity_id: group.all_devices
-#      to: 'not_home'
-#    action:
-#      service: light.turn_off
-#      entity_id: group.all_lights
-
 binary_sensor:
   - platform: rpi_gpio
     ports:
@@ -225,6 +71,18 @@ switch:
   - platform: rpi_gpio
     ports: 
       24: motion_led
+  - platform: broadlink
+    #friendly_name: "Broadlink RM Mini 3"
+    #type: rm_mini
+    host: 192.168.0.50
+    mac: "C8:F7:42:40:01:F8"
+    #timeout: 15
+    #retry: 5
+    #switches:
+    #  samsung_tv:
+    #    friendly_name: "TV"
+    #    command_on: ""
+    #    command_off: ""
 
 device_tracker:
   - platform: nmap_tracker
@@ -234,11 +92,3 @@ device_tracker:
     new_device_defaults:
       track_new_devices: true
       hide_if_away: false
-
-#person:
-
-#person:
-#  - id: 1ffad28c25bc4ccb9e8d4199ff73dc98
-#    user_id: 75cfafa25f36464abc9116845e53f2ca
-#    device_trackers:
-#      - device_tracker.ceres

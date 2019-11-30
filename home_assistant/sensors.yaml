@@ -1,0 +1,47 @@
+  - platform: bme280
+    name: Ambient
+    i2c_address: 0x76
+    operation_mode: 2  # forced mode
+    time_standby: 5
+    oversampling_temperature: 1
+    oversampling_pressure: 1
+    oversampling_humidity: 1
+    delta_temperature: -0.5
+    monitored_conditions:
+      - temperature
+      - humidity
+      - pressure
+    scan_interval: 40
+  - platform: template
+    sensors:
+      battery_phone:
+        friendly_name: Ceres Battery
+        unit_of_measurement: '%'
+        value_template: >-
+            {%- if state_attr('device_tracker.ceres', 'battery') %}
+                {{ state_attr('device_tracker.ceres', 'battery')|round }}
+            {% else %}
+                {{ states('sensor.ceres_battery_level') }}
+            {%- endif %}
+        device_class: battery
+  - platform: systemmonitor
+    resources:
+      - type: disk_use_percent
+        arg: /
+      - type: memory_use_percent
+      - type: processor_use
+      - type: load_1m
+      - type: load_5m
+      - type: load_15m
+      - type: throughput_network_in
+        arg: wlan0
+      - type: throughput_network_out
+        arg: wlan0
+      - type: last_boot
+  - platform: command_line
+    name: server_cpu_temp
+    command: "cat /sys/class/thermal/thermal_zone0/temp"
+    unit_of_measurement: "°C"
+    value_template: '{{ value | multiply(0.001) | round(2)  }}'
+    scan_interval: 60
+

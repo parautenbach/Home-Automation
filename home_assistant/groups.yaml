@@ -1,3 +1,18 @@
+default_view:
+  view: true
+  entities:
+    - binary_sensor.motion_sensor
+    - binary_sensor.updater
+    - sun.sun
+    - device_tracker.ceres
+    - person.pieter_rautenbach
+    - group.ambient_sensor
+    - group.living_room
+    - group.multimedia
+    - group.security
+    - group.devices
+    - group.server
+
 ambient_sensor:
   name: Environment
   control: hidden
@@ -5,6 +20,17 @@ ambient_sensor:
     - sensor.ambient_temperature
     - sensor.ambient_humidity
     - sensor.ambient_pressure
+
+living_room:
+  name: Living Room
+  entities:
+    - switch.living_room_lamp
+
+multimedia:
+  name: Multimedia
+  control: hidden
+  entities:
+    - switch.samsung_tv
 
 security:
   name: Security

@@ -1,1 +1,71 @@
-[]
+  - alias: "Motion Snapshots"
+    id: motion_snapshots
+    initial_state: false
+    trigger:
+      platform: state
+      entity_id: binary_sensor.motion_sensor
+      to: "on"
+    action:
+      - service: camera.snapshot
+        data:
+          entity_id: camera.security_camera
+          filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+      - service: notify.family
+        data:
+          message: "Motion detected!"
+  - alias: "Motion Indicator On"
+    initial_state: true
+    hide_entity: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.motion_sensor
+      to: "on"
+    action:
+      - service: switch.turn_on
+        entity_id: switch.motion_led
+  - alias: "Motion Indicator Off"
+    initial_state: true
+    hide_entity: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.motion_sensor
+      to: "off"
+    action:
+      - service: switch.turn_off
+        entity_id: switch.motion_led
+#  - alias: "Living Room Lamp"
+#    initial_state: true
+#    hide_entity: true
+#    trigger:
+#      - platform: sun
+#        event: sunset
+#        offset: "-01:00:00"
+#      - platform: state
+#        entity_id: group.anyone
+#        to: "home"
+#    condition:
+#      - condition: state
+#        entity_id: group.anyone
+#        state: "home"
+#      - condition: time
+#        after: "16:00:00"
+#        before: "23:00:00"
+#    action:
+#      service: homeassistant.turn_on
+#      entity_id: xxx
+#  - alias: "Away Mode"
+#    trigger:
+#      platform: state
+#      entity_id: group.all_devices
+#      to: 'not_home'
+#    action:
+#      service: light.turn_off
+#      entity_id: group.all_lights
+
+#  alias: "Test 1"
+#  action:
+#    service: camera.record
+#    data:
+#      entity_id: camera.security_camera
+#      filename: /tmp/test.mp4 #'/tmp/{{ entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+

@@ -42,12 +42,13 @@ homeassistant:
 #  ignore:
 #    - homekit
 
-#homekit:
-#  auto_start: true
-#  port: 51827
-#  name: Home Assistant Bridge
+homekit:
+  name: Home Assistant
+  filter:
+    include_entities:
+      - input_boolean.pieter_present
 
-ios:
+#ios:
 
 stream:
 
@@ -60,12 +61,32 @@ notify:
   - name: family
     platform: group
     services:
-      - service: ios_ceres
+      - service: mobile_app_ceres
   
+input_boolean:
+  pieter_present:
+    name: Pieter Presence
+    icon: mdi:account
+
 binary_sensor:
   - platform: rpi_gpio
     ports:
       23: motion_sensor 
+  - platform: template
+    sensors:
+      anybody_home:
+        friendly_name: "Anybody Home"
+        value_template: >-
+          {{ is_state("person.pieter_rautenbach", "home") }}
+        #device_class: presence
+        #value_template: >-
+        #  {% set ns = namespace(found=false) %}
+        #  {% for state in states.person %}
+        #    {% if "state.state" == "home" %}
+        #      {% set ns.found = true %}
+        #    {% endif %}
+        #  {% endfor %}
+        #  {{ns.found}}
 
 switch:
   - platform: rpi_gpio

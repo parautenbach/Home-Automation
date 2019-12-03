@@ -71,11 +71,11 @@ dc_4f_22_fa_02_75:
   picture:
   track: true
 
-ceres:
+ceres_nmap:
   hide_if_away: false
   icon:
   mac: 80:B0:3D:C1:6D:90
-  name: Ceres
+  name: Ceres (nmap)
   picture:
   track: true
 
@@ -84,5 +84,13 @@ fc_b6_d8_84_6e_67:
   icon:
   mac: FC:B6:D8:84:6E:67
   name: fc b6 d8 84 6e 67
+  picture:
+  track: true
+
+e4_e0_a6_9e_cf_32:
+  hide_if_away: false
+  icon:
+  mac: E4:E0:A6:9E:CF:32
+  name: e4 e0 a6 9e cf 32
   picture:
   track: true

@@ -4,8 +4,10 @@ default_view:
     - binary_sensor.motion_sensor
     - binary_sensor.updater
     - sun.sun
-    - device_tracker.ceres
+    - device_tracker.ceres_2
     - person.pieter_rautenbach
+    - binary_sensor.anybody_home
+    # add sensor for input_boolean.pieter_presence
     - group.ambient_sensor
     - group.living_room
     - group.multimedia
@@ -44,9 +46,9 @@ devices:
   name: Devices
   control: hidden
   entities:
-    - device_tracker.ceres
-    - sensor.ceres_battery_level
-    - sensor.ceres_battery_state
+    - device_tracker.ceres_2
+    - sensor.ceres_2_battery_level
+    - sensor.ceres_2_battery_state
 
 server:
   name: Server

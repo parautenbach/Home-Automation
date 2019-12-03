@@ -12,18 +12,18 @@
       - humidity
       - pressure
     scan_interval: 40
-  - platform: template
-    sensors:
-      battery_phone:
-        friendly_name: Ceres Battery
-        unit_of_measurement: '%'
-        value_template: >-
-            {%- if state_attr('device_tracker.ceres', 'battery') %}
-                {{ state_attr('device_tracker.ceres', 'battery')|round }}
-            {% else %}
-                {{ states('sensor.ceres_battery_level') }}
-            {%- endif %}
-        device_class: battery
+#  - platform: template
+#    sensors:
+#      battery_phone:
+#        friendly_name: Ceres Battery
+#        unit_of_measurement: '%'
+#        value_template: >-
+#            {%- if state_attr('device_tracker.ceres_2', 'battery') %}
+#                {{ state_attr('device_tracker.ceres_2', 'battery')|round }}
+#            {% else %}
+#                {{ states('sensor.ceres_battery_level') }}
+#            {%- endif %}
+#        device_class: battery
   - platform: systemmonitor
     resources:
       - type: disk_use_percent

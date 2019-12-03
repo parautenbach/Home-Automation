@@ -33,34 +33,35 @@
     action:
       - service: switch.turn_off
         entity_id: switch.motion_led
-#  - alias: "Living Room Lamp"
-#    initial_state: true
-#    hide_entity: true
-#    trigger:
-#      - platform: sun
-#        event: sunset
-#        offset: "-01:00:00"
-#      - platform: state
-#        entity_id: group.anyone
-#        to: "home"
-#    condition:
-#      - condition: state
-#        entity_id: group.anyone
-#        state: "home"
-#      - condition: time
-#        after: "16:00:00"
-#        before: "23:00:00"
-#    action:
-#      service: homeassistant.turn_on
-#      entity_id: xxx
-#  - alias: "Away Mode"
-#    trigger:
-#      platform: state
-#      entity_id: group.all_devices
-#      to: 'not_home'
-#    action:
-#      service: light.turn_off
-#      entity_id: group.all_lights
+  - alias: "Living Room Lamp Auto On"
+    initial_state: true
+    hide_entity: true
+    trigger:
+      - platform: sun
+        event: sunset
+        offset: "-01:00:00"
+      - platform: state
+        entity_id: person.pieter_rautenbach #group.anyone
+        to: "home"
+    condition:
+      - condition: state
+        entity_id: person.pieter_rautenbach #group.anyone
+        state: "home"
+      - condition: time
+        after: "16:00:00"
+        before: "23:00:00"
+    action:
+      - service: switch.turn_on #homeassistant.turn_on > for group
+        entity_id: switch.living_room_lamp
+  - alias: "Away Mode"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: person.pieter_rautenbach #group.all_devices
+      to: 'not_home'
+    action:
+      service: switch.turn_off #light.turn_off
+      entity_id: switch.living_room_lamp #group.all_lights
 
 #  alias: "Test 1"
 #  action:

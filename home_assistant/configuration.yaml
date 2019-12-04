@@ -47,6 +47,7 @@ homekit:
   filter:
     include_entities:
       - input_boolean.pieter_present
+      - input_boolean.rouve_present
 
 #ios:
 
@@ -67,6 +68,10 @@ input_boolean:
   pieter_present:
     name: Pieter Presence
     icon: mdi:account
+    #initial: ???
+  rouve_present:
+    name: Rouvé Presence
+    icon: mdi:account
 
 binary_sensor:
   - platform: rpi_gpio
@@ -74,11 +79,21 @@ binary_sensor:
       23: motion_sensor 
   - platform: template
     sensors:
+      pieter_present:
+        friendly_name: "Pieter Present"
+        value_template: >- 
+          {{ is_state("input_boolean.pieter_present", "on") }}
+      rouve_present:
+        friendly_name: "Rouvé Present"
+        value_template: >-
+          {{ is_state("input_boolean.rouve_present", "on") }}
       anybody_home:
         friendly_name: "Anybody Home"
-        value_template: >-
-          {{ is_state("person.pieter_rautenbach", "home") }}
-        #device_class: presence
+        value_template: >- 
+          {{ is_state("binary_sensor.pieter_present", "on") or is_state("binary_sensor.rouve_present", "on") }} 
+        #value_template: >-
+        #  {{ is_state("person.pieter_rautenbach", "home") }}
+        #device_class: presence # (On/Off)
         #value_template: >-
         #  {% set ns = namespace(found=false) %}
         #  {% for state in states.person %}

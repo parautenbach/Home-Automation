@@ -41,12 +41,16 @@
         event: sunset
         offset: "-01:00:00"
       - platform: state
-        entity_id: person.pieter_rautenbach #group.anyone
-        to: "home"
+        entity_id: binary_sensor.anybody_home
+        to: "on"
+        #entity_id: person.pieter_rautenbach #group.anyone
+        #to: "home"
     condition:
       - condition: state
-        entity_id: person.pieter_rautenbach #group.anyone
-        state: "home"
+        entity_id: binary_sensor.anybody_home
+        state: "on"
+        #entity_id: person.pieter_rautenbach #group.anyone
+        #state: "home"
       - condition: time
         after: "16:00:00"
         before: "23:00:00"
@@ -57,8 +61,10 @@
     initial_state: true
     trigger:
       platform: state
-      entity_id: person.pieter_rautenbach #group.all_devices
-      to: 'not_home'
+      entity_id: binary_sensor.anybody_home
+      to: "off"
+      #entity_id: person.pieter_rautenbach #group.all_devices
+      #to: 'not_home'
     action:
       service: switch.turn_off #light.turn_off
       entity_id: switch.living_room_lamp #group.all_lights

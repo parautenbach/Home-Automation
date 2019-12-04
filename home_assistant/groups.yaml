@@ -4,15 +4,19 @@ default_view:
     - binary_sensor.motion_sensor
     - binary_sensor.updater
     - sun.sun
-    - device_tracker.ceres_2
+      #- device_tracker.ceres_2
+      #- device_tracker.rouve
     - person.pieter_rautenbach
+    - person.rouve_rautenbach
     - binary_sensor.anybody_home
-    # add sensor for input_boolean.pieter_presence
+    - binary_sensor.pieter_present
+    - binary_sensor.rouve_present
     - group.ambient_sensor
     - group.living_room
     - group.multimedia
     - group.security
-    - group.devices
+    - group.device_ceres
+    - group.device_rouve
     - group.server
 
 ambient_sensor:
@@ -42,13 +46,21 @@ security:
     - switch.motion_led
     - automation.motion_snapshots
 
-devices:
-  name: Devices
+device_ceres:
+  name: Ceres
   control: hidden
   entities:
     - device_tracker.ceres_2
     - sensor.ceres_2_battery_level
     - sensor.ceres_2_battery_state
+
+device_rouve:
+  name: Rouvé
+  control: hidden
+  entities:
+    - device_tracker.rouve
+    - sensor.rouve_battery_level
+    - sensor.rouve_battery_state
 
 server:
   name: Server

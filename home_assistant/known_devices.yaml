@@ -7,11 +7,11 @@ b8_27_eb_45_4f_ff:
   picture:
   track: true
 
-5c_96_9d_6f_84_e4:
+apple_airport:
   hide_if_away: false
   icon:
   mac: 5C:96:9D:6F:84:E4
-  name: 5c 96 9d 6f 84 e4
+  name: Apple Airport
   picture:
   track: true
 
@@ -31,11 +31,11 @@ c8_3a_35_c2_0a_75:
   picture:
   track: true
 
-88_ce_fa_98_e5_d5:
+adsl_router:
   hide_if_away: false
   icon:
   mac: 88:CE:FA:98:E5:D5
-  name: 88 ce fa 98 e5 d5
+  name: ADSL Router
   picture:
   track: true
 
@@ -47,19 +47,19 @@ broadlink_rm_mini_3:
   picture:
   track: true
 
-50_32_37_81_6b_83:
+apple_tv:
   hide_if_away: false
   icon:
   mac: 50:32:37:81:6B:83
-  name: 50 32 37 81 6b 83
+  name: Apple TV
   picture:
   track: true
 
-a8_66_7f_1f_a6_36:
+pieter_macbook:
   hide_if_away: false
   icon:
   mac: A8:66:7F:1F:A6:36
-  name: a8 66 7f 1f a6 36
+  name: Pieter MacBook
   picture:
   track: true
 
@@ -87,10 +87,18 @@ rouve_nmap:
   picture:
   track: true
 
-e4_e0_a6_9e_cf_32:
+chronos_nmap:
   hide_if_away: false
   icon:
   mac: E4:E0:A6:9E:CF:32
-  name: e4 e0 a6 9e cf 32
+  name: Chronos
+  picture:
+  track: true
+
+20_78_f0_8a_e4_9f:
+  hide_if_away: false
+  icon:
+  mac: 20:78:F0:8A:E4:9F
+  name: 20 78 f0 8a e4 9f
   picture:
   track: true

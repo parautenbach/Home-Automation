@@ -65,9 +65,27 @@
       to: "off"
       #entity_id: person.pieter_rautenbach #group.all_devices
       #to: 'not_home'
+    condition:
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "off"
     action:
-      service: switch.turn_off #light.turn_off
-      entity_id: switch.living_room_lamp #group.all_lights
+      - service: switch.turn_off #light.turn_off
+        entity_id: switch.living_room_lamp #group.all_lights
+      - service: automation.turn_on
+        entity_id: automation.motion_snapshots
+  - alias: "Home Mode"
+    trigger:
+      platform: state
+      entity_id: binary_sensor.anybody_home
+      to: "on"
+    condition:
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "on"
+    action:
+      - service: automation.turn_off
+        entity_id: automation.motion_snapshots
 
 #  alias: "Test 1"
 #  action:

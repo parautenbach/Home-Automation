@@ -21,22 +21,7 @@ homeassistant:
   whitelist_external_dirs:
     - /tmp
 
-  customize:
-    sensor.ambient_temperature:
-      icon: mdi:thermometer
-      friendly_name: "Temperature"
-    sensor.ambient_humidity:
-      icon: mdi:weather-rainy
-      friendly_name: "Humidity"
-    sensor.ambient_pressure:
-      icon: mdi:gauge
-      friendly_name: "Pressure"
-    camera.security_camera:
-      friendly_name: "Security Camera"
-    binary_sensor.motion_sensor:
-      friendly_name: "Motion Sensor"
-    switch.motion_led:
-      friendly_name: "Motion LED"
+  customize: !include customize.yaml
 
 #discovery:
 #  ignore:

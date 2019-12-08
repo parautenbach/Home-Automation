@@ -12,6 +12,18 @@ camera.security_camera:
 binary_sensor.motion_sensor:
   friendly_name: Motion Sensor
 switch.motion_led:
+  icon: mdi:motion-sensor
   friendly_name: Motion LED
 sensor.server_cpu_temp:
   friendly_name: CPU Temperature
+script.hk_3380_vol_up:
+  friendly_name: Hi-Fi Volume Up
+  icon: mdi:volume-plus
+script.hk_3380_vol_down:
+  friendly_name: Hi-Fi Volume Down
+  icon: mdi:volume-minus
+switch.living_room_lamp:
+  icon: mdi:lightbulb
+automation.motion_snapshots:
+  icon: mdi:camera
+

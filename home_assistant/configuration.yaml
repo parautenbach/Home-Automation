@@ -20,7 +20,6 @@ homeassistant:
   unit_system: metric
   whitelist_external_dirs:
     - /tmp
-
   customize: !include customize.yaml
 
 #discovery:

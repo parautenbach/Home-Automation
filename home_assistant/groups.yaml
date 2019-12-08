@@ -14,6 +14,8 @@ default_view:
     - group.ambient_sensor
     - group.living_room
     - group.multimedia
+    - group.hk_3380
+    - group.dstv
     - group.security
     - group.device_ceres
     - group.device_rouve

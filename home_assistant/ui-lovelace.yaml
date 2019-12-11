@@ -1,0 +1,125 @@
+title: Home
+views:
+  - path: default_view
+    title: default_view
+    badges:
+      - entity: binary_sensor.motion_sensor
+      - entity: binary_sensor.updater
+      - entity: binary_sensor.anybody_home
+      - entity: binary_sensor.pieter_present
+      - entity: binary_sensor.rouve_present
+      - entity: person.pieter_rautenbach
+      - entity: person.rouve_rautenbach
+      - entity: sun.sun
+    cards:
+      - type: entities
+        entities:
+          - sensor.ambient_temperature
+          - sensor.ambient_humidity
+          - sensor.ambient_pressure
+        title: Environment
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - script.hk_3380_vol_up
+          - script.hk_3380_vol_down
+        title: Multimedia
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - switch.living_room_lamp
+        title: Living Room
+        show_header_toggle: true
+      - type: entities
+        entities:
+          - sensor.disk_use_percent
+          - sensor.memory_use_percent
+          - sensor.processor_use
+          - sensor.load_1m
+          - sensor.load_5m
+          - sensor.load_15m
+          - sensor.server_cpu_temp
+          - sensor.network_throughput_in_wlan0
+          - sensor.network_throughput_out_wlan0
+          - sensor.last_boot
+        title: Server
+        show_header_toggle: false
+      - type: history-graph
+        entities:
+          - entity: binary_sensor.anybody_home
+        hours_to_show: 24
+        refresh_interval: 0
+  - title: Security
+    path: security
+    badges: []
+    cards:
+      - type: picture-entity
+        entity: camera.security_camera
+      - type: entities
+        entities:
+          - switch.motion_led
+          - automation.motion_snapshots
+        title: Security
+        show_header_toggle: false
+  - title: Remotes
+    path: remotes
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - script.hk_3380_power_off
+          - script.hk_3380_power_on
+          - script.hk_3380_vid1
+          - script.hk_3380_vid2
+          - script.hk_3380_dimmer
+          - script.hk_3380_vol_up
+          - script.hk_3380_vol_down
+          - script.hk_3380_power_mute
+        title: Sound
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - script.dstv_power
+          - script.dstv_ch_plus
+          - script.dstv_ch_minus
+          - script.dstv_vol_up
+          - script.dstv_vol_down
+          - script.dstv_mute
+          - script.dstv_alt
+          - script.dstv_info
+          - script.dstv_back
+          - script.dstv_ok
+          - script.dstv_left
+          - script.dstv_right
+          - script.dstv_up
+          - script.dstv_down
+          - script.dstv_0
+          - script.dstv_1
+          - script.dstv_2
+          - script.dstv_3
+          - script.dstv_4
+          - script.dstv_5
+          - script.dstv_6
+          - script.dstv_7
+          - script.dstv_8
+          - script.dstv_9
+        title: Satellite
+        show_header_toggle: false
+  - title: Devices
+    path: devices
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - device_tracker.ceres_2
+          - sensor.ceres_2_battery_level
+          - sensor.ceres_2_battery_state
+        title: Ceres
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - device_tracker.rouve
+          - sensor.rouve_battery_level
+          - sensor.rouve_battery_state
+        title: Rouvé
+        show_header_toggle: false

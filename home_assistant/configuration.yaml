@@ -22,7 +22,7 @@ homeassistant:
     - /tmp
   customize: !include customize.yaml
 
-#discovery:
+discovery:
 #  ignore:
 #    - homekit
 
@@ -94,7 +94,7 @@ switch:
   - platform: broadlink
     #friendly_name: "Broadlink RM Mini 3"
     #type: rm_mini
-    host: 192.168.0.50
+    host: 192.168.0.52
     mac: "C8:F7:42:40:01:F8"
     #timeout: 15
     #retry: 5

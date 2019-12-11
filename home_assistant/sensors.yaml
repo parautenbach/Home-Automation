@@ -1,6 +1,6 @@
   - platform: bme280
     name: Ambient
-    i2c_address: 0x76
+    i2c_address: 0x77
     operation_mode: 2  # forced mode
     time_standby: 5
     oversampling_temperature: 1

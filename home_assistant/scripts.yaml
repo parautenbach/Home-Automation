@@ -2,7 +2,7 @@ hk_3380_power_off:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgBQAAABIZQTEhMSExITEhMSExITExI3ExITExMSExITNxM2EzcTEhM3EzcTNxM3EzYTExITEzcTExITEhMTExMSEzcTNxITEgAFpgABJ0kTAA0FAAAAAAAAAAA="
 
@@ -10,7 +10,7 @@ hk_3380_power_on:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgBQAAABIZMTExITExITEhMSExITEhM3ExITEhMTEhMSNxM3EzcTEhMSExITExITExITEhM3EzcTNxM3EzcTNxM3EzcTEhMSEwAFqgABJEcUAA0FAAAAAAAAAAA="
 
@@ -18,7 +18,7 @@ hk_3380_vid1:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgBQAAABIpMTExITExITEhMSExITEhM3ExITEhMTEhMSNxM3EzcTEhMSEzcTEhM3ExITEhM3EzgTNxITEzcSFBI3EzcTEhMSEwAFpQABKEkTAA0FAAAAAAAAAAA="
 
@@ -26,7 +26,7 @@ hk_3380_vid2:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgBQAAABIpQTEhMSExITEhMSExMSExM2ExMSExMSExITNxM3EjcTExI3EzcTEhM3ExITEhM3EzgTEhMSEzcTExM3EzYTExITEwAFpgABJkoSAA0FAAAAAAAAAAA="
 
@@ -34,7 +34,7 @@ hk_3380_dimmer:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgBQAAABI5MTEhMSExITEhMSExMSExM3EhMTEhMSExITNxM3EzYTExITExITNxM3EjcTEhM3EzgTNxM3EhMSFBMSEzcSExMSEwAFpQABJ0kUAA0FAAAAAAAAAAA="
 
@@ -42,7 +42,7 @@ hk_3380_vol_up:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA="
 
@@ -50,7 +50,7 @@ hk_3380_vol_down:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA="
 
@@ -58,7 +58,7 @@ hk_3380_power_mute:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgBQAAABI5ITEhMTEhMTEhMSExITEhM3ExITEhMSExMSNxM3EzcTEhM3ExITEhMSExMSExI3EzgTEhM3EzcTOBI3EzcTEhMTEgAFpgABJ0oSAA0FAAAAAAAAAAA="
 
@@ -66,7 +66,7 @@ dstv_power:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB4AAQcCDwHKghbBysHKggqBzwHAAGSCB0HTgcZByoHGQdcBxgIGAcACkIKGgg7CigHXAcqCCoIKgc8BwABkggcCCoHPAooBxkHWwcZBxgIAAXqBx0HPAcrB1sIKgcqCCoHPAgAAZEIHQcmB0EHKgcZB1wHGAgYBwANBQ=="
 
@@ -74,7 +74,7 @@ dstv_ch_plus:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB6AAYcBz0IKQlaBysHKgkpCTgJAAGTCBwHUwcYBysJOgc0CBcKFgkACkMEHgU+CycJWgsmBysKJwk7CQABkAcdBy8KOgcqCTsKMAYaCRYKAAGQBx0JOgcrClkJBwkYBiwJKAc9CQABkAkbBysGQggpCTsJMQcZBxgKAA0FAAAAAAAAAAAAAAAAAAA="
 
@@ -82,7 +82,7 @@ dstv_ch_minus:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB4AAQbCDwIKQdcByoIKgcrBzwHAAGSCBwHWAcYCCoIOwcvBxkHGAkACkEKGAk8BysJWgkoBysIKQk7CQABkAcdCTEIPAcqCDwILgcZBxgKAAGPCRsJOwkoB1wJKQcqBykLOgcAAZIJGwguCEAIKgg7CiwIGAcZCAANBQ=="
 
@@ -90,7 +90,7 @@ dstv_vol_up:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB4AAQcCDwHKgdcBysHKgcrBzwHAAGSCBwIGAkXByoIPAcmBxgHGQcACkIHHQc8CCoHXAcqCSkHKgc9BwABkgcdBzwIPAcqCDwHJgcYCBgHAAGSBxsLOggqB1wHKgcrByoIPAcAAZIIHAc4B0EHKgg8ByYHGQcYBwANBQ=="
 
@@ -98,7 +98,7 @@ dstv_vol_down:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB8AAQcCDwHKwdcByoHKgcrBzwHAAGSChsHWwgYByoIPAcqCBgHGQcACkMIGwg8ByoIWwkpByoIKgc8BwABkggdBzgHPAcrBzwHKwcYBxkHAAGSBx0HPQcqB1wHKggqBysHPAcAAZIIHAgzBz8LKAg8ByoIGAcZBwAJ/ggADQUAAAAAAAAAAAAAAAA="
 
@@ -106,7 +106,7 @@ dstv_mute:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB4AAQcCDwHKghbBysHKgcqCTsIAAGSBx0HWwgYBysHGAhOBxgIGAcACkUFHAg8ByoIWwgqByoIKgc8CAABkQgbCzYHPAcpCRgHTwgXBxkHAAGSBx0HPAgqB1wHKggqByoIPAcAAZIHHQc0B0AIKgcZB04HGQcYBwANBQ=="
 
@@ -114,7 +114,7 @@ dstv_alt:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB4AAQbCDwHKghbCCoIKQgqBzwIAAGSBx0HLwcYCCoHLwcdBxkHGAgACkIJGwc9ByoHXAkpByoHKwc7CQABkQkbCVEIPAcqCC4IHAgYBxkHAAGSCBoLOggqB1wHKggqByoJOwcAAZIJGwhOB0EIKQcvBx0IGAcYCAANBQ=="
 
@@ -122,7 +122,7 @@ dstv_info:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB4AAUbCDsKKAdbCSkHKwkoCjoHAAGSCxkJKQgXBysJOgdcCRYJFwcACkMREwk7ByoHXAkpByoJKQc8CQABkAgbCU4HPAcrCDsIWwcZBxgIAAGRCBwIPAgqB1sJKQkoCSkHPggAAZAHHQhJCT4IKAs6CV4EGAkXBwANBQ=="
 
@@ -130,7 +130,7 @@ dstv_back:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB4AAcZCToHKwlZCigKJwgpBz4NAAGMCRsIKQ4WCCoJOwZYCBcJFwcACkINFwo6CSgKWQkpCSgJKQc8BwABkgcdB1MJOwkoCjoFWQcZChUHAAO+Bx0GPgkoB1wLJwkoBysKOQoAAY8LGghNB0EJKAc9CVUJFwkWBwANBQ=="
 
@@ -138,7 +138,7 @@ dstv_ok:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB4AAQdBzwIKgdcCCkJKQcqCDwHAAGSBx0HPAgYBysHPAlIBxkHGAgACkQPEgg8ByoIWwgqCCkIKgc8BwABkggcCRcHPAgqCDsISQgXCxYHAAGSCBwHPAgqB1sIKgkpByoHPAgAAZIHHQdcB0EJKAc8CEkJFwgYBwANBQ=="
 
@@ -146,7 +146,7 @@ dstv_left:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB4AAQcBz0GLAZdBysFKwcrBj4FAAGVBR0HNwkXCCsIPAZPBhkHGAcACkUFHQc9ByoHXAcqBysHKgg8BwABlAUdB1wHPAkpBz0HTgcYCBgHAAGSCBwIPAcqCFsIKgcqBysHPAkAAZEHHQdXB0EHKwc8B04IGAcZBwANBQ=="
 
@@ -154,7 +154,7 @@ dstv_right:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB4AAUbBzwIKghbByoIKgcqCDwHAAGSBx0HSgcZByoJOwc8BxkHGAgACkIHHAg8ByoIWwkpBygLKQc8CAABkgcbCiUHPAgqBzwIPAcYCBgGAAGTCRsHPAgqB1wHKggqByoIPAcAAZMGHQciB0EHKgc9BzwHGQcYCAANBQ=="
 
@@ -162,7 +162,7 @@ dstv_up:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB4AAQcBz0HKghbCCoHKgcrBzwHAAGSCRsIMwcYCCoHPQdSCBgHGQcACkIIHAc9ByoHXAcqCCoHKwc8BwABkggcCFcHPAgqBzwIUgcZBxgIAAO+CBwHPAcrB1sIKgcrByoHPAgAAZIHHQdTB0EHKgc9B1IIGAcZBwANBQ=="
 
@@ -170,7 +170,7 @@ dstv_down:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB4AAUdBzwHKwdbCCoHKgkpBzwIAAGSBx0HTgcZByoIPAc4BxgIGAcACkIHHQc8CCoHXAcqCSkHKgg8BwABkgcdBysHPAcrBzwINwcZBxgIAAgVCB0HOwopB1sIKgcqCCoHPAgAAZIHHQcmB0EHKgc9BzgHGAcZBwANBQ=="
 
@@ -178,7 +178,7 @@ dstv_0:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB2AAUaBz0NJAdcCicIKgYsBj0JAAGRBxwISQgYCSgHGQcZCRYGGgUACkUJGgo6ByoKWQkpCSgHKwk6CQABkAceCSMJOwcrCRYHGQkWBxoFAAXrBx0KOgkoB1wLJwkpByoJOgkAAZAIHQciBUIJKQkXBxgJNgcADQUAAA=="
 
@@ -186,7 +186,7 @@ dstv_1:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB0AAQbCTwGKgpZByoIKgkpCToGAAGTBx0JRAoVCSkJFwkbCBcGGgUACkUJGgg8CCkGXQooCSgKKAk6BgABlAkbByEHPQkoCzkJFwUaBwADwwQeBzsFLAZdBysJKAsnBT4GAAGUCBwJHAVCCSgHGQoaBhoFAA0FAAAAAA=="
 
@@ -194,7 +194,7 @@ dstv_2:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB2AAgWCjsHKwlZCycJKAkpCjkLAAGPChoHQQcZCSgHGQVDBxkFAApECRsJOwkoB1wIKQkpBSwHPQkAAZAJGwkbBz0HKgcZCR8IGQYZBwABkgkbBzwJKQhbCyYHKwcqBj4KAAGPCQcGDQkXB0EJKQcZCCAJFwkADQUAAA=="
 
@@ -202,7 +202,7 @@ dstv_3:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB4AAQbCTwHKgdcByoJKQcqCDwHAAGSCBwJOwcYCCoHGAgmBxgIGAcACkMHHAg8ByoKVwkrCSgIKgc8BwABkgkbCBgHPAgqBxkHJgcYBxkHAAGSCBwHPAgqB1wHKggqByoIPAcAAZIHHQhbB0EHKggYCCUHGQcYCAANBQ=="
 
@@ -210,7 +210,7 @@ dstv_4:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB4AAQdBzwIKgdcByoIKgcqCDwHAAGSCBwINwkXByoIGAcrBxgJFwcACkMJGgg8ByoIWwsnByoIKgc8CQABkAgdCVoJOgkpCRYGKgsWChYHAAGSCRsIPAkoB1wLJwkoCigHPAkAAZALGgdXCT8JKAsVBiwJFgYaCgANBQ=="
 
@@ -218,7 +218,7 @@ dstv_5:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB2AAQdCDsJKQpYCigJKQonBz0JAAGRBh0MLgoWCCoHGAcvChYHGAkACkMGGwc9ByoHXAkpCSgKKAU+BwABkgkcCVUHPAooDRIJLQgYBhoJAAGQCxkKOQ8jB1wJKAkpCicHPQcAAZIJGwdTCz0JKQkWBy8KFgkADQUAAA=="
 
@@ -226,7 +226,7 @@ dstv_6:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB4AAQcCTsHKglaCSkMJQcrBzwLAAGPCBwHLwcZBisJFgoxChYJFgcACkQGHQc7CygHXAcqBysHKgo6BwABkgkbClAJOggqBxkIMgcZBxgIAAGSCBwHPAcrB1wHKgcrCicJOwcAAZIIHAdODDwHKwcYCDMJFwoVBwANBQ=="
 
@@ -234,7 +234,7 @@ dstv_7:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB4AAQcBzwIKgdcCCkIKgcrCjkHAAGSCRsIKgcYCCoHGQc4CBcHGQcACkQNFQo6CCkJWgcrCCkKKAc8CQABkQccCU0JOgooCBcIOAoVBxkHAAGSBx0JOwonCVoIKQooBysHPAYAAZMJGwdKCj4HKwcYBzgHGQcZBQANBQ=="
 
@@ -242,7 +242,7 @@ dstv_8:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB2AAYaBzwJKQdcCCkIKgcqCDwJAAGQCRsHJgkXByoIGAk7BxgHGQcACkIJGwg7BysJWgkpByoHKwc8CQABkAoaCkcHPQkoChYHPAkXBxkHAAGSCBwIOwooB1wKJwkpCCkHPQkAAZAJGwpDCT8JKAkXBzwJFwgADQUAAA=="
 
@@ -250,7 +250,7 @@ dstv_9:
   sequence:
     - service: broadlink.send
       data:
-        host: 192.168.0.50
+        host: !secret broadlink_host
         packet:
           - "JgB4AAgXBz0IKQhbCCkJKQgpCDwHAAGSBx0JIAkWBysHGQk+CBgHGQgACkEJGwo6CCkHXAcrByoKKAg7BwABkgsZB0YHPAkpChUGQggYBxkHAAGSChoHPAsnB1wJKAooCSgHPQcAAZMGHQk/CT8JKQkWB0EHGQcYBwANBQ=="
 

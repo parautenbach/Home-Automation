@@ -22,6 +22,9 @@ homeassistant:
     - /tmp
   customize: !include customize.yaml
 
+lovelace:
+  mode: yaml
+
 discovery:
 #  ignore:
 #    - homekit

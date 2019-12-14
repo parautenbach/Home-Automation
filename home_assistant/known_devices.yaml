@@ -1,9 +1,9 @@
 
-b8_27_eb_45_4f_ff:
+rasplex:
   hide_if_away: false
   icon:
   mac: B8:27:EB:45:4F:FF
-  name: b8 27 eb 45 4f ff
+  name: Plex
   picture:
   track: true
 
@@ -23,11 +23,11 @@ apple_airport:
   picture:
   track: true
 
-c8_3a_35_c2_0a_75:
+rasplay:
   hide_if_away: false
   icon:
   mac: C8:3A:35:C2:0A:75
-  name: c8 3a 35 c2 0a 75
+  name: Rasplay
   picture:
   track: true
 
@@ -103,7 +103,7 @@ chronos_nmap:
   picture:
   track: true
 
-'00_00_00_00_00_00':
+00_00_00_00_00_00:
   hide_if_away: false
   icon:
   mac: 00:00:00:00:00:00

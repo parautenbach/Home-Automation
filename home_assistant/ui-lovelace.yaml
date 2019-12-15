@@ -19,6 +19,8 @@ views:
           - sensor.ambient_pressure
         title: Environment
         show_header_toggle: false
+      - type: weather-forecast
+        entity: weather.2_bach
       - type: entities
         entities:
           - script.hk_3380_vol_up
@@ -123,3 +125,9 @@ views:
           - sensor.rouve_battery_state
         title: Rouvé
         show_header_toggle: false
+      - type: entities
+        entities:
+          - group.all_devices
+        title: All Devices
+        show_header_toggle: false
+

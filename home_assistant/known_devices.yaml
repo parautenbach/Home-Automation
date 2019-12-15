@@ -3,7 +3,7 @@ rasplex:
   hide_if_away: false
   icon:
   mac: B8:27:EB:45:4F:FF
-  name: Plex
+  name: Plex Server
   picture:
   track: true
 
@@ -15,11 +15,11 @@ apple_airport:
   picture:
   track: true
 
-00_90_a9_3f_c8_55:
+thor:
   hide_if_away: false
   icon:
   mac: 00:90:A9:3F:C8:55
-  name: 00 90 a9 3f c8 55
+  name: Thor (Cloud Drive)
   picture:
   track: true
 
@@ -63,11 +63,11 @@ pieter_macbook:
   picture:
   track: true
 
-dc_4f_22_fa_02_75:
+living_room_lamp:
   hide_if_away: false
   icon:
   mac: DC:4F:22:FA:02:75
-  name: dc 4f 22 fa 02 75
+  name: Living Room Lamp
   picture:
   track: true
 
@@ -100,13 +100,5 @@ chronos_nmap:
   icon:
   mac: 20:78:F0:8A:E4:9F
   name: 20 78 f0 8a e4 9f
-  picture:
-  track: true
-
-00_00_00_00_00_00:
-  hide_if_away: false
-  icon:
-  mac: 00:00:00:00:00:00
-  name: 00 00 00 00 00 00
   picture:
   track: true

@@ -21,11 +21,6 @@ views:
         show_header_toggle: false
       - type: weather-forecast
         entity: weather.2_bach
-      - type: entities
-        entities:
-          - script.hk_3380_vol_up
-          - script.hk_3380_vol_down
-        title: Multimedia
         show_header_toggle: false
       - type: entities
         entities:
@@ -47,10 +42,90 @@ views:
         title: Server
         show_header_toggle: false
       - type: history-graph
+        title: Anybody Home
         entities:
           - entity: binary_sensor.anybody_home
         hours_to_show: 24
         refresh_interval: 0
+      - type: vertical-stack
+        title: Multimedia
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: entity-button
+                entity: script.hk_3380_power_on
+                show_name: true
+                name: "On"
+                #color: 'rgb(255,0,0)'
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_power_on
+              - type: entity-button
+                entity: script.hk_3380_power_off
+                show_name: true
+                name: "Off"
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_power_off
+          - type: horizontal-stack
+            cards:
+              - type: entity-button
+                entity: script.hk_3380_vid1
+                show_name: true
+                name: "Source 1"
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vid1
+              - type: entity-button
+                entity: script.hk_3380_vid2
+                show_name: true
+                name: "Source 2"
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vid2
+              - type: entity-button
+                entity: script.hk_3380_dimmer
+                show_name: true
+                name: "Dimmer"
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_dimmer
+          - type: horizontal-stack
+            cards:
+              - type: entity-button
+                entity: script.hk_3380_vol_down
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_down
+              - type: entity-button
+                entity: script.hk_3380_vol_up
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_up
+              - type: entity-button
+                entity: script.hk_3380_mute
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_mute
   - title: Security
     path: security
     badges: []
@@ -76,7 +151,7 @@ views:
           - script.hk_3380_dimmer
           - script.hk_3380_vol_up
           - script.hk_3380_vol_down
-          - script.hk_3380_power_mute
+          - script.hk_3380_mute
         title: Sound
         show_header_toggle: false
       - type: entities

@@ -54,7 +54,7 @@ hk_3380_vol_down:
         packet:
           - "JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA="
 
-hk_3380_power_mute:
+hk_3380_mute:
   sequence:
     - service: broadlink.send
       data:

@@ -22,6 +22,24 @@ script.hk_3380_vol_up:
 script.hk_3380_vol_down:
   friendly_name: Hi-Fi Volume Down
   icon: mdi:volume-minus
+script.hk_3380_mute:
+  friendly_name: Hi-Fi Mute
+  icon: mdi:volume-off
+script.hk_3380_power_on:
+  friendly_name: Hi-Fi Power On
+  icon: mdi:power
+script.hk_3380_power_off:
+  friendly_name: Hi-Fi Power Off
+  icon: mdi:power
+script.hk_3380_vid1:
+  friendly_name: Hi-Fi Video 1
+  icon: mdi:video
+script.hk_3380_vid2:
+  friendly_name: Hi-Fi Video 2
+  icon: mdi:video
+script.hk_3380_dimmer:
+  friendly_name: Hi-Fi Dimmer
+  icon: mdi:power-sleep
 switch.living_room_lamp:
   icon: mdi:lightbulb
 automation.motion_snapshots:

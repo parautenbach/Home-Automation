@@ -97,7 +97,7 @@ switch:
   - platform: broadlink
     #friendly_name: "Broadlink RM Mini 3"
     #type: rm_mini
-    host: 192.168.0.106
+    host: !secret broadlink_host
     mac: "C8:F7:42:40:01:F8"
     #timeout: 15
     #retry: 5
@@ -110,8 +110,9 @@ switch:
 device_tracker:
   - platform: nmap_tracker
     hosts: 192.168.0.0/24
-    interval_seconds: 60
-    consider_home: 180
+    interval_seconds: 60 # scan interval
+    #home_interval: 5 # minutes (scan interval)
+    consider_home: 600 # seconds (timeout)
     new_device_defaults:
       track_new_devices: true
       hide_if_away: false

@@ -95,10 +95,19 @@ chronos_nmap:
   picture:
   track: true
 
-20_78_f0_8a_e4_9f:
+rouve_laptop:
+  hide_if_away: false
+  icon:
+  mac: 28:39:26:4F:C8:EF
+  name: Rouvé Laptop
+  picture:
+  track: true
+
+rouve_watch_nmap:
   hide_if_away: false
   icon:
   mac: 20:78:F0:8A:E4:9F
-  name: 20 78 f0 8a e4 9f
+  name: Rouvé Watch
   picture:
   track: true
+

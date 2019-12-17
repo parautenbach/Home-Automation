@@ -26,4 +26,5 @@ switch.living_room_lamp:
   icon: mdi:lightbulb
 automation.motion_snapshots:
   icon: mdi:camera
-
+group.all_devices:
+  friendly_name: All Devices

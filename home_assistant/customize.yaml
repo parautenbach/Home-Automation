@@ -60,7 +60,7 @@ script.dstv_vol_up:
   icon: mdi:volume-plus
 script.dstv_vol_down:
   friendly_name: DStv Volume Down
-  icon: mdi:volume_minus
+  icon: mdi:volume-minus
 script.dstv_mute:
   friendly_name: DStv Mute
   icon: mdi:volume-off

@@ -46,3 +46,75 @@ automation.motion_snapshots:
   icon: mdi:camera
 group.all_devices:
   friendly_name: All Devices
+script.dstv_power:
+  friendly_name: DStv Power
+  icon: mdi:power
+script.dstv_ch_plus:
+  friendly_name: DStv Channel Up
+  icon: mdi:menu-up
+script.dstv_ch_minus:
+  friendly_name: "DStv Channel Down"
+  icon: mdi:menu-down
+script.dstv_vol_up:
+  friendly_name: DStv Volume Up
+  icon: mdi:volume-plus
+script.dstv_vol_down:
+  friendly_name: DStv Volume Down
+  icon: mdi:volume_minus
+script.dstv_mute:
+  friendly_name: DStv Mute
+  icon: mdi:volume-off
+script.dstv_alt:
+  friendly_name: DStv Alt
+  icon: mdi:menu-swap
+script.dstv_info:
+  friendly_name: DStv Info
+  icon: mdi:information-variant
+script.dstv_back:
+  friendly_name: DStv Back
+  icon: mdi:undo-variant
+script.dstv_ok:
+  friendly_name: DStv OK
+  icon: mdi:circle
+script.dstv_left:
+  friendly_name: DStv Left 
+  icon: mdi:arrow-left
+script.dstv_right:
+  friendly_name: DStv Right
+  icon: mdi:arrow-right
+script.dstv_up:
+  friendly_name: DStv Up
+  icon: mdi:arrow-up
+script.dstv_down:
+  friendly_name: DStv Down
+  icon: mdi:arrow-down
+script.dstv_0:
+  friendly_name: DStv 0 
+  icon: mdi:numeric-0
+script.dstv_1:
+  friendly_name: DStv 1
+  icon: mdi:numeric-1
+script.dstv_2:
+  friendly_name: DStv 2
+  icon: mdi:numeric-2
+script.dstv_3:
+  friendly_name: DStv 3
+  icon: mdi:numeric-3
+script.dstv_4:
+  friendly_name: DStv 4 
+  icon: mdi:numeric-4
+script.dstv_5:
+  friendly_name: DStv 5 
+  icon: mdi:numeric-5
+script.dstv_6:
+  friendly_name: DStv 6 
+  icon: mdi:numeric-6
+script.dstv_7:
+  friendly_name: DStv 7 
+  icon: mdi:numeric-7
+script.dstv_8:
+  friendly_name: DStv 8 
+  icon: mdi:numeric-8
+script.dstv_9:
+  friendly_name: DStv 9 
+  icon: mdi:numeric-9

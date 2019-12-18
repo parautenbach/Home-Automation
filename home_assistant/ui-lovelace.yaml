@@ -1,7 +1,7 @@
 title: Home
 views:
-  - path: default_view
-    title: default_view
+  - path: main
+    title: Main
     badges:
       - entity: binary_sensor.motion_sensor
       - entity: binary_sensor.updater
@@ -27,28 +27,18 @@ views:
           - switch.living_room_lamp
         title: Living Room
         show_header_toggle: true
-      - type: entities
-        entities:
-          - sensor.disk_use_percent
-          - sensor.memory_use_percent
-          - sensor.processor_use
-          - sensor.load_1m
-          - sensor.load_5m
-          - sensor.load_15m
-          - sensor.server_cpu_temp
-          - sensor.network_throughput_in_wlan0
-          - sensor.network_throughput_out_wlan0
-          - sensor.last_boot
-        title: Server
-        show_header_toggle: false
       - type: history-graph
         title: Anybody Home
         entities:
           - entity: binary_sensor.anybody_home
         hours_to_show: 24
         refresh_interval: 0
+  - title: Entertainment
+    path: entertainment
+    badges: []
+    cards:
       - type: vertical-stack
-        title: Multimedia
+        title: Controls
         cards:
           - type: horizontal-stack
             cards:
@@ -126,22 +116,6 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.hk_3380_mute
-  - title: Security
-    path: security
-    badges: []
-    cards:
-      - type: picture-entity
-        entity: camera.security_camera
-      - type: entities
-        entities:
-          - switch.motion_led
-          - automation.motion_snapshots
-        title: Security
-        show_header_toggle: false
-  - title: Remotes
-    path: remotes
-    badges: []
-    cards:
       - type: entities
         entities:
           - script.hk_3380_power_off
@@ -182,6 +156,18 @@ views:
           - script.dstv_9
         title: Satellite
         show_header_toggle: false
+  - title: Security
+    path: security
+    badges: []
+    cards:
+      - type: picture-entity
+        entity: camera.security_camera
+      - type: entities
+        entities:
+          - switch.motion_led
+          - automation.motion_snapshots
+        title: Security
+        show_header_toggle: false
   - title: Devices
     path: devices
     badges: []
@@ -204,5 +190,19 @@ views:
         entities:
           - group.all_devices
         title: All Devices
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - sensor.disk_use_percent
+          - sensor.memory_use_percent
+          - sensor.processor_use
+          - sensor.load_1m
+          - sensor.load_5m
+          - sensor.load_15m
+          - sensor.server_cpu_temp
+          - sensor.network_throughput_in_wlan0
+          - sensor.network_throughput_out_wlan0
+          - sensor.last_boot
+        title: Server
         show_header_toggle: false
 

@@ -254,3 +254,98 @@ dstv_9:
         packet:
           - "JgB4AAgXBz0IKQhbCCkJKQgpCDwHAAGSBx0JIAkWBysHGQk+CBgHGQgACkEJGwo6CCkHXAcrByoKKAg7BwABkgsZB0YHPAkpChUGQggYBxkHAAGSChoHPAsnB1wJKAooCSgHPQcAAZMGHQk/CT8JKQkWB0EHGQcYBwANBQ=="
 
+dstv_menu:
+  sequence:
+    - service: broadlink.send
+      data:
+        host: !secret broadlink_host
+        packet:
+          - "JgB4AAUaCToKKAdcCSgJKQkoCjoHAAGSChoHKwoVCigHIgYwCRYJFwkACkEJGwk6CigJWgonCycJKAo6CgABjwkbCkwKOQkpByEHLwoWCRcHAAgWChsHPAkpClgKKAkpCSgJPAgAAZAJGwlICEALJgseBy8JFwcYBgANBQ=="
+
+apple_tv_menu:
+  sequence:
+    - service: broadlink.send
+      data:
+        host: !secret broadlink_host
+        packet:
+          - "JgBQAAABJpUTEhI3EzYUNhMSEjcUNhM3EjYTNxI3ExISExMTEhITNxI4EjcTERQSEhQSExETExMTNhMSEhMTEhIUERMSExITEgAFlQABJkoTAA0FAAAAAAAAAAA="
+
+apple_tv_home:
+  sequence:
+    - service: broadlink.send
+      data:
+        host: !secret broadlink_host
+        packet:
+          - "JgCoAAABJpURExM3EjcSNxITEzcSNxI3FDYTNhQ1FBEUEhIUEhISNxI3FDcTERMSExMRExQTERMSNxMTERMSExITExMTEhITEgAFlAABKEkTAAxOAAEnShIADE8AASdJFAAMTQABJ0oSAAxPAAEnShIADE8AASdJEwAMTwABJ0kTAAxOAAEnShIADE8AAShIFAAMTgABJ0kSAAxPAAEoSRMADE4AASZKEwANBQ=="
+
+apple_tv_ok:
+  sequence:
+    - service: broadlink.send
+      data:
+        host: !secret broadlink_host
+        packet:
+          - "JgCYAAABKJsRFRE5EDoROBMTEjgSORE5EDoRORI4EhQQFRAVEBUQOhIUEBURORE5ETkQFRE5EhQROBEVERUPFRAVERQRFRAUEQAFTQABJ5wRFBE5EjkQOhEUETkRORI5EToQORI4ERUQFBMTEBUROg86ERQSOBITEhQQFRAWDxUROREVEBURExEVEBUQFg8WDwAFTgABKEsRAA0F"
+
+apple_tv_up:
+  sequence:
+    - service: broadlink.send
+      data:
+        host: !secret broadlink_host
+        packet:
+          - "JgBQAAABJ5QTExE3EzcTNxITEjYUNhM2EzYTOBE3ExMRFBISExIUNxISEjcTEhM4ERMSExMTERMSNxURExISFBEUEhMRExMSEwAFlAABJ0oTAA0FAAAAAAAAAAA="
+
+apple_tv_down:
+  sequence:
+    - service: broadlink.send
+      data:
+        host: !secret broadlink_host
+        packet:
+          - "JgBQAAABJ5QUEhE3FDYSNxQREjgSNxI3EzcSNxQ1ExMUEBQSEhMSNxIUERMTNhM3ExMRExMSExITNxMTERQRExMTERQRExMTEgAFlAABJ0oTAA0FAAAAAAAAAAA="
+
+apple_tv_left:
+  sequence:
+    - service: broadlink.send
+      data:
+        host: !secret broadlink_host
+        packet:
+          - "JgBQAAABKJMSExM3EzYSNxQSEjYUNhI3FDYUNRI4ExISExMSExITNhM2FBITEhI3EhQRExMSFBITNhMSEhMTExMSEhMSEhMTEgAFlAABKEkTAA0FAAAAAAAAAAA="
+
+apple_tv_right:
+  sequence:
+    - service: broadlink.send
+      data:
+        host: !secret broadlink_host
+        packet:
+          - "JgBQAAABJ5MUEhI3EjcTNxIUEzUTNhQ2EjcTNhQ2ExMRFBMSEhITNxIUETcTNhMSExQRExUQFBESNxQSEhMSExMSERQTEhITEgAFlQABJ0kXAA0FAAAAAAAAAAA="
+
+apple_tv_play_pause:
+  sequence:
+    - service: broadlink.send
+      data:
+        host: !secret broadlink_host
+        packet:
+          - "JgCYAAABKZoSExE6EDoQOhIUEDoQOhA6EDoQOhQ2EhQSExAVEBUQOhE5EjgSOBE6ETkSFBE4EhMSORITEhMQFREUERUQFBIUEAAFTQABJ5wSExE6EjgQOhEUETkSOBI5EDoQOhI4EhMSExEVERUQORE5EhQQNhYSERUQFREVEBUROBITEhQPFRIUEBUQFg8VEAAFTgABJ0wQAA0F"
+
+samsung_tv_power:
+  sequence:
+    - service: broadlink.send
+      data:
+        host: !secret broadlink_host
+        packet:
+          - "JgCMAJCUEzYTNxI3ExISExMSExITEhM2EzcSOBMRExISExMSExISExM2ExITEhITExISExISEjgTEhI3FDYTNxM2FDYTNxIABgOUlBM3EjcTNxITEhITEhITEhMTNxM2EzcTEhMSEhMTERMSEhMSOBITEhITEhITEhMSExI3ExITNxI4EzYTNxM2EzcTAA0FAAAAAAAAAAAAAAAA"
+
+samsung_tv_hdmi:
+  sequence:
+    - service: broadlink.send
+      data:
+        host: !secret broadlink_host
+        packet:
+          - "JgCMAI+UEjgTNxM2EhMTEhITEhMSEhM3EzcTNhMSExISExMSEhMSNxM3EhMSNxMSEhMSExI4EhITEhI4EhMTNhM3EjgTERMABgKVkxM3EzcSNxMSEhMSExISExISOBI4EjcSExITExISExMREzcSOBITEjcSExITExITNhMSExISOBITEjcTNxM3ExETAA0FAAAAAAAAAAAAAAAA"
+
+samsung_tv_picture_mode:
+  sequence:
+    - service: broadlink.send
+      data:
+        host: !secret broadlink_host
+        packet:
+          - "JgCMAI+UEzcSOBM2EhMTEhMSEhMSEhM3EjgTNxISExITEhMSExITEhMRExITNxMSEjgSEhMSEjgTNhQ2ExITNxITEjcTNxIABgOVkxM3EzYTNxMSExISEhMSExISOBI3EzcTEhMSExITERMSEhMTEhMSEzYTEhI4ExISExM3EjcTNhMSEjgSExM2EzcSAA0FAAAAAAAAAAAAAAAA"

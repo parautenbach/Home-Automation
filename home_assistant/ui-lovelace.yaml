@@ -131,6 +131,7 @@ views:
       - type: entities
         entities:
           - script.dstv_power
+          - script.dstv_menu
           - script.dstv_ch_plus
           - script.dstv_ch_minus
           - script.dstv_vol_up
@@ -155,6 +156,25 @@ views:
           - script.dstv_8
           - script.dstv_9
         title: Satellite
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - script.apple_tv_menu
+          - script.apple_tv_home
+          - script.apple_tv_ok
+          - script.apple_tv_up
+          - script.apple_tv_down
+          - script.apple_tv_left
+          - script.apple_tv_right
+          - script.apple_tv_play_pause
+        title: Apple TV
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - script.samsung_tv_power
+          - script.samsung_tv_hdmi
+          - script.samsung_tv_picture_mode
+        title: Samsung TV
         show_header_toggle: false
   - title: Security
     path: security

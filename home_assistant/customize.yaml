@@ -78,16 +78,16 @@ script.dstv_ok:
   icon: mdi:circle
 script.dstv_left:
   friendly_name: DStv Left 
-  icon: mdi:arrow-left
+  icon: mdi:arrow-left-bold
 script.dstv_right:
   friendly_name: DStv Right
-  icon: mdi:arrow-right
+  icon: mdi:arrow-right-bold
 script.dstv_up:
   friendly_name: DStv Up
-  icon: mdi:arrow-up
+  icon: mdi:arrow-up-bold
 script.dstv_down:
   friendly_name: DStv Down
-  icon: mdi:arrow-down
+  icon: mdi:arrow-down-bold
 script.dstv_0:
   friendly_name: DStv 0 
   icon: mdi:numeric-0
@@ -118,3 +118,39 @@ script.dstv_8:
 script.dstv_9:
   friendly_name: DStv 9 
   icon: mdi:numeric-9
+script.dstv_menu:
+  friendly_name: DStv Menu
+  icon: mdi:menu
+script.apple_tv_menu:
+  friendly_name: Apple TV Menu
+  icon: mdi:menu
+script.apple_tv_home:
+  friendly_name: Apple TV Home
+  icon: mdi:monitor
+script.apple_tv_ok:
+  friendly_name: Apple TV OK
+  icon: mdi:circle
+script.apple_tv_up:
+  friendly_name: Apple TV Up
+  icon: mdi:arrow-up-bold
+script.apple_tv_down:
+  friendly_name: Apple TV Down
+  icon: mdi:arrow-down-bold
+script.apple_tv_left:
+  friendly_name: Apple TV Left
+  icon: mdi:arrow-left-bold
+script.apple_tv_right:
+  friendly_name: Apple TV Right
+  icon: mdi:arrow-right-bold
+script.apple_tv_play_pause:
+  friendly_name: Apple TV Play/Pause
+  icon: mdi:play-pause
+script.samsung_tv_power:
+  friendly_name: Samsung TV Power
+  icon: mdi:power
+script.samsung_tv_hdmi:
+  friendly_name: Samsung TV HDMI
+  icon: mdi:video-input-hdmi
+script.samsung_tv_picture_mode:
+  friendly_name: Samsung TV Picture Mode
+  icon: mdi:image

@@ -38,7 +38,36 @@ views:
     badges: []
     cards:
       - type: vertical-stack
-        title: Controls
+        title: TV
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: entity-button
+                entity: script.samsung_tv_power
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.samsung_tv_power
+              - type: entity-button
+                entity: script.samsung_tv_hdmi
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.samsung_tv_hdmi
+              - type: entity-button
+                entity: script.samsung_tv_picture_mode
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.samsung_tv_picture_mode
+      - type: vertical-stack
+        title: Audio
         cards:
           - type: horizontal-stack
             cards:
@@ -116,18 +145,103 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.hk_3380_mute
-      - type: entities
-        entities:
-          - script.hk_3380_power_off
-          - script.hk_3380_power_on
-          - script.hk_3380_vid1
-          - script.hk_3380_vid2
-          - script.hk_3380_dimmer
-          - script.hk_3380_vol_up
-          - script.hk_3380_vol_down
-          - script.hk_3380_mute
-        title: Sound
-        show_header_toggle: false
+
+      - type: vertical-stack
+        title: Apple TV
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: entity-button
+                entity: script.noop
+                show_name: false
+                tap_action:
+                  action: none
+              - type: entity-button
+                entity: script.apple_tv_up
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.apple_tv_up
+              - type: entity-button
+                entity: script.noop
+                show_name: false
+                tap_action:
+                  action: none
+          - type: horizontal-stack
+            cards:
+              - type: entity-button
+                entity: script.apple_tv_left
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.apple_tv_left
+              - type: entity-button
+                entity: script.apple_tv_ok
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.apple_tv_ok
+              - type: entity-button
+                entity: script.apple_tv_right
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.apple_tv_right
+          - type: horizontal-stack
+            cards:
+              - type: entity-button
+                entity: script.noop
+                show_name: false
+                tap_action:
+                  action: none
+              - type: entity-button
+                entity: script.apple_tv_down
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.apple_tv_down
+              - type: entity-button
+                entity: script.noop
+                show_name: false
+                tap_action:
+                  action: none
+          - type: horizontal-stack
+            cards:
+              - type: entity-button
+                entity: script.apple_tv_menu
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.apple_tv_menu
+              - type: entity-button
+                entity: script.apple_tv_play_pause
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.apple_tv_play_pause
+              - type: entity-button
+                entity: script.apple_tv_home
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.apple_tv_home
+
       - type: entities
         entities:
           - script.dstv_power
@@ -156,25 +270,6 @@ views:
           - script.dstv_8
           - script.dstv_9
         title: Satellite
-        show_header_toggle: false
-      - type: entities
-        entities:
-          - script.apple_tv_menu
-          - script.apple_tv_home
-          - script.apple_tv_ok
-          - script.apple_tv_up
-          - script.apple_tv_down
-          - script.apple_tv_left
-          - script.apple_tv_right
-          - script.apple_tv_play_pause
-        title: Apple TV
-        show_header_toggle: false
-      - type: entities
-        entities:
-          - script.samsung_tv_power
-          - script.samsung_tv_hdmi
-          - script.samsung_tv_picture_mode
-        title: Samsung TV
         show_header_toggle: false
   - title: Security
     path: security

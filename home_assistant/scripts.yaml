@@ -1,3 +1,7 @@
+noop:
+  sequence:
+    - service: shell_command.noop
+
 hk_3380_power_off:
   sequence:
     - service: broadlink.send

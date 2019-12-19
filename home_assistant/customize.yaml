@@ -33,10 +33,10 @@ script.hk_3380_power_off:
   icon: mdi:power
 script.hk_3380_vid1:
   friendly_name: Hi-Fi Video 1
-  icon: mdi:video
+  icon: mdi:volume-source
 script.hk_3380_vid2:
   friendly_name: Hi-Fi Video 2
-  icon: mdi:video
+  icon: mdi:volume-source
 script.hk_3380_dimmer:
   friendly_name: Hi-Fi Dimmer
   icon: mdi:power-sleep
@@ -154,3 +154,5 @@ script.samsung_tv_hdmi:
 script.samsung_tv_picture_mode:
   friendly_name: Samsung TV Picture Mode
   icon: mdi:image
+script.noop:
+  icon: mdi:blank

@@ -154,6 +154,7 @@ views:
               - type: entity-button
                 entity: script.noop
                 show_name: false
+                show_icon: false
                 tap_action:
                   action: none
               - type: entity-button
@@ -167,6 +168,7 @@ views:
               - type: entity-button
                 entity: script.noop
                 show_name: false
+                show_icon: false
                 tap_action:
                   action: none
           - type: horizontal-stack
@@ -200,6 +202,7 @@ views:
               - type: entity-button
                 entity: script.noop
                 show_name: false
+                show_icon: false
                 tap_action:
                   action: none
               - type: entity-button
@@ -213,6 +216,7 @@ views:
               - type: entity-button
                 entity: script.noop
                 show_name: false
+                show_icon: false
                 tap_action:
                   action: none
           - type: horizontal-stack

@@ -154,6 +154,24 @@ views:
         cards:
           - type: horizontal-stack
             cards:
+              - type: entity-button
+                entity: script.apple_tv_menu
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.apple_tv_menu
+              - type: entity-button
+                entity: script.apple_tv_home
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.apple_tv_home
+          - type: horizontal-stack
+            cards:
               - type: "custom:button-card"
                 color_type: blank-card
               - type: entity-button
@@ -215,7 +233,7 @@ views:
                   action: call-service
                   service: script.turn_on
                   service_data:
-                    entity_id: script.apple_tv_menu
+                    entity_id: script.apple_tv_skip_backward
               - type: entity-button
                 entity: script.apple_tv_play_pause
                 show_name: false
@@ -231,8 +249,7 @@ views:
                   action: call-service
                   service: script.turn_on
                   service_data:
-                    entity_id: script.apple_tv_home
-
+                    entity_id: script.apple_tv_skip_forward
       - type: entities
         entities:
           - script.dstv_power

@@ -75,7 +75,7 @@ script.dstv_back:
   icon: mdi:undo-variant
 script.dstv_ok:
   friendly_name: DStv OK
-  icon: mdi:circle
+  icon: mdi:circle-medium
 script.dstv_left:
   friendly_name: DStv Left 
   icon: mdi:arrow-left-bold
@@ -129,7 +129,7 @@ script.apple_tv_home:
   icon: mdi:monitor
 script.apple_tv_ok:
   friendly_name: Apple TV OK
-  icon: mdi:circle
+  icon: mdi:circle-medium
 script.apple_tv_up:
   friendly_name: Apple TV Up
   icon: mdi:arrow-up-bold

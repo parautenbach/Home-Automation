@@ -1,4 +1,7 @@
 title: Home
+resources:
+  - url: /local/button-card.js
+    type: module
 views:
   - path: main
     title: Main
@@ -151,12 +154,8 @@ views:
         cards:
           - type: horizontal-stack
             cards:
-              - type: entity-button
-                entity: script.noop
-                show_name: false
-                show_icon: false
-                tap_action:
-                  action: none
+              - type: "custom:button-card"
+                color_type: blank-card
               - type: entity-button
                 entity: script.apple_tv_up
                 show_name: false
@@ -165,12 +164,8 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.apple_tv_up
-              - type: entity-button
-                entity: script.noop
-                show_name: false
-                show_icon: false
-                tap_action:
-                  action: none
+              - type: "custom:button-card"
+                color_type: blank-card
           - type: horizontal-stack
             cards:
               - type: entity-button
@@ -199,12 +194,8 @@ views:
                     entity_id: script.apple_tv_right
           - type: horizontal-stack
             cards:
-              - type: entity-button
-                entity: script.noop
-                show_name: false
-                show_icon: false
-                tap_action:
-                  action: none
+              - type: "custom:button-card"
+                color_type: blank-card
               - type: entity-button
                 entity: script.apple_tv_down
                 show_name: false
@@ -213,12 +204,8 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.apple_tv_down
-              - type: entity-button
-                entity: script.noop
-                show_name: false
-                show_icon: false
-                tap_action:
-                  action: none
+              - type: "custom:button-card"
+                color_type: blank-card
           - type: horizontal-stack
             cards:
               - type: entity-button

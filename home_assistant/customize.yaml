@@ -145,6 +145,12 @@ script.apple_tv_right:
 script.apple_tv_play_pause:
   friendly_name: Apple TV Play/Pause
   icon: mdi:play-pause
+script.apple_tv_skip_backward:
+  friendly_name: Apple TV Skip Backward
+  icon: mdi:skip-backward
+script.apple_tv_skip_forward:
+  friendly_name: Apple TV Skip Forward
+  icon: mdi:skip-forward
 script.samsung_tv_power:
   friendly_name: Samsung TV Power
   icon: mdi:power

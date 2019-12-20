@@ -227,7 +227,7 @@ views:
           - type: horizontal-stack
             cards:
               - type: entity-button
-                entity: script.apple_tv_menu
+                entity: script.apple_tv_skip_backward
                 show_name: false
                 tap_action:
                   action: call-service
@@ -243,7 +243,7 @@ views:
                   service_data:
                     entity_id: script.apple_tv_play_pause
               - type: entity-button
-                entity: script.apple_tv_home
+                entity: script.apple_tv_skip_forward
                 show_name: false
                 tap_action:
                   action: call-service

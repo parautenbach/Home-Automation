@@ -108,6 +108,7 @@ views:
             cards:
               - type: custom:button-card
                 entity: script.hk_3380_power_on
+                aspect_ratio: 3/1
                 show_name: false
                 styles:
                   icon:
@@ -119,6 +120,7 @@ views:
                     entity_id: script.hk_3380_power_on
               - type: custom:button-card
                 entity: script.hk_3380_power_off
+                aspect_ratio: 3/1
                 show_name: false
                 tap_action:
                   action: call-service
@@ -210,6 +212,7 @@ views:
             cards:
               - type: entity-button
                 entity: script.apple_tv_menu
+                aspect_ratio: 3/1
                 show_name: false
                 tap_action:
                   action: call-service
@@ -218,6 +221,7 @@ views:
                     entity_id: script.apple_tv_menu
               - type: entity-button
                 entity: script.apple_tv_home
+                aspect_ratio: 3/1
                 show_name: false
                 tap_action:
                   action: call-service

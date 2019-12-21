@@ -28,23 +28,19 @@ views:
       - type: horizontal-stack
         title: Entertainment
         cards:
-          - type: entity-button
+          - type: custom:button-card
             entity: script.entertainment_apple_tv_on
             show_name: false
-            styles:
-              icon:
-                - color: rgb(255, 0, 0)
+            icon: mdi:apple
             tap_action:
               action: call-service
               service: script.turn_on
               service_data:
                 entity_id: script.entertainment_apple_tv_on
-          - type: entity-button
+          - type: custom:button-card
             entity: script.entertainment_satellite_on
             show_name: false
-            styles:
-              icon:
-                - color: rgb(255, 0, 0)
+            icon: mdi:set-top-box
             tap_action:
               action: call-service
               service: script.turn_on
@@ -52,6 +48,7 @@ views:
                 entity_id: script.entertainment_satellite_on
           - type: entity-button
             entity: script.entertainment_off
+            show_name: false
             tap_action:
               action: call-service
               service: script.turn_on

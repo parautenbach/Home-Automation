@@ -41,7 +41,7 @@ script.hk_3380_dimmer:
   friendly_name: Hi-Fi Dimmer
   icon: mdi:power-sleep
 switch.living_room_lamp:
-  icon: mdi:lightbulb
+  icon: mdi:floor-lamp
 automation.motion_snapshots:
   icon: mdi:camera
 group.all_devices:
@@ -162,3 +162,12 @@ script.samsung_tv_picture_mode:
   icon: mdi:image
 script.noop:
   icon: mdi:blank
+script.entertainment_apple_tv_on:
+  friendly_name: Apply TV System On
+  icon: mdi:power
+script.entertainment_satellite_on:
+  friendly_name: Satellite System On
+  icon: mdi:power
+script.entertainment_off:
+  friendly_name: System Off
+  icon: mdi:power

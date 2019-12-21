@@ -25,6 +25,38 @@ views:
       - type: weather-forecast
         entity: weather.2_bach
         show_header_toggle: false
+      - type: horizontal-stack
+        title: Entertainment
+        cards:
+          - type: entity-button
+            entity: script.entertainment_apple_tv_on
+            show_name: false
+            styles:
+              icon:
+                - color: rgb(255, 0, 0)
+            tap_action:
+              action: call-service
+              service: script.turn_on
+              service_data:
+                entity_id: script.entertainment_apple_tv_on
+          - type: entity-button
+            entity: script.entertainment_satellite_on
+            show_name: false
+            styles:
+              icon:
+                - color: rgb(255, 0, 0)
+            tap_action:
+              action: call-service
+              service: script.turn_on
+              service_data:
+                entity_id: script.entertainment_satellite_on
+          - type: entity-button
+            entity: script.entertainment_off
+            tap_action:
+              action: call-service
+              service: script.turn_on
+              service_data:
+                entity_id: script.entertainment_off
       - type: entities
         entities:
           - switch.living_room_lamp
@@ -45,8 +77,11 @@ views:
         cards:
           - type: horizontal-stack
             cards:
-              - type: entity-button
+              - type: custom:button-card
                 entity: script.samsung_tv_power
+                styles:
+                  icon:
+                    - color: rgb(255, 0, 0)
                 show_name: false
                 tap_action:
                   action: call-service
@@ -74,20 +109,20 @@ views:
         cards:
           - type: horizontal-stack
             cards:
-              - type: entity-button
+              - type: custom:button-card
                 entity: script.hk_3380_power_on
-                show_name: true
-                name: "On"
-                #color: 'rgb(255,0,0)'
+                show_name: false
+                styles:
+                  icon:
+                    - color: rgb(255, 0, 0)
                 tap_action:
                   action: call-service
                   service: script.turn_on
                   service_data:
                     entity_id: script.hk_3380_power_on
-              - type: entity-button
+              - type: custom:button-card
                 entity: script.hk_3380_power_off
-                show_name: true
-                name: "Off"
+                show_name: false
                 tap_action:
                   action: call-service
                   service: script.turn_on
@@ -171,7 +206,7 @@ views:
                     entity_id: script.apple_tv_home
           - type: horizontal-stack
             cards:
-              - type: "custom:button-card"
+              - type: custom:button-card
                 color_type: blank-card
               - type: entity-button
                 entity: script.apple_tv_up
@@ -181,7 +216,7 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.apple_tv_up
-              - type: "custom:button-card"
+              - type: custom:button-card
                 color_type: blank-card
           - type: horizontal-stack
             cards:
@@ -211,7 +246,7 @@ views:
                     entity_id: script.apple_tv_right
           - type: horizontal-stack
             cards:
-              - type: "custom:button-card"
+              - type: custom:button-card
                 color_type: blank-card
               - type: entity-button
                 entity: script.apple_tv_down
@@ -221,7 +256,7 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.apple_tv_down
-              - type: "custom:button-card"
+              - type: custom:button-card
                 color_type: blank-card
           - type: horizontal-stack
             cards:
@@ -254,8 +289,11 @@ views:
         cards:
           - type: horizontal-stack
             cards:
-              - type: entity-button
+              - type: custom:button-card
                 entity: script.dstv_power
+                styles:
+                  icon:
+                    - color: rgb(255, 0, 0)
                 show_name: false
                 tap_action:
                   action: call-service
@@ -462,7 +500,7 @@ views:
                     entity_id: script.dstv_9
           - type: horizontal-stack
             cards:
-              - type: "custom:button-card"
+              - type: custom:button-card
                 color_type: blank-card
               - type: entity-button
                 entity: script.dstv_0
@@ -472,7 +510,7 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.dstv_0
-              - type: "custom:button-card"
+              - type: custom:button-card
                 color_type: blank-card
   - title: Security
     path: security

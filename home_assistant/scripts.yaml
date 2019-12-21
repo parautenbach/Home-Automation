@@ -369,3 +369,38 @@ samsung_tv_picture_mode:
         host: !secret broadlink_host
         packet:
           - "JgCMAI+UEzcSOBM2EhMTEhMSEhMSEhM3EjgTNxISExITEhMSExITEhMRExITNxMSEjgSEhMSEjgTNhQ2ExITNxITEjcTNxIABgOVkxM3EzYTNxMSExISEhMSExISOBI3EzcTEhMSExITERMSEhMTEhMSEzYTEhI4ExISExM3EjcTNhMSEjgSExM2EzcSAA0FAAAAAAAAAAAAAAAA"
+
+entertainment_apple_tv_on:
+  sequence:
+    - service: script.turn_on
+      entity_id: script.samsung_tv_power
+    - delay:
+        seconds: 1
+    - service: script.turn_on
+      entity_id: script.hk_3380_power_on
+    - delay:
+        seconds:1 
+    - service: script.turn_on
+      entity_id: script.apple_tv_menu
+
+entertainment_satellite_on:
+  sequence:
+    - service: script.turn_on
+      entity_id: script.samsung_tv_power
+    - delay:
+        seconds: 1
+    - service: script.turn_on
+      entity_id: script.hk_3380_power_on
+    - delay:
+        seconds:1 
+    - service: script.turn_on
+      entity_id: script.dstv_power
+
+entertainment_off:
+  sequence:
+    - service: script.turn_on
+      entity_id: script.samsung_tv_power
+    - delay:
+        seconds: 1
+    - service: script.turn_on
+      entity_id: script.hk_3380_power_off

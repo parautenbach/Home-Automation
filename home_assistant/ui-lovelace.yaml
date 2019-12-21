@@ -127,28 +127,51 @@ views:
                     entity_id: script.hk_3380_power_off
           - type: horizontal-stack
             cards:
-              - type: entity-button
+              - type: custom:button-card
                 entity: script.hk_3380_vid1
-                show_name: true
-                name: "Source 1"
+                show_name: false
+                styles:
+                  grid:
+                    - position: relative
+                  custom_fields:
+                    source:
+                      - position: absolute
+                      - left: 80%
+                      - top: 60%
+                      - height: 20px
+                      - width: 20px
+                custom_fields:
+                  source: >
+                    [[[ return `<ha-icon icon="mdi:numeric-1" style="color: #44739e;"></ha-icon>` ]]]
                 tap_action:
                   action: call-service
                   service: script.turn_on
                   service_data:
                     entity_id: script.hk_3380_vid1
-              - type: entity-button
+              - type: custom:button-card
                 entity: script.hk_3380_vid2
-                show_name: true
-                name: "Source 2"
+                show_name: false
                 tap_action:
                   action: call-service
                   service: script.turn_on
                   service_data:
                     entity_id: script.hk_3380_vid2
+                styles:
+                  grid:
+                    - position: relative
+                  custom_fields:
+                    source:
+                      - position: absolute
+                      - left: 80%
+                      - top: 60%
+                      - height: 20px
+                      - width: 20px
+                custom_fields:
+                  source: >
+                    [[[ return `<ha-icon icon="mdi:numeric-2" style="color: #44739e;"></ha-icon>` ]]]
               - type: entity-button
                 entity: script.hk_3380_dimmer
-                show_name: true
-                name: "Dimmer"
+                show_name: false
                 tap_action:
                   action: call-service
                   service: script.turn_on

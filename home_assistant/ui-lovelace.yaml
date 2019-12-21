@@ -210,7 +210,7 @@ views:
         cards:
           - type: horizontal-stack
             cards:
-              - type: entity-button
+              - type: custom:button-card
                 entity: script.apple_tv_menu
                 aspect_ratio: 3/1
                 show_name: false
@@ -219,7 +219,7 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.apple_tv_menu
-              - type: entity-button
+              - type: custom:button-card
                 entity: script.apple_tv_home
                 aspect_ratio: 3/1
                 show_name: false

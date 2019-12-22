@@ -5,6 +5,7 @@ resources:
 views:
   - path: main
     title: Main
+    icon: mdi:home
     badges:
       - entity: binary_sensor.motion_sensor
       - entity: binary_sensor.updater
@@ -67,6 +68,7 @@ views:
         refresh_interval: 0
   - title: Entertainment
     path: entertainment
+    icon: mdi:audio-video
     badges: []
     cards:
       - type: vertical-stack
@@ -538,6 +540,7 @@ views:
                 color_type: blank-card
   - title: Security
     path: security
+    icon: mdi:security
     badges: []
     cards:
       - type: picture-entity
@@ -550,6 +553,7 @@ views:
         show_header_toggle: false
   - title: Devices
     path: devices
+    icon: mdi:devices
     badges: []
     cards:
       - type: entities

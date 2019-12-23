@@ -51,11 +51,15 @@
         state: "on"
         #entity_id: person.pieter_rautenbach #group.anyone
         #state: "home"
-      - condition: sun
-        after: sunset
-        after_offset: "-01:00:00"
-        before: sunrise
-        before_offset: "-01:00:00"
+      - condition: or
+        # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
+        conditions:
+          - condition: sun
+            after: sunset
+            after_offset: "-01:00:00"
+          - condition: sun
+            before: sunrise
+            before_offset: "-01:00:00"
     action:
       - service: switch.turn_on #homeassistant.turn_on > for group
         entity_id: switch.living_room_lamp

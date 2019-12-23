@@ -354,6 +354,22 @@ samsung_tv_power:
         packet:
           - "JgCMAJCUEzYTNxI3ExISExMSExITEhM2EzcSOBMRExISExMSExISExM2ExITEhITExISExISEjgTEhI3FDYTNxM2FDYTNxIABgOUlBM3EjcTNxITEhITEhITEhMTNxM2EzcTEhMSEhMTERMSEhMSOBITEhITEhITEhMSExI3ExITNxI4EzYTNxM2EzcTAA0FAAAAAAAAAAAAAAAA"
 
+samsung_tv_power_on:
+  sequence:
+    - service: broadlink.send
+      data:
+        host: !secret broadlink_host
+        packet:
+          - "JgBGAJKVETkRORA6ERQRFBEUERQRFBE5ETkQOhAVEBUQFREUEBUQOhEUERQRORE5EBURFBA6EBUQOhE5EBUQFRA6EDoRFBEADQUAAA=="
+
+samsung_tv_power_off:
+  sequence:
+    - service: broadlink.send
+      data:
+        host: !secret broadlink_host
+        packet:
+          - "JgBGAJOVEDoQOhA6DxYPFhAVEBUQFRA6ETkROREUERQRFBEUEBUQFREUERQRORE5EBUQFRE5ETkRORE5ERUQFRA6DzsPFhAADQUAAA=="
+
 samsung_tv_hdmi:
   sequence:
     - service: broadlink.send
@@ -363,7 +379,8 @@ samsung_tv_hdmi:
           - "JgCMAI+UEjgTNxM2EhMTEhITEhMSEhM3EzcTNhMSExISExMSEhMSNxM3EhMSNxMSEhMSExI4EhITEhI4EhMTNhM3EjgTERMABgKVkxM3EzcSNxMSEhMSExISExISOBI4EjcSExITExISExMREzcSOBITEjcSExITExITNhMSExISOBITEjcTNxM3ExETAA0FAAAAAAAAAAAAAAAA"
 
 samsung_tv_hdmi1:
-  # https://community.home-assistant.io/t/broadlink-rm-mini-3-code-database-samsung-tv-hdmi-selection/15612/100
+  # https://github.com/yahat/broadlink_mini_homeassistant_ir_codes_samsung_tv
+  # https://community.home-assistant.io/t/broadlink-rm-mini-3-code-database-samsung-tv-hdmi-selection/15612/100 (old)
   # sat
   sequence:
     - service: broadlink.send
@@ -371,7 +388,7 @@ samsung_tv_hdmi1:
         host: !secret broadlink_host
         packet:
           - packet:
-            - "JgBGAJOSEjcUMxUzFQ4UDhEREREUDxMzETcSNxMQEw4UDhEREhAUMxUOERERNxQPEzMRNxI3ExATMxUzEhEUMxIRExATDhQADQUAAA"
+            - "JgBGAJKVETkRORE5ERQQFRAVERQQFRE5ETkROREUERQRFBEUERQRORAVERUPOxAVDzsQOhA6EBUQOhA6EBUQOhAVEBUPFhAADQUAAA=="
 
 samsung_tv_hdmi2:
   # atv
@@ -381,7 +398,7 @@ samsung_tv_hdmi2:
         host: !secret broadlink_host
         packet:
           - packet:
-            - "JgBGAJOUETkRORA6ERQQFRAVERQRFBA6ETkROhAVDxYQFQ8WEBUQFQ87EDoRORA6DzsQFRA6DzsPFhAVDxYQFRAVEDoQFRAADQUAAA"
+            - "JgBGAJOUETkRORA6ERQQFRAVERQRFBA6ETkROhAVDxYQFQ8WEBUQFQ87EDoRORA6DzsQFRA6DzsPFhAVDxYQFRAVEDoQFRAADQUAAA=="
 
 samsung_tv_picture_mode:
   sequence:
@@ -394,7 +411,7 @@ samsung_tv_picture_mode:
 entertainment_apple_tv_on:
   sequence:
     - service: script.turn_on
-      entity_id: script.samsung_tv_power
+      entity_id: script.samsung_tv_power_on
     - delay: "00:00:01"
     - service: script.turn_on
       entity_id: script.hk_3380_power_on
@@ -408,7 +425,7 @@ entertainment_apple_tv_on:
 entertainment_satellite_on:
   sequence:
     - service: script.turn_on
-      entity_id: script.samsung_tv_power
+      entity_id: script.samsung_tv_power_on
     - delay: "00:00:01"
     - service: script.turn_on
       entity_id: script.hk_3380_power_on
@@ -422,7 +439,7 @@ entertainment_satellite_on:
 entertainment_off:
   sequence:
     - service: script.turn_on
-      entity_id: script.samsung_tv_power
+      entity_id: script.samsung_tv_power_off
     - delay: "00:00:01"
     - service: script.turn_on
       entity_id: script.hk_3380_power_off

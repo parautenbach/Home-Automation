@@ -387,8 +387,7 @@ samsung_tv_hdmi1:
       data:
         host: !secret broadlink_host
         packet:
-          - packet:
-            - "JgBGAJKVETkRORE5ERQQFRAVERQQFRE5ETkROREUERQRFBEUERQRORAVERUPOxAVDzsQOhA6EBUQOhA6EBUQOhAVEBUPFhAADQUAAA=="
+          - "JgBGAJKVETkRORE5ERQQFRAVERQQFRE5ETkROREUERQRFBEUERQRORAVERUPOxAVDzsQOhA6EBUQOhA6EBUQOhAVEBUPFhAADQUAAA=="
 
 samsung_tv_hdmi2:
   # atv
@@ -397,8 +396,7 @@ samsung_tv_hdmi2:
       data:
         host: !secret broadlink_host
         packet:
-          - packet:
-            - "JgBGAJOUETkRORA6ERQQFRAVERQRFBA6ETkROhAVDxYQFQ8WEBUQFQ87EDoRORA6DzsQFRA6DzsPFhAVDxYQFRAVEDoQFRAADQUAAA=="
+          - "JgBGAJOUETkRORA6ERQQFRAVERQRFBA6ETkROhAVDxYQFQ8WEBUQFQ87EDoRORA6DzsQFRA6DzsPFhAVDxYQFRAVEDoQFRAADQUAAA=="
 
 samsung_tv_picture_mode:
   sequence:

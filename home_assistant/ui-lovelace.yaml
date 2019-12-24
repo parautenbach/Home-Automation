@@ -191,6 +191,12 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.hk_3380_vol_down
+                hold_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_down
+                  repeat: 200
               - type: entity-button
                 entity: script.hk_3380_vol_up
                 show_name: false
@@ -199,9 +205,18 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.hk_3380_vol_up
-              - type: entity-button
+                hold_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_up
+                  repeat: 200
+              - type: custom:button-card
                 entity: script.hk_3380_mute
                 show_name: false
+                styles:
+                  icon:
+                    - color: rgb(255, 0, 0)
                 tap_action:
                   action: call-service
                   service: script.turn_on
@@ -438,9 +453,12 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.dstv_vol_up
-              - type: entity-button
+              - type: custom:button-card
                 entity: script.dstv_mute
                 show_name: false
+                styles:
+                  icon:
+                    - color: rgb(255, 0, 0)
                 tap_action:
                   action: call-service
                   service: script.turn_on

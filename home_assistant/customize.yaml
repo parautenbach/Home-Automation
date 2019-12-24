@@ -163,7 +163,7 @@ script.samsung_tv_picture_mode:
 script.noop:
   icon: mdi:blank
 script.entertainment_apple_tv_on:
-  friendly_name: Apply TV System On
+  friendly_name: Apple TV System On
   icon: mdi:power
 script.entertainment_satellite_on:
   friendly_name: Satellite System On

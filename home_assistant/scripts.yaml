@@ -380,6 +380,7 @@ samsung_tv_hdmi:
 
 samsung_tv_hdmi1:
   # https://github.com/yahat/broadlink_mini_homeassistant_ir_codes_samsung_tv
+  # old:
   # https://community.home-assistant.io/t/broadlink-rm-mini-3-code-database-samsung-tv-hdmi-selection/15612/100 (old)
   # sat
   sequence:

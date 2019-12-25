@@ -469,7 +469,7 @@ entertainment_off:
 
 security_camera_record_clip:
   sequence:
-    - service: service: camera.record
+    - service: camera.record
       data:
         entity_id: camera.security_camera
         filename: /tmp/test.mp4 #'/tmp/{{ entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'

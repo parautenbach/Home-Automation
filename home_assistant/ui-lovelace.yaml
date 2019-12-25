@@ -577,7 +577,12 @@ views:
         entities:
           - switch.motion_led
           - automation.motion_snapshots
-          - script.security_camera_record_clip
+          - entity: script.security_camera_record_clip
+            tap_action: 
+              action: call-service
+              service: script.turn_on
+              service_data:
+                entity_id: script.security_camera_record_clip
   - title: Devices
     path: devices
     icon: mdi:devices

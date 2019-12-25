@@ -578,7 +578,6 @@ views:
           - switch.motion_led
           - automation.motion_snapshots
           - script.security_camera_record_clip
-            icon: mdi:video
   - title: Devices
     path: devices
     icon: mdi:devices

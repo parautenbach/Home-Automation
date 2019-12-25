@@ -171,3 +171,6 @@ script.entertainment_satellite_on:
 script.entertainment_off:
   friendly_name: System Off
   icon: mdi:power
+script.security_camera_record_clip:
+  friendly_name: Record Security Camera Clip
+  icon: mdi:video

@@ -475,4 +475,4 @@ security_camera_record_clip:
         #filename: /tmp/test.mp4 
         filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
         duration: 10
-    - delay: "00:00:10"
+    - delay: "00:00:15"

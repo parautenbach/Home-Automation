@@ -183,7 +183,7 @@ views:
                     entity_id: script.hk_3380_dimmer
           - type: horizontal-stack
             cards:
-              - type: entity-button
+              - type: custom:button-card
                 entity: script.hk_3380_vol_down
                 show_name: false
                 tap_action:
@@ -197,7 +197,7 @@ views:
                   service_data:
                     entity_id: script.hk_3380_vol_down
                   repeat: 200
-              - type: entity-button
+              - type: custom:button-card
                 entity: script.hk_3380_vol_up
                 show_name: false
                 tap_action:

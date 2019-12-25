@@ -192,11 +192,16 @@ views:
                   service_data:
                     entity_id: script.hk_3380_vol_down
                 hold_action:
+                  repeat: 200
                   action: call-service
                   service: script.turn_on
                   service_data:
                     entity_id: script.hk_3380_vol_down
-                  repeat: 200
+                double_tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_down_minus_5
               - type: custom:button-card
                 entity: script.hk_3380_vol_up
                 show_name: false
@@ -206,11 +211,16 @@ views:
                   service_data:
                     entity_id: script.hk_3380_vol_up
                 hold_action:
+                  repeat: 200
                   action: call-service
                   service: script.turn_on
                   service_data:
                     entity_id: script.hk_3380_vol_up
-                  repeat: 200
+                double_tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_up_plus_5
               - type: custom:button-card
                 entity: script.hk_3380_mute
                 show_name: false

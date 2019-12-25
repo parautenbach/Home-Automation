@@ -466,3 +466,12 @@ entertainment_off:
     - delay: "00:00:01"
     - service: script.turn_on
       entity_id: script.hk_3380_power_off
+
+security_camera_record_clip:
+  sequence:
+    - service: service: camera.record
+      data:
+        entity_id: camera.security_camera
+        filename: /tmp/test.mp4 #'/tmp/{{ entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+        duration: 10
+    - delay: "00:00:10"

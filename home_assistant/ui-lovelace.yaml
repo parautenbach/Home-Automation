@@ -571,14 +571,14 @@ views:
     icon: mdi:security
     badges: []
     cards:
-      - type: picture-entity
-        entity: camera.security_camera
-      - type: entities
+      - type: picture-glance
+        title: Security Camera
+        camera_image: camera.security_camera
         entities:
           - switch.motion_led
           - automation.motion_snapshots
-        title: Security
-        show_header_toggle: false
+          - script.security_camera_record_clip
+            icon: mdi:video
   - title: Devices
     path: devices
     icon: mdi:devices

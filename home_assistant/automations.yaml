@@ -92,11 +92,3 @@
     action:
       - service: automation.turn_off
         entity_id: automation.motion_snapshots
-
-#  alias: "Test 1"
-#  action:
-#    service: camera.record
-#    data:
-#      entity_id: camera.security_camera
-#      filename: /tmp/test.mp4 #'/tmp/{{ entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
-

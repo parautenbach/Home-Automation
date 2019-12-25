@@ -52,24 +52,15 @@ hk_3380_vol_up:
 
 hk_3380_vol_up_plus_5:
   sequence:
-    - service: script.turn_on
-      entity_id: script.hk_3380_vol_up
-    - delay: 
-        milliseconds: 200
-    - service: script.turn_on
-      entity_id: script.hk_3380_vol_up
-    - delay: 
-        milliseconds: 200
-    - service: script.turn_on
-      entity_id: script.hk_3380_vol_up
-    - delay: 
-        milliseconds: 200
-    - service: script.turn_on
-      entity_id: script.hk_3380_vol_up
-    - delay: 
-        milliseconds: 200
-    - service: script.turn_on
-      entity_id: script.hk_3380_vol_up
+    - service: broadlink.send
+      data:
+        host: !secret broadlink_host
+        packet:
+          - "JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA="
+          - "JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA="
+          - "JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA="
+          - "JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA="
+          - "JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA="
 
 hk_3380_vol_down:
   sequence:
@@ -81,24 +72,15 @@ hk_3380_vol_down:
 
 hk_3380_vol_down_minus_5:
   sequence:
-    - service: script.turn_on
-      entity_id: script.hk_3380_vol_down
-    - delay: 
-        milliseconds: 200
-    - service: script.turn_on
-      entity_id: script.hk_3380_vol_down
-    - delay: 
-        milliseconds: 200
-    - service: script.turn_on
-      entity_id: script.hk_3380_vol_down
-    - delay: 
-        milliseconds: 200
-    - service: script.turn_on
-      entity_id: script.hk_3380_vol_down
-    - delay: 
-        milliseconds: 200
-    - service: script.turn_on
-      entity_id: script.hk_3380_vol_down
+    - service: broadlink.send
+      data:
+        host: !secret broadlink_host
+        packet:
+          - "JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA="
+          - "JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA="
+          - "JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA="
+          - "JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA="
+          - "JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA="
 
 hk_3380_mute:
   sequence:

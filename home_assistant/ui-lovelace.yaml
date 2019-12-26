@@ -598,9 +598,10 @@ views:
               service_data:
                 entity_id: script.security_camera_record_clip
       - type: picture-glance
+        # this auto updates every 10s
         entities: []
-        title: Last Motion Snapshot
-        image: /local/camera.security_camera_20191225-193212.jpg
+        title: Last Motion Snapshot # timestamp
+        image: /local/camera.security_camera_last.jpg
       # - type: picture-glance
       #   entities: []
       #   title: Last Clip

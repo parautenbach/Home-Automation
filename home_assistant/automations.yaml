@@ -6,13 +6,8 @@
     entity_id: binary_sensor.motion_sensor
     to: "on"
   action:
-    - service: camera.snapshot
-      data:
-        entity_id: camera.security_camera
-        filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
-    - service: notify.family
-      data:
-        message: "Motion detected!"
+    - service: script.turn_on
+      entity_id: script.security_camera_create_snapshot
 - alias: "Motion Indicator On"
   initial_state: true
   hide_entity: true

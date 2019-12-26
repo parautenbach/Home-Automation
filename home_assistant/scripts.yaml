@@ -476,3 +476,15 @@ security_camera_record_clip:
         filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
         duration: 10
     - delay: "00:00:15"
+
+security_camera_create_snapshot:
+  # https://www.reddit.com/r/homeassistant/comments/9fz5e4/show_the_x_most_recent_pictures_in_a_directory/e69alpc/
+  sequence:
+    - service: camera.snapshot
+      data:
+        entity_id: camera.security_camera
+        filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+    - service: shell_command.copy_last_snapshot
+    - service: notify.family
+      data:
+        message: "Motion detected!"

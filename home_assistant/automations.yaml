@@ -1,94 +1,108 @@
-  - alias: "Motion Snapshots"
-    id: motion_snapshots
-    initial_state: false
-    trigger:
-      platform: state
-      entity_id: binary_sensor.motion_sensor
-      to: "on"
-    action:
-      - service: camera.snapshot
-        data:
-          entity_id: camera.security_camera
-          filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
-      - service: notify.family
-        data:
-          message: "Motion detected!"
-  - alias: "Motion Indicator On"
-    initial_state: true
-    hide_entity: true
-    trigger:
-      platform: state
-      entity_id: binary_sensor.motion_sensor
-      to: "on"
-    action:
-      - service: switch.turn_on
-        entity_id: switch.motion_led
-  - alias: "Motion Indicator Off"
-    initial_state: true
-    hide_entity: true
-    trigger:
-      platform: state
-      entity_id: binary_sensor.motion_sensor
-      to: "off"
-    action:
-      - service: switch.turn_off
-        entity_id: switch.motion_led
-  - alias: "Living Room Lamp Auto On"
-    initial_state: true
-    hide_entity: true
-    trigger:
-      - platform: sun
-        event: sunset
-        offset: "-01:00:00"
-      - platform: state
-        entity_id: binary_sensor.anybody_home
-        to: "on"
-        #entity_id: person.pieter_rautenbach #group.anyone
-        #to: "home"
-    condition:
-      - condition: state
-        entity_id: binary_sensor.anybody_home
-        state: "on"
-        #entity_id: person.pieter_rautenbach #group.anyone
-        #state: "home"
-      - condition: or
-        # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
-        conditions:
-          - condition: sun
-            after: sunset
-            after_offset: "-01:00:00"
-          - condition: sun
-            before: sunrise
-            before_offset: "-01:00:00"
-    action:
-      - service: switch.turn_on #homeassistant.turn_on > for group
-        entity_id: switch.living_room_lamp
-  - alias: "Away Mode"
-    initial_state: true
-    trigger:
-      platform: state
-      entity_id: binary_sensor.anybody_home
-      to: "off"
-      #entity_id: person.pieter_rautenbach #group.all_devices
-      #to: 'not_home'
-    condition:
-      - condition: state
-        entity_id: binary_sensor.anybody_home
-        state: "off"
-    action:
-      - service: switch.turn_off #light.turn_off
-        entity_id: switch.living_room_lamp #group.all_lights
-      - service: automation.turn_on
-        entity_id: automation.motion_snapshots
-  - alias: "Home Mode"
-    trigger:
-      platform: state
+- alias: "Motion Snapshots"
+  id: motion_snapshots
+  initial_state: false
+  trigger:
+    platform: state
+    entity_id: binary_sensor.motion_sensor
+    to: "on"
+  action:
+    - service: camera.snapshot
+      data:
+        entity_id: camera.security_camera
+        filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+    - service: notify.family
+      data:
+        message: "Motion detected!"
+- alias: "Motion Indicator On"
+  initial_state: true
+  hide_entity: true
+  trigger:
+    platform: state
+    entity_id: binary_sensor.motion_sensor
+    to: "on"
+  action:
+    - service: switch.turn_on
+      entity_id: switch.motion_led
+- alias: "Motion Indicator Off"
+  initial_state: true
+  hide_entity: true
+  trigger:
+    platform: state
+    entity_id: binary_sensor.motion_sensor
+    to: "off"
+  action:
+    - service: switch.turn_off
+      entity_id: switch.motion_led
+- alias: "Living Room Lamp Auto On"
+  initial_state: true
+  hide_entity: true
+  trigger:
+    - platform: sun
+      event: sunset
+      offset: "-01:00:00"
+    - platform: state
       entity_id: binary_sensor.anybody_home
       to: "on"
-    condition:
-      - condition: state
-        entity_id: binary_sensor.anybody_home
-        state: "on"
-    action:
-      - service: automation.turn_off
-        entity_id: automation.motion_snapshots
+      #entity_id: person.pieter_rautenbach #group.anyone
+      #to: "home"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.anybody_home
+      state: "on"
+      #entity_id: person.pieter_rautenbach #group.anyone
+      #state: "home"
+    - condition: or
+      # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
+      conditions:
+        - condition: sun
+          after: sunset
+          after_offset: "-01:00:00"
+        - condition: sun
+          before: sunrise
+          before_offset: "-01:00:00"
+  action:
+    - service: switch.turn_on #homeassistant.turn_on > for group
+      entity_id: switch.living_room_lamp
+- alias: "Away Mode"
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id: binary_sensor.anybody_home
+    to: "off"
+    #entity_id: person.pieter_rautenbach #group.all_devices
+    #to: 'not_home'
+  condition:
+    - condition: state
+      entity_id: binary_sensor.anybody_home
+      state: "off"
+  action:
+    - service: switch.turn_off #light.turn_off
+      entity_id: switch.living_room_lamp #group.all_lights
+    - service: automation.turn_on
+      entity_id: automation.motion_snapshots
+- alias: "Home Mode"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.anybody_home
+    to: "on"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.anybody_home
+      state: "on"
+  action:
+    - service: automation.turn_off
+      entity_id: automation.motion_snapshots
+- alias: Check Disk Space on the Home Assistant server
+  trigger:
+    - platform: time_pattern
+      hours: "*"
+      minutes: 0
+      seconds: 0
+  condition:
+    - condition: numeric_state
+      entity_id: sensor.disk_use_percent
+      above: 90
+  action:
+    - service: notify.family
+      data:
+        message: "Server disk usage is exceeding 90%!"

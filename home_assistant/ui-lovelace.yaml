@@ -597,11 +597,19 @@ views:
               service: script.turn_on
               service_data:
                 entity_id: script.security_camera_record_clip
-      - type: picture-glance
-        # this auto updates every 10s
-        entities: []
-        title: Last Motion Snapshot # timestamp
-        image: /local/camera.security_camera_last.jpg
+      - type: vertical-stack
+        cards:                
+          - type: picture-glance
+            # this auto updates every 10s
+            entities: []
+            title: Last Motion Captured
+            image: /local/camera.security_camera_last.jpg
+          - type: entities
+            entities:
+              - entity: sensor.last_snapshot_date
+                name: Last Event
+                format: datetime
+                icon: mdi:clock-outline
       # - type: picture-glance
       #   entities: []
       #   title: Last Clip

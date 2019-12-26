@@ -488,4 +488,11 @@ security_camera_create_snapshot:
     - service: shell_command.save_last_snapshot_date
     - service: notify.family
       data:
+        title: Security Camera
         message: "Motion detected!"
+        data:
+          attachment:
+            # url: https://geoexpressinternational.com/wp-content/plugins/webp-express/test/test-pattern-tv.jpg
+            url: http://securitypi.local/local/camera.security_camera_last.jpg
+            # content-type: jpg
+            # hide-thumbnail: false

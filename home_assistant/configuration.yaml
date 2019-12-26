@@ -124,4 +124,5 @@ device_tracker:
 shell_command:
   noop: ":"
   copy_last_snapshot: "cp `ls -t /tmp/camera.security_camera_*.jpg | head -n1` /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg"
+  # TODO: date +%s
   save_last_snapshot_date: "date > /home/homeassistant/.homeassistant/www/camera.security_camera_last.txt"

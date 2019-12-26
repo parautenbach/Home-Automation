@@ -620,6 +620,10 @@ views:
                 name: Last Event
                 format: datetime
                 icon: mdi:clock-outline
+              # - entity: sensor.last_snapshot_date
+              #   name: " "
+              #   format: relative
+              #   icon: mdi:blank
       # - type: picture-glance
       #   entities: []
       #   title: Last Clip

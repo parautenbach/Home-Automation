@@ -1,7 +1,7 @@
 
 rasplex:
   hide_if_away: false
-  icon:
+  icon: mdi:plex
   mac: B8:27:EB:45:4F:FF
   name: Plex Server
   picture:
@@ -9,7 +9,7 @@ rasplex:
 
 apple_airport:
   hide_if_away: false
-  icon:
+  icon: mdi:router-wireless
   mac: 5C:96:9D:6F:84:E4
   name: Apple Airport
   picture:
@@ -17,7 +17,7 @@ apple_airport:
 
 thor:
   hide_if_away: false
-  icon:
+  icon: mdi:nas
   mac: 00:90:A9:3F:C8:55
   name: Thor (Cloud Drive)
   picture:
@@ -25,7 +25,7 @@ thor:
 
 rasplay:
   hide_if_away: false
-  icon:
+  icon: mdi:airplay
   mac: C8:3A:35:C2:0A:75
   name: Rasplay
   picture:
@@ -33,7 +33,7 @@ rasplay:
 
 adsl_router:
   hide_if_away: false
-  icon:
+  icon: mdi:network-router
   mac: 88:CE:FA:98:E5:D5
   name: ADSL Router
   picture:
@@ -41,7 +41,7 @@ adsl_router:
 
 broadlink_rm_mini_3:
   hide_if_away: false
-  icon:
+  icon: mdi:remote
   mac: C8:F7:42:40:01:F8
   name: Broadlink RM mini 3
   picture:
@@ -49,7 +49,7 @@ broadlink_rm_mini_3:
 
 apple_tv:
   hide_if_away: false
-  icon:
+  icon: mdi:apple
   mac: 50:32:37:81:6B:83
   name: Apple TV
   picture:
@@ -57,7 +57,7 @@ apple_tv:
 
 pieter_macbook:
   hide_if_away: false
-  icon:
+  icon: mdi:laptop
   mac: A8:66:7F:1F:A6:36
   name: Pieter MacBook
   picture:
@@ -65,7 +65,7 @@ pieter_macbook:
 
 living_room_lamp:
   hide_if_away: false
-  icon:
+  icon: mdi:floor-lamp
   mac: DC:4F:22:FA:02:75
   name: Living Room Lamp
   picture:
@@ -73,7 +73,7 @@ living_room_lamp:
 
 ceres_nmap:
   hide_if_away: false
-  icon:
+  icon: mdi:cellphone-iphone
   mac: 80:B0:3D:C1:6D:90
   name: Ceres (nmap)
   picture:
@@ -81,7 +81,7 @@ ceres_nmap:
 
 rouve_nmap:
   hide_if_away: false
-  icon:
+  icon: mdi:cellphone-iphone
   mac: FC:B6:D8:84:6E:67
   name: Rouvé (nmap)
   picture:
@@ -89,7 +89,7 @@ rouve_nmap:
 
 chronos_nmap:
   hide_if_away: false
-  icon:
+  icon: mdi:watch
   mac: E4:E0:A6:9E:CF:32
   name: Chronos
   picture:
@@ -97,7 +97,7 @@ chronos_nmap:
 
 rouve_laptop:
   hide_if_away: false
-  icon:
+  icon: mdi:laptop
   mac: 28:39:26:4F:C8:EF
   name: Rouvé Laptop
   picture:
@@ -105,7 +105,7 @@ rouve_laptop:
 
 rouve_watch_nmap:
   hide_if_away: false
-  icon:
+  icon: mdi:watch
   mac: 20:78:F0:8A:E4:9F
   name: Rouvé Watch
   picture:

@@ -68,6 +68,16 @@ views:
           - entity: binary_sensor.anybody_home
         hours_to_show: 24
         refresh_interval: 0
+      - type: picture-elements
+        image: /local/floorplan.jpg
+        elements:
+          - type: state-icon
+            entity: switch.living_room_lamp
+            tap_action:
+              action: toggle
+            style: 
+              top: 40%
+              left: 75%
   - title: Entertainment
     path: entertainment
     icon: mdi:audio-video

@@ -1,5 +1,4 @@
-- alias: "Motion Snapshots"
-  id: motion_snapshots
+- alias: "Take Motion Snapshots"
   initial_state: false
   trigger:
     platform: state
@@ -8,6 +7,39 @@
   action:
     - service: script.turn_on
       entity_id: script.security_camera_create_snapshot
+- alias: "Switch On Living Room Lamp if Motion is Detected"
+  # only at night though
+  initial_state: false
+  trigger:
+    platform: state
+    entity_id: binary_sensor.motion_sensor
+    to: "on"
+  condition:
+    - condition: or
+      # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
+      conditions:
+        - condition: sun
+          after: sunset
+          after_offset: "-01:00:00"
+        - condition: sun
+          before: sunrise
+          before_offset: "-01:00:00"
+  action:
+    - service: switch.turn_on
+      entity_id: switch.living_room_lamp
+    - service: timer.start
+      data:
+        entity_id: timer.motion_timer
+- alias: "Switch Off Living Room Lamp When Timer Expires"
+  initial_state: true
+  trigger:
+    platform: event
+    event_type: timer.finished
+    event_data:
+      entity_id: timer.motion_timer
+  action:
+    - service: switch.turn_off
+      entity_id: switch.living_room_lamp
 - alias: "Motion Indicator On"
   initial_state: true
   hide_entity: true
@@ -28,7 +60,7 @@
   action:
     - service: switch.turn_off
       entity_id: switch.motion_led
-- alias: "Living Room Lamp Auto On"
+- alias: "Living Room Lamp Auto On Upon Sunset or Arrival"
   initial_state: true
   hide_entity: true
   trigger:
@@ -74,7 +106,9 @@
     - service: switch.turn_off #light.turn_off
       entity_id: switch.living_room_lamp #group.all_lights
     - service: automation.turn_on
-      entity_id: automation.motion_snapshots
+      entity_id: automation.take_motion_snapshots
+    - service: automation.turn_on
+      entity_id: automation.switch_on_living_room_lamp_if_motion_is_detected
 - alias: "Home Mode"
   trigger:
     platform: state
@@ -86,7 +120,9 @@
       state: "on"
   action:
     - service: automation.turn_off
-      entity_id: automation.motion_snapshots
+      entity_id: automation.take_motion_snapshots
+    - service: automation.turn_off
+      entity_id: automation.switch_on_living_room_lamp_if_motion_is_detected
 - alias: Check Disk Space on the Home Assistant server
   trigger:
     - platform: time_pattern

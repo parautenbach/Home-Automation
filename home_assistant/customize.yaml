@@ -42,7 +42,7 @@ script.hk_3380_dimmer:
   icon: mdi:power-sleep
 switch.living_room_lamp:
   icon: mdi:floor-lamp
-automation.motion_snapshots:
+automation.take_motion_snapshots:
   icon: mdi:camera
 group.all_devices:
   friendly_name: All Devices

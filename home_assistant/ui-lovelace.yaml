@@ -600,7 +600,7 @@ views:
         camera_image: camera.security_camera
         entities:
           - switch.motion_led
-          - automation.motion_snapshots
+          - automation.take_motion_snapshots
           - entity: script.security_camera_record_clip
             tap_action: 
               action: call-service

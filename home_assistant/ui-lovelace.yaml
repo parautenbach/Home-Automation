@@ -624,17 +624,10 @@ views:
               #   name: " "
               #   format: relative
               #   icon: mdi:blank
-      # - type: picture-glance
-      #   entities: []
-      #   title: Last Clip
-      #   camera_image: camera.security_camera_last_clip
-      # - type: picture-entity
-      #   name: Last Clip
-      #   show_name: true
-      #   show_state: false
-      #   entity: camera.security_camera_last_clip
-      #   camera_image: camera.security_camera_last_clip
-
+      - type: entities
+        entities:
+          - switch.visitor_mode
+        show_header_toggle: false  
   - title: Devices
     path: devices
     icon: mdi:devices

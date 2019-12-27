@@ -35,6 +35,7 @@ homekit:
     include_entities:
       - input_boolean.pieter_present
       - input_boolean.rouve_present
+      - input_boolean.visitors_present
 
 #ios:
 
@@ -66,6 +67,9 @@ input_boolean:
   rouve_present:
     name: Rouvé Presence
     icon: mdi:account
+  visitors_present:
+    name: Visitors Present
+    icon: mdi:account
 
 binary_sensor:
   - platform: rpi_gpio
@@ -84,7 +88,7 @@ binary_sensor:
       anybody_home:
         friendly_name: "Anybody Home"
         value_template: >- 
-          {{ is_state("binary_sensor.pieter_present", "on") or is_state("binary_sensor.rouve_present", "on") }} 
+          {{ is_state("binary_sensor.pieter_present", "on") or is_state("binary_sensor.rouve_present", "on") or is_state("binary_sensor.visitors_present", "on") }} 
         #value_template: >-
         #  {{ is_state("person.pieter_rautenbach", "home") }}
         #device_class: presence # (On/Off)
@@ -113,6 +117,16 @@ switch:
     #    friendly_name: "TV"
     #    command_on: ""
     #    command_off: ""
+  - platform: template
+    switches:
+      visitor_mode:
+        value_template: "{{ is_state('input_boolean.visitors_present', 'on') }}"
+        turn_on:
+          - service: input_boolean.turn_on
+            entity_id: input_boolean.visitors_present
+        turn_off:
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.visitors_present
 
 device_tracker:
   - platform: nmap_tracker

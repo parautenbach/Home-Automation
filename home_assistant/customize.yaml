@@ -174,3 +174,6 @@ script.entertainment_off:
 script.security_camera_record_clip:
   friendly_name: Record Security Camera Clip
   icon: mdi:video
+switch.visitor_mode:
+  friendly_name: Visitor Mode
+  icon: mdi:briefcase

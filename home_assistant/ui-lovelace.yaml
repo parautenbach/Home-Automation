@@ -610,10 +610,10 @@ views:
       - type: vertical-stack
         cards:                
           - type: picture-glance
-            # this auto updates every 10s
-            entities: []
             title: Last Motion Captured
-            image: /local/camera.security_camera_last.jpg
+            camera_image: camera.security_camera_last_snapshot
+            entities: []
+            # image: /local/camera.security_camera_last.jpg
           - type: entities
             entities:
               - entity: sensor.last_snapshot_date

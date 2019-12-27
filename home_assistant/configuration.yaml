@@ -45,6 +45,9 @@ camera:
     name: security_camera
     input: -rtsp_transport tcp -i rtsp://localhost:8554/unicast
     extra_arguments: "-vf hue=s=0"
+  - platform: local_file
+    name: security_camera_last_snapshot
+    file_path: /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg
   # - platform: ffmpeg
   #   name: security_camera_last_clip
   #   input: "/home/homeassistant/.homeassistant/www/camera.security_camera_20191225-193224.mp4"

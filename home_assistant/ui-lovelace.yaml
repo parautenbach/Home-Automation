@@ -624,14 +624,10 @@ views:
             # image: /local/camera.security_camera_last.jpg
           - type: entities
             entities:
-              - entity: sensor.last_snapshot_timestamp
+              - entity: sensor.last_snapshot_timestamp_relative
                 name: Last Event
                 format: datetime
                 icon: mdi:clock-outline
-              # - entity: sensor.last_snapshot_date
-              #   name: " "
-              #   format: relative
-              #   icon: mdi:blank
   - title: Devices
     path: devices
     icon: mdi:devices

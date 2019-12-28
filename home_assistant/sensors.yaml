@@ -48,3 +48,33 @@
     name: last_snapshot_timestamp
     file_path: /home/homeassistant/.homeassistant/www/camera.security_camera_last.txt
     value_template: "{{ value | int | timestamp_local }}"
+  - platform: file
+    name: last_snapshot_timestamp_relative
+    file_path: /home/homeassistant/.homeassistant/www/camera.security_camera_last.txt
+    value_template: >
+      {%- set t = value | int | timestamp_local %}
+      {%- if t != None %}
+        {%- set t = as_timestamp(t) %}
+        {%- set n = now().timestamp() %}
+        {%- set d = n-t %}
+        {%- set midnight_today = as_timestamp(strptime(now().date() | string, "%Y-%m-%d")) %}
+        {%- set midnight_yesterday = midnight_today - 86400 %}
+        {%- set midnight_week_ago = midnight_today - 604800 %}
+        {%- if d < 60 %}
+          {{ d | int }} seconds ago
+        {%- elif d >= 60 and d < 120 %}
+          1 minute ago
+        {%- elif d < 3600 %}
+          {{ (d // 60) | int }} minutes ago
+        {%- elif d < n-midnight_today %}
+          today at {{ t | timestamp_custom('%H:%M') }}
+        {%- elif d < n-midnight_yesterday %}
+          yesterday at {{ t | timestamp_custom('%H:%M') }}
+        {%- elif d < n-midnight_week_ago %}
+          {{ t | timestamp_custom('%A at %H:%M') }}
+        {%- else %}
+          {{ t | timestamp_local }}
+        {%- endif %}
+      {% else %}
+        unknown
+      {% endif %}

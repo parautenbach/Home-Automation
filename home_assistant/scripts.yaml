@@ -484,8 +484,8 @@ security_camera_create_snapshot:
       data:
         entity_id: camera.security_camera
         filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
-    - service: shell_command.copy_last_snapshot
-    - service: shell_command.save_last_snapshot_date
+    - service: shell_command.copy_last_snapshot_image
+    - service: shell_command.save_last_snapshot_timestamp
     - service: notify.family
       data:
         title: Security Camera

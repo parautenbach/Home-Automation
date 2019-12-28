@@ -16,62 +16,66 @@ views:
       - entity: person.rouve_rautenbach
       - entity: sun.sun
     cards:
-      - type: entities
-        entities:
-          - sensor.ambient_temperature
-          - sensor.ambient_humidity
-          - sensor.ambient_pressure
-        title: Environment
-        show_header_toggle: false
-      - type: weather-forecast
-        entity: weather.2_bach
-        show_header_toggle: false
-      - type: horizontal-stack
-        title: Entertainment
+      - type: vertical-stack
         cards:
-          - type: custom:button-card
-            entity: script.entertainment_apple_tv_on
-            show_name: false
-            icon: mdi:apple
-            tap_action:
-              action: call-service
-              haptic: light
-              service: script.turn_on
-              service_data:
-                entity_id: script.entertainment_apple_tv_on
-          - type: custom:button-card
-            entity: script.entertainment_satellite_on
-            show_name: false
-            icon: mdi:set-top-box
-            tap_action:
-              action: call-service
-              haptic: light
-              service: script.turn_on
-              service_data:
-                entity_id: script.entertainment_satellite_on
-          - type: entity-button
-            entity: script.entertainment_off
-            show_name: false
-            tap_action:
-              action: call-service
-              service: script.turn_on
-              service_data:
-                entity_id: script.entertainment_off
-      - type: entities
-        entities:
-          - switch.living_room_lamp
-        title: Living Room
-        show_header_toggle: true
-      - type: history-graph
-        title: Anybody Home
-        entities:
-          - entity: binary_sensor.anybody_home
-        hours_to_show: 24
-        refresh_interval: 0
-      - type: entities
-        entities:
-          - switch.visitor_mode
-        show_header_toggle: false  
+        - type: weather-forecast
+          entity: weather.2_bach
+          show_header_toggle: false
+        - type: entities
+          entities:
+            - sensor.ambient_temperature
+            - sensor.ambient_humidity
+            - sensor.ambient_pressure
+          title: Environment
+          show_header_toggle: false
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            title: Entertainment
+            cards:
+              - type: custom:button-card
+                entity: script.entertainment_apple_tv_on
+                show_name: false
+                icon: mdi:apple
+                tap_action:
+                  action: call-service
+                  haptic: light
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.entertainment_apple_tv_on
+              - type: custom:button-card
+                entity: script.entertainment_satellite_on
+                show_name: false
+                icon: mdi:set-top-box
+                tap_action:
+                  action: call-service
+                  haptic: light
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.entertainment_satellite_on
+              - type: entity-button
+                entity: script.entertainment_off
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.entertainment_off
+          - type: entities
+            entities:
+              - switch.living_room_lamp
+            title: Living Room
+            show_header_toggle: true
+          - type: entities
+            entities:
+              - switch.visitor_mode
+            show_header_toggle: false  
+          - type: history-graph
+            title: Anybody Home
+            entities:
+              - entity: binary_sensor.anybody_home
+            hours_to_show: 24
+            refresh_interval: 0
       - type: picture-elements
         image: /local/floorplan.jpg
         elements:
@@ -620,7 +624,7 @@ views:
             # image: /local/camera.security_camera_last.jpg
           - type: entities
             entities:
-              - entity: sensor.last_snapshot_date
+              - entity: sensor.last_snapshot_timestamp
                 name: Last Event
                 format: datetime
                 icon: mdi:clock-outline

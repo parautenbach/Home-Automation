@@ -45,6 +45,6 @@
     value_template: '{{ value | multiply(0.001) | round(2)  }}'
     scan_interval: 60
   - platform: file
-    name: last_snapshot_date
-    # device_class: timestamp
+    name: last_snapshot_timestamp
     file_path: /home/homeassistant/.homeassistant/www/camera.security_camera_last.txt
+    value_template: "{{ value | int | timestamp_local }}"

@@ -68,6 +68,10 @@ views:
           - entity: binary_sensor.anybody_home
         hours_to_show: 24
         refresh_interval: 0
+      - type: entities
+        entities:
+          - switch.visitor_mode
+        show_header_toggle: false  
       - type: picture-elements
         image: /local/floorplan.jpg
         elements:
@@ -624,10 +628,6 @@ views:
               #   name: " "
               #   format: relative
               #   icon: mdi:blank
-      - type: entities
-        entities:
-          - switch.visitor_mode
-        show_header_toggle: false  
   - title: Devices
     path: devices
     icon: mdi:devices

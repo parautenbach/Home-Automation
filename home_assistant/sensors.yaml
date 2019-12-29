@@ -67,9 +67,9 @@
         {%- elif d < 3600 %}
           {{ (d // 60) | int }} minutes ago
         {%- elif d < n-midnight_today %}
-          today at {{ t | timestamp_custom('%H:%M') }}
+          Today at {{ t | timestamp_custom('%H:%M') }}
         {%- elif d < n-midnight_yesterday %}
-          yesterday at {{ t | timestamp_custom('%H:%M') }}
+          Yesterday at {{ t | timestamp_custom('%H:%M') }}
         {%- elif d < n-midnight_week_ago %}
           {{ t | timestamp_custom('%A at %H:%M') }}
         {%- else %}

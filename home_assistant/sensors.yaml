@@ -12,18 +12,6 @@
       - humidity
       - pressure
     scan_interval: 40
-#  - platform: template
-#    sensors:
-#      battery_phone:
-#        friendly_name: Ceres Battery
-#        unit_of_measurement: '%'
-#        value_template: >-
-#            {%- if state_attr('device_tracker.ceres_2', 'battery') %}
-#                {{ state_attr('device_tracker.ceres_2', 'battery')|round }}
-#            {% else %}
-#                {{ states('sensor.ceres_battery_level') }}
-#            {%- endif %}
-#        device_class: battery
   - platform: systemmonitor
     resources:
       - type: disk_use_percent
@@ -44,37 +32,37 @@
     unit_of_measurement: "°C"
     value_template: '{{ value | multiply(0.001) | round(2)  }}'
     scan_interval: 60
-  - platform: file
-    name: last_snapshot_timestamp
-    file_path: /home/homeassistant/.homeassistant/www/camera.security_camera_last.txt
-    value_template: "{{ value | int | timestamp_local }}"
-  - platform: file
-    name: last_snapshot_timestamp_relative
-    file_path: /home/homeassistant/.homeassistant/www/camera.security_camera_last.txt
-    value_template: >
-      {%- set t = value | int | timestamp_local %}
-      {%- if t != None %}
-        {%- set t = as_timestamp(t) %}
-        {%- set n = now().timestamp() %}
-        {%- set d = n-t %}
-        {%- set midnight_today = as_timestamp(strptime(now().date() | string, "%Y-%m-%d")) %}
-        {%- set midnight_yesterday = midnight_today - 86400 %}
-        {%- set midnight_week_ago = midnight_today - 604800 %}
-        {%- if d < 60 %}
-          {{ d | int }} seconds ago
-        {%- elif d >= 60 and d < 120 %}
-          1 minute ago
-        {%- elif d < 3600 %}
-          {{ (d // 60) | int }} minutes ago
-        {%- elif d < n-midnight_today %}
-          Today at {{ t | timestamp_custom('%H:%M') }}
-        {%- elif d < n-midnight_yesterday %}
-          Yesterday at {{ t | timestamp_custom('%H:%M') }}
-        {%- elif d < n-midnight_week_ago %}
-          {{ t | timestamp_custom('%A at %H:%M') }}
-        {%- else %}
-          {{ t | timestamp_local }}
-        {%- endif %}
-      {% else %}
-        unknown
-      {% endif %}
+  - platform: template
+    sensors:
+      security_camera_last_snapshot:
+        entity_id: input_datetime.security_camera_last_snapshot
+        device_class: timestamp
+        value_template: "{{ states('camera.security_camera_last_snapshot') }}"
+      security_camera_last_snapshot_relative:
+        entity_id: input_datetime.security_camera_last_snapshot
+        value_template: >
+          {%- set t = state_attr('input_datetime.security_camera_last_snapshot', 'timestamp') %}
+          {%- if t != None %}
+            {%- set n = now().timestamp() %}
+            {%- set d = n-t %}
+            {%- set midnight_today = as_timestamp(strptime(now().date() | string, "%Y-%m-%d")) %}
+            {%- set midnight_yesterday = midnight_today - 86400 %}
+            {%- set midnight_week_ago = midnight_today - 604800 %}
+            {%- if d < 60 %}
+              {{ d | int }} seconds ago
+            {%- elif d >= 60 and d < 120 %}
+              1 minute ago
+            {%- elif d < 3600 %}
+              {{ (d // 60) | int }} minutes ago
+            {%- elif d < n-midnight_today %}
+              Today at {{ t | timestamp_custom('%H:%M') }}
+            {%- elif d < n-midnight_yesterday %}
+              Yesterday at {{ t | timestamp_custom('%H:%M') }}
+            {%- elif d < n-midnight_week_ago %}
+              {{ t | timestamp_custom('%A at %H:%M') }}
+            {%- else %}
+              {{ t | timestamp_local }}
+            {%- endif %}
+          {% else %}
+            unknown
+          {% endif %}

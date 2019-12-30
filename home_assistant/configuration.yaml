@@ -49,9 +49,6 @@ camera:
   - platform: local_file
     name: security_camera_last_snapshot
     file_path: /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg
-  # - platform: ffmpeg
-  #   name: security_camera_last_clip
-  #   input: "/home/homeassistant/.homeassistant/www/camera.security_camera_20191225-193224.mp4"
 
 notify:
   - name: family
@@ -71,6 +68,11 @@ input_boolean:
     name: Visitors Present
     icon: mdi:account
 
+input_datetime:
+  security_camera_last_snapshot:
+    has_date: true
+    has_time: true
+
 binary_sensor:
   - platform: rpi_gpio
     ports:
@@ -89,34 +91,14 @@ binary_sensor:
         friendly_name: "Anybody Home"
         value_template: >- 
           {{ is_state("binary_sensor.pieter_present", "on") or is_state("binary_sensor.rouve_present", "on") or is_state("binary_sensor.visitors_present", "on") }} 
-        #value_template: >-
-        #  {{ is_state("person.pieter_rautenbach", "home") }}
-        #device_class: presence # (On/Off)
-        #value_template: >-
-        #  {% set ns = namespace(found=false) %}
-        #  {% for state in states.person %}
-        #    {% if "state.state" == "home" %}
-        #      {% set ns.found = true %}
-        #    {% endif %}
-        #  {% endfor %}
-        #  {{ns.found}}
 
 switch:
   - platform: rpi_gpio
     ports: 
       24: motion_led
   - platform: broadlink
-    #friendly_name: "Broadlink RM Mini 3"
-    #type: rm_mini
     host: !secret broadlink_host
     mac: "C8:F7:42:40:01:F8"
-    #timeout: 15
-    #retry: 5
-    #switches:
-    #  samsung_tv:
-    #    friendly_name: "TV"
-    #    command_on: ""
-    #    command_off: ""
   - platform: template
     switches:
       visitor_mode:
@@ -141,7 +123,6 @@ device_tracker:
 shell_command:
   noop: ":"
   copy_last_snapshot_image: "cp `ls -t /tmp/camera.security_camera_*.jpg | head -n1` /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg"
-  save_last_snapshot_timestamp: "date +%s > /home/homeassistant/.homeassistant/www/camera.security_camera_last.txt"
 
 timer:
   motion_timer:

@@ -28,6 +28,7 @@ views:
             - sensor.ambient_pressure
           title: Environment
           show_header_toggle: false
+      # TODO: Clocks
       - type: vertical-stack
         cards:
           - type: horizontal-stack
@@ -36,7 +37,6 @@ views:
               - type: custom:button-card
                 entity: script.entertainment_apple_tv_on
                 show_name: false
-                icon: mdi:apple
                 tap_action:
                   action: call-service
                   haptic: light
@@ -46,7 +46,6 @@ views:
               - type: custom:button-card
                 entity: script.entertainment_satellite_on
                 show_name: false
-                icon: mdi:set-top-box
                 tap_action:
                   action: call-service
                   haptic: light
@@ -621,13 +620,10 @@ views:
             title: Last Motion Captured
             camera_image: camera.security_camera_last_snapshot
             entities: []
-            # image: /local/camera.security_camera_last.jpg
           - type: entities
             entities:
-              - entity: sensor.last_snapshot_timestamp_relative
+              - entity: sensor.security_camera_last_snapshot_relative
                 name: Last Event
-                format: datetime
-                icon: mdi:clock-outline
   - title: Devices
     path: devices
     icon: mdi:devices

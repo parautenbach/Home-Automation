@@ -164,10 +164,10 @@ script.noop:
   icon: mdi:blank
 script.entertainment_apple_tv_on:
   friendly_name: Apple TV System On
-  icon: mdi:power
+  icon: mdi:apple
 script.entertainment_satellite_on:
   friendly_name: Satellite System On
-  icon: mdi:power
+  icon: mdi:set-top-box
 script.entertainment_off:
   friendly_name: System Off
   icon: mdi:power
@@ -177,3 +177,13 @@ script.security_camera_record_clip:
 switch.visitor_mode:
   friendly_name: Visitor Mode
   icon: mdi:briefcase
+sensor.security_camera_last_snapshot:
+  icon: mdi:clock-outline
+sensor.security_camera_last_snapshot_relative:
+  icon: mdi:clock-outline
+input_boolean.pieter_present:
+  icon: mdi:account
+input_boolean.rouve_present:
+  icon: mdi:account
+input_boolean.visitors_present:
+  icon: mdi:account

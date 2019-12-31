@@ -157,6 +157,12 @@ script.samsung_tv_power:
 script.samsung_tv_hdmi:
   friendly_name: Samsung TV HDMI
   icon: mdi:video-input-hdmi
+script.samsung_tv_hdmi1:
+  friendly_name: Samsung TV HDMI 1
+  icon: mdi:video-input-hdmi
+script.samsung_tv_hdmi2:
+  friendly_name: Samsung TV HDMI 2
+  icon: mdi:video-input-hdmi
 script.samsung_tv_picture_mode:
   friendly_name: Samsung TV Picture Mode
   icon: mdi:image

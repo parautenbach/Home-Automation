@@ -68,6 +68,8 @@ views:
           - type: entities
             entities:
               - switch.visitor_mode
+              # - input_datetime.visitor_mode_on
+              # - input_datetime.visitor_mode_off
             show_header_toggle: false  
           - type: history-graph
             title: Anybody Home

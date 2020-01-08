@@ -193,3 +193,7 @@ input_boolean.rouve_present:
   icon: mdi:account
 input_boolean.visitors_present:
   icon: mdi:account
+input_datetime.visitor_mode_on:
+  friendly_name: Start
+input_datetime.visitor_mode_off:
+  friendly_name: End

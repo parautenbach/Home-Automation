@@ -72,6 +72,12 @@ input_datetime:
   security_camera_last_snapshot:
     has_date: true
     has_time: true
+  visitor_mode_on:
+    has_date: true
+    has_time: true
+  visitor_mode_off:
+    has_date: true
+    has_time: true
 
 binary_sensor:
   - platform: rpi_gpio
@@ -90,7 +96,7 @@ binary_sensor:
       anybody_home:
         friendly_name: "Anybody Home"
         value_template: >- 
-          {{ is_state("binary_sensor.pieter_present", "on") or is_state("binary_sensor.rouve_present", "on") or is_state("binary_sensor.visitors_present", "on") }} 
+          {{ is_state("input_boolean.pieter_present", "on") or is_state("input_boolean.rouve_present", "on") or is_state("input_boolean.visitors_present", "on") }} 
 
 switch:
   - platform: rpi_gpio

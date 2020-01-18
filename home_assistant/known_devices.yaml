@@ -31,14 +31,6 @@ rasplay:
   picture:
   track: true
 
-adsl_router:
-  hide_if_away: false
-  icon: mdi:network-router
-  mac: 88:CE:FA:98:E5:D5
-  name: ADSL Router
-  picture:
-  track: true
-
 broadlink_rm_mini_3:
   hide_if_away: false
   icon: mdi:remote
@@ -111,3 +103,10 @@ rouve_watch_nmap:
   picture:
   track: true
 
+fibre_router:
+  hide_if_away: false
+  icon: mdi:network-router
+  mac: 74:19:F8:EB:83:77
+  name: Fibre Router
+  picture:
+  track: true

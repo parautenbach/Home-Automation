@@ -55,7 +55,7 @@ notify:
     platform: group
     services:
       - service: mobile_app_ceres
-  
+
 input_boolean:
   pieter_present:
     name: Pieter Presence
@@ -113,7 +113,7 @@ switch:
 device_tracker:
   - platform: nmap_tracker
     hosts: 192.168.0.0/24
-    interval_seconds: 60 # scan interval
+    interval_seconds: 600 # scan interval
     #home_interval: 5 # minutes (scan interval)
     consider_home: 600 # seconds (timeout)
     new_device_defaults:

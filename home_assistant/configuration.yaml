@@ -44,10 +44,11 @@ homekit:
 #ios:
 
 zone:
+  name: Home
   #hidden: true
   latitude: -33.9352105
   longitude: 18.8354788
-  radius: 200
+  radius: 100
   friendly_name: Home
   icon: mdi:home
 

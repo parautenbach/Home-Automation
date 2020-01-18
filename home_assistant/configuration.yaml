@@ -17,7 +17,11 @@ sensor: !include sensors.yaml
 
 homeassistant:
   name: Home
+  latitude: -33.9352105
+  longitude: 18.8354788
+  elevation: 130
   unit_system: metric
+  time_zone: "Africa/Johannesburg"
   whitelist_external_dirs:
     - /tmp
   customize: !include customize.yaml
@@ -38,6 +42,14 @@ homekit:
       - input_boolean.visitors_present
 
 #ios:
+
+zone:
+  #hidden: true
+  latitude: -33.9352105
+  longitude: 18.8354788
+  radius: 200
+  friendly_name: Home
+  icon: mdi:home
 
 stream:
 

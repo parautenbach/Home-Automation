@@ -19,7 +19,7 @@ views:
       - type: vertical-stack
         cards:
         - type: weather-forecast
-          entity: weather.2_bach
+          entity: weather.home
           show_header_toggle: false
         - type: entities
           entities:

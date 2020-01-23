@@ -110,3 +110,11 @@ fibre_router:
   name: Fibre Router
   picture:
   track: true
+
+wifi_extender:
+  hide_if_away: false
+  icon: mdi:router-wireless
+  mac: 74:DA:88:6C:F1:9B
+  name: WiFi Extender
+  picture:
+  track: true

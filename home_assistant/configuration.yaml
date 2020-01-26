@@ -114,6 +114,9 @@ binary_sensor:
           {{ is_state("input_boolean.pieter_present", "on") or is_state("input_boolean.rouve_present", "on") or 
              is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on") }} 
 
+tplink:
+  discovery: true
+
 switch:
   - platform: rpi_gpio
     ports: 

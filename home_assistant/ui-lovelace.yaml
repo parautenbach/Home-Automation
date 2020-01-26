@@ -12,7 +12,6 @@ views:
       - entity: binary_sensor.anybody_home
       - entity: binary_sensor.pieter_present
       - entity: binary_sensor.rouve_present
-      - entity: binary_sensor.contractor_mode
       - entity: person.pieter_rautenbach
       - entity: person.rouve_rautenbach
       - entity: sun.sun
@@ -64,6 +63,7 @@ views:
           - type: entities
             entities:
               - switch.living_room_lamp
+              - light.smart_bulb_1
             title: Living Room
             show_header_toggle: true
           - type: entities

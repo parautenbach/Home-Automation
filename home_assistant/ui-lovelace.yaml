@@ -67,16 +67,47 @@ views:
             title: Living Room
             show_header_toggle: true
           - type: entities
+            title: Special Modes
             entities:
               - switch.guest_mode
               - switch.contractor_mode
-            show_header_toggle: false  
+            show_header_toggle: false
+          - type: entities
+            title: Shelly Switches
+            entities:
+              - switch.shelly1_b961d2_relay_0
+            show_header_toggle: true
           - type: history-graph
             title: Anybody Home
             entities:
               - entity: binary_sensor.anybody_home
             hours_to_show: 24
             refresh_interval: 0
+      - type: horizontal-stack
+        title: Light Profiles
+        cards:
+          - type: custom:button-card
+            entity: script.smart_bulb_1_soft_yellow
+            show_name: false
+            # color_type: icon
+            styles:
+              icon:
+              color: rgb(255, 255, 100)
+            tap_action:
+              action: call-service
+              service: script.turn_on
+              service_data:
+                entity_id: script.smart_bulb_1_soft_yellow
+          - type: entity-button
+            entity: script.smart_bulb_1_bright_white
+            show_name: false
+            tap_action:
+              action: call-service
+              service: script.turn_on
+              service_data:
+                entity_id: script.smart_bulb_1_bright_white
+      - type: light
+        entity: light.smart_bulb_1
       - type: picture-elements
         image: /local/floorplan.jpg
         elements:

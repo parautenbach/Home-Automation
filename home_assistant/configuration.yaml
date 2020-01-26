@@ -41,6 +41,7 @@ homekit:
       - input_boolean.rouve_present
       - input_boolean.guest_mode
       - input_boolean.contractor_mode
+      - light.smart_bulb_1
 
 #ios:
 
@@ -116,6 +117,9 @@ binary_sensor:
 
 tplink:
   discovery: true
+
+python_script:
+# https://raw.githubusercontent.com/bieniu/ha-shellies-discovery/master/python_scripts/shellies_discovery.py
 
 switch:
   - platform: rpi_gpio

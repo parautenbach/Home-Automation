@@ -167,3 +167,22 @@
     - service: notify.family
       data:
         message: "Contractor mode disabled."
+- alias: "Shellies Announce"
+  trigger:
+    - platform: homeassistant
+      event: start
+  action:
+    service: mqtt.publish
+    data:
+      topic: shellies/command
+      payload: announce
+- alias: "Shellies Discovery"
+  trigger:
+    - platform: mqtt
+      topic: shellies/announce
+  action:
+    service: python_script.shellies_discovery
+    data_template:
+      id: '{{ trigger.payload_json.id }}'
+      mac: '{{ trigger.payload_json.mac }}'
+      fw_ver: '{{ trigger.payload_json.fw_ver }}'

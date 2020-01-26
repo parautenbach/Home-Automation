@@ -198,3 +198,7 @@ input_boolean.guest_mode:
   icon: mdi:briefcase
 input_boolean.contractor_mode:
   icon: mdi:worker
+script.smart_bulb_1_soft_yellow:
+  icon: mdi:lightbulb-on-outline
+script.smart_bulb_1_bright_white:
+  icon: mdi:lightbulb-on-outline

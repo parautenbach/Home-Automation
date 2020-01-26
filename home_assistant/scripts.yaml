@@ -499,3 +499,17 @@ security_camera_create_snapshot:
             url: http://securitypi.local/local/camera.security_camera_last.jpg
             # content-type: jpg
             # hide-thumbnail: false
+
+smart_bulb_1_soft_yellow:
+  sequence:
+    - service: light.turn_on
+      data:
+        entity_id: light.smart_bulb_1
+        rgb_color: [255, 255, 100]
+
+smart_bulb_1_bright_white:
+  sequence:
+    - service: light.turn_on
+      data:
+        entity_id: light.smart_bulb_1
+        rgb_color: [255, 255, 255]

@@ -12,6 +12,7 @@ views:
       - entity: binary_sensor.anybody_home
       - entity: binary_sensor.pieter_present
       - entity: binary_sensor.rouve_present
+      - entity: binary_sensor.contractor_mode
       - entity: person.pieter_rautenbach
       - entity: person.rouve_rautenbach
       - entity: sun.sun
@@ -67,9 +68,8 @@ views:
             show_header_toggle: true
           - type: entities
             entities:
-              - switch.visitor_mode
-              # - input_datetime.visitor_mode_on
-              # - input_datetime.visitor_mode_off
+              - switch.guest_mode
+              - switch.contractor_mode
             show_header_toggle: false  
           - type: history-graph
             title: Anybody Home

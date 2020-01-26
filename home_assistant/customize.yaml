@@ -180,9 +180,12 @@ script.entertainment_off:
 script.security_camera_record_clip:
   friendly_name: Record Security Camera Clip
   icon: mdi:video
-switch.visitor_mode:
-  friendly_name: Visitor Mode
+switch.guest_mode:
+  friendly_name: Guest Mode
   icon: mdi:briefcase
+switch.contractor_mode:
+  friendly_name: Contractor Mode
+  icon: mdi:worker  
 sensor.security_camera_last_snapshot:
   icon: mdi:clock-outline
 sensor.security_camera_last_snapshot_relative:
@@ -191,9 +194,7 @@ input_boolean.pieter_present:
   icon: mdi:account
 input_boolean.rouve_present:
   icon: mdi:account
-input_boolean.visitors_present:
-  icon: mdi:account
-input_datetime.visitor_mode_on:
-  friendly_name: Start
-input_datetime.visitor_mode_off:
-  friendly_name: End
+input_boolean.guest_mode:
+  icon: mdi:briefcase
+input_boolean.contractor_mode:
+  icon: mdi:worker

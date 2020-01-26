@@ -39,7 +39,8 @@ homekit:
     include_entities:
       - input_boolean.pieter_present
       - input_boolean.rouve_present
-      - input_boolean.visitors_present
+      - input_boolean.guest_mode
+      - input_boolean.contractor_mode
 
 #ios:
 
@@ -77,18 +78,15 @@ input_boolean:
   rouve_present:
     name: Rouvé Presence
     icon: mdi:account
-  visitors_present:
-    name: Visitors Present
-    icon: mdi:account
+  guest_mode:
+    name: Guest Mode
+    icon: mdi:briefcase
+  contractor_mode:
+    name: Contractor Mode
+    icon: mdi:worker  
 
 input_datetime:
   security_camera_last_snapshot:
-    has_date: true
-    has_time: true
-  visitor_mode_on:
-    has_date: true
-    has_time: true
-  visitor_mode_off:
     has_date: true
     has_time: true
 
@@ -106,10 +104,15 @@ binary_sensor:
         friendly_name: "Rouvé Present"
         value_template: >-
           {{ is_state("input_boolean.rouve_present", "on") }}
+      contractor_mode:
+        friendly_name: "Contractor Mode"
+        value_template: >-
+          {{ is_state("input_boolean.contractor_mode", "on") }}
       anybody_home:
         friendly_name: "Anybody Home"
         value_template: >- 
-          {{ is_state("input_boolean.pieter_present", "on") or is_state("input_boolean.rouve_present", "on") or is_state("input_boolean.visitors_present", "on") }} 
+          {{ is_state("input_boolean.pieter_present", "on") or is_state("input_boolean.rouve_present", "on") or 
+             is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on") }} 
 
 switch:
   - platform: rpi_gpio
@@ -120,14 +123,22 @@ switch:
     mac: "C8:F7:42:40:01:F8"
   - platform: template
     switches:
-      visitor_mode:
-        value_template: "{{ is_state('input_boolean.visitors_present', 'on') }}"
+      guest_mode:
+        value_template: "{{ is_state('input_boolean.guest_mode', 'on') }}"
         turn_on:
           - service: input_boolean.turn_on
-            entity_id: input_boolean.visitors_present
+            entity_id: input_boolean.guest_mode
         turn_off:
           - service: input_boolean.turn_off
-            entity_id: input_boolean.visitors_present
+            entity_id: input_boolean.guest_mode
+      contractor_mode:
+        value_template: "{{ is_state('input_boolean.contractor_mode', 'on') }}"
+        turn_on:
+          - service: input_boolean.turn_on
+            entity_id: input_boolean.contractor_mode
+        turn_off:
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.contractor_mode
 
 device_tracker:
   - platform: nmap_tracker

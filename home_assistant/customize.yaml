@@ -202,3 +202,5 @@ script.smart_bulb_1_soft_yellow:
   icon: mdi:lightbulb-on-outline
 script.smart_bulb_1_bright_white:
   icon: mdi:lightbulb-on-outline
+switch.shelly1_b961d2_relay_0:
+  friendly_name: Shelly1 1

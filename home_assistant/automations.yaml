@@ -170,6 +170,9 @@
       data:
         title: "Special Mode"
         message: "Contractor mode disabled."
+        data:
+          push:
+            category: "contractor_mode_keep_enabled_alert"
 - alias: "Contractor Mode Still Enabled Alert"
   trigger:
     - platform: time_pattern
@@ -192,7 +195,7 @@
         message: "Contractor mode is still enabled."
         data:
           push:
-            category: "contractor_mode_alert"
+            category: "contractor_mode_still_enabled_alert"
 - alias: "Disable Contractor Mode From Alert Action"
   trigger:
     - platform: event
@@ -201,6 +204,15 @@
         actionName: DISABLE_CONTRACTOR_MODE
   action:
     - service: switch.turn_off
+      entity_id: switch.contractor_mode  
+- alias: "Enable Contractor Mode From Alert Action"
+  trigger:
+    - platform: event
+      event_type: ios.notification_action_fired
+      event_data:
+        actionName: ENABLE_CONTRACTOR_MODE
+  action:
+    - service: switch.turn_on
       entity_id: switch.contractor_mode  
 - alias: "Shellies Announce"
   trigger:

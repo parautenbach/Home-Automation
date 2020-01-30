@@ -46,14 +46,19 @@ homekit:
 ios:
   push:
     categories:
-      - name: Contractor Mode Alert
-        identifier: "contractor_mode_alert"
+      - name: Contractor Mode Still Enabled Alert
+        identifier: "contractor_mode_still_enabled_alert"
         actions:
           - identifier: "DISABLE_CONTRACTOR_MODE"
             title: "Disable"
             # activationMode: "background"
             # authenticationRequired: true
             # behavior: "default"
+      - name: Contractor Mode Keep Enabled Alert
+        identifier: "contractor_mode_keep_enabled_alert"
+        actions:
+          - identifier: "ENABLE_CONTRACTOR_MODE"
+            title: "Keep Enabled"
       - name: Test
         identifier: 'test'
         actions:

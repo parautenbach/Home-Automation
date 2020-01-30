@@ -43,7 +43,22 @@ homekit:
       - input_boolean.contractor_mode
       - light.smart_bulb_1
 
-#ios:
+ios:
+  push:
+    categories:
+      - name: Contractor Mode Alert
+        identifier: "contractor_mode_alert"
+        actions:
+          - identifier: "DISABLE_CONTRACTOR_MODE"
+            title: "Disable"
+            # activationMode: "background"
+            # authenticationRequired: true
+            # behavior: "default"
+      - name: Test
+        identifier: 'test'
+        actions:
+          - identifier: 'TEST'
+            title: 'Test Action'
 
 zone:
   name: Home

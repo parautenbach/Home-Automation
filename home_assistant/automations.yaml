@@ -15,8 +15,8 @@
     entity_id: binary_sensor.motion_sensor
     to: "on"
   condition:
+    # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
     - condition: or
-      # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
       conditions:
         - condition: sun
           after: sunset
@@ -136,6 +136,7 @@
   action:
     - service: notify.family
       data:
+        title: "System"
         message: "Server disk usage is exceeding 90%!"
 - alias: "Enable Contractor Mode"
   trigger:
@@ -151,6 +152,7 @@
       entity_id: switch.contractor_mode
     - service: notify.family
       data:
+        title: "Special Mode"
         message: "Contractor mode enabled."
 - alias: "Disable Contractor Mode"
   trigger:
@@ -166,7 +168,40 @@
       entity_id: switch.contractor_mode
     - service: notify.family
       data:
+        title: "Special Mode"
         message: "Contractor mode disabled."
+- alias: "Contractor Mode Still Enabled Alert"
+  trigger:
+    - platform: time_pattern
+      hours: "*"
+      minutes: 0
+      seconds: 0
+  condition:
+    - condition: and
+      conditions:
+        - condition: state
+          entity_id: switch.contractor_mode
+          state: "on"
+        - condition: time
+          after: "17:00:00"
+          before: "21:00:00"
+  action:
+    - service: notify.family
+      data:
+        title: "Special Mode"
+        message: "Contractor mode is still enabled."
+        data:
+          push:
+            category: "contractor_mode_alert"
+- alias: "Disable Contractor Mode From Alert Action"
+  trigger:
+    - platform: event
+      event_type: ios.notification_action_fired
+      event_data:
+        actionName: DISABLE_CONTRACTOR_MODE
+  action:
+    - service: switch.turn_off
+      entity_id: switch.contractor_mode  
 - alias: "Shellies Announce"
   trigger:
     - platform: homeassistant

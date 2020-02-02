@@ -54,11 +54,16 @@ ios:
             # activationMode: "background"
             # authenticationRequired: true
             # behavior: "default"
-      - name: Contractor Mode Keep Enabled Alert
-        identifier: "contractor_mode_keep_enabled_alert"
+      - name: Contractor Mode Enabled
+        identifier: "contractor_mode_enabled"
+        actions:
+          - identifier: "DISABLE_CONTRACTOR_MODE"
+            title: "Disable"
+      - name: Contractor Mode Disabled
+        identifier: "contractor_mode_disabled"
         actions:
           - identifier: "ENABLE_CONTRACTOR_MODE"
-            title: "Keep Enabled"
+            title: "Enable"
       - name: Test
         identifier: 'test'
         actions:

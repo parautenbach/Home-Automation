@@ -138,6 +138,35 @@
       data:
         title: "System"
         message: "Server disk usage is exceeding 90%!"
+
+- alias: "Contractor Mode Enabled Alert"
+  trigger: 
+    - platform: state
+      entity_id: switch.contractor_mode
+      to: "on"
+  action:
+    - service: notify.family
+      data:
+        title: "Special Mode"
+        message: "Contractor mode enabled."
+        data:
+          push:
+            category: "contractor_mode_enabled"
+
+- alias: "Contractor Mode Disabled Alert"
+  trigger: 
+    - platform: state
+      entity_id: switch.contractor_mode
+      to: "off"
+  action:
+    - service: notify.family
+      data:
+        title: "Special Mode"
+        message: "Contractor mode disabled."
+        data:
+          push:
+            category: "contractor_mode_disabled"
+
 - alias: "Enable Contractor Mode"
   trigger:
     - platform: time
@@ -150,10 +179,6 @@
   action:
     - service: switch.turn_on
       entity_id: switch.contractor_mode
-    - service: notify.family
-      data:
-        title: "Special Mode"
-        message: "Contractor mode enabled."
 - alias: "Disable Contractor Mode"
   trigger:
     - platform: time
@@ -166,13 +191,6 @@
   action:
     - service: switch.turn_off
       entity_id: switch.contractor_mode
-    - service: notify.family
-      data:
-        title: "Special Mode"
-        message: "Contractor mode disabled."
-        data:
-          push:
-            category: "contractor_mode_keep_enabled_alert"
 - alias: "Contractor Mode Still Enabled Alert"
   trigger:
     - platform: time_pattern

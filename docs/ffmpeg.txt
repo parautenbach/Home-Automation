@@ -67,7 +67,6 @@ Michel.
 
 ==========
 
-http://www.oid-info.com/cgi-bin/display?oid=1.3.6.1.4.1.16972&submit=Display&action=display
-https://www.comparitech.com/net-admin/snmpwalk-examples-windows-linux/
-http://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1.3.6.1.2.1.2.2.1
-http://intronetworks.cs.luc.edu/current/html/netmgmt.html
+ v4l2-ctl --all
+ v4l2-ctl -C saturation
+ v4l2-ctl -C color_effects

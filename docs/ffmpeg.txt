@@ -38,3 +38,36 @@ ffmpeg version git-2019-10-23-ac0f5f4 Copyright (c) 2000-2019 the FFmpeg develop
   libpostproc    55.  6.100 / 55.  6.100
 
 https://trac.ffmpeg.org/wiki/CompilationGuide/RaspberryPi
+
+==========
+
+https://github.com/mpromonet/v4l2rtspserver/issues/166
+
+parautenbach commented on 16 Dec 2019 • 
+Is there a way to do this? I can't seem to find info on this. I'd like to do something similar to ffmpeg where one can set hue=s=0. I don't see options to do this directly with v4l2rtspserver or v4l2-ctl.
+
+The reason I want to do this is to make an infrared camera feed look a little more pleasing.
+
+@mpromonet
+ 
+Owner
+mpromonet commented on 3 Jan • 
+Hi Peter,
+This project doesnot modify image, it streams what it captures using the V4L2 interface.
+Depending on the V4L2 device this could be possible using the appropiate control.
+Using the driver bcm2835_v4l2, the black & white could be set using :
+
+v4l2-ctl -c saturation=-100
+or
+
+v4l2-ctl -c color_effects=1
+An other way is to add a v4l2loopback device that makes the tranformation, but this will need some processing ressources...
+Best Regards,
+Michel.
+
+==========
+
+http://www.oid-info.com/cgi-bin/display?oid=1.3.6.1.4.1.16972&submit=Display&action=display
+https://www.comparitech.com/net-admin/snmpwalk-examples-windows-linux/
+http://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1.3.6.1.2.1.2.2.1
+http://intronetworks.cs.luc.edu/current/html/netmgmt.html

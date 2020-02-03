@@ -22,14 +22,18 @@ views:
           entity: weather.home
           show_header_toggle: false
         - type: entities
+          title: Environment
           entities:
             - sensor.ambient_temperature
             - sensor.ambient_humidity
             - sensor.ambient_pressure
-          title: Environment
           show_header_toggle: false
+        - type: history-graph
+          entities:
+            - entity: sensor.ambient_temperature
+          hours_to_show: 24
+          refresh_interval: 60
       # TODO: Clocks
-
       - type: vertical-stack
         cards:
           - type: horizontal-stack
@@ -52,7 +56,6 @@ views:
                   yellow: 2
                   red: 4
           - type: history-graph
-            title: Download History
             entities:
               - entity: sensor.internet_speed_in
               - entity: sensor.internet_speed_out

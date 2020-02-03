@@ -189,3 +189,13 @@ shell_command:
 timer:
   motion_timer:
     duration: "00:05:00"
+
+input_number:
+  wan_traffic_delta_in:
+    min: 0
+    max: 4294967295
+    #unit_of_measurement:
+    #icon
+  wan_traffic_delta_out:
+    min: 0
+    max: 4294967295

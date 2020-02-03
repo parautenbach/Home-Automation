@@ -60,6 +60,13 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.entertainment_off
+          - type: horizontal-stack
+            title: Internet
+            cards:
+              - type: gauge
+                entity: sensor.internet_speed_in
+              - type: gauge
+                entity: sensor.internet_speed_out
           - type: entities
             entities:
               - switch.living_room_lamp

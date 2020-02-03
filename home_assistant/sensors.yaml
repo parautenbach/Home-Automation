@@ -66,3 +66,29 @@
           {% else %}
             unknown
           {% endif %}
+      internet_speed_in:
+        value_template: '{{ ((states.input_number.wan_traffic_delta_in.state | float ) / 1000000 ) | round(2) }}'
+        unit_of_measurement: 'Mbps'
+      internet_speed_out:
+        value_template: '{{ ((states.input_number.wan_traffic_delta_out.state | float ) / 1000000 ) | round(2) }}'
+        unit_of_measurement: 'Mbps'
+  - platform: snmp
+    name: snmp_wan_in
+    host: 192.168.0.1
+    community: Router
+    version: 2c
+    baseoid: 1.3.6.1.2.1.2.2.1.10.18  # ifInOctets.14
+    unit_of_measurement: octets
+  - platform: snmp
+    name: snmp_wan_out
+    host: 192.168.0.1
+    community: Router
+    version: 2c
+    baseoid: 1.3.6.1.2.1.2.2.1.16.18  # ifOutOctets.14
+    unit_of_measurement: octets
+  - platform: statistics
+    name: 'Internet Traffic In'
+    entity_id: sensor.internet_speed_in
+  - platform: statistics
+    name: 'Internet Traffic Out'
+    entity_id: sensor.internet_speed_out

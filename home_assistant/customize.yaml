@@ -204,3 +204,9 @@ script.smart_bulb_1_bright_white:
   icon: mdi:lightbulb-on-outline
 switch.shelly1_b961d2_relay_0:
   friendly_name: Shelly1 1
+sensor.internet_speed_in:
+  friendly_name: 'Current Downloads'
+  icon: mdi:download
+sensor.internet_speed_out:
+  friendly_name: 'Current Uploads'
+  icon: mdi:upload

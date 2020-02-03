@@ -125,10 +125,11 @@ views:
           - type: custom:button-card
             entity: script.smart_bulb_1_soft_yellow
             show_name: false
-            # color_type: icon
-            styles:
-              icon:
-                - color: rgb(255, 255, 100)
+            color_type: card
+            color: rgb(255, 255, 100)
+            # styles:
+            #   icon:
+            #     - color: rgb(255, 255, 100)
             tap_action:
               action: call-service
               service: script.turn_on

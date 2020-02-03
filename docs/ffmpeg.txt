@@ -70,3 +70,11 @@ Michel.
  v4l2-ctl --all
  v4l2-ctl -C saturation
  v4l2-ctl -C color_effects
+
+Hi parautenbach,
+Yes this is depending on the device driver. you can get list of controls supported by the driver using :
+
+v4l2-ctl --all -d /dev/video0
+
+Best Regards,
+Michel.

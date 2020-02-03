@@ -29,6 +29,35 @@ views:
           title: Environment
           show_header_toggle: false
       # TODO: Clocks
+
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            title: Internet
+            cards:
+              - type: gauge
+                entity: sensor.internet_speed_in
+                min: 0
+                max: 10
+                severity:
+                  green: 0
+                  yellow: 4
+                  red: 8
+              - type: gauge
+                entity: sensor.internet_speed_out
+                min: 0
+                max: 5
+                severity:
+                  green: 0
+                  yellow: 2
+                  red: 4
+          - type: history-graph
+            title: Download History
+            entities:
+              - entity: sensor.internet_speed_in
+              - entity: sensor.internet_speed_out
+            hours_to_show: 24
+            refresh_interval: 60
       - type: vertical-stack
         cards:
           - type: horizontal-stack
@@ -60,13 +89,6 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.entertainment_off
-          - type: horizontal-stack
-            title: Internet
-            cards:
-              - type: gauge
-                entity: sensor.internet_speed_in
-              - type: gauge
-                entity: sensor.internet_speed_out
           - type: entities
             entities:
               - switch.living_room_lamp
@@ -85,11 +107,15 @@ views:
               - switch.shelly1_b961d2_relay_0
             show_header_toggle: true
           - type: history-graph
-            title: Anybody Home
+            title: Who's Home?
             entities:
               - entity: binary_sensor.anybody_home
+              - entity: binary_sensor.pieter_present
+              - entity: binary_sensor.rouve_present
+              - entity: binary_sensor.contractor_mode
+              - entity: switch.guest_mode
             hours_to_show: 24
-            refresh_interval: 0
+            refresh_interval: 300
       - type: horizontal-stack
         title: Light Profiles
         cards:

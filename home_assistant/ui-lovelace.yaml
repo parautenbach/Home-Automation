@@ -128,7 +128,7 @@ views:
             # color_type: icon
             styles:
               icon:
-              color: rgb(255, 255, 100)
+                - color: rgb(255, 255, 100)
             tap_action:
               action: call-service
               service: script.turn_on

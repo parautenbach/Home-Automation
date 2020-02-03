@@ -1,53 +1,23 @@
-(base) parautenbach@venus:~$ snmpwalk -v1 -Os -c Router 192.168.0.1
-sysDescr.0 = STRING: FIBRE WiFi ROUTER
-sysObjectID.0 = Wrong Type (should be OBJECT IDENTIFIER): STRING: "1.3.6.1.4.1.16972"
-sysUpTimeInstance = Timeticks: (25110200) 2 days, 21:45:02.00
-sysContact.0 = STRING: MWEB
-sysName.0 = STRING: WR7010 v2
-sysLocation.0 = STRING: South Africa
-sysServices.0 = INTEGER: 6
-ipInReceives.0 = Counter32: 1985896
-ipForwDatagrams.0 = Counter32: 953068
-ipInDelivers.0 = Counter32: 985640
-ipOutRequests.0 = Counter32: 1229504
-ipReasmReqds.0 = Counter32: 34
-ipReasmOKs.0 = Counter32: 9
-ipReasmFails.0 = Counter32: 12
-ipFragOKs.0 = Counter32: 6
-ipFragFails.0 = Counter32: 0
-ipFragCreates.0 = Counter32: 16
-tcpActiveOpens.0 = Counter32: 12
-tcpPassiveOpens.0 = Counter32: 2063
-tcpAttemptFails.0 = Counter32: 366
-tcpEstabResets.0 = Counter32: 1940
-tcpCurrEstab.0 = Gauge32: 0
-tcpInSegs.0 = Counter32: 49229
-tcpOutSegs.0 = Counter32: 44411
-tcpRetransSegs.0 = Counter32: 12
-udpInDatagrams.0 = Counter32: 177105
-udpNoPorts.0 = Counter32: 1342
-udpInErrors.0 = Counter32: 0
-udpOutDatagrams.0 = Counter32: 173254
-End of MIB
+$ snmpwalk -v1 -Os -c Router 192.168.0.1
 
-(base) parautenbach@venus:/tmp$ snmpwalk -v2c -c Router 192.168.0.1 ifDescr.14
+$ snmpwalk -v2c -c Router 192.168.0.1 ifDescr.14
 IF-MIB::ifDescr.14 = STRING: nas0
-(base) parautenbach@venus:/tmp$ snmpwalk -v2c -c Router 192.168.0.1 ifDescr.15
+$ snmpwalk -v2c -c Router 192.168.0.1 ifDescr.15
 IF-MIB::ifDescr.15 = STRING: sit0
-(base) parautenbach@venus:/tmp$ snmpwalk -v2c -c Router 192.168.0.1 ifDescr.16
+$ snmpwalk -v2c -c Router 192.168.0.1 ifDescr.16
 IF-MIB::ifDescr.16 = STRING: ip6tnl0
-(base) parautenbach@venus:/tmp$ snmpwalk -v2c -c Router 192.168.0.1 ifDescr.17
+$ snmpwalk -v2c -c Router 192.168.0.1 ifDescr.17
 IF-MIB::ifDescr.17 = STRING: br0
-(base) parautenbach@venus:/tmp$ snmpwalk -v2c -c Router 192.168.0.1 ifDescr.18
+$ snmpwalk -v2c -c Router 192.168.0.1 ifDescr.18
 IF-MIB::ifDescr.18 = STRING: ppp0
 
-(base) parautenbach@venus:/tmp$ snmpwalk -v2c -c Router 192.168.0.1 ifOutOctets.14
+$ snmpwalk -v2c -c Router 192.168.0.1 ifOutOctets.14
 IF-MIB::ifOutOctets.14 = Counter32: 1166228102
-(base) parautenbach@venus:/tmp$ snmpwalk -v2c -c Router 192.168.0.1 ifInOctets.14
+$ snmpwalk -v2c -c Router 192.168.0.1 ifInOctets.14
 IF-MIB::ifInOctets.14 = Counter32: 3035682687
-(base) parautenbach@venus:/tmp$ snmpwalk -v2c -c Router 192.168.0.1 ifOutOctets.18
+$ snmpwalk -v2c -c Router 192.168.0.1 ifOutOctets.18
 IF-MIB::ifOutOctets.18 = Counter32: 71033234
-(base) parautenbach@venus:/tmp$ snmpwalk -v2c -c Router 192.168.0.1 ifInOctets.18
+$ snmpwalk -v2c -c Router 192.168.0.1 ifInOctets.18
 IF-MIB::ifInOctets.18 = Counter32: 2873375628
 
 420378472

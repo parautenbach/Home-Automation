@@ -251,6 +251,7 @@
       id: '{{ trigger.payload_json.id }}'
       mac: '{{ trigger.payload_json.mac }}'
       fw_ver: '{{ trigger.payload_json.fw_ver }}'
+# https://community.home-assistant.io/t/snmp-bandwidth-monitor/7122
 - alias: "Monitor Inbound Internet Traffic"
   trigger:
     platform: state

@@ -142,6 +142,9 @@ binary_sensor:
 
 tplink:
   discovery: true
+  # discovery: false
+  # light:
+  #   - host: 192.168.0.107
 
 python_script:
 # https://raw.githubusercontent.com/bieniu/ha-shellies-discovery/master/python_scripts/shellies_discovery.py

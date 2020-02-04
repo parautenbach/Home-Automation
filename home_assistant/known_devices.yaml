@@ -1,4 +1,3 @@
-
 rasplex:
   hide_if_away: false
   icon: mdi:plex
@@ -116,5 +115,37 @@ wifi_extender:
   icon: mdi:router-wireless
   mac: 74:DA:88:6C:F1:9B
   name: WiFi Extender
+  picture:
+  track: true
+
+shelly1_1:
+  hide_if_away: false
+  icon: mdi:electric-switch
+  mac: 98:F4:AB:B9:61:D2
+  name: Shelly1 B961D2 (1)
+  picture:
+  track: true
+
+lb130_1:
+  hide_if_away: false
+  icon: mdi:lightbulb
+  mac: AC:84:C6:AA:33:61
+  name: Kasa LB130 (1)
+  picture:
+  track: true
+
+juno:
+  hide_if_away: false
+  icon: mdi:tablet-ipad
+  mac: 34:C0:59:55:2A:B7
+  name: 
+  picture:
+  track: true
+
+venus:
+  hide_if_away: false
+  icon: mdi:desktop-mac
+  mac: 8C:2D:AA:5B:64:7F
+  name: 
   picture:
   track: true

@@ -138,7 +138,7 @@ juno:
   hide_if_away: false
   icon: mdi:tablet-ipad
   mac: 34:C0:59:55:2A:B7
-  name: 
+  name: Juno
   picture:
   track: true
 
@@ -146,6 +146,6 @@ venus:
   hide_if_away: false
   icon: mdi:desktop-mac
   mac: 8C:2D:AA:5B:64:7F
-  name: 
+  name: Venus
   picture:
   track: true

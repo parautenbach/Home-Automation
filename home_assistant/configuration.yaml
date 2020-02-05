@@ -202,3 +202,17 @@ input_number:
   wan_traffic_delta_out:
     min: 0
     max: 4294967295
+
+utility_meter:
+  daily_internet_usage_in:
+    source: sensor.internet_usage_in
+    cycle: daily
+  daily_internet_usage_out:
+    source: sensor.internet_usage_out
+    cycle: daily
+  monthly_internet_usage_in:
+    source: sensor.internet_usage_in
+    cycle: monthly
+  monthly_internet_usage_out:
+    source: sensor.internet_usage_out
+    cycle: monthly

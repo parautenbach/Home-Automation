@@ -72,6 +72,12 @@
       internet_speed_out:
         value_template: '{{ ((states.input_number.wan_traffic_delta_out.state | float ) / 1000000 ) | round(2) }}'
         unit_of_measurement: 'Mbps'
+      internet_usage_in:
+        value_template: '{{ ((states.input_number.wan_traffic_delta_in.state | float ) / 1000000 / 8 ) | round(3) }}'
+        unit_of_measurement: 'GB'
+      internet_usage_out:
+        value_template: '{{ ((states.input_number.wan_traffic_delta_out.state | float ) / 1000000 / 8 ) | round(3) }}'
+        unit_of_measurement: 'GB'
   - platform: snmp
     name: snmp_wan_in
     host: 192.168.0.1

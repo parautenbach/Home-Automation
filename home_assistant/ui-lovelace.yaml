@@ -71,7 +71,7 @@ views:
                 name: This Month
               - entity: sensor.monthly_internet_usage_out
                 name: This Month
-            show_name: false
+            show_name: true
             columns: 2
       - type: vertical-stack
         cards:

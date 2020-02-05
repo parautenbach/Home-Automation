@@ -210,3 +210,21 @@ sensor.internet_speed_in:
 sensor.internet_speed_out:
   friendly_name: 'Upload Traffic'
   icon: mdi:upload
+sensor.internet_usage_in:
+  friendly_name: 'Download Usage'
+  icon: mdi:download
+sensor.internet_usage_out:
+  friendly_name: 'Upload Usage'
+  icon: mdi:upload
+sensor.daily_internet_usage_in:
+  friendly_name: 'Daily Downloads'
+  icon: mdi:download
+sensor.daily_internet_usage_out:
+  friendly_name: 'Daily Uploads'
+  icon: mdi:upload
+sensor.monthly_internet_usage_in:
+  friendly_name: 'Monthly Downloads'
+  icon: mdi:download
+sensor.monthly_internet_usage_out:
+  friendly_name: 'Monthly Uploads'
+  icon: mdi:upload

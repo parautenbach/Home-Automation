@@ -62,17 +62,23 @@ views:
             hours_to_show: 24
             refresh_interval: 60
           - type: glance
+            title: Today
+            show_name: false
+            columns: 2
             entities:
               - entity: sensor.daily_internet_usage_in
                 name: Today
               - entity: sensor.daily_internet_usage_out
                 name: Today
+          - type: glance
+            title: This Month
+            show_name: false
+            columns: 2
+            entities:
               - entity: sensor.monthly_internet_usage_in
                 name: This Month
               - entity: sensor.monthly_internet_usage_out
                 name: This Month
-            show_name: true
-            columns: 2
       - type: vertical-stack
         cards:
           - type: horizontal-stack

@@ -42,7 +42,6 @@
       entity_id: switch.living_room_lamp
 - alias: "Motion Indicator On"
   initial_state: true
-  hide_entity: true
   trigger:
     platform: state
     entity_id: binary_sensor.motion_sensor
@@ -52,7 +51,6 @@
       entity_id: switch.motion_led
 - alias: "Motion Indicator Off"
   initial_state: true
-  hide_entity: true
   trigger:
     platform: state
     entity_id: binary_sensor.motion_sensor
@@ -62,7 +60,6 @@
       entity_id: switch.motion_led
 - alias: "Living Room Lamp Auto On Upon Sunset or Arrival"
   initial_state: true
-  hide_entity: true
   trigger:
     - platform: sun
       event: sunset

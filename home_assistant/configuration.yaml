@@ -42,6 +42,9 @@ homekit:
       - input_boolean.guest_mode
       - input_boolean.contractor_mode
       - light.smart_bulb_1
+      - light.smart_bulb_2
+      - light.smart_bulb_3
+      - light.smart_bulb_4
 
 ios:
   push:

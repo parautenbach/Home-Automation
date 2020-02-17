@@ -198,6 +198,14 @@ input_boolean.guest_mode:
   icon: mdi:briefcase
 input_boolean.contractor_mode:
   icon: mdi:worker
+light.smart_bulb_1:
+  friendly_name: Smart Bulb 1
+light.smart_bulb_2:
+  friendly_name: Smart Bulb 2
+light.smart_bulb_3:
+  friendly_name: Smart Bulb 3
+light.smart_bulb_4:
+  friendly_name: Smart Bulb 4
 script.smart_bulb_1_soft_yellow:
   icon: mdi:lightbulb-on-outline
 script.smart_bulb_1_bright_white:

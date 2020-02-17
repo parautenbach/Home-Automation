@@ -112,8 +112,12 @@ views:
                     entity_id: script.entertainment_off
           - type: entities
             entities:
-              - switch.living_room_lamp
+              - entity: switch.living_room_lamp
+                state_color: true
               - light.smart_bulb_1
+              - light.smart_bulb_2
+              - light.smart_bulb_3
+              - light.smart_bulb_4
             title: Living Room
             show_header_toggle: true
           - type: entities

@@ -1,5 +1,4 @@
 default_view:
-  view: true
   entities:
     - binary_sensor.motion_sensor
     - binary_sensor.updater
@@ -23,7 +22,6 @@ default_view:
 
 ambient_sensor:
   name: Environment
-  control: hidden
   entities:
     - sensor.ambient_temperature
     - sensor.ambient_humidity
@@ -36,14 +34,12 @@ living_room:
 
 multimedia:
   name: Multimedia
-  control: hidden
   entities:
     - script.hk_3380_vol_up
     - script.hk_3380_vol_down
 
 hk_3380:
   name: Sound
-  control: hidden
   entities:
     - script.hk_3380_power_off
     - script.hk_3380_power_on
@@ -56,7 +52,6 @@ hk_3380:
 
 dstv:
   name: Satellite
-  control: hidden
   entities:
     - script.dstv_power
     - script.dstv_ch_plus
@@ -85,7 +80,6 @@ dstv:
 
 security:
   name: Security
-  control: hidden
   entities:
     - camera.security_camera
     - switch.motion_led
@@ -93,7 +87,6 @@ security:
 
 device_ceres:
   name: Ceres
-  control: hidden
   entities:
     - device_tracker.ceres_2
     - sensor.ceres_2_battery_level
@@ -101,7 +94,6 @@ device_ceres:
 
 device_rouve:
   name: Rouvé
-  control: hidden
   entities:
     - device_tracker.rouve
     - sensor.rouve_battery_level
@@ -109,7 +101,6 @@ device_rouve:
 
 server:
   name: Server
-  control: hidden
   entities:
     - sensor.disk_use_percent
     - sensor.memory_use_percent
@@ -121,3 +112,26 @@ server:
     - sensor.network_throughput_in_wlan0
     - sensor.network_throughput_out_wlan0
     - sensor.last_boot
+
+all_devices:
+  name: All Devices 
+  entities:
+    - device_tracker.rasplex
+    - device_tracker.apple_airport
+    - device_tracker.thor
+    - device_tracker.rasplay
+    - device_tracker.broadlink_rm_mini_3
+    - device_tracker.apple_tv
+    - device_tracker.pieter_macbook
+    - device_tracker.living_room_lamp
+    - device_tracker.ceres_nmap
+    - device_tracker.rouve_nmap
+    - device_tracker.chronos_nmap
+    - device_tracker.rouve_laptop
+    - device_tracker.rouve_watch_nmap
+    - device_tracker.fibre_router
+    - device_tracker.wifi_extender
+    - device_tracker.shelly1_1
+    - device_tracker.lb130_1
+    - device_tracker.juno
+    - device_tracker.venus

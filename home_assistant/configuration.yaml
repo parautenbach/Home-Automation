@@ -76,7 +76,6 @@ zone:
   latitude: -33.9352105
   longitude: 18.8354788
   radius: 100
-  friendly_name: Home
   icon: mdi:home
 
 stream:
@@ -183,7 +182,6 @@ device_tracker:
     consider_home: 600 # seconds (timeout)
     new_device_defaults:
       track_new_devices: true
-      hide_if_away: false
 
 shell_command:
   noop: ":"

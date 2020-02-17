@@ -1,5 +1,4 @@
 rasplex:
-  hide_if_away: false
   icon: mdi:plex
   mac: B8:27:EB:45:4F:FF
   name: Plex Server
@@ -7,7 +6,6 @@ rasplex:
   track: true
 
 apple_airport:
-  hide_if_away: false
   icon: mdi:router-wireless
   mac: 5C:96:9D:6F:84:E4
   name: Apple Airport
@@ -15,7 +13,6 @@ apple_airport:
   track: true
 
 thor:
-  hide_if_away: false
   icon: mdi:nas
   mac: 00:90:A9:3F:C8:55
   name: Thor (Cloud Drive)
@@ -23,7 +20,6 @@ thor:
   track: true
 
 rasplay:
-  hide_if_away: false
   icon: mdi:airplay
   mac: C8:3A:35:C2:0A:75
   name: Rasplay
@@ -31,7 +27,6 @@ rasplay:
   track: true
 
 broadlink_rm_mini_3:
-  hide_if_away: false
   icon: mdi:remote
   mac: C8:F7:42:40:01:F8
   name: Broadlink RM mini 3
@@ -39,7 +34,6 @@ broadlink_rm_mini_3:
   track: true
 
 apple_tv:
-  hide_if_away: false
   icon: mdi:apple
   mac: 50:32:37:81:6B:83
   name: Apple TV
@@ -47,7 +41,6 @@ apple_tv:
   track: true
 
 pieter_macbook:
-  hide_if_away: false
   icon: mdi:laptop
   mac: A8:66:7F:1F:A6:36
   name: Pieter MacBook
@@ -55,7 +48,6 @@ pieter_macbook:
   track: true
 
 living_room_lamp:
-  hide_if_away: false
   icon: mdi:floor-lamp
   mac: DC:4F:22:FA:02:75
   name: Living Room Lamp
@@ -63,7 +55,6 @@ living_room_lamp:
   track: true
 
 ceres_nmap:
-  hide_if_away: false
   icon: mdi:cellphone-iphone
   mac: 80:B0:3D:C1:6D:90
   name: Ceres (nmap)
@@ -71,7 +62,6 @@ ceres_nmap:
   track: true
 
 rouve_nmap:
-  hide_if_away: false
   icon: mdi:cellphone-iphone
   mac: FC:B6:D8:84:6E:67
   name: Rouvé (nmap)
@@ -79,7 +69,6 @@ rouve_nmap:
   track: true
 
 chronos_nmap:
-  hide_if_away: false
   icon: mdi:watch
   mac: E4:E0:A6:9E:CF:32
   name: Chronos
@@ -87,7 +76,6 @@ chronos_nmap:
   track: true
 
 rouve_laptop:
-  hide_if_away: false
   icon: mdi:laptop
   mac: 28:39:26:4F:C8:EF
   name: Rouvé Laptop
@@ -95,7 +83,6 @@ rouve_laptop:
   track: true
 
 rouve_watch_nmap:
-  hide_if_away: false
   icon: mdi:watch
   mac: 20:78:F0:8A:E4:9F
   name: Rouvé Watch
@@ -103,7 +90,6 @@ rouve_watch_nmap:
   track: true
 
 fibre_router:
-  hide_if_away: false
   icon: mdi:network-router
   mac: 74:19:F8:EB:83:77
   name: Fibre Router
@@ -111,7 +97,6 @@ fibre_router:
   track: true
 
 wifi_extender:
-  hide_if_away: false
   icon: mdi:router-wireless
   mac: 74:DA:88:6C:F1:9B
   name: WiFi Extender
@@ -119,7 +104,6 @@ wifi_extender:
   track: true
 
 shelly1_1:
-  hide_if_away: false
   icon: mdi:electric-switch
   mac: 98:F4:AB:B9:61:D2
   name: Shelly1 B961D2 (1)
@@ -127,7 +111,6 @@ shelly1_1:
   track: true
 
 lb130_1:
-  hide_if_away: false
   icon: mdi:lightbulb
   mac: AC:84:C6:AA:33:61
   name: Kasa LB130 (1)
@@ -135,7 +118,6 @@ lb130_1:
   track: true
 
 juno:
-  hide_if_away: false
   icon: mdi:tablet-ipad
   mac: 34:C0:59:55:2A:B7
   name: Juno
@@ -143,7 +125,6 @@ juno:
   track: true
 
 venus:
-  hide_if_away: false
   icon: mdi:desktop-mac
   mac: 8C:2D:AA:5B:64:7F
   name: Venus

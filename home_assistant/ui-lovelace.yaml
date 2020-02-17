@@ -774,6 +774,10 @@ views:
           - sensor.rouve_battery_state
         title: Rouvé
         show_header_toggle: false
+      - type: map
+        entities:
+          - device_tracker.ceres_2
+          - device_tracker.rouve
       - type: entities
         entities:
           - group.all_devices

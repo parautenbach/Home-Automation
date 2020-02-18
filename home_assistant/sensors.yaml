@@ -1,3 +1,12 @@
+  - platform: time_date
+    display_options:
+      - 'time'
+      - 'date'
+      - 'date_time'
+      - 'date_time_utc'
+      - 'date_time_iso'
+      - 'time_date'
+      - 'time_utc'
   - platform: bme280
     name: Ambient
     i2c_address: 0x77
@@ -39,7 +48,9 @@
         device_class: timestamp
         value_template: "{{ states('camera.security_camera_last_snapshot') }}"
       security_camera_last_snapshot_relative:
-        entity_id: input_datetime.security_camera_last_snapshot
+        entity_id: 
+          - input_datetime.security_camera_last_snapshot
+          - sensor.time
         value_template: >
           {%- set t = state_attr('input_datetime.security_camera_last_snapshot', 'timestamp') %}
           {%- if t != None %}

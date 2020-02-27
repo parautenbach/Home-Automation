@@ -190,8 +190,8 @@ views:
             tap_action:
               action: toggle
             style: 
-              top: 40%
-              left: 75%
+              top: 42%
+              left: 7%
   - title: Entertainment
     path: entertainment
     icon: mdi:audio-video

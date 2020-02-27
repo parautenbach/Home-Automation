@@ -20,10 +20,10 @@
       conditions:
         - condition: sun
           after: sunset
-          after_offset: "-01:30:00"
+          after_offset: "-02:00:00"
         - condition: sun
           before: sunrise
-          before_offset: "-01:00:00"
+          before_offset: "-00:30:00"
   action:
     - service: switch.turn_on
       entity_id: switch.living_room_lamp

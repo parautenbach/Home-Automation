@@ -121,16 +121,16 @@ views:
             title: Living Room
             show_header_toggle: true
           - type: entities
+            title: Shelly Switches
+            entities:
+              - switch.shelly1_b961d2_relay_0
+            show_header_toggle: true
+          - type: entities
             title: Special Modes
             entities:
               - switch.guest_mode
               - switch.contractor_mode
             show_header_toggle: false
-          - type: entities
-            title: Shelly Switches
-            entities:
-              - switch.shelly1_b961d2_relay_0
-            show_header_toggle: true
           - type: history-graph
             title: Who's Home?
             entities:
@@ -182,8 +182,6 @@ views:
               service: script.turn_on
               service_data:
                 entity_id: script.smart_bulb_1_bright_white
-      - type: light
-        entity: light.smart_bulb_1
       - type: picture-elements
         image: /local/floorplan.jpg
         elements:

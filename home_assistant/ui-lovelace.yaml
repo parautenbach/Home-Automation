@@ -183,7 +183,7 @@ views:
               service_data:
                 entity_id: script.smart_bulb_1_bright_white
       - type: picture-elements
-        image: /local/floorplan.jpg
+        image: /local/floorplan.png
         elements:
           - type: state-icon
             entity: switch.living_room_lamp

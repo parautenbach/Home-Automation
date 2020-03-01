@@ -39,7 +39,7 @@ script.hk_3380_vid2:
   icon: mdi:volume-source
 script.hk_3380_dimmer:
   friendly_name: Hi-Fi Dimmer
-  icon: mdi:power-sleep
+  icon: mdi:white-balance-sunny
 switch.living_room_lamp:
   icon: mdi:floor-lamp
 automation.take_motion_snapshots:

@@ -182,16 +182,6 @@ views:
               service: script.turn_on
               service_data:
                 entity_id: script.smart_bulb_1_bright_white
-      - type: picture-elements
-        image: /local/floorplan.svg
-        elements:
-          - type: state-icon
-            entity: switch.living_room_lamp
-            tap_action:
-              action: toggle
-            style: 
-              top: 42%
-              left: 7%
   - title: Entertainment
     path: entertainment
     icon: mdi:audio-video
@@ -726,6 +716,21 @@ views:
                     entity_id: script.dstv_0
               - type: custom:button-card
                 color_type: blank-card
+  - title: Floorplan
+    path: floorplan
+    icon: mdi:floor-plan
+    badges: []
+    cards:
+      - type: picture-elements
+        image: /local/floorplan.svg
+        elements:
+          - type: state-icon
+            entity: switch.living_room_lamp
+            tap_action:
+              action: toggle
+            style: 
+              top: 42%
+              left: 7%    
   - title: Security
     path: security
     icon: mdi:security

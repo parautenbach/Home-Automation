@@ -29,6 +29,8 @@ homeassistant:
 lovelace:
   mode: yaml
 
+apple_tv:
+
 discovery:
 #  ignore:
 #    - homekit

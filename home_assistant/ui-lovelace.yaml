@@ -118,7 +118,7 @@ views:
               - light.smart_bulb_2
               - light.smart_bulb_3
               - light.smart_bulb_4
-            title: Living Room
+            title: Lights
             show_header_toggle: true
           - type: entities
             title: Shelly Switches

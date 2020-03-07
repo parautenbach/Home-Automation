@@ -718,6 +718,7 @@ views:
                 color_type: blank-card
   - title: Floorplan
     path: floorplan
+    panel: true
     icon: mdi:floor-plan
     badges: []
     cards:
@@ -730,7 +731,21 @@ views:
               action: toggle
             style: 
               top: 42%
-              left: 7%    
+              left: 7%
+          - type: state-icon
+            entity: light.smart_bulb_1
+            tap_action: 
+              action: toggle
+            style: 
+              top: 54.5%
+              left: 68%
+          - type: state-icon
+            entity: light.smart_bulb_2
+            tap_action: 
+              action: toggle
+            style: 
+              top: 60.5%
+              left: 68%
   - title: Security
     path: security
     icon: mdi:security

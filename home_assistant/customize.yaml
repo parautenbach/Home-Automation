@@ -200,8 +200,10 @@ input_boolean.contractor_mode:
   icon: mdi:worker
 light.smart_bulb_1:
   friendly_name: Pieter's Bedside Lamp
+  icon: mdi:lamp
 light.smart_bulb_2:
   friendly_name: Rouvé's Bedside Lamp
+  icon: mdi:lamp
 light.smart_bulb_3:
   friendly_name: Smart Bulb 3
 light.smart_bulb_4:

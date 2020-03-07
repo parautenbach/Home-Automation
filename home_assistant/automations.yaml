@@ -135,7 +135,6 @@
       data:
         title: "System"
         message: "Server disk usage is exceeding 90%!"
-
 - alias: "Contractor Mode Enabled Alert"
   trigger: 
     - platform: state
@@ -149,7 +148,6 @@
         data:
           push:
             category: "contractor_mode_enabled"
-
 - alias: "Contractor Mode Disabled Alert"
   trigger: 
     - platform: state
@@ -163,7 +161,6 @@
         data:
           push:
             category: "contractor_mode_disabled"
-
 - alias: "Enable Contractor Mode"
   trigger:
     - platform: time

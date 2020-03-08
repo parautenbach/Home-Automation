@@ -238,3 +238,7 @@ sensor.monthly_internet_usage_in:
 sensor.monthly_internet_usage_out:
   friendly_name: 'Monthly Uploads'
   icon: mdi:upload
+person.pieter_rautenbach:
+  entity_picture: '/local/pieter.jpg'
+person.rouve_rautenbach:
+  entity_picture: '/local/rouve.jpg'

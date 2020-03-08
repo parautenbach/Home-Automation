@@ -58,9 +58,11 @@ Depending on the V4L2 device this could be possible using the appropiate control
 Using the driver bcm2835_v4l2, the black & white could be set using :
 
 v4l2-ctl -c saturation=-100
+
 or
 
 v4l2-ctl -c color_effects=1
+
 An other way is to add a v4l2loopback device that makes the tranformation, but this will need some processing ressources...
 Best Regards,
 Michel.

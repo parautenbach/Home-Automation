@@ -141,6 +141,12 @@ all_devices:
     - device_tracker.juno
     - device_tracker.venus
 
+all_lights:
+  name: All Lights
+    - switch.living_room_lamp
+    - light.smart_bulb_1
+    - light.smart_bulb_2
+
 family:
   name: Family
   entities:

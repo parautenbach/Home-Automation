@@ -109,3 +109,8 @@
   - platform: statistics
     name: 'Internet Traffic Out'
     entity_id: sensor.internet_speed_out
+  # - platform: waze_travel_time
+  #   name: pieter_work_cape_town_to_home
+  #   origin: zone.pieter_work_cape_town
+  #   destination: zone.home
+  #   region: 'US'

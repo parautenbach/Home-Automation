@@ -100,8 +100,10 @@
       entity_id: binary_sensor.anybody_home
       state: "off"
   action:
-    - service: switch.turn_off #light.turn_off
-      entity_id: switch.living_room_lamp #group.all_lights
+    # - service: switch.turn_off #light.turn_off
+    #   entity_id: switch.living_room_lamp #group.all_lights
+    - service: homeassistant.turn_off
+      entity_id: group.all_lights
     - service: automation.turn_on
       entity_id: automation.take_motion_snapshots
     - service: automation.turn_on
@@ -264,3 +266,21 @@
       data_template:
         entity_id: input_number.wan_traffic_delta_out
         value: '{{ ((trigger.to_state.state | int - trigger.from_state.state | int) * 8 ) / ( as_timestamp(trigger.to_state.last_updated) - as_timestamp(trigger.from_state.last_updated) ) }}'
+- alias: "Notify Pieter Going Home from Work in Cape Town"
+  trigger:
+    platform: zone
+    entity_id: person.pieter_rautenbach
+    zone: zone.pieter_work_cape_town
+    event: leave
+  condition:
+    - condition: time
+      after: "16:00:00"
+      weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+  action:
+    - service: script.turn_on
+      entity_id: script.send_pieter_work_cape_town_to_home_eta

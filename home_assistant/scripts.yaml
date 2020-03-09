@@ -513,3 +513,10 @@ smart_bulb_1_bright_white:
       data:
         entity_id: light.smart_bulb_1
         rgb_color: [255, 255, 255]
+
+send_pieter_work_cape_town_to_home_eta:
+  sequence:
+    - service: notify.family
+      data:
+        title: Home ETA
+        message: "Testing!"

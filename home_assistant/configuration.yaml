@@ -145,10 +145,11 @@ binary_sensor:
              is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on") }} 
 
 tplink:
-  discovery: true
-  # discovery: false
-  # light:
-  #   - host: 192.168.0.107
+  # discovery: true
+  discovery: false
+  light:
+    - host: 192.168.0.108
+    - host: 192.168.0.116
 
 python_script:
 # https://raw.githubusercontent.com/bieniu/ha-shellies-discovery/master/python_scripts/shellies_discovery.py
@@ -179,12 +180,17 @@ switch:
           - service: input_boolean.turn_off
             entity_id: input_boolean.contractor_mode
 
+light:
+  - platform: switch
+    name: living_room_lamp
+    entity_id: switch.living_room_lamp
+
 device_tracker:
   - platform: nmap_tracker
     hosts: 192.168.0.0/24
-    interval_seconds: 600 # scan interval
+    interval_seconds: 300 # scan interval
     #home_interval: 5 # minutes (scan interval)
-    consider_home: 600 # seconds (timeout)
+    consider_home: 300 # seconds (timeout)
     new_device_defaults:
       track_new_devices: true
 

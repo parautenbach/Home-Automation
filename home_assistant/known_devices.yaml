@@ -117,6 +117,13 @@ lb130_1:
   picture:
   track: true
 
+lb130_2:
+  icon: mdi:lightbulb
+  mac: AC:84:C6:AA:2B:6F
+  name: Kasa LB130 (2)
+  picture:
+  track: true
+
 juno:
   icon: mdi:tablet-ipad
   mac: 34:C0:59:55:2A:B7

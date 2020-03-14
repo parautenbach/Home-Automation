@@ -198,6 +198,9 @@ input_boolean.guest_mode:
   icon: mdi:briefcase
 input_boolean.contractor_mode:
   icon: mdi:worker
+light.living_room_lamp:
+  friendly_name: Living Room Lamp
+  icon: mdi:floor-lamp
 light.smart_bulb_1:
   friendly_name: Pieter's Bedside Lamp
   icon: mdi:lamp

@@ -496,7 +496,8 @@ security_camera_create_snapshot:
         data:
           attachment:
             # url: https://geoexpressinternational.com/wp-content/plugins/webp-express/test/test-pattern-tv.jpg
-            url: http://securitypi.local/local/camera.security_camera_last.jpg
+            # url: http://securitypi.local/local/camera.security_camera_last.jpg
+            url: !secret security_camera_last_snapshot_url
             # content-type: jpg
             # hide-thumbnail: false
 

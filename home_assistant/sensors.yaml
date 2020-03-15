@@ -113,3 +113,6 @@
     api_key: !secret google_maps_api_key
     origin: zone.pieter_work_cape_town
     destination: zone.home
+    options:
+      mode: driving
+      departure_time: now

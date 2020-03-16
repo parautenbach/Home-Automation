@@ -520,4 +520,4 @@ send_pieter_work_cape_town_to_home_eta:
     - service: notify.family
       data:
         title: Home ETA
-        message: "Testing!"
+        message: "Pieter left work and will be home at {{ (now().timestamp() + (states('sensor.google_travel_time_driving') | float)*60) | timestamp_custom('%H:%M', True) }}."

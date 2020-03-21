@@ -116,8 +116,8 @@ views:
                 state_color: true
               - light.smart_bulb_1
               - light.smart_bulb_2
-              - light.smart_bulb_3
-              - light.smart_bulb_4
+              # - light.smart_bulb_3
+              # - light.smart_bulb_4
             title: Lights
             show_header_toggle: true
           - type: entities
@@ -146,42 +146,42 @@ views:
                 name: Guests
             hours_to_show: 24
             refresh_interval: 300
-      - type: horizontal-stack
-        title: Light Profiles
-        cards:
-          - type: custom:button-card
-            # entity: script.smart_bulb_1_soft_yellow
-            entity: light.smart_bulb_1
-            show_name: false
+      # - type: horizontal-stack
+      #   title: Light Profiles
+      #   cards:
+      #     - type: custom:button-card
+      #       # entity: script.smart_bulb_1_soft_yellow
+      #       entity: light.smart_bulb_1
+      #       show_name: false
 
-            # color_type: card
-            # color: auto  # rgb(255, 255, 100)
-            # color_type: icon
+      #       # color_type: card
+      #       # color: auto  # rgb(255, 255, 100)
+      #       # color_type: icon
 
-            # styles:
-            #   card:
-            #     # - color: rgb(255, 255, 100)
-            #     - color: rgb(255, 0, 0)
-            
-            color: var(--button-card-light-color)
-            
-            tap_action:
-              action: call-service
-              # service: script.turn_on
-              # service_data:
-              #   entity_id: script.smart_bulb_1_soft_yellow
-              service: light.turn_on
-              service_data:
-                entity_id: light.smart_bulb_1
-                rgb_color: [255, 255, 100]
-          - type: entity-button
-            entity: script.smart_bulb_1_bright_white
-            show_name: false
-            tap_action:
-              action: call-service
-              service: script.turn_on
-              service_data:
-                entity_id: script.smart_bulb_1_bright_white
+      #       # styles:
+      #       #   card:
+      #       #     # - color: rgb(255, 255, 100)
+      #       #     - color: rgb(255, 0, 0)
+
+      #       color: var(--button-card-light-color)
+
+      #       tap_action:
+      #         action: call-service
+      #         # service: script.turn_on
+      #         # service_data:
+      #         #   entity_id: script.smart_bulb_1_soft_yellow
+      #         service: light.turn_on
+      #         service_data:
+      #           entity_id: light.smart_bulb_1
+      #           rgb_color: [255, 255, 100]
+      #     - type: entity-button
+      #       entity: script.smart_bulb_1_bright_white
+      #       show_name: false
+      #       tap_action:
+      #         action: call-service
+      #         service: script.turn_on
+      #         service_data:
+      #           entity_id: script.smart_bulb_1_bright_white
   - title: Entertainment
     path: entertainment
     icon: mdi:audio-video

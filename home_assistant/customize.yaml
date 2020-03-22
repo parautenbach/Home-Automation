@@ -245,3 +245,5 @@ person.pieter_rautenbach:
   entity_picture: '/local/pieter.jpg'
 person.rouve_rautenbach:
   entity_picture: '/local/rouve.jpg'
+sensor.ambient_temperature_filtered:
+  friendly_name: Temperature

@@ -30,7 +30,7 @@ views:
           show_header_toggle: false
         - type: history-graph
           entities:
-            - entity: sensor.ambient_temperature
+            - entity: sensor.ambient_temperature_filtered
           hours_to_show: 24
           refresh_interval: 60
         - type: entities

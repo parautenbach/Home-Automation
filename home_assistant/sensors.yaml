@@ -116,3 +116,10 @@
     options:
       mode: driving
       departure_time: now
+  - platform: filter
+    name: google_travel_time_filtered
+    entity_id: sensor.google_travel_time_driving
+    filters: 
+      filter: lowpass
+      time_constant: 10
+      precision: 0

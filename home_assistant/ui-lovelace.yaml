@@ -37,7 +37,7 @@ views:
           title: Current Travel Time
           show_header_toggle: false
           entities:
-            - entity: sensor.google_travel_time_driving
+            - entity: sensor.google_travel_time_filtered
               icon: mdi:briefcase-clock
               name: Driving – Takealot HQ to Home
       # TODO: Clocks

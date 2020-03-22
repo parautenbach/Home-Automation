@@ -86,6 +86,11 @@ views:
                 name: This Month
               - entity: sensor.monthly_internet_usage_out
                 name: This Month
+          # - type: entities
+          #   title: Clocks
+          #   show_header_toggle: false
+          #   entities:
+          #     - 
       - type: vertical-stack
         cards:
           - type: horizontal-stack
@@ -780,6 +785,8 @@ views:
             entities:
               - entity: sensor.security_camera_last_snapshot_relative
                 name: Last Event
+              - entity: timer.motion_timer
+                name: Living Room Light Timeout
   - title: Devices
     path: devices
     icon: mdi:devices

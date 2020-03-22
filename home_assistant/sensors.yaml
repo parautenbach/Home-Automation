@@ -130,3 +130,9 @@
       filter: lowpass
       time_constant: 10
       precision: 1
+  - platform: worldclock
+    time_zone: Africa/Johannesburg
+  - platform: worldclock
+    time_zone: America/Los_Angeles
+  - platform: worldclock
+    time_zone: Europe/London

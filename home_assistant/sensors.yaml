@@ -131,8 +131,11 @@
       time_constant: 10
       precision: 1
   - platform: worldclock
+    name: cape_town
     time_zone: Africa/Johannesburg
   - platform: worldclock
+    name: san_francisco
     time_zone: America/Los_Angeles
   - platform: worldclock
+    name: london
     time_zone: Europe/London

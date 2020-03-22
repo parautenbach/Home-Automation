@@ -247,3 +247,9 @@ person.rouve_rautenbach:
   entity_picture: '/local/rouve.jpg'
 sensor.ambient_temperature_filtered:
   friendly_name: Temperature
+sensor.cape_town:
+  friendly_name: Cape Town
+sensor.san_francisco:
+  friendly_name: San Francisco
+sensor.london:
+  friendly_name: London

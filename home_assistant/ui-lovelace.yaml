@@ -86,11 +86,13 @@ views:
                 name: This Month
               - entity: sensor.monthly_internet_usage_out
                 name: This Month
-          # - type: entities
-          #   title: Clocks
-          #   show_header_toggle: false
-          #   entities:
-          #     - 
+          - type: entities
+            title: Clocks
+            show_header_toggle: false
+            entities:
+              - sensor.cape_town
+              - sensor.san_francisco
+              - sensor.london
       - type: vertical-stack
         cards:
           - type: horizontal-stack

@@ -26,6 +26,9 @@ homeassistant:
     - /tmp
   customize: !include customize.yaml
 
+logger:
+  default: warning
+
 lovelace:
   mode: yaml
 

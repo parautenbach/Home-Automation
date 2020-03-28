@@ -94,14 +94,14 @@
     host: 192.168.0.1
     community: Router
     version: 2c
-    baseoid: 1.3.6.1.2.1.2.2.1.10.18  # ifInOctets.14
+    baseoid: 1.3.6.1.2.1.2.2.1.10.26  # ifInOctets.26 / nas0_0
     unit_of_measurement: octets
   - platform: snmp
     name: snmp_wan_out
     host: 192.168.0.1
     community: Router
     version: 2c
-    baseoid: 1.3.6.1.2.1.2.2.1.16.18  # ifOutOctets.14
+    baseoid: 1.3.6.1.2.1.2.2.1.16.26  # ifOutOctets.26 / nas0_0
     unit_of_measurement: octets
   - platform: statistics
     name: 'Internet Traffic In'

@@ -31,6 +31,9 @@ logger:
 
 lovelace:
   mode: yaml
+  resources:
+    - url: /local/button-card.js
+      type: module
 
 apple_tv:
 

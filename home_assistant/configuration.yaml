@@ -99,6 +99,7 @@ notify:
     platform: group
     services:
       - service: mobile_app_ceres
+      - service: mobile_app_rouve
 
 input_boolean:
   pieter_present:
@@ -148,8 +149,8 @@ tplink:
   # discovery: true
   discovery: false
   light:
-    - host: 192.168.0.108
-    - host: 192.168.0.116
+    - host: 192.168.0.108  # smart bulb 1
+    - host: 192.168.0.116  # smart bulb 2
 
 python_script:
 # https://raw.githubusercontent.com/bieniu/ha-shellies-discovery/master/python_scripts/shellies_discovery.py

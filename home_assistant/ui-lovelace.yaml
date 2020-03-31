@@ -65,24 +65,26 @@ views:
               - entity: sensor.internet_speed_out
             hours_to_show: 24
             refresh_interval: 60
-          - type: glance
-            title: Today
-            show_name: false
-            columns: 2
-            entities:
-              - entity: sensor.daily_internet_usage_in
-                name: Today
-              - entity: sensor.daily_internet_usage_out
-                name: Today
-          - type: glance
-            title: This Month
-            show_name: false
-            columns: 2
-            entities:
-              - entity: sensor.monthly_internet_usage_in
-                name: This Month
-              - entity: sensor.monthly_internet_usage_out
-                name: This Month
+          - type: horizontal-stack
+            cards:
+              - type: glance
+                title: Today
+                show_name: false
+                columns: 2
+                entities:
+                  - entity: sensor.daily_internet_usage_in
+                    name: Today
+                  - entity: sensor.daily_internet_usage_out
+                    name: Today
+              - type: glance
+                title: This Month
+                show_name: false
+                columns: 2
+                entities:
+                  - entity: sensor.monthly_internet_usage_in
+                    name: This Month
+                  - entity: sensor.monthly_internet_usage_out
+                    name: This Month
           - type: entities
             title: Clocks
             show_header_toggle: false

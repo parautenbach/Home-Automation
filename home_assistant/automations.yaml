@@ -133,7 +133,7 @@
       entity_id: sensor.disk_use_percent
       above: 90
   action:
-    - service: notify.family
+    - service: notify.mobile_app_ceres
       data:
         title: "System"
         message: "Server disk usage is exceeding 90%!"
@@ -143,7 +143,7 @@
       entity_id: switch.contractor_mode
       to: "on"
   action:
-    - service: notify.family
+    - service: notify.mobile_app_ceres
       data:
         title: "Special Mode"
         message: "Contractor mode enabled."
@@ -156,7 +156,7 @@
       entity_id: switch.contractor_mode
       to: "off"
   action:
-    - service: notify.family
+    - service: notify.mobile_app_ceres
       data:
         title: "Special Mode"
         message: "Contractor mode disabled."
@@ -203,7 +203,7 @@
           after: "17:00:00"
           before: "21:00:00"
   action:
-    - service: notify.family
+    - service: notify.mobile_app_ceres
       data:
         title: "Special Mode"
         message: "Contractor mode is still enabled."

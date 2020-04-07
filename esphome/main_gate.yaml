@@ -45,6 +45,7 @@ switch:
     name: "Gate Control"
     pin: 14
   - platform: template
+    id: gate_remote
     name: "Gate Remote"
     icon: "mdi:remote"
     turn_on_action:

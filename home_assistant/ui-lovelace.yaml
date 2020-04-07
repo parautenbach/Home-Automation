@@ -777,7 +777,7 @@ views:
               service_data:
                 entity_id: script.security_camera_record_clip
       - type: vertical-stack
-        cards:                
+        cards:
           - type: picture-glance
             title: Last Motion Captured
             camera_image: camera.security_camera_last_snapshot
@@ -788,6 +788,11 @@ views:
                 name: Last Event
               - entity: timer.motion_timer
                 name: Living Room Light Timeout
+      - type: entities
+        title: Covers
+        show_header_toggle: false
+        entities:
+          - cover.main_gate
   - title: Devices
     path: devices
     icon: mdi:devices

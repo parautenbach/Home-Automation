@@ -46,7 +46,7 @@ switch:
     pin: 14
   - platform: template
     name: "Gate Remote"
-    icon: "mdi:gate"
+    icon: "mdi:remote"
     turn_on_action:
     - switch.turn_on: gate_control
     - delay: 500ms

@@ -253,3 +253,5 @@ sensor.san_francisco:
   friendly_name: San Francisco
 sensor.london:
   friendly_name: London
+binary_sensor.gate_status:
+  icon: mdi:gate

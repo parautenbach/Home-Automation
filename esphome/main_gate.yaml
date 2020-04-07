@@ -1,0 +1,57 @@
+esphome:
+  name: main_gate
+  platform: ESP32
+  board: esp32doit-devkit-v1
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  power_save_mode: none
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Main Gate Fallback Hotspot"
+    password: !secret fallback_ap_password
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: !secret home_assistant_api_password
+
+ota:
+  password: !secret ota_password
+
+# https://esphome.io/components/binary_sensor/gpio.html
+binary_sensor:
+  - platform: gpio
+    id: gate_status
+    name: "Gate Status"
+    device_class: door
+    pin:
+      number: 34
+      inverted: True
+    filters:
+      - delayed_on: 100ms
+      - delayed_off: 100ms
+
+# https://esphome.io/components/switch/gpio.html
+switch:
+  - platform: gpio
+    id: gate_control
+    name: "Gate Control"
+    pin: 14
+  - platform: template
+    name: "Gate Remote"
+    icon: "mdi:gate"
+    turn_on_action:
+    - switch.turn_on: gate_control
+    - delay: 500ms
+    - switch.turn_off: gate_control
+
+mqtt:
+  broker: !secret mqtt_broker
+  discovery: True

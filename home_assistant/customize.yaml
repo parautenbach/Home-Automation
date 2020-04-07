@@ -255,3 +255,5 @@ sensor.london:
   friendly_name: London
 binary_sensor.gate_status:
   icon: mdi:gate
+binary_sensor.gate_status_2:
+  icon: mdi:gate

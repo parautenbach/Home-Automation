@@ -75,8 +75,8 @@
       state: "on"
       #entity_id: person.pieter_rautenbach #group.anyone
       #state: "home"
+    # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
     - condition: or
-      # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
       conditions:
         - condition: sun
           after: sunset
@@ -87,6 +87,28 @@
   action:
     - service: switch.turn_on #homeassistant.turn_on > for group
       entity_id: switch.living_room_lamp
+- alias: "Bedlamps Auto On Upon Sunset or Arrival"
+  initial_state: true
+  trigger:
+    - platform: sun
+      event: sunset
+    - platform: state
+      entity_id: binary_sensor.anybody_home
+      to: "on"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.anybody_home
+      state: "on"
+    # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
+    - condition: or
+      conditions:
+        - condition: sun
+          after: sunset
+        - condition: sun
+          before: sunrise
+  action:
+    - service: homeassistant.turn_on
+      entity_id: group.main_bedroom
 - alias: "Away Mode"
   initial_state: true
   trigger:

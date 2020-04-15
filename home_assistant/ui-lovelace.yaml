@@ -7,8 +7,8 @@ views:
       - entity: binary_sensor.motion_sensor
       - entity: binary_sensor.updater
       - entity: binary_sensor.anybody_home
-      - entity: binary_sensor.pieter_present
-      - entity: binary_sensor.rouve_present
+      # - entity: binary_sensor.pieter_present
+      # - entity: binary_sensor.rouve_present
       - entity: person.pieter_rautenbach
       - entity: person.rouve_rautenbach
       - entity: sun.sun

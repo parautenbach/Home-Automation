@@ -241,7 +241,7 @@ cover:
           data:
             entity_id: switch.gate_remote
         close_cover:
-          service: switch.turn_off
+          service: switch.turn_on
           data:
             entity_id: switch.gate_remote
         stop_cover:

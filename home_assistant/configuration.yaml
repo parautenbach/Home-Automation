@@ -17,9 +17,9 @@ sensor: !include sensors.yaml
 
 homeassistant:
   name: Home
-  latitude: -33.9352105
-  longitude: 18.8354788
-  elevation: 130
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  elevation: !secret home_elevation
   unit_system: metric
   time_zone: "Africa/Johannesburg"
   whitelist_external_dirs:

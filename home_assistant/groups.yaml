@@ -34,6 +34,7 @@ living_room:
 
 main_bedroom:
   name: Main Bedroom
+  entities:
     - light.smart_bulb_1
     - light.smart_bulb_2
 

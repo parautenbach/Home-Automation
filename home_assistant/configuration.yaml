@@ -208,6 +208,8 @@ shell_command:
 timer:
   motion_timer:
     duration: "00:05:00"
+  main_gate_timer:
+    duration: "00:01:00"
 
 input_number:
   wan_traffic_delta_in:

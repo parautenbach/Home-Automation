@@ -788,11 +788,20 @@ views:
                 name: Last Event
               - entity: timer.motion_timer
                 name: Living Room Light Timeout
-      - type: entities
-        title: Covers
-        show_header_toggle: false
-        entities:
-          - cover.main_gate
+      - type: vertical-stack
+        cards:
+          - type: entities
+            title: Covers
+            show_header_toggle: false
+            entities:
+              - cover.main_gate
+          - type: history-graph
+            entities:
+              - entity: cover.main_gate
+          - type: entities
+            entities:
+              - entity: timer.main_gate_timer
+                name: Main Gate Open Timeout
   - title: Devices
     path: devices
     icon: mdi:devices

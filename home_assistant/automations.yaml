@@ -308,3 +308,57 @@
   action:
     - service: script.turn_on
       entity_id: script.send_pieter_work_cape_town_to_home_eta
+- alias: "Start Main Gate Timer When Opened"
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id: cover.main_gate
+    to: "open"
+  action:
+    - service: timer.start
+      data:
+        entity_id: timer.main_gate_timer
+- alias: "Main Gate Left Open Alert"
+  initial_state: true
+  trigger:
+    - platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.main_gate_timer
+    - platform: state
+      entity_id: binary_sensor.anybody_home
+      to: "off"
+  condition:
+    - condition: state
+      entity_id: cover.main_gate
+      state: "open"
+  action:
+    - service: notify.mobile_app_ceres
+      data:
+        title: "Security"
+        message: "The main gate has been left open for too long."
+        data:
+          push:
+            category: "main_gate_open"
+    - service: timer.start
+      data:
+        entity_id: timer.main_gate_timer
+- alias: "Close Main Gate From Alert Action"
+  trigger:
+    - platform: event
+      event_type: ios.notification_action_fired
+      event_data:
+        actionName: CLOSE_MAIN_GATE
+  action:
+    - service: cover.close_cover
+      entity_id: cover.main_gate
+- alias: "Stop Main Gate Timer When Closed"
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id: cover.main_gate
+    to: "closed"
+  action:
+    - service: timer.cancel
+      data:
+        entity_id: timer.main_gate_timer

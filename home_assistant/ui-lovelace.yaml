@@ -798,6 +798,7 @@ views:
           - type: history-graph
             entities:
               - entity: cover.main_gate
+                name: Main Gate
           - type: entities
             entities:
               - entity: timer.main_gate_timer

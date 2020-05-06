@@ -75,6 +75,11 @@ ios:
         actions:
           - identifier: "ENABLE_CONTRACTOR_MODE"
             title: "Enable"
+      - name: Main Gate Open
+        identifier: "main_gate_open"
+        actions:
+          - identifier: "CLOSE_MAIN_GATE"
+            title: "Close"
       - name: Test
         identifier: 'test'
         actions:
@@ -209,7 +214,7 @@ timer:
   motion_timer:
     duration: "00:05:00"
   main_gate_timer:
-    duration: "00:01:00"
+    duration: "00:02:00"
 
 input_number:
   wan_traffic_delta_in:

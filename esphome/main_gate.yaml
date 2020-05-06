@@ -33,7 +33,7 @@ binary_sensor:
     device_class: door
     pin:
       number: 34
-      inverted: True
+      inverted: False
     filters:
       - delayed_on: 100ms
       - delayed_off: 100ms

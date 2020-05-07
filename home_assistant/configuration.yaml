@@ -53,6 +53,7 @@ homekit:
       - light.smart_bulb_2
       - light.smart_bulb_3
       - light.smart_bulb_4
+      - cover.main_gate
 
 ios:
   push:

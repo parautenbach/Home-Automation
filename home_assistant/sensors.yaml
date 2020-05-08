@@ -139,3 +139,9 @@
   - platform: worldclock
     name: london
     time_zone: Europe/London
+  - platform: command_line
+    name: internet_packet_loss
+    command: "ping -c 10 www.google.com | grep -o -P '(?<= )(\d+)(?=%)'"
+    unit_of_measurement: "%"
+    value_template: '{{ value | int }}'
+    scan_interval: 300

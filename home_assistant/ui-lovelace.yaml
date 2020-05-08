@@ -86,6 +86,11 @@ views:
                   - entity: sensor.monthly_internet_usage_out
                     name: This Month
           - type: entities
+            show_header_toggle: false
+            entities:
+              - binary_sensor.internet
+              - sensor.internet_packet_loss
+          - type: entities
             title: Clocks
             show_header_toggle: false
             entities:

@@ -156,6 +156,11 @@ binary_sensor:
         value_template: >- 
           {{ is_state("input_boolean.pieter_present", "on") or is_state("input_boolean.rouve_present", "on") or 
              is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on") }} 
+  - platform: ping
+    name: Internet
+    host: www.google.com
+    count: 10
+    scan_interval: 300
 
 tplink:
   # discovery: true

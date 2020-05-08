@@ -30,66 +30,15 @@ views:
             - entity: sensor.ambient_temperature_filtered
           hours_to_show: 24
           refresh_interval: 60
-        - type: entities
-          title: Current Travel Time
-          show_header_toggle: false
-          entities:
-            - entity: sensor.google_travel_time_filtered
-              icon: mdi:briefcase-clock
-              name: Driving – Takealot HQ to Home
-      # TODO: Clocks
       - type: vertical-stack
         cards:
-          - type: horizontal-stack
-            title: Internet
-            cards:
-              - type: gauge
-                entity: sensor.internet_speed_in
-                min: 0
-                max: 10
-                severity:
-                  green: 0
-                  yellow: 4
-                  red: 8
-              - type: gauge
-                entity: sensor.internet_speed_out
-                min: 0
-                max: 5
-                severity:
-                  green: 0
-                  yellow: 2
-                  red: 4
-          - type: history-graph
-            entities:
-              - entity: sensor.internet_speed_in
-              - entity: sensor.internet_speed_out
-            hours_to_show: 24
-            refresh_interval: 60
-          - type: horizontal-stack
-            cards:
-              - type: glance
-                title: Today
-                show_name: false
-                columns: 2
-                entities:
-                  - entity: sensor.daily_internet_usage_in
-                    name: Today
-                  - entity: sensor.daily_internet_usage_out
-                    name: Today
-              - type: glance
-                title: This Month
-                show_name: false
-                columns: 2
-                entities:
-                  - entity: sensor.monthly_internet_usage_in
-                    name: This Month
-                  - entity: sensor.monthly_internet_usage_out
-                    name: This Month
           - type: entities
+            title: Current Travel Time
             show_header_toggle: false
             entities:
-              - binary_sensor.internet
-              - sensor.internet_packet_loss
+              - entity: sensor.google_travel_time_filtered
+                icon: mdi:briefcase-clock
+                name: Driving – Takealot HQ to Home
           - type: entities
             title: Clocks
             show_header_toggle: false
@@ -734,36 +683,66 @@ views:
                     entity_id: script.dstv_0
               - type: custom:button-card
                 color_type: blank-card
-  - title: Floorplan
-    path: floorplan
-    panel: true
-    icon: mdi:floor-plan
-    badges: []
+  - title: Internet
+    path: internet
+    icon: mdi:server-network
+    badges:
+      - binary_sensor.internet
     cards:
-      - type: picture-elements
-        image: /local/floorplan.svg
-        elements:
-          - type: state-icon
-            entity: switch.living_room_lamp
-            tap_action:
-              action: toggle
-            style: 
-              top: 42%
-              left: 7%
-          - type: state-icon
-            entity: light.smart_bulb_1
-            tap_action: 
-              action: toggle
-            style: 
-              top: 54.5%
-              left: 68%
-          - type: state-icon
-            entity: light.smart_bulb_2
-            tap_action: 
-              action: toggle
-            style: 
-              top: 60.5%
-              left: 68%
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            title: Internet
+            cards:
+              - type: gauge
+                entity: sensor.internet_speed_in
+                min: 0
+                max: 10
+                severity:
+                  green: 0
+                  yellow: 4
+                  red: 8
+              - type: gauge
+                entity: sensor.internet_speed_out
+                min: 0
+                max: 5
+                severity:
+                  green: 0
+                  yellow: 2
+                  red: 4
+          - type: history-graph
+            entities:
+              - entity: sensor.internet_speed_in
+              - entity: sensor.internet_speed_out
+            hours_to_show: 24
+            refresh_interval: 60
+          - type: horizontal-stack
+            cards:
+              - type: glance
+                title: Today
+                show_name: false
+                columns: 2
+                entities:
+                  - entity: sensor.daily_internet_usage_in
+                    name: Today
+                  - entity: sensor.daily_internet_usage_out
+                    name: Today
+              - type: glance
+                title: This Month
+                show_name: false
+                columns: 2
+                entities:
+                  - entity: sensor.monthly_internet_usage_in
+                    name: This Month
+                  - entity: sensor.monthly_internet_usage_out
+                    name: This Month
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - binary_sensor.internet
+              - sensor.internet_round_trip_time_avg
+              - sensor.internet_round_trip_time_mdev
+              - sensor.internet_packet_loss
   - title: Security
     path: security
     icon: mdi:security
@@ -808,6 +787,36 @@ views:
             entities:
               - entity: timer.main_gate_timer
                 name: Main Gate Open Timeout
+  - title: Floorplan
+    path: floorplan
+    panel: true
+    icon: mdi:floor-plan
+    badges: []
+    cards:
+      - type: picture-elements
+        image: /local/floorplan.svg
+        elements:
+          - type: state-icon
+            entity: switch.living_room_lamp
+            tap_action:
+              action: toggle
+            style: 
+              top: 42%
+              left: 7%
+          - type: state-icon
+            entity: light.smart_bulb_1
+            tap_action: 
+              action: toggle
+            style: 
+              top: 54.5%
+              left: 68%
+          - type: state-icon
+            entity: light.smart_bulb_2
+            tap_action: 
+              action: toggle
+            style: 
+              top: 60.5%
+              left: 68%                
   - title: Devices
     path: devices
     icon: mdi:devices

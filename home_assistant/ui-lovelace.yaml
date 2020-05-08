@@ -39,6 +39,21 @@ views:
               - entity: sensor.google_travel_time_filtered
                 icon: mdi:briefcase-clock
                 name: Driving – Takealot HQ to Home
+          - type: history-graph
+            title: Who's Home?
+            entities:
+              - entity: binary_sensor.anybody_home
+                name: Anybody
+              - entity: binary_sensor.pieter_present
+                name: Pieter
+              - entity: binary_sensor.rouve_present
+                name: Rouvé
+              - entity: binary_sensor.contractor_mode
+                name: Contractors
+              - entity: switch.guest_mode
+                name: Guests
+            hours_to_show: 24
+            refresh_interval: 300
           - type: entities
             title: Clocks
             show_header_toggle: false
@@ -98,21 +113,6 @@ views:
               - switch.guest_mode
               - switch.contractor_mode
             show_header_toggle: false
-          - type: history-graph
-            title: Who's Home?
-            entities:
-              - entity: binary_sensor.anybody_home
-                name: Anybody
-              - entity: binary_sensor.pieter_present
-                name: Pieter
-              - entity: binary_sensor.rouve_present
-                name: Rouvé
-              - entity: binary_sensor.contractor_mode
-                name: Contractors
-              - entity: switch.guest_mode
-                name: Guests
-            hours_to_show: 24
-            refresh_interval: 300
       # - type: horizontal-stack
       #   title: Light Profiles
       #   cards:
@@ -689,60 +689,57 @@ views:
     badges:
       - binary_sensor.internet
     cards:
-      - type: vertical-stack
+      - type: horizontal-stack
+        title: Internet
         cards:
-          - type: horizontal-stack
-            title: Internet
-            cards:
-              - type: gauge
-                entity: sensor.internet_speed_in
-                min: 0
-                max: 10
-                severity:
-                  green: 0
-                  yellow: 4
-                  red: 8
-              - type: gauge
-                entity: sensor.internet_speed_out
-                min: 0
-                max: 5
-                severity:
-                  green: 0
-                  yellow: 2
-                  red: 4
-          - type: history-graph
+          - type: gauge
+            entity: sensor.internet_speed_in
+            min: 0
+            max: 10
+            severity:
+              green: 0
+              yellow: 4
+              red: 8
+          - type: gauge
+            entity: sensor.internet_speed_out
+            min: 0
+            max: 5
+            severity:
+              green: 0
+              yellow: 2
+              red: 4
+      - type: history-graph
+        entities:
+          - entity: sensor.internet_speed_in
+          - entity: sensor.internet_speed_out
+        hours_to_show: 24
+        refresh_interval: 60
+      - type: horizontal-stack
+        cards:
+          - type: glance
+            title: Today
+            show_name: false
+            columns: 2
             entities:
-              - entity: sensor.internet_speed_in
-              - entity: sensor.internet_speed_out
-            hours_to_show: 24
-            refresh_interval: 60
-          - type: horizontal-stack
-            cards:
-              - type: glance
-                title: Today
-                show_name: false
-                columns: 2
-                entities:
-                  - entity: sensor.daily_internet_usage_in
-                    name: Today
-                  - entity: sensor.daily_internet_usage_out
-                    name: Today
-              - type: glance
-                title: This Month
-                show_name: false
-                columns: 2
-                entities:
-                  - entity: sensor.monthly_internet_usage_in
-                    name: This Month
-                  - entity: sensor.monthly_internet_usage_out
-                    name: This Month
-          - type: entities
-            show_header_toggle: false
+              - entity: sensor.daily_internet_usage_in
+                name: Today
+              - entity: sensor.daily_internet_usage_out
+                name: Today
+          - type: glance
+            title: This Month
+            show_name: false
+            columns: 2
             entities:
-              - binary_sensor.internet
-              - sensor.internet_round_trip_time_avg
-              - sensor.internet_round_trip_time_mdev
-              - sensor.internet_packet_loss
+              - entity: sensor.monthly_internet_usage_in
+                name: This Month
+              - entity: sensor.monthly_internet_usage_out
+                name: This Month
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - sensor.internet_round_trip_time_avg
+          - sensor.internet_round_trip_time_mdev
+          - sensor.internet_packet_loss
   - title: Security
     path: security
     icon: mdi:security

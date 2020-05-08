@@ -259,8 +259,10 @@ binary_sensor.gate_status_2:
   icon: mdi:gate
 sensor.internet_packet_loss:
   friendly_name: Packet Loss
+  icon: mdi:close-circle
 sensor.internet_round_trip_time_avg:
   friendly_name: Mean Ping Time
+  icon: mdi:timer
 sensor.internet_round_trip_time_mdev:
   friendly_name: Mean Ping Deviation
   icon: mdi:sigma-lower

@@ -690,7 +690,6 @@ views:
       - binary_sensor.internet
     cards:
       - type: horizontal-stack
-        title: Internet
         cards:
           - type: gauge
             entity: sensor.internet_speed_in

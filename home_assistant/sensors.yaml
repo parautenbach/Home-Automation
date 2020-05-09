@@ -151,3 +151,9 @@
     unit_of_measurement: "%"
     value_template: '{{ value | int }}'
     scan_interval: 300
+  - platform: command_line
+    name: thor_disk_usage
+    command: "ssh root@thor.local 'df -l --total' | perl -n -e'/^total[ ]+[0-9 ]+?([0-9]+)%$/ && print $1'"
+    unit_of_measurement: "%"
+    value_template: '{{ value | int }}'
+    scan_interval: 3600

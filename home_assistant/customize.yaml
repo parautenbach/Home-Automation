@@ -266,3 +266,6 @@ sensor.internet_round_trip_time_avg:
 sensor.internet_round_trip_time_mdev:
   friendly_name: Mean Ping Deviation
   icon: mdi:sigma-lower
+sensor.thor_disk_usage:
+  friendly_name: Disk use (percent)
+  icon: mdi:harddisk

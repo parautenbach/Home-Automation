@@ -855,4 +855,7 @@ views:
           - sensor.last_boot
         title: Server
         show_header_toggle: false
-
+      - type: entities
+        title: Thor (WD Cloud Drive)
+        entities:
+          - sensor.thor_disk_usage

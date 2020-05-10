@@ -368,6 +368,7 @@
       entity_id: cover.main_gate
       state: "open"
   action:
+    # https://companion.home-assistant.io/docs/notifications/critical-notifications/
     - service: notify.mobile_app_ceres
       data:
         title: "Security"

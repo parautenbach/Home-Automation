@@ -34,6 +34,8 @@ lovelace:
   resources:
     - url: /local/button-card.js
       type: module
+    - url: /local/fold-entity-row.js
+      type: module
 
 apple_tv:
 
@@ -159,7 +161,7 @@ binary_sensor:
   - platform: ping
     name: Internet
     host: www.google.com
-    count: 10
+    count: 5
     scan_interval: 300
 
 tplink:

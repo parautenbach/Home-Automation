@@ -161,6 +161,26 @@
       entity_id: automation.take_motion_snapshots
     - service: automation.turn_off
       entity_id: automation.switch_on_living_room_lamp_if_motion_is_detected
+- alias: "Open The Gate When Arriving Home"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.pieter_present
+      to: "on"
+    - platform: state
+      entity_id: binary_sensor.rouve_present
+      to: "on"
+  condition:
+    - condition: and
+      conditions:
+        - condition: state
+          entity_id: cover.main_gate
+          state: "closed"
+        - condition: time
+          after: "07:00:00"
+          before: "22:00:00"
+  action:
+    - service: cover.open_cover
+      entity_id: cover.main_gate
 - alias: "Check Disk Space on the Home Assistant server"
   trigger:
     - platform: time_pattern

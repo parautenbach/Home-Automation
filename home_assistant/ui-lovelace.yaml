@@ -54,6 +54,20 @@ views:
                 name: Guests
             hours_to_show: 24
             refresh_interval: 300
+          - type: horizontal-stack
+            cards:
+              - type: custom:button-card
+                entity: cover.main_gate
+                color_type: icon
+                color: var(--paper-item-icon-color)
+                show_name: false
+                tap_action:
+                  action: toggle
+                  haptic: light
+              - type: custom:button-card
+                color_type: blank-card
+              - type: custom:button-card
+                color_type: blank-card
           - type: entities
             title: Clocks
             show_header_toggle: false

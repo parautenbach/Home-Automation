@@ -64,6 +64,12 @@ views:
                 tap_action:
                   action: toggle
                   haptic: light
+                double_tap_action:
+                  action: call-service
+                  haptic: medium
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.open_pedestrian_gap
               - type: custom:button-card
                 color_type: blank-card
               - type: custom:button-card
@@ -319,11 +325,13 @@ views:
                 hold_action:
                   repeat: 200
                   action: call-service
+                  haptic: selection
                   service: script.turn_on
                   service_data:
                     entity_id: script.hk_3380_vol_down
                 double_tap_action:
                   action: call-service
+                  haptic: medium
                   service: script.turn_on
                   service_data:
                     entity_id: script.hk_3380_vol_down_minus_5
@@ -339,11 +347,13 @@ views:
                 hold_action:
                   repeat: 200
                   action: call-service
+                  haptic: selection
                   service: script.turn_on
                   service_data:
                     entity_id: script.hk_3380_vol_up
                 double_tap_action:
                   action: call-service
+                  haptic: medium
                   service: script.turn_on
                   service_data:
                     entity_id: script.hk_3380_vol_up_plus_5

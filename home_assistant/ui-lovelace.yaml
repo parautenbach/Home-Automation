@@ -763,6 +763,12 @@ views:
           - sensor.internet_round_trip_time_avg
           - sensor.internet_round_trip_time_mdev
           - sensor.internet_packet_loss
+      # - type: entities
+      #   show_header_toggle: false
+      #   entities:
+      #     - type: attribute
+      #       entity: binary_sensor.internet
+      #       attribute: round_trip_time_avg
   - title: Security
     path: security
     icon: mdi:security

@@ -259,7 +259,7 @@ binary_sensor.gate_status_2:
   icon: mdi:gate
 sensor.internet_packet_loss:
   friendly_name: Packet Loss
-  icon: mdi:grave-stone
+  icon: mdi:cancel
 sensor.internet_round_trip_time_avg:
   friendly_name: Mean Ping Time
   icon: mdi:timer

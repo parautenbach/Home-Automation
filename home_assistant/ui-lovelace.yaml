@@ -70,6 +70,9 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.open_pedestrian_gap
+                hold_action:
+                  action: more-info
+                  haptic: selection
               - type: custom:button-card
                 color_type: blank-card
               - type: custom:button-card

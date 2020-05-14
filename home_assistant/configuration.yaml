@@ -90,12 +90,11 @@ ios:
             title: 'Test Action'
 
 zone:
-  name: Home
-  #hidden: true
-  latitude: -33.9352105
-  longitude: 18.8354788
-  radius: 100
-  icon: mdi:home
+  - name: Home
+    latitude: !secret home_latitude
+    longitude: !secret home_longitude
+    radius: 80
+    icon: mdi:home
 
 stream:
 

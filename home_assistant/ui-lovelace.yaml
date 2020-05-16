@@ -25,11 +25,13 @@ views:
             - sensor.ambient_humidity
             - sensor.ambient_pressure
           show_header_toggle: false
-        - type: history-graph
+        - type: custom:mini-graph-card
           entities:
-            - entity: sensor.ambient_temperature_filtered
+            - entity: sensor.ambient_temperature
           hours_to_show: 24
-          refresh_interval: 60
+          update_interval: 60
+          hour24: true
+          smoothing: true
       - type: vertical-stack
         cards:
           - type: entities

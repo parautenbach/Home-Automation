@@ -41,7 +41,7 @@ views:
         cards:
           - type: custom:mini-graph-card
             name: Driving – Takealot HQ to Home
-            name: Current Travel Time
+            # name: Current Travel Time
             icon: mdi:briefcase-clock
             entities:
               - entity: sensor.google_travel_time_driving
@@ -797,6 +797,19 @@ views:
       #     - type: attribute
       #       entity: binary_sensor.internet
       #       attribute: round_trip_time_avg
+      - type: custom:mini-graph-card
+        name: Latency
+        entities:
+          - entity: sensor.internet_round_trip_time_avg
+        hours_to_show: 24
+        update_interval: 12
+        hour24: true
+        smoothing: true
+        group_by: hour
+        points_per_hour: 12  # every 5 min
+        line_width: 2
+        show:
+          extrema: true
   - title: Security
     path: security
     icon: mdi:security

@@ -36,6 +36,8 @@ lovelace:
       type: module
     - url: /local/fold-entity-row.js
       type: module
+    - url: /local/mini-graph-card-bundle.js
+      type: module
 
 apple_tv:
 

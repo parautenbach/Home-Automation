@@ -32,6 +32,8 @@ views:
           update_interval: 60
           hour24: true
           smoothing: true
+          group_by: hour
+          points_per_hour: 2  # one every 30 min
       - type: vertical-stack
         cards:
           - type: entities
@@ -744,6 +746,11 @@ views:
         update_interval: 60
         hour24: true
         smoothing: true
+        points_per_hour: 12  # one every 5 min
+        aggregate_func: avg
+        group_by: hour
+        show:
+          - extrema: true
       - type: horizontal-stack
         cards:
           - type: glance

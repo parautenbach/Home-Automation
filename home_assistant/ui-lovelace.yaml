@@ -926,6 +926,21 @@ views:
           - sensor.last_boot
         title: Server
         show_header_toggle: false
+      - type: custom:mini-graph-card
+        name: Server Load
+        entities:
+          - entity: sensor.load_1m
+          - entity: sensor.load_5m
+          - entity: sensor.load_15m
+        hours_to_show: 24
+        update_interval: 60
+        hour24: true
+        smoothing: true
+        group_by: hour
+        points_per_hour: 60  # every 30 min
+        line_width: 2
+        show:
+          extrema: true
       - type: entities
         title: Thor (WD Cloud Drive)
         entities:

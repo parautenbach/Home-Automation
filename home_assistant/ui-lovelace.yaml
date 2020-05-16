@@ -736,12 +736,14 @@ views:
               green: 0
               yellow: 2
               red: 4
-      - type: history-graph
+      - type: custom:mini-graph-card
         entities:
           - entity: sensor.internet_speed_in
           - entity: sensor.internet_speed_out
         hours_to_show: 24
-        refresh_interval: 60
+        update_interval: 60
+        hour24: true
+        smoothing: true
       - type: horizontal-stack
         cards:
           - type: glance

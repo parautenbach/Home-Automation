@@ -33,19 +33,27 @@ views:
           hour24: true
           smoothing: true
           group_by: hour
-          points_per_hour: 2  # one every 30 min
+          points_per_hour: 2  # every 30 min
           line_width: 2
           show:
             extrema: true
       - type: vertical-stack
         cards:
-          - type: entities
-            title: Current Travel Time
-            show_header_toggle: false
+          - type: custom:mini-graph-card
+            name: Driving – Takealot HQ to Home
+            name: Current Travel Time
+            icon: mdi:briefcase-clock
             entities:
-              - entity: sensor.google_travel_time_filtered
-                icon: mdi:briefcase-clock
-                name: Driving – Takealot HQ to Home
+              - entity: sensor.google_travel_time_driving
+            hours_to_show: 24
+            update_interval: 60
+            hour24: true
+            smoothing: true
+            group_by: hour
+            points_per_hour: 12  # every 5 min
+            line_width: 2
+            show:
+              extrema: true
           - type: history-graph
             title: Who's Home?
             entities:
@@ -753,8 +761,8 @@ views:
         update_interval: 60
         hour24: true
         smoothing: true
-        points_per_hour: 12  # one every 5 min
-        aggregate_func: avg
+        points_per_hour: 60  # every 1 min
+        aggregate_func: max
         group_by: hour
         line_width: 2
       - type: horizontal-stack

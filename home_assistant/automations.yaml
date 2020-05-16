@@ -192,7 +192,7 @@
     - service: notify.mobile_app_ceres
       data:
         title: "System"
-        message: "Server disk usage is exceeding 90%!"
+        message: "Server disk usage is exceeding {{ trigger.above }}%!"
 - alias: "Contractor Mode Enabled Alert"
   trigger: 
     - platform: state
@@ -395,3 +395,15 @@
     - service: timer.cancel
       data:
         entity_id: timer.main_gate_timer
+- alias: "Notify If Server Load High"
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.load_15m
+    above: 1
+    for: 
+      minutes: 5
+  action:
+    - service: notify.mobile_app_ceres
+      data:
+        title: "Server"
+        message: "The 15m server load has been {{ states('sensor.load_15m') }} for {{ trigger.for }}."

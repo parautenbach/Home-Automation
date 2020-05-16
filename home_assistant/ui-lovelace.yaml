@@ -34,6 +34,9 @@ views:
           smoothing: true
           group_by: hour
           points_per_hour: 2  # one every 30 min
+          line_width: 2
+          show:
+            extrema: true
       - type: vertical-stack
         cards:
           - type: entities
@@ -739,6 +742,10 @@ views:
               yellow: 2
               red: 4
       - type: custom:mini-graph-card
+        name: Traffic
+        show:
+          icon: false
+          extrema: true
         entities:
           - entity: sensor.internet_speed_in
           - entity: sensor.internet_speed_out
@@ -749,8 +756,7 @@ views:
         points_per_hour: 12  # one every 5 min
         aggregate_func: avg
         group_by: hour
-        show:
-          - extrema: true
+        line_width: 2
       - type: horizontal-stack
         cards:
           - type: glance

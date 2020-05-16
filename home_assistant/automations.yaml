@@ -405,5 +405,5 @@
   action:
     - service: notify.mobile_app_ceres
       data:
-        title: "Server"
+        title: "System"
         message: "The 15m server load has been {{ states('sensor.load_15m') }} for {{ trigger.for }}."

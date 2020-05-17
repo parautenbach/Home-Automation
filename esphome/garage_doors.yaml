@@ -1,0 +1,80 @@
+esphome:
+  name: garage_doors
+  platform: ESP32
+  board: esp32doit-devkit-v1
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  power_save_mode: none
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Garage Doors Fallback Hotspot"
+    password: !secret fallback_ap_password
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: !secret home_assistant_api_password
+
+ota:
+  password: !secret ota_password
+
+# https://esphome.io/components/binary_sensor/gpio.html
+binary_sensor:
+  - platform: gpio
+    id: lhs_garage_door_status
+    name: "LHS Garage Door Status"
+    device_class: garage_door
+    pin:
+      number: 34
+      inverted: True
+    filters:
+      - delayed_on: 100ms
+      - delayed_off: 100ms
+  - platform: gpio
+    id: rhs_garage_door_status
+    name: "RHS Garage Door Status"
+    device_class: garage_door
+    pin:
+      number: 35
+      inverted: True
+    filters:
+      - delayed_on: 100ms
+      - delayed_off: 100ms
+
+# https://esphome.io/components/switch/gpio.html
+switch:
+  - platform: gpio
+    id: lhs_garage_door_control
+    name: "LHS Garage Door Control"
+    pin: 14
+  - platform: template
+    id: lhs_garage_door_remote
+    name: "LHS Garage Door Remote"
+    icon: "mdi:remote"
+    turn_on_action:
+      - switch.turn_on: lhs_garage_door_control
+      - delay: 500ms
+      - switch.turn_off: lhs_garage_door_control
+  - platform: gpio
+    id: rhs_garage_door_control
+    name: "RHS Garage Door Control"
+    pin: 15
+  - platform: template
+    id: rhs_garage_door_remote
+    name: "RHS Garage Door Remote"
+    icon: "mdi:remote"
+    turn_on_action:
+      - switch.turn_on: rhs_garage_door_control
+      - delay: 500ms
+      - switch.turn_off: rhs_garage_door_control
+
+mqtt:
+  broker: !secret mqtt_broker
+  discovery: True

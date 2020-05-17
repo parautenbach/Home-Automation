@@ -1,2 +1,4 @@
 .DS_Store
 home_assistant/secrets.yaml
+esphome/electricity_pulse_counter/partitions.csv
+esphome/garage_doors/partitions.csv

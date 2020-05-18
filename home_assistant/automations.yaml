@@ -406,4 +406,5 @@
     - service: notify.mobile_app_ceres
       data_template:
         title: "System"
-        message: "The 15m server load has been {{ states('sensor.load_15m') }} for {{ trigger.for }}."
+        # https://community.home-assistant.io/t/convert-trigger-for-into-a-relative-age/196979
+        message: "The server load has been {{ states('sensor.load_15m') }} for {{ trigger.for.seconds / 60 }} minutes."

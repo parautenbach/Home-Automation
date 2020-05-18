@@ -53,6 +53,7 @@ homekit:
       - input_boolean.rouve_present
       - input_boolean.guest_mode
       - input_boolean.contractor_mode
+      - input_boolean.pieter_in_car
       - light.smart_bulb_1
       - light.smart_bulb_2
       - light.smart_bulb_3
@@ -129,7 +130,10 @@ input_boolean:
     icon: mdi:briefcase
   contractor_mode:
     name: Contractor Mode
-    icon: mdi:worker  
+    icon: mdi:worker
+  pieter_in_car:
+    name: Pieter In Car
+    icon: mdi:car-connected
 
 input_datetime:
   security_camera_last_snapshot:
@@ -159,6 +163,10 @@ binary_sensor:
         value_template: >- 
           {{ is_state("input_boolean.pieter_present", "on") or is_state("input_boolean.rouve_present", "on") or 
              is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on") }} 
+      pieter_in_car:
+        friendly_name: "Pieter In Car"
+        value_template: >- 
+          {{ is_state("input_boolean.pieter_in_car", "on") }}
   - platform: ping
     name: Internet
     host: www.google.com

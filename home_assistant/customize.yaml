@@ -269,3 +269,7 @@ sensor.internet_round_trip_time_mdev:
 sensor.thor_disk_usage:
   friendly_name: Disk use (percent)
   icon: mdi:harddisk
+sensor.pieter_activity_type:
+  friendly_name: Pieter Activity Type
+sensor.pieter_activity_confidence:
+  friendly_name: Pieter Activity Confidence

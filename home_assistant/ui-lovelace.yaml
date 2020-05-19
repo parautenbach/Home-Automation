@@ -950,3 +950,5 @@ views:
         entities:
           - entity: input_boolean.pieter_in_car
           - entity: binary_sensor.pieter_in_car
+          - entity: sensor.pieter_activity_type
+          - entity: sensor.pieter_activity_confidence

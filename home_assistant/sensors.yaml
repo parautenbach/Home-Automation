@@ -95,6 +95,21 @@
       internet_round_trip_time_mdev:
         value_template: "{{ state_attr('binary_sensor.internet', 'round_trip_time_mdev') }}"
         unit_of_measurement: 'ms'
+      # https://companion.home-assistant.io/docs/core/sensors/
+      pieter_activity_type:
+        value_template: "{{ state_attr('sensor.ceres_activity', 'Types') | first }}"
+        icon_template: "{{ state_attr('sensor.ceres_activity', 'icon') }}"
+      pieter_activity_confidence:
+        value_template: "{{ state_attr('sensor.ceres_activity', 'Confidence') }}"
+        # icon_template: mdi:delta
+        icon_template: >-
+          {% if state_attr('sensor.ceres_activity', 'Confidence') == 'High' %}
+            mdi:quality-high
+          {% elif state_attr('sensor.ceres_activity', 'Confidence') == 'Medium' %}
+            mdi:quality-medium
+          {% else %}
+            mdi:quality-low
+          {% endif %}
   - platform: snmp
     name: snmp_wan_in
     host: 192.168.0.1

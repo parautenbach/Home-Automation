@@ -945,3 +945,8 @@ views:
         title: Thor (WD Cloud Drive)
         entities:
           - sensor.thor_disk_usage
+      - type: history-graph
+        name: Test
+        entities:
+          - entity: input_boolean.pieter_in_car
+          - entity: binary_sensor.pieter_in_car

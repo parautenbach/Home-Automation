@@ -54,6 +54,29 @@ views:
             line_width: 2
             show:
               extrema: true
+          - type: horizontal-stack
+            cards:
+              - type: custom:button-card
+                color_type: blank-card
+              - type: custom:button-card
+                entity: cover.main_gate
+                color_type: icon
+                color: var(--paper-item-icon-color)
+                show_name: false
+                tap_action:
+                  action: toggle
+                  haptic: light
+                double_tap_action:
+                  action: call-service
+                  haptic: medium
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.open_pedestrian_gap
+                hold_action:
+                  action: more-info
+                  haptic: selection
+              - type: custom:button-card
+                color_type: blank-card
           - type: custom:mini-graph-card
             name: Who's Home?
             entities:
@@ -67,6 +90,7 @@ views:
                 name: Contractors
               - entity: switch.guest_mode
                 name: Guests
+            icon: mdi:home
             hours_to_show: 24
             update_interval: 300
             aggregate_func: max
@@ -92,36 +116,12 @@ views:
                 name: Guest Mode
             hours_to_show: 24
             refresh_interval: 300
-          - type: horizontal-stack
-            cards:
-              - type: custom:button-card
-                entity: cover.main_gate
-                color_type: icon
-                color: var(--paper-item-icon-color)
-                show_name: false
-                tap_action:
-                  action: toggle
-                  haptic: light
-                double_tap_action:
-                  action: call-service
-                  haptic: medium
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.open_pedestrian_gap
-                hold_action:
-                  action: more-info
-                  haptic: selection
-              - type: custom:button-card
-                color_type: blank-card
-              - type: custom:button-card
-                color_type: blank-card
           - type: entities
-            title: Clocks
-            show_header_toggle: false
+            title: Special Modes
             entities:
-              - sensor.cape_town
-              - sensor.san_francisco
-              - sensor.london
+              - switch.guest_mode
+              - switch.contractor_mode
+            show_header_toggle: false
       - type: vertical-stack
         cards:
           - type: horizontal-stack
@@ -169,11 +169,12 @@ views:
               - switch.shelly1_b961d2_relay_0
             show_header_toggle: true
           - type: entities
-            title: Special Modes
-            entities:
-              - switch.guest_mode
-              - switch.contractor_mode
+            title: Clocks
             show_header_toggle: false
+            entities:
+              - sensor.cape_town
+              - sensor.san_francisco
+              - sensor.london
       # - type: horizontal-stack
       #   title: Light Profiles
       #   cards:

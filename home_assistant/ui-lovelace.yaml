@@ -86,9 +86,11 @@ views:
                 name: Contractors
               - entity: switch.guest_mode
                 name: Guests
+            show:
+              state: false
             icon: mdi:home
             hours_to_show: 24
-            points_per_hour: 12  # every 5 min
+            points_per_hour: 6  # every 10 min
             hour24: true
             aggregate_func: max
             line_width: 2
@@ -98,21 +100,6 @@ views:
                 label: Away
               - value: "on"
                 label: Home
-          - type: history-graph
-            title: Who's Home?
-            entities:
-              - entity: binary_sensor.anybody_home
-                name: Anybody
-              - entity: binary_sensor.pieter_present
-                name: Pieter
-              - entity: binary_sensor.rouve_present
-                name: Rouvé
-              - entity: binary_sensor.contractor_mode
-                name: Contractors
-              - entity: switch.guest_mode
-                name: Guests
-            hours_to_show: 24
-            refresh_interval: 300
           - type: entities
             title: Special Modes
             entities:

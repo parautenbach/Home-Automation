@@ -401,10 +401,17 @@
     entity_id: sensor.load_15m
     above: 1
     for: 
-      minutes: 5
+      minutes: 10
   action:
     - service: notify.mobile_app_ceres
       data_template:
         title: "System"
         # https://community.home-assistant.io/t/convert-trigger-for-into-a-relative-age/196979
         message: "The server load has been {{ states('sensor.load_15m') }} for {{ trigger.for.seconds / 60 }} minutes."
+# open garage door when arriving home:
+# when moving above a certain (last) speed (so i'm driving, not cycling or otherwise, or getting transported in some other way)
+# and connected to my car's bluetooth (thus, open my garage door only for my car)
+# and rouve is home (proxy for the alarm being off)
+# https://www.home-assistant.io/integrations/proximity/
+# https://www.home-assistant.io/docs/configuration/templating/ (distance function)
+# https://companion.home-assistant.io/docs/core/sensors/

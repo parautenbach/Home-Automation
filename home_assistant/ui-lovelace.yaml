@@ -54,8 +54,8 @@ views:
             line_width: 2
             show:
               extrema: true
-          - type: history-graph
-            title: Who's Home?
+          - type: custom:mini-graph-card
+            name: Who's Home?
             entities:
               - entity: binary_sensor.anybody_home
                 name: Anybody
@@ -67,6 +67,29 @@ views:
                 name: Contractors
               - entity: switch.guest_mode
                 name: Guests
+            hours_to_show: 24
+            update_interval: 300
+            aggregate_func: max
+            line_width: 2
+            smoothing: false
+            state_map:
+              - value: "off"
+                label: Away
+              - value: "on"
+                label: Home
+          - type: history-graph
+            title: Who's Home?
+            entities:
+              - entity: binary_sensor.anybody_home
+                name: Anybody
+              - entity: binary_sensor.pieter_present
+                name: Pieter
+              - entity: binary_sensor.rouve_present
+                name: Rouvé
+              - entity: binary_sensor.contractor_mode
+                name: Contractor Mode
+              - entity: switch.guest_mode
+                name: Guest Mode
             hours_to_show: 24
             refresh_interval: 300
           - type: horizontal-stack
@@ -889,71 +912,79 @@ views:
     icon: mdi:devices
     badges: []
     cards:
-      - type: entities
-        entities:
-          - device_tracker.ceres
-          - sensor.ceres_battery_level
-          - sensor.ceres_battery_state
-        title: Ceres
-        show_header_toggle: false
-      - type: entities
-        entities:
-          - device_tracker.rouve
-          - sensor.rouve_battery_level
-          - sensor.rouve_battery_state
-        title: Rouvé
-        show_header_toggle: false
-      - type: map
-        entities:
-          - device_tracker.ceres_2
-          - device_tracker.rouve
-      - type: entities
-        entities:
-          - group.all_devices
-        title: All Devices
-        show_header_toggle: false
-      - type: entities
-        entities:
-          - sensor.disk_use_percent
-          - sensor.memory_use_percent
-          - sensor.processor_use
-          - sensor.load_1m
-          - sensor.load_5m
-          - sensor.load_15m
-          - sensor.server_cpu_temp
-          - sensor.network_throughput_in_wlan0
-          - sensor.network_throughput_out_wlan0
-          - sensor.last_boot
-        title: Server
-        show_header_toggle: false
-      - type: custom:mini-graph-card
-        name: Server Load
-        entities:
-          - entity: sensor.load_1m
-          - entity: sensor.load_5m
-          - entity: sensor.load_15m
-        hours_to_show: 24
-        update_interval: 60
-        hour24: true
-        smoothing: true
-        group_by: hour
-        points_per_hour: 60  # every 30 min
-        line_width: 2
-        show:
-          extrema: true
-      - type: entities
-        title: Thor (WD Cloud Drive)
-        entities:
-          - sensor.thor_disk_usage
-      - type: history-graph
-        name: Test
-        hours_to_show: 6
-        entities:
-          - entity: input_boolean.pieter_in_car
-          - entity: binary_sensor.pieter_in_car
-          - entity: sensor.pieter_activity_type
-          - entity: sensor.pieter_activity_confidence
-      - type: glance
-        entities:
-          - entity: sensor.pieter_activity_type
-            show_last_changed: true
+      - type: vertical-stack
+        cards:
+        - type: glance
+          entities:
+            - entity: sensor.pieter_activity_type
+              show_last_changed: true
+            - entity: sensor.pieter_activity_confidence
+              show_last_changed: true
+        - type: entities
+          entities:
+            - device_tracker.ceres
+            - sensor.ceres_battery_level
+            - sensor.ceres_battery_state
+          title: Ceres
+          show_header_toggle: false
+        - type: entities
+          entities:
+            - device_tracker.rouve
+            - sensor.rouve_battery_level
+            - sensor.rouve_battery_state
+          title: Rouvé
+          show_header_toggle: false
+      - type: vertical-stack
+        cards:
+          - type: map
+            entities:
+              - device_tracker.ceres_2
+              - device_tracker.rouve
+          - type: history-graph
+            name: Test
+            hours_to_show: 6
+            entities:
+              - entity: input_boolean.pieter_in_car
+              - entity: binary_sensor.pieter_in_car
+              - entity: sensor.pieter_activity_type
+              - entity: sensor.pieter_activity_confidence
+      - type: vertical-stack
+        cards:
+          - type: custom:mini-graph-card
+            name: Server Load
+            entities:
+              - entity: sensor.load_1m
+              - entity: sensor.load_5m
+              - entity: sensor.load_15m
+            hours_to_show: 24
+            update_interval: 60
+            hour24: true
+            smoothing: true
+            group_by: hour
+            points_per_hour: 60  # every 30 min
+            line_width: 2
+            show:
+              extrema: true
+          - type: entities
+            entities:
+              - sensor.disk_use_percent
+              - sensor.memory_use_percent
+              - sensor.processor_use
+              - sensor.load_1m
+              - sensor.load_5m
+              - sensor.load_15m
+              - sensor.server_cpu_temp
+              - sensor.network_throughput_in_wlan0
+              - sensor.network_throughput_out_wlan0
+              - sensor.last_boot
+            title: Server
+            show_header_toggle: false
+          - type: entities
+            title: Thor (WD Cloud Drive)
+            entities:
+              - sensor.thor_disk_usage
+          - type: entities
+            entities:
+              - group.all_devices
+            title: All Devices
+            show_header_toggle: false

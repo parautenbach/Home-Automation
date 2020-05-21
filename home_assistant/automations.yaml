@@ -412,11 +412,10 @@
   trigger:
     platform: state
     entity_id: sensor.pieter_activity_type
+    from: "Automotive"  # to anything else
   action:
     - service: input_boolean.turn_off
-      data_template:
-        entity_id: input_boolean.pieter_in_car
-        value: '{{ states("sensors.pieter_activity_type") == "Automotive" }}'
+      entity_id: input_boolean.pieter_in_car
 # open garage door when arriving home:
 # when moving above a certain (last) speed (so i'm driving, not cycling or otherwise, or getting transported in some other way)
 # and connected to my car's bluetooth (thus, open my garage door only for my car)

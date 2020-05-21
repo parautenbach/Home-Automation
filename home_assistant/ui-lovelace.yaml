@@ -53,7 +53,28 @@ views:
           - type: horizontal-stack
             cards:
               - type: custom:button-card
-                color_type: blank-card
+                icon: mdi:garage
+                entity: script.noop
+                show_name: false
+                styles:
+                  grid:
+                    - position: relative
+                  custom_fields:
+                    source:
+                      - position: absolute
+                      - left: 80%
+                      - top: 60%
+                      - height: 20px
+                      - width: 20px
+                custom_fields:
+                  source: >
+                    [[[ return `<ha-icon icon="mdi:chevron-left" style="color: #44739e;"></ha-icon>` ]]]
+                tap_action:
+                  action: call-service
+                  haptic: light
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.noop
               - type: custom:button-card
                 entity: cover.main_gate
                 color_type: icon
@@ -72,7 +93,28 @@ views:
                   action: more-info
                   haptic: selection
               - type: custom:button-card
-                color_type: blank-card
+                icon: mdi:garage
+                entity: script.noop
+                show_name: false
+                styles:
+                  grid:
+                    - position: relative
+                  custom_fields:
+                    source:
+                      - position: absolute
+                      - left: 80%
+                      - top: 60%
+                      - height: 20px
+                      - width: 20px
+                custom_fields:
+                  source: >
+                    [[[ return `<ha-icon icon="mdi:chevron-right" style="color: #44739e;"></ha-icon>` ]]]
+                tap_action:
+                  action: call-service
+                  haptic: light
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.noop
           - type: custom:mini-graph-card
             name: Who's Home?
             entities:

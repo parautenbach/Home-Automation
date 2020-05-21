@@ -101,14 +101,15 @@
         icon_template: "{{ state_attr('sensor.ceres_activity', 'icon') }}"
       pieter_activity_confidence:
         value_template: "{{ state_attr('sensor.ceres_activity', 'Confidence') }}"
-        # icon_template: mdi:delta
         icon_template: >-
           {% if state_attr('sensor.ceres_activity', 'Confidence') == 'High' %}
-            mdi:quality-high
+            mdi:speedometer
           {% elif state_attr('sensor.ceres_activity', 'Confidence') == 'Medium' %}
-            mdi:quality-medium
+            mdi:speedometer-medium
+          {% elif state_attr('sensor.ceres_activity', 'Confidence') == 'Low' %}
+            mdi:speedometer-slow
           {% else %}
-            mdi:quality-low
+            None
           {% endif %}
   - platform: snmp
     name: snmp_wan_in

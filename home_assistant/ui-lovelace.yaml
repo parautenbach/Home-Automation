@@ -29,7 +29,6 @@ views:
           entities:
             - entity: sensor.ambient_temperature
           hours_to_show: 24
-          update_interval: 60
           hour24: true
           smoothing: true
           group_by: hour
@@ -46,7 +45,6 @@ views:
             entities:
               - entity: sensor.google_travel_time_driving
             hours_to_show: 24
-            update_interval: 60
             hour24: true
             smoothing: true
             group_by: hour
@@ -92,7 +90,8 @@ views:
                 name: Guests
             icon: mdi:home
             hours_to_show: 24
-            update_interval: 300
+            points_per_hour: 60
+            hour24: true
             aggregate_func: max
             line_width: 2
             smoothing: false
@@ -111,9 +110,9 @@ views:
               - entity: binary_sensor.rouve_present
                 name: Rouvé
               - entity: binary_sensor.contractor_mode
-                name: Contractor Mode
+                name: Contractors
               - entity: switch.guest_mode
-                name: Guest Mode
+                name: Guests
             hours_to_show: 24
             refresh_interval: 300
           - type: entities
@@ -783,7 +782,6 @@ views:
           - entity: sensor.internet_speed_in
           - entity: sensor.internet_speed_out
         hours_to_show: 24
-        update_interval: 60
         hour24: true
         smoothing: true
         points_per_hour: 60  # every 1 min
@@ -827,7 +825,6 @@ views:
         entities:
           - entity: sensor.internet_round_trip_time_avg
         hours_to_show: 24
-        update_interval: 12
         hour24: true
         smoothing: true
         group_by: hour
@@ -959,7 +956,6 @@ views:
               - entity: sensor.load_5m
               - entity: sensor.load_15m
             hours_to_show: 24
-            update_interval: 60
             hour24: true
             smoothing: true
             group_by: hour

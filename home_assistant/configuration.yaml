@@ -131,7 +131,7 @@ input_boolean:
   contractor_mode:
     name: Contractor Mode
     icon: mdi:worker
-  # this doesn't work, due to an ios bug where the automation in the shortcuts app refuses to trigger
+  # this gets set by a shortcuts automation on ios – what sucks is that it doesn't happen automatically
   pieter_in_car:
     name: Pieter In Car
     icon: mdi:car-connected

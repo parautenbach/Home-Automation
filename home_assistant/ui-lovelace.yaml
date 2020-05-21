@@ -776,6 +776,7 @@ views:
       - type: custom:mini-graph-card
         name: Traffic
         show:
+          state: false
           icon: false
           extrema: true
         entities:

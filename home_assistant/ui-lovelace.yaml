@@ -947,8 +947,13 @@ views:
           - sensor.thor_disk_usage
       - type: history-graph
         name: Test
+        hours_to_show: 6
         entities:
           - entity: input_boolean.pieter_in_car
           - entity: binary_sensor.pieter_in_car
           - entity: sensor.pieter_activity_type
           - entity: sensor.pieter_activity_confidence
+      - type: glance
+        entities:
+          - entity: sensor.pieter_activity_type
+            show_last_changed: true

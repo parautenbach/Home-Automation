@@ -31,7 +31,6 @@ views:
           hours_to_show: 24
           hour24: true
           smoothing: true
-          group_by: hour
           points_per_hour: 2  # every 30 min
           line_width: 2
           show:
@@ -47,8 +46,7 @@ views:
             hours_to_show: 24
             hour24: true
             smoothing: true
-            group_by: hour
-            points_per_hour: 12  # every 5 min
+            points_per_hour: 4  # every 15 min
             line_width: 2
             show:
               extrema: true
@@ -90,7 +88,7 @@ views:
                 name: Guests
             icon: mdi:home
             hours_to_show: 24
-            points_per_hour: 60
+            points_per_hour: 12  # every 5 min
             hour24: true
             aggregate_func: max
             line_width: 2
@@ -784,9 +782,8 @@ views:
         hours_to_show: 24
         hour24: true
         smoothing: true
-        points_per_hour: 60  # every 1 min
+        points_per_hour: 12  # every 5 min
         aggregate_func: max
-        group_by: hour
         line_width: 2
       - type: horizontal-stack
         cards:
@@ -814,12 +811,6 @@ views:
           - sensor.internet_round_trip_time_avg
           - sensor.internet_round_trip_time_mdev
           - sensor.internet_packet_loss
-      # - type: entities
-      #   show_header_toggle: false
-      #   entities:
-      #     - type: attribute
-      #       entity: binary_sensor.internet
-      #       attribute: round_trip_time_avg
       - type: custom:mini-graph-card
         name: Latency
         entities:
@@ -827,7 +818,6 @@ views:
         hours_to_show: 24
         hour24: true
         smoothing: true
-        group_by: hour
         points_per_hour: 12  # every 5 min
         line_width: 2
         show:
@@ -958,8 +948,7 @@ views:
             hours_to_show: 24
             hour24: true
             smoothing: true
-            group_by: hour
-            points_per_hour: 60  # every 30 min
+            points_per_hour: 12  # every 5 min
             line_width: 2
             show:
               extrema: true

@@ -53,19 +53,22 @@ views:
           - type: horizontal-stack
             cards:
               - type: custom:button-card
+                name: Pieter
+                show_name: true
                 icon: mdi:garage
                 entity: script.noop
-                show_name: false
                 styles:
+                  name:
+                    - color: var(--paper-item-icon-color)
+                  card:
+                    - font-size: 12px
                   grid:
                     - position: relative
                   custom_fields:
                     source:
                       - position: absolute
-                      - left: 80%
-                      - top: 60%
-                      - height: 20px
-                      - width: 20px
+                      - left: 25%
+                      - top: 40%
                 custom_fields:
                   source: >
                     [[[ return `<ha-icon icon="mdi:chevron-left" style="color: #44739e;"></ha-icon>` ]]]
@@ -76,10 +79,16 @@ views:
                   service_data:
                     entity_id: script.noop
               - type: custom:button-card
+                name: Gate
+                show_name: true
                 entity: cover.main_gate
                 color_type: icon
                 color: var(--paper-item-icon-color)
-                show_name: false
+                styles:
+                  name:
+                    - color: var(--paper-item-icon-color)
+                  card:
+                    - font-size: 12px
                 tap_action:
                   action: toggle
                   haptic: light
@@ -93,19 +102,22 @@ views:
                   action: more-info
                   haptic: selection
               - type: custom:button-card
+                name: Rouvé
+                show_name: true
                 icon: mdi:garage
                 entity: script.noop
-                show_name: false
                 styles:
+                  name:
+                    - color: var(--paper-item-icon-color)
+                  card:
+                    - font-size: 12px
                   grid:
                     - position: relative
                   custom_fields:
                     source:
                       - position: absolute
-                      - left: 80%
-                      - top: 60%
-                      - height: 20px
-                      - width: 20px
+                      - left: 60%
+                      - top: 40%
                 custom_fields:
                   source: >
                     [[[ return `<ha-icon icon="mdi:chevron-right" style="color: #44739e;"></ha-icon>` ]]]

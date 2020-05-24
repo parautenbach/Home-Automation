@@ -10,6 +10,7 @@ sensor.ambient_pressure:
 camera.security_camera:
   friendly_name: Security Camera
 binary_sensor.motion_sensor:
+  icon: mdi:motion-sensor
   friendly_name: Motion Sensor
 switch.motion_led:
   icon: mdi:motion-sensor

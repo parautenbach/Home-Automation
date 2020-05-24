@@ -127,8 +127,9 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.noop
-          - type: custom:mini-graph-card
+          - type: history-graph
             name: Who's Home?
+            hours_to_show: 24
             entities:
               - entity: binary_sensor.anybody_home
                 name: Anybody
@@ -140,20 +141,6 @@ views:
                 name: Contractors
               - entity: switch.guest_mode
                 name: Guests
-            show:
-              state: false
-            icon: mdi:home
-            hours_to_show: 24
-            points_per_hour: 6  # every 10 min
-            hour24: true
-            aggregate_func: max
-            line_width: 2
-            smoothing: false
-            state_map:
-              - value: "off"
-                label: Away
-              - value: "on"
-                label: Home
           - type: entities
             title: Special Modes
             entities:
@@ -872,7 +859,10 @@ views:
         title: Security Camera
         camera_image: camera.security_camera
         entities:
-          - switch.motion_led
+          # todo: replace switch with sensor
+          # todo: add "take snapshot now"
+          # - switch.motion_led
+          - binary_sensor.motion_sensor
           - automation.take_motion_snapshots
           - entity: script.security_camera_record_clip
             tap_action: 
@@ -946,6 +936,8 @@ views:
               show_last_changed: true
             - entity: sensor.pieter_activity_confidence
               show_last_changed: true
+            - entity: sensor.pieter_in_car
+              show_last_changed: true
         - type: entities
           entities:
             - device_tracker.ceres
@@ -966,14 +958,6 @@ views:
             entities:
               - device_tracker.ceres_2
               - device_tracker.rouve
-          - type: history-graph
-            name: Test
-            hours_to_show: 6
-            entities:
-              - entity: input_boolean.pieter_in_car
-              - entity: binary_sensor.pieter_in_car
-              - entity: sensor.pieter_activity_type
-              - entity: sensor.pieter_activity_confidence
       - type: vertical-stack
         cards:
           - type: custom:mini-graph-card

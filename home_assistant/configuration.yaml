@@ -173,8 +173,8 @@ binary_sensor:
   - platform: ping
     name: Internet
     host: www.google.com
-    count: 5
-    scan_interval: 300
+    count: 1
+    scan_interval: 60
 
 tplink:
   # discovery: true
@@ -230,6 +230,8 @@ device_tracker:
 shell_command:
   noop: ":"
   copy_last_snapshot_image: "cp `ls -t /tmp/camera.security_camera_*.jpg | head -n1` /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg"
+  # todo: only keep n vids/pics
+  copy_snapshots_and_videos_to_gallery: "cp /tmp/camera.security_camera_*.* /home/homeassistant/.homeassistant/www/gallery/"
 
 timer:
   motion_timer:
@@ -283,3 +285,8 @@ cover:
           {% else %}
             mdi:gate
           {% endif %}
+
+folder_watcher:
+  - folder: /tmp/
+    patterns: 
+      - "camera.security_camera_*.*"

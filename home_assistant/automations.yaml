@@ -396,6 +396,7 @@
       data:
         entity_id: timer.main_gate_timer
 - alias: "Notify If Server Load High"
+  initial_state: true
   trigger:
     platform: numeric_state
     entity_id: sensor.load_15m
@@ -409,6 +410,7 @@
         # https://community.home-assistant.io/t/convert-trigger-for-into-a-relative-age/196979
         message: "The server load has been {{ states('sensor.load_15m') }} for {{ trigger.for.seconds / 60 }} minutes."
 - alias: "Pieter Is Not Driving"
+  initial_state: true
   trigger:
     platform: state
     entity_id: sensor.pieter_activity_type
@@ -417,6 +419,7 @@
     - service: input_boolean.turn_off
       entity_id: input_boolean.pieter_in_car
 - alias: "Notify If Driving State Changed"
+  initial_state: true
   trigger:
     platform: state
     entity_id: binary_sensor.pieter_in_car
@@ -433,3 +436,12 @@
 # https://www.home-assistant.io/integrations/proximity/
 # https://www.home-assistant.io/docs/configuration/templating/ (distance function)
 # https://companion.home-assistant.io/docs/core/sensors/
+- alias: New Security Snapshot or Video Created
+  initial_state: true
+  trigger:
+    platform: event
+    event_type: folder_watcher
+    event_data:
+      event_type: created
+  action:
+    service: shell_command.copy_snapshots_and_videos_to_gallery

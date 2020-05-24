@@ -163,10 +163,10 @@
     time_zone: Europe/London
   - platform: command_line
     name: internet_packet_loss
-    command: 'ping -c 5 www.google.com | grep -o -P "(?<= )(\d+)(?=%)"'
+    command: 'ping -c 1 www.google.com | grep -o -P "(?<= )(\d+)(?=%)"'
     unit_of_measurement: "%"
     value_template: '{{ value | int }}'
-    scan_interval: 300
+    scan_interval: 60
   - platform: command_line
     name: thor_disk_usage
     command: !secret thor_disk_usage_command

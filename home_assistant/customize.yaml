@@ -274,3 +274,5 @@ sensor.pieter_activity_type:
   friendly_name: Pieter's Current Activity
 sensor.pieter_activity_confidence:
   friendly_name: Pieter's Activity Confidence
+binary_sensor.pieter_in_car:
+  icon: mdi:car

@@ -1,3 +1,5 @@
 https://circuits4you.com/2018/12/31/esp32-devkit-esp32-wroom-gpio-pinout/
 
 https://community.home-assistant.io/t/icon-template-with-esphome-cover/109936/5
+
+https://components101.com/microcontrollers/esp32-devkitc

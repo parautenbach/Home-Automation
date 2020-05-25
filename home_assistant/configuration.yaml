@@ -173,8 +173,8 @@ binary_sensor:
   - platform: ping
     name: Internet
     host: www.google.com
-    count: 1
-    scan_interval: 60
+    count: 5
+    scan_interval: 300
 
 tplink:
   # discovery: true

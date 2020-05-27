@@ -422,12 +422,11 @@
         message: "The server load has been {{ states('sensor.load_15m') }} for {{ trigger.for.seconds / 60 }} minutes."
 - alias: "Set Pieter's Driving State"
   initial_state: true
-  - trigger:
-      platform: state
+  trigger:
+    - platform: state
       entity_id: sensor.pieter_activity_type
       to: "Automotive"  # from anything else
-  - trigger:
-      platform: state
+    - platform: state
       entity_id: sensor.pieter_activity_type
       from: "Automotive"  # to anything else
   action:

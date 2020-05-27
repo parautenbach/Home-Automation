@@ -53,7 +53,7 @@ homekit:
       - input_boolean.rouve_present
       - input_boolean.guest_mode
       - input_boolean.contractor_mode
-      - input_boolean.pieter_in_car
+      - input_boolean.pieter_driving
       - light.smart_bulb_1
       - light.smart_bulb_2
       - light.smart_bulb_3
@@ -86,6 +86,11 @@ ios:
         actions:
           - identifier: "CLOSE_MAIN_GATE"
             title: "Close"
+          # do nothing with this: the default 2 min will count down
+          - identifier: "EXTEND_MAIN_GATE_TIMEOUT_2_MIN"
+            title: "Wait 2 min"            
+          - identifier: "EXTEND_MAIN_GATE_TIMEOUT_10_MIN"
+            title: "Wait 10 min"
       - name: Test
         identifier: 'test'
         actions:
@@ -132,9 +137,9 @@ input_boolean:
     name: Contractor Mode
     icon: mdi:worker
   # this gets set by a shortcuts automation on ios – what sucks is that it doesn't happen automatically
-  pieter_in_car:
-    name: Pieter In Car
-    icon: mdi:car-connected
+  pieter_driving:
+    name: Pieter Driving
+    icon: mdi:car
 
 input_datetime:
   security_camera_last_snapshot:
@@ -166,10 +171,10 @@ binary_sensor:
         value_template: >- 
           {{ is_state("input_boolean.pieter_present", "on") or is_state("input_boolean.rouve_present", "on") or 
              is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on") }} 
-      pieter_in_car:
-        friendly_name: "Pieter In Car"
+      pieter_driving:
+        friendly_name: "Pieter Driving"
         value_template: >- 
-          {{ is_state("input_boolean.pieter_in_car", "on") }}
+          {{ is_state("input_boolean.pieter_driving", "on") }}
   - platform: ping
     name: Internet
     host: www.google.com

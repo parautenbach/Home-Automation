@@ -385,6 +385,17 @@
   action:
     - service: cover.close_cover
       entity_id: cover.main_gate
+- alias: "Extend Main Gate Timeout To 10 Min From Alert Action"
+  trigger:
+    - platform: event
+      event_type: ios.notification_action_fired
+      event_data:
+        actionName: EXTEND_MAIN_GATE_TIMEOUT_10_MIN
+  action:
+    - service: timer.start
+      data:
+        entity_id: timer.main_gate_timer
+        duration: "00:10:00"
 - alias: "Stop Main Gate Timer When Closed"
   initial_state: true
   trigger:
@@ -409,26 +420,30 @@
         title: "System"
         # https://community.home-assistant.io/t/convert-trigger-for-into-a-relative-age/196979
         message: "The server load has been {{ states('sensor.load_15m') }} for {{ trigger.for.seconds / 60 }} minutes."
-- alias: "Pieter Is Not Driving"
+- alias: "Set Pieter's Driving State"
   initial_state: true
-  trigger:
-    platform: state
-    entity_id: sensor.pieter_activity_type
-    from: "Automotive"  # to anything else
+  - trigger:
+      platform: state
+      entity_id: sensor.pieter_activity_type
+      to: "Automotive"  # from anything else
+  - trigger:
+      platform: state
+      entity_id: sensor.pieter_activity_type
+      from: "Automotive"  # to anything else
   action:
-    - service: input_boolean.turn_off
-      entity_id: input_boolean.pieter_in_car
+    - service_template: "input_boolean.turn_{{ 'on' if states('sensor.pieter_activity_type') == 'Automotive' else 'off'}}"
+      entity_id: input_boolean.pieter_driving
 - alias: "Notify If Driving State Changed"
   initial_state: true
   trigger:
     platform: state
-    entity_id: binary_sensor.pieter_in_car
+    entity_id: binary_sensor.pieter_driving
   action:
     - service: notify.mobile_app_ceres
       data_template:
         title: "Test"
-        # message: "Pieter is{% if states('binary_sensor.pieter_in_car') == 'off' %} not{% endif %} driving."
-        message: "Pieter is{{ ' not' if states('binary_sensor.pieter_in_car') == 'off' }} driving."
+        # message: "Pieter is{% if states('binary_sensor.pieter_driving') == 'off' %} not{% endif %} driving."
+        message: "Pieter is{{ ' not' if states('binary_sensor.pieter_driving') == 'off' }} driving."
 # open garage door when arriving home:
 # when moving above a certain (last) speed (so i'm driving, not cycling or otherwise, or getting transported in some other way)
 # and connected to my car's bluetooth (thus, open my garage door only for my car)

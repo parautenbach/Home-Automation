@@ -64,14 +64,6 @@ views:
                     - font-size: 12px
                   grid:
                     - position: relative
-                  custom_fields:
-                    source:
-                      - position: absolute
-                      - left: 25%
-                      - top: 40%
-                custom_fields:
-                  source: >
-                    [[[ return `<ha-icon icon="mdi:chevron-left" style="color: #44739e;"></ha-icon>` ]]]
                 tap_action:
                   action: call-service
                   haptic: light
@@ -113,14 +105,6 @@ views:
                     - font-size: 12px
                   grid:
                     - position: relative
-                  custom_fields:
-                    source:
-                      - position: absolute
-                      - left: 60%
-                      - top: 40%
-                custom_fields:
-                  source: >
-                    [[[ return `<ha-icon icon="mdi:chevron-right" style="color: #44739e;"></ha-icon>` ]]]
                 tap_action:
                   action: call-service
                   haptic: light
@@ -936,7 +920,7 @@ views:
               show_last_changed: true
             - entity: sensor.pieter_activity_confidence
               show_last_changed: true
-            - entity: binary_sensor.pieter_in_car
+            - entity: binary_sensor.pieter_driving
               show_last_changed: true
         - type: entities
           entities:

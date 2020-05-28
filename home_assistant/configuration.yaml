@@ -290,8 +290,3 @@ cover:
           {% else %}
             mdi:gate
           {% endif %}
-
-folder_watcher:
-  - folder: /tmp/
-    patterns: 
-      - "camera.security_camera_*.*"

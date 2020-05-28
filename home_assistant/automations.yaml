@@ -450,12 +450,3 @@
 # https://www.home-assistant.io/integrations/proximity/
 # https://www.home-assistant.io/docs/configuration/templating/ (distance function)
 # https://companion.home-assistant.io/docs/core/sensors/
-- alias: New Security Snapshot or Video Created
-  initial_state: true
-  trigger:
-    platform: event
-    event_type: folder_watcher
-    event_data:
-      event_type: created
-  action:
-    service: shell_command.copy_snapshots_and_videos_to_gallery

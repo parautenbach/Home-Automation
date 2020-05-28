@@ -44,10 +44,12 @@ switch:
     id: gate_control
     name: "Gate Control"
     pin: 14
+    restore_mode: ALWAYS_OFF
   - platform: template
     id: gate_remote
     name: "Gate Remote"
     icon: "mdi:remote"
+    restore_state: False
     turn_on_action:
     - switch.turn_on: gate_control
     - delay: 500ms

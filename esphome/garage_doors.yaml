@@ -54,10 +54,12 @@ switch:
     id: lhs_garage_door_control
     name: "LHS Garage Door Control"
     pin: 12
+    restore_mode: ALWAYS_OFF
   - platform: template
     id: lhs_garage_door_remote
     name: "LHS Garage Door Remote"
     icon: "mdi:remote"
+    restore_state: False
     turn_on_action:
       - switch.turn_on: lhs_garage_door_control
       - delay: 500ms
@@ -66,10 +68,12 @@ switch:
     id: rhs_garage_door_control
     name: "RHS Garage Door Control"
     pin: 14
+    restore_mode: ALWAYS_OFF
   - platform: template
     id: rhs_garage_door_remote
     name: "RHS Garage Door Remote"
     icon: "mdi:remote"
+    restore_state: False
     turn_on_action:
       - switch.turn_on: rhs_garage_door_control
       - delay: 500ms

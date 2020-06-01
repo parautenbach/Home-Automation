@@ -187,6 +187,7 @@ tplink:
   light:
     - host: 192.168.0.108  # smart bulb 1
     - host: 192.168.0.116  # smart bulb 2
+    - host: 192.168.0.115  # smart plug 1
 
 python_script:
 # https://raw.githubusercontent.com/bieniu/ha-shellies-discovery/master/python_scripts/shellies_discovery.py

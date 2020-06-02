@@ -56,6 +56,8 @@ views:
                 name: Rouvé
                 show_name: true
                 entity: cover.lhs_garage_door
+                color_type: icon
+                color: var(--paper-item-icon-color)
                 styles:
                   name:
                     - color: var(--paper-item-icon-color)
@@ -96,6 +98,8 @@ views:
                 name: Pieter
                 show_name: true
                 entity: cover.rhs_garage_door
+                color_type: icon
+                color: var(--paper-item-icon-color)
                 styles:
                   name:
                     - color: var(--paper-item-icon-color)

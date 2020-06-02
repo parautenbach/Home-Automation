@@ -28,8 +28,8 @@ ota:
 # https://esphome.io/components/binary_sensor/gpio.html
 binary_sensor:
   - platform: gpio
-    id: lhs_garage_door_status
-    name: "LHS Garage Door Status"
+    id: rhs_garage_door_status
+    name: "RHS Garage Door Status"
     device_class: garage_door
     pin:
       number: 32
@@ -38,8 +38,8 @@ binary_sensor:
       - delayed_on: 100ms
       - delayed_off: 100ms
   - platform: gpio
-    id: rhs_garage_door_status
-    name: "RHS Garage Door Status"
+    id: lhs_garage_door_status
+    name: "LHS Garage Door Status"
     device_class: garage_door
     pin:
       number: 35
@@ -51,13 +51,13 @@ binary_sensor:
 # https://esphome.io/components/switch/gpio.html
 switch:
   - platform: gpio
-    id: lhs_garage_door_control
-    name: "LHS Garage Door Control"
+    id: rhs_garage_door_control
+    name: "RHS Garage Door Control"
     pin: 12
     restore_mode: ALWAYS_OFF
   - platform: template
-    id: lhs_garage_door_remote
-    name: "LHS Garage Door Remote"
+    id: rhs_garage_door_remote
+    name: "RHS Garage Door Remote"
     icon: "mdi:remote"
     restore_state: False
     turn_on_action:
@@ -65,13 +65,13 @@ switch:
       - delay: 500ms
       - switch.turn_off: lhs_garage_door_control
   - platform: gpio
-    id: rhs_garage_door_control
-    name: "RHS Garage Door Control"
+    id: lhs_garage_door_control
+    name: "LHS Garage Door Control"
     pin: 14
     restore_mode: ALWAYS_OFF
   - platform: template
-    id: rhs_garage_door_remote
-    name: "RHS Garage Door Remote"
+    id: lhs_garage_door_remote
+    name: "LHS Garage Door Remote"
     icon: "mdi:remote"
     restore_state: False
     turn_on_action:

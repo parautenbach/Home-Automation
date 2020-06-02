@@ -61,9 +61,9 @@ switch:
     icon: "mdi:remote"
     restore_state: False
     turn_on_action:
-      - switch.turn_on: lhs_garage_door_control
+      - switch.turn_on: rhs_garage_door_control
       - delay: 500ms
-      - switch.turn_off: lhs_garage_door_control
+      - switch.turn_off: rhs_garage_door_control
   - platform: gpio
     id: lhs_garage_door_control
     name: "LHS Garage Door Control"
@@ -75,9 +75,9 @@ switch:
     icon: "mdi:remote"
     restore_state: False
     turn_on_action:
-      - switch.turn_on: rhs_garage_door_control
+      - switch.turn_on: lhs_garage_door_control
       - delay: 500ms
-      - switch.turn_off: rhs_garage_door_control
+      - switch.turn_off: lhs_garage_door_control
 
 mqtt:
   broker: !secret mqtt_broker

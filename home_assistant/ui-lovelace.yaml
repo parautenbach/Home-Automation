@@ -53,10 +53,9 @@ views:
           - type: horizontal-stack
             cards:
               - type: custom:button-card
-                name: Pieter
+                name: Rouvé
                 show_name: true
-                icon: mdi:garage
-                entity: script.noop
+                entity: cover.lhs_garage_door
                 styles:
                   name:
                     - color: var(--paper-item-icon-color)
@@ -65,11 +64,11 @@ views:
                   grid:
                     - position: relative
                 tap_action:
-                  action: call-service
+                  action: toggle
                   haptic: light
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.noop
+                hold_action:
+                  action: more-info
+                  haptic: selection
               - type: custom:button-card
                 name: Gate
                 show_name: true
@@ -94,10 +93,9 @@ views:
                   action: more-info
                   haptic: selection
               - type: custom:button-card
-                name: Rouvé
+                name: Pieter
                 show_name: true
-                icon: mdi:garage
-                entity: script.noop
+                entity: cover.rhs_garage_door
                 styles:
                   name:
                     - color: var(--paper-item-icon-color)
@@ -106,11 +104,11 @@ views:
                   grid:
                     - position: relative
                 tap_action:
-                  action: call-service
+                  action: toggle
                   haptic: light
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.noop
+                hold_action:
+                  action: more-info
+                  haptic: selection
           - type: history-graph
             title: Who's Home?
             hours_to_show: 24

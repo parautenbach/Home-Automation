@@ -292,3 +292,49 @@ cover:
           {% else %}
             mdi:gate
           {% endif %}
+  - platform: template
+    covers:
+      main_gate:
+        friendly_name: "LHS Garage Door"
+        open_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.lhs_garage_door_remote
+        close_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.lhs_garage_door_remote
+        stop_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.lhs_garage_door_remote
+        value_template: "{{ is_state('binary_sensor.lhs_garage_door_status', 'on') }}"
+        icon_template: >-
+          {% if is_state('binary_sensor.lhs_garage_door_status', 'on') %}
+            mdi:garage-open
+          {% else %}
+            mdi:garage
+          {% endif %}
+  - platform: template
+    covers:
+      main_gate:
+        friendly_name: "RHS Garage Door"
+        open_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.rhs_garage_door_remote
+        close_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.rhs_garage_door_remote
+        stop_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.rhs_garage_door_remote
+        value_template: "{{ is_state('binary_sensor.rhs_garage_door_status', 'on') }}"
+        icon_template: >-
+          {% if is_state('binary_sensor.rhs_garage_door_status', 'on') %}
+            mdi:garage-open
+          {% else %}
+            mdi:garage
+          {% endif %}

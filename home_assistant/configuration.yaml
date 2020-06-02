@@ -294,7 +294,7 @@ cover:
           {% endif %}
   - platform: template
     covers:
-      main_gate:
+      lhs_garage_door:
         friendly_name: "LHS Garage Door"
         open_cover:
           service: switch.turn_on
@@ -317,7 +317,7 @@ cover:
           {% endif %}
   - platform: template
     covers:
-      main_gate:
+      rhs_garage_door:
         friendly_name: "RHS Garage Door"
         open_cover:
           service: switch.turn_on

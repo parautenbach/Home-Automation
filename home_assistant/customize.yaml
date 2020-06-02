@@ -276,3 +276,6 @@ sensor.pieter_activity_confidence:
   friendly_name: Pieter's Activity Confidence
 binary_sensor.pieter_driving:
   icon: mdi:car
+switch.smart_plug_1:
+  friendly_name: Tivoli Audio
+  icon: mdi:radio

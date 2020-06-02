@@ -162,6 +162,14 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.entertainment_off
+              - type: entity-button
+                entity: switch.smart_plug_1
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: switch.toggle
+                  service_data:
+                    entity_id: switch.smart_plug_1
           - type: entities
             entities:
               - entity: switch.living_room_lamp

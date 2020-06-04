@@ -246,6 +246,10 @@ timer:
     duration: "00:05:00"
   main_gate_timer:
     duration: "00:02:00"
+  lhs_garage_door_timer:
+    duration: "00:02:00"
+  rhs_garage_door_timer:
+    duration: "00:02:00"
 
 input_number:
   wan_traffic_delta_in:

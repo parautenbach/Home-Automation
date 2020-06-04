@@ -882,11 +882,19 @@ views:
             title: Covers
             show_header_toggle: false
             entities:
-              - cover.main_gate
+              - entity: cover.main_gate
+              - entity: cover.lhs_garage_door
+                name: Rouvé's Garage Door Open (LHS)
+              - entity: cover.rhs_garage_door
+                name: Pieter's Garage Door Open (RHS)
           - type: entities
             entities:
               - entity: timer.main_gate_timer
                 name: Main Gate Open Timeout
+              - entity: timer.lhs_garage_door_timer
+                name: Rouvé's Garage Door Open Timeout (LHS)
+              - entity: timer.rhs_garage_door_timer
+                name: Pieter's Garage Door Open Timeout (RHS)
   - title: Floorplan
     path: floorplan
     panel: true

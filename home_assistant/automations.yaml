@@ -274,7 +274,7 @@
         actionName: DISABLE_CONTRACTOR_MODE
   action:
     - service: switch.turn_off
-      entity_id: switch.contractor_mode  
+      entity_id: switch.contractor_mode
 - alias: "Enable Contractor Mode From Alert Action"
   trigger:
     - platform: event
@@ -340,42 +340,69 @@
   action:
     - service: script.turn_on
       entity_id: script.send_pieter_work_cape_town_to_home_eta
-- alias: "Start Main Gate Timer When Opened"
+- alias: "Start Cover Timer When Opened"
   initial_state: true
   trigger:
     platform: state
-    entity_id: cover.main_gate
+    entity_id: 
+      - cover.main_gate
+      - cover.lhs_garage_door
+      - cover.rhs_garage_door
     to: "open"
   action:
     - service: timer.start
-      data:
-        entity_id: timer.main_gate_timer
-- alias: "Main Gate Left Open Alert"
+      data_template:
+        entity_id: "timer.{{ trigger.entity_id | replace('cover.', '') }}_timer"
+- alias: "Cover Left Open Alert"
   initial_state: true
   trigger:
     - platform: event
       event_type: timer.finished
       event_data:
         entity_id: timer.main_gate_timer
-    - platform: state
-      entity_id: binary_sensor.anybody_home
-      to: "off"
+    - platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.lhs_garage_door_timer
+    - platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.rhs_garage_door_timer
   condition:
-    - condition: state
-      entity_id: cover.main_gate
-      state: "open"
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: cover.main_gate
+          state: "open"
+        - condition: state
+          entity_id: cover.lhs_garage_door
+          state: "open"
+        - condition: state
+          entity_id: cover.rhs_garage_door
+          state: "open"
   action:
     # https://companion.home-assistant.io/docs/notifications/critical-notifications/
     - service: notify.mobile_app_ceres
-      data:
+      data_template:
         title: "Security"
-        message: "The main gate has been left open for too long."
+        # timer.rhs_garage_door_timer -> Pieter's garage door
+        message: >-
+          {% set message_part = " has been left open for too long." %}
+          {% set name = None %}
+          {% if trigger.event.data.entity_id | regex_search("lhs", ignorecase=True) %}
+            {% set name = "Rouvé's garage door" %}
+          {% elif trigger.event.data.entity_id | regex_search("rhs", ignorecase=True) %}
+            {% set name = "Pieter's garage door" %}
+          {% else %}
+            {% set name = "The main gate" %}
+          {% endif %}
+          {{ name }}{{ message_part }}
         data:
           push:
             category: "main_gate_open"
     - service: timer.start
-      data:
-        entity_id: timer.main_gate_timer
+      data_template:
+        entity_id: "{{ trigger.event.data.entity_id }}"
 - alias: "Close Main Gate From Alert Action"
   trigger:
     - platform: event
@@ -396,16 +423,20 @@
       data:
         entity_id: timer.main_gate_timer
         duration: "00:10:00"
-- alias: "Stop Main Gate Timer When Closed"
+- alias: "Stop Cover Timer When Closed"
   initial_state: true
   trigger:
     platform: state
-    entity_id: cover.main_gate
+    entity_id:
+      - cover.main_gate
+      - cover.lhs_garage_door
+      - cover.rhs_garage_door
     to: "closed"
   action:
     - service: timer.cancel
-      data:
-        entity_id: timer.main_gate_timer
+      data_template:
+        # cover.main_gate -> timer.main_gate_timer
+        entity_id: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
 - alias: "Notify If Server Load High"
   initial_state: true
   trigger:

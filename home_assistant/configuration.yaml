@@ -82,15 +82,15 @@ ios:
         actions:
           - identifier: "ENABLE_CONTRACTOR_MODE"
             title: "Enable"
-      - name: Main Gate Open
-        identifier: "main_gate_open"
+      - name: Cover Open
+        identifier: "cover_open"
         actions:
-          - identifier: "CLOSE_MAIN_GATE"
+          - identifier: "CLOSE_COVER"
             title: "Close"
-          # do nothing with this: the default 2 min will count down
-          - identifier: "EXTEND_MAIN_GATE_TIMEOUT_2_MIN"
-            title: "Wait 2 min"            
-          - identifier: "EXTEND_MAIN_GATE_TIMEOUT_10_MIN"
+          # do nothing with this: the default timer value will be used
+          - identifier: "EXTEND_COVER_TIMEOUT_DEFAULT"
+            title: "Wait 3 min"            
+          - identifier: "EXTEND_COVER_TIMEOUT_10_MIN"
             title: "Wait 10 min"
       - name: Test
         identifier: 'test'
@@ -245,11 +245,11 @@ timer:
   motion_timer:
     duration: "00:05:00"
   main_gate_timer:
-    duration: "00:02:00"
+    duration: "00:03:00"
   lhs_garage_door_timer:
-    duration: "00:02:00"
+    duration: "00:03:00"
   rhs_garage_door_timer:
-    duration: "00:02:00"
+    duration: "00:03:00"
 
 input_number:
   wan_traffic_delta_in:

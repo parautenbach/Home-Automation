@@ -399,29 +399,34 @@
           {{ name }}{{ message_part }}
         data:
           push:
-            category: "main_gate_open"
+            category: "cover_open"
+          action_data:
+            # convert this to the cover entity to use in the automation that receives this
+            cover_id: "{{ trigger.event.data.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
+            timer_id: "{{ trigger.event.data.entity_id }}"
     - service: timer.start
       data_template:
         entity_id: "{{ trigger.event.data.entity_id }}"
-- alias: "Close Main Gate From Alert Action"
+- alias: "Close Cover From Alert Action"
   trigger:
     - platform: event
       event_type: ios.notification_action_fired
       event_data:
-        actionName: CLOSE_MAIN_GATE
+        actionName: CLOSE_COVER
   action:
     - service: cover.close_cover
-      entity_id: cover.main_gate
-- alias: "Extend Main Gate Timeout To 10 Min From Alert Action"
+      data_template:
+        entity_id: "{{ trigger.event.data.action_data.cover_id }}"
+- alias: "Extend Cover Timeout To 10 Min From Alert Action"
   trigger:
     - platform: event
       event_type: ios.notification_action_fired
       event_data:
-        actionName: EXTEND_MAIN_GATE_TIMEOUT_10_MIN
+        actionName: EXTEND_COVER_TIMEOUT_10_MIN
   action:
     - service: timer.start
-      data:
-        entity_id: timer.main_gate_timer
+      data_template:
+        entity_id: "{{ trigger.event.data.action_data.timer_id }}"
         duration: "00:10:00"
 - alias: "Stop Cover Timer When Closed"
   initial_state: true

@@ -60,6 +60,8 @@ homekit:
       - light.smart_bulb_4
       - switch.smart_plug_1
       - cover.main_gate
+      - cover.lhs_garage_door
+      - cover.rhs_garage_door
 
 ios:
   push:

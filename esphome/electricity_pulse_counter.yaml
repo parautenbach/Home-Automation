@@ -35,15 +35,6 @@ sensor:
     unit_of_measurement: "W"
     update_interval: 60s
     accuracy_decimals: 0
-  - platform: integration
-    id: total_electricity_consumption
-    name: "Total Electricity Consumption"
-    sensor: electricity_pulse_counter
-    time_unit: min
-    unit_of_measurement: "kWh"
-    accuracy_decimals: 3
-    filters:
-      - multiply: 0.001
 
 mqtt:
   broker: !secret mqtt_broker

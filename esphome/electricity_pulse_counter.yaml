@@ -28,9 +28,10 @@ ota:
 # https://esphome.io/components/sensor/pulse_counter.html
 sensor:
   - platform: pulse_counter
-    pin: 34
+    # internal pull-up 45k
+    pin: 33
     name: "Electricity Pulse Counter"
-    unit_of_measurement: "kWh"
+    unit_of_measurement: "W"
     update_interval: 60s
 
 mqtt:

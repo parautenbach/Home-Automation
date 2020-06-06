@@ -48,6 +48,7 @@ views:
             smoothing: true
             points_per_hour: 4  # every 15 min
             line_width: 2
+            line_color: '#3498db'
             show:
               extrema: true
           - type: horizontal-stack
@@ -255,6 +256,33 @@ views:
             entities:
               - switch.shelly1_b961d2_relay_0
             show_header_toggle: true
+          - type: entities
+            title: Electricity Consumption
+            show_header_toggle: false
+            entities:
+              # todo: current
+              - entity: sensor.daily_power_consumption
+                name: Today
+                icon: mdi:power-plug
+              - entity: sensor.monthly_power_consumption
+                name: This Month
+                icon: mdi:power-plug
+            footer:
+              type: custom:mini-graph-card
+              entities:
+                - entity: sensor.electricity_pulse_counter
+              hours_to_show: 24
+              hour24: true
+              smoothing: true
+              points_per_hour: 12  # every 5 min
+              line_width: 2
+              line_color: '#e74c3c'
+              show:
+                extrema: true
+                name: false
+                icon: false
+                average: true
+                state: false
           - type: entities
             title: Clocks
             show_header_toggle: false
@@ -862,6 +890,7 @@ views:
               red: 4
       - type: custom:mini-graph-card
         name: Traffic
+        icon: mdi:pulse
         show:
           state: false
           icon: false

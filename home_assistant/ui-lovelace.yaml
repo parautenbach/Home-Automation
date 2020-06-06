@@ -54,17 +54,39 @@ views:
             cards:
               - type: custom:button-card
                 name: Rouvé
-                show_name: true
                 entity: cover.lhs_garage_door
+                show_name: true
                 color_type: icon
                 color: var(--paper-item-icon-color)
+                custom_fields:
+                  t:
+                    card:
+                      type: custom:button-card
+                      name: Timer
+                      entity: timer.lhs_garage_door_timer
+                      show_name: false
+                      show_icon: false
+                      show_state: true
+                      styles:
+                        card:
+                          - font-size: 12px
+                        state:
+                          - color: >
+                              [[[
+                                if (states['timer.lhs_garage_door_timer'].state == 'idle')
+                                  return "var(--paper-item-icon-color)";
+                                else
+                                  return "red";
+                              ]]]
                 styles:
                   name:
                     - color: var(--paper-item-icon-color)
                   card:
                     - font-size: 12px
                   grid:
-                    - position: relative
+                    - grid-template-areas: '"n" "i" "t"'
+                    - grid-template-rows: min-content 1fr min-content
+                    - grid-template-columns: 1fr
                 tap_action:
                   action: toggle
                   haptic: light

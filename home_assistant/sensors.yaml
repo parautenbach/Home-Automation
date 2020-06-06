@@ -173,3 +173,13 @@
     unit_of_measurement: "%"
     value_template: '{{ value | int }}'
     scan_interval: 3600
+  - platform: integration
+    name: "Total Electricity Consumption"
+    source: sensor.electricity_pulse_counter
+    round: 3
+    unit_prefix: k
+    unit_time: min
+    unit: "kWh"
+  # - platform: folder
+  #   folder: /home/homeassistant/.homeassistant/www/gallery
+  #   filter: "camera.security_camera_*.jpg"

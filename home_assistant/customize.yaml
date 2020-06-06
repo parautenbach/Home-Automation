@@ -279,3 +279,9 @@ binary_sensor.pieter_driving:
 switch.smart_plug_1:
   friendly_name: Tivoli Audio
   icon: mdi:radio
+sensor.daily_power_consumption:
+  friendly_name: Daily Power Consumption
+  icon: mdi:power-plug
+sensor.monthly_power_consumption:
+  friendly_name: Daily Power Consumption  # keywords: power plug guage light alert flash
+  icon: mdi:power-plug

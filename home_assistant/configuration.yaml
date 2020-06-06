@@ -265,14 +265,20 @@ utility_meter:
   daily_internet_usage_in:
     source: sensor.internet_usage_in
     cycle: daily
-  daily_internet_usage_out:
-    source: sensor.internet_usage_out
-    cycle: daily
   monthly_internet_usage_in:
     source: sensor.internet_usage_in
     cycle: monthly
+  daily_internet_usage_out:
+    source: sensor.internet_usage_out
+    cycle: daily
   monthly_internet_usage_out:
     source: sensor.internet_usage_out
+    cycle: monthly
+  daily_power_consumption:
+    source: sensor.total_electricity_consumption
+    cycle: daily
+  monthly_power_consumption:
+    source: sensor.total_electricity_consumption
     cycle: monthly
 
 cover:

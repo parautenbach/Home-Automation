@@ -270,7 +270,7 @@ views:
             footer:
               type: custom:mini-graph-card
               entities:
-                - entity: sensor.electricity_pulse_counter
+                - entity: sensor.current_power
               hours_to_show: 24
               hour24: true
               smoothing: true
@@ -282,7 +282,7 @@ views:
                 name: false
                 icon: false
                 average: true
-                state: false
+                state: true
           - type: entities
             title: Clocks
             show_header_toggle: false

@@ -175,7 +175,7 @@
     scan_interval: 3600
   - platform: integration
     name: "Total Electricity Consumption"
-    source: sensor.electricity_pulse_counter
+    source: sensor.current_energy
     round: 3
     unit_prefix: k
     unit_time: min

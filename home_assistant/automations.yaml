@@ -67,14 +67,10 @@
     - platform: state
       entity_id: binary_sensor.anybody_home
       to: "on"
-      #entity_id: person.pieter_rautenbach #group.anyone
-      #to: "home"
   condition:
     - condition: state
       entity_id: binary_sensor.anybody_home
       state: "on"
-      #entity_id: person.pieter_rautenbach #group.anyone
-      #state: "home"
     # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
     - condition: or
       conditions:
@@ -85,7 +81,7 @@
           before: sunrise
           before_offset: "-01:00:00"
   action:
-    - service: switch.turn_on #homeassistant.turn_on > for group
+    - service: switch.turn_on
       entity_id: switch.living_room_lamp
 - alias: "Bedlamps Auto On Upon Sunset or Arrival"
   initial_state: true
@@ -132,15 +128,11 @@
     platform: state
     entity_id: binary_sensor.anybody_home
     to: "off"
-    #entity_id: person.pieter_rautenbach #group.all_devices
-    #to: 'not_home'
   condition:
     - condition: state
       entity_id: binary_sensor.anybody_home
       state: "off"
   action:
-    # - service: switch.turn_off
-    #   entity_id: switch.living_room_lamp
     - service: light.turn_off
       entity_id: all
     - service: automation.turn_on
@@ -417,8 +409,12 @@
     - service: cover.close_cover
       data_template:
         entity_id: "{{ trigger.event.data.action_data.cover_id }}"
-- alias: "Extend Cover Timeout To 10 Min From Alert Action"
+- alias: "Extend Cover Timeout From Alert Action"
   trigger:
+    - platform: event
+      event_type: ios.notification_action_fired
+      event_data:
+        actionName: EXTEND_COVER_TIMEOUT_05_MIN
     - platform: event
       event_type: ios.notification_action_fired
       event_data:
@@ -427,7 +423,7 @@
     - service: timer.start
       data_template:
         entity_id: "{{ trigger.event.data.action_data.timer_id }}"
-        duration: "00:10:00"
+        duration: "{{ trigger.event.data.actionName | regex_findall_index(find='\\d+', index=0, ignorecase=False) | int * 60 }}"
 - alias: "Stop Cover Timer When Closed"
   initial_state: true
   trigger:
@@ -440,7 +436,6 @@
   action:
     - service: timer.cancel
       data_template:
-        # cover.main_gate -> timer.main_gate_timer
         entity_id: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
 - alias: "Notify If Server Load High"
   initial_state: true

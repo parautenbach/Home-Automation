@@ -260,7 +260,6 @@ views:
             title: Electricity Consumption
             show_header_toggle: false
             entities:
-              # todo: current
               - entity: sensor.daily_power_consumption
                 name: Today
                 icon: mdi:power-plug

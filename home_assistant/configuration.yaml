@@ -71,9 +71,6 @@ ios:
         actions:
           - identifier: "DISABLE_CONTRACTOR_MODE"
             title: "Disable"
-            # activationMode: "background"
-            # authenticationRequired: true
-            # behavior: "default"
       - name: Contractor Mode Enabled
         identifier: "contractor_mode_enabled"
         actions:
@@ -88,10 +85,9 @@ ios:
         identifier: "cover_open"
         actions:
           - identifier: "CLOSE_COVER"
-            title: "Close"
-          # do nothing with this: the default timer value will be used
-          - identifier: "EXTEND_COVER_TIMEOUT_DEFAULT"
-            title: "Wait 3 min"            
+            title: "Close now"
+          - identifier: "EXTEND_COVER_TIMEOUT_05_MIN"
+            title: "Wait 5 min"            
           - identifier: "EXTEND_COVER_TIMEOUT_10_MIN"
             title: "Wait 10 min"
       - name: Test
@@ -129,7 +125,6 @@ input_boolean:
   pieter_present:
     name: Pieter Presence
     icon: mdi:account
-    #initial: ???
   rouve_present:
     name: Rouvé Presence
     icon: mdi:account
@@ -139,7 +134,6 @@ input_boolean:
   contractor_mode:
     name: Contractor Mode
     icon: mdi:worker
-  # this gets set by a shortcuts automation on ios – what sucks is that it doesn't happen automatically
   pieter_driving:
     name: Pieter Driving
     icon: mdi:car
@@ -185,7 +179,6 @@ binary_sensor:
     scan_interval: 300
 
 tplink:
-  # discovery: true
   discovery: false
   light:
     - host: 192.168.0.108  # smart bulb 1
@@ -231,9 +224,9 @@ device_tracker:
   # https://community.home-assistant.io/t/device-tracker-home-interval-or-consider-home/84383/6
   - platform: nmap_tracker
     hosts: 192.168.0.0/24
-    interval_seconds: 300 # scan interval
-    #home_interval: 5 # minutes (scan interval)
-    consider_home: 900 # seconds (timeout)
+    interval_seconds: 300  # scan interval
+    #home_interval: 5  # minutes (scan interval)
+    consider_home: 900  # seconds (timeout)
     new_device_defaults:
       track_new_devices: true
 

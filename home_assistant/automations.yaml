@@ -345,6 +345,7 @@
     - service: timer.start
       data_template:
         entity_id: "timer.{{ trigger.entity_id | replace('cover.', '') }}_timer"
+        duration: "00:03:00"
 - alias: "Cover Left Open Alert"
   initial_state: true
   trigger:
@@ -423,6 +424,7 @@
     - service: timer.start
       data_template:
         entity_id: "{{ trigger.event.data.action_data.timer_id }}"
+        # in seconds
         duration: "{{ trigger.event.data.actionName | regex_findall_index(find='\\d+', index=0, ignorecase=False) | int * 60 }}"
 - alias: "Stop Cover Timer When Closed"
   initial_state: true

@@ -100,9 +100,6 @@ views:
                 hold_action:
                   action: more-info
                   haptic: selection
-                hold_action:
-                  action: more-info
-                  haptic: selection
               - type: custom:button-card
                 name: Gate
                 entity: cover.main_gate

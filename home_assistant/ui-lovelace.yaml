@@ -196,8 +196,8 @@ views:
                     # https://community.home-assistant.io/t/problem-passing-variable-from-automation-to-script/134989/5
                     # https://community.home-assistant.io/t/lovelace-button-card/65981/1063
                     # https://community.home-assistant.io/t/tap-action-script-variable/124023
-                    # this: https://community.home-assistant.io/t/passing-a-variable-to-a-script-in-lovelace-with-entity-button/155935
-                    # variables:
+                    # https://community.home-assistant.io/t/passing-a-variable-to-a-script-in-lovelace-with-entity-button/155935
+                    # https://community.home-assistant.io/t/passing-variable-from-entity-button-script-shell-command/178570
                     garage_door: "[[[ return entity.entity_id; ]]]"
                 hold_action:
                   action: more-info

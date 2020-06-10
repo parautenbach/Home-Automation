@@ -198,6 +198,8 @@ views:
                         card:
                           - font-size: 12px
                         state:
+                          - margin-top: -1ex
+                          - margin-bottom: -1.5ex
                           - color: >
                               [[[
                                 if (states['timer.lhs_garage_door_timer'].state == 'idle')
@@ -246,6 +248,8 @@ views:
                         card:
                           - font-size: 12px
                         state:
+                          - margin-top: -1ex
+                          - margin-bottom: -1.5ex
                           - color: >
                               [[[
                                 if (states['timer.main_gate_timer'].state == 'idle')
@@ -294,6 +298,8 @@ views:
                         card:
                           - font-size: 12px
                         state:
+                          - margin-top: -1ex
+                          - margin-bottom: -1.5ex
                           - color: >
                               [[[
                                 if (states['timer.rhs_garage_door_timer'].state == 'idle')

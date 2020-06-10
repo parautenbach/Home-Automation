@@ -20,6 +20,7 @@ views:
             cards:
               - type: custom:button-card
                 entity: script.entertainment_apple_tv_on
+                size: 20%
                 show_name: false
                 tap_action:
                   action: call-service
@@ -29,6 +30,7 @@ views:
                     entity_id: script.entertainment_apple_tv_on
               - type: custom:button-card
                 entity: script.entertainment_satellite_on
+                size: 20%
                 show_name: false
                 tap_action:
                   action: call-service
@@ -36,95 +38,112 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.entertainment_satellite_on
-              - type: entity-button
+              - type: custom:button-card
                 entity: script.entertainment_off
+                size: 20%
                 show_name: false
                 tap_action:
                   action: call-service
                   service: script.turn_on
                   service_data:
                     entity_id: script.entertainment_off
-              - type: entity-button
-                entity: switch.smart_plug_1
-                show_name: false
-                tap_action:
-                  action: call-service
-                  service: switch.toggle
-                  service_data:
-                    entity_id: switch.smart_plug_1
           - type: horizontal-stack
             title: Main Bedroom
             cards:
+              # todo: light profiles
               - type: custom:button-card
                 name: Rouvé
                 entity: light.smart_bulb_2
+                size: 20%
                 color: var(--button-card-light-color)
+                show_label: true
+                label: >
+                  [[[
+                    var b = states['light.smart_bulb_1'].attributes.brightness;
+                    return (b ? b : '0') + '%'; 
+                  ]]]
                 styles:
                   name:
                     - color: var(--paper-item-icon-color)              
+                  label:
+                    - color: var(--paper-item-icon-color)
                   card:
                     - font-size: 12px
                   grid:
-                    - grid-template-areas: '"i" "n"'
+                    - grid-template-areas: '"l" "i" "n"'
                     - grid-template-rows: min-content 1fr
                     - grid-template-columns: 1fr
-                  tap_action:
-                    action: toggle
-                    haptic: light
-                  hold_action:
-                    action: more-info
-                    haptic: selection
+                tap_action:
+                  action: toggle
+                  haptic: light
+                hold_action:
+                  action: more-info
+                  haptic: selection
               - type: custom:button-card
                 name: Tivoli
                 entity: switch.smart_plug_1
+                size: 20%
+                show_label: true
+                # the label plus the label colour is a hack to create a phantom space
+                label: >
+                  [[[ 
+                    return '_'; 
+                  ]]]
                 styles:
                   name:
-                    - color: var(--paper-item-icon-color)              
+                    - color: var(--paper-item-icon-color)
+                  label:
+                    - color: var(--primary-background-color)   
                   card:
                     - font-size: 12px
                   grid:
-                    - grid-template-areas: '"i" "n"'
+                    - grid-template-areas: '"l" "i" "n"'
                     - grid-template-rows: min-content 1fr
                     - grid-template-columns: 1fr
-                  tap_action:
-                    action: toggle
-                    haptic: light
-                  hold_action:
-                    action: more-info
-                    haptic: selection
+                tap_action:
+                  action: toggle
+                  haptic: light
+                hold_action:
+                  action: more-info
+                  haptic: selection
               - type: custom:button-card
                 name: Pieter
                 entity: light.smart_bulb_1
+                size: 20%
                 color: var(--button-card-light-color)
+                show_label: true
+                label: >
+                  [[[
+                    var b = states['light.smart_bulb_1'].attributes.brightness;
+                    return (b ? b : '0') + '%'; 
+                  ]]]
                 styles:
                   name:
-                    - color: var(--paper-item-icon-color)              
+                    - color: var(--paper-item-icon-color)
+                  label:
+                    - color: var(--paper-item-icon-color)
                   card:
                     - font-size: 12px
                   grid:
-                    - grid-template-areas: '"i" "n"'
-                    - grid-template-rows: min-content 1fr
+                    - grid-template-areas: '"l" "i" "n"'
+                    - grid-template-rows: min-content 1fr min-content
                     - grid-template-columns: 1fr
-                  tap_action:
-                    action: toggle
-                    haptic: light
-                  hold_action:
-                    action: more-info
-                    haptic: selection
+                tap_action:
+                  action: toggle
+                  haptic: light
+                hold_action:
+                  action: more-info
+                  haptic: selection
           - type: entities
             entities:
               - entity: switch.living_room_lamp
                 state_color: true
-              - light.smart_bulb_1
-              - light.smart_bulb_2
+              - switch.shelly1_b961d2_relay_0
+              # - light.smart_bulb_1
+              # - light.smart_bulb_2
               # - light.smart_bulb_3
               # - light.smart_bulb_4
             title: Lights
-            show_header_toggle: true
-          - type: entities
-            title: Shelly Switches
-            entities:
-              - switch.shelly1_b961d2_relay_0
             show_header_toggle: true
           - type: entities
             title: Electricity Consumption
@@ -160,6 +179,7 @@ views:
               - type: custom:button-card
                 name: Rouvé
                 entity: cover.lhs_garage_door
+                size: 20%
                 show_name: true
                 color_type: icon
                 color: var(--paper-item-icon-color)
@@ -207,6 +227,7 @@ views:
               - type: custom:button-card
                 name: Gate
                 entity: cover.main_gate
+                size: 20%
                 show_name: true
                 color_type: icon
                 color: var(--paper-item-icon-color)
@@ -254,6 +275,7 @@ views:
               - type: custom:button-card
                 name: Pieter
                 entity: cover.rhs_garage_door
+                size: 20%
                 show_name: true
                 color_type: icon
                 color: var(--paper-item-icon-color)
@@ -365,42 +387,6 @@ views:
             - sensor.cape_town
             - sensor.san_francisco
             - sensor.london
-      # - type: horizontal-stack
-      #   title: Light Profiles
-      #   cards:
-      #     - type: custom:button-card
-      #       # entity: script.smart_bulb_1_soft_yellow
-      #       entity: light.smart_bulb_1
-      #       show_name: false
-
-      #       # color_type: card
-      #       # color: auto  # rgb(255, 255, 100)
-      #       # color_type: icon
-
-      #       # styles:
-      #       #   card:
-      #       #     # - color: rgb(255, 255, 100)
-      #       #     - color: rgb(255, 0, 0)
-
-      #       color: var(--button-card-light-color)
-
-      #       tap_action:
-      #         action: call-service
-      #         # service: script.turn_on
-      #         # service_data:
-      #         #   entity_id: script.smart_bulb_1_soft_yellow
-      #         service: light.turn_on
-      #         service_data:
-      #           entity_id: light.smart_bulb_1
-      #           rgb_color: [255, 255, 100]
-      #     - type: entity-button
-      #       entity: script.smart_bulb_1_bright_white
-      #       show_name: false
-      #       tap_action:
-      #         action: call-service
-      #         service: script.turn_on
-      #         service_data:
-      #           entity_id: script.smart_bulb_1_bright_white
   - title: Entertainment
     path: entertainment
     icon: mdi:audio-video

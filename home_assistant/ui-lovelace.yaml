@@ -52,6 +52,65 @@ views:
                   service: switch.toggle
                   service_data:
                     entity_id: switch.smart_plug_1
+          - type: horizontal-stack
+            title: Main Bedroom
+            cards:
+              - type: custom:button-card
+                name: Rouvé
+                entity: light.smart_bulb_2
+                color: var(--button-card-light-color)
+                styles:
+                  name:
+                    - color: var(--paper-item-icon-color)              
+                  card:
+                    - font-size: 12px
+                  grid:
+                    - grid-template-areas: '"i" "n"'
+                    - grid-template-rows: min-content 1fr
+                    - grid-template-columns: 1fr
+                  tap_action:
+                    action: toggle
+                    haptic: light
+                  hold_action:
+                    action: more-info
+                    haptic: selection
+              - type: custom:button-card
+                name: Tivoli
+                entity: switch.smart_plug_1
+                styles:
+                  name:
+                    - color: var(--paper-item-icon-color)              
+                  card:
+                    - font-size: 12px
+                  grid:
+                    - grid-template-areas: '"i" "n"'
+                    - grid-template-rows: min-content 1fr
+                    - grid-template-columns: 1fr
+                  tap_action:
+                    action: toggle
+                    haptic: light
+                  hold_action:
+                    action: more-info
+                    haptic: selection
+              - type: custom:button-card
+                name: Pieter
+                entity: light.smart_bulb_1
+                color: var(--button-card-light-color)
+                styles:
+                  name:
+                    - color: var(--paper-item-icon-color)              
+                  card:
+                    - font-size: 12px
+                  grid:
+                    - grid-template-areas: '"i" "n"'
+                    - grid-template-rows: min-content 1fr
+                    - grid-template-columns: 1fr
+                  tap_action:
+                    action: toggle
+                    haptic: light
+                  hold_action:
+                    action: more-info
+                    haptic: selection
           - type: entities
             entities:
               - entity: switch.living_room_lamp
@@ -96,7 +155,7 @@ views:
       - type: vertical-stack
         cards:
           - type: horizontal-stack
-            title: Entry
+            title: "Entry & Access"
             cards:
               - type: custom:button-card
                 name: Rouvé
@@ -130,7 +189,7 @@ views:
                   card:
                     - font-size: 12px
                   grid:
-                    - grid-template-areas: '"n" "i" "t"'
+                    - grid-template-areas: '"t" "i" "n"'
                     - grid-template-rows: min-content 1fr min-content
                     - grid-template-columns: 1fr
                 tap_action:
@@ -177,7 +236,7 @@ views:
                   card:
                     - font-size: 12px
                   grid:
-                    - grid-template-areas: '"n" "i" "t"'
+                    - grid-template-areas: '"t" "i" "n"'
                     - grid-template-rows: min-content 1fr min-content
                     - grid-template-columns: 1fr
                 tap_action:
@@ -224,7 +283,7 @@ views:
                   card:
                     - font-size: 12px
                   grid:
-                    - grid-template-areas: '"n" "i" "t"'
+                    - grid-template-areas: '"t" "i" "n"'
                     - grid-template-rows: min-content 1fr min-content
                     - grid-template-columns: 1fr
                 tap_action:

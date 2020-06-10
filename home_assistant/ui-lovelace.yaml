@@ -15,43 +15,88 @@ views:
     cards:
       - type: vertical-stack
         cards:
-        - type: weather-forecast
-          entity: weather.home
-          show_header_toggle: false
-        - type: entities
-          title: Environment
-          entities:
-            - sensor.ambient_temperature
-            - sensor.ambient_humidity
-            - sensor.ambient_pressure
-          show_header_toggle: false
-        - type: custom:mini-graph-card
-          entities:
-            - entity: sensor.ambient_temperature
-          hours_to_show: 24
-          hour24: true
-          smoothing: true
-          points_per_hour: 2  # every 30 min
-          line_width: 2
-          show:
-            extrema: true
+          - type: horizontal-stack
+            title: Entertainment
+            cards:
+              - type: custom:button-card
+                entity: script.entertainment_apple_tv_on
+                show_name: false
+                tap_action:
+                  action: call-service
+                  haptic: light
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.entertainment_apple_tv_on
+              - type: custom:button-card
+                entity: script.entertainment_satellite_on
+                show_name: false
+                tap_action:
+                  action: call-service
+                  haptic: light
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.entertainment_satellite_on
+              - type: entity-button
+                entity: script.entertainment_off
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.entertainment_off
+              - type: entity-button
+                entity: switch.smart_plug_1
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: switch.toggle
+                  service_data:
+                    entity_id: switch.smart_plug_1
+          - type: entities
+            entities:
+              - entity: switch.living_room_lamp
+                state_color: true
+              - light.smart_bulb_1
+              - light.smart_bulb_2
+              # - light.smart_bulb_3
+              # - light.smart_bulb_4
+            title: Lights
+            show_header_toggle: true
+          - type: entities
+            title: Shelly Switches
+            entities:
+              - switch.shelly1_b961d2_relay_0
+            show_header_toggle: true
+          - type: entities
+            title: Electricity Consumption
+            show_header_toggle: false
+            entities:
+              - entity: sensor.daily_power_consumption
+                name: Today
+                icon: mdi:power-plug
+              - entity: sensor.monthly_power_consumption
+                name: This Month
+                icon: mdi:power-plug
+            footer:
+              type: custom:mini-graph-card
+              entities:
+                - entity: sensor.current_power
+              hours_to_show: 24
+              hour24: true
+              smoothing: true
+              points_per_hour: 12  # every 5 min
+              line_width: 2
+              line_color: '#e74c3c'
+              show:
+                extrema: true
+                name: false
+                icon: false
+                average: true
+                state: true
       - type: vertical-stack
         cards:
-          - type: custom:mini-graph-card
-            name: Driving – Takealot HQ to Home
-            # name: Current Travel Time
-            icon: mdi:briefcase-clock
-            entities:
-              - entity: sensor.google_travel_time_driving
-            hours_to_show: 24
-            hour24: true
-            smoothing: true
-            points_per_hour: 4  # every 15 min
-            line_width: 2
-            line_color: '#3498db'
-            show:
-              extrema: true
           - type: horizontal-stack
+            title: Entry
             cards:
               - type: custom:button-card
                 name: Rouvé
@@ -219,93 +264,48 @@ views:
               - switch.guest_mode
               - switch.contractor_mode
             show_header_toggle: false
+          - type: custom:mini-graph-card
+            name: Driving – Takealot HQ to Home
+            # name: Current Travel Time
+            icon: mdi:briefcase-clock
+            entities:
+              - entity: sensor.google_travel_time_driving
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 4  # every 15 min
+            line_width: 2
+            line_color: '#3498db'
+            show:
+              extrema: true
       - type: vertical-stack
         cards:
-          - type: horizontal-stack
-            title: Entertainment
-            cards:
-              - type: custom:button-card
-                entity: script.entertainment_apple_tv_on
-                show_name: false
-                tap_action:
-                  action: call-service
-                  haptic: light
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.entertainment_apple_tv_on
-              - type: custom:button-card
-                entity: script.entertainment_satellite_on
-                show_name: false
-                tap_action:
-                  action: call-service
-                  haptic: light
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.entertainment_satellite_on
-              - type: entity-button
-                entity: script.entertainment_off
-                show_name: false
-                tap_action:
-                  action: call-service
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.entertainment_off
-              - type: entity-button
-                entity: switch.smart_plug_1
-                show_name: false
-                tap_action:
-                  action: call-service
-                  service: switch.toggle
-                  service_data:
-                    entity_id: switch.smart_plug_1
-          - type: entities
-            entities:
-              - entity: switch.living_room_lamp
-                state_color: true
-              - light.smart_bulb_1
-              - light.smart_bulb_2
-              # - light.smart_bulb_3
-              # - light.smart_bulb_4
-            title: Lights
-            show_header_toggle: true
-          - type: entities
-            title: Shelly Switches
-            entities:
-              - switch.shelly1_b961d2_relay_0
-            show_header_toggle: true
-          - type: entities
-            title: Electricity Consumption
-            show_header_toggle: false
-            entities:
-              - entity: sensor.daily_power_consumption
-                name: Today
-                icon: mdi:power-plug
-              - entity: sensor.monthly_power_consumption
-                name: This Month
-                icon: mdi:power-plug
-            footer:
-              type: custom:mini-graph-card
-              entities:
-                - entity: sensor.current_power
-              hours_to_show: 24
-              hour24: true
-              smoothing: true
-              points_per_hour: 12  # every 5 min
-              line_width: 2
-              line_color: '#e74c3c'
-              show:
-                extrema: true
-                name: false
-                icon: false
-                average: true
-                state: true
-          - type: entities
-            title: Clocks
-            show_header_toggle: false
-            entities:
-              - sensor.cape_town
-              - sensor.san_francisco
-              - sensor.london
+        - type: weather-forecast
+          entity: weather.home
+        - type: entities
+          title: Environment
+          entities:
+            - sensor.ambient_temperature
+            - sensor.ambient_humidity
+            - sensor.ambient_pressure
+          show_header_toggle: false
+        - type: custom:mini-graph-card
+          entities:
+            - entity: sensor.ambient_temperature
+          hours_to_show: 24
+          hour24: true
+          smoothing: true
+          points_per_hour: 2  # every 30 min
+          line_width: 2
+          show:
+            extrema: true
+        - type: entities
+          title: Clocks
+          show_header_toggle: false
+          entities:
+            - sensor.cape_town
+            - sensor.san_francisco
+            - sensor.london
       # - type: horizontal-stack
       #   title: Light Profiles
       #   cards:

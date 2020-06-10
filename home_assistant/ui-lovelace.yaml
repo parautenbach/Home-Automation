@@ -67,6 +67,7 @@ views:
                     - color: var(--paper-item-icon-color)              
                   label:
                     - color: var(--paper-item-icon-color)
+                    - padding-left: 1ex
                   card:
                     - font-size: 12px
                   grid:
@@ -122,6 +123,7 @@ views:
                     - color: var(--paper-item-icon-color)
                   label:
                     - color: var(--paper-item-icon-color)
+                    - padding-left: 1ex
                   card:
                     - font-size: 12px
                   grid:

@@ -108,6 +108,8 @@
     - service: homeassistant.turn_on
       entity_id: group.main_bedroom
 - alias: "Lights Off After Sunrise"
+  # todo: later when cloudy
+  # and switch on earlier when cloudy
   initial_state: true
   trigger:
     - platform: sun
@@ -391,6 +393,11 @@
           {% endif %}
           {{ name }}{{ message_part }}
         data:
+          # todo: threading and replacing notifications
+          # https://github.com/home-assistant/iOS/issues/579
+          # https://github.com/home-assistant/iOS/issues/215
+          # https://companion.home-assistant.io/docs/notifications/notifications-basic (to clear and/or replace; note the quotes around 'apns-collapse-id')
+          # https://developer.apple.com/documentation/usernotifications/unnotificationrequest/1649634-identifier
           push:
             category: "cover_open"
           action_data:

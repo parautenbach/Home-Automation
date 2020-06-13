@@ -47,6 +47,24 @@ binary_sensor:
     filters:
       - delayed_on: 100ms
       - delayed_off: 100ms
+  # 100cm / 1m
+  # true => occupied; false => empty
+  - platform: template
+    name: "LHS Garage Occupied"
+    lambda: |-
+      if (id(lhs_garage_ultrasonic_sensor).state < 1) {
+        return true;
+      } else {
+        return false;
+      }
+  - platform: template
+    name: "RHS Garage Occupied"
+    lambda: |-
+      if (id(rhs_garage_ultrasonic_sensor).state < 1) {
+        return true;
+      } else {
+        return false;
+      }
 
 # https://esphome.io/components/switch/gpio.html
 switch:
@@ -78,6 +96,22 @@ switch:
       - switch.turn_on: lhs_garage_door_control
       - delay: 500ms
       - switch.turn_off: lhs_garage_door_control
+
+sensor:
+  - platform: ultrasonic
+    id: lhs_garage_ultrasonic_sensor
+    name: "LHS Garage Ultrasonic Sensor"
+    icon: "mdi:contactless-payment"
+    trigger_pin: 26
+    echo_pin: 27
+    update_interval: 60s
+  - platform: ultrasonic
+    id: rhs_garage_ultrasonic_sensor
+    name: "RHS Garage Ultrasonic Sensor"
+    icon: "mdi:contactless-payment"
+    trigger_pin: 33
+    echo_pin: 25
+    update_interval: 60s
 
 mqtt:
   broker: !secret mqtt_broker

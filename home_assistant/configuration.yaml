@@ -122,6 +122,8 @@ notify:
       - service: mobile_app_rouve
 
 input_boolean:
+  test:
+    name: Test
   pieter_present:
     name: Pieter Presence
     icon: mdi:account

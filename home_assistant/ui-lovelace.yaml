@@ -60,7 +60,7 @@ views:
                 label: >
                   [[[
                     var b = states['light.smart_bulb_2'].attributes.brightness;
-                    return (b ? b : '0') + '%'; 
+                    return parseInt(b ? b/2.55 : '0') + '%'; 
                   ]]]
                 styles:
                   name:
@@ -116,7 +116,7 @@ views:
                 label: >
                   [[[
                     var b = states['light.smart_bulb_1'].attributes.brightness;
-                    return (b ? b : '0') + '%'; 
+                    return parseInt(b ? b/2.55 : '0') + '%'; 
                   ]]]
                 styles:
                   name:
@@ -185,6 +185,19 @@ views:
                 show_name: true
                 color_type: icon
                 color: var(--paper-item-icon-color)
+                state:
+                  - operator: template
+                    value: >
+                      [[[
+                        return states['binary_sensor.lhs_garage_occupied'].state == 'on'
+                      ]]]
+                    color: var(--paper-item-icon-active-color)
+                  - operator: template
+                    value: >
+                      [[[
+                        return states['binary_sensor.lhs_garage_occupied'].state == 'off'
+                      ]]]
+                    color: var(--paper-item-icon-color)
                 custom_fields:
                   t:
                     card:
@@ -285,6 +298,19 @@ views:
                 show_name: true
                 color_type: icon
                 color: var(--paper-item-icon-color)
+                state:
+                  - operator: template
+                    value: >
+                      [[[
+                        return states['binary_sensor.rhs_garage_occupied'].state == 'on'
+                      ]]]
+                    color: var(--paper-item-icon-active-color)
+                  - operator: template
+                    value: >
+                      [[[
+                        return states['binary_sensor.rhs_garage_occupied'].state == 'off'
+                      ]]]
+                    color: var(--paper-item-icon-color)
                 custom_fields:
                   t:
                     card:

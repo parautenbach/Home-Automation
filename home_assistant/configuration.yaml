@@ -49,6 +49,7 @@ homekit:
   name: Home Assistant
   filter:
     include_entities:
+      - input_boolean.test
       - input_boolean.pieter_present
       - input_boolean.rouve_present
       - input_boolean.guest_mode

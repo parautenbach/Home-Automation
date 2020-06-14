@@ -168,10 +168,50 @@
           state: "closed"
         - condition: time
           after: "07:00:00"
-          before: "22:00:00"
+          before: "23:00:00"
   action:
     - service: cover.open_cover
       entity_id: cover.main_gate
+# open garage door when arriving home:
+# when moving above a certain (last) speed (so i'm driving, not cycling or otherwise, or getting transported in some other way)
+#   - the above now done with an ios activity sensor
+# and connected to my car's bluetooth (thus, open my garage door only for my car)
+#   - because ios prompts you to run the automation to set the input boolean, it's not useful; installing ultrasonic sensors to track which door to open
+#   - check for one or both to open (edge case)
+# and rouve/someone is home (proxy for the alarm being off)
+# https://www.home-assistant.io/integrations/proximity/
+# https://www.home-assistant.io/docs/configuration/templating/ (distance function)
+# https://companion.home-assistant.io/docs/core/sensors/
+- alias: "Open Garage Door When Arriving By Car"
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.pieter_present
+      to: "on"
+  condition:
+    - condition: and
+      conditions:
+        - condition: state
+          entity_id: cover.rhs_garage_door
+          state: "closed"
+        - condition: time
+          after: "07:00:00"
+          before: "23:00:00"
+        # i must be arriving by car
+        - condition: state
+          entity_id: binary_sensor.pieter_driving
+          state: "on"
+        # my cover for my car
+        - condition: state
+          entity_id: binary_sensor.rhs_garage_occupied
+          state: "off"
+        # proxy for the alarm being off
+        - condition: state
+          entity_id: binary_sensor.rouve_present
+          state: "on"
+  action:
+    - service: cover.open_cover
+      entity_id: cover.rhs_garage_door
 - alias: "Check Disk Space on the Home Assistant server"
   trigger:
     - platform: time_pattern
@@ -483,13 +523,3 @@
         title: "Test"
         # message: "Pieter is{% if states('binary_sensor.pieter_driving') == 'off' %} not{% endif %} driving."
         message: "Pieter is{{ ' not' if states('binary_sensor.pieter_driving') == 'off' }} driving."
-# open garage door when arriving home:
-# when moving above a certain (last) speed (so i'm driving, not cycling or otherwise, or getting transported in some other way)
-#   - the above now done with an ios activity sensor
-# and connected to my car's bluetooth (thus, open my garage door only for my car)
-#   - because ios prompts you to run the automation to set the input boolean, it's not useful; installing ultrasonic sensors to track which door to open
-#   - check for one or both to open (edge case)
-# and rouve/someone is home (proxy for the alarm being off)
-# https://www.home-assistant.io/integrations/proximity/
-# https://www.home-assistant.io/docs/configuration/templating/ (distance function)
-# https://companion.home-assistant.io/docs/core/sensors/

@@ -59,7 +59,7 @@ views:
                 show_label: true
                 label: >
                   [[[
-                    var b = states['light.smart_bulb_1'].attributes.brightness;
+                    var b = states['light.smart_bulb_2'].attributes.brightness;
                     return (b ? b : '0') + '%'; 
                   ]]]
                 styles:

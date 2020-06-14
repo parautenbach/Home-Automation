@@ -291,3 +291,7 @@ input_number.wan_traffic_delta_in:
   friendly_name: WAN Traffic Delta In
 input_number.wan_traffic_delta_out:
   friendly_name: WAN Traffic Delta Out
+binary_sensor.lhs_garage_occupied:
+  icon: mdi:car-connected
+binary_sensor.rhs_garage_occupied:
+  icon: mdi:car-connected

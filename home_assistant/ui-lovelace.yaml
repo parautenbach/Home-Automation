@@ -1087,6 +1087,14 @@ views:
                 name: Rouvé's Garage Door Open Timeout (LHS)
               - entity: timer.rhs_garage_door_timer
                 name: Pieter's Garage Door Open Timeout (RHS)
+          - type: history-graph
+            title: Vehicles
+            hours_to_show: 24
+            entities:
+              - entity: binary_sensor.lhs_garage_occupied
+                name: Rouvé
+              - entity: binary_sensor.rhs_garage_occupied
+                name: Pieter
   - title: Floorplan
     path: floorplan
     panel: true
@@ -1116,7 +1124,17 @@ views:
               action: toggle
             style: 
               top: 60.5%
-              left: 68%                
+              left: 68%
+          - type: state-icon
+            entity: binary_sensor.lhs_garage_occupied
+            style: 
+              top: 15%
+              left: 68%
+          - type: state-icon
+            entity: binary_sensor.rhs_garage_occupied
+            style: 
+              top: 15%
+              left: 56%              
   - title: Devices
     path: devices
     icon: mdi:devices

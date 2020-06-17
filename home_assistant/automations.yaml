@@ -30,6 +30,7 @@
     - service: timer.start
       data:
         entity_id: timer.motion_timer
+        duration: "00:05:00"
 - alias: "Switch Off Living Room Lamp When Timer Expires"
   initial_state: true
   trigger:
@@ -61,6 +62,7 @@
 - alias: "Living Room Lamp Auto On Upon Sunset or Arrival"
   initial_state: true
   trigger:
+    # https://www.home-assistant.io/cookbook/automation_sun/
     - platform: sun
       event: sunset
       offset: "-01:00:00"

@@ -295,3 +295,5 @@ binary_sensor.lhs_garage_occupied:
   icon: mdi:car-connected
 binary_sensor.rhs_garage_occupied:
   icon: mdi:car-connected
+sensor.sun_illuminance:
+  friendly_name: Sun Illuminance

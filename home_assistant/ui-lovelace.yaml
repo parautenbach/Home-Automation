@@ -414,6 +414,16 @@ views:
           line_width: 2
           show:
             extrema: true
+        - type: custom:mini-graph-card
+          entities:
+            - entity: sensor.sun_illuminance
+          hours_to_show: 24
+          hour24: true
+          smoothing: true
+          points_per_hour: 12  # every 5 min
+          line_width: 2
+          show:
+            extrema: true
         - type: entities
           title: Clocks
           show_header_toggle: false
@@ -1170,6 +1180,16 @@ views:
             entities:
               - device_tracker.ceres_2
               - device_tracker.rouve
+          - type: history-graph
+            title: Lights
+            hours_to_show: 24
+            entities:
+              - entity: light.living_room_lamp
+                name: Living Room
+              - entity: light.smart_bulb_1
+                name: Pieter's Side
+              - entity: light.smart_bulb_2
+                name: Rouvé's Side
       - type: vertical-stack
         cards:
           - type: custom:mini-graph-card

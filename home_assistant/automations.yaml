@@ -109,9 +109,25 @@
   action:
     - service: homeassistant.turn_on
       entity_id: group.main_bedroom
+- alias: "Lights On Upon Low Light"
+  initial_state: true
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.sun_illuminance
+      below: 15320
+  condition:
+    - condition: state
+      entity_id: binary_sensor.anybody_home
+      state: "on"
+    - condition: time
+      after: "16:00:00"
+  action:
+    - service: homeassistant.turn_on
+      entity_id: group.main_bedroom
+    - service: switch.turn_on
+      entity_id: switch.living_room_lamp
 - alias: "Lights Off After Sunrise"
   # todo: later when cloudy
-  # and switch on earlier when cloudy
   initial_state: true
   trigger:
     - platform: sun

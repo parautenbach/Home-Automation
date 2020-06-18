@@ -439,6 +439,7 @@
       data_template:
         title: "Security"
         # timer.rhs_garage_door_timer -> Pieter's garage door
+        # todo: add duration
         message: >-
           {% set message_part = " has been left open for too long." %}
           {% set name = None %}
@@ -452,10 +453,13 @@
           {{ name }}{{ message_part }}
         data:
           # todo: threading and replacing notifications
+          # todo: clear notifications when closed
           # https://github.com/home-assistant/iOS/issues/579
           # https://github.com/home-assistant/iOS/issues/215
           # https://companion.home-assistant.io/docs/notifications/notifications-basic (to clear and/or replace; note the quotes around 'apns-collapse-id')
           # https://developer.apple.com/documentation/usernotifications/unnotificationrequest/1649634-identifier
+          apns_headers:
+            'apns-collapse-id': "{{ trigger.event.data.entity_id }}"
           push:
             category: "cover_open"
           action_data:

@@ -551,3 +551,14 @@ close_garage_door_and_main_gate:
       state: "open"
     - service: cover.close_cover
       entity_id: cover.main_gate
+
+test:
+  description: "Testing whether a template works in the collapse ID field"
+  sequence:
+    - service: notify.mobile_app_ceres
+      data_template:
+        title: "Testing"
+        message: "Test {{ now() }} {{ states('input_boolean.test') }}"
+        data:
+          apns_headers:
+            'apns-collapse-id': "{{ states('input_boolean.test') }}"

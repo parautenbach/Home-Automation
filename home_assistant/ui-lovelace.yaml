@@ -1223,8 +1223,3 @@ views:
             title: Thor (WD Cloud Drive)
             entities:
               - sensor.thor_disk_usage
-          - type: entities
-            entities:
-              - group.all_devices
-            title: All Devices
-            show_header_toggle: false

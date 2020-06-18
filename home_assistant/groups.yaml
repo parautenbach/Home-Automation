@@ -91,20 +91,6 @@ security:
     - switch.motion_led
     - automation.motion_snapshots
 
-device_ceres:
-  name: Ceres
-  entities:
-    - device_tracker.ceres_2
-    - sensor.ceres_2_battery_level
-    - sensor.ceres_2_battery_state
-
-device_rouve:
-  name: Rouvé
-  entities:
-    - device_tracker.rouve
-    - sensor.rouve_battery_level
-    - sensor.rouve_battery_state
-
 server:
   name: Server
   entities:
@@ -118,29 +104,6 @@ server:
     - sensor.network_throughput_in_wlan0
     - sensor.network_throughput_out_wlan0
     - sensor.last_boot
-
-all_devices:
-  name: All Devices 
-  entities:
-    - device_tracker.rasplex
-    - device_tracker.apple_airport
-    - device_tracker.thor
-    - device_tracker.rasplay
-    - device_tracker.broadlink_rm_mini_3
-    - device_tracker.apple_tv
-    - device_tracker.pieter_macbook
-    - device_tracker.living_room_lamp
-    - device_tracker.ceres_nmap
-    - device_tracker.rouve_nmap
-    - device_tracker.chronos_nmap
-    - device_tracker.rouve_laptop
-    - device_tracker.rouve_watch_nmap
-    - device_tracker.fibre_router
-    - device_tracker.wifi_extender
-    - device_tracker.shelly1_1
-    - device_tracker.lb130_1
-    - device_tracker.juno
-    - device_tracker.venus
 
 family:
   name: Family

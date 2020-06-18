@@ -1178,7 +1178,7 @@ views:
         cards:
           - type: map
             entities:
-              - device_tracker.ceres_2
+              - device_tracker.ceres
               - device_tracker.rouve
           - type: history-graph
             title: Lights

@@ -223,16 +223,6 @@ light:
     name: living_room_lamp
     entity_id: switch.living_room_lamp
 
-device_tracker:
-  # https://community.home-assistant.io/t/device-tracker-home-interval-or-consider-home/84383/6
-  - platform: nmap_tracker
-    hosts: 192.168.0.0/24
-    interval_seconds: 300  # scan interval
-    #home_interval: 5  # minutes (scan interval)
-    consider_home: 900  # seconds (timeout)
-    new_device_defaults:
-      track_new_devices: true
-
 shell_command:
   noop: ":"
   copy_last_snapshot_image: "cp `ls -t /tmp/camera.security_camera_*.jpg | head -n1` /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg"

@@ -185,6 +185,11 @@
     method: GET
     name: sun_illuminance
     device_class: illuminance
+    # we're using the GHI (global horizontal irradiance here)
+    # https://www.ammonit.com/en/wind-solar-wissen/solarmessung
+    # https://www.nrel.gov/grid/solar-resource/solar-glossary.html#globalhorizontalradiation
+    # GHI = DHI + DNI · cos (θ) (where θ is the solar zenith angle)
+    # The total amount of radiation received from above by a horizontal surface. This value includes both Direct Normal Irradiation (DNI) and Diffuse Horizontal Irradiation (DHI).
     # https://physics.stackexchange.com/questions/135618/rm-lux-and-w-m2-relationship
     value_template: '{{ value_json[-1].SunWM_Avg | multiply(1/0.0079) }}'
     unit_of_measurement: "lx"

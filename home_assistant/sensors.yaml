@@ -191,7 +191,7 @@
     # GHI = DHI + DNI · cos (θ) (where θ is the solar zenith angle)
     # The total amount of radiation received from above by a horizontal surface. This value includes both Direct Normal Irradiation (DNI) and Diffuse Horizontal Irradiation (DHI).
     # https://physics.stackexchange.com/questions/135618/rm-lux-and-w-m2-relationship
-    value_template: '{{ value_json[-1].SunWM_Avg | multiply(1/0.0079) }}'
+    value_template: '{{ value_json[-1].SunWM_Avg | float | multiply(1/0.0079) }}'
     unit_of_measurement: "lx"
     scan_interval: 300
   # - platform: folder

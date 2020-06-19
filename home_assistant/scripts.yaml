@@ -494,6 +494,9 @@ security_camera_create_snapshot:
         title: Security Camera
         message: "Motion detected!"
         data:
+          push:
+            # https://companion.home-assistant.io/docs/notifications/notifications-basic#thread-id-grouping-notifications
+            thread-id: "security-camera-snapshots"
           attachment:
             # url: https://geoexpressinternational.com/wp-content/plugins/webp-express/test/test-pattern-tv.jpg
             # url: http://securitypi.local/local/camera.security_camera_last.jpg

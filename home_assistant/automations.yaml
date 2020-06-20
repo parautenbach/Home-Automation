@@ -115,6 +115,7 @@
     - platform: numeric_state
       entity_id: sensor.sun_illuminance
       below: 15320
+      above: 0
   condition:
     - condition: state
       entity_id: binary_sensor.anybody_home

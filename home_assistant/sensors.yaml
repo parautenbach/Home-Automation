@@ -181,7 +181,7 @@
     unit_time: min
     unit: "kWh"
   - platform: rest
-    resource_template: 'http://weather.sun.ac.za/api/getSonbesie.php?start={{ utcnow() | as_timestamp | int - 60 }}&end={{ utcnow() | as_timestamp | int }}'
+    resource_template: 'http://weather.sun.ac.za/api/getSonbesie.php?start={{ utcnow() | as_timestamp | int - 300 }}&end={{ utcnow() | as_timestamp | int }}'
     method: GET
     name: sun_illuminance
     device_class: illuminance
@@ -194,6 +194,7 @@
     value_template: '{{ value_json[-1].SunWM_Avg | float | multiply(1/0.0079) }}'
     unit_of_measurement: "lx"
     scan_interval: 300
+    timeout: 15
   # - platform: folder
   #   folder: /home/homeassistant/.homeassistant/www/gallery
   #   filter: "camera.security_camera_*.jpg"

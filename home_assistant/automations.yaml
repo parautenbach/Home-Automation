@@ -114,14 +114,17 @@
   trigger:
     - platform: numeric_state
       entity_id: sensor.sun_illuminance
-      below: 15320
-      above: 0
+      below: 15320.0
+      above: 0.0
+    - platform: template
+      value_template: "{{ states('sensor.sun_illuminance') | int < 15320 }}"
   condition:
     - condition: state
       entity_id: binary_sensor.anybody_home
       state: "on"
     - condition: time
       after: "16:00:00"
+      before: "21:00:00"
   action:
     - service: homeassistant.turn_on
       entity_id: group.main_bedroom
@@ -130,7 +133,7 @@
     - service: notify.mobile_app_ceres
       data:
         title: "Testing"
-        message: "Low light: {{ states('sensor.sun_illuminance') }}lx."
+        message: "Low light: {{ states('sensor.sun_illuminance') | int }}lx."
 - alias: "Lights Off After Sunrise"
   # todo: later when cloudy
   initial_state: true

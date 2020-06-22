@@ -1,4 +1,5 @@
 title: Home
+background: var(--background-image)
 views:
   - path: main
     title: Main
@@ -141,8 +142,6 @@ views:
               - entity: switch.living_room_lamp
                 state_color: true
               - switch.shelly1_b961d2_relay_0
-              # - light.smart_bulb_1
-              # - light.smart_bulb_2
               # - light.smart_bulb_3
               # - light.smart_bulb_4
             title: Lights
@@ -173,6 +172,13 @@ views:
                 icon: false
                 average: true
                 state: true
+          - type: entities
+            title: Clocks
+            show_header_toggle: false
+            entities:
+              - sensor.cape_town
+              - sensor.san_francisco
+              - sensor.london
       - type: vertical-stack
         cards:
           - type: horizontal-stack
@@ -210,6 +216,7 @@ views:
                       styles:
                         card:
                           - font-size: 12px
+                          - box-shadow: none
                         state:
                           - margin-top: -1ex
                           - margin-bottom: -1ex
@@ -260,6 +267,7 @@ views:
                       styles:
                         card:
                           - font-size: 12px
+                          - box-shadow: none
                         state:
                           - margin-top: -1ex
                           - margin-bottom: -1ex
@@ -323,6 +331,7 @@ views:
                       styles:
                         card:
                           - font-size: 12px
+                          - box-shadow: none
                         state:
                           - margin-top: -1ex
                           - margin-bottom: -1ex
@@ -424,13 +433,6 @@ views:
           line_width: 2
           show:
             extrema: true
-        - type: entities
-          title: Clocks
-          show_header_toggle: false
-          entities:
-            - sensor.cape_town
-            - sensor.san_francisco
-            - sensor.london
   - title: Entertainment
     path: entertainment
     icon: mdi:audio-video

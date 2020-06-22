@@ -1,3 +1,11 @@
+- alias: "Set Theme at Startup"
+  trigger:
+   - platform: homeassistant
+     event: start
+  action:
+    service: frontend.set_theme
+    data:
+      name: custom-light-mode
 - alias: "Take Motion Snapshots"
   initial_state: false
   trigger:

@@ -35,11 +35,11 @@ logger:
 lovelace:
   mode: yaml
   resources:
-    - url: /local/community/button-card/button-card.js
+    - url: /hacsfiles/button-card/button-card.js
       type: module
-    - url: /local/community/lovelace-fold-entity-row/fold-entity-row.js
+    - url: /hacsfiles/lovelace-fold-entity-row/fold-entity-row.js
       type: module
-    - url: /local/community/mini-graph-card/mini-graph-card-bundle.js
+    - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
       type: module
 
 apple_tv:

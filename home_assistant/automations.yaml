@@ -243,6 +243,8 @@
         - condition: state
           entity_id: binary_sensor.rouve_present
           state: "on"
+          for:
+            minutes: 5
   action:
     - service: cover.open_cover
       entity_id: cover.rhs_garage_door

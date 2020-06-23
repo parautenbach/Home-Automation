@@ -1,11 +1,29 @@
-- alias: "Set Theme at Startup"
+- alias: "Set Light Theme"
   trigger:
-   - platform: homeassistant
-     event: start
+    - platform: homeassistant
+      event: start
+    - platform: sun
+      event: sunrise
+  condition:
+    - condition: sun
+      after: sunrise
   action:
     service: frontend.set_theme
     data:
       name: custom-light-mode
+- alias: "Set Dark Theme"
+  trigger:
+    - platform: homeassistant
+      event: start
+    - platform: sun
+      event: sunset
+  condition:
+    - condition: sun
+      after: sunset
+  action:
+    service: frontend.set_theme
+    data:
+      name: slate
 - alias: "Take Motion Snapshots"
   initial_state: false
   trigger:
@@ -120,10 +138,10 @@
 - alias: "Lights On Upon Low Light"
   initial_state: true
   trigger:
-    - platform: numeric_state
-      entity_id: sensor.sun_illuminance
-      below: 15320.0
-      above: 0.0
+    # - platform: numeric_state
+    #   entity_id: sensor.sun_illuminance
+    #   below: 15320.0
+    #   above: 0.0
     - platform: template
       value_template: "{{ states('sensor.sun_illuminance') | int < 15320 }}"
   condition:

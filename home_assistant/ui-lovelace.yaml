@@ -61,11 +61,11 @@ views:
                 label: >
                   [[[
                     var b = states['light.smart_bulb_2'].attributes.brightness;
-                    return parseInt(b ? b/2.55 : '0') + '%'; 
+                    return parseInt(b ? b/2.55 : '0') + '%';
                   ]]]
                 styles:
                   name:
-                    - color: var(--paper-item-icon-color)              
+                    - color: var(--paper-item-icon-color)
                   label:
                     - color: var(--paper-item-icon-color)
                     - padding-left: 1ex
@@ -88,14 +88,14 @@ views:
                 show_label: true
                 # the label plus the label colour is a hack to create a phantom space
                 label: >
-                  [[[ 
-                    return '_'; 
+                  [[[
+                    return '_';
                   ]]]
                 styles:
                   name:
                     - color: var(--paper-item-icon-color)
                   label:
-                    - color: var(--primary-background-color)   
+                    - color: var(--primary-background-color)
                   card:
                     - font-size: 12px
                   grid:
@@ -117,7 +117,7 @@ views:
                 label: >
                   [[[
                     var b = states['light.smart_bulb_1'].attributes.brightness;
-                    return parseInt(b ? b/2.55 : '0') + '%'; 
+                    return parseInt(b ? b/2.55 : '0') + '%';
                   ]]]
                 styles:
                   name:
@@ -1063,7 +1063,7 @@ views:
           - binary_sensor.motion_sensor
           - automation.take_motion_snapshots
           - entity: script.security_camera_record_clip
-            tap_action: 
+            tap_action:
               action: call-service
               service: script.turn_on
               service_data:
@@ -1120,33 +1120,33 @@ views:
             entity: switch.living_room_lamp
             tap_action:
               action: toggle
-            style: 
+            style:
               top: 42%
               left: 7%
           - type: state-icon
             entity: light.smart_bulb_1
-            tap_action: 
+            tap_action:
               action: toggle
-            style: 
+            style:
               top: 54.5%
               left: 68%
           - type: state-icon
             entity: light.smart_bulb_2
-            tap_action: 
+            tap_action:
               action: toggle
-            style: 
+            style:
               top: 60.5%
               left: 68%
           - type: state-icon
             entity: binary_sensor.lhs_garage_occupied
-            style: 
+            style:
               top: 15%
               left: 68%
           - type: state-icon
             entity: binary_sensor.rhs_garage_occupied
-            style: 
+            style:
               top: 15%
-              left: 56%              
+              left: 56%
   - title: Devices
     path: devices
     icon: mdi:devices

@@ -48,7 +48,7 @@
         device_class: timestamp
         value_template: "{{ states('camera.security_camera_last_snapshot') }}"
       security_camera_last_snapshot_relative:
-        entity_id: 
+        entity_id:
           - input_datetime.security_camera_last_snapshot
           - sensor.time
         value_template: >
@@ -141,14 +141,14 @@
   - platform: filter
     name: google_travel_time_filtered
     entity_id: sensor.google_travel_time_driving
-    filters: 
+    filters:
       filter: lowpass
       time_constant: 10
       precision: 0
   - platform: filter
     name: ambient_temperature_filtered
     entity_id: sensor.ambient_temperature
-    filters: 
+    filters:
       filter: lowpass
       time_constant: 10
       precision: 1

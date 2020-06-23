@@ -93,7 +93,7 @@ ios:
           - identifier: "CLOSE_COVER"
             title: "Close now"
           - identifier: "EXTEND_COVER_TIMEOUT_05_MIN"
-            title: "Wait 5 min"            
+            title: "Wait 5 min"
           - identifier: "EXTEND_COVER_TIMEOUT_10_MIN"
             title: "Wait 10 min"
       - name: Test
@@ -154,18 +154,18 @@ input_datetime:
 binary_sensor:
   - platform: rpi_gpio
     ports:
-      23: motion_sensor 
+      23: motion_sensor
   - platform: template
     sensors:
       pieter_present:
         friendly_name: "Pieter Present"
-        value_template: >- 
-          {{ is_state("input_boolean.pieter_present", "on") or 
+        value_template: >-
+          {{ is_state("input_boolean.pieter_present", "on") or
              is_state("person.pieter_rautenbach", "home") }}
       rouve_present:
         friendly_name: "Rouvé Present"
         value_template: >-
-          {{ is_state("input_boolean.rouve_present", "on") or 
+          {{ is_state("input_boolean.rouve_present", "on") or
              is_state("person.rouve_rautenbach", "home") }}
       contractor_mode:
         friendly_name: "Contractor Mode"
@@ -173,12 +173,12 @@ binary_sensor:
           {{ is_state("input_boolean.contractor_mode", "on") }}
       anybody_home:
         friendly_name: "Anybody Home"
-        value_template: >- 
-          {{ is_state("input_boolean.pieter_present", "on") or is_state("input_boolean.rouve_present", "on") or 
-             is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on") }} 
+        value_template: >-
+          {{ is_state("input_boolean.pieter_present", "on") or is_state("input_boolean.rouve_present", "on") or
+             is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on") }}
       pieter_driving:
         friendly_name: "Pieter Driving"
-        value_template: >- 
+        value_template: >-
           {{ is_state("input_boolean.pieter_driving", "on") }}
   - platform: ping
     name: Internet
@@ -199,7 +199,7 @@ python_script:
 
 switch:
   - platform: rpi_gpio
-    ports: 
+    ports:
       24: motion_led
   - platform: broadlink
     host: !secret broadlink_host

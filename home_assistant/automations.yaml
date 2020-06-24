@@ -11,6 +11,7 @@
     service: frontend.set_theme
     data:
       name: custom-light-mode
+
 - alias: "Set Dark Theme"
   trigger:
     - platform: homeassistant
@@ -24,6 +25,7 @@
     service: frontend.set_theme
     data:
       name: slate
+
 - alias: "Take Motion Snapshots"
   initial_state: false
   trigger:
@@ -33,6 +35,7 @@
   action:
     - service: script.turn_on
       entity_id: script.security_camera_create_snapshot
+
 - alias: "Switch On Living Room Lamp if Motion is Detected"
   # only at night though
   initial_state: false
@@ -57,6 +60,7 @@
       data:
         entity_id: timer.motion_timer
         duration: "00:05:00"
+
 - alias: "Switch Off Living Room Lamp When Timer Expires"
   initial_state: true
   trigger:
@@ -67,6 +71,7 @@
   action:
     - service: switch.turn_off
       entity_id: switch.living_room_lamp
+
 - alias: "Motion Indicator On"
   initial_state: true
   trigger:
@@ -76,6 +81,7 @@
   action:
     - service: switch.turn_on
       entity_id: switch.motion_led
+
 - alias: "Motion Indicator Off"
   initial_state: true
   trigger:
@@ -85,6 +91,7 @@
   action:
     - service: switch.turn_off
       entity_id: switch.motion_led
+
 - alias: "Living Room Lamp Auto On Upon Sunset or Arrival"
   initial_state: true
   trigger:
@@ -111,6 +118,7 @@
   action:
     - service: switch.turn_on
       entity_id: switch.living_room_lamp
+
 - alias: "Bedlamps Auto On Upon Sunset or Arrival"
   initial_state: true
   trigger:
@@ -135,6 +143,7 @@
   action:
     - service: homeassistant.turn_on
       entity_id: group.main_bedroom
+
 - alias: "Lights On Upon Low Light"
   initial_state: true
   trigger:
@@ -163,6 +172,7 @@
       data:
         title: "Testing"
         message: "Low light: {{ states('sensor.sun_illuminance') | int }}lx."
+
 - alias: "Lights Off After Sunrise"
   # todo: later when cloudy
   initial_state: true
@@ -179,6 +189,7 @@
       entity_id: group.main_bedroom
     - service: switch.turn_off
       entity_id: switch.living_room_lamp
+
 - alias: "Away Mode"
   initial_state: true
   trigger:
@@ -196,6 +207,7 @@
       entity_id: automation.take_motion_snapshots
     - service: automation.turn_on
       entity_id: automation.switch_on_living_room_lamp_if_motion_is_detected
+
 - alias: "Home Mode"
   trigger:
     platform: state
@@ -210,6 +222,7 @@
       entity_id: automation.take_motion_snapshots
     - service: automation.turn_off
       entity_id: automation.switch_on_living_room_lamp_if_motion_is_detected
+
 - alias: "Open The Gate When Arriving Home"
   trigger:
     - platform: state
@@ -227,6 +240,7 @@
   action:
     - service: cover.open_cover
       entity_id: cover.main_gate
+
 # open garage door when arriving home:
 # when moving above a certain (last) speed (so i'm driving, not cycling or otherwise, or getting transported in some other way)
 #   - the above now done with an ios activity sensor
@@ -269,6 +283,7 @@
   action:
     - service: cover.open_cover
       entity_id: cover.rhs_garage_door
+
 - alias: "Check Disk Space on the Home Assistant server"
   trigger:
     - platform: time_pattern
@@ -284,6 +299,7 @@
       data_template:
         title: "System"
         message: "Server disk usage is exceeding {{ trigger.above }}%!"
+
 - alias: "Contractor Mode Enabled Alert"
   trigger:
     - platform: state
@@ -297,6 +313,7 @@
         data:
           push:
             category: "contractor_mode_enabled"
+
 - alias: "Contractor Mode Disabled Alert"
   trigger:
     - platform: state
@@ -310,6 +327,7 @@
         data:
           push:
             category: "contractor_mode_disabled"
+
 - alias: "Enable Contractor Mode"
   trigger:
     - platform: time
@@ -322,6 +340,7 @@
   action:
     - service: switch.turn_on
       entity_id: switch.contractor_mode
+
 - alias: "Disable Contractor Mode"
   trigger:
     - platform: time
@@ -334,6 +353,7 @@
   action:
     - service: switch.turn_off
       entity_id: switch.contractor_mode
+
 - alias: "Contractor Mode Still Enabled Alert"
   trigger:
     - platform: time_pattern
@@ -357,6 +377,7 @@
         data:
           push:
             category: "contractor_mode_still_enabled_alert"
+
 - alias: "Disable Contractor Mode From Alert Action"
   trigger:
     - platform: event
@@ -366,6 +387,7 @@
   action:
     - service: switch.turn_off
       entity_id: switch.contractor_mode
+
 - alias: "Enable Contractor Mode From Alert Action"
   trigger:
     - platform: event
@@ -375,6 +397,7 @@
   action:
     - service: switch.turn_on
       entity_id: switch.contractor_mode
+
 - alias: "Shellies Announce"
   trigger:
     - platform: homeassistant
@@ -384,6 +407,7 @@
     data:
       topic: shellies/command
       payload: announce
+
 - alias: "Shellies Discovery"
   trigger:
     - platform: mqtt
@@ -394,6 +418,7 @@
       id: '{{ trigger.payload_json.id }}'
       mac: '{{ trigger.payload_json.mac }}'
       fw_ver: '{{ trigger.payload_json.fw_ver }}'
+
 # https://community.home-assistant.io/t/snmp-bandwidth-monitor/7122
 - alias: "Monitor Inbound Internet Traffic"
   trigger:
@@ -404,6 +429,7 @@
       data_template:
         entity_id: input_number.wan_traffic_delta_in
         value: '{{ ((trigger.to_state.state | int - trigger.from_state.state | int) * 8 ) / ( as_timestamp(trigger.to_state.last_updated) - as_timestamp(trigger.from_state.last_updated) ) }}'
+
 - alias: "Monitor Outbound Internet Traffic"
   trigger:
     platform: state
@@ -413,6 +439,7 @@
       data_template:
         entity_id: input_number.wan_traffic_delta_out
         value: '{{ ((trigger.to_state.state | int - trigger.from_state.state | int) * 8 ) / ( as_timestamp(trigger.to_state.last_updated) - as_timestamp(trigger.from_state.last_updated) ) }}'
+
 - alias: "Notify Pieter Going Home from Work in Cape Town"
   trigger:
     platform: zone
@@ -431,6 +458,7 @@
   action:
     - service: script.turn_on
       entity_id: script.send_pieter_work_cape_town_to_home_eta
+
 - alias: "Start Cover Timer When Opened"
   initial_state: true
   trigger:
@@ -445,6 +473,7 @@
       data_template:
         entity_id: "timer.{{ trigger.entity_id | replace('cover.', '') }}_timer"
         duration: "00:03:00"
+
 - alias: "Cover Left Open Alert"
   initial_state: true
   trigger:
@@ -508,6 +537,7 @@
     - service: timer.start
       data_template:
         entity_id: "{{ trigger.event.data.entity_id }}"
+
 - alias: "Close Cover From Alert Action"
   trigger:
     - platform: event
@@ -518,6 +548,7 @@
     - service: cover.close_cover
       data_template:
         entity_id: "{{ trigger.event.data.action_data.cover_id }}"
+
 - alias: "Extend Cover Timeout From Alert Action"
   trigger:
     - platform: event
@@ -534,6 +565,7 @@
         entity_id: "{{ trigger.event.data.action_data.timer_id }}"
         # in seconds
         duration: "{{ trigger.event.data.actionName | regex_findall_index(find='\\d+', index=0, ignorecase=False) | int * 60 }}"
+
 - alias: "Stop Cover Timer When Closed"
   initial_state: true
   trigger:
@@ -547,6 +579,7 @@
     - service: timer.cancel
       data_template:
         entity_id: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
+
 - alias: "Notify If Server Load High"
   initial_state: true
   trigger:
@@ -561,6 +594,7 @@
         title: "System"
         # https://community.home-assistant.io/t/convert-trigger-for-into-a-relative-age/196979
         message: "The server load has been {{ states('sensor.load_15m') }} for {{ trigger.for.seconds / 60 }} minutes."
+
 - alias: "Set Pieter's Driving State"
   initial_state: true
   trigger:
@@ -573,6 +607,7 @@
   action:
     - service_template: "input_boolean.turn_{{ 'on' if states('sensor.pieter_activity_type') == 'Automotive' else 'off'}}"
       entity_id: input_boolean.pieter_driving
+
 - alias: "Notify If Driving State Changed"
   initial_state: false
   trigger:

@@ -1,0 +1,24 @@
+- platform: rpi_gpio
+  ports:
+    24: motion_led
+- platform: broadlink
+  host: !secret broadlink_host
+  mac: "C8:F7:42:40:01:F8"
+- platform: template
+  switches:
+    guest_mode:
+      value_template: "{{ is_state('input_boolean.guest_mode', 'on') }}"
+      turn_on:
+        - service: input_boolean.turn_on
+          entity_id: input_boolean.guest_mode
+      turn_off:
+        - service: input_boolean.turn_off
+          entity_id: input_boolean.guest_mode
+    contractor_mode:
+      value_template: "{{ is_state('input_boolean.contractor_mode', 'on') }}"
+      turn_on:
+        - service: input_boolean.turn_on
+          entity_id: input_boolean.contractor_mode
+      turn_off:
+        - service: input_boolean.turn_off
+          entity_id: input_boolean.contractor_mode

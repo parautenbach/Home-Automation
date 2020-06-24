@@ -1,24 +1,14 @@
-
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
-frontend:
-  themes: !include_dir_merge_named themes
-  extra_module_url:
-    - /local/custom.js
-
-# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
-# http:
-#   base_url: example.duckdns.org:8123
-
-# Text to speech
-tts:
-  - platform: google_translate
-
 group: !include groups.yaml
 automation: !include automations.yaml
-script: !include scripts.yaml
+binary_sensor: !include binary_sensors.yaml
 sensor: !include sensors.yaml
+switch: !include switches.yaml
+utility_meter: !include utility_meters.yaml
+cover: !include covers.yaml
+script: !include scripts.yaml
 
 homeassistant:
   name: Home
@@ -44,11 +34,22 @@ lovelace:
     - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
       type: module
 
+frontend:
+  themes: !include_dir_merge_named themes
+  extra_module_url:
+    - /local/custom.js
+
+tts:
+  - platform: google_translate
+
 apple_tv:
 
 discovery:
-#  ignore:
-#    - homekit
+
+stream:
+
+python_script:
+# https://raw.githubusercontent.com/bieniu/ha-shellies-discovery/master/python_scripts/shellies_discovery.py
 
 homekit:
   name: Home Assistant
@@ -109,8 +110,6 @@ zone:
     radius: 22
     icon: mdi:home
 
-stream:
-
 camera:
   - platform: ffmpeg
     name: security_camera
@@ -151,40 +150,13 @@ input_datetime:
     has_date: true
     has_time: true
 
-binary_sensor:
-  - platform: rpi_gpio
-    ports:
-      23: motion_sensor
-  - platform: template
-    sensors:
-      pieter_present:
-        friendly_name: "Pieter Present"
-        value_template: >-
-          {{ is_state("input_boolean.pieter_present", "on") or
-             is_state("person.pieter_rautenbach", "home") }}
-      rouve_present:
-        friendly_name: "Rouvé Present"
-        value_template: >-
-          {{ is_state("input_boolean.rouve_present", "on") or
-             is_state("person.rouve_rautenbach", "home") }}
-      contractor_mode:
-        friendly_name: "Contractor Mode"
-        value_template: >-
-          {{ is_state("input_boolean.contractor_mode", "on") }}
-      anybody_home:
-        friendly_name: "Anybody Home"
-        value_template: >-
-          {{ is_state("input_boolean.pieter_present", "on") or is_state("input_boolean.rouve_present", "on") or
-             is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on") }}
-      pieter_driving:
-        friendly_name: "Pieter Driving"
-        value_template: >-
-          {{ is_state("input_boolean.pieter_driving", "on") }}
-  - platform: ping
-    name: Internet
-    host: www.google.com
-    count: 5
-    scan_interval: 300
+input_number:
+  wan_traffic_delta_in:
+    min: 0
+    max: 4294967295
+  wan_traffic_delta_out:
+    min: 0
+    max: 4294967295
 
 tplink:
   discovery: false
@@ -193,35 +165,6 @@ tplink:
     - host: 192.168.0.116  # smart bulb 2
   switch:
     - host: 192.168.0.115  # smart plug 1
-
-python_script:
-# https://raw.githubusercontent.com/bieniu/ha-shellies-discovery/master/python_scripts/shellies_discovery.py
-
-switch:
-  - platform: rpi_gpio
-    ports:
-      24: motion_led
-  - platform: broadlink
-    host: !secret broadlink_host
-    mac: "C8:F7:42:40:01:F8"
-  - platform: template
-    switches:
-      guest_mode:
-        value_template: "{{ is_state('input_boolean.guest_mode', 'on') }}"
-        turn_on:
-          - service: input_boolean.turn_on
-            entity_id: input_boolean.guest_mode
-        turn_off:
-          - service: input_boolean.turn_off
-            entity_id: input_boolean.guest_mode
-      contractor_mode:
-        value_template: "{{ is_state('input_boolean.contractor_mode', 'on') }}"
-        turn_on:
-          - service: input_boolean.turn_on
-            entity_id: input_boolean.contractor_mode
-        turn_off:
-          - service: input_boolean.turn_off
-            entity_id: input_boolean.contractor_mode
 
 light:
   - platform: switch
@@ -243,102 +186,3 @@ timer:
     duration: "00:03:00"
   rhs_garage_door_timer:
     duration: "00:03:00"
-
-input_number:
-  wan_traffic_delta_in:
-    min: 0
-    max: 4294967295
-  wan_traffic_delta_out:
-    min: 0
-    max: 4294967295
-
-utility_meter:
-  daily_internet_usage_in:
-    source: sensor.internet_usage_in
-    cycle: daily
-  monthly_internet_usage_in:
-    source: sensor.internet_usage_in
-    cycle: monthly
-  daily_internet_usage_out:
-    source: sensor.internet_usage_out
-    cycle: daily
-  monthly_internet_usage_out:
-    source: sensor.internet_usage_out
-    cycle: monthly
-  daily_power_consumption:
-    source: sensor.total_electricity_consumption
-    cycle: daily
-  monthly_power_consumption:
-    source: sensor.total_electricity_consumption
-    cycle: monthly
-
-cover:
-  - platform: template
-    covers:
-      main_gate:
-        friendly_name: "Main Gate"
-        open_cover:
-          service: switch.turn_on
-          data:
-            entity_id: switch.gate_remote
-        close_cover:
-          service: switch.turn_on
-          data:
-            entity_id: switch.gate_remote
-        stop_cover:
-          service: switch.turn_on
-          data:
-            entity_id: switch.gate_remote
-        value_template: "{{ is_state('binary_sensor.gate_status', 'on') }}"
-        icon_template: >-
-          {% if is_state('binary_sensor.gate_status', 'on') %}
-            mdi:gate-open
-          {% else %}
-            mdi:gate
-          {% endif %}
-  - platform: template
-    covers:
-      lhs_garage_door:
-        friendly_name: "LHS Garage Door"
-        open_cover:
-          service: switch.turn_on
-          data:
-            entity_id: switch.lhs_garage_door_remote
-        close_cover:
-          service: switch.turn_on
-          data:
-            entity_id: switch.lhs_garage_door_remote
-        stop_cover:
-          service: switch.turn_on
-          data:
-            entity_id: switch.lhs_garage_door_remote
-        value_template: "{{ is_state('binary_sensor.lhs_garage_door_status', 'on') }}"
-        icon_template: >-
-          {% if is_state('binary_sensor.lhs_garage_door_status', 'on') %}
-            mdi:garage-open
-          {% else %}
-            mdi:garage
-          {% endif %}
-  - platform: template
-    covers:
-      rhs_garage_door:
-        friendly_name: "RHS Garage Door"
-        open_cover:
-          service: switch.turn_on
-          data:
-            entity_id: switch.rhs_garage_door_remote
-        close_cover:
-          service: switch.turn_on
-          data:
-            entity_id: switch.rhs_garage_door_remote
-        stop_cover:
-          service: switch.turn_on
-          data:
-            entity_id: switch.rhs_garage_door_remote
-        value_template: "{{ is_state('binary_sensor.rhs_garage_door_status', 'on') }}"
-        icon_template: >-
-          {% if is_state('binary_sensor.rhs_garage_door_status', 'on') %}
-            mdi:garage-open
-          {% else %}
-            mdi:garage
-          {% endif %}

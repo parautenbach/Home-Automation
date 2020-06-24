@@ -1,0 +1,33 @@
+- platform: rpi_gpio
+  ports:
+    23: motion_sensor
+- platform: template
+  sensors:
+    pieter_present:
+      friendly_name: "Pieter Present"
+      value_template: >-
+        {{ is_state("input_boolean.pieter_present", "on") or
+           is_state("person.pieter_rautenbach", "home") }}
+    rouve_present:
+      friendly_name: "Rouvé Present"
+      value_template: >-
+        {{ is_state("input_boolean.rouve_present", "on") or
+           is_state("person.rouve_rautenbach", "home") }}
+    contractor_mode:
+      friendly_name: "Contractor Mode"
+      value_template: >-
+        {{ is_state("input_boolean.contractor_mode", "on") }}
+    anybody_home:
+      friendly_name: "Anybody Home"
+      value_template: >-
+        {{ is_state("input_boolean.pieter_present", "on") or is_state("input_boolean.rouve_present", "on") or
+           is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on") }}
+    pieter_driving:
+      friendly_name: "Pieter Driving"
+      value_template: >-
+        {{ is_state("input_boolean.pieter_driving", "on") }}
+- platform: ping
+  name: Internet
+  host: www.google.com
+  count: 5
+  scan_interval: 300

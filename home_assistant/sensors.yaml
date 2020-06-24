@@ -7,6 +7,7 @@
     - 'date_time_iso'
     - 'time_date'
     - 'time_utc'
+
 - platform: bme280
   name: Ambient
   i2c_address: 0x77
@@ -21,6 +22,7 @@
     - humidity
     - pressure
   scan_interval: 40
+
 - platform: systemmonitor
   resources:
     - type: disk_use_percent
@@ -35,12 +37,14 @@
     - type: throughput_network_out
       arg: wlan0
     - type: last_boot
+
 - platform: command_line
   name: server_cpu_temp
   command: "cat /sys/class/thermal/thermal_zone0/temp"
   unit_of_measurement: "°C"
   value_template: '{{ value | multiply(0.001) | round(2)  }}'
   scan_interval: 60
+
 - platform: template
   sensors:
     security_camera_last_snapshot:
@@ -111,6 +115,7 @@
         {% else %}
           None
         {% endif %}
+
 - platform: snmp
   name: snmp_wan_in
   host: 192.168.0.1
@@ -118,6 +123,7 @@
   version: 2c
   baseoid: 1.3.6.1.2.1.2.2.1.10.26  # ifInOctets.26 / nas0_0
   unit_of_measurement: octets
+
 - platform: snmp
   name: snmp_wan_out
   host: 192.168.0.1
@@ -125,12 +131,15 @@
   version: 2c
   baseoid: 1.3.6.1.2.1.2.2.1.16.26  # ifOutOctets.26 / nas0_0
   unit_of_measurement: octets
+
 - platform: statistics
   name: 'Internet Traffic In'
   entity_id: sensor.internet_speed_in
+
 - platform: statistics
   name: 'Internet Traffic Out'
   entity_id: sensor.internet_speed_out
+
 - platform: google_travel_time
   api_key: !secret google_maps_api_key
   origin: zone.pieter_work_cape_town
@@ -138,6 +147,7 @@
   options:
     mode: driving
     departure_time: now
+
 - platform: filter
   name: google_travel_time_filtered
   entity_id: sensor.google_travel_time_driving
@@ -145,6 +155,7 @@
     filter: lowpass
     time_constant: 10
     precision: 0
+
 - platform: filter
   name: ambient_temperature_filtered
   entity_id: sensor.ambient_temperature
@@ -152,27 +163,33 @@
     filter: lowpass
     time_constant: 10
     precision: 1
+
 - platform: worldclock
   name: cape_town
   time_zone: Africa/Johannesburg
+
 - platform: worldclock
   name: san_francisco
   time_zone: America/Los_Angeles
+
 - platform: worldclock
   name: london
   time_zone: Europe/London
+
 - platform: command_line
   name: internet_packet_loss
   command: 'ping -c 5 www.google.com | grep -o -P "(?<= )(\d+)(?=%)"'
   unit_of_measurement: "%"
   value_template: '{{ value | int }}'
   scan_interval: 300
+
 - platform: command_line
   name: thor_disk_usage
   command: !secret thor_disk_usage_command
   unit_of_measurement: "%"
   value_template: '{{ value | int }}'
   scan_interval: 3600
+
 - platform: integration
   name: "Total Electricity Consumption"
   source: sensor.current_energy
@@ -180,6 +197,7 @@
   unit_prefix: k
   unit_time: min
   unit: "kWh"
+
 - platform: rest
   resource_template: 'http://weather.sun.ac.za/api/getSonbesie.php?start={{ utcnow() | as_timestamp | int - 300 }}&end={{ utcnow() | as_timestamp | int }}'
   method: GET
@@ -195,6 +213,7 @@
   unit_of_measurement: "lx"
   scan_interval: 300
   timeout: 15
+
 # - platform: folder
 #   folder: /home/homeassistant/.homeassistant/www/gallery
 #   filter: "camera.security_camera_*.jpg"

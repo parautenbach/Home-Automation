@@ -433,6 +433,12 @@ views:
           line_width: 2
           show:
             extrema: true
+          color_thresholds:
+            - value: 15320
+              color: '#f39c12'
+            - value: 15321
+              color: '#e74c3c'
+          color_thresholds_transition: hard
   - title: Entertainment
     path: entertainment
     icon: mdi:audio-video

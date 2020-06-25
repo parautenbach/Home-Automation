@@ -185,6 +185,121 @@ views:
             title: "Entry & Access"
             cards:
               - type: custom:button-card
+                name: Rouvé
+                entity: cover.lhs_garage_door
+                size: 20%
+                show_name: true
+                color_type: icon
+                color: var(--paper-item-icon-color)
+                state:
+                  - operator: template
+                    value: >
+                      [[[
+                        return states['binary_sensor.lhs_garage_occupied'].state == 'on'
+                      ]]]
+                    color: var(--paper-item-icon-active-color)
+                  - operator: template
+                    value: >
+                      [[[
+                        return states['binary_sensor.lhs_garage_occupied'].state == 'off'
+                      ]]]
+                    color: var(--paper-item-icon-color)
+                custom_fields:
+                  t:
+                    card:
+                      type: custom:button-card
+                      name: Timer
+                      entity: timer.lhs_garage_door_timer
+                      show_name: false
+                      show_icon: false
+                      show_state: true
+                      styles:
+                        card:
+                          - font-size: 12px
+                          - box-shadow: none
+                        state:
+                          - margin-top: -1ex
+                          - margin-bottom: -1ex
+                          - color: >
+                              [[[
+                                if (states['timer.lhs_garage_door_timer'].state == 'idle')
+                                  return "var(--paper-item-icon-color)";
+                                else
+                                  return "red";
+                              ]]]
+                styles:
+                  name:
+                    - color: var(--paper-item-icon-color)
+                  card:
+                    - font-size: 12px
+                  grid:
+                    - grid-template-areas: '"t" "i" "n"'
+                    - grid-template-rows: min-content 1fr min-content
+                    - grid-template-columns: 1fr
+                tap_action:
+                  action: toggle
+                  haptic: light
+                double_tap_action:
+                  action: call-service
+                  haptic: medium
+                  service: script.close_garage_door_and_main_gate
+                  service_data:
+                    garage_door: "[[[ return entity.entity_id; ]]]"
+                hold_action:
+                  action: more-info
+                  haptic: selection
+              - type: custom:button-card
+                name: Gate
+                entity: cover.main_gate
+                size: 20%
+                show_name: true
+                color_type: icon
+                color: var(--paper-item-icon-color)
+                custom_fields:
+                  t:
+                    card:
+                      type: custom:button-card
+                      name: Timer
+                      entity: timer.main_gate_timer
+                      show_name: false
+                      show_icon: false
+                      show_state: true
+                      styles:
+                        card:
+                          - font-size: 12px
+                          - box-shadow: none
+                        state:
+                          - margin-top: -1ex
+                          - margin-bottom: -1ex
+                          - color: >
+                              [[[
+                                if (states['timer.main_gate_timer'].state == 'idle')
+                                  return "var(--paper-item-icon-color)";
+                                else
+                                  return "red";
+                              ]]]
+                styles:
+                  name:
+                    - color: var(--paper-item-icon-color)
+                  card:
+                    - font-size: 12px
+                  grid:
+                    - grid-template-areas: '"t" "i" "n"'
+                    - grid-template-rows: min-content 1fr min-content
+                    - grid-template-columns: 1fr
+                tap_action:
+                  action: toggle
+                  haptic: light
+                double_tap_action:
+                  action: call-service
+                  haptic: medium
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.open_pedestrian_gap
+                hold_action:
+                  action: more-info
+                  haptic: selection
+              - type: custom:button-card
                 name: Pieter
                 entity: cover.rhs_garage_door
                 size: 20%
@@ -249,121 +364,6 @@ views:
                     # https://community.home-assistant.io/t/tap-action-script-variable/124023
                     # https://community.home-assistant.io/t/passing-a-variable-to-a-script-in-lovelace-with-entity-button/155935
                     # https://community.home-assistant.io/t/passing-variable-from-entity-button-script-shell-command/178570
-                    garage_door: "[[[ return entity.entity_id; ]]]"
-                hold_action:
-                  action: more-info
-                  haptic: selection
-              - type: custom:button-card
-                name: Gate
-                entity: cover.main_gate
-                size: 20%
-                show_name: true
-                color_type: icon
-                color: var(--paper-item-icon-color)
-                custom_fields:
-                  t:
-                    card:
-                      type: custom:button-card
-                      name: Timer
-                      entity: timer.main_gate_timer
-                      show_name: false
-                      show_icon: false
-                      show_state: true
-                      styles:
-                        card:
-                          - font-size: 12px
-                          - box-shadow: none
-                        state:
-                          - margin-top: -1ex
-                          - margin-bottom: -1ex
-                          - color: >
-                              [[[
-                                if (states['timer.main_gate_timer'].state == 'idle')
-                                  return "var(--paper-item-icon-color)";
-                                else
-                                  return "red";
-                              ]]]
-                styles:
-                  name:
-                    - color: var(--paper-item-icon-color)
-                  card:
-                    - font-size: 12px
-                  grid:
-                    - grid-template-areas: '"t" "i" "n"'
-                    - grid-template-rows: min-content 1fr min-content
-                    - grid-template-columns: 1fr
-                tap_action:
-                  action: toggle
-                  haptic: light
-                double_tap_action:
-                  action: call-service
-                  haptic: medium
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.open_pedestrian_gap
-                hold_action:
-                  action: more-info
-                  haptic: selection
-              - type: custom:button-card
-                name: Rouvé
-                entity: cover.lhs_garage_door
-                size: 20%
-                show_name: true
-                color_type: icon
-                color: var(--paper-item-icon-color)
-                state:
-                  - operator: template
-                    value: >
-                      [[[
-                        return states['binary_sensor.lhs_garage_occupied'].state == 'on'
-                      ]]]
-                    color: var(--paper-item-icon-active-color)
-                  - operator: template
-                    value: >
-                      [[[
-                        return states['binary_sensor.lhs_garage_occupied'].state == 'off'
-                      ]]]
-                    color: var(--paper-item-icon-color)
-                custom_fields:
-                  t:
-                    card:
-                      type: custom:button-card
-                      name: Timer
-                      entity: timer.lhs_garage_door_timer
-                      show_name: false
-                      show_icon: false
-                      show_state: true
-                      styles:
-                        card:
-                          - font-size: 12px
-                          - box-shadow: none
-                        state:
-                          - margin-top: -1ex
-                          - margin-bottom: -1ex
-                          - color: >
-                              [[[
-                                if (states['timer.lhs_garage_door_timer'].state == 'idle')
-                                  return "var(--paper-item-icon-color)";
-                                else
-                                  return "red";
-                              ]]]
-                styles:
-                  name:
-                    - color: var(--paper-item-icon-color)
-                  card:
-                    - font-size: 12px
-                  grid:
-                    - grid-template-areas: '"t" "i" "n"'
-                    - grid-template-rows: min-content 1fr min-content
-                    - grid-template-columns: 1fr
-                tap_action:
-                  action: toggle
-                  haptic: light
-                double_tap_action:
-                  action: call-service
-                  haptic: medium
-                  service: script.close_garage_door_and_main_gate
-                  service_data:
                     garage_door: "[[[ return entity.entity_id; ]]]"
                 hold_action:
                   action: more-info

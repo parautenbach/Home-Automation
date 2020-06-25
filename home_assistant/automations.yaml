@@ -168,13 +168,9 @@
       entity_id: group.main_bedroom
     - service: switch.turn_on
       entity_id: switch.living_room_lamp
-    - service: notify.mobile_app_ceres
-      data:
-        title: "Testing"
-        message: "Low light: {{ states('sensor.sun_illuminance') | int }}lx."
 
 - alias: "Lights Off After Sunrise"
-  # todo: later when cloudy
+  # todo: use illuminance
   initial_state: true
   trigger:
     - platform: sun
@@ -518,7 +514,7 @@
           {% endif %}
           {% set entity = trigger.event.data.entity_id | replace('_timer', '') | replace('timer.', '') %}
           {% set last_changed = states["cover"][entity].last_changed %}
-          {{ name }} has been left open for {{ ((as_timestamp(utcnow()) - as_timestamp(last_changed) + 1) // 60) | int }} min.
+          {{ name }} has been left open for {{ ((as_timestamp(utcnow()) - as_timestamp(last_changed) + 5) // 60) | int }} min.
         data:
           # todo: threading and replacing notifications
           # todo: clear notifications when closed

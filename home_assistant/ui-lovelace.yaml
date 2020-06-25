@@ -434,10 +434,11 @@ views:
           show:
             extrema: true
           color_thresholds:
+            # needs to be the same as the automation's threshold to make sense
             - value: 15320
-              color: '#f39c12'
+              color: '#cccccc'
             - value: 15321
-              color: '#e74c3c'
+              color: '#f39c12'
           color_thresholds_transition: hard
   - title: Entertainment
     path: entertainment

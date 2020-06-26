@@ -577,6 +577,44 @@
       data_template:
         entity_id: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
 
+- alias: "Replace Cover Notifications When Closed"
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id:
+      - cover.main_gate
+      - cover.lhs_garage_door
+      - cover.rhs_garage_door
+    to: "closed"
+  condition:
+    condition: template
+    # only when there's been at least one notification, which will be after the first timer expired (default 3 min)
+    # value_template: "{{ (as_timestamp(utcnow()) - as_timestamp(states['cover'][trigger.entity_id | replace('cover.', '')].last_changed)) + 200 | int > 180 }}"
+    # {% set cover_entity = trigger.entity_id | replace("cover.", "") %}
+    # {% set cover_last_changed = trigger.from_state.last_changed %}
+    value_template: >-
+      {{ (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int > 180 }}
+  action:
+    - service: notify.mobile_app_ceres
+      data_template:
+        title: "Security"
+        # cover.rhs_garage_door -> Pieter's garage door
+        message: >-
+          {% set name = None %}
+          {% if trigger.entity_id | regex_search("lhs", ignorecase=True) %}
+            {% set name = "Rouvé's garage door" %}
+          {% elif trigger.entity_id | regex_search("rhs", ignorecase=True) %}
+            {% set name = "Pieter's garage door" %}
+          {% else %}
+            {% set name = "The main gate" %}
+          {% endif %}
+          {{ name }} has been closed after {{ ((as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) // 60) | int }} min.
+        data:
+          apns_headers:
+            # the timer entity
+            # cover.rhs_garage_door -> timer.rhs_garage_door_timer
+            'apns-collapse-id': "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
+
 - alias: "Notify If Server Load High"
   initial_state: true
   trigger:

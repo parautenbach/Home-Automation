@@ -3,8 +3,6 @@ default_view:
     - binary_sensor.motion_sensor
     - binary_sensor.updater
     - sun.sun
-      #- device_tracker.ceres_2
-      #- device_tracker.rouve
     - person.pieter_rautenbach
     - person.rouve_rautenbach
     - binary_sensor.anybody_home

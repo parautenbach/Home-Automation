@@ -294,7 +294,7 @@
     - service: notify.mobile_app_ceres
       data_template:
         title: "System"
-        message: "Server disk usage is exceeding {{ trigger.above }}%!"
+        message: "Server disk usage is {{ states('sensor.disk_use_percent') }}%!"
 
 - alias: "Contractor Mode Enabled Alert"
   trigger:

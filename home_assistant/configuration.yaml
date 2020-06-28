@@ -39,6 +39,10 @@ frontend:
   extra_module_url:
     - /local/custom.js
 
+recorder:
+  auto_purge: true
+  purge_keep_days: 3
+
 tts:
   - platform: google_translate
 

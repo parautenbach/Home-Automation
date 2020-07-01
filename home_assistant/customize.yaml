@@ -181,6 +181,9 @@ script.entertainment_off:
 script.security_camera_record_clip:
   friendly_name: Record Security Camera Clip
   icon: mdi:video
+script.security_camera_create_snapshot:
+  friendly_name: Take Security Camera Snapshot
+  icon: mdi:camera
 switch.guest_mode:
   friendly_name: Guest Mode
   icon: mdi:briefcase

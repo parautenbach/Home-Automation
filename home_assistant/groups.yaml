@@ -89,6 +89,12 @@ security:
     - switch.motion_led
     - automation.motion_snapshots
 
+security_automations:
+  name: Security Automations
+  entities:
+    - automation.take_motion_snapshots
+    - automation.switch_on_living_room_lamp_if_motion_is_detected
+
 server:
   name: Server
   entities:

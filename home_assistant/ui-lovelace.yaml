@@ -1068,13 +1068,19 @@ views:
           # todo: add "take snapshot now"
           # - switch.motion_led
           - binary_sensor.motion_sensor
-          - automation.take_motion_snapshots
+          - entity: script.security_camera_create_snapshot
+            tap_action:
+              action: call-service
+              service: script.turn_on
+              service_data:
+                entity_id: script.security_camera_create_snapshot
           - entity: script.security_camera_record_clip
             tap_action:
               action: call-service
               service: script.turn_on
               service_data:
                 entity_id: script.security_camera_record_clip
+          - group.security_automations
       - type: vertical-stack
         cards:
           - type: picture-glance
@@ -1084,9 +1090,11 @@ views:
           - type: entities
             entities:
               - entity: sensor.security_camera_last_snapshot_relative
-                name: Last Event
+                name: Last Motion Event
               - entity: timer.motion_timer
                 name: Living Room Light Timeout
+              - entity: group.security_automations
+                name: Snapshots and Lights
       - type: vertical-stack
         cards:
           - type: entities

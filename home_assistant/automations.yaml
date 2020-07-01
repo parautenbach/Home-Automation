@@ -295,6 +295,9 @@
       data_template:
         title: "System"
         message: "Server disk usage is {{ states('sensor.disk_use_percent') }}%!"
+        data:
+          push:
+            thread-id: "system-disk-space"
 
 - alias: "Contractor Mode Enabled Alert"
   trigger:
@@ -516,7 +519,6 @@
           {% set cover_last_changed = states["cover"][cover_entity].last_changed %}
           {{ name }} has been left open for {{ ((as_timestamp(utcnow()) - as_timestamp(cover_last_changed) + 5) // 60) | int }} min.
         data:
-          # todo: threading and replacing notifications
           # todo: clear notifications when closed
           # https://github.com/home-assistant/iOS/issues/579
           # https://github.com/home-assistant/iOS/issues/215
@@ -629,6 +631,9 @@
         title: "System"
         # https://community.home-assistant.io/t/convert-trigger-for-into-a-relative-age/196979
         message: "The server load has been {{ states('sensor.load_15m') }} for {{ trigger.for.seconds // 60 }} minutes."
+        data:
+          push:
+            thread-id: "system-load"
 
 - alias: "Set Pieter's Driving State"
   initial_state: true

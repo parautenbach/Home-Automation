@@ -300,3 +300,7 @@ binary_sensor.rhs_garage_occupied:
   icon: mdi:car-connected
 sensor.sun_illuminance:
   friendly_name: Sun Illuminance
+binary_sensor.anybody_home:
+  icon: mdi:home-account
+binary_sensor.updater:
+  icon: mdi:refresh

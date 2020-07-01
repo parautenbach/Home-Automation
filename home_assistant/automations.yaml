@@ -624,7 +624,7 @@
     entity_id: sensor.load_15m
     above: 1
     for:
-      minutes: 10
+      minutes: 15
   action:
     - service: notify.mobile_app_ceres
       data_template:

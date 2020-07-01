@@ -1064,9 +1064,6 @@ views:
         title: Security Camera
         camera_image: camera.security_camera
         entities:
-          # todo: replace switch with sensor
-          # todo: add "take snapshot now"
-          # - switch.motion_led
           - binary_sensor.motion_sensor
           - entity: script.security_camera_create_snapshot
             tap_action:

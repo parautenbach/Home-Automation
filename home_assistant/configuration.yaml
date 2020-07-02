@@ -40,6 +40,12 @@ frontend:
     - /local/custom.js
 
 recorder:
+  # https://community.home-assistant.io/t/home-assistant-db-size/1198/10?u=parautenbach
+  # If you set it for 14 days, then it runs after 14 days of UNINTERRUPTED uptime. If you restart your HA server, then the clock restarts from zero again.
+  # delete from events where time_fired < datetime('now','-30 days');
+  # delete from states where created < datetime('now', '-30 days');
+  # SQLite does not recover the disk space after you have done this, so it is necessary to ‘vacuum’ the database. Simply issue the following command:
+  # vacuum;
   auto_purge: true
   purge_keep_days: 2
 

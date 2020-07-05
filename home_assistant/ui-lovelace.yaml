@@ -1055,6 +1055,7 @@ views:
         line_width: 2
         show:
           extrema: true
+          average: true
   - title: Security
     path: security
     icon: mdi:security
@@ -1219,6 +1220,7 @@ views:
             line_width: 2
             show:
               extrema: true
+              average: true
           - type: entities
             entities:
               - sensor.disk_use_percent

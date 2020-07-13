@@ -33,6 +33,8 @@ lovelace:
       type: module
     - url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js
       type: module
+    - url: /local/floorplan/floorplan-card.js
+      type: module
 
 frontend:
   themes: !include_dir_merge_named themes

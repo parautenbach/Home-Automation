@@ -5,14 +5,12 @@ views:
     title: Main
     icon: mdi:home
     badges:
-      - entity: binary_sensor.motion_sensor
       - entity: binary_sensor.updater
-      - entity: binary_sensor.anybody_home
-      # - entity: binary_sensor.pieter_present
-      # - entity: binary_sensor.rouve_present
+      - entity: binary_sensor.motion_detected
       - entity: person.pieter_rautenbach
       - entity: person.rouve_rautenbach
-      - entity: sun.sun
+      - entity: binary_sensor.electricity_feed
+      - entity: binary_sensor.internet_connection
     cards:
       - type: vertical-stack
         cards:

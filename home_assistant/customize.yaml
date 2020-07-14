@@ -10,7 +10,6 @@ sensor.ambient_pressure:
 camera.security_camera:
   friendly_name: Security Camera
 binary_sensor.motion_sensor:
-  icon: mdi:motion-sensor
   friendly_name: Motion Sensor
 switch.motion_led:
   icon: mdi:motion-sensor
@@ -300,7 +299,3 @@ binary_sensor.rhs_garage_occupied:
   icon: mdi:car-connected
 sensor.sun_illuminance:
   friendly_name: Sun Illuminance
-binary_sensor.anybody_home:
-  icon: mdi:home-account
-binary_sensor.updater:
-  icon: mdi:refresh

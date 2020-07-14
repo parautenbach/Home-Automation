@@ -659,3 +659,32 @@
         title: "Test"
         # message: "Pieter is{% if states('binary_sensor.pieter_driving') == 'off' %} not{% endif %} driving."
         message: "Pieter is{{ ' not' if states('binary_sensor.pieter_driving') == 'off' }} driving."
+
+- alias: "Notify If Internet Status Changed"
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id: binary_sensor.internet_connection
+  action:
+    - service: notify.mobile_app_ceres
+      data_template:
+        title: "Home"
+        message: "The Internet is {{ 'available' if states('binary_sensor.internet_connection') else 'unavailable' }}."
+        data:
+          push:
+            thread-id: "home-internet"
+
+
+- alias: "Notify If Electricity Feed Status Changed"
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id: binary_sensor.electricity_feed
+  action:
+    - service: notify.mobile_app_ceres
+      data_template:
+        title: "Home"
+        message: "The electricity feed is {{ 'restored' if states('binary_sensor.electricity_feed') else 'cut' }}."
+        data:
+          push:
+            thread-id: "home-electricity"

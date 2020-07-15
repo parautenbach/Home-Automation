@@ -6,11 +6,47 @@ views:
     icon: mdi:home
     badges:
       - entity: binary_sensor.updater
+        style:
+          ha-state-label-badge:
+            $:
+              ha-label-badge:
+                $:
+                  .value: |
+                      ha-icon {
+                        color: {{ "var(--state-icon-active-color)" if is_state('binary_sensor.updater', 'on') }} !important;
+                      }
       - entity: binary_sensor.motion_detected
+        style:
+          ha-state-label-badge:
+            $:
+              ha-label-badge:
+                $:
+                  .value: |
+                      ha-icon {
+                        color: {{ "var(--state-icon-active-color)" if is_state('binary_sensor.motion_detected', 'on') }} !important;
+                      }
       - entity: person.pieter_rautenbach
       - entity: person.rouve_rautenbach
       - entity: binary_sensor.electricity_feed
+        style:
+          ha-state-label-badge:
+            $:
+              ha-label-badge:
+                $:
+                  .value: |
+                      ha-icon {
+                        color: {{ "var(--state-icon-active-color)" if is_state('binary_sensor.electricity_feed', 'on') }} !important;
+                      }
       - entity: binary_sensor.internet_connection
+        style:
+          ha-state-label-badge:
+            $:
+              ha-label-badge:
+                $:
+                  .value: |
+                      ha-icon {
+                        color: {{ "var(--state-icon-active-color)" if is_state('binary_sensor.internet_connection', 'on') }} !important;
+                      }
     cards:
       - type: vertical-stack
         cards:
@@ -436,7 +472,7 @@ views:
             - value: 15320
               color: '#cccccc'
             - value: 15321
-              color: '#f39c12'
+              color: var(--accent-color)
           color_thresholds_transition: hard
   - title: Entertainment
     path: entertainment

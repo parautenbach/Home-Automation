@@ -88,6 +88,8 @@
     platform: state
     entity_id: binary_sensor.motion_sensor
     to: "off"
+    for:
+      seconds: 5
   action:
     - service: switch.turn_off
       entity_id: switch.motion_led

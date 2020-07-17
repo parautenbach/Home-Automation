@@ -1098,7 +1098,7 @@ views:
         title: Security Camera
         camera_image: camera.security_camera
         entities:
-          - binary_sensor.motion_sensor
+          - binary_sensor.motion_detected
           - entity: script.security_camera_create_snapshot
             tap_action:
               action: call-service

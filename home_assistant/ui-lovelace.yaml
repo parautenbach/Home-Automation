@@ -1015,8 +1015,7 @@ views:
   - title: Internet
     path: internet
     icon: mdi:server-network
-    badges:
-      - binary_sensor.internet
+    badges: []
     cards:
       - type: horizontal-stack
         cards:

@@ -671,7 +671,7 @@
     - service: notify.mobile_app_ceres
       data_template:
         title: "Home"
-        message: "The Internet is {{ 'available' if states('binary_sensor.internet_connection') else 'unavailable' }}."
+        message: "The Internet is {{ 'available' if is_state('binary_sensor.internet_connection', 'on') else 'unavailable' }}."
         data:
           push:
             thread-id: "home-internet"
@@ -686,7 +686,7 @@
     - service: notify.mobile_app_ceres
       data_template:
         title: "Home"
-        message: "The electricity feed is {{ 'restored' if states('binary_sensor.electricity_feed') else 'cut' }}."
+        message: "The electricity feed is {{ 'restored' if is_state('binary_sensor.electricity_feed', 'on') else 'cut' }}."
         data:
           push:
             thread-id: "home-electricity"

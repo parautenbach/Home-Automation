@@ -78,4 +78,4 @@
   name: Internet
   host: www.google.com
   count: 5
-  scan_interval: 300
+  scan_interval: 120

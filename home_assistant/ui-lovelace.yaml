@@ -193,7 +193,7 @@ views:
             footer:
               type: custom:mini-graph-card
               entities:
-                - entity: sensor.current_power
+                - entity: sensor.current_power_2
               hours_to_show: 24
               hour24: true
               smoothing: true

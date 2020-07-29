@@ -82,6 +82,63 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.entertainment_off
+          - type: horizontal-stack
+            cards:
+              - type: custom:button-card
+                entity: script.hk_3380_vol_down
+                size: 20%
+                show_name: false
+                tap_action:
+                  action: call-service
+                  haptic: light
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_down
+                hold_action:
+                  repeat: 200
+                  action: call-service
+                  haptic: selection
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_down
+                double_tap_action:
+                  action: call-service
+                  haptic: medium
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_down_minus_5
+              - type: custom:button-card
+                entity: script.hk_3380_vol_up
+                size: 20%
+                show_name: false
+                tap_action:
+                  action: call-service
+                  haptic: light
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_up
+                hold_action:
+                  repeat: 200
+                  action: call-service
+                  haptic: selection
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_up
+                double_tap_action:
+                  action: call-service
+                  haptic: medium
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_up_plus_5
+              - type: custom:button-card
+                entity: script.hk_3380_dimmer
+                size: 20%
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_dimmer
           - type: media-control
             entity: media_player.living_room
           - type: horizontal-stack

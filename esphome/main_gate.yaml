@@ -18,10 +18,6 @@ captive_portal:
 # Enable logging
 logger:
 
-# Enable Home Assistant API
-api:
-  password: !secret home_assistant_api_password
-
 ota:
   password: !secret ota_password
 

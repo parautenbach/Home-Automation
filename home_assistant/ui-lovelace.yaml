@@ -82,6 +82,8 @@ views:
                   service: script.turn_on
                   service_data:
                     entity_id: script.entertainment_off
+          - type: media-control
+            entity: media_player.living_room
           - type: horizontal-stack
             title: Main Bedroom
             cards:

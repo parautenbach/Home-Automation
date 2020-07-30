@@ -466,6 +466,14 @@ entertainment_off:
     - delay: "00:00:01"
     - service: script.turn_on
       entity_id: script.hk_3380_power_off
+    - condition: state
+      entity_id: media_player.living_room
+      state: "playing"
+    # https://github.com/postlund/pyatv/blob/6018ba22851287afaf7c99dafa42de5766b97acf/pyatv/interface.py#L94
+    - service: remote.send_command
+      entity_id: remote.living_room
+      command:
+        - suspend
 
 security_camera_record_clip:
   sequence:

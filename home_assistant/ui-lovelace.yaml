@@ -51,97 +51,6 @@ views:
       - type: vertical-stack
         cards:
           - type: horizontal-stack
-            title: Entertainment
-            cards:
-              - type: custom:button-card
-                entity: script.entertainment_apple_tv_on
-                size: 20%
-                show_name: false
-                tap_action:
-                  action: call-service
-                  haptic: light
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.entertainment_apple_tv_on
-              - type: custom:button-card
-                entity: script.entertainment_satellite_on
-                size: 20%
-                show_name: false
-                tap_action:
-                  action: call-service
-                  haptic: light
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.entertainment_satellite_on
-              - type: custom:button-card
-                entity: script.entertainment_off
-                size: 20%
-                show_name: false
-                tap_action:
-                  action: call-service
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.entertainment_off
-          - type: horizontal-stack
-            cards:
-              - type: custom:button-card
-                entity: script.hk_3380_vol_down
-                size: 20%
-                show_name: false
-                tap_action:
-                  action: call-service
-                  haptic: light
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.hk_3380_vol_down
-                hold_action:
-                  repeat: 200
-                  action: call-service
-                  haptic: selection
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.hk_3380_vol_down
-                double_tap_action:
-                  action: call-service
-                  haptic: medium
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.hk_3380_vol_down_minus_5
-              - type: custom:button-card
-                entity: script.hk_3380_vol_up
-                size: 20%
-                show_name: false
-                tap_action:
-                  action: call-service
-                  haptic: light
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.hk_3380_vol_up
-                hold_action:
-                  repeat: 200
-                  action: call-service
-                  haptic: selection
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.hk_3380_vol_up
-                double_tap_action:
-                  action: call-service
-                  haptic: medium
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.hk_3380_vol_up_plus_5
-              - type: custom:button-card
-                entity: script.hk_3380_dimmer
-                size: 20%
-                show_name: false
-                tap_action:
-                  action: call-service
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.hk_3380_dimmer
-          - type: media-control
-            entity: media_player.living_room
-          - type: horizontal-stack
             title: Main Bedroom
             cards:
               # todo: light profiles
@@ -239,6 +148,97 @@ views:
               # - light.smart_bulb_4
             title: Lights
             show_header_toggle: true
+          - type: horizontal-stack
+            title: Entertainment
+            cards:
+              - type: custom:button-card
+                entity: script.entertainment_apple_tv_on
+                size: 20%
+                show_name: false
+                tap_action:
+                  action: call-service
+                  haptic: light
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.entertainment_apple_tv_on
+              - type: custom:button-card
+                entity: script.entertainment_satellite_on
+                size: 20%
+                show_name: false
+                tap_action:
+                  action: call-service
+                  haptic: light
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.entertainment_satellite_on
+              - type: custom:button-card
+                entity: script.entertainment_off
+                size: 20%
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.entertainment_off
+          - type: horizontal-stack
+            cards:
+              - type: custom:button-card
+                entity: script.hk_3380_vol_down
+                size: 20%
+                show_name: false
+                tap_action:
+                  action: call-service
+                  haptic: light
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_down
+                hold_action:
+                  repeat: 200
+                  action: call-service
+                  haptic: selection
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_down
+                double_tap_action:
+                  action: call-service
+                  haptic: medium
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_down_minus_5
+              - type: custom:button-card
+                entity: script.hk_3380_vol_up
+                size: 20%
+                show_name: false
+                tap_action:
+                  action: call-service
+                  haptic: light
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_up
+                hold_action:
+                  repeat: 200
+                  action: call-service
+                  haptic: selection
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_up
+                double_tap_action:
+                  action: call-service
+                  haptic: medium
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_vol_up_plus_5
+              - type: custom:button-card
+                entity: script.hk_3380_dimmer
+                size: 20%
+                show_name: false
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.hk_3380_dimmer
+          - type: media-control
+            entity: media_player.living_room
           - type: entities
             title: Electricity Consumption
             show_header_toggle: false
@@ -265,13 +265,6 @@ views:
                 icon: false
                 average: true
                 state: true
-          - type: entities
-            title: Clocks
-            show_header_toggle: false
-            entities:
-              - sensor.cape_town
-              - sensor.san_francisco
-              - sensor.london
       - type: vertical-stack
         cards:
           - type: horizontal-stack
@@ -495,6 +488,13 @@ views:
             line_color: '#3498db'
             show:
               extrema: true
+          - type: entities
+            title: Clocks
+            show_header_toggle: false
+            entities:
+              - sensor.cape_town
+              - sensor.san_francisco
+              - sensor.london
       - type: vertical-stack
         cards:
         - type: weather-forecast

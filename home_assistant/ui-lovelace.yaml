@@ -638,7 +638,7 @@ views:
                       - width: 20px
                 custom_fields:
                   source: >
-                    [[[ return `<ha-icon icon="mdi:numeric-1" style="color: #44739e;"></ha-icon>` ]]]
+                    [[[ return `<ha-icon icon="mdi:numeric-1" style="color: var(--paper-item-icon-color);"></ha-icon>` ]]]
                 tap_action:
                   action: call-service
                   haptic: light
@@ -666,7 +666,7 @@ views:
                       - width: 20px
                 custom_fields:
                   source: >
-                    [[[ return `<ha-icon icon="mdi:numeric-2" style="color: #44739e;"></ha-icon>` ]]]
+                    [[[ return `<ha-icon icon="mdi:numeric-2" style="color: var(--paper-item-icon-color);"></ha-icon>` ]]]
               - type: entity-button
                 entity: script.hk_3380_dimmer
                 show_name: false

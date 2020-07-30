@@ -472,8 +472,9 @@ entertainment_off:
     # https://github.com/postlund/pyatv/blob/6018ba22851287afaf7c99dafa42de5766b97acf/pyatv/interface.py#L94
     - service: remote.send_command
       entity_id: remote.living_room
-      command:
-        - suspend
+      data:
+        command:
+          - suspend
 
 security_camera_record_clip:
   sequence:

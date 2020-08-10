@@ -35,6 +35,8 @@ lovelace:
       type: module
     - url: /hacsfiles/lovelace-card-mod/card-mod.js
       type: module
+    - url: /hacsfiles/mini-media-player/mini-media-player-bundle.js
+      type: module
     - url: /local/floorplan/floorplan-card.js
       type: module
 
@@ -132,6 +134,9 @@ camera:
   - platform: local_file
     name: security_camera_last_snapshot
     file_path: /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg
+  - platform: mqtt
+    name: main_bedroom_audio_album
+    topic: shairport-sync/main-bedroom/cover
 
 notify:
   - name: family
@@ -200,3 +205,20 @@ timer:
     duration: "00:03:00"
   rhs_garage_door_timer:
     duration: "00:03:00"
+
+media_player:
+  - platform: universal
+    name: Living Room Universal
+    children:
+      - media_player.living_room
+    commands:
+      turn_on:
+        service: script.entertainment_apple_tv_on
+      turn_off:
+        service: script.entertainment_off
+      volume_up:
+        service: script.hk_3380_vol_up
+      volume_down:
+        service: script.hk_3380_vol_down
+      volume_mute:
+        service: script.hk_3380_mute

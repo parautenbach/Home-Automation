@@ -577,3 +577,19 @@ test:
         data:
           apns_headers:
             'apns-collapse-id': "{{ states('input_boolean.test') }}"
+
+main_bedroom_audio_skip_next:
+  description: "Skip forward"
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: shairport-sync/main-bedroom/remote
+        payload: nextitem
+
+main_bedroom_audio_skip_previous:
+  description: "Skip back"
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: shairport-sync/main-bedroom/remote
+        payload: previtem

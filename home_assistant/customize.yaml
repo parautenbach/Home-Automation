@@ -300,3 +300,7 @@ binary_sensor.rhs_garage_occupied:
   icon: mdi:car-connected
 sensor.sun_illuminance:
   friendly_name: Sun Illuminance
+script.main_bedroom_audio_skip_next:
+  icon: mdi:skip-next
+script.main_bedroom_audio_skip_previous:
+  icon: mdi:skip-previous

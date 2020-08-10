@@ -148,97 +148,36 @@ views:
               # - light.smart_bulb_4
             title: Lights
             show_header_toggle: true
-          - type: horizontal-stack
+          # - type: media-control
+          #   entity: media_player.living_room
+          - type: vertical-stack
             title: Entertainment
             cards:
-              - type: custom:button-card
-                entity: script.entertainment_apple_tv_on
-                size: 20%
-                show_name: false
-                tap_action:
-                  action: call-service
-                  haptic: light
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.entertainment_apple_tv_on
-              - type: custom:button-card
-                entity: script.entertainment_satellite_on
-                size: 20%
-                show_name: false
-                tap_action:
-                  action: call-service
-                  haptic: light
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.entertainment_satellite_on
-              - type: custom:button-card
-                entity: script.entertainment_off
-                size: 20%
-                show_name: false
-                tap_action:
-                  action: call-service
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.entertainment_off
-          - type: horizontal-stack
-            cards:
-              - type: custom:button-card
-                entity: script.hk_3380_vol_down
-                size: 20%
-                show_name: false
-                tap_action:
-                  action: call-service
-                  haptic: light
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.hk_3380_vol_down
-                hold_action:
-                  repeat: 200
-                  action: call-service
-                  haptic: selection
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.hk_3380_vol_down
-                double_tap_action:
-                  action: call-service
-                  haptic: medium
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.hk_3380_vol_down_minus_5
-              - type: custom:button-card
-                entity: script.hk_3380_vol_up
-                size: 20%
-                show_name: false
-                tap_action:
-                  action: call-service
-                  haptic: light
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.hk_3380_vol_up
-                hold_action:
-                  repeat: 200
-                  action: call-service
-                  haptic: selection
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.hk_3380_vol_up
-                double_tap_action:
-                  action: call-service
-                  haptic: medium
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.hk_3380_vol_up_plus_5
-              - type: custom:button-card
-                entity: script.hk_3380_dimmer
-                size: 20%
-                show_name: false
-                tap_action:
-                  action: call-service
-                  service: script.turn_on
-                  service_data:
-                    entity_id: script.hk_3380_dimmer
-          - type: media-control
-            entity: media_player.living_room
+              - type: custom:mini-media-player
+                name: Living Room
+                entity: media_player.living_room_universal
+                # entity: media_player.living_room
+                artwork: cover
+                volume_stateless: true
+                hide:
+                  power: true
+                  volume: false
+                  mute: true
+                shortcuts:
+                  columns: 4
+                  buttons:
+                    - type: script
+                      icon: mdi:apple
+                      id: script.entertainment_apple_tv_on
+                    - type: script
+                      icon: mdi:set-top-box
+                      id: script.entertainment_satellite_on
+                    - type: script
+                      icon: mdi:white-balance-sunny
+                      id: script.hk_3380_dimmer
+                    - type: script
+                      icon: mdi:power
+                      id: script.entertainment_off
           - type: entities
             title: Electricity Consumption
             show_header_toggle: false
@@ -1383,3 +1322,26 @@ views:
             title: Thor (WD Cloud Drive)
             entities:
               - sensor.thor_disk_usage
+  - title: Test
+    path: test
+    icon: mdi:test-tube
+    badges: []
+    cards:
+      - type: picture-glance
+        title: Main Bedroom
+        camera_image: camera.main_bedroom_audio_album
+        entities:
+          - entity: script.main_bedroom_audio_skip_previous
+            tap_action:
+              action: call-service
+              service: script.turn_on
+              service_data:
+                entity_id: script.main_bedroom_audio_skip_previous
+          - entity: script.main_bedroom_audio_skip_next
+            tap_action:
+              action: call-service
+              service: script.turn_on
+              service_data:
+                entity_id: script.main_bedroom_audio_skip_next
+          - entity: switch.smart_plug_1
+            icon: mdi:power

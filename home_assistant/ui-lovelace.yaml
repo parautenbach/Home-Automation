@@ -439,7 +439,7 @@ views:
         cards:
         - type: weather-forecast
           entity: weather.home
-          secondary_info_attribute: precipitation
+          secondary_info_attribute: humidity
         - type: entities
           title: Environment
           entities:

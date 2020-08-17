@@ -189,7 +189,7 @@ switch.guest_mode:
   icon: mdi:briefcase
 switch.contractor_mode:
   friendly_name: Contractor Mode
-  icon: mdi:worker
+  icon: mdi:account-hard-hat
 sensor.security_camera_last_snapshot:
   icon: mdi:clock-outline
 sensor.security_camera_last_snapshot_relative:
@@ -201,7 +201,7 @@ input_boolean.rouve_present:
 input_boolean.guest_mode:
   icon: mdi:briefcase
 input_boolean.contractor_mode:
-  icon: mdi:worker
+  icon: mdi:account-hard-hat
 light.living_room_lamp:
   friendly_name: Living Room Lamp
   icon: mdi:floor-lamp
@@ -304,3 +304,9 @@ script.main_bedroom_audio_skip_next:
   icon: mdi:skip-next
 script.main_bedroom_audio_skip_previous:
   icon: mdi:skip-previous
+script.main_bedroom_audio_volume_up:
+  icon: mdi:volume-plus
+script.main_bedroom_audio_volume_down:
+  icon: mdi:volume-minus
+switch.main_bedroom_audio_play_state:
+  friendly_name: "Main Bedroom Audio Play State"

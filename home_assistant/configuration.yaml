@@ -17,7 +17,7 @@ homeassistant:
   elevation: !secret home_elevation
   unit_system: metric
   time_zone: "Africa/Johannesburg"
-  whitelist_external_dirs:
+  allowlist_external_dirs:
     - /tmp
   customize: !include customize.yaml
 
@@ -163,6 +163,21 @@ input_boolean:
   pieter_driving:
     name: Pieter Driving
     icon: mdi:car
+  main_bedroom_audio_connected:
+    name: Main Bedroom Audio Connected
+    icon: mdi:cast
+  main_bedroom_audio_playing:
+    name: Main Bedroom Audio Playing
+    icon: mdi:play-pause
+
+input_text:
+  main_bedroom_audio_artist:
+    name: Main Bedroom Audio Artist
+  main_bedroom_audio_title:
+    name: Main Bedroom Audio Title
+  main_bedroom_audio_full_title:
+    name: Main Bedroom Audio Full Title
+    icon: mdi:music
 
 input_datetime:
   security_camera_last_snapshot:

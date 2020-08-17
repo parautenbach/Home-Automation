@@ -43,6 +43,7 @@ hk_3380_dimmer:
           - "JgBQAAABI5MTEhMSExITEhMSExMSExM3EhMTEhMSExITNxM3EzYTExITExITNxM3EjcTEhM3EzgTNxM3EhMSFBMSEzcSExMSEwAFpQABJ0kUAA0FAAAAAAAAAAA="
 
 hk_3380_vol_up:
+  mode: queued
   sequence:
     - service: broadlink.send
       data:
@@ -51,6 +52,7 @@ hk_3380_vol_up:
           - "JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA="
 
 hk_3380_vol_up_plus_5:
+  mode: queued
   sequence:
     - service: broadlink.send
       data:
@@ -63,6 +65,7 @@ hk_3380_vol_up_plus_5:
           - "JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA="
 
 hk_3380_vol_down:
+  mode: queued
   sequence:
     - service: broadlink.send
       data:
@@ -71,6 +74,7 @@ hk_3380_vol_down:
           - "JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA="
 
 hk_3380_vol_down_minus_5:
+  mode: queued
   sequence:
     - service: broadlink.send
       data:
@@ -99,6 +103,7 @@ dstv_power:
           - "JgB4AAQcCDwHKghbBysHKggqBzwHAAGSCB0HTgcZByoHGQdcBxgIGAcACkIKGgg7CigHXAcqCCoIKgc8BwABkggcCCoHPAooBxkHWwcZBxgIAAXqBx0HPAcrB1sIKgcqCCoHPAgAAZEIHQcmB0EHKgcZB1wHGAgYBwANBQ=="
 
 dstv_ch_plus:
+  mode: queued
   sequence:
     - service: broadlink.send
       data:
@@ -107,6 +112,7 @@ dstv_ch_plus:
           - "JgB6AAYcBz0IKQlaBysHKgkpCTgJAAGTCBwHUwcYBysJOgc0CBcKFgkACkMEHgU+CycJWgsmBysKJwk7CQABkAcdBy8KOgcqCTsKMAYaCRYKAAGQBx0JOgcrClkJBwkYBiwJKAc9CQABkAkbBysGQggpCTsJMQcZBxgKAA0FAAAAAAAAAAAAAAAAAAA="
 
 dstv_ch_minus:
+  mode: queued
   sequence:
     - service: broadlink.send
       data:
@@ -115,6 +121,7 @@ dstv_ch_minus:
           - "JgB4AAQbCDwIKQdcByoIKgcrBzwHAAGSCBwHWAcYCCoIOwcvBxkHGAkACkEKGAk8BysJWgkoBysIKQk7CQABkAcdCTEIPAcqCDwILgcZBxgKAAGPCRsJOwkoB1wJKQcqBykLOgcAAZIJGwguCEAIKgg7CiwIGAcZCAANBQ=="
 
 dstv_vol_up:
+  mode: queued
   sequence:
     - service: broadlink.send
       data:
@@ -123,6 +130,7 @@ dstv_vol_up:
           - "JgB4AAQcCDwHKgdcBysHKgcrBzwHAAGSCBwIGAkXByoIPAcmBxgHGQcACkIHHQc8CCoHXAcqCSkHKgc9BwABkgcdBzwIPAcqCDwHJgcYCBgHAAGSBxsLOggqB1wHKgcrByoIPAcAAZIIHAc4B0EHKgg8ByYHGQcYBwANBQ=="
 
 dstv_vol_down:
+  mode: queued
   sequence:
     - service: broadlink.send
       data:
@@ -171,6 +179,7 @@ dstv_ok:
           - "JgB4AAQdBzwIKgdcCCkJKQcqCDwHAAGSBx0HPAgYBysHPAlIBxkHGAgACkQPEgg8ByoIWwgqCCkIKgc8BwABkggcCRcHPAgqCDsISQgXCxYHAAGSCBwHPAgqB1sIKgkpByoHPAgAAZIHHQdcB0EJKAc8CEkJFwgYBwANBQ=="
 
 dstv_left:
+  mode: queued
   sequence:
     - service: broadlink.send
       data:
@@ -179,6 +188,7 @@ dstv_left:
           - "JgB4AAQcBz0GLAZdBysFKwcrBj4FAAGVBR0HNwkXCCsIPAZPBhkHGAcACkUFHQc9ByoHXAcqBysHKgg8BwABlAUdB1wHPAkpBz0HTgcYCBgHAAGSCBwIPAcqCFsIKgcqBysHPAkAAZEHHQdXB0EHKwc8B04IGAcZBwANBQ=="
 
 dstv_right:
+  mode: queued
   sequence:
     - service: broadlink.send
       data:
@@ -187,6 +197,7 @@ dstv_right:
           - "JgB4AAUbBzwIKghbByoIKgcqCDwHAAGSBx0HSgcZByoJOwc8BxkHGAgACkIHHAg8ByoIWwkpBygLKQc8CAABkgcbCiUHPAgqBzwIPAcYCBgGAAGTCRsHPAgqB1wHKggqByoIPAcAAZMGHQciB0EHKgc9BzwHGQcYCAANBQ=="
 
 dstv_up:
+  mode: queued
   sequence:
     - service: broadlink.send
       data:
@@ -195,6 +206,7 @@ dstv_up:
           - "JgB4AAQcBz0HKghbCCoHKgcrBzwHAAGSCRsIMwcYCCoHPQdSCBgHGQcACkIIHAc9ByoHXAcqCCoHKwc8BwABkggcCFcHPAgqBzwIUgcZBxgIAAO+CBwHPAcrB1sIKgcrByoHPAgAAZIHHQdTB0EHKgc9B1IIGAcZBwANBQ=="
 
 dstv_down:
+  mode: queued
   sequence:
     - service: broadlink.send
       data:
@@ -315,6 +327,7 @@ apple_tv_ok:
           - "JgCYAAABKJsRFRE5EDoROBMTEjgSORE5EDoRORI4EhQQFRAVEBUQOhIUEBURORE5ETkQFRE5EhQROBEVERUPFRAVERQRFRAUEQAFTQABJ5wRFBE5EjkQOhEUETkRORI5EToQORI4ERUQFBMTEBUROg86ERQSOBITEhQQFRAWDxUROREVEBURExEVEBUQFg8WDwAFTgABKEsRAA0F"
 
 apple_tv_up:
+  mode: queued
   sequence:
     - service: broadlink.send
       data:
@@ -323,6 +336,7 @@ apple_tv_up:
           - "JgBQAAABJ5QTExE3EzcTNxITEjYUNhM2EzYTOBE3ExMRFBISExIUNxISEjcTEhM4ERMSExMTERMSNxURExISFBEUEhMRExMSEwAFlAABJ0oTAA0FAAAAAAAAAAA="
 
 apple_tv_down:
+  mode: queued
   sequence:
     - service: broadlink.send
       data:
@@ -331,6 +345,7 @@ apple_tv_down:
           - "JgBQAAABJ5QUEhE3FDYSNxQREjgSNxI3EzcSNxQ1ExMUEBQSEhMSNxIUERMTNhM3ExMRExMSExITNxMTERQRExMTERQRExMTEgAFlAABJ0oTAA0FAAAAAAAAAAA="
 
 apple_tv_left:
+  mode: queued
   sequence:
     - service: broadlink.send
       data:
@@ -339,6 +354,7 @@ apple_tv_left:
           - "JgBQAAABKJMSExM3EzYSNxQSEjYUNhI3FDYUNRI4ExISExMSExITNhM2FBITEhI3EhQRExMSFBITNhMSEhMTExMSEhMSEhMTEgAFlAABKEkTAA0FAAAAAAAAAAA="
 
 apple_tv_right:
+  mode: queued
   sequence:
     - service: broadlink.send
       data:
@@ -593,3 +609,35 @@ main_bedroom_audio_skip_previous:
       data:
         topic: shairport-sync/main-bedroom/remote
         payload: previtem
+
+main_bedroom_audio_play:
+  description: "Play"
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: shairport-sync/main-bedroom/remote
+        payload: play
+
+main_bedroom_audio_pause:
+  description: "Pause"
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: shairport-sync/main-bedroom/remote
+        payload: pause
+
+main_bedroom_audio_volume_up:
+  description: "Volume up"
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: shairport-sync/main-bedroom/remote
+        payload: volumeup
+
+main_bedroom_audio_volume_down:
+  description: "Volume down"
+  sequence:
+    - service: mqtt.publish
+      data:
+        topic: shairport-sync/main-bedroom/remote
+        payload: volumedown

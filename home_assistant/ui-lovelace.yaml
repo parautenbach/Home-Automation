@@ -148,21 +148,22 @@ views:
               # - light.smart_bulb_4
             title: Lights
             show_header_toggle: true
-          # - type: media-control
-          #   entity: media_player.living_room
           - type: vertical-stack
             title: Entertainment
             cards:
               - type: custom:mini-media-player
                 name: Living Room
                 entity: media_player.living_room_universal
-                # entity: media_player.living_room
                 artwork: cover
                 volume_stateless: true
                 hide:
                   power: true
                   volume: false
                   mute: true
+                idle_view:
+                  when_idle: false
+                  when_paused: false
+                  when_standby: false
                 shortcuts:
                   columns: 4
                   buttons:
@@ -438,6 +439,7 @@ views:
         cards:
         - type: weather-forecast
           entity: weather.home
+          secondary_info_attribute: precipitation
         - type: entities
           title: Environment
           entities:
@@ -1327,21 +1329,111 @@ views:
     icon: mdi:test-tube
     badges: []
     cards:
-      - type: picture-glance
-        title: Main Bedroom
-        camera_image: camera.main_bedroom_audio_album
-        entities:
-          - entity: script.main_bedroom_audio_skip_previous
-            tap_action:
-              action: call-service
-              service: script.turn_on
-              service_data:
-                entity_id: script.main_bedroom_audio_skip_previous
-          - entity: script.main_bedroom_audio_skip_next
-            tap_action:
-              action: call-service
-              service: script.turn_on
-              service_data:
-                entity_id: script.main_bedroom_audio_skip_next
-          - entity: switch.smart_plug_1
-            icon: mdi:power
+      - type: vertical-stack
+        cards:
+          - type: picture-glance
+            title: Main Bedroom
+            # image: /local/camera.security_camera_last.jpg
+            camera_image: camera.main_bedroom_audio_album
+            entities:
+              # - entity: binary_sensor.main_bedroom_audio_connected
+              - entity: script.main_bedroom_audio_volume_down
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.main_bedroom_audio_volume_down
+              - entity: script.main_bedroom_audio_volume_up
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.main_bedroom_audio_volume_up
+              - entity: script.main_bedroom_audio_skip_previous
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.main_bedroom_audio_skip_previous
+              - entity: binary_sensor.main_bedroom_audio_playing
+                tap_action:
+                  action: call-service
+                  service: switch.toggle
+                  service_data:
+                    entity_id: switch.main_bedroom_audio_play_state
+              - entity: script.main_bedroom_audio_skip_next
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  service_data:
+                    entity_id: script.main_bedroom_audio_skip_next
+              - entity: switch.smart_plug_1
+                icon: mdi:power
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.main_bedroom_audio_playing
+                state: "on"
+            card:
+              type: entity
+              entity: input_text.main_bedroom_audio_full_title
+              name: Now playing
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.main_bedroom_audio_playing
+                state: "off"
+            card:
+              type: entity
+              entity: input_text.main_bedroom_audio_full_title
+              name: Paused
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: custom:button-card
+                entity: camera.main_bedroom_audio_album
+                show_live_stream: true
+                aspect_ratio: 1.1
+                show_name: false
+                styles:
+                  card:
+                    - height: 270px
+                    - width: 300px
+                    - padding: 0
+                    - margin: 0
+                  icon:
+                    - height: 100%
+                    - width: 100%
+                    - padding: 0
+                    - margin: 0
+                  img_cell:
+                    - padding: 0
+                    - margin: 0
+                grid:
+                  - grid-template-areas: '"i"'
+                tap_action:
+                  action: none
+                double_tap_action:
+                  action: none
+                hold_action:
+                  action: none
+              - type: custom:button-card
+                color_type: blank-card
+                styles:
+                  card:
+                    - height: 270px
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.main_bedroom_audio_playing
+                state: "on"
+            card:
+              type: entity
+              entity: input_text.main_bedroom_audio_full_title
+              name: Now playing
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.main_bedroom_audio_playing
+                state: "off"
+            card:
+              type: entity
+              entity: input_text.main_bedroom_audio_full_title
+              name: Paused

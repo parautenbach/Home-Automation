@@ -23,6 +23,8 @@ homeassistant:
 
 logger:
   default: warning
+  logs:
+    custom_components.shairport_sync: debug
 
 lovelace:
   mode: yaml
@@ -53,7 +55,7 @@ recorder:
   # SQLite does not recover the disk space after you have done this, so it is necessary to ‘vacuum’ the database. Simply issue the following command:
   # vacuum;
   auto_purge: true
-  purge_keep_days: 2
+  purge_keep_days: 3
 
 tts:
   - platform: google_translate
@@ -237,3 +239,20 @@ media_player:
         service: script.hk_3380_vol_down
       volume_mute:
         service: script.hk_3380_mute
+  - platform: shairport_sync
+    name: Main Bedroom
+    remote:
+      topic: shairport-sync/main-bedroom/remote
+    states:
+      playing:
+        topic: shairport-sync/main-bedroom/play_start
+      paused:
+        topic: shairport-sync/main-bedroom/play_end
+    metadata:
+      artist:
+        topic: shairport-sync/main-bedroom/artist
+      title:
+        topic: shairport-sync/main-bedroom/title
+      artwork:
+        topic: shairport-sync/main-bedroom/cover
+

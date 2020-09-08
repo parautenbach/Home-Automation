@@ -1,0 +1,40 @@
+title: Floorplan
+path: floorplan
+panel: true
+icon: mdi:floor-plan
+badges: []
+cards:
+  - type: picture-elements
+    image: /local/floorplan.svg
+    elements:
+      - type: state-icon
+        entity: switch.living_room_lamp
+        tap_action:
+          action: toggle
+        style:
+          top: 42%
+          left: 7%
+      - type: state-icon
+        entity: light.smart_bulb_1
+        tap_action:
+          action: toggle
+        style:
+          top: 54.5%
+          left: 68%
+      - type: state-icon
+        entity: light.smart_bulb_2
+        tap_action:
+          action: toggle
+        style:
+          top: 60.5%
+          left: 68%
+      - type: state-icon
+        entity: binary_sensor.lhs_garage_occupied
+        style:
+          top: 15%
+          left: 68%
+      - type: state-icon
+        entity: binary_sensor.rhs_garage_occupied
+        style:
+          top: 15%
+          left: 56%

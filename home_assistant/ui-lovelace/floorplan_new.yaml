@@ -1,0 +1,52 @@
+title: Floorplan New
+path: floorplan_new
+panel: true
+icon: mdi:floor-plan
+badges: []
+cards:
+  - title: Floorplan
+    type: custom:floorplan-card
+    config:
+      image: /local/floorplan/floorplan.svg
+      log_level: error
+      rules:
+        - entities:
+            - binary_sensor.gate_status
+            - binary_sensor.lhs_garage_door_status
+            - binary_sensor.rhs_garage_door_status
+            - binary_sensor.lhs_garage_occupied
+            - binary_sensor.rhs_garage_occupied
+            - binary_sensor.motion_sensor
+          states:
+            - state: 'on'
+              class: 'binary-sensor-on'
+            - state: 'off'
+              class: 'binary-sensor-off'
+        - action:
+            service: light.toggle
+          element: light.living_room_lamp
+          entity: light.living_room_lamp
+          states:
+            - state: 'on'
+              class: 'light-on'
+            - state: 'off'
+              class: 'light-off'
+        - action:
+            service: light.toggle
+          element: light.smart_bulb_1
+          entity: light.smart_bulb_1
+          states:
+            - state: 'on'
+              class: 'light-on'
+            - state: 'off'
+              class: 'light-off'
+        - action:
+            service: light.toggle
+          element: light.smart_bulb_2
+          entity: light.smart_bulb_2
+          states:
+            - state: 'on'
+              class: 'light-on'
+            - state: 'off'
+              class: 'light-off'
+      stylesheet: /local/floorplan/floorplan.css

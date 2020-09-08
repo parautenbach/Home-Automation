@@ -1,0 +1,77 @@
+title: Internet
+path: internet
+icon: mdi:server-network
+badges: []
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: gauge
+        entity: sensor.internet_speed_in
+        min: 0
+        max: 10
+        severity:
+          green: 0
+          yellow: 4
+          red: 8
+      - type: gauge
+        entity: sensor.internet_speed_out
+        min: 0
+        max: 5
+        severity:
+          green: 0
+          yellow: 2
+          red: 4
+  - type: custom:mini-graph-card
+    name: Traffic
+    icon: mdi:pulse
+    show:
+      state: false
+      icon: false
+      extrema: true
+    entities:
+      - entity: sensor.internet_speed_in
+      - entity: sensor.internet_speed_out
+    hours_to_show: 24
+    hour24: true
+    smoothing: true
+    points_per_hour: 12  # every 5 min
+    aggregate_func: max
+    line_width: 2
+  - type: horizontal-stack
+    cards:
+      - type: glance
+        title: Today
+        show_name: false
+        columns: 2
+        entities:
+          - entity: sensor.daily_internet_usage_in
+            name: Today
+          - entity: sensor.daily_internet_usage_out
+            name: Today
+      - type: glance
+        title: This Month
+        show_name: false
+        columns: 2
+        entities:
+          - entity: sensor.monthly_internet_usage_in
+            name: This Month
+          - entity: sensor.monthly_internet_usage_out
+            name: This Month
+  - type: entities
+    show_header_toggle: false
+    entities:
+      - sensor.internet_round_trip_time_avg
+      - sensor.internet_round_trip_time_mdev
+      - sensor.internet_packet_loss
+  - type: custom:mini-graph-card
+    name: Latency
+    entities:
+      - entity: sensor.internet_round_trip_time_avg
+    hours_to_show: 24
+    hour24: true
+    smoothing: true
+    points_per_hour: 12  # every 5 min
+    line_width: 2
+    show:
+      extrema: true
+      average: true

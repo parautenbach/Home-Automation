@@ -1,0 +1,79 @@
+title: Devices
+path: devices
+icon: mdi:devices
+badges: []
+cards:
+  - type: vertical-stack
+    cards:
+    - type: glance
+      entities:
+        - entity: sensor.pieter_activity_type
+          show_last_changed: true
+        - entity: sensor.pieter_activity_confidence
+          show_last_changed: true
+        - entity: binary_sensor.pieter_driving
+          show_last_changed: true
+    - type: entities
+      entities:
+        - device_tracker.ceres
+        - sensor.ceres_battery_level
+        - sensor.ceres_battery_state
+      title: Ceres
+      show_header_toggle: false
+    - type: entities
+      entities:
+        - device_tracker.rouve
+        - sensor.rouve_battery_level
+        - sensor.rouve_battery_state
+      title: Rouvé
+      show_header_toggle: false
+  - type: vertical-stack
+    cards:
+      - type: map
+        entities:
+          - device_tracker.ceres
+          - device_tracker.rouve
+      - type: history-graph
+        title: Lights
+        hours_to_show: 24
+        entities:
+          - entity: light.living_room_lamp
+            name: Living Room
+          - entity: light.smart_bulb_1
+            name: Pieter's Side
+          - entity: light.smart_bulb_2
+            name: Rouvé's Side
+  - type: vertical-stack
+    cards:
+      - type: custom:mini-graph-card
+        name: Server Load
+        entities:
+          - entity: sensor.load_1m
+          - entity: sensor.load_5m
+          - entity: sensor.load_15m
+        hours_to_show: 24
+        hour24: true
+        smoothing: true
+        points_per_hour: 12  # every 5 min
+        line_width: 2
+        show:
+          extrema: true
+          average: true
+      - type: entities
+        entities:
+          - sensor.disk_use_percent
+          - sensor.memory_use_percent
+          - sensor.processor_use
+          - sensor.load_1m
+          - sensor.load_5m
+          - sensor.load_15m
+          - sensor.server_cpu_temp
+          - sensor.network_throughput_in_wlan0
+          - sensor.network_throughput_out_wlan0
+          - sensor.last_boot
+        title: Server
+        show_header_toggle: false
+      - type: entities
+        title: Thor (WD Cloud Drive)
+        entities:
+          - sensor.thor_disk_usage

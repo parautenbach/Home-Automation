@@ -1,0 +1,486 @@
+path: main
+title: Main
+icon: mdi:home
+badges:
+  - entity: binary_sensor.updater
+    style:
+      ha-state-label-badge:
+        $:
+          ha-label-badge:
+            $:
+              .value: |
+                  ha-icon {
+                    color: {{ "var(--state-icon-active-color)" if is_state('binary_sensor.updater', 'on') }} !important;
+                  }
+  - entity: binary_sensor.motion_detected
+    style:
+      ha-state-label-badge:
+        $:
+          ha-label-badge:
+            $:
+              .value: |
+                  ha-icon {
+                    color: {{ "var(--state-icon-active-color)" if is_state('binary_sensor.motion_detected', 'on') }} !important;
+                  }
+  - entity: person.pieter_rautenbach
+  - entity: person.rouve_rautenbach
+  - entity: binary_sensor.electricity_feed
+    style:
+      ha-state-label-badge:
+        $:
+          ha-label-badge:
+            $:
+              .value: |
+                  ha-icon {
+                    color: {{ "var(--state-icon-active-color)" if is_state('binary_sensor.electricity_feed', 'on') }} !important;
+                  }
+  - entity: binary_sensor.internet_connection
+    style:
+      ha-state-label-badge:
+        $:
+          ha-label-badge:
+            $:
+              .value: |
+                  ha-icon {
+                    color: {{ "var(--state-icon-active-color)" if is_state('binary_sensor.internet_connection', 'on') }} !important;
+                  }
+cards:
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        title: Main Bedroom
+        cards:
+          # todo: light profiles
+          - type: custom:button-card
+            name: Pieter
+            entity: light.smart_bulb_1
+            size: 20%
+            color: var(--button-card-light-color)
+            show_label: true
+            label: >
+              [[[
+                var b = states['light.smart_bulb_1'].attributes.brightness;
+                return parseInt(b ? b/2.55 : '0') + '%';
+              ]]]
+            styles:
+              name:
+                - color: var(--paper-item-icon-color)
+              label:
+                - color: var(--paper-item-icon-color)
+                - padding-left: 1ex
+              card:
+                - font-size: 12px
+              grid:
+                - grid-template-areas: '"l" "i" "n"'
+                - grid-template-rows: min-content 1fr min-content
+                - grid-template-columns: 1fr
+            tap_action:
+              action: toggle
+              haptic: light
+            hold_action:
+              action: more-info
+              haptic: selection
+          - type: custom:button-card
+            name: Tivoli
+            entity: switch.smart_plug_1
+            size: 20%
+            show_label: true
+            # the label plus the label colour is a hack to create a phantom space
+            label: >
+              [[[
+                return '_';
+              ]]]
+            styles:
+              name:
+                - color: var(--paper-item-icon-color)
+              label:
+                - color: var(--primary-background-color)
+              card:
+                - font-size: 12px
+              grid:
+                - grid-template-areas: '"l" "i" "n"'
+                - grid-template-rows: min-content 1fr min-content
+                - grid-template-columns: 1fr
+            tap_action:
+              action: toggle
+              haptic: light
+            hold_action:
+              action: more-info
+              haptic: selection
+          - type: custom:button-card
+            name: Rouvé
+            entity: light.smart_bulb_2
+            size: 20%
+            color: var(--button-card-light-color)
+            show_label: true
+            label: >
+              [[[
+                var b = states['light.smart_bulb_2'].attributes.brightness;
+                return parseInt(b ? b/2.55 : '0') + '%';
+              ]]]
+            styles:
+              name:
+                - color: var(--paper-item-icon-color)
+              label:
+                - color: var(--paper-item-icon-color)
+                - padding-left: 1ex
+              card:
+                - font-size: 12px
+              grid:
+                - grid-template-areas: '"l" "i" "n"'
+                - grid-template-rows: min-content 1fr min-content
+                - grid-template-columns: 1fr
+            tap_action:
+              action: toggle
+              haptic: light
+            hold_action:
+              action: more-info
+              haptic: selection
+      - type: entities
+        entities:
+          - entity: switch.living_room_lamp
+            state_color: true
+          - switch.shelly1_b961d2_relay_0
+          # - light.smart_bulb_3
+          # - light.smart_bulb_4
+        title: Lights
+        show_header_toggle: true
+      - type: vertical-stack
+        title: Entertainment
+        cards:
+          - type: custom:mini-media-player
+            name: Living Room
+            entity: media_player.living_room_universal
+            artwork: cover
+            volume_stateless: true
+            hide:
+              power: true
+              volume: false
+              mute: true
+            idle_view:
+              when_idle: false
+              when_paused: false
+              when_standby: false
+            shortcuts:
+              columns: 4
+              buttons:
+                - type: script
+                  icon: mdi:apple
+                  id: script.entertainment_apple_tv_on
+                - type: script
+                  icon: mdi:set-top-box
+                  id: script.entertainment_satellite_on
+                - type: script
+                  icon: mdi:white-balance-sunny
+                  id: script.hk_3380_dimmer
+                - type: script
+                  icon: mdi:power
+                  id: script.entertainment_off
+          - type: custom:mini-media-player
+            name: Main Bedroom
+            entity: media_player.main_bedroom
+            artwork: cover
+            volume_stateless: true
+            hide:
+              power: true
+              volume: false
+              mute: true
+            idle_view:
+              when_idle: false
+              when_paused: false
+              when_standby: false
+      - type: entities
+        title: Electricity Consumption
+        show_header_toggle: false
+        entities:
+          - entity: sensor.daily_power_consumption
+            name: Today
+            icon: mdi:power-plug
+          - entity: sensor.monthly_power_consumption
+            name: This Month
+            icon: mdi:power-plug
+        footer:
+          type: custom:mini-graph-card
+          entities:
+            - entity: sensor.current_power_2
+          hours_to_show: 24
+          hour24: true
+          smoothing: true
+          points_per_hour: 12  # every 5 min
+          line_width: 2
+          line_color: '#e74c3c'
+          show:
+            extrema: true
+            name: false
+            icon: false
+            average: true
+            state: true
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        title: "Entry & Access"
+        cards:
+          - type: custom:button-card
+            name: Rouvé
+            entity: cover.lhs_garage_door
+            size: 20%
+            show_name: true
+            color_type: icon
+            color: var(--paper-item-icon-color)
+            state:
+              - operator: template
+                value: >
+                  [[[
+                    return states['binary_sensor.lhs_garage_occupied'].state == 'on'
+                  ]]]
+                color: var(--paper-item-icon-active-color)
+              - operator: template
+                value: >
+                  [[[
+                    return states['binary_sensor.lhs_garage_occupied'].state == 'off'
+                  ]]]
+                color: var(--paper-item-icon-color)
+            custom_fields:
+              t:
+                card:
+                  type: custom:button-card
+                  name: Timer
+                  entity: timer.lhs_garage_door_timer
+                  show_name: false
+                  show_icon: false
+                  show_state: true
+                  styles:
+                    card:
+                      - font-size: 12px
+                      - box-shadow: none
+                    state:
+                      - margin-top: -1ex
+                      - margin-bottom: -1ex
+                      - color: >
+                          [[[
+                            if (states['timer.lhs_garage_door_timer'].state == 'idle')
+                              return "var(--paper-item-icon-color)";
+                            else
+                              return "red";
+                          ]]]
+            styles:
+              name:
+                - color: var(--paper-item-icon-color)
+              card:
+                - font-size: 12px
+              grid:
+                - grid-template-areas: '"t" "i" "n"'
+                - grid-template-rows: min-content 1fr min-content
+                - grid-template-columns: 1fr
+            tap_action:
+              action: toggle
+              haptic: light
+            double_tap_action:
+              action: call-service
+              haptic: medium
+              service: script.close_garage_door_and_main_gate
+              service_data:
+                garage_door: "[[[ return entity.entity_id; ]]]"
+            hold_action:
+              action: more-info
+              haptic: selection
+          - type: custom:button-card
+            name: Gate
+            entity: cover.main_gate
+            size: 20%
+            show_name: true
+            color_type: icon
+            color: var(--paper-item-icon-color)
+            custom_fields:
+              t:
+                card:
+                  type: custom:button-card
+                  name: Timer
+                  entity: timer.main_gate_timer
+                  show_name: false
+                  show_icon: false
+                  show_state: true
+                  styles:
+                    card:
+                      - font-size: 12px
+                      - box-shadow: none
+                    state:
+                      - margin-top: -1ex
+                      - margin-bottom: -1ex
+                      - color: >
+                          [[[
+                            if (states['timer.main_gate_timer'].state == 'idle')
+                              return "var(--paper-item-icon-color)";
+                            else
+                              return "red";
+                          ]]]
+            styles:
+              name:
+                - color: var(--paper-item-icon-color)
+              card:
+                - font-size: 12px
+              grid:
+                - grid-template-areas: '"t" "i" "n"'
+                - grid-template-rows: min-content 1fr min-content
+                - grid-template-columns: 1fr
+            tap_action:
+              action: toggle
+              haptic: light
+            double_tap_action:
+              action: call-service
+              haptic: medium
+              service: script.turn_on
+              service_data:
+                entity_id: script.open_pedestrian_gap
+            hold_action:
+              action: more-info
+              haptic: selection
+          - type: custom:button-card
+            name: Pieter
+            entity: cover.rhs_garage_door
+            size: 20%
+            show_name: true
+            color_type: icon
+            color: var(--paper-item-icon-color)
+            state:
+              - operator: template
+                value: >
+                  [[[
+                    return states['binary_sensor.rhs_garage_occupied'].state == 'on'
+                  ]]]
+                color: var(--paper-item-icon-active-color)
+              - operator: template
+                value: >
+                  [[[
+                    return states['binary_sensor.rhs_garage_occupied'].state == 'off'
+                  ]]]
+                color: var(--paper-item-icon-color)
+            custom_fields:
+              t:
+                card:
+                  type: custom:button-card
+                  name: Timer
+                  entity: timer.rhs_garage_door_timer
+                  show_name: false
+                  show_icon: false
+                  show_state: true
+                  styles:
+                    card:
+                      - font-size: 12px
+                      - box-shadow: none
+                    state:
+                      - margin-top: -1ex
+                      - margin-bottom: -1ex
+                      - color: >
+                          [[[
+                            if (states['timer.rhs_garage_door_timer'].state == 'idle')
+                              return "var(--paper-item-icon-color)";
+                            else
+                              return "red";
+                          ]]]
+            styles:
+              name:
+                - color: var(--paper-item-icon-color)
+              card:
+                - font-size: 12px
+              grid:
+                - grid-template-areas: '"t" "i" "n"'
+                - grid-template-rows: min-content 1fr min-content
+                - grid-template-columns: 1fr
+            tap_action:
+              action: toggle
+              haptic: light
+            double_tap_action:
+              action: call-service
+              haptic: medium
+              service: script.close_garage_door_and_main_gate
+              service_data:
+                # https://community.home-assistant.io/t/problem-passing-variable-from-automation-to-script/134989/5
+                # https://community.home-assistant.io/t/lovelace-button-card/65981/1063
+                # https://community.home-assistant.io/t/tap-action-script-variable/124023
+                # https://community.home-assistant.io/t/passing-a-variable-to-a-script-in-lovelace-with-entity-button/155935
+                # https://community.home-assistant.io/t/passing-variable-from-entity-button-script-shell-command/178570
+                garage_door: "[[[ return entity.entity_id; ]]]"
+            hold_action:
+              action: more-info
+              haptic: selection
+      - type: history-graph
+        title: Who's Home?
+        hours_to_show: 24
+        entities:
+          - entity: binary_sensor.anybody_home
+            name: Anybody
+          - entity: binary_sensor.pieter_present
+            name: Pieter
+          - entity: binary_sensor.rouve_present
+            name: Rouvé
+          - entity: binary_sensor.contractor_mode
+            name: Contractors
+          - entity: switch.guest_mode
+            name: Guests
+      - type: entities
+        title: Special Modes
+        entities:
+          - switch.guest_mode
+          - switch.contractor_mode
+        show_header_toggle: false
+      - type: custom:mini-graph-card
+        name: Driving – Takealot HQ to Home
+        # name: Current Travel Time
+        icon: mdi:briefcase-clock
+        entities:
+          - entity: sensor.google_travel_time_driving
+        hours_to_show: 24
+        hour24: true
+        smoothing: true
+        points_per_hour: 4  # every 15 min
+        line_width: 2
+        line_color: '#3498db'
+        show:
+          extrema: true
+      - type: entities
+        title: Clocks
+        show_header_toggle: false
+        entities:
+          - sensor.cape_town
+          - sensor.san_francisco
+          - sensor.london
+  - type: vertical-stack
+    cards:
+    - type: weather-forecast
+      entity: weather.home
+      secondary_info_attribute: humidity
+    - type: entities
+      title: Environment
+      entities:
+        - sensor.ambient_temperature
+        - sensor.ambient_humidity
+        - sensor.ambient_pressure
+      show_header_toggle: false
+    - type: custom:mini-graph-card
+      entities:
+        - entity: sensor.ambient_temperature
+      hours_to_show: 24
+      hour24: true
+      smoothing: true
+      points_per_hour: 2  # every 30 min
+      line_width: 2
+      show:
+        extrema: true
+    - type: custom:mini-graph-card
+      entities:
+        - entity: sensor.sun_illuminance
+      hours_to_show: 24
+      hour24: true
+      smoothing: true
+      points_per_hour: 12  # every 5 min
+      line_width: 2
+      show:
+        extrema: true
+      color_thresholds:
+        # needs to be the same as the automation's threshold to make sense
+        - value: 15320
+          color: '#cccccc'
+        - value: 15321
+          color: var(--accent-color)
+      color_thresholds_transition: hard

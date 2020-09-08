@@ -3,3 +3,4 @@ home_assistant/secrets.yaml
 esphome/electricity_pulse_counter/partitions.csv
 esphome/garage_doors/partitions.csv
 home_assistant/floorplan/floorplan.bak.svg
+scripts/sync_to_server.sh

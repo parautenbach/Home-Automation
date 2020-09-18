@@ -136,9 +136,6 @@ camera:
   - platform: local_file
     name: security_camera_last_snapshot
     file_path: /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg
-  - platform: mqtt
-    name: main_bedroom_audio_album
-    topic: shairport-sync/main-bedroom/cover
 
 notify:
   - name: family
@@ -165,21 +162,6 @@ input_boolean:
   pieter_driving:
     name: Pieter Driving
     icon: mdi:car
-  main_bedroom_audio_connected:
-    name: Main Bedroom Audio Connected
-    icon: mdi:cast
-  main_bedroom_audio_playing:
-    name: Main Bedroom Audio Playing
-    icon: mdi:play-pause
-
-input_text:
-  main_bedroom_audio_artist:
-    name: Main Bedroom Audio Artist
-  main_bedroom_audio_title:
-    name: Main Bedroom Audio Title
-  main_bedroom_audio_full_title:
-    name: Main Bedroom Audio Full Title
-    icon: mdi:music
 
 input_datetime:
   security_camera_last_snapshot:
@@ -241,18 +223,4 @@ media_player:
         service: script.hk_3380_mute
   - platform: shairport_sync
     name: Main Bedroom
-    remote:
-      topic: shairport-sync/main-bedroom/remote
-    states:
-      playing:
-        topic: shairport-sync/main-bedroom/play_start
-      paused:
-        topic: shairport-sync/main-bedroom/play_end
-    metadata:
-      artist:
-        topic: shairport-sync/main-bedroom/artist
-      title:
-        topic: shairport-sync/main-bedroom/title
-      artwork:
-        topic: shairport-sync/main-bedroom/cover
-
+    topic: shairport-sync/main-bedroom

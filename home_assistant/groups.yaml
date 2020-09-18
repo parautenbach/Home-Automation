@@ -114,19 +114,3 @@ family:
   entities:
     - person.pieter_rautenbach
     - person.rouve_rautenbach
-
-main_bedroom_audio:
-  name: Main Bedroom Audio
-  entities:
-    - binary_sensor.main_bedroom_audio_connected
-    - binary_sensor.main_bedroom_audio_playing
-    - input_boolean.main_bedroom_audio_connected
-    - input_boolean.main_bedroom_audio_playing
-    - input_text.main_bedroom_audio_artist
-    - input_text.main_bedroom_audio_title
-    - input_text.main_bedroom_audio_full_title
-    - script.main_bedroom_audio_play
-    - script.main_bedroom_audio_pause
-    - script.main_bedroom_audio_volume_up
-    - script.main_bedroom_audio_volume_down
-    - switch.main_bedroom_audio_play_state

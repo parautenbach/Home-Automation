@@ -212,10 +212,10 @@ light.smart_bulb_2:
   friendly_name: Rouvé's Bedside Lamp
   icon: mdi:lamp
 light.smart_bulb_3:
-  friendly_name: Dining Room
+  friendly_name: Dining Room Light
   icon: mdi:dome-light
 light.smart_bulb_4:
-  friendly_name: Music Room
+  friendly_name: Music Room Light
   icon: mdi:dome-light
 script.smart_bulb_1_soft_yellow:
   icon: mdi:lightbulb-on-outline

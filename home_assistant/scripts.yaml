@@ -4,419 +4,419 @@ noop:
 
 hk_3380_power_off:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBQAAABIZQTEhMSExITEhMSExITExI3ExITExMSExITNxM2EzcTEhM3EzcTNxM3EzYTExITEzcTExITEhMTExMSEzcTNxITEgAFpgABJ0kTAA0FAAAAAAAAAAA="
+          - b64:JgBQAAABIZQTEhMSExITEhMSExITExI3ExITExMSExITNxM2EzcTEhM3EzcTNxM3EzYTExITEzcTExITEhMTExMSEzcTNxITEgAFpgABJ0kTAA0FAAAAAAAAAAA=
 
 hk_3380_power_on:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBQAAABIZMTExITExITEhMSExITEhM3ExITEhMTEhMSNxM3EzcTEhMSExITExITExITEhM3EzcTNxM3EzcTNxM3EzcTEhMSEwAFqgABJEcUAA0FAAAAAAAAAAA="
+          - b64:JgBQAAABIZMTExITExITEhMSExITEhM3ExITEhMTEhMSNxM3EzcTEhMSExITExITExITEhM3EzcTNxM3EzcTNxM3EzcTEhMSEwAFqgABJEcUAA0FAAAAAAAAAAA=
 
 hk_3380_vid1:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBQAAABIpMTExITExITEhMSExITEhM3ExITEhMTEhMSNxM3EzcTEhMSEzcTEhM3ExITEhM3EzgTNxITEzcSFBI3EzcTEhMSEwAFpQABKEkTAA0FAAAAAAAAAAA="
+          - b64:JgBQAAABIpMTExITExITEhMSExITEhM3ExITEhMTEhMSNxM3EzcTEhMSEzcTEhM3ExITEhM3EzgTNxITEzcSFBI3EzcTEhMSEwAFpQABKEkTAA0FAAAAAAAAAAA=
 
 hk_3380_vid2:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBQAAABIpQTEhMSExITEhMSExMSExM2ExMSExMSExITNxM3EjcTExI3EzcTEhM3ExITEhM3EzgTEhMSEzcTExM3EzYTExITEwAFpgABJkoSAA0FAAAAAAAAAAA="
+          - b64:JgBQAAABIpQTEhMSExITEhMSExMSExM2ExMSExMSExITNxM3EjcTExI3EzcTEhM3ExITEhM3EzgTEhMSEzcTExM3EzYTExITEwAFpgABJkoSAA0FAAAAAAAAAAA=
 
 hk_3380_dimmer:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBQAAABI5MTEhMSExITEhMSExMSExM3EhMTEhMSExITNxM3EzYTExITExITNxM3EjcTEhM3EzgTNxM3EhMSFBMSEzcSExMSEwAFpQABJ0kUAA0FAAAAAAAAAAA="
+          - b64:JgBQAAABI5MTEhMSExITEhMSExMSExM3EhMTEhMSExITNxM3EzYTExITExITNxM3EjcTEhM3EzgTNxM3EhMSFBMSEzcSExMSEwAFpQABJ0kUAA0FAAAAAAAAAAA=
 
 hk_3380_vol_up:
   mode: queued
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA="
+          - b64:JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA=
 
 hk_3380_vol_up_plus_5:
   mode: queued
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA="
-          - "JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA="
-          - "JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA="
-          - "JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA="
-          - "JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA="
+          - b64:JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA=
+          - b64:JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA=
+          - b64:JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA=
+          - b64:JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA=
+          - b64:JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA=
 
 hk_3380_vol_down:
   mode: queued
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA="
+          - b64:JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA=
 
 hk_3380_vol_down_minus_5:
   mode: queued
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA="
-          - "JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA="
-          - "JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA="
-          - "JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA="
-          - "JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA="
+          - b64:JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA=
+          - b64:JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA=
+          - b64:JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA=
+          - b64:JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA=
+          - b64:JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA=
 
 hk_3380_mute:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBQAAABI5ITEhMTEhMTEhMSExITEhM3ExITEhMSExMSNxM3EzcTEhM3ExITEhMSExMSExI3EzgTEhM3EzcTOBI3EzcTEhMTEgAFpgABJ0oSAA0FAAAAAAAAAAA="
+          - b64:JgBQAAABI5ITEhMTEhMTEhMSExITEhM3ExITEhMSExMSNxM3EzcTEhM3ExITEhMSExMSExI3EzgTEhM3EzcTOBI3EzcTEhMTEgAFpgABJ0oSAA0FAAAAAAAAAAA=
 
 dstv_power:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAQcCDwHKghbBysHKggqBzwHAAGSCB0HTgcZByoHGQdcBxgIGAcACkIKGgg7CigHXAcqCCoIKgc8BwABkggcCCoHPAooBxkHWwcZBxgIAAXqBx0HPAcrB1sIKgcqCCoHPAgAAZEIHQcmB0EHKgcZB1wHGAgYBwANBQ=="
+          - b64:JgB4AAQcCDwHKghbBysHKggqBzwHAAGSCB0HTgcZByoHGQdcBxgIGAcACkIKGgg7CigHXAcqCCoIKgc8BwABkggcCCoHPAooBxkHWwcZBxgIAAXqBx0HPAcrB1sIKgcqCCoHPAgAAZEIHQcmB0EHKgcZB1wHGAgYBwANBQ==
 
 dstv_ch_plus:
   mode: queued
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB6AAYcBz0IKQlaBysHKgkpCTgJAAGTCBwHUwcYBysJOgc0CBcKFgkACkMEHgU+CycJWgsmBysKJwk7CQABkAcdBy8KOgcqCTsKMAYaCRYKAAGQBx0JOgcrClkJBwkYBiwJKAc9CQABkAkbBysGQggpCTsJMQcZBxgKAA0FAAAAAAAAAAAAAAAAAAA="
+          - b64:JgB6AAYcBz0IKQlaBysHKgkpCTgJAAGTCBwHUwcYBysJOgc0CBcKFgkACkMEHgU+CycJWgsmBysKJwk7CQABkAcdBy8KOgcqCTsKMAYaCRYKAAGQBx0JOgcrClkJBwkYBiwJKAc9CQABkAkbBysGQggpCTsJMQcZBxgKAA0FAAAAAAAAAAAAAAAAAAA=
 
 dstv_ch_minus:
   mode: queued
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAQbCDwIKQdcByoIKgcrBzwHAAGSCBwHWAcYCCoIOwcvBxkHGAkACkEKGAk8BysJWgkoBysIKQk7CQABkAcdCTEIPAcqCDwILgcZBxgKAAGPCRsJOwkoB1wJKQcqBykLOgcAAZIJGwguCEAIKgg7CiwIGAcZCAANBQ=="
+          - b64:JgB4AAQbCDwIKQdcByoIKgcrBzwHAAGSCBwHWAcYCCoIOwcvBxkHGAkACkEKGAk8BysJWgkoBysIKQk7CQABkAcdCTEIPAcqCDwILgcZBxgKAAGPCRsJOwkoB1wJKQcqBykLOgcAAZIJGwguCEAIKgg7CiwIGAcZCAANBQ==
 
 dstv_vol_up:
   mode: queued
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAQcCDwHKgdcBysHKgcrBzwHAAGSCBwIGAkXByoIPAcmBxgHGQcACkIHHQc8CCoHXAcqCSkHKgc9BwABkgcdBzwIPAcqCDwHJgcYCBgHAAGSBxsLOggqB1wHKgcrByoIPAcAAZIIHAc4B0EHKgg8ByYHGQcYBwANBQ=="
+          - b64:JgB4AAQcCDwHKgdcBysHKgcrBzwHAAGSCBwIGAkXByoIPAcmBxgHGQcACkIHHQc8CCoHXAcqCSkHKgc9BwABkgcdBzwIPAcqCDwHJgcYCBgHAAGSBxsLOggqB1wHKgcrByoIPAcAAZIIHAc4B0EHKgg8ByYHGQcYBwANBQ==
 
 dstv_vol_down:
   mode: queued
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB8AAQcCDwHKwdcByoHKgcrBzwHAAGSChsHWwgYByoIPAcqCBgHGQcACkMIGwg8ByoIWwkpByoIKgc8BwABkggdBzgHPAcrBzwHKwcYBxkHAAGSBx0HPQcqB1wHKggqBysHPAcAAZIIHAgzBz8LKAg8ByoIGAcZBwAJ/ggADQUAAAAAAAAAAAAAAAA="
+          - b64:JgB8AAQcCDwHKwdcByoHKgcrBzwHAAGSChsHWwgYByoIPAcqCBgHGQcACkMIGwg8ByoIWwkpByoIKgc8BwABkggdBzgHPAcrBzwHKwcYBxkHAAGSBx0HPQcqB1wHKggqBysHPAcAAZIIHAgzBz8LKAg8ByoIGAcZBwAJ/ggADQUAAAAAAAAAAAAAAAA=
 
 dstv_mute:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAQcCDwHKghbBysHKgcqCTsIAAGSBx0HWwgYBysHGAhOBxgIGAcACkUFHAg8ByoIWwgqByoIKgc8CAABkQgbCzYHPAcpCRgHTwgXBxkHAAGSBx0HPAgqB1wHKggqByoIPAcAAZIHHQc0B0AIKgcZB04HGQcYBwANBQ=="
+          - b64:JgB4AAQcCDwHKghbBysHKgcqCTsIAAGSBx0HWwgYBysHGAhOBxgIGAcACkUFHAg8ByoIWwgqByoIKgc8CAABkQgbCzYHPAcpCRgHTwgXBxkHAAGSBx0HPAgqB1wHKggqByoIPAcAAZIHHQc0B0AIKgcZB04HGQcYBwANBQ==
 
 dstv_alt:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAQbCDwHKghbCCoIKQgqBzwIAAGSBx0HLwcYCCoHLwcdBxkHGAgACkIJGwc9ByoHXAkpByoHKwc7CQABkQkbCVEIPAcqCC4IHAgYBxkHAAGSCBoLOggqB1wHKggqByoJOwcAAZIJGwhOB0EIKQcvBx0IGAcYCAANBQ=="
+          - b64:JgB4AAQbCDwHKghbCCoIKQgqBzwIAAGSBx0HLwcYCCoHLwcdBxkHGAgACkIJGwc9ByoHXAkpByoHKwc7CQABkQkbCVEIPAcqCC4IHAgYBxkHAAGSCBoLOggqB1wHKggqByoJOwcAAZIJGwhOB0EIKQcvBx0IGAcYCAANBQ==
 
 dstv_info:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAUbCDsKKAdbCSkHKwkoCjoHAAGSCxkJKQgXBysJOgdcCRYJFwcACkMREwk7ByoHXAkpByoJKQc8CQABkAgbCU4HPAcrCDsIWwcZBxgIAAGRCBwIPAgqB1sJKQkoCSkHPggAAZAHHQhJCT4IKAs6CV4EGAkXBwANBQ=="
+          - b64:JgB4AAUbCDsKKAdbCSkHKwkoCjoHAAGSCxkJKQgXBysJOgdcCRYJFwcACkMREwk7ByoHXAkpByoJKQc8CQABkAgbCU4HPAcrCDsIWwcZBxgIAAGRCBwIPAgqB1sJKQkoCSkHPggAAZAHHQhJCT4IKAs6CV4EGAkXBwANBQ==
 
 dstv_back:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAcZCToHKwlZCigKJwgpBz4NAAGMCRsIKQ4WCCoJOwZYCBcJFwcACkINFwo6CSgKWQkpCSgJKQc8BwABkgcdB1MJOwkoCjoFWQcZChUHAAO+Bx0GPgkoB1wLJwkoBysKOQoAAY8LGghNB0EJKAc9CVUJFwkWBwANBQ=="
+          - b64:JgB4AAcZCToHKwlZCigKJwgpBz4NAAGMCRsIKQ4WCCoJOwZYCBcJFwcACkINFwo6CSgKWQkpCSgJKQc8BwABkgcdB1MJOwkoCjoFWQcZChUHAAO+Bx0GPgkoB1wLJwkoBysKOQoAAY8LGghNB0EJKAc9CVUJFwkWBwANBQ==
 
 dstv_ok:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAQdBzwIKgdcCCkJKQcqCDwHAAGSBx0HPAgYBysHPAlIBxkHGAgACkQPEgg8ByoIWwgqCCkIKgc8BwABkggcCRcHPAgqCDsISQgXCxYHAAGSCBwHPAgqB1sIKgkpByoHPAgAAZIHHQdcB0EJKAc8CEkJFwgYBwANBQ=="
+          - b64:JgB4AAQdBzwIKgdcCCkJKQcqCDwHAAGSBx0HPAgYBysHPAlIBxkHGAgACkQPEgg8ByoIWwgqCCkIKgc8BwABkggcCRcHPAgqCDsISQgXCxYHAAGSCBwHPAgqB1sIKgkpByoHPAgAAZIHHQdcB0EJKAc8CEkJFwgYBwANBQ==
 
 dstv_left:
   mode: queued
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAQcBz0GLAZdBysFKwcrBj4FAAGVBR0HNwkXCCsIPAZPBhkHGAcACkUFHQc9ByoHXAcqBysHKgg8BwABlAUdB1wHPAkpBz0HTgcYCBgHAAGSCBwIPAcqCFsIKgcqBysHPAkAAZEHHQdXB0EHKwc8B04IGAcZBwANBQ=="
+          - b64:JgB4AAQcBz0GLAZdBysFKwcrBj4FAAGVBR0HNwkXCCsIPAZPBhkHGAcACkUFHQc9ByoHXAcqBysHKgg8BwABlAUdB1wHPAkpBz0HTgcYCBgHAAGSCBwIPAcqCFsIKgcqBysHPAkAAZEHHQdXB0EHKwc8B04IGAcZBwANBQ==
 
 dstv_right:
   mode: queued
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAUbBzwIKghbByoIKgcqCDwHAAGSBx0HSgcZByoJOwc8BxkHGAgACkIHHAg8ByoIWwkpBygLKQc8CAABkgcbCiUHPAgqBzwIPAcYCBgGAAGTCRsHPAgqB1wHKggqByoIPAcAAZMGHQciB0EHKgc9BzwHGQcYCAANBQ=="
+          - b64:JgB4AAUbBzwIKghbByoIKgcqCDwHAAGSBx0HSgcZByoJOwc8BxkHGAgACkIHHAg8ByoIWwkpBygLKQc8CAABkgcbCiUHPAgqBzwIPAcYCBgGAAGTCRsHPAgqB1wHKggqByoIPAcAAZMGHQciB0EHKgc9BzwHGQcYCAANBQ==
 
 dstv_up:
   mode: queued
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAQcBz0HKghbCCoHKgcrBzwHAAGSCRsIMwcYCCoHPQdSCBgHGQcACkIIHAc9ByoHXAcqCCoHKwc8BwABkggcCFcHPAgqBzwIUgcZBxgIAAO+CBwHPAcrB1sIKgcrByoHPAgAAZIHHQdTB0EHKgc9B1IIGAcZBwANBQ=="
+          - b64:JgB4AAQcBz0HKghbCCoHKgcrBzwHAAGSCRsIMwcYCCoHPQdSCBgHGQcACkIIHAc9ByoHXAcqCCoHKwc8BwABkggcCFcHPAgqBzwIUgcZBxgIAAO+CBwHPAcrB1sIKgcrByoHPAgAAZIHHQdTB0EHKgc9B1IIGAcZBwANBQ==
 
 dstv_down:
   mode: queued
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAUdBzwHKwdbCCoHKgkpBzwIAAGSBx0HTgcZByoIPAc4BxgIGAcACkIHHQc8CCoHXAcqCSkHKgg8BwABkgcdBysHPAcrBzwINwcZBxgIAAgVCB0HOwopB1sIKgcqCCoHPAgAAZIHHQcmB0EHKgc9BzgHGAcZBwANBQ=="
+          - b64:JgB4AAUdBzwHKwdbCCoHKgkpBzwIAAGSBx0HTgcZByoIPAc4BxgIGAcACkIHHQc8CCoHXAcqCSkHKgg8BwABkgcdBysHPAcrBzwINwcZBxgIAAgVCB0HOwopB1sIKgcqCCoHPAgAAZIHHQcmB0EHKgc9BzgHGAcZBwANBQ==
 
 dstv_0:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB2AAUaBz0NJAdcCicIKgYsBj0JAAGRBxwISQgYCSgHGQcZCRYGGgUACkUJGgo6ByoKWQkpCSgHKwk6CQABkAceCSMJOwcrCRYHGQkWBxoFAAXrBx0KOgkoB1wLJwkpByoJOgkAAZAIHQciBUIJKQkXBxgJNgcADQUAAA=="
+          - b64:JgB2AAUaBz0NJAdcCicIKgYsBj0JAAGRBxwISQgYCSgHGQcZCRYGGgUACkUJGgo6ByoKWQkpCSgHKwk6CQABkAceCSMJOwcrCRYHGQkWBxoFAAXrBx0KOgkoB1wLJwkpByoJOgkAAZAIHQciBUIJKQkXBxgJNgcADQUAAA==
 
 dstv_1:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB0AAQbCTwGKgpZByoIKgkpCToGAAGTBx0JRAoVCSkJFwkbCBcGGgUACkUJGgg8CCkGXQooCSgKKAk6BgABlAkbByEHPQkoCzkJFwUaBwADwwQeBzsFLAZdBysJKAsnBT4GAAGUCBwJHAVCCSgHGQoaBhoFAA0FAAAAAA=="
+          - b64:JgB0AAQbCTwGKgpZByoIKgkpCToGAAGTBx0JRAoVCSkJFwkbCBcGGgUACkUJGgg8CCkGXQooCSgKKAk6BgABlAkbByEHPQkoCzkJFwUaBwADwwQeBzsFLAZdBysJKAsnBT4GAAGUCBwJHAVCCSgHGQoaBhoFAA0FAAAAAA==
 
 dstv_2:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB2AAgWCjsHKwlZCycJKAkpCjkLAAGPChoHQQcZCSgHGQVDBxkFAApECRsJOwkoB1wIKQkpBSwHPQkAAZAJGwkbBz0HKgcZCR8IGQYZBwABkgkbBzwJKQhbCyYHKwcqBj4KAAGPCQcGDQkXB0EJKQcZCCAJFwkADQUAAA=="
+          - b64:JgB2AAgWCjsHKwlZCycJKAkpCjkLAAGPChoHQQcZCSgHGQVDBxkFAApECRsJOwkoB1wIKQkpBSwHPQkAAZAJGwkbBz0HKgcZCR8IGQYZBwABkgkbBzwJKQhbCyYHKwcqBj4KAAGPCQcGDQkXB0EJKQcZCCAJFwkADQUAAA==
 
 dstv_3:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAQbCTwHKgdcByoJKQcqCDwHAAGSCBwJOwcYCCoHGAgmBxgIGAcACkMHHAg8ByoKVwkrCSgIKgc8BwABkgkbCBgHPAgqBxkHJgcYBxkHAAGSCBwHPAgqB1wHKggqByoIPAcAAZIHHQhbB0EHKggYCCUHGQcYCAANBQ=="
+          - b64:JgB4AAQbCTwHKgdcByoJKQcqCDwHAAGSCBwJOwcYCCoHGAgmBxgIGAcACkMHHAg8ByoKVwkrCSgIKgc8BwABkgkbCBgHPAgqBxkHJgcYBxkHAAGSCBwHPAgqB1wHKggqByoIPAcAAZIHHQhbB0EHKggYCCUHGQcYCAANBQ==
 
 dstv_4:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAQdBzwIKgdcByoIKgcqCDwHAAGSCBwINwkXByoIGAcrBxgJFwcACkMJGgg8ByoIWwsnByoIKgc8CQABkAgdCVoJOgkpCRYGKgsWChYHAAGSCRsIPAkoB1wLJwkoCigHPAkAAZALGgdXCT8JKAsVBiwJFgYaCgANBQ=="
+          - b64:JgB4AAQdBzwIKgdcByoIKgcqCDwHAAGSCBwINwkXByoIGAcrBxgJFwcACkMJGgg8ByoIWwsnByoIKgc8CQABkAgdCVoJOgkpCRYGKgsWChYHAAGSCRsIPAkoB1wLJwkoCigHPAkAAZALGgdXCT8JKAsVBiwJFgYaCgANBQ==
 
 dstv_5:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB2AAQdCDsJKQpYCigJKQonBz0JAAGRBh0MLgoWCCoHGAcvChYHGAkACkMGGwc9ByoHXAkpCSgKKAU+BwABkgkcCVUHPAooDRIJLQgYBhoJAAGQCxkKOQ8jB1wJKAkpCicHPQcAAZIJGwdTCz0JKQkWBy8KFgkADQUAAA=="
+          - b64:JgB2AAQdCDsJKQpYCigJKQonBz0JAAGRBh0MLgoWCCoHGAcvChYHGAkACkMGGwc9ByoHXAkpCSgKKAU+BwABkgkcCVUHPAooDRIJLQgYBhoJAAGQCxkKOQ8jB1wJKAkpCicHPQcAAZIJGwdTCz0JKQkWBy8KFgkADQUAAA==
 
 dstv_6:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAQcCTsHKglaCSkMJQcrBzwLAAGPCBwHLwcZBisJFgoxChYJFgcACkQGHQc7CygHXAcqBysHKgo6BwABkgkbClAJOggqBxkIMgcZBxgIAAGSCBwHPAcrB1wHKgcrCicJOwcAAZIIHAdODDwHKwcYCDMJFwoVBwANBQ=="
+          - b64:JgB4AAQcCTsHKglaCSkMJQcrBzwLAAGPCBwHLwcZBisJFgoxChYJFgcACkQGHQc7CygHXAcqBysHKgo6BwABkgkbClAJOggqBxkIMgcZBxgIAAGSCBwHPAcrB1wHKgcrCicJOwcAAZIIHAdODDwHKwcYCDMJFwoVBwANBQ==
 
 dstv_7:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAQcBzwIKgdcCCkIKgcrCjkHAAGSCRsIKgcYCCoHGQc4CBcHGQcACkQNFQo6CCkJWgcrCCkKKAc8CQABkQccCU0JOgooCBcIOAoVBxkHAAGSBx0JOwonCVoIKQooBysHPAYAAZMJGwdKCj4HKwcYBzgHGQcZBQANBQ=="
+          - b64:JgB4AAQcBzwIKgdcCCkIKgcrCjkHAAGSCRsIKgcYCCoHGQc4CBcHGQcACkQNFQo6CCkJWgcrCCkKKAc8CQABkQccCU0JOgooCBcIOAoVBxkHAAGSBx0JOwonCVoIKQooBysHPAYAAZMJGwdKCj4HKwcYBzgHGQcZBQANBQ==
 
 dstv_8:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB2AAYaBzwJKQdcCCkIKgcqCDwJAAGQCRsHJgkXByoIGAk7BxgHGQcACkIJGwg7BysJWgkpByoHKwc8CQABkAoaCkcHPQkoChYHPAkXBxkHAAGSCBwIOwooB1wKJwkpCCkHPQkAAZAJGwpDCT8JKAkXBzwJFwgADQUAAA=="
+          - b64:JgB2AAYaBzwJKQdcCCkIKgcqCDwJAAGQCRsHJgkXByoIGAk7BxgHGQcACkIJGwg7BysJWgkpByoHKwc8CQABkAoaCkcHPQkoChYHPAkXBxkHAAGSCBwIOwooB1wKJwkpCCkHPQkAAZAJGwpDCT8JKAkXBzwJFwgADQUAAA==
 
 dstv_9:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAgXBz0IKQhbCCkJKQgpCDwHAAGSBx0JIAkWBysHGQk+CBgHGQgACkEJGwo6CCkHXAcrByoKKAg7BwABkgsZB0YHPAkpChUGQggYBxkHAAGSChoHPAsnB1wJKAooCSgHPQcAAZMGHQk/CT8JKQkWB0EHGQcYBwANBQ=="
+          - b64:JgB4AAgXBz0IKQhbCCkJKQgpCDwHAAGSBx0JIAkWBysHGQk+CBgHGQgACkEJGwo6CCkHXAcrByoKKAg7BwABkgsZB0YHPAkpChUGQggYBxkHAAGSChoHPAsnB1wJKAooCSgHPQcAAZMGHQk/CT8JKQkWB0EHGQcYBwANBQ==
 
 dstv_menu:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgB4AAUaCToKKAdcCSgJKQkoCjoHAAGSChoHKwoVCigHIgYwCRYJFwkACkEJGwk6CigJWgonCycJKAo6CgABjwkbCkwKOQkpByEHLwoWCRcHAAgWChsHPAkpClgKKAkpCSgJPAgAAZAJGwlICEALJgseBy8JFwcYBgANBQ=="
+          - b64:JgB4AAUaCToKKAdcCSgJKQkoCjoHAAGSChoHKwoVCigHIgYwCRYJFwkACkEJGwk6CigJWgonCycJKAo6CgABjwkbCkwKOQkpByEHLwoWCRcHAAgWChsHPAkpClgKKAkpCSgJPAgAAZAJGwlICEALJgseBy8JFwcYBgANBQ==
 
 apple_tv_menu:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBQAAABJpUTEhI3EzYUNhMSEjcUNhM3EjYTNxI3ExISExMTEhITNxI4EjcTERQSEhQSExETExMTNhMSEhMTEhIUERMSExITEgAFlQABJkoTAA0FAAAAAAAAAAA="
+          - b64:JgBQAAABJpUTEhI3EzYUNhMSEjcUNhM3EjYTNxI3ExISExMTEhITNxI4EjcTERQSEhQSExETExMTNhMSEhMTEhIUERMSExITEgAFlQABJkoTAA0FAAAAAAAAAAA=
 
 apple_tv_home:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgCoAAABJpURExM3EjcSNxITEzcSNxI3FDYTNhQ1FBEUEhIUEhISNxI3FDcTERMSExMRExQTERMSNxMTERMSExITExMTEhITEgAFlAABKEkTAAxOAAEnShIADE8AASdJFAAMTQABJ0oSAAxPAAEnShIADE8AASdJEwAMTwABJ0kTAAxOAAEnShIADE8AAShIFAAMTgABJ0kSAAxPAAEoSRMADE4AASZKEwANBQ=="
+          - b64:JgCoAAABJpURExM3EjcSNxITEzcSNxI3FDYTNhQ1FBEUEhIUEhISNxI3FDcTERMSExMRExQTERMSNxMTERMSExITExMTEhITEgAFlAABKEkTAAxOAAEnShIADE8AASdJFAAMTQABJ0oSAAxPAAEnShIADE8AASdJEwAMTwABJ0kTAAxOAAEnShIADE8AAShIFAAMTgABJ0kSAAxPAAEoSRMADE4AASZKEwANBQ==
 
 apple_tv_ok:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgCYAAABKJsRFRE5EDoROBMTEjgSORE5EDoRORI4EhQQFRAVEBUQOhIUEBURORE5ETkQFRE5EhQROBEVERUPFRAVERQRFRAUEQAFTQABJ5wRFBE5EjkQOhEUETkRORI5EToQORI4ERUQFBMTEBUROg86ERQSOBITEhQQFRAWDxUROREVEBURExEVEBUQFg8WDwAFTgABKEsRAA0F"
+          - b64:JgCYAAABKJsRFRE5EDoROBMTEjgSORE5EDoRORI4EhQQFRAVEBUQOhIUEBURORE5ETkQFRE5EhQROBEVERUPFRAVERQRFRAUEQAFTQABJ5wRFBE5EjkQOhEUETkRORI5EToQORI4ERUQFBMTEBUROg86ERQSOBITEhQQFRAWDxUROREVEBURExEVEBUQFg8WDwAFTgABKEsRAA0F"
 
 apple_tv_up:
   mode: queued
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBQAAABJ5QTExE3EzcTNxITEjYUNhM2EzYTOBE3ExMRFBISExIUNxISEjcTEhM4ERMSExMTERMSNxURExISFBEUEhMRExMSEwAFlAABJ0oTAA0FAAAAAAAAAAA="
+          - b64:JgBQAAABJ5QTExE3EzcTNxITEjYUNhM2EzYTOBE3ExMRFBISExIUNxISEjcTEhM4ERMSExMTERMSNxURExISFBEUEhMRExMSEwAFlAABJ0oTAA0FAAAAAAAAAAA=
 
 apple_tv_down:
   mode: queued
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBQAAABJ5QUEhE3FDYSNxQREjgSNxI3EzcSNxQ1ExMUEBQSEhMSNxIUERMTNhM3ExMRExMSExITNxMTERQRExMTERQRExMTEgAFlAABJ0oTAA0FAAAAAAAAAAA="
+          - b64:JgBQAAABJ5QUEhE3FDYSNxQREjgSNxI3EzcSNxQ1ExMUEBQSEhMSNxIUERMTNhM3ExMRExMSExITNxMTERQRExMTERQRExMTEgAFlAABJ0oTAA0FAAAAAAAAAAA=
 
 apple_tv_left:
   mode: queued
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBQAAABKJMSExM3EzYSNxQSEjYUNhI3FDYUNRI4ExISExMSExITNhM2FBITEhI3EhQRExMSFBITNhMSEhMTExMSEhMSEhMTEgAFlAABKEkTAA0FAAAAAAAAAAA="
+          - b64:JgBQAAABKJMSExM3EzYSNxQSEjYUNhI3FDYUNRI4ExISExMSExITNhM2FBITEhI3EhQRExMSFBITNhMSEhMTExMSEhMSEhMTEgAFlAABKEkTAA0FAAAAAAAAAAA=
 
 apple_tv_right:
   mode: queued
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBQAAABJ5MUEhI3EjcTNxIUEzUTNhQ2EjcTNhQ2ExMRFBMSEhITNxIUETcTNhMSExQRExUQFBESNxQSEhMSExMSERQTEhITEgAFlQABJ0kXAA0FAAAAAAAAAAA="
+          - b64:JgBQAAABJ5MUEhI3EjcTNxIUEzUTNhQ2EjcTNhQ2ExMRFBMSEhITNxIUETcTNhMSExQRExUQFBESNxQSEhMSExMSERQTEhITEgAFlQABJ0kXAA0FAAAAAAAAAAA=
 
 apple_tv_play_pause:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgCYAAABKZoSExE6EDoQOhIUEDoQOhA6EDoQOhQ2EhQSExAVEBUQOhE5EjgSOBE6ETkSFBE4EhMSORITEhMQFREUERUQFBIUEAAFTQABJ5wSExE6EjgQOhEUETkSOBI5EDoQOhI4EhMSExEVERUQORE5EhQQNhYSERUQFREVEBUROBITEhQPFRIUEBUQFg8VEAAFTgABJ0wQAA0F"
+          - b64:JgCYAAABKZoSExE6EDoQOhIUEDoQOhA6EDoQOhQ2EhQSExAVEBUQOhE5EjgSOBE6ETkSFBE4EhMSORITEhMQFREUERUQFBIUEAAFTQABJ5wSExE6EjgQOhEUETkSOBI5EDoQOhI4EhMSExEVERUQORE5EhQQNhYSERUQFREVEBUROBITEhQPFRIUEBUQFg8VEAAFTgABJ0wQAA0F"
 
 apple_tv_skip_backward:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBQAAABJpUSNxIUETcTEhMTEjcSNxQ2EjcSNxM3EhQSEhMSExISNxM3ExMRNxITFBITNhITEhMSNxMSFBITEhIUExATExMSEwAFlAABJ0kTAA0FAAAAAAAAAAA="
+          - b64:JgBQAAABJpUSNxIUETcTEhMTEjcSNxQ2EjcSNxM3EhQSEhMSExISNxM3ExMRNxITFBITNhITEhMSNxMSFBITEhIUExATExMSEwAFlAABJ0kTAA0FAAAAAAAAAAA=
 
 apple_tv_skip_forward:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBQAAABKJMTNRQTEzYUEhISEjgSNxI3EzYTNxI3FBISExISFBITNhI3EzYUEhMSExMSNhIUERMTNxQRExMRExIUEhMRFBQQEwAFlAABJ0oSAA0FAAAAAAAAAAA="
+          - b64:JgBQAAABKJMTNRQTEzYUEhISEjgSNxI3EzYTNxI3FBISExISFBITNhI3EzYUEhMSExMSNhIUERMTNxQRExMRExIUEhMRFBQQEwAFlAABJ0oSAA0FAAAAAAAAAAA=
 
 samsung_tv_power:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgCMAJCUEzYTNxI3ExISExMSExITEhM2EzcSOBMRExISExMSExISExM2ExITEhITExISExISEjgTEhI3FDYTNxM2FDYTNxIABgOUlBM3EjcTNxITEhITEhITEhMTNxM2EzcTEhMSEhMTERMSEhMSOBITEhITEhITEhMSExI3ExITNxI4EzYTNxM2EzcTAA0FAAAAAAAAAAAAAAAA"
+          - b64:JgCMAJCUEzYTNxI3ExISExMSExITEhM2EzcSOBMRExISExMSExISExM2ExITEhITExISExISEjgTEhI3FDYTNxM2FDYTNxIABgOUlBM3EjcTNxITEhITEhITEhMTNxM2EzcTEhMSEhMTERMSEhMSOBITEhITEhITEhMSExI3ExITNxI4EzYTNxM2EzcTAA0FAAAAAAAAAAAAAAAA"
 
 samsung_tv_power_on:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBGAJKVETkRORA6ERQRFBEUERQRFBE5ETkQOhAVEBUQFREUEBUQOhEUERQRORE5EBURFBA6EBUQOhE5EBUQFRA6EDoRFBEADQUAAA=="
+          - b64:JgBGAJKVETkRORA6ERQRFBEUERQRFBE5ETkQOhAVEBUQFREUEBUQOhEUERQRORE5EBURFBA6EBUQOhE5EBUQFRA6EDoRFBEADQUAAA==
 
 samsung_tv_power_off:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBGAJOVEDoQOhA6DxYPFhAVEBUQFRA6ETkROREUERQRFBEUEBUQFREUERQRORE5EBUQFRE5ETkRORE5ERUQFRA6DzsPFhAADQUAAA=="
+          - b64:JgBGAJOVEDoQOhA6DxYPFhAVEBUQFRA6ETkROREUERQRFBEUEBUQFREUERQRORE5EBUQFRE5ETkRORE5ERUQFRA6DzsPFhAADQUAAA==
 
 samsung_tv_hdmi:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgCMAI+UEjgTNxM2EhMTEhITEhMSEhM3EzcTNhMSExISExMSEhMSNxM3EhMSNxMSEhMSExI4EhITEhI4EhMTNhM3EjgTERMABgKVkxM3EzcSNxMSEhMSExISExISOBI4EjcSExITExISExMREzcSOBITEjcSExITExITNhMSExISOBITEjcTNxM3ExETAA0FAAAAAAAAAAAAAAAA"
+          - b64:JgCMAI+UEjgTNxM2EhMTEhITEhMSEhM3EzcTNhMSExISExMSEhMSNxM3EhMSNxMSEhMSExI4EhITEhI4EhMTNhM3EjgTERMABgKVkxM3EzcSNxMSEhMSExISExISOBI4EjcSExITExISExMREzcSOBITEjcSExITExITNhMSExISOBITEjcTNxM3ExETAA0FAAAAAAAAAAAAAAAA"
 
 samsung_tv_hdmi1:
   # https://github.com/yahat/broadlink_mini_homeassistant_ir_codes_samsung_tv
@@ -424,28 +424,28 @@ samsung_tv_hdmi1:
   # https://community.home-assistant.io/t/broadlink-rm-mini-3-code-database-samsung-tv-hdmi-selection/15612/100 (old)
   # sat
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBGAJKVETkRORE5ERQQFRAVERQQFRE5ETkROREUERQRFBEUERQRORAVERUPOxAVDzsQOhA6EBUQOhA6EBUQOhAVEBUPFhAADQUAAA=="
+          - b64:JgBGAJKVETkRORE5ERQQFRAVERQQFRE5ETkROREUERQRFBEUERQRORAVERUPOxAVDzsQOhA6EBUQOhA6EBUQOhAVEBUPFhAADQUAAA==
 
 samsung_tv_hdmi2:
   # atv
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgBGAJOUETkRORA6ERQQFRAVERQRFBA6ETkROhAVDxYQFQ8WEBUQFQ87EDoRORA6DzsQFRA6DzsPFhAVDxYQFRAVEDoQFRAADQUAAA=="
+          - b64:JgBGAJOUETkRORA6ERQQFRAVERQRFBA6ETkROhAVDxYQFQ8WEBUQFQ87EDoRORA6DzsQFRA6DzsPFhAVDxYQFRAVEDoQFRAADQUAAA==
 
 samsung_tv_picture_mode:
   sequence:
-    - service: broadlink.send
+    - service: remote.send_command
       data:
-        host: !secret broadlink_host
+        entity_id: remote.living_room
         packet:
-          - "JgCMAI+UEzcSOBM2EhMTEhMSEhMSEhM3EjgTNxISExITEhMSExITEhMRExITNxMSEjgSEhMSEjgTNhQ2ExITNxITEjcTNxIABgOVkxM3EzYTNxMSExISEhMSExISOBI3EzcTEhMSExITERMSEhMTEhMSEzYTEhI4ExISExM3EjcTNhMSEjgSExM2EzcSAA0FAAAAAAAAAAAAAAAA"
+          - b64:JgCMAI+UEzcSOBM2EhMTEhMSEhMSEhM3EjgTNxISExITEhMSExITEhMRExITNxMSEjgSEhMSEjgTNhQ2ExITNxITEjcTNxIABgOVkxM3EzYTNxMSExISEhMSExISOBI3EzcTEhMSExITERMSEhMTEhMSEzYTEhI4ExISExM3EjcTNhMSEjgSExM2EzcSAA0FAAAAAAAAAAAAAAAA"
 
 entertainment_apple_tv_on:
   sequence:

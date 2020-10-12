@@ -1,9 +1,6 @@
 - platform: rpi_gpio
   ports:
     24: motion_led
-- platform: broadlink
-  host: !secret broadlink_host
-  mac: "C8:F7:42:40:01:F8"
 - platform: template
   switches:
     guest_mode:

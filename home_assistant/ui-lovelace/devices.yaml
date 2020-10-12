@@ -72,8 +72,8 @@ cards:
           - sensor.server_cpu_temp
           - sensor.network_throughput_in_wlan0
           - sensor.network_throughput_out_wlan0
-          - sensor.last_boot
           - binary_sensor.rpi_power_status
+          - sensor.last_boot
         title: Server
         show_header_toggle: false
       - type: entities

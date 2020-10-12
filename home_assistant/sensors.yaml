@@ -48,14 +48,14 @@
 - platform: template
   sensors:
     security_camera_last_snapshot:
-      entity_id: input_datetime.security_camera_last_snapshot
       device_class: timestamp
       value_template: "{{ states('camera.security_camera_last_snapshot') }}"
     security_camera_last_snapshot_relative:
-      entity_id:
-        - input_datetime.security_camera_last_snapshot
-        - sensor.time
+      # the first line is a hack to avoid having to write an automation
+      # - https://www.home-assistant.io/integrations/template/#working-without-entities
+      # - https://community.home-assistant.io/t/heads-up-upcoming-breaking-change-in-the-template-integration/223715
       value_template: >
+        {%- set _ = states('sensor.time') %}
         {%- set t = state_attr('input_datetime.security_camera_last_snapshot', 'timestamp') %}
         {%- if t != None %}
           {%- set n = now().timestamp() %}

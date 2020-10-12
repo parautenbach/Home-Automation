@@ -37,12 +37,14 @@ cards:
         title: Lights
         hours_to_show: 24
         entities:
-          - entity: light.living_room_lamp
-            name: Living Room
           - entity: light.smart_bulb_1
             name: Pieter's Side
           - entity: light.smart_bulb_2
             name: Rouvé's Side
+          - entity: light.living_room_lamp
+            name: Living Room
+          - entity: light.smart_bulb_3
+          - entity: light.smart_bulb_4
   - type: vertical-stack
     cards:
       - type: custom:mini-graph-card
@@ -71,6 +73,7 @@ cards:
           - sensor.network_throughput_in_wlan0
           - sensor.network_throughput_out_wlan0
           - sensor.last_boot
+          - binary_sensor.rpi_power_status
         title: Server
         show_header_toggle: false
       - type: entities

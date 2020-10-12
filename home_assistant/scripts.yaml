@@ -57,12 +57,7 @@ hk_3380_vol_up_plus_5:
     - repeat:
         count: 5
         sequence:
-          - service: remote.send_command
-            data:
-              entity_id: remote.living_room_remote
-              command:
-                - b64:JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA=
-          - delay: 1
+          - service: script.hk_3380_vol_up
 
 hk_3380_vol_down:
   mode: queued
@@ -79,12 +74,7 @@ hk_3380_vol_down_minus_5:
     - repeat:
         count: 5
         sequence:
-          - service: remote.send_command
-            data:
-              entity_id: remote.living_room_remote
-              command:
-                - b64:JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA=
-          - delay: 1
+          - service: script.hk_3380_vol_down
 
 hk_3380_mute:
   sequence:

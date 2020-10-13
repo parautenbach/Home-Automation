@@ -214,6 +214,18 @@
   scan_interval: 300
   timeout: 15
 
+- platform: mqtt
+  name: MQTT Broker Received Messages (1min load)
+  state_topic: $SYS/broker/load/messages/received/1min
+  unit_of_measurement: 'messages/s'
+  icon: mdi:email-receive-outline
+
+- platform: mqtt
+  name: MQTT Broker Sent Messages (1min load)
+  state_topic: $SYS/broker/load/messages/sent/1min
+  unit_of_measurement: 'messages/s'
+  icon: mdi:email-send-outline
+
 # - platform: folder
 #   folder: /home/homeassistant/.homeassistant/www/gallery
 #   filter: "camera.security_camera_*.jpg"

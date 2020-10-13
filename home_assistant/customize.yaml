@@ -308,3 +308,7 @@ remote.living_room_remote:
   friendly_name: Broadlink Universal Remote
 binary_sensor.rpi_power_status:
   friendly_name: Power supply
+sensor.mqtt_broker_sent_messages_1min_load:
+  friendly_name: MQTT broker messages out
+sensor.mqtt_broker_received_messages_1min_load:
+  friendly_name: MQTT broker messages in

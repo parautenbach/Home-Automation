@@ -27,6 +27,10 @@ cards:
         - sensor.rouve_battery_state
       title: Rouvé
       show_header_toggle: false
+    - type: entities
+      title: Thor (WD Cloud Drive)
+      entities:
+        - sensor.thor_disk_usage
   - type: vertical-stack
     cards:
       - type: map
@@ -67,16 +71,26 @@ cards:
           - sensor.memory_use_percent
           - sensor.processor_use
           - sensor.load_1m
-          - sensor.load_5m
-          - sensor.load_15m
           - sensor.server_cpu_temp
           - sensor.network_throughput_in_wlan0
           - sensor.network_throughput_out_wlan0
+          - sensor.mqtt_broker_sent_messages_1min_load
+          - sensor.mqtt_broker_received_messages_1min_load
           - binary_sensor.rpi_power_status
           - sensor.last_boot
         title: Server
         show_header_toggle: false
-      - type: entities
-        title: Thor (WD Cloud Drive)
+      - type: custom:mini-graph-card
+        name: MQTT Broker Load
+        icon: mdi:traffic-light
         entities:
-          - sensor.thor_disk_usage
+          - entity: sensor.mqtt_broker_sent_messages_1min_load
+          - entity: sensor.mqtt_broker_received_messages_1min_load
+        hours_to_show: 24
+        hour24: true
+        smoothing: true
+        points_per_hour: 12  # every 5 min
+        line_width: 2
+        show:
+          extrema: true
+          average: true

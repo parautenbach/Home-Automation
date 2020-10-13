@@ -16,7 +16,7 @@ switch.motion_led:
   icon: mdi:motion-sensor
   friendly_name: Motion LED
 sensor.server_cpu_temp:
-  friendly_name: CPU Temperature
+  friendly_name: CPU temperature
 script.hk_3380_vol_up:
   friendly_name: Hi-Fi Volume Up
   icon: mdi:volume-plus
@@ -306,3 +306,5 @@ remote.living_room:
   friendly_name: Apple TV Remote
 remote.living_room_remote:
   friendly_name: Broadlink Universal Remote
+binary_sensor.rpi_power_status:
+  friendly_name: Power supply

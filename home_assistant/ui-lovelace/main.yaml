@@ -450,7 +450,7 @@ cards:
   - type: vertical-stack
     cards:
     - type: custom:weather-card
-      name: Stellenbosch
+      name: Stellies
       entity: weather.home_hourly
       current: true
       details: true

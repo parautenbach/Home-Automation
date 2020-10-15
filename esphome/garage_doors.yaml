@@ -31,8 +31,8 @@ binary_sensor:
       number: 32
       inverted: True
     filters:
-      - delayed_on: 200ms
-      - delayed_off: 200ms
+      - delayed_on: 1000ms
+      - delayed_off: 1000ms
   - platform: gpio
     id: lhs_garage_door_status
     name: "LHS Garage Door Status"
@@ -41,8 +41,8 @@ binary_sensor:
       number: 35
       inverted: True
     filters:
-      - delayed_on: 200ms
-      - delayed_off: 200ms
+      - delayed_on: 1000ms
+      - delayed_off: 1000ms
   # 100cm / 1m
   # true => occupied; false => empty
   - platform: template

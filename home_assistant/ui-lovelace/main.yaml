@@ -449,11 +449,19 @@ cards:
           - sensor.london
   - type: vertical-stack
     cards:
-    - type: weather-forecast
+    - type: custom:weather-card
+      name: Stellenbosch
+      entity: weather.home_hourly
+      current: true
+      details: true
+      forecast: true
+    - type: custom:weather-card
       entity: weather.home
-      secondary_info_attribute: humidity
+      current: false
+      details: false
+      forecast: true
     - type: entities
-      title: Environment
+      title: Home
       entities:
         - sensor.ambient_temperature
         - sensor.ambient_humidity

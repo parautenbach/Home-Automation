@@ -469,6 +469,7 @@
       - cover.lhs_garage_door
       - cover.rhs_garage_door
     to: "open"
+    mode: queued
   action:
     - service: timer.start
       data_template:
@@ -576,6 +577,7 @@
       - cover.lhs_garage_door
       - cover.rhs_garage_door
     to: "closed"
+    mode: queued
   action:
     - service: timer.cancel
       data_template:

@@ -487,8 +487,9 @@ security_camera_record_clip:
     - service: camera.record
       data:
         entity_id: camera.security_camera
-        #filename: /tmp/test.mp4
-        filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+        # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
+        # filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+        filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
         duration: 10
     - delay: "00:00:15"
 
@@ -502,7 +503,9 @@ security_camera_create_snapshot:
     - service: camera.snapshot
       data:
         entity_id: camera.security_camera
-        filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+        # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
+        # filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+        filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
     - service: shell_command.copy_last_snapshot_image
     - condition: state
       entity_id: group.security_automations
@@ -583,3 +586,12 @@ test:
         data:
           apns_headers:
             'apns-collapse-id': "{{ states('input_boolean.test') }}"
+
+test_snapshot:
+  sequence:
+    - service: camera.snapshot
+      data:
+        entity_id: camera.security_camera
+        # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
+        # https://www.home-assistant.io/integrations/camera/#service-snapshot
+        filename: '/tmp/snapshot_{{ entity_id.name }}.jpg'

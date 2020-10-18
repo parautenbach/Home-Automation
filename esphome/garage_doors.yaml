@@ -29,6 +29,7 @@ binary_sensor:
     device_class: garage_door
     pin:
       number: 32
+      mode: INPUT_PULLUP
       inverted: True
     filters:
       - delayed_on: 1000ms
@@ -39,6 +40,7 @@ binary_sensor:
     device_class: garage_door
     pin:
       number: 35
+      # WARNING: no internal pull-up: must add this as part of the circuit
       inverted: True
     filters:
       - delayed_on: 1000ms

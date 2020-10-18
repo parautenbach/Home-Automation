@@ -1,0 +1,2 @@
+no ios notifications:
+https://community.home-assistant.io/t/endpoint-is-disabled-ios/39269/4?u=parautenbach

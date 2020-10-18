@@ -485,6 +485,8 @@ entertainment_off:
 security_camera_record_clip:
   sequence:
     - service: camera.record
+      # https://github.com/home-assistant/core/issues/40241
+      # entity_id: camera.security_camera
       data:
         entity_id: camera.security_camera
         # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
@@ -501,6 +503,8 @@ security_camera_create_snapshot:
       data_template:
         datetime: "{{ now() }}"
     - service: camera.snapshot
+      # https://github.com/home-assistant/core/issues/40241
+      # entity_id: camera.security_camera
       data:
         entity_id: camera.security_camera
         # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
@@ -590,6 +594,8 @@ test:
 test_snapshot:
   sequence:
     - service: camera.snapshot
+      # https://github.com/home-assistant/core/issues/40241
+      entity_id: camera.security_camera
       data:
         entity_id: camera.security_camera
         # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597

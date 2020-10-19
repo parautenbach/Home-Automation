@@ -55,8 +55,11 @@ cards:
         name: Server Load
         entities:
           - entity: sensor.load_1m
+            name: 1 min
           - entity: sensor.load_5m
+            name: 5 min
           - entity: sensor.load_15m
+            name: 15 min
         hours_to_show: 24
         hour24: true
         smoothing: true
@@ -85,7 +88,9 @@ cards:
         icon: mdi:traffic-light
         entities:
           - entity: sensor.mqtt_broker_sent_messages_1min_load
+            name: Sent
           - entity: sensor.mqtt_broker_received_messages_1min_load
+            name: Received
         hours_to_show: 24
         hour24: true
         smoothing: true

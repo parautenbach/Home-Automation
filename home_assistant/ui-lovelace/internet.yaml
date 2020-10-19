@@ -30,7 +30,9 @@ cards:
       extrema: true
     entities:
       - entity: sensor.internet_speed_in
+        name: Download rate
       - entity: sensor.internet_speed_out
+        name: Upload rate
     hours_to_show: 24
     hour24: true
     smoothing: true

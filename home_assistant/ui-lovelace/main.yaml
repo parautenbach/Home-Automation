@@ -144,9 +144,11 @@ cards:
           - entity: light.smart_bulb_3
             state_color: true
             name: Dining Room
+            secondary_info: brightness
           - entity: light.smart_bulb_4
             state_color: true
             name: Music Room
+            secondary_info: brightness
           - switch.shelly1_b961d2_relay_0
         title: Lights
         show_header_toggle: true

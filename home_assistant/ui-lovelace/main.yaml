@@ -140,10 +140,13 @@ cards:
         entities:
           - entity: switch.living_room_lamp
             state_color: true
+            name: Living Room
           - entity: light.smart_bulb_3
             state_color: true
+            name: Dining Room
           - entity: light.smart_bulb_4
             state_color: true
+            name: Music Room
           - switch.shelly1_b961d2_relay_0
         title: Lights
         show_header_toggle: true

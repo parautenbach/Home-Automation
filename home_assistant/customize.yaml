@@ -290,6 +290,9 @@ sensor.daily_power_consumption:
 sensor.monthly_power_consumption:
   friendly_name: Daily Power Consumption  # keywords: power plug guage light alert flash
   icon: mdi:power-plug
+sensor.monthly_power_consumption_forecast:
+  friendly_name: Monthly Power Consumption Forecast
+  icon: mdi:trending-up
 input_datetime.security_camera_last_snapshot:
   friendly_name: Security Camera Last Snapshot
 input_number.wan_traffic_delta_in:

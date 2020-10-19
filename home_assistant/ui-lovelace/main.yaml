@@ -206,6 +206,9 @@ cards:
           - entity: sensor.monthly_power_consumption
             name: This Month
             icon: mdi:power-plug
+          - entity: sensor.monthly_power_consumption_forecast
+            name: This Month's Forecast
+            icon: mdi:trending-up
         footer:
           type: custom:mini-graph-card
           entities:

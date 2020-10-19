@@ -115,6 +115,27 @@
         {% else %}
           None
         {% endif %}
+    monthly_power_consumption_forecast:
+      unit_of_measurement: "kWh"
+      value_template: >
+        {% set now = now() %}
+        {% set month = now.month %}
+        {% set year = now.year %}
+        {% set days = None %}
+        {# feb: leap years #}
+        {% if month == 2 and year is divisibleby 4 and not year is divisibleby 400 %}
+          {% set days = 29 %}
+        {# jan, mar, may, jul, aug, oct, dec #}
+        {% elif month in [1,3,5,7,8,10,12] %}
+          {% set days = 31 %}
+        {# apr, jun, sep, nov #}
+        {% elif month in [4,6,9,11] %}
+          {% set days = 30 %}
+        {# feb #}
+        {% else %}
+          {% set days = 28 %}
+        {% endif %}
+        {{ ((states('sensor.monthly_power_consumption') | int) / now.day * days) | round(3) }}
 
 - platform: snmp
   name: snmp_wan_in

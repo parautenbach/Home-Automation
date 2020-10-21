@@ -500,7 +500,7 @@ security_camera_create_snapshot:
   sequence:
     - service: input_datetime.set_datetime
       entity_id: input_datetime.security_camera_last_snapshot
-      data_template:
+      data:
         datetime: "{{ now() }}"
     - service: camera.snapshot
       # https://github.com/home-assistant/core/issues/40241
@@ -572,7 +572,7 @@ close_garage_door_and_main_gate:
     - condition: template
       value_template: "{{ states(garage_door) == 'open' }}"
     - service: cover.close_cover
-      data_template:
+      data:
         entity_id: "{{ garage_door }}"
     - condition: state
       entity_id: cover.main_gate
@@ -584,7 +584,7 @@ test:
   description: "Testing whether a template works in the collapse ID field"
   sequence:
     - service: notify.mobile_app_ceres
-      data_template:
+      data:
         title: "Testing"
         message: "Test {{ now() }} {{ states('input_boolean.test') }}"
         data:

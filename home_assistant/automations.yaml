@@ -294,7 +294,7 @@
       above: 90
   action:
     - service: notify.mobile_app_ceres
-      data_template:
+      data:
         title: "System"
         message: "Server disk usage is {{ states('sensor.disk_use_percent') }}%!"
         data:
@@ -415,7 +415,7 @@
       topic: shellies/announce
   action:
     service: python_script.shellies_discovery
-    data_template:
+    data:
       id: '{{ trigger.payload_json.id }}'
       mac: '{{ trigger.payload_json.mac }}'
       fw_ver: '{{ trigger.payload_json.fw_ver }}'
@@ -427,7 +427,7 @@
     entity_id: sensor.snmp_wan_in
   action:
     - service: input_number.set_value
-      data_template:
+      data:
         entity_id: input_number.wan_traffic_delta_in
         value: '{{ ((trigger.to_state.state | int - trigger.from_state.state | int) * 8 ) / ( as_timestamp(trigger.to_state.last_updated) - as_timestamp(trigger.from_state.last_updated) ) }}'
 
@@ -437,7 +437,7 @@
     entity_id: sensor.snmp_wan_out
   action:
     - service: input_number.set_value
-      data_template:
+      data:
         entity_id: input_number.wan_traffic_delta_out
         value: '{{ ((trigger.to_state.state | int - trigger.from_state.state | int) * 8 ) / ( as_timestamp(trigger.to_state.last_updated) - as_timestamp(trigger.from_state.last_updated) ) }}'
 
@@ -472,7 +472,7 @@
   mode: queued
   action:
     - service: timer.start
-      data_template:
+      data:
         entity_id: "timer.{{ trigger.entity_id | replace('cover.', '') }}_timer"
         duration: "00:03:00"
 
@@ -506,7 +506,7 @@
   action:
     # https://companion.home-assistant.io/docs/notifications/critical-notifications/
     - service: notify.mobile_app_ceres
-      data_template:
+      data:
         title: "Security"
         # timer.rhs_garage_door_timer -> Pieter's garage door
         message: >-
@@ -537,7 +537,7 @@
             cover_id: "{{ trigger.event.data.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
             timer_id: "{{ trigger.event.data.entity_id }}"
     - service: timer.start
-      data_template:
+      data:
         entity_id: "{{ trigger.event.data.entity_id }}"
 
 - alias: "Close Cover From Alert Action"
@@ -548,7 +548,7 @@
         actionName: CLOSE_COVER
   action:
     - service: cover.close_cover
-      data_template:
+      data:
         entity_id: "{{ trigger.event.data.action_data.cover_id }}"
 
 - alias: "Extend Cover Timeout From Alert Action"
@@ -563,7 +563,7 @@
         actionName: EXTEND_COVER_TIMEOUT_10_MIN
   action:
     - service: timer.start
-      data_template:
+      data:
         entity_id: "{{ trigger.event.data.action_data.timer_id }}"
         # in seconds
         duration: "{{ trigger.event.data.actionName | regex_findall_index(find='\\d+', index=0, ignorecase=False) | int * 60 }}"
@@ -580,7 +580,7 @@
   mode: queued
   action:
     - service: timer.cancel
-      data_template:
+      data:
         entity_id: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
 
 - alias: "Replace Cover Notifications When Closed"
@@ -602,7 +602,7 @@
       {{ (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int > 180 }}
   action:
     - service: notify.mobile_app_ceres
-      data_template:
+      data:
         title: "Security"
         # cover.rhs_garage_door -> Pieter's garage door
         message: >-
@@ -631,7 +631,7 @@
       minutes: 15
   action:
     - service: notify.mobile_app_ceres
-      data_template:
+      data:
         title: "System"
         # https://community.home-assistant.io/t/convert-trigger-for-into-a-relative-age/196979
         message: "The server load has been {{ states('sensor.load_15m') }} for {{ trigger.for.seconds // 60 }} minutes."
@@ -649,7 +649,7 @@
       entity_id: sensor.pieter_activity_type
       from: "Automotive"  # to anything else
   action:
-    - service_template: "input_boolean.turn_{{ 'on' if is_state('sensor.pieter_activity_type', 'Automotive') else 'off'}}"
+    - service: "input_boolean.turn_{{ 'on' if is_state('sensor.pieter_activity_type', 'Automotive') else 'off'}}"
       entity_id: input_boolean.pieter_driving
 
 - alias: "Notify If Driving State Changed"
@@ -659,7 +659,7 @@
     entity_id: binary_sensor.pieter_driving
   action:
     - service: notify.mobile_app_ceres
-      data_template:
+      data:
         title: "Test"
         # message: "Pieter is{% if states('binary_sensor.pieter_driving') == 'off' %} not{% endif %} driving."
         message: "Pieter is{{ ' not' if is_state('binary_sensor.pieter_driving', 'off') }} driving."
@@ -671,7 +671,7 @@
     entity_id: binary_sensor.internet_connection
   action:
     - service: notify.mobile_app_ceres
-      data_template:
+      data:
         title: "Home"
         message: "The Internet is {{ 'available' if is_state('binary_sensor.internet_connection', 'on') else 'unavailable' }}."
         data:
@@ -686,7 +686,7 @@
     entity_id: binary_sensor.electricity_feed
   action:
     - service: notify.mobile_app_ceres
-      data_template:
+      data:
         title: "Home"
         message: "The electricity feed is {{ 'restored' if is_state('binary_sensor.electricity_feed', 'on') else 'cut' }}."
         data:

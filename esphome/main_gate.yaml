@@ -47,9 +47,9 @@ switch:
     icon: "mdi:remote"
     restore_state: False
     turn_on_action:
-    - switch.turn_on: gate_control
-    - delay: 1000ms
-    - switch.turn_off: gate_control
+      - switch.turn_on: gate_control
+      - delay: 1000ms
+      - switch.turn_off: gate_control
 
 mqtt:
   broker: !secret mqtt_broker

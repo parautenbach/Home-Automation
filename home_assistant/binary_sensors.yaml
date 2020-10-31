@@ -53,8 +53,6 @@
       device_class: connectivity
       value_template: >-
         {{ is_state('binary_sensor.internet', 'on') }}
-      delay_off:
-        minutes: 1
       icon_template: >-
         {% if is_state('binary_sensor.internet', 'on') %}
           mdi:server-network

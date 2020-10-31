@@ -43,15 +43,15 @@ https://trac.ffmpeg.org/wiki/CompilationGuide/RaspberryPi
 
 https://github.com/mpromonet/v4l2rtspserver/issues/166
 
-parautenbach commented on 16 Dec 2019 • 
+parautenbach commented on 16 Dec 2019 •
 Is there a way to do this? I can't seem to find info on this. I'd like to do something similar to ffmpeg where one can set hue=s=0. I don't see options to do this directly with v4l2rtspserver or v4l2-ctl.
 
 The reason I want to do this is to make an infrared camera feed look a little more pleasing.
 
 @mpromonet
- 
+
 Owner
-mpromonet commented on 3 Jan • 
+mpromonet commented on 3 Jan •
 Hi Peter,
 This project doesnot modify image, it streams what it captures using the V4L2 interface.
 Depending on the V4L2 device this could be possible using the appropiate control.
@@ -80,3 +80,16 @@ v4l2-ctl --all -d /dev/video0
 
 Best Regards,
 Michel.
+
+==========
+
+# /etc/modules: kernel modules to load at boot time.
+#
+# This file contains the names of kernel modules that should be loaded
+# at boot time, one per line. Lines beginning with "#" are ignored.
+
+i2c-dev
+bcm2835-v4l2
+v4l2loopback
+
+==========

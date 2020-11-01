@@ -399,27 +399,6 @@
     - service: switch.turn_on
       entity_id: switch.contractor_mode
 
-- alias: "Shellies Announce"
-  trigger:
-    - platform: homeassistant
-      event: start
-  action:
-    service: mqtt.publish
-    data:
-      topic: shellies/command
-      payload: announce
-
-- alias: "Shellies Discovery"
-  trigger:
-    - platform: mqtt
-      topic: shellies/announce
-  action:
-    service: python_script.shellies_discovery
-    data:
-      id: '{{ trigger.payload_json.id }}'
-      mac: '{{ trigger.payload_json.mac }}'
-      fw_ver: '{{ trigger.payload_json.fw_ver }}'
-
 # https://community.home-assistant.io/t/snmp-bandwidth-monitor/7122
 - alias: "Monitor Inbound Internet Traffic"
   trigger:

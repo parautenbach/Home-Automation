@@ -671,3 +671,47 @@
         data:
           push:
             thread-id: "home-electricity"
+
+- alias: "Switch On Garage Light When Any Garage Door Opened"
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id:
+      - cover.lhs_garage_door
+      - cover.rhs_garage_door
+    to: "open"
+  mode: queued
+  condition:
+    - condition: or
+      conditions:
+        - condition: sun
+          after: sunset
+          after_offset: "-01:00:00"
+        - condition: sun
+          before: sunrise
+          before_offset: "+01:00:00"
+  action:
+    - service: switch.turn_on
+      entity_id: switch.shelly1_b95a0e
+
+- alias: "Switch Off Garage Light When Any Garage Door Closed"
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id:
+      - cover.lhs_garage_door
+      - cover.rhs_garage_door
+    to: "closed"
+  mode: queued
+  condition:
+    - condition: or
+      conditions:
+        - condition: sun
+          after: sunset
+          after_offset: "-01:00:00"
+        - condition: sun
+          before: sunrise
+          before_offset: "+01:00:00"
+  action:
+    - service: switch.turn_off
+      entity_id: switch.shelly1_b95a0e

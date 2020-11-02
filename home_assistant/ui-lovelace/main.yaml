@@ -149,7 +149,9 @@ cards:
             state_color: true
             name: Music Room
             secondary_info: brightness
-          - switch.shelly1_b961d2_relay_0
+          - entity: switch.shelly1_b95a0e
+            name: Garage
+          - switch.shelly1_b961d2
         title: Lights
         show_header_toggle: true
       - type: vertical-stack

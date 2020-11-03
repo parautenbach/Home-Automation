@@ -151,6 +151,10 @@ cards:
             secondary_info: brightness
           - entity: switch.shelly1_b95a0e
             name: Garage
+          - entity: switch.shelly1_77128c
+            name: Front Door
+          - entity: switch.shelly1_b91f6f
+            name: Backyard
           - switch.shelly1_b961d2
         title: Lights
         show_header_toggle: true

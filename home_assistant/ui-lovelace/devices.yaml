@@ -85,7 +85,7 @@ cards:
         show_header_toggle: false
       - type: custom:mini-graph-card
         name: MQTT Broker Load
-        icon: mdi:traffic-light
+        icon: mdi:email-multiple-outline
         entities:
           - entity: sensor.mqtt_broker_sent_messages_1min_load
             name: Sent

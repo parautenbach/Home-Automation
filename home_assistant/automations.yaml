@@ -181,7 +181,7 @@
   condition:
     - condition: sun
       after: sunrise
-      after_offset: "01:00:00"
+      after_offset: "01:30:00"
   action:
     - service: homeassistant.turn_off
       entity_id: group.main_bedroom

@@ -52,7 +52,7 @@ cards:
         cards:
           # todo: light profiles
           - type: custom:button-card
-            name: Pieter
+            name: Pieter's Side
             entity: light.smart_bulb_1
             size: 20%
             color: var(--button-card-light-color)
@@ -108,7 +108,7 @@ cards:
               action: more-info
               haptic: selection
           - type: custom:button-card
-            name: Rouvé
+            name: Rouvé's Side
             entity: light.smart_bulb_2
             size: 20%
             color: var(--button-card-light-color)
@@ -136,28 +136,178 @@ cards:
             hold_action:
               action: more-info
               haptic: selection
-      - type: entities
-        entities:
-          - entity: switch.living_room_lamp
-            state_color: true
+      - type: horizontal-stack
+        title: Inside Lights
+        cards:
+          - type: custom:button-card
             name: Living Room
-          - entity: light.smart_bulb_3
-            state_color: true
+            entity: light.living_room_lamp
+            size: 20%
+            color: var(--button-card-light-color)
+            show_label: true
+            label: >
+              [[[
+                return '_';
+              ]]]
+            styles:
+              name:
+                - color: var(--paper-item-icon-color)
+              label:
+                - color: var(--primary-background-color)
+              card:
+                - font-size: 12px
+              grid:
+                - grid-template-areas: '"l" "i" "n"'
+                - grid-template-rows: min-content 1fr min-content
+                - grid-template-columns: 1fr
+            tap_action:
+              action: toggle
+              haptic: light
+            hold_action:
+              action: more-info
+              haptic: selection
+          - type: custom:button-card
             name: Dining Room
-            secondary_info: brightness
-          - entity: light.smart_bulb_4
-            state_color: true
+            entity: light.smart_bulb_3
+            size: 20%
+            color: var(--button-card-light-color)
+            show_label: true
+            label: >
+              [[[
+                var b = states['light.smart_bulb_3'].attributes.brightness;
+                return parseInt(b ? b/2.55 : '0') + '%';
+              ]]]
+            styles:
+              name:
+                - color: var(--paper-item-icon-color)
+              label:
+                - color: var(--paper-item-icon-color)
+                - padding-left: 1ex
+              card:
+                - font-size: 12px
+              grid:
+                - grid-template-areas: '"l" "i" "n"'
+                - grid-template-rows: min-content 1fr min-content
+                - grid-template-columns: 1fr
+            tap_action:
+              action: toggle
+              haptic: light
+            hold_action:
+              action: more-info
+              haptic: selection
+          - type: custom:button-card
             name: Music Room
-            secondary_info: brightness
-          - entity: switch.shelly1_b95a0e
-            name: Garage
-          - entity: switch.shelly1_77128c
+            entity: light.smart_bulb_4
+            size: 20%
+            color: var(--button-card-light-color)
+            show_label: true
+            label: >
+              [[[
+                var b = states['light.smart_bulb_4'].attributes.brightness;
+                return parseInt(b ? b/2.55 : '0') + '%';
+              ]]]
+            styles:
+              name:
+                - color: var(--paper-item-icon-color)
+              label:
+                - color: var(--paper-item-icon-color)
+                - padding-left: 1ex
+              card:
+                - font-size: 12px
+              grid:
+                - grid-template-areas: '"l" "i" "n"'
+                - grid-template-rows: min-content 1fr min-content
+                - grid-template-columns: 1fr
+            tap_action:
+              action: toggle
+              haptic: light
+            hold_action:
+              action: more-info
+              haptic: selection
+      - type: horizontal-stack
+        title: Outside Lights
+        cards:
+          - type: custom:button-card
             name: Front Door
-          - entity: switch.shelly1_b91f6f
+            entity: switch.shelly1_77128c
+            size: 20%
+            color: var(--button-card-light-color)
+            show_label: true
+            label: >
+              [[[
+                return '_';
+              ]]]
+            styles:
+              name:
+                - color: var(--paper-item-icon-color)
+              label:
+                - color: var(--primary-background-color)
+              card:
+                - font-size: 12px
+              grid:
+                - grid-template-areas: '"l" "i" "n"'
+                - grid-template-rows: min-content 1fr min-content
+                - grid-template-columns: 1fr
+            tap_action:
+              action: toggle
+              haptic: light
+            hold_action:
+              action: more-info
+              haptic: selection
+          - type: custom:button-card
+            name: Garage
+            entity: switch.shelly1_b95a0e
+            size: 20%
+            color: var(--button-card-light-color)
+            show_label: true
+            label: >
+              [[[
+                return '_';
+              ]]]
+            styles:
+              name:
+                - color: var(--paper-item-icon-color)
+              label:
+                - color: var(--primary-background-color)
+              card:
+                - font-size: 12px
+              grid:
+                - grid-template-areas: '"l" "i" "n"'
+                - grid-template-rows: min-content 1fr min-content
+                - grid-template-columns: 1fr
+            tap_action:
+              action: toggle
+              haptic: light
+            hold_action:
+              action: more-info
+              haptic: selection
+          - type: custom:button-card
             name: Backyard
-          - switch.shelly1_b961d2
-        title: Lights
-        show_header_toggle: true
+            entity: switch.shelly1_b91f6f
+            size: 20%
+            color: var(--button-card-light-color)
+            show_label: true
+            label: >
+              [[[
+                return '_';
+              ]]]
+            styles:
+              name:
+                - color: var(--paper-item-icon-color)
+              label:
+                - color: var(--primary-background-color)
+              card:
+                - font-size: 12px
+              grid:
+                - grid-template-areas: '"l" "i" "n"'
+                - grid-template-rows: min-content 1fr min-content
+                - grid-template-columns: 1fr
+            tap_action:
+              action: toggle
+              haptic: light
+            hold_action:
+              action: more-info
+              haptic: selection
       - type: vertical-stack
         title: Entertainment
         cards:

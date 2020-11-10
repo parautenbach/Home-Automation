@@ -257,6 +257,7 @@
     - platform: state
       entity_id: binary_sensor.pieter_present
       to: "on"
+  mode: single
   condition:
     - condition: and
       conditions:

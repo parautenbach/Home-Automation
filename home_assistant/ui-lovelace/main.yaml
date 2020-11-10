@@ -250,11 +250,6 @@ cards:
             entity: switch.shelly1_77128c
             size: 20%
             color: var(--button-card-light-color)
-            show_label: true
-            label: >
-              [[[
-                return '_';
-              ]]]
             styles:
               name:
                 - color: var(--paper-item-icon-color)
@@ -263,9 +258,32 @@ cards:
               card:
                 - font-size: 12px
               grid:
-                - grid-template-areas: '"l" "i" "n"'
+                - grid-template-areas: '"t" "i" "n"'
                 - grid-template-rows: min-content 1fr min-content
                 - grid-template-columns: 1fr
+            custom_fields:
+              t:
+                card:
+                  type: custom:button-card
+                  name: Timer
+                  entity: timer.front_door_timer
+                  show_name: false
+                  show_icon: false
+                  show_state: true
+                  styles:
+                    card:
+                      - font-size: 12px
+                      - box-shadow: none
+                    state:
+                      - margin-top: -1ex
+                      - margin-bottom: -1ex
+                      - color: >
+                          [[[
+                            if (states['timer.front_door_timer'].state == 'idle')
+                              return "var(--paper-item-icon-color)";
+                            else
+                              return "red";
+                          ]]]
             tap_action:
               action: toggle
               haptic: light

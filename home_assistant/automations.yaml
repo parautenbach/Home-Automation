@@ -221,6 +221,37 @@
     - service: automation.turn_off
       entity_id: automation.switch_on_living_room_lamp_if_motion_is_detected
 
+- alias: "Switch On The Front Door Light When Arriving Home"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.anybody_home
+      to: "on"
+  condition:
+    - condition: or
+      conditions:
+        - condition: sun
+          after: sunset
+        - condition: sun
+          before: sunrise
+  action:
+    - service: switch.turn_on
+      entity_id: switch.shelly1_77128c
+    - service: timer.start
+      data:
+        entity_id: timer.front_door_timer
+        duration: "00:05:00"
+
+- alias: "Switch Off Front Door Light When Timer Expires"
+  initial_state: true
+  trigger:
+    platform: event
+    event_type: timer.finished
+    event_data:
+      entity_id: timer.front_door_timer
+  action:
+    - service: switch.turn_off
+      entity_id: switch.shelly1_77128c
+
 - alias: "Open The Gate When Arriving Home"
   trigger:
     - platform: state

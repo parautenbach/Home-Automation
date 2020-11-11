@@ -225,10 +225,9 @@
   trigger:
     # when either of us arrive home, irrespective of whether anybody is home
     - platform: state
-      entity_id: binary_sensor.pieter_present
-      to: "on"
-    - platform: state
-      entity_id: binary_sensor.rouve_present
+      entity_id:
+        - binary_sensor.pieter_present
+        - binary_sensor.rouve_present
       to: "on"
   condition:
     - condition: or

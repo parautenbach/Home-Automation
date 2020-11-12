@@ -551,6 +551,7 @@ send_pieter_work_cape_town_to_home_eta:
         message: "Pieter left work and will be home at {{ (now().timestamp() + (states('sensor.google_travel_time_driving') | float)*60) | timestamp_custom('%H:%M', True) }}."
 
 open_pedestrian_gap:
+  mode: single
   sequence:
     - condition: state
       entity_id: cover.main_gate
@@ -567,6 +568,7 @@ close_garage_door_and_main_gate:
     garage_door:
       description: "A cover entity"
       example: "cover.garage_door"
+  mode: single
   sequence:
     # https://www.home-assistant.io/docs/scripts/conditions/
     - condition: template

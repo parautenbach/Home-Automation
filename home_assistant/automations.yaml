@@ -229,6 +229,7 @@
         - binary_sensor.pieter_present
         - binary_sensor.rouve_present
       to: "on"
+  mode: single
   condition:
     - condition: or
       conditions:

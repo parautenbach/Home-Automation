@@ -275,6 +275,20 @@
     - service: cover.open_cover
       entity_id: cover.main_gate
 
+- alias: "Stop Front Door Light Timer If Running When Switched Off"
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id: switch.shelly1_77128c
+    to: "off"
+  condition:
+    - condition: state
+      entity_id: timer.front_door_timer
+      state: "active"
+  action:
+    - service: timer.cancel
+      entity_id: timer.front_door_timer
+
 # open garage door when arriving home:
 # when moving above a certain (last) speed (so i'm driving, not cycling or otherwise, or getting transported in some other way)
 #   - the above now done with an ios activity sensor

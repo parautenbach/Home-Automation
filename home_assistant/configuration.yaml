@@ -212,7 +212,7 @@ timer:
   rhs_garage_door_timer:
     duration: "00:03:00"
   front_door_timer:
-    duration: "00:05:00"
+    duration: "00:03:00"
 
 media_player:
   - platform: universal

@@ -243,7 +243,7 @@
     - service: timer.start
       data:
         entity_id: timer.front_door_timer
-        duration: "00:05:00"
+        duration: "00:03:00"
 
 - alias: "Switch Off Front Door Light When Timer Expires"
   initial_state: true

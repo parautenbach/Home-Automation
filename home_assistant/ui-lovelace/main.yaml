@@ -188,7 +188,6 @@ cards:
             name: Dining Room
             entity: light.smart_bulb_3
             size: 20%
-            color: var(--button-card-light-color)
             show_label: true
             label: >
               [[[
@@ -207,6 +206,38 @@ cards:
                 - grid-template-areas: '"l" "i" "n"'
                 - grid-template-rows: min-content 1fr min-content
                 - grid-template-columns: 1fr
+              # https://community.home-assistant.io/t/lovelace-button-card/65981/4599
+              icon:
+                - color: >
+                    [[[
+                      let threshold = 255;
+                      if (entity.state === 'on' && entity.attributes.rgb_color) {
+                        let red = entity.attributes.rgb_color[0];
+                        let green = entity.attributes.rgb_color[1];
+                        let blue = entity.attributes.rgb_color[2];
+                        let brightness = entity.attributes.brightness;
+                        // 0 brightness means 50% – scale 0-255 to 0.5-1
+                        let brightness_factor = (brightness/255 + 1)/2;
+                        // imitate the built-in active icon colour for rgb lights when the light colour is white(-ish)
+                        if ((red >= threshold) && (green >= threshold) && (blue >= threshold)) {
+                          // this is a tint applied to typically a golden yellow ((FD,D8,35) or (253,216,53)) by multiplying by the brightness
+                          // so 50% brightness is the colour (189,162,39)
+                          let paper_item_icon_active_color = getComputedStyle(this.parentNode).getPropertyValue('--paper-item-icon-active-color').trim();
+                          // https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+                          let re = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(paper_item_icon_active_color);
+                          red = parseInt(re[1], 16) * brightness_factor;
+                          green = parseInt(re[2], 16) * brightness_factor;
+                          blue = parseInt(re[3], 16) * brightness_factor;
+                        }
+                        // otherwise, show the actual colour adjusted for brightness
+                        return 'rgb(' + red + ',' + green + ',' + blue + ')';
+                      } else if (entity.state === 'off') {
+                        return 'var(--paper-item-icon-color)';
+                      } else {
+                        // default entity.state === 'unavailable' colour
+                        return 'var(--primary-text-color)';
+                      }
+                    ]]]
             tap_action:
               action: toggle
               haptic: light
@@ -217,7 +248,6 @@ cards:
             name: Music Room
             entity: light.smart_bulb_4
             size: 20%
-            color: var(--button-card-light-color)
             show_label: true
             label: >
               [[[
@@ -236,6 +266,37 @@ cards:
                 - grid-template-areas: '"l" "i" "n"'
                 - grid-template-rows: min-content 1fr min-content
                 - grid-template-columns: 1fr
+              icon:
+                - color: >
+                    [[[
+                      let threshold = 255;
+                      if (entity.state === 'on' && entity.attributes.rgb_color) {
+                        let red = entity.attributes.rgb_color[0];
+                        let green = entity.attributes.rgb_color[1];
+                        let blue = entity.attributes.rgb_color[2];
+                        let brightness = entity.attributes.brightness;
+                        // 0 brightness means 50% – scale 0-255 to 0.5-1
+                        let brightness_factor = (brightness/255 + 1)/2;
+                        // imitate the built-in active icon colour for rgb lights when the light colour is white(-ish)
+                        if ((red >= threshold) && (green >= threshold) && (blue >= threshold)) {
+                          // this is a tint applied to typically a golden yellow ((FD,D8,35) or (253,216,53)) by multiplying by the brightness
+                          // so 50% brightness is the colour (189,162,39)
+                          let paper_item_icon_active_color = getComputedStyle(this.parentNode).getPropertyValue('--paper-item-icon-active-color').trim();
+                          // https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+                          let re = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(paper_item_icon_active_color);
+                          red = parseInt(re[1], 16) * brightness_factor;
+                          green = parseInt(re[2], 16) * brightness_factor;
+                          blue = parseInt(re[3], 16) * brightness_factor;
+                        }
+                        // otherwise, show the actual colour adjusted for brightness
+                        return 'rgb(' + red + ',' + green + ',' + blue + ')';
+                      } else if (entity.state === 'off') {
+                        return 'var(--paper-item-icon-color)';
+                      } else {
+                        // default entity.state === 'unavailable' colour
+                        return 'var(--primary-text-color)';
+                      }
+                    ]]]
             tap_action:
               action: toggle
               haptic: light

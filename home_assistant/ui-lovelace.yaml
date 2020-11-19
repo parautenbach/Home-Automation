@@ -5,7 +5,6 @@ views:
   - !include ui-lovelace/entertainment.yaml
   - !include ui-lovelace/internet.yaml
   - !include ui-lovelace/security.yaml
-  - !include ui-lovelace/floorplan_new.yaml
-  - !include ui-lovelace/floorplan_old.yaml
+  - !include ui-lovelace/floorplan.yaml
   - !include ui-lovelace/devices.yaml
   - !include ui-lovelace/test.yaml

@@ -1,0 +1,113 @@
+title: Floorplan
+path: floorplan
+panel: true
+icon: mdi:floor-plan
+badges: []
+cards:
+  - title: Floorplan
+    type: custom:floorplan-card
+    config:
+      image: /local/floorplan/floorplan.svg
+      log_level: error
+      rules:
+        - entities:
+            - binary_sensor.gate_status
+            - binary_sensor.lhs_garage_occupied
+            - binary_sensor.rhs_garage_occupied
+            - binary_sensor.motion_sensor
+          states:
+            - state: 'on'
+              class: 'binary-sensor-on'
+            - state: 'off'
+              class: 'binary-sensor-off'
+        - action:
+            service: cover.toggle
+          element: cover.lhs_garage_door
+          entity: cover.lhs_garage_door
+          states:
+            - state: 'open'
+              class: 'cover-open'
+            - state: 'closed'
+              class: 'cover-closed'
+        - action:
+            service: cover.toggle
+          element: cover.rhs_garage_door
+          entity: cover.rhs_garage_door
+          states:
+            - state: 'open'
+              class: 'cover-open'
+            - state: 'closed'
+              class: 'cover-closed'
+        - action:
+            service: light.toggle
+          element: light.living_room_lamp
+          entity: light.living_room_lamp
+          states:
+            - state: 'on'
+              class: 'light-on'
+            - state: 'off'
+              class: 'light-off'
+        - action:
+            service: light.toggle
+          element: light.smart_bulb_1
+          entity: light.smart_bulb_1
+          states:
+            - state: 'on'
+              class: 'light-on'
+            - state: 'off'
+              class: 'light-off'
+        - action:
+            service: light.toggle
+          element: light.smart_bulb_2
+          entity: light.smart_bulb_2
+          states:
+            - state: 'on'
+              class: 'light-on'
+            - state: 'off'
+              class: 'light-off'
+        - action:
+            service: light.toggle
+          element: light.smart_bulb_3
+          entity: light.smart_bulb_3
+          states:
+            - state: 'on'
+              class: 'light-on'
+            - state: 'off'
+              class: 'light-off'
+        - action:
+            service: light.toggle
+          element: light.smart_bulb_4
+          entity: light.smart_bulb_4
+          states:
+            - state: 'on'
+              class: 'light-on'
+            - state: 'off'
+              class: 'light-off'
+        - action:
+            service: switch.toggle
+          element: switch.shelly1_77128c
+          entity: switch.shelly1_77128c
+          states:
+            - state: 'on'
+              class: 'light-on'
+            - state: 'off'
+              class: 'light-off'
+        - action:
+            service: switch.toggle
+          element: switch.shelly1_b95a0e
+          entity: switch.shelly1_b95a0e
+          states:
+            - state: 'on'
+              class: 'light-on'
+            - state: 'off'
+              class: 'light-off'
+        - action:
+            service: switch.toggle
+          element: switch.shelly1_b91f6f
+          entity: switch.shelly1_b91f6f
+          states:
+            - state: 'on'
+              class: 'light-on'
+            - state: 'off'
+              class: 'light-off'
+      stylesheet: /local/floorplan/floorplan.css

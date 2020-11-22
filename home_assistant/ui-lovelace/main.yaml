@@ -295,7 +295,7 @@ cards:
         cards:
           - type: custom:button-card
             name: Front Door
-            entity: switch.shelly1_77128c
+            entity: light.front_door_light
             size: 20%
             color: var(--button-card-light-color)
             styles:
@@ -335,6 +335,12 @@ cards:
             tap_action:
               action: toggle
               haptic: light
+            double_tap_action:
+              action: call-service
+              haptic: medium
+              service: script.turn_on_light_and_timer
+              service_data:
+                light: "[[[ return entity.entity_id; ]]]"
             hold_action:
               action: more-info
               haptic: selection

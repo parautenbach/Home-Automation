@@ -229,6 +229,9 @@ switch.shelly1_b95a0e:
 switch.shelly1_77128c:
   friendly_name: Front Door Light
   icon: mdi:coach-lamp
+light.front_door_light:
+  friendly_name: Front Door Light
+  icon: mdi:coach-lamp
 switch.shelly1_b91f6f:
   friendly_name: Backyard Light
   icon: mdi:track-light

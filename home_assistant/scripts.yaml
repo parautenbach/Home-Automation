@@ -582,6 +582,23 @@ close_garage_door_and_main_gate:
     - service: cover.close_cover
       entity_id: cover.main_gate
 
+turn_on_light_and_timer:
+  description: "Turn on a light and its corresponding timer"
+  fields:
+    light:
+      description: "A light entity"
+      example: "light.front_door_light"
+  mode: single
+  sequence:
+    # https://www.home-assistant.io/docs/scripts/conditions/
+    - service: light.turn_on
+      data:
+        entity_id: "{{ light }}"
+    - service: timer.start
+      data:
+        entity_id: "{{ light | replace('light.', 'timer.') }}_timer"
+        duration: "00:03:00"
+
 test:
   description: "Testing whether a template works in the collapse ID field"
   sequence:

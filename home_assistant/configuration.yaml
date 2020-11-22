@@ -195,6 +195,9 @@ light:
   - platform: switch
     name: living_room_lamp
     entity_id: switch.living_room_lamp
+  - platform: switch
+    name: front_door_light
+    entity_id: switch.shelly1_77128c
 
 shell_command:
   noop: ":"

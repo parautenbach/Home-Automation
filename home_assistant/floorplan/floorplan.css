@@ -28,6 +28,16 @@ svg tspan {
   fill: #A3A3A3 !important;
 }
 
+.cover-open {
+  /* yellow */
+  fill: #F9D27C !important;
+}
+
+.cover-closed {
+  /* grey */
+  fill: #A3A3A3 !important;
+}
+
 .binary-sensor-on {
   /* yellow */
   fill: #F9D27C !important;

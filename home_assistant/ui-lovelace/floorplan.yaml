@@ -8,6 +8,7 @@ cards:
     type: custom:floorplan-card
     config:
       image: /local/floorplan/floorplan.svg
+      stylesheet: /local/floorplan/floorplan.css
       log_level: error
       rules:
         - entities:
@@ -20,6 +21,15 @@ cards:
               class: 'binary-sensor-on'
             - state: 'off'
               class: 'binary-sensor-off'
+        # - action:
+        #     service: cover.toggle
+        #   element: cover.main_gate
+        #   entity: cover.main_gate
+        #   states:
+        #     - state: 'open'
+        #       class: 'cover-open'
+        #     - state: 'closed'
+        #       class: 'cover-closed'
         - action:
             service: cover.toggle
           element: cover.lhs_garage_door
@@ -110,4 +120,3 @@ cards:
               class: 'light-on'
             - state: 'off'
               class: 'light-off'
-      stylesheet: /local/floorplan/floorplan.css

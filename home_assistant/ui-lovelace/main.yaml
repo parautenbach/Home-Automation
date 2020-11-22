@@ -314,7 +314,7 @@ cards:
                 card:
                   type: custom:button-card
                   name: Timer
-                  entity: timer.front_door_timer
+                  entity: timer.front_door_light_timer
                   show_name: false
                   show_icon: false
                   show_state: true
@@ -327,7 +327,7 @@ cards:
                       - margin-bottom: -1ex
                       - color: >
                           [[[
-                            if (states['timer.front_door_timer'].state == 'idle')
+                            if (states['timer.front_door_light_timer'].state == 'idle')
                               return "var(--paper-item-icon-color)";
                             else
                               return "red";

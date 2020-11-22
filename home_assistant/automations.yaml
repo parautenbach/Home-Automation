@@ -242,7 +242,7 @@
       entity_id: switch.shelly1_77128c
     - service: timer.start
       data:
-        entity_id: timer.front_door_timer
+        entity_id: timer.front_door_light_timer
         duration: "00:03:00"
 
 - alias: "Switch Off Front Door Light When Timer Expires"
@@ -251,7 +251,7 @@
     platform: event
     event_type: timer.finished
     event_data:
-      entity_id: timer.front_door_timer
+      entity_id: timer.front_door_light_timer
   action:
     - service: switch.turn_off
       entity_id: switch.shelly1_77128c
@@ -283,11 +283,11 @@
     to: "off"
   condition:
     - condition: state
-      entity_id: timer.front_door_timer
+      entity_id: timer.front_door_light_timer
       state: "active"
   action:
     - service: timer.cancel
-      entity_id: timer.front_door_timer
+      entity_id: timer.front_door_light_timer
 
 # open garage door when arriving home:
 # when moving above a certain (last) speed (so i'm driving, not cycling or otherwise, or getting transported in some other way)

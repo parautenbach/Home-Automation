@@ -346,7 +346,7 @@ cards:
               haptic: selection
           - type: custom:button-card
             name: Garage
-            entity: switch.shelly1_b95a0e
+            entity: light.garage_light
             size: 20%
             color: var(--button-card-light-color)
             show_label: true
@@ -373,7 +373,7 @@ cards:
               haptic: selection
           - type: custom:button-card
             name: Backyard
-            entity: switch.shelly1_b91f6f
+            entity: light.backyard_light
             size: 20%
             color: var(--button-card-light-color)
             show_label: true

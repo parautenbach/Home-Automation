@@ -33,9 +33,9 @@ all_lights:
     - light.smart_bulb_2        # rouvé
     - light.smart_bulb_3        # dining
     - light.smart_bulb_4        # music
-    - switch.shelly1_77128c     # front door
-    - switch.shelly1_b95a0e     # garage
-    - switch.shelly1_b91f6f     # backyard
+    - light.front_door_light
+    - light.garage_light
+    - light.backyard_light
 
 living_room:
   name: Living Room

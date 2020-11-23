@@ -60,7 +60,7 @@ cards:
         - action:
             service: light.toggle
           element: light.smart_bulb_1
-          entity: light.smart_bulb_1
+          entity: light.smart_bulb_1  # pieter's bedside lamp
           states:
             - state: 'on'
               class: 'light-on'
@@ -69,7 +69,7 @@ cards:
         - action:
             service: light.toggle
           element: light.smart_bulb_2
-          entity: light.smart_bulb_2
+          entity: light.smart_bulb_2  # rouvé's bedside lamp
           states:
             - state: 'on'
               class: 'light-on'
@@ -78,7 +78,7 @@ cards:
         - action:
             service: light.toggle
           element: light.smart_bulb_3
-          entity: light.smart_bulb_3
+          entity: light.smart_bulb_3  # dining room light
           states:
             - state: 'on'
               class: 'light-on'
@@ -87,7 +87,7 @@ cards:
         - action:
             service: light.toggle
           element: light.smart_bulb_4
-          entity: light.smart_bulb_4
+          entity: light.smart_bulb_4  # music room light
           states:
             - state: 'on'
               class: 'light-on'
@@ -95,8 +95,8 @@ cards:
               class: 'light-off'
         - action:
             service: switch.toggle
-          element: switch.shelly1_77128c
-          entity: switch.shelly1_77128c
+          element: light.front_door_light
+          entity: light.front_door_light
           states:
             - state: 'on'
               class: 'light-on'
@@ -104,8 +104,8 @@ cards:
               class: 'light-off'
         - action:
             service: switch.toggle
-          element: switch.shelly1_b95a0e
-          entity: switch.shelly1_b95a0e
+          element: light.garage_light
+          entity: light.garage_light
           states:
             - state: 'on'
               class: 'light-on'
@@ -113,8 +113,8 @@ cards:
               class: 'light-off'
         - action:
             service: switch.toggle
-          element: switch.shelly1_b91f6f
-          entity: switch.shelly1_b91f6f
+          element: light.backyard_light
+          entity: light.backyard_light
           states:
             - state: 'on'
               class: 'light-on'

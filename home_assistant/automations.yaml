@@ -238,8 +238,8 @@
         - condition: sun
           before: sunrise
   action:
-    - service: switch.turn_on
-      entity_id: switch.shelly1_77128c
+    - service: light.turn_on
+      entity_id: light.front_door_light
     - service: timer.start
       data:
         entity_id: timer.front_door_light_timer
@@ -253,8 +253,8 @@
     event_data:
       entity_id: timer.front_door_light_timer
   action:
-    - service: switch.turn_off
-      entity_id: switch.shelly1_77128c
+    - service: light.turn_off
+      entity_id: light.front_door_light
 
 - alias: "Open The Gate When Arriving Home"
   trigger:
@@ -279,7 +279,7 @@
   initial_state: true
   trigger:
     platform: state
-    entity_id: switch.shelly1_77128c
+    entity_id: light.front_door_light
     to: "off"
   condition:
     - condition: state
@@ -741,8 +741,8 @@
           before: sunrise
           before_offset: "+01:00:00"
   action:
-    - service: switch.turn_on
-      entity_id: switch.shelly1_b95a0e
+    - service: light.turn_on
+      entity_id: light.garage_light
 
 - alias: "Switch Off Garage Light When Any Garage Door Closed"
   initial_state: true
@@ -763,5 +763,5 @@
           before: sunrise
           before_offset: "+01:00:00"
   action:
-    - service: switch.turn_off
-      entity_id: switch.shelly1_b95a0e
+    - service: light.turn_off
+      entity_id: light.garage_light

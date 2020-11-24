@@ -94,7 +94,7 @@ cards:
             - state: 'off'
               class: 'light-off'
         - action:
-            service: switch.toggle
+            service: light.toggle
           element: light.front_door_light
           entity: light.front_door_light
           states:
@@ -103,7 +103,7 @@ cards:
             - state: 'off'
               class: 'light-off'
         - action:
-            service: switch.toggle
+            service: light.toggle
           element: light.garage_light
           entity: light.garage_light
           states:
@@ -112,7 +112,7 @@ cards:
             - state: 'off'
               class: 'light-off'
         - action:
-            service: switch.toggle
+            service: light.toggle
           element: light.backyard_light
           entity: light.backyard_light
           states:
@@ -120,3 +120,4 @@ cards:
               class: 'light-on'
             - state: 'off'
               class: 'light-off'
+        # tivoli

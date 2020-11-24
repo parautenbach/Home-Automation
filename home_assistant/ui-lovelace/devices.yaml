@@ -48,7 +48,15 @@ cards:
           - entity: light.living_room_lamp
             name: Living Room
           - entity: light.smart_bulb_3
+            name: Dining Room
           - entity: light.smart_bulb_4
+            name: Music Room
+          - entity: light.front_door_light
+            name: Front Door
+          - entity: light.backyard_light
+            name: Backyard
+          - entity: light.garage_light
+            name: Garage
   - type: vertical-stack
     cards:
       - type: custom:mini-graph-card

@@ -2,6 +2,7 @@
   covers:
     main_gate:
       friendly_name: "Main Gate"
+      device_class: gate
       open_cover:
         service: switch.turn_on
         data:
@@ -25,6 +26,7 @@
   covers:
     lhs_garage_door:
       friendly_name: "LHS Garage Door"
+      device_class: garage
       open_cover:
         service: switch.turn_on
         data:
@@ -48,6 +50,7 @@
   covers:
     rhs_garage_door:
       friendly_name: "RHS Garage Door"
+      device_class: garage
       open_cover:
         service: switch.turn_on
         data:

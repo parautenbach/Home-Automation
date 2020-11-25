@@ -88,6 +88,9 @@ homekit:
       - light.smart_bulb_2
       - light.smart_bulb_3
       - light.smart_bulb_4
+      - light.front_door_light
+      - light.backyard_light
+      - light.garage_light
       - switch.smart_plug_1
       - cover.main_gate
       - cover.lhs_garage_door

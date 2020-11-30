@@ -442,13 +442,6 @@ cards:
               when_idle: false
               when_paused: false
               when_standby: false
-          - type: history-graph
-            hours_to_show: 24
-            entities:
-              - entity: media_player.living_room_universal
-                name: Living Room
-              - entity: media_player.main_bedroom
-                name: Main Bedroom
       - type: entities
         title: Electricity Consumption
         show_header_toggle: false

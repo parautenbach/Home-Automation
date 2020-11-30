@@ -79,8 +79,6 @@ homekit:
   filter:
     include_entities:
       - input_boolean.test
-      - input_boolean.pieter_present
-      - input_boolean.rouve_present
       - input_boolean.guest_mode
       - input_boolean.contractor_mode
       - input_boolean.pieter_driving

@@ -84,6 +84,9 @@ homekit:
       - input_boolean.guest_mode
       - input_boolean.contractor_mode
       - input_boolean.pieter_driving
+      - binary_sensor.electricity_feed
+      - binary_sensor.internet_connection
+      - binary_sensor.motion_detected
       - light.smart_bulb_1
       - light.smart_bulb_2
       - light.smart_bulb_3

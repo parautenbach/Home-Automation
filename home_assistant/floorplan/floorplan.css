@@ -19,13 +19,28 @@ svg tspan {
 }
 
 .light-on {
-  /* yellow */
-  fill: #F9D27C !important;
+  /*fill: var(--button-card-light-color) !important;*/
+  fill: var(--paper-item-icon-active-color) !important;
+}
+
+/*
+https://css-tricks.com/thing-know-gradients-transparent-black/
+https://stackoverflow.com/questions/14051351/svg-gradient-using-css
+*/
+
+#glowGradient {
+  --color-outer: rgb(255, 255, 255) !important;
+  --color-inner: var(--paper-item-icon-active-color) !important;
+  --opacity: 0.5;
+}
+
+stop {
+  transition: all 2s !important;
 }
 
 .light-off {
   /* grey */
-  fill: #A3A3A3 !important;
+  fill: var(--paper-item-icon-color) !important;
 }
 
 .cover-open {

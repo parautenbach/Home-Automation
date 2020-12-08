@@ -21,6 +21,13 @@ cards:
               class: 'binary-sensor-on'
             - state: 'off'
               class: 'binary-sensor-off'
+          state_transitions:
+            - duration: 1
+              from_state: 'on'
+              to_state: 'off'
+            - duration: 1
+              from_state: 'off'
+              to_state: 'on'
         # - action:
         #     service: cover.toggle
         #   element: cover.main_gate
@@ -79,11 +86,7 @@ cards:
             service: light.toggle
           element: light.smart_bulb_3
           entity: light.smart_bulb_3  # dining room light
-          states:
-            - state: 'on'
-              class: 'light-on'
-            - state: 'off'
-              class: 'light-off'
+          image_template: '/local/floorplan/mdi-dome-light-${entity.state}.svg'
         - action:
             service: light.toggle
           element: light.smart_bulb_4

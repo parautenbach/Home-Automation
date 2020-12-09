@@ -43,6 +43,8 @@ lovelace:
       type: module
     - url: /hacsfiles/weather-card/weather-card.js
       type: module
+    - url: /hacsfiles/gallery-card/gallery-card.js
+      type: module
     - url: /local/floorplan/floorplan-card.js
       type: module
 

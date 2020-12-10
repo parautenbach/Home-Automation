@@ -250,3 +250,9 @@ media_player:
   - platform: shairport_sync
     name: Main Bedroom
     topic: shairport-sync/main-bedroom
+
+# https://community.home-assistant.io/t/control-recursion-in-the-folder-watcher-integration/200110
+# folder_watcher:
+#   - folder: /tmp/
+#     patterns:
+#       - 'camera.security_camera_*.jpg'

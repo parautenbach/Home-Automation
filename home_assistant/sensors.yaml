@@ -247,6 +247,17 @@
   unit_of_measurement: 'messages/s'
   icon: mdi:email-send-outline
 
-# - platform: folder
-#   folder: /home/homeassistant/.homeassistant/www/gallery
-#   filter: "camera.security_camera_*.jpg"
+# used by the gallery panel
+- platform: files
+  folder: /home/homeassistant/.homeassistant/www/gallery/
+  filter: 'camera.security_camera_*.jpg'
+  name: security_camera_snapshots
+  sort: date
+  recursive: False
+
+# used to sync files from tmp to the gallery
+# alt: https://www.home-assistant.io/integrations/folder_watcher/
+# then watch /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg
+- platform: folder
+  folder: /tmp/
+  filter: 'camera.security_camera_*.jpg'

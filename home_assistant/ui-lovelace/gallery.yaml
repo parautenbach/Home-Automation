@@ -1,0 +1,15 @@
+title: Gallery
+path: gallery
+panel: true
+icon: mdi:image-multiple
+badges: []
+cards:
+  - type: 'custom:gallery-card'
+    title: Security Camera Snapshots
+    entities:
+      - sensor.security_camera_snapshots
+    menu_alignment: Responsive
+    maximum_files: 5
+    file_name_format: 'camera.security_camera_%YYY%m%d-%H%M%S.jpg'
+    caption_format: '%YYY-%m-%d %H:%M:%S'
+# todo: clips

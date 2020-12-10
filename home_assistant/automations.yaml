@@ -765,3 +765,13 @@
   action:
     - service: light.turn_off
       entity_id: light.garage_light
+
+- alias: "Update Security Camera Snapshot Gallery"
+  trigger:
+    - platform: state
+      entity_id: sensor.tmp
+      attribute: number_of_files
+  mode: queued
+  action:
+    - service: shell_command.sync_snapshots
+    - service: shell_command.trim_snapshots

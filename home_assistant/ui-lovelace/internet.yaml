@@ -59,12 +59,20 @@ cards:
             name: This Month
           - entity: sensor.monthly_internet_usage_out
             name: This Month
-  - type: entities
-    show_header_toggle: false
-    entities:
-      - sensor.internet_round_trip_time_avg
-      - sensor.internet_round_trip_time_mdev
-      - sensor.internet_packet_loss
+  - type: vertical-stack
+    title: Connection Details
+    cards:
+      - type: history-graph
+        hours_to_show: 24
+        entities:
+          - entity: binary_sensor.internet_connection
+            name: Connection
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - sensor.internet_round_trip_time_avg
+          - sensor.internet_round_trip_time_mdev
+          - sensor.internet_packet_loss
   - type: custom:mini-graph-card
     name: Latency
     entities:

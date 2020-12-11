@@ -1,7 +1,7 @@
 title: Gallery
 path: gallery
 panel: true
-icon: mdi:image-multiple
+icon: mdi:cctv
 badges: []
 cards:
   - type: 'custom:gallery-card'

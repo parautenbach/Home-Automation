@@ -709,11 +709,14 @@ cards:
       current: true
       details: true
       forecast: true
+      hourly_forecast: true
+      number_of_forecasts: 5  # hours
     - type: custom:weather-card
       entity: weather.home
       current: false
       details: false
       forecast: true
+      number_of_forecasts: 5  # days
     - type: entities
       title: Home
       entities:

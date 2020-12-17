@@ -33,3 +33,30 @@ cards:
       when_standby: false
   - type: media-control
     entity: media_player.main_bedroom
+  - type: custom:weather-card
+    name: Stellies
+    entity: weather.home_hourly
+    current: true
+    details: true
+    forecast: true
+    hourly_forecast: true
+    number_of_forecasts: 10
+  - type: custom:weather-card
+    entity: weather.home
+    current: false
+    details: false
+    forecast: true
+  - type: custom:weather-card-chart
+    title: Weather
+    weather: weather.home
+    mode: daily
+  - type: custom:weather-card-chart
+    title: Weather
+    weather: weather.home_hourly
+    mode: hourly
+  - type: custom:weather-card
+    entity: weather.home
+    current: true
+    details: true
+    forecast: true
+    number_of_forecasts: 4

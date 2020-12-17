@@ -33,6 +33,7 @@ logger:
 lovelace:
   mode: yaml
   resources:
+    # hacs
     - url: /hacsfiles/button-card/button-card.js
       type: module
     - url: /hacsfiles/lovelace-fold-entity-row/fold-entity-row.js
@@ -47,7 +48,10 @@ lovelace:
       type: module
     - url: /hacsfiles/gallery-card/gallery-card.js
       type: module
+    # manual
     - url: /local/floorplan/floorplan-card.js
+      type: module
+    - url: /local/weather-card-chart/weather-card-chart.js
       type: module
 
 frontend:

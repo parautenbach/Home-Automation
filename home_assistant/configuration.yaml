@@ -19,6 +19,8 @@ homeassistant:
   time_zone: "Africa/Johannesburg"
   allowlist_external_dirs:
     - /tmp
+  media_dirs:
+    local: /home/homeassistant/.homeassistant/www/gallery
   customize: !include customize.yaml
 
 logger:
@@ -253,6 +255,8 @@ media_player:
   - platform: shairport_sync
     name: Main Bedroom
     topic: shairport-sync/main-bedroom
+
+media_source:
 
 # https://community.home-assistant.io/t/control-recursion-in-the-folder-watcher-integration/200110
 # folder_watcher:

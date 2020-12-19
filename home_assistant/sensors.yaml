@@ -261,3 +261,16 @@
 - platform: folder
   folder: /tmp/
   filter: 'camera.security_camera_*.jpg'
+
+- platform: sql
+  # Not needed when using recorder, because we already have a connection
+  # https://community.home-assistant.io/t/calculate-home-assistant-v2-db-size-without-whitelisting-entire-config-dir/195808/2
+  # https://www.home-assistant.io/integrations/sql/
+  scan_interval: 10800  # 60*60*3 / every 3 hours
+  queries:
+    - name: DB size
+      # This is the fastest solution, available since sqlite 3.16.
+      # It’s the same info as returned by ".dbinfo" in the sqlite3 cmdline client.
+      query: 'SELECT ROUND(page_count * page_size / 1024 / 1024, 1) as size FROM pragma_page_count(), pragma_page_size();'
+      column: 'size'
+      unit_of_measurement: 'MiB'

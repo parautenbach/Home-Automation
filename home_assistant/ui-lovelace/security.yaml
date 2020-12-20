@@ -24,7 +24,7 @@ cards:
   - type: vertical-stack
     cards:
       - type: picture-glance
-        title: Last Motion Captured
+        title: Last Snapshot Captured
         camera_image: camera.security_camera_last_snapshot
         entities: []
       - type: entities
@@ -37,6 +37,10 @@ cards:
             name: Snapshots and Lights
   - type: vertical-stack
     cards:
+      - type: picture-glance
+        title: Last Clip Captured
+        camera_image: camera.security_camera_last_clip
+        entities: []
       - type: entities
         title: Covers
         show_header_toggle: false

@@ -494,6 +494,7 @@ security_camera_record_clip:
         filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
         duration: 10
     - delay: "00:00:15"
+    - service: shell_command.copy_last_video_clip
 
 security_camera_create_snapshot:
   # https://www.reddit.com/r/homeassistant/comments/9fz5e4/show_the_x_most_recent_pictures_in_a_directory/e69alpc/

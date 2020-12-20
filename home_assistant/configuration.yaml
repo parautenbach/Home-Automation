@@ -20,7 +20,7 @@ homeassistant:
   allowlist_external_dirs:
     - /tmp
   media_dirs:
-    local: /home/homeassistant/.homeassistant/www/gallery
+    gallery: /home/homeassistant/.homeassistant/www/gallery
   customize: !include customize.yaml
 
 logger:
@@ -155,6 +155,9 @@ camera:
   - platform: local_file
     name: security_camera_last_snapshot
     file_path: /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg
+  - platform: ffmpeg
+    name: security_camera_last_clip
+    input: /home/homeassistant/.homeassistant/www/camera.security_camera_last.mp4
 
 notify:
   - name: family
@@ -222,6 +225,7 @@ light:
 shell_command:
   noop: ":"
   copy_last_snapshot_image: "cp `ls -t /tmp/camera.security_camera_*.jpg | head -n1` /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg"
+  copy_last_video_clip: "cp `ls -t /tmp/camera.security_camera_*.mp4 | head -n1` /home/homeassistant/.homeassistant/www/camera.security_camera_last.mp4"
   # keep a rolling buffer of n snapshots by always copying only the latest ones and removing the oldest
   # rsync will only copy what's new up to n and the second command will remove what's extra (can't do it with rsync's --delete unless the source is a directory)
   # this is to avoid the distination from growing indefinitely

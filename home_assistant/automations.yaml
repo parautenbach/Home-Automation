@@ -106,6 +106,36 @@
     - service: switch.turn_off
       entity_id: switch.motion_led
 
+- alias: "Blink Motion Indicator While Recording"
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id: script.security_camera_record_clip
+    to: "on"
+  mode: single
+  action:
+    # stop motion indicator
+    - service: automation.turn_off
+      entity_id: automation.motion_indicator_on
+    # blink
+    - repeat:
+        sequence:
+          - service: switch.turn_on
+            entity_id: switch.motion_led
+          - delay:
+              milliseconds: 500
+          - service: switch.turn_off
+            entity_id: switch.motion_led
+          - delay:
+              milliseconds: 500
+        until:
+          - condition: state
+            entity_id: script.security_camera_record_clip
+            state: "off"
+    # resume motion indicator
+    - service: automation.turn_on
+      entity_id: automation.motion_indicator_on
+
 - alias: "Living Room Lamp Auto On Upon Sunset or Arrival"
   initial_state: true
   trigger:

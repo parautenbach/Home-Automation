@@ -325,7 +325,7 @@
   # Not needed when using recorder, because we already have a connection
   # https://community.home-assistant.io/t/calculate-home-assistant-v2-db-size-without-whitelisting-entire-config-dir/195808/2
   # https://www.home-assistant.io/integrations/sql/
-  scan_interval: 10800  # 60*60*3 / every 3 hours
+  scan_interval: 3600  # 60*60 / every 1 hour
   queries:
     - name: DB size
       # This is the fastest solution, available since sqlite 3.16.

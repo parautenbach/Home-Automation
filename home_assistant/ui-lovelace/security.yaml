@@ -3,44 +3,26 @@ path: security
 icon: mdi:security
 badges: []
 cards:
-  - type: picture-glance
-    title: Security Camera
-    camera_image: camera.security_camera
-    entities:
-      - binary_sensor.motion_detected
-      - entity: script.security_camera_create_snapshot
-        tap_action:
-          action: call-service
-          service: script.turn_on
-          service_data:
-            entity_id: script.security_camera_create_snapshot
-      - entity: script.security_camera_record_clip
-        tap_action:
-          action: call-service
-          service: script.turn_on
-          service_data:
-            entity_id: script.security_camera_record_clip
-      - group.security_automations
   - type: vertical-stack
     cards:
       - type: picture-glance
-        title: Last Snapshot Captured
-        camera_image: camera.security_camera_last_snapshot
-        entities: []
-      - type: entities
+        title: Security Camera
+        camera_image: camera.security_camera
         entities:
-          - entity: sensor.security_camera_last_snapshot_relative
-            name: Last Motion Event
-          - entity: timer.motion_timer
-            name: Living Room Light Timeout
-          - entity: group.security_automations
-            name: Snapshots and Lights
-  - type: vertical-stack
-    cards:
-      - type: picture-glance
-        title: Last Clip Captured
-        camera_image: camera.security_camera_last_clip
-        entities: []
+          - binary_sensor.motion_detected
+          - entity: script.security_camera_create_snapshot
+            tap_action:
+              action: call-service
+              service: script.turn_on
+              service_data:
+                entity_id: script.security_camera_create_snapshot
+          - entity: script.security_camera_record_clip
+            tap_action:
+              action: call-service
+              service: script.turn_on
+              service_data:
+                entity_id: script.security_camera_record_clip
+          - group.security_automations
       - type: entities
         title: Covers
         show_header_toggle: false
@@ -66,3 +48,35 @@ cards:
             name: Rouvé
           - entity: binary_sensor.rhs_garage_occupied
             name: Pieter
+  - type: vertical-stack
+    cards:
+      - type: picture-glance
+        title: Last Snapshot Captured
+        camera_image: camera.security_camera_last_snapshot
+        entities: []
+        style: |
+          .title:after {
+            content: ": {{ states('sensor.security_camera_last_snapshot_relative') }}";
+          }
+      - type: picture-glance
+        title: Last Clip Captured
+        camera_image: camera.security_camera_last_clip
+        entities: []
+        style: |
+          .title:after {
+            content: ": {{ states('sensor.security_camera_last_clip_relative') }}";
+          }
+      - type: entities
+        entities:
+          - entity: sensor.motion_detected_last_relative
+            name: Last Motion Detected
+          - entity: timer.motion_timer
+            name: Living Room Light Timeout
+          - entity: group.security_automations
+            name: Snapshots and Lights
+      - type: history-graph
+        title: Motion
+        hours_to_show: 24
+        entities:
+          - entity: binary_sensor.motion_sensor
+            name: Security Camera

@@ -484,6 +484,10 @@ entertainment_off:
 
 security_camera_record_clip:
   sequence:
+    - service: input_datetime.set_datetime
+      entity_id: input_datetime.security_camera_last_clip
+      data:
+        datetime: "{{ now() }}"
     - service: camera.record
       # https://github.com/home-assistant/core/issues/40241
       # entity_id: camera.security_camera

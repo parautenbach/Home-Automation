@@ -189,6 +189,12 @@ input_datetime:
   security_camera_last_snapshot:
     has_date: true
     has_time: true
+  security_camera_last_clip:
+    has_date: true
+    has_time: true
+  motion_detected_last:
+    has_date: true
+    has_time: true
 
 input_number:
   wan_traffic_delta_in:

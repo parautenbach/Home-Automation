@@ -194,6 +194,10 @@ sensor.security_camera_last_snapshot:
   icon: mdi:clock-outline
 sensor.security_camera_last_snapshot_relative:
   icon: mdi:clock-outline
+sensor.security_camera_last_clip_relative:
+  icon: mdi:clock-outline
+sensor.motion_detected_last_relative:
+  icon: mdi:clock-outline
 input_boolean.pieter_present:
   icon: mdi:account
 input_boolean.rouve_present:

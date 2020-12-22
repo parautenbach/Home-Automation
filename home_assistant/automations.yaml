@@ -817,3 +817,26 @@
   action:
     - service: shell_command.sync_snapshots
     - service: shell_command.trim_snapshots
+
+- alias: "Switch Off Bedlamp When Plugging In Phone"
+  trigger:
+    platform: state
+    entity_id: sensor.ceres_battery_state
+    from: 'Not Charging'  # Can be to Charging or Full
+  mode: single
+  condition:
+    - condition: and
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.pieter_present
+          state: "on"
+        - condition: time
+          after: "21:00:00"
+          before: "23:59:59"
+        # proxy for nobody inside
+        - condition: state
+          entity_id: light.living_room_lamp
+          state: "off"
+  action:
+    - service: light.turn_off
+      entity_id: light.smart_bulb_1

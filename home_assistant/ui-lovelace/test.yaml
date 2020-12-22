@@ -60,3 +60,8 @@ cards:
     details: true
     forecast: true
     number_of_forecasts: 4
+  - type: entities
+    title: Test
+    entities:
+      - input_boolean.test
+    show_header_toggle: true

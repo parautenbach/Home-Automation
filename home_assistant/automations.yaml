@@ -840,3 +840,17 @@
   action:
     - service: light.turn_off
       entity_id: light.smart_bulb_1
+
+- alias: "Turn Off Entertainment System When Idle Or Leaving Room"
+  trigger:
+    - platform: state
+      entity_id: media_player.living_room
+      to: "idle"
+      for:
+        minutes: 15
+    - platform: state
+      entity_id: light.living_room_lamp
+      to: "off"
+  action:
+    - service: script.turn_on
+      entity_id: script.entertainment_off

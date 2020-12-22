@@ -737,6 +737,9 @@ cards:
     - type: custom:mini-graph-card
       entities:
         - entity: sensor.sun_illuminance
+        - entity: sensor.solar_angle
+          color: '#e74c3c'
+          y_axis: secondary
       hours_to_show: 24
       hour24: true
       smoothing: true

@@ -851,6 +851,7 @@
     - platform: state
       entity_id: light.living_room_lamp
       to: "off"
+  # condition: if only we could know whether it's on
   action:
     - service: script.turn_on
       entity_id: script.entertainment_off

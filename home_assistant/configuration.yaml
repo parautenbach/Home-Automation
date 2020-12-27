@@ -106,6 +106,10 @@ homekit:
       - cover.main_gate
       - cover.lhs_garage_door
       - cover.rhs_garage_door
+      - script.entertainment_apple_tv_on
+      - script.entertainment_satellite_on
+      - script.entertainment_off
+      - script.open_pedestrian_gap
 
 ios:
   push:

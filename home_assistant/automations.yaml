@@ -846,11 +846,12 @@
 
 - alias: "Turn Off Entertainment System When Idle Or Leaving Room"
   trigger:
-    - platform: state
-      entity_id: media_player.living_room
-      to: "idle"
-      for:
-        minutes: 15
+    # we don't know the decoder's state so we could be turning off the tv just because the apple tv isn't playing...
+    # - platform: state
+    #   entity_id: media_player.living_room
+    #   to: "idle"
+    #   for:
+    #     minutes: 15
     - platform: state
       entity_id: light.living_room_lamp
       to: "off"

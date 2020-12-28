@@ -72,6 +72,18 @@
         {% else %}
           mdi:walk
         {% endif %}
+    no_recent_backup:
+      friendly_name: "Recent Backup"
+      device_class: problem
+      # get the last file, extract the date and compare
+      value_template: >-
+        {{ (now() - (strptime((state_attr('sensor.home_assistant', 'file_list') | sort(reverse=True))[1] | regex_findall_index(find='\d{8}'),'%Y%m%d') | as_local)).days > 4 }}
+      icon_template: >-
+        {% if (now() - (strptime((state_attr('sensor.home_assistant', 'file_list') | sort(reverse=True))[1] | regex_findall_index(find='\d{8}'),'%Y%m%d') | as_local)).days > 4 %}
+          mdi:file-alert-outline
+        {% else %}
+          mdi:file-outline
+        {% endif %}
 
 - platform: ping
   name: Internet

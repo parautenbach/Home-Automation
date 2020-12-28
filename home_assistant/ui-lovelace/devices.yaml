@@ -87,6 +87,7 @@ cards:
           - sensor.network_throughput_out_wlan0
           - sensor.mqtt_broker_sent_messages_1min_load
           - sensor.mqtt_broker_received_messages_1min_load
+          - sensor.last_backup_relative
           - sensor.db_size
           - binary_sensor.rpi_power_status
           - sensor.last_boot

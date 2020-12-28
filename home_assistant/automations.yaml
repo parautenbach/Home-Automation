@@ -858,3 +858,17 @@
   action:
     - service: script.turn_on
       entity_id: script.entertainment_off
+
+- alias: "Notify If No Recent Backup"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.no_recent_backup
+    to: "on"
+  action:
+    - service: notify.mobile_app_ceres
+      data:
+        title: "System"
+        message: "No recent backup found."
+        data:
+          push:
+            thread-id: "system-backup"

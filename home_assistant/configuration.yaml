@@ -19,6 +19,7 @@ homeassistant:
   time_zone: "Africa/Johannesburg"
   allowlist_external_dirs:
     - /tmp
+    - /mnt/nas/Backups/home_assistant/
   media_dirs:
     gallery: /home/homeassistant/.homeassistant/www/gallery
   customize: !include customize.yaml

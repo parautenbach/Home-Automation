@@ -170,12 +170,21 @@
       event: sunset
       offset: "-00:30:00"
     - platform: state
-      entity_id: binary_sensor.anybody_home
+      entity_id: binary_sensor.pieter_present
       to: "on"
+    - platform: state
+      entity_id: binary_sensor.rouve_present
+      to: "on"
+  mode: single
   condition:
-    - condition: state
-      entity_id: binary_sensor.anybody_home
-      state: "on"
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.pieter_present
+          state: "on"
+        - condition: state
+          entity_id: binary_sensor.rouve_present
+          state: "on"
     # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
     - condition: or
       conditions:
@@ -208,10 +217,30 @@
       entity_id: switch.living_room_lamp
       state: "off"
   action:
-    - service: homeassistant.turn_on
-      entity_id: group.main_bedroom
     - service: switch.turn_on
       entity_id: switch.living_room_lamp
+
+- alias: "Bedlamps On Upon Low Light"
+  initial_state: true
+  trigger:
+    - platform: template
+      # todo: make binary sensor
+      value_template: "{{ states('sensor.sun_illuminance') | int < 15320 }}"
+  condition:
+    - condition: time
+      after: "16:00:00"
+      before: "21:00:00"
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.pieter_present
+          state: "on"
+        - condition: state
+          entity_id: binary_sensor.rouve_present
+          state: "on"
+  action:
+    - service: homeassistant.turn_on
+      entity_id: group.main_bedroom
 
 - alias: "Lights Off After Sunrise"
   # todo: use illuminance
@@ -220,6 +249,7 @@
     - platform: sun
       event: sunrise
       offset: "01:30:00"
+  # todo: if anybody home?
   condition:
     - condition: sun
       after: sunrise

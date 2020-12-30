@@ -447,7 +447,7 @@ entertainment_apple_tv_on:
     - delay: "00:00:01"
     - service: script.turn_on
       entity_id: script.apple_tv_menu
-    - delay: "00:00:03"
+    - delay: "00:00:05"
     - service: script.turn_on
       entity_id: script.samsung_tv_hdmi2
 
@@ -461,7 +461,7 @@ entertainment_satellite_on:
     - delay: "00:00:01"
     - service: script.turn_on
       entity_id: script.dstv_power
-    - delay: "00:00:03"
+    - delay: "00:00:05"
     - service: script.turn_on
       entity_id: script.samsung_tv_hdmi1
 

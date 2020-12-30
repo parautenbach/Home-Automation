@@ -273,6 +273,8 @@
   action:
     - service: light.turn_off
       entity_id: all
+    - service: script.turn_on
+      entity_id: script.entertainment_off
     - service: automation.turn_on
       entity_id: automation.take_motion_snapshots
     - service: automation.turn_on

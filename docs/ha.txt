@@ -1,2 +1,7 @@
 no ios notifications:
-https://community.home-assistant.io/t/endpoint-is-disabled-ios/39269/4?u=parautenbach
+https://community.home-assistant.io/t/endpoint-is-disabled-ios/39269/4
+
+when creating a new virtual env, set remote gpio env vars:
+"Note that for virtual environments you may need to set an environment variable when starting the environment to set the pin factory, example:
+GPIOZERO_PIN_FACTORY=pigpio PIGPIO_ADDR=YOUR_RPi_IP_ADDRESS"
+from: https://www.home-assistant.io/integrations/remote_rpi_gpio/

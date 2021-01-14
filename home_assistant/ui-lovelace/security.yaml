@@ -78,5 +78,5 @@ cards:
         title: Motion
         hours_to_show: 24
         entities:
-          - entity: binary_sensor.motion_sensor_2
+          - entity: binary_sensor.motion_sensor_3
             name: Security Camera

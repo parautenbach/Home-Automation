@@ -88,22 +88,20 @@
   initial_state: true
   trigger:
     platform: state
-    entity_id: binary_sensor.motion_sensor_2
+    entity_id: binary_sensor.motion_detected
     to: "on"
   action:
-    - service: switch.turn_on
+    - service: light.turn_on
       entity_id: light.led
 
 - alias: "Motion Indicator Off"
   initial_state: true
   trigger:
     platform: state
-    entity_id: binary_sensor.motion_sensor_2
+    entity_id: binary_sensor.motion_detected
     to: "off"
-    for:
-      seconds: 5
   action:
-    - service: switch.turn_off
+    - service: light.turn_off
       entity_id: light.led
 
 - alias: "Blink Motion Indicator While Recording"

@@ -38,15 +38,6 @@
             "type": "Lightbulb",
             "name": "LED",
             "pin": 5
-        },
-        {
-            "accessory": "mqtt-switch-tasmota",
-            "name": "Living Room Lamp",
-            "url": "mqtt://homeassistant.local/",
-            "topics": {
-                "statusGet": "living-room/lamp/stat/POWER",
-                "statusSet": "living-room/lamp/cmnd/POWER"
-            }
         }
     ],
     "platforms": [
@@ -79,16 +70,6 @@
                     }
                 }
             ]
-        },
-        {
-            "platform": "mqtt",
-            "name": "mqtt",
-            "url": "mqtt://homeassistant.local/"
-        },
-        {
-            "platform": "BroadlinkRM",
-            "name": "Broadlink RM",
-            "hideScanFrequencyButton": true
         }
     ]
 }

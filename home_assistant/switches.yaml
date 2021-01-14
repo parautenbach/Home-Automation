@@ -1,4 +1,5 @@
-- platform: rpi_gpio
+- platform: remote_rpi_gpio
+  host: securitypi.local
   ports:
     24: motion_led
 - platform: template

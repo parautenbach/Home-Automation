@@ -8,21 +8,6 @@
     - 'time_date'
     - 'time_utc'
 
-- platform: bme280
-  name: Ambient
-  i2c_address: 0x77
-  operation_mode: 2  # forced mode
-  time_standby: 5
-  oversampling_temperature: 1
-  oversampling_pressure: 1
-  oversampling_humidity: 1
-  delta_temperature: -0.5
-  monitored_conditions:
-    - temperature
-    - humidity
-    - pressure
-  scan_interval: 40
-
 - platform: systemmonitor
   resources:
     - type: disk_use_percent
@@ -33,9 +18,9 @@
     - type: load_5m
     - type: load_15m
     - type: throughput_network_in
-      arg: wlan0
+      arg: enp3s0
     - type: throughput_network_out
-      arg: wlan0
+      arg: enp3s0
     - type: last_boot
 
 - platform: command_line
@@ -345,6 +330,7 @@
   filter: 'camera.security_camera_*.jpg'
 
 - platform: sql
+  db_url: postgresql://@/homeassistant
   # Not needed when using recorder, because we already have a connection
   # https://community.home-assistant.io/t/calculate-home-assistant-v2-db-size-without-whitelisting-entire-config-dir/195808/2
   # https://www.home-assistant.io/integrations/sql/
@@ -353,9 +339,9 @@
     - name: DB size
       # This is the fastest solution, available since sqlite 3.16.
       # It’s the same info as returned by ".dbinfo" in the sqlite3 cmdline client.
-      query: 'SELECT ROUND(page_count * page_size / 1024 / 1024, 1) as size FROM pragma_page_count(), pragma_page_size();'
-      column: 'size'
-      unit_of_measurement: 'MiB'
+      query: "SELECT (pg_database_size('homeassistant')/1024/1024) as db_size;"
+      column: "db_size"
+      unit_of_measurement: "MiB"
 
 # used to check backups
 - platform: folder

@@ -15,7 +15,7 @@ cards:
             - binary_sensor.gate_status
             - binary_sensor.lhs_garage_occupied
             - binary_sensor.rhs_garage_occupied
-            - binary_sensor.motion_sensor
+            - binary_sensor.motion_sensor_2
           states:
             - state: 'on'
               class: 'binary-sensor-on'

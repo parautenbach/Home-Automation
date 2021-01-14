@@ -720,9 +720,8 @@ cards:
     - type: entities
       title: Home
       entities:
-        - sensor.ambient_temperature
-        - sensor.ambient_humidity
-        - sensor.ambient_pressure
+        - sensor.conditions_temperature
+        - sensor.conditions_humidity
       show_header_toggle: false
     - type: custom:mini-graph-card
       entities:

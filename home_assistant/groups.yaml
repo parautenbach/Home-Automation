@@ -1,6 +1,6 @@
 default_view:
   entities:
-    - binary_sensor.motion_sensor
+    - binary_sensor.motion_sensor_2
     - binary_sensor.updater
     - sun.sun
     - person.pieter_rautenbach
@@ -21,9 +21,8 @@ default_view:
 ambient_sensor:
   name: Environment
   entities:
-    - sensor.ambient_temperature
-    - sensor.ambient_humidity
-    - sensor.ambient_pressure
+    - sensor.conditions_temperature
+    - sensor.conditions_humidity
 
 all_lights:
   name: All Lights
@@ -98,7 +97,7 @@ security:
   name: Security
   entities:
     - camera.security_camera
-    - switch.motion_led
+    - light.led
     - automation.motion_snapshots
 
 security_automations:
@@ -117,8 +116,8 @@ server:
     - sensor.load_5m
     - sensor.load_15m
     - sensor.server_cpu_temp
-    - sensor.network_throughput_in_wlan0
-    - sensor.network_throughput_out_wlan0
+    - sensor.network_throughput_in_enp3s0
+    - sensor.network_throughput_out_enp3s0
     - sensor.last_boot
 
 family:

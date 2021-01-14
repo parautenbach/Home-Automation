@@ -61,6 +61,7 @@ frontend:
     - /local/custom.js
 
 recorder:
+  db_url: postgresql://@/homeassistant
   # https://community.home-assistant.io/t/home-assistant-db-size/1198/10?u=parautenbach
   # If you set it for 14 days, then it runs after 14 days of UNINTERRUPTED uptime. If you restart your HA server, then the clock restarts from zero again.
   # delete from events where time_fired < datetime('now','-30 days');
@@ -68,7 +69,7 @@ recorder:
   # SQLite does not recover the disk space after you have done this, so it is necessary to ‘vacuum’ the database. Simply issue the following command:
   # vacuum;
   auto_purge: true
-  purge_keep_days: 3
+  purge_keep_days: 14
 
 tts:
   - platform: google_translate
@@ -96,6 +97,8 @@ homekit:
       - binary_sensor.electricity_feed
       - binary_sensor.internet_connection
       - binary_sensor.motion_detected
+      - sensor.conditions_temperature  # from homebridge
+      - sensor.conditions_humidity  # from homebridge
       - light.smart_bulb_1
       - light.smart_bulb_2
       - light.smart_bulb_3
@@ -103,6 +106,7 @@ homekit:
       - light.front_door_light
       - light.backyard_light
       - light.garage_light
+      - light.led  # from homebridge
       - switch.smart_plug_1
       - cover.main_gate
       - cover.lhs_garage_door
@@ -111,6 +115,7 @@ homekit:
       - script.entertainment_satellite_on
       - script.entertainment_off
       - script.open_pedestrian_gap
+      # TODO: https://www.home-assistant.io/integrations/homekit/ - names
 
 ios:
   push:
@@ -155,7 +160,7 @@ zone:
 camera:
   - platform: ffmpeg
     name: security_camera
-    input: -rtsp_transport tcp -i rtsp://localhost:8554/unicast
+    input: -rtsp_transport tcp -i rtsp://securitypi.local:8554/unicast
     extra_arguments: "-vf hue=s=0"
   - platform: local_file
     name: security_camera_last_snapshot

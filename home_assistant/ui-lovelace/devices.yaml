@@ -83,13 +83,13 @@ cards:
           - sensor.processor_use
           - sensor.load_1m
           - sensor.server_cpu_temp
-          - sensor.network_throughput_in_wlan0
-          - sensor.network_throughput_out_wlan0
+          - sensor.network_throughput_in_enp3s0
+          - sensor.network_throughput_out_enp3s0
           - sensor.mqtt_broker_sent_messages_1min_load
           - sensor.mqtt_broker_received_messages_1min_load
           - sensor.last_backup_relative
           - sensor.db_size
-          - binary_sensor.rpi_power_status
+          # TODO: - binary_sensor.rpi_power_status
           - sensor.last_boot
         title: Server
         show_header_toggle: false

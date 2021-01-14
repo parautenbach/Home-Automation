@@ -30,7 +30,7 @@
   initial_state: false
   trigger:
     platform: state
-    entity_id: binary_sensor.motion_sensor
+    entity_id: binary_sensor.motion_sensor_2
     to: "on"
   action:
     - service: script.turn_on
@@ -40,7 +40,7 @@
   initial_state: true
   trigger:
     platform: state
-    entity_id: binary_sensor.motion_sensor
+    entity_id: binary_sensor.motion_sensor_2
     to: "on"
   action:
     - service: input_datetime.set_datetime
@@ -53,7 +53,7 @@
   initial_state: false
   trigger:
     platform: state
-    entity_id: binary_sensor.motion_sensor
+    entity_id: binary_sensor.motion_sensor_2
     to: "on"
   condition:
     # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
@@ -88,23 +88,23 @@
   initial_state: true
   trigger:
     platform: state
-    entity_id: binary_sensor.motion_sensor
+    entity_id: binary_sensor.motion_sensor_2
     to: "on"
   action:
     - service: switch.turn_on
-      entity_id: switch.motion_led
+      entity_id: light.led
 
 - alias: "Motion Indicator Off"
   initial_state: true
   trigger:
     platform: state
-    entity_id: binary_sensor.motion_sensor
+    entity_id: binary_sensor.motion_sensor_2
     to: "off"
     for:
       seconds: 5
   action:
     - service: switch.turn_off
-      entity_id: switch.motion_led
+      entity_id: light.led
 
 - alias: "Blink Motion Indicator While Recording"
   initial_state: true
@@ -121,11 +121,11 @@
     - repeat:
         sequence:
           - service: switch.turn_on
-            entity_id: switch.motion_led
+            entity_id: light.led
           - delay:
               milliseconds: 500
           - service: switch.turn_off
-            entity_id: switch.motion_led
+            entity_id: light.led
           - delay:
               milliseconds: 500
         until:

@@ -3,7 +3,7 @@ ha upgrade:
 - https://www.home-assistant.io/docs/installation/raspberry-pi
 
 py upgrade:
-- https://blog.kalavala.net/raspberrypi/python/2018/01/12/upgrade-python.html/
+- https://blog.kalavala.net/raspberrypi/python/2018/01/12/upgrade-python.html
 - https://community.home-assistant.io/t/python-3-6-upgrade-of-a-virtualenv/21722/162?u=parautenbach
 - http://blog.ceard.tech/2017/12/upgrading-python-virtual-environment.html
 

@@ -1,7 +1,3 @@
-- platform: remote_rpi_gpio
-  host: securitypi.local
-  ports:
-    23: motion_sensor
 - platform: template
   sensors:
     pieter_present:

@@ -1,7 +1,3 @@
-- platform: remote_rpi_gpio
-  host: securitypi.local
-  ports:
-    24: motion_led
 - platform: template
   switches:
     guest_mode:

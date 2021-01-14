@@ -1,49 +1,94 @@
 {
-  "bridge": {
-    "name": "Homebridge",
-    "username": "CC:22:3D:E3:CE:31",
-    "port": 51826,
-    "pin": "031-45-155"
-  },
-  
-  "description": "Main config.",
-  "ports": {
-    "start": 52100,
-    "end": 52150,
-    "comment": "This section is used to control the range of ports that separate accessory (like camera or television) should be bind to."
-  },
-
-  "accessories": [
-    {
-      "accessory": "BME280",
-      "name": "Conditions",
-      "name_temperature": "Temperature",
-      "name_humidity": "Humidity",
-      "options": {
-        "i2cBusNo": 1,
-        "i2cAddress": "0x76"
-      }
+    "bridge": {
+        "name": "Homebridge",
+        "username": "CC:22:3D:E3:CE:31",
+        "port": 51826,
+        "pin": "031-45-155"
     },
-    {
-      "accessory": "GPIODevice",
-      "type": "MotionSensor",
-      "name": "Motion Sensor",
-      "pin": 4,
-      "inverted": true,
-      "occupancy": {
-        "name": "Occupancy Detector",
-	"timeout": 5
-      }
+    "description": "Main config.",
+    "ports": {
+        "start": 52100,
+        "end": 52150,
+        "comment": "This section is used to control the range of ports that separate accessory (like camera or television) should be bind to."
     },
-    {
-      "accessory": "GPIODevice",
-      "type": "Lightbulb",
-      "name": "LED",
-      "pin": 5
-    }
-  ],
-
-  "platforms": [
-  ]
+    "accessories": [
+        {
+            "accessory": "BME280",
+            "name": "Conditions",
+            "name_temperature": "Temperature",
+            "name_humidity": "Humidity",
+            "options": {
+                "i2cBusNo": 1,
+                "i2cAddress": "0x77"
+            }
+        },
+        {
+            "accessory": "GPIODevice",
+            "type": "MotionSensor",
+            "name": "Motion Sensor",
+            "pin": 4,
+            "inverted": true,
+            "occupancy": {
+                "name": "Occupancy Detector",
+                "timeout": 5
+            }
+        },
+        {
+            "accessory": "GPIODevice",
+            "type": "Lightbulb",
+            "name": "LED",
+            "pin": 5
+        },
+        {
+            "accessory": "mqtt-switch-tasmota",
+            "name": "Living Room Lamp",
+            "url": "mqtt://homeassistant.local/",
+            "topics": {
+                "statusGet": "living-room/lamp/stat/POWER",
+                "statusSet": "living-room/lamp/cmnd/POWER"
+            }
+        }
+    ],
+    "platforms": [
+        {
+            "name": "Config",
+            "port": 8080,
+            "auth": "form",
+            "theme": "auto",
+            "tempUnits": "c",
+            "sudo": false,
+            "log": {
+                "method": "systemd",
+                "service": "homebridge"
+            },
+            "platform": "config"
+        },
+        {
+            "platform": "Camera-ffmpeg",
+            "cameras": [
+                {
+                    "name": "Security Camera",
+                    "videoConfig": {
+                        "source": "-rtsp_transport tcp -re -i rtsp://localhost:8554/unicast",
+                        "stillImageSource": "-re -i rtsp://localhost:8554/unicast",
+                        "maxStreams": 2,
+                        "maxFPS": 5,
+                        "maxWidth": 640,
+                        "maxHeight": 480,
+                        "vcodec": "h264_omx"
+                    }
+                }
+            ]
+        },
+        {
+            "platform": "mqtt",
+            "name": "mqtt",
+            "url": "mqtt://homeassistant.local/"
+        },
+        {
+            "platform": "BroadlinkRM",
+            "name": "Broadlink RM",
+            "hideScanFrequencyButton": true
+        }
+    ]
 }
-

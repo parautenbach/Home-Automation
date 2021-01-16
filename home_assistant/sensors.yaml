@@ -161,7 +161,7 @@
         {% elif state_attr('sensor.ceres_activity', 'Confidence') == 'Low' %}
           mdi:speedometer-slow
         {% else %}
-          None
+          unknown
         {% endif %}
     monthly_power_consumption_forecast:
       unit_of_measurement: "kWh"
@@ -185,24 +185,35 @@
         {% endif %}
         {{ ((states('sensor.monthly_power_consumption') | int) / now.day * days) | round(3) }}
     last_backup:
+      # relies on cronjob running on a sunday and a wednedsay
       device_class: timestamp
       value_template: >-
-        {{ (strptime((state_attr('sensor.home_assistant', 'file_list') | sort(reverse=True))[1] | regex_findall_index(find='\d{8}'),'%Y%m%d') | as_local).date() }}
-      icon_template: >-
-        {% if (now() - (strptime((state_attr('sensor.home_assistant', 'file_list') | sort(reverse=True))[1] | regex_findall_index(find='\d{8}'),'%Y%m%d') | as_local)).days > 4 %}
-          mdi:file-alert-outline
+        {% set reversed_file_list = state_attr('sensor.home_assistant', 'file_list') | sort(reverse=True) %}
+        {% set files_exist = (reversed_file_list | length) > 0 %}
+        {% if (files_exist) %}
+          {% set last_backup_dt = strptime(reversed_file_list[1] | regex_findall_index(find='\d{8}'),'%Y%m%d') | as_local %}
+          {{ last_backup_dt.date() }}
         {% else %}
-          mdi:file-outline
+          unknown
+        {% endif %}
+      icon_template: >-
+        {% set reversed_file_list = state_attr('sensor.home_assistant', 'file_list') | sort(reverse=True) %}
+        {% set files_exist = (reversed_file_list | length) > 0 %}
+        {% if (files_exist) %}
+          {% set last_backup_dt = strptime(reversed_file_list[1] | regex_findall_index(find='\d{8}'),'%Y%m%d') | as_local %}
+          {% if ((now() - (last_backup_dt)).days > 4) %}
+            mdi:file-alert-outline
+          {% else %}
+            mdi:file-outline
+          {% endif %}
+        {% else %}
+          mdi:file-alert-outline
         {% endif %}
     last_backup_relative:
       value_template: >-
-        {{ relative_time(strptime((state_attr('sensor.home_assistant', 'file_list') | sort(reverse=True))[1] | regex_findall_index(find='\d{8}'),'%Y%m%d') | as_local) }}
+        {{ relative_time(states('sensor.last_backup')) }}
       icon_template: >-
-        {% if (now() - (strptime((state_attr('sensor.home_assistant', 'file_list') | sort(reverse=True))[1] | regex_findall_index(find='\d{8}'),'%Y%m%d') | as_local)).days > 4 %}
-          mdi:file-alert-outline
-        {% else %}
-          mdi:file-outline
-        {% endif %}
+        {{ state_attr('sensor.last_backup', 'icon') }}
 
 - platform: snmp
   name: snmp_wan_in

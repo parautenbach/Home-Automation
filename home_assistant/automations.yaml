@@ -789,7 +789,7 @@
     - service: notify.mobile_app_ceres
       data:
         title: "Home"
-        message: "The electricity feed is {{ 'restored' if is_state('binary_sensor.electricity_feed', 'on') else 'cut' }}."
+        message: "The electricity feed has been {{ 'restored' if is_state('binary_sensor.electricity_feed', 'on') else 'cut' }}."
         data:
           push:
             thread-id: "home-electricity"
@@ -890,11 +890,20 @@
     - service: script.turn_on
       entity_id: script.entertainment_off
 
+# backup script: https://gist.github.com/riemers/041c6a386a2eab95c55ba3ccaa10e7b0
 - alias: "Notify If No Recent Backup"
   trigger:
-    platform: state
-    entity_id: binary_sensor.no_recent_backup
-    to: "on"
+    - platform: state
+      entity_id: binary_sensor.no_recent_backup
+      to: "on"
+    # backup check in case there was a restart and the state didn't change
+    - platform: time
+      at: "09:00:00"
+  mode: single
+  condition:
+    - condition: state
+      entity_id: binary_sensor.no_recent_backup
+      state: "on"
   action:
     - service: notify.mobile_app_ceres
       data:

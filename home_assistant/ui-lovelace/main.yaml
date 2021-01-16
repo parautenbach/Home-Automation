@@ -717,15 +717,12 @@ cards:
       details: false
       forecast: true
       number_of_forecasts: 5  # days
-    - type: entities
-      title: Home
-      entities:
-        - sensor.conditions_temperature
-        - sensor.conditions_humidity
-      show_header_toggle: false
     - type: custom:mini-graph-card
+      name: Home
       entities:
         - entity: sensor.conditions_temperature
+        - entity: sensor.conditions_humidity
+          y_axis: secondary
       hours_to_show: 24
       hour24: true
       smoothing: true

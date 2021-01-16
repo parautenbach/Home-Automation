@@ -1,3 +1,7 @@
+sensor.conditions_temperature:
+  friendly_name: Temperature
+sensor.conditions_humidity:
+  friendly_name: Humidity
 camera.security_camera:
   friendly_name: Security Camera
 binary_sensor.motion_sensor_2:

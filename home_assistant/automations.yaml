@@ -118,11 +118,11 @@
     # blink
     - repeat:
         sequence:
-          - service: switch.turn_on
+          - service: light.turn_on
             entity_id: light.led
           - delay:
               milliseconds: 500
-          - service: switch.turn_off
+          - service: light.turn_off
             entity_id: light.led
           - delay:
               milliseconds: 500

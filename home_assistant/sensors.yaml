@@ -257,7 +257,7 @@
 
 - platform: filter
   name: ambient_temperature_filtered
-  entity_id: sensor.ambient_temperature
+  entity_id: sensor.conditions_temperature
   filters:
     filter: lowpass
     time_constant: 10

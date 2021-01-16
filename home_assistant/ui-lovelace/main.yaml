@@ -725,7 +725,7 @@ cards:
       show_header_toggle: false
     - type: custom:mini-graph-card
       entities:
-        - entity: sensor.ambient_temperature
+        - entity: sensor.conditions_temperature
       hours_to_show: 24
       hour24: true
       smoothing: true

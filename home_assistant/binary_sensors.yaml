@@ -35,7 +35,7 @@
       # https://www.home-assistant.io/integrations/binary_sensor/#device-class
       device_class: power
       value_template: >-
-        {{ states('sensor.current_power_2') is not none }}
+        {{ state_attr('sensor.home_assistant_server_battery', 'status') != 'Discharging' }}
       delay_off:
         minutes: 1
       # or must i use: {{ is_state('sensor.current_power', 'unavailable') }}

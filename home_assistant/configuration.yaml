@@ -20,6 +20,7 @@ homeassistant:
   allowlist_external_dirs:
     - /tmp
     - /mnt/nas/Backups/home_assistant/
+    - /sys/class/power_supply/
   media_dirs:
     gallery: /home/homeassistant/.homeassistant/www/gallery
   customize: !include customize.yaml
@@ -27,6 +28,7 @@ homeassistant:
 logger:
   default: warning
   # logs:
+  #   homeassistant.components.linux_battery: debug
   #   homeassistant.components.automation: info
   #   homeassistant.components.python_script: debug
   #   custom_components.shairport_sync: debug

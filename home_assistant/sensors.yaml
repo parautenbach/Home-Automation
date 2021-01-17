@@ -359,3 +359,8 @@
   folder: /mnt/nas/Backups/home_assistant/
   filter: 'hass-config_*.zip'
   scan_interval: 3600
+
+- platform: linux_battery
+  name: Home Assistant Server Battery
+  battery: 0
+  system: linux

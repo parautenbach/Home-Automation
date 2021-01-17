@@ -89,6 +89,8 @@ cards:
           - sensor.mqtt_broker_received_messages_1min_load
           - sensor.last_backup_relative
           - sensor.db_size
+          - entity: sensor.home_assistant_server_battery
+            name: Server Battery
           # TODO: - binary_sensor.rpi_power_status
           - sensor.last_boot
         title: Server

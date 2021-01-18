@@ -101,6 +101,7 @@ homekit:
       - binary_sensor.motion_detected
       - sensor.conditions_temperature  # from homebridge
       - sensor.conditions_humidity  # from homebridge
+      - light.living_room_lamp
       - light.smart_bulb_1
       - light.smart_bulb_2
       - light.smart_bulb_3
@@ -117,7 +118,45 @@ homekit:
       - script.entertainment_satellite_on
       - script.entertainment_off
       - script.open_pedestrian_gap
-      # TODO: https://www.home-assistant.io/integrations/homekit/ - names
+  entity_config:
+    sensor.conditions_temperature:
+      name: Living Room Temperature
+    sensor.conditions_humidity:
+      name: Living Room Humidity
+    light.living_room_lamp:
+      name: Living Room Lamp
+    light.smart_bulb_1:
+      name: Pieter's Bedside Lamp
+    light.smart_bulb_2:
+      name: Rouvé's Bedside Lamp
+    light.smart_bulb_3:
+      name: Dining Room Light
+    light.smart_bulb_4:
+      name: Music Room Light
+    light.front_door_light:
+      name: Front Door Light
+    light.backyard_light:
+      name: Backyard Light
+    light.garage_light:
+      name: Garage Light
+    light.led:
+      name: Motion LED
+    switch.smart_plug_1:
+      name: Tivoli Audio
+    cover.main_gate:
+      name: Main Gate
+    cover.lhs_garage_door:
+      name: Rouvé's Garage Door
+    cover.rhs_garage_door:
+      name: Pieter's Garage Door
+    script.entertainment_apple_tv_on:
+      name: Apple TV Sys On
+    script.entertainment_satellite_on:
+      name: Satellite Sys On
+    script.entertainment_off:
+      name: Entertainment Sys Off
+    script.open_pedestrian_gap:
+      name: Open Pedestrian Gap
 
 ios:
   push:

@@ -209,6 +209,7 @@ camera:
   - platform: ffmpeg
     name: security_camera_last_clip
     input: /home/homeassistant/.homeassistant/www/camera.security_camera_last.mp4
+    extra_arguments: "-vf hue=s=0"
 
 notify:
   - name: family

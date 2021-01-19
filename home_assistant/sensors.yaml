@@ -192,7 +192,7 @@
         {% set files_exist = (reversed_file_list | length) > 0 %}
         {% if (files_exist) %}
           {% set last_backup_dt = strptime(reversed_file_list[1] | regex_findall_index(find='\d{8}'),'%Y%m%d') | as_local %}
-          {{ last_backup_dt.date() }}
+          {{ last_backup_dt }}
         {% else %}
           unknown
         {% endif %}
@@ -211,9 +211,16 @@
         {% endif %}
     last_backup_relative:
       value_template: >-
-        {{ relative_time(states('sensor.last_backup')) }}
+        {{ relative_time(strptime(states('sensor.last_backup'), "%Y-%m-%d %H:%M:%S%z")) }}
       icon_template: >-
         {{ state_attr('sensor.last_backup', 'icon') }}
+    home_assistant_server_battery_status:
+      friendly_name: "Home Assistant Server Battery Status"
+      device_class: battery
+      value_template: >-
+        {{ state_attr('sensor.home_assistant_server_battery', 'status') }}
+      icon_template: >-
+        {{ state_attr('sensor.home_assistant_server_battery', 'icon') }}
 
 - platform: snmp
   name: snmp_wan_in

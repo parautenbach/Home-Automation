@@ -220,7 +220,24 @@
       value_template: >-
         {{ state_attr('sensor.home_assistant_server_battery', 'status') }}
       icon_template: >-
-        {{ state_attr('sensor.home_assistant_server_battery', 'icon') }}
+        {% set state = states('sensor.home_assistant_server_battery') | int %}
+        {% set charging = "-charging" if states('sensor.home_assistant_server_battery_status') == "Charging" else "" %}
+        {% set suffix = (state // 10) * 10 %}
+        {# empty #}
+        {% if suffix == 0 %}
+          mdi:battery{{ charging }}-outline
+        {# full #}
+        {% elif suffix == 100 %}
+          {# choose the right full battery #}
+          {% if charging != "" %}
+            mdi:battery-charging-100
+          {% else %}
+            mdi:battery
+          {% endif %}
+        {# everything in between #}
+        {% else %}
+          mdi:battery{{ charging }}-{{ suffix }}
+        {% endif %}
 
 - platform: snmp
   name: snmp_wan_in

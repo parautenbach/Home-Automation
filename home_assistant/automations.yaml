@@ -770,6 +770,13 @@
   trigger:
     platform: state
     entity_id: binary_sensor.internet_connection
+  condition:
+    - condition: state
+      entity_id: binary_sensor.pieter_present
+      state: "on"
+    - condition: time
+      after: "06:00:00"
+      before: "23:00:00"
   action:
     - service: notify.mobile_app_ceres
       data:

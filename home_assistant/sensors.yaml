@@ -211,7 +211,7 @@
         {% endif %}
     last_backup_relative:
       value_template: >-
-        {{ relative_time(strptime(states('sensor.last_backup'), "%Y-%m-%d %H:%M:%S%z")) }}
+        {{ relative_time(strptime(states('sensor.last_backup'), "%Y-%m-%d %H:%M:%S%z")) ~ " ago" }}
       icon_template: >-
         {{ state_attr('sensor.last_backup', 'icon') }}
     home_assistant_server_battery_status:

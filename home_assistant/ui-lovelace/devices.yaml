@@ -91,9 +91,7 @@ cards:
           - sensor.db_size
           - entity: sensor.home_assistant_server_battery
             name: Server battery
-          - type: attribute
-            entity: sensor.home_assistant_server_battery
-            attribute: status
+          - entity: sensor.home_assistant_server_battery_status
             name: Battery status
           # TODO: - binary_sensor.rpi_power_status
           - sensor.last_boot

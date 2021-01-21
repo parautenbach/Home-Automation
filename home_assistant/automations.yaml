@@ -789,7 +789,23 @@
     - service: notify.mobile_app_ceres
       data:
         title: "Home"
-        message: "The electricity feed has been {{ 'restored' if is_state('binary_sensor.electricity_feed', 'on') else 'cut' }}."
+        message: >-
+          {% set after = "" %}
+          {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
+          {% if seconds < 60 %}
+            {% set after = seconds ~ " sec" %}
+          {% elif seconds < 60*60 %}
+            {% set after = seconds // 60 ~ " min" %}
+          {% else %}
+            {% set h = seconds // (60*60) %}
+            {% set m = ((seconds / (60*60) - seconds // (60*60)) * 60) | round %}
+            {% if m < 10 %}
+              {% set after = h ~ "h0" ~ m %}
+            {% else %}
+              {% set after = h ~ "h" ~ m %}
+            {% endif %}
+          {% endif %}
+          "The electricity feed has been {{ 'restored after ' ~  after ~ '.' if is_state('binary_sensor.electricity_feed', 'on') else 'cut.' }}"
         data:
           push:
             thread-id: "home-electricity"
@@ -912,3 +928,18 @@
         data:
           push:
             thread-id: "system-backup"
+
+- alias: "Low Server Battery"
+  initial_state: true
+  trigger:
+    - platform: template
+      value_template: "{{ states('sensor.home_assistant_server_battery') | int <= 10 }}"
+  action:
+    - service: notify.mobile_app_ceres
+      data:
+        title: "System"
+        message: "Server battery is running low!"
+        data:
+          push:
+            thread-id: "system-battery"
+

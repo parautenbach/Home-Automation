@@ -980,3 +980,41 @@
   action:
     - service: switch.turn_on
       entity_id: switch.guest_mode
+
+- alias: "Alert If Gate Or Garages Opened When Nobody Home"
+  trigger:
+    platform: state
+    entity_id:
+      - cover.main_gate
+      - cover.lhs_garage_door
+      - cover.rhs_garage_door
+    to: "open"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.anybody_home
+      state: "off"
+  action:
+    - service: notify.mobile_app_ceres
+      data:
+        title: "Security"
+        message: >-
+          {% set name = None %}
+          {% if trigger.entity_id | regex_search("lhs", ignorecase=True) %}
+            {% set name = "Rouvé's garage door" %}
+          {% elif trigger.entity_id | regex_search("rhs", ignorecase=True) %}
+            {% set name = "Pieter's garage door" %}
+          {% else %}
+            {% set name = "The main gate" %}
+          {% endif %}
+          {{ name }} has been opened when nobody's home.
+          {# todo: alert/call security company #}
+        data:
+          apns_headers:
+            # group notifications by the timer entity
+            'apns-collapse-id': "{{ trigger.entity_id }}"
+          push:
+            category: "cover_open"
+          action_data:
+            # convert this to the cover entity to use in the automation that receives this
+            cover_id: "{{ trigger.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
+            timer_id: "{{ trigger.entity_id }}"

@@ -176,6 +176,11 @@ ios:
         actions:
           - identifier: "ENABLE_CONTRACTOR_MODE"
             title: "Enable"
+      - name: Guest Mode Disabled
+        identifier: "guest_mode_disabled"
+        actions:
+          - identifier: "ENABLE_GUEST_MODE"
+            title: "Enable"
       - name: Cover Open
         identifier: "cover_open"
         actions:

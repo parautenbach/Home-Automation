@@ -950,3 +950,33 @@
           push:
             thread-id: "system-battery"
 
+- alias: "Disable Guest Mode When Getting Home"
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.anybody_home
+      to: "on"
+  condition:
+    - condition: state
+      entity_id: switch.guest_mode
+      state: "on"
+  action:
+    - service: switch.turn_off
+      entity_id: switch.guest_mode
+    - service: notify.mobile_app_ceres
+      data:
+        title: "Special Mode"
+        message: "Guest mode disabled."
+        data:
+          push:
+            category: "guest_mode_disabled"
+
+- alias: "Enable Guest Mode From Alert Action"
+  trigger:
+    - platform: event
+      event_type: ios.notification_action_fired
+      event_data:
+        actionName: ENABLE_GUEST_MODE
+  action:
+    - service: switch.turn_on
+      entity_id: switch.guest_mode

@@ -973,6 +973,7 @@
             category: "guest_mode_disabled"
 
 - alias: "Enable Guest Mode From Alert Action"
+  initial_state: true
   trigger:
     - platform: event
       event_type: ios.notification_action_fired
@@ -983,6 +984,7 @@
       entity_id: switch.guest_mode
 
 - alias: "Alert If Gate Or Garages Opened When Nobody Home"
+  initial_state: true
   trigger:
     platform: state
     entity_id:
@@ -1021,6 +1023,7 @@
             timer_id: "{{ trigger.entity_id }}"
 
 - alias: "Save Last Smart Bulb State"
+  initial_state: true
   trigger:
     - platform: state
       entity_id:
@@ -1032,14 +1035,18 @@
   condition:
     # power was NOT recently restored (2 min), causing the light to turn on and connect to hass, and trigger this automation
     # it would also mean it wasn't a hass restart
-    - condition: template
-      value_template: "{{ ((as_timestamp(utcnow()) - as_timestamp(states.binary_sensor.electricity_feed.last_changed)) / 60) > 2 }}"
+    # - condition: template
+    #   value_template: "{{ ((as_timestamp(utcnow()) - as_timestamp(states.binary_sensor.electricity_feed.last_changed)) / 60) > 2 }}"
+    - condition: state
+      entity_id: binary_sensor.electricity_feed
+      state: "on"
   action:
     - service: "input_boolean.turn_{{ states(trigger.entity_id) }}"
       data:
         entity_id: "{{ trigger.entity_id | replace('light.', 'input_boolean.') }}_state"
 
 - alias: "Restore Smart Bulb Statuses After Power Restored"
+  initial_state: true
   trigger:
     # tp-link smart bulbs always turn on when power is connected
     # this will thus trigger the moment the smart bulb reconnects to the network and hass
@@ -1051,6 +1058,9 @@
         - light.smart_bulb_4
       to: "on"
   mode: parallel
+  # some other ideas:
+  # - simplify all of this by only have a time window condition and always turn the lights off (say between 11 pm and 6 am)
+  #   downside is that you simply can't turn on the lights during those times.
   condition:
     - condition: and
       conditions:
@@ -1058,6 +1068,8 @@
         - condition: template
           value_template: "{{ is_state(trigger.entity_id | replace('light.', 'input_boolean.') ~ '_state', 'off') }}"
         # power was recently restored (2 min)
+        # what if the sensor didn't pick up the outage if it was too short for it to update?
+        # this solution won't currently work for that scenario
         - condition: template
           value_template: "{{ ((as_timestamp(utcnow()) - as_timestamp(states.binary_sensor.electricity_feed.last_changed)) / 60) <= 2 }}"
         # but the electricity feed sensor didn't update due to a hass restart (2 min)

@@ -36,14 +36,11 @@
       device_class: power
       value_template: >-
         {{ state_attr('sensor.home_assistant_server_battery', 'status') != 'Discharging' }}
-      delay_off:
-        minutes: 1
-      # or must i use: {{ is_state('sensor.current_power', 'unavailable') }}
       icon_template: >-
-        {% if states('sensor.current_power_2') is not none %}
-          mdi:power-plug
-        {% else %}
+        {% if state_attr('sensor.home_assistant_server_battery', 'status') == 'Discharging' %}
           mdi:power-plug-off
+        {% else %}
+          mdi:power-plug
         {% endif %}
     internet_connection:
       friendly_name: "Internet"

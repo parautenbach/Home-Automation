@@ -604,6 +604,21 @@ turn_on_light_and_timer:
         entity_id: "{{ light | replace('light.', 'timer.') }}_timer"
         duration: "00:03:00"
 
+force_on_smart_bulb:
+  description: "Force a smart bulb to turn on"
+  fields:
+    light:
+      description: "A smart bulb"
+      example: "light.smart_bulb_1"
+  mode: parallel
+  sequence:
+    - service: input_boolean.turn_on
+      data:
+        entity_id: "{{ light | replace('light.', 'input_boolean.') }}_state"
+    - service: light.turn_on
+      data:
+        entity_id: "{{ light }}"
+
 test:
   description: "Testing whether a template works in the collapse ID field"
   sequence:

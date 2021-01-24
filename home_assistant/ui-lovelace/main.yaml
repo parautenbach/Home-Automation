@@ -235,6 +235,12 @@ cards:
             tap_action:
               action: toggle
               haptic: light
+            double_tap_action:
+              action: call-service
+              haptic: medium
+              service: script.force_on_smart_bulb
+              service_data:
+                light: "[[[ return entity.entity_id; ]]]"
             hold_action:
               action: more-info
               haptic: selection

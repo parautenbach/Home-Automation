@@ -750,7 +750,7 @@
       entity_id: sensor.pieter_activity_type
       from: "Automotive"  # to anything else
   action:
-    - service: "input_boolean.turn_{{ 'on' if is_state('sensor.pieter_activity_type', 'Automotive') else 'off'}}"
+    - service: "input_boolean.turn_{{ 'on' if is_state('sensor.pieter_activity_type', 'Automotive') else 'off' }}"
       entity_id: input_boolean.pieter_driving
 
 - alias: "Notify If Driving State Changed"
@@ -899,6 +899,7 @@
 
 - alias: "Turn Off Entertainment System When Idle Or Leaving Room"
   trigger:
+    # todo:
     # we don't know the decoder's state so we could be turning off the tv just because the apple tv isn't playing...
     # - platform: state
     #   entity_id: media_player.living_room
@@ -1018,3 +1019,51 @@
             # convert this to the cover entity to use in the automation that receives this
             cover_id: "{{ trigger.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
             timer_id: "{{ trigger.entity_id }}"
+
+- alias: "Save Last Smart Bulb State"
+  trigger:
+    - platform: state
+      entity_id:
+        - light.smart_bulb_1
+        - light.smart_bulb_2
+        - light.smart_bulb_3
+        - light.smart_bulb_4
+  mode: parallel
+  condition:
+    # power was NOT recently restored (2 min), causing the light to turn on and connect to hass, and trigger this automation
+    # it would also mean it wasn't a hass restart
+    - condition: template
+      value_template: "{{ ((as_timestamp(utcnow()) - as_timestamp(states.binary_sensor.electricity_feed.last_changed)) / 60) > 2 }}"
+  action:
+    - service: "input_boolean.turn_{{ states(trigger.entity_id) }}"
+      data:
+        entity_id: "{{ trigger.entity_id | replace('light.', 'input_boolean.') }}_state"
+
+- alias: "Restore Smart Bulb Statuses After Power Restored"
+  trigger:
+    # tp-link smart bulbs always turn on when power is connected
+    # this will thus trigger the moment the smart bulb reconnects to the network and hass
+    - platform: state
+      entity_id:
+        - light.smart_bulb_1
+        - light.smart_bulb_2
+        - light.smart_bulb_3
+        - light.smart_bulb_4
+      to: "on"
+  mode: parallel
+  condition:
+    - condition: and
+      conditions:
+        # only if the light state and saved state disagrees: trigger says on; state says off
+        - condition: template
+          value_template: "{{ is_state(trigger.entity_id | replace('light.', 'input_boolean.') ~ '_state', 'off') }}"
+        # power was recently restored (2 min)
+        - condition: template
+          value_template: "{{ ((as_timestamp(utcnow()) - as_timestamp(states.binary_sensor.electricity_feed.last_changed)) / 60) <= 2 }}"
+        # but the electricity feed sensor didn't update due to a hass restart (2 min)
+        - condition: template
+          value_template: "{{ (utcnow() - strptime(states('sensor.home_assistant_uptime'), '%Y-%m-%dT%H:%M:%S.%f%z')).seconds / 60 > 2 }}"
+  action:
+    - service: light.turn_off
+      data:
+        entity_id: "{{ trigger.entity_id }}"

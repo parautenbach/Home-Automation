@@ -241,6 +241,18 @@ input_boolean:
   pieter_driving:
     name: Pieter Driving
     icon: mdi:car
+  smart_bulb_1_state:
+    name: Smart Bulb 1 State
+    icon: mdi:lightbulb
+  smart_bulb_2_state:
+    name: Smart Bulb 2 State
+    icon: mdi:lightbulb
+  smart_bulb_3_state:
+    name: Smart Bulb 3 State
+    icon: mdi:lightbulb
+  smart_bulb_4_state:
+    name: Smart Bulb 4 State
+    icon: mdi:lightbulb
 
 input_datetime:
   security_camera_last_snapshot:

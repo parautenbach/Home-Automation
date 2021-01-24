@@ -391,3 +391,6 @@
   name: Home Assistant Server Battery
   battery: 0
   system: linux
+
+- platform: uptime
+  name: Home Assistant Uptime

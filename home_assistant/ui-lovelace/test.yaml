@@ -72,3 +72,20 @@ cards:
       - sensor.conditions_temperature
       - sensor.conditions_humidity
     show_header_toggle: true
+  - type: custom:mini-graph-card
+    name: Bitcoin
+    # name: Current Travel Time
+    icon: mdi:briefcase-clock
+    entities:
+      - entity: sensor.exchange_rate_1_btc
+        color: '#ff9800'
+      - entity: sensor.trade_volume
+        color: '#3498db'
+        y_axis: secondary
+    hours_to_show: 72
+    hour24: true
+    smoothing: true
+    points_per_hour: 4  # every 15 min
+    line_width: 2
+    show:
+      extrema: true

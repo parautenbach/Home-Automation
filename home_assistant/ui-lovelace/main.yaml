@@ -738,7 +738,9 @@ cards:
         extrema: true
     - type: custom:mini-graph-card
       entities:
-        - entity: sensor.sun_illuminance
+        # currently down and generally very unreliable; need to use my own light meter
+        # - entity: sensor.sun_illuminance
+        #   color: '#ff9800'
         - entity: sensor.solar_angle
           color: '#e74c3c'
           y_axis: secondary

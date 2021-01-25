@@ -391,6 +391,7 @@
   name: Home Assistant Server Battery
   battery: 0
   system: linux
+  scan_interval: 5
 
 - platform: uptime
   name: Home Assistant Uptime

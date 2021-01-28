@@ -1090,7 +1090,7 @@
 # sudo /etc/init.d/udev restart
 # udevadm control --log-priority=debug
 # journalctl -f
-- alias: "Update Battery Status"
+- alias: "Update Server Power Status"
   trigger:
     - platform: webhook
       webhook_id: server_power_connected

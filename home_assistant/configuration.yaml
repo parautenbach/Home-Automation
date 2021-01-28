@@ -253,6 +253,9 @@ input_boolean:
   smart_bulb_4_state:
     name: Smart Bulb 4 State
     icon: mdi:lightbulb
+  server_power_connected:
+    name: Server Power Connected
+    icon: mdi:power-plug
 
 input_datetime:
   security_camera_last_snapshot:

@@ -1081,3 +1081,23 @@
     - service: light.turn_off
       data:
         entity_id: "{{ trigger.entity_id }}"
+
+# udevadm monitor
+# udevadm info --path=/sys/class/power_supply/AC0
+# /etc/udev/rules.d/60-power.rules
+# SUBSYSTEM=="power_supply",ENV{POWER_SUPPLY_NAME}=="AC0",RUN+="/usr/bin/curl -s -X POST http://<host>:<port>/api/webhook/<webhook_id> -d 'status=$env{POWER_SUPPLY_ONLINE}'"
+# udevadm control --reload-rules && udevadm trigger
+# sudo /etc/init.d/udev restart
+# udevadm control --log-priority=debug
+# journalctl -f
+- alias: "Update Battery Status"
+  trigger:
+    - platform: webhook
+      webhook_id: server_power_connected
+  mode: queued
+  action:
+    - service: homeassistant.update_entity
+      entity_id: sensor.home_assistant_server_battery
+    - service: "input_boolean.turn_{{ 'on' if (trigger.data['status'] | int) else 'off' }}"
+      data:
+        entity_id: input_boolean.server_power_connected

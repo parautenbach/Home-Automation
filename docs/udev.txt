@@ -1,0 +1,159 @@
+
+https://superuser.com/questions/1417292/udev-rule-to-start-a-command-on-ac-battery-plug-unplug-event
+https://hackaday.com/2009/09/18/how-to-write-udev-rules/
+https://stackoverflow.com/questions/12818987/pass-attridvendor-as-argument-in-udev-script
+https://opensource.com/article/18/11/udev
+https://superuser.com/questions/677106/how-to-check-if-a-udev-rule-fired
+https://unix.stackexchange.com/questions/401394/udev-rule-triggers-but-any-run-command-fails
+http://reactivated.net/writing_udev_rules.html
+https://unix.stackexchange.com/questions/499804/udev-event-triggering-multiple-times-and-not-respecting-matching-conditions
+
+==========
+
+KERNEL==&quot;sd?1&quot;, ATTRS{idVendor}==&quot;13fe&quot;, ATTRS{idProduct}==&quot;1f00&quot;, ATTRS{serial}==&quot;50E6920B000AE8&quot;, SYMLINK+=&quot;hackaday&quot;, RUN+=&quot;/home/mike/notify-plugin.sh 'HackaDay Thumbdrive:' 'Connected as: $KERNEL'&quot;
+
+SUBSYSTEM=="power_supply",ENV{POWER_SUPPLY_ONLINE}=="0",RUN+="/bin/killcompton.sh"
+
+??? => ACTION=="change",
+
+SUBSYSTEM=="power_supply",ENV{POWER_SUPPLY_NAME}=="AC0",RUN+="/usr/bin/curl -s -X POST http://<host>:<port>/api/webhook/<webhook_id> -d 'status=$env{POWER_SUPPLY_ONLINE}'"
+
+==========
+
+curl -X POST http://<host>:<port>/api/webhook/<webhook_id> -d "status=0"
+wget -O- -q --post-data='status=1' http://<host>:<port>/api/webhook/<webhook_id>
+
+==========
+
+udevadm info -a /sys/class/power_supply/AC0
+
+# udevadm info --path=/sys/class/power_supply/AC0
+P: /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0
+L: 0
+E: DEVPATH=/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0
+E: POWER_SUPPLY_NAME=AC0
+E: POWER_SUPPLY_ONLINE=1
+E: SUBSYSTEM=power_supply
+
+==========
+
+vi /etc/udev/rules.d/60-power.rules
+sudo /etc/init.d/udev restart
+udevadm control --log-priority=debug
+journalctl -f
+
+udevadm control --reload-rules && udevadm trigger
+udevadm test $(udevadm info --query=/sys/class/power_supply/AC0 --name=device_name???)
+
+==========
+
+# udevadm monitor -u -p
+monitor will print the received events for:
+UDEV - the event which udev sends out after rule processing
+KERNEL - the kernel uevent
+
+KERNEL[976443.653858] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0 (power_supply)
+UDEV  [976443.691132] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0 (power_supply)
+KERNEL[976443.786565] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/PNP0C0A:00/power_supply/BAT0 (power_supply)
+UDEV  [976443.789135] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/PNP0C0A:00/power_supply/BAT0 (power_supply)
+KERNEL[976444.354564] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/PNP0C0A:00/power_supply/BAT0 (power_supply)
+KERNEL[976444.359316] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0 (power_supply)
+UDEV  [976444.359429] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/PNP0C0A:00/power_supply/BAT0 (power_supply)
+UDEV  [976444.388245] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0 (power_supply)
+KERNEL[976444.565788] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0 (power_supply)
+UDEV  [976444.593602] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0 (power_supply)
+KERNEL[976444.722218] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/PNP0C0A:00/power_supply/BAT0 (power_supply)
+UDEV  [976444.725336] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/PNP0C0A:00/power_supply/BAT0 (power_supply)
+KERNEL[976445.578666] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/PNP0C0A:00/power_supply/BAT0 (power_supply)
+KERNEL[976445.581027] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0 (power_supply)
+UDEV  [976445.581138] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/PNP0C0A:00/power_supply/BAT0 (power_supply)
+UDEV  [976445.625485] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0 (power_supply)
+
+==========
+
+root@homeassistant:/usr/lib/udev/rules.d# udevadm monitor -u -p
+monitor will print the received events for:
+UDEV - the event which udev sends out after rule processing
+
+UDEV  [1121104.886837] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0 (power_supply)
+ACTION=change
+DEVPATH=/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0
+SUBSYSTEM=power_supply
+POWER_SUPPLY_NAME=AC0
+POWER_SUPPLY_ONLINE=0
+SEQNUM=24168
+USEC_INITIALIZED=1121104856089
+
+UDEV  [1121105.567364] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0 (power_supply)
+ACTION=change
+DEVPATH=/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0
+SUBSYSTEM=power_supply
+POWER_SUPPLY_NAME=AC0
+POWER_SUPPLY_ONLINE=0
+SEQNUM=24171
+USEC_INITIALIZED=1121105544490
+
+UDEV  [1121107.933540] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0 (power_supply)
+ACTION=change
+DEVPATH=/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0
+SUBSYSTEM=power_supply
+POWER_SUPPLY_NAME=AC0
+POWER_SUPPLY_ONLINE=1
+SEQNUM=24172
+USEC_INITIALIZED=1121107908042
+
+UDEV  [1121108.633842] change   /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0 (power_supply)
+ACTION=change
+DEVPATH=/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0
+SUBSYSTEM=power_supply
+POWER_SUPPLY_NAME=AC0
+POWER_SUPPLY_ONLINE=1
+SEQNUM=24175
+USEC_INITIALIZED=1121108612975
+
+==========
+
+root@homeassistant:/usr/lib/udev/rules.d# udevadm info -a /sys/class/power_supply/AC0
+
+Udevadm info starts with the device specified by the devpath and then
+walks up the chain of parent devices. It prints for every device
+found, all possible attributes in the udev rules key format.
+A rule to match, can be composed by the attributes of the device
+and the attributes from one single parent device.
+
+  looking at device '/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00/power_supply/AC0':
+    KERNEL=="AC0"
+    SUBSYSTEM=="power_supply"
+    DRIVER==""
+    ATTR{type}=="Mains"
+    ATTR{online}=="1"
+
+  looking at parent device '/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ACPI0003:00':
+    KERNELS=="ACPI0003:00"
+    SUBSYSTEMS=="acpi"
+    DRIVERS=="ac"
+    ATTRS{hid}=="ACPI0003"
+    ATTRS{path}=="\_SB_.PCI0.AC0_"
+
+  looking at parent device '/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00':
+    KERNELS=="PNP0A08:00"
+    SUBSYSTEMS=="acpi"
+    DRIVERS==""
+    ATTRS{hid}=="PNP0A08"
+    ATTRS{uid}=="0"
+    ATTRS{path}=="\_SB_.PCI0"
+    ATTRS{adr}=="0x00000000"
+
+  looking at parent device '/devices/LNXSYSTM:00/LNXSYBUS:00':
+    KERNELS=="LNXSYBUS:00"
+    SUBSYSTEMS=="acpi"
+    DRIVERS==""
+    ATTRS{hid}=="LNXSYBUS"
+    ATTRS{path}=="\_SB_"
+
+  looking at parent device '/devices/LNXSYSTM:00':
+    KERNELS=="LNXSYSTM:00"
+    SUBSYSTEMS=="acpi"
+    DRIVERS==""
+    ATTRS{hid}=="LNXSYSTM"
+    ATTRS{path}=="\"

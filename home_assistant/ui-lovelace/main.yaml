@@ -52,14 +52,14 @@ cards:
         cards:
           # todo: light profiles
           - type: custom:button-card
-            name: Rouvé's Side
-            entity: light.smart_bulb_2
+            name: Pieter's Side
+            entity: light.smart_bulb_1
             size: 20%
             color: var(--button-card-light-color)
             show_label: true
             label: >
               [[[
-                var b = states['light.smart_bulb_2'].attributes.brightness;
+                var b = states['light.smart_bulb_1'].attributes.brightness;
                 return parseInt(b ? b/2.55 : '0') + '%';
               ]]]
             styles:
@@ -118,14 +118,14 @@ cards:
               action: more-info
               haptic: selection
           - type: custom:button-card
-            name: Pieter's Side
-            entity: light.smart_bulb_1
+            name: Rouvé's Side
+            entity: light.smart_bulb_2
             size: 20%
             color: var(--button-card-light-color)
             show_label: true
             label: >
               [[[
-                var b = states['light.smart_bulb_1'].attributes.brightness;
+                var b = states['light.smart_bulb_2'].attributes.brightness;
                 return parseInt(b ? b/2.55 : '0') + '%';
               ]]]
             styles:

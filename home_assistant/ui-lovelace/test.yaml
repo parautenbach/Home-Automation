@@ -71,7 +71,14 @@ cards:
       - binary_sensor.motion_sensor_3
       - sensor.conditions_temperature
       - sensor.conditions_humidity
+      - proximity.home
     show_header_toggle: true
+  - type: history-graph
+    title: Proximity
+    hours_to_show: 24
+    entities:
+      - entity: proximity.home
+        name: Home
   - type: custom:mini-graph-card
     name: Bitcoin
     # name: Current Travel Time

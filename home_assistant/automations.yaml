@@ -1101,3 +1101,14 @@
     - service: "input_boolean.turn_{{ 'on' if (trigger.data['status'] | int) else 'off' }}"
       data:
         entity_id: input_boolean.server_power_connected
+
+- alias: "Proximity Updates"
+  trigger:
+    - platform: state
+      entity_id: proximity.home
+  action:
+    - service: persistent_notification.create
+      data:
+        title: Proximity
+        message: >-
+          Distance: {{ states('proximity.home') }}{{ state_attr('proximity.home', 'unit_of_measurement') }}; Direction of travel: {{ state_attr('proximity.home', 'dir_of_travel') }}.

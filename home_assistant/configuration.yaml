@@ -344,6 +344,14 @@ media_player:
 
 media_source:
 
+proximity:
+  home:  # this refers to zone.home
+    zone: home
+    devices:
+      - device_tracker.ceres
+    tolerance: 20
+    unit_of_measurement: m
+
 # https://community.home-assistant.io/t/control-recursion-in-the-folder-watcher-integration/200110
 # folder_watcher:
 #   - folder: /tmp/

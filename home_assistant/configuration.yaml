@@ -51,6 +51,10 @@ lovelace:
       type: module
     - url: /hacsfiles/gallery-card/gallery-card.js
       type: module
+    - url: /hacsfiles/apexcharts-card/apexcharts-card.js
+      type: module
+    - url: /hacsfiles/ha-floorplan/floorplan.js
+      type: module
     # manual
     - url: /local/floorplan/floorplan-card.js
       type: module

@@ -764,107 +764,23 @@ cards:
         title: Clocks
         cards:
           - type: custom:button-card
+            template: clock
+            variables:
+              timezone: Africa/Johannesburg
             name: Cape Town
-            label: >
-              [[[
-                return (new Date()).toLocaleDateString("en-ZA", {timeZone: "Africa/Johannesburg"});
-              ]]]
             entity: sensor.cape_town
-            show_name: true
-            show_state: true
-            show_icon: true
-            show_label: true
-            color: var(--paper-item-icon-color)
-            icon: >
-              [[[
-                var timezone = "Africa/Johannesburg";
-                var hourNamesIndexed = ["twelve", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"];
-                var timeParts = (new Date()).toLocaleTimeString("en-ZA", {timeZone: timezone, hour12: true}).split(':');
-                var hour = parseInt(timeParts[0]);
-                var minute = parseInt(timeParts[1]);
-                return "mdi:clock-time-" + hourNamesIndexed[hour] + "-outline";
-              ]]]
-            styles:
-              grid:
-                - grid-template-areas: '"n" "i" "s" "l"'
-              name:
-                - color: var(--secondary-text-color
-                - font-size: 1rem
-              state:
-                - color: var(--secondary-text-color)
-                - font-size: 0.8rem
-              label:
-                - color: var(--secondary-text-color
-                - font-size: 0.8rem
-            tap_action: none
           - type: custom:button-card
+            template: clock
+            variables:
+              timezone: America/Los_Angeles
             name: San Francisco
-            label: >
-              [[[
-                return (new Date()).toLocaleDateString("en-ZA", {timeZone: "America/Los_Angeles"});
-              ]]]
             entity: sensor.san_francisco
-            show_name: true
-            show_state: true
-            show_icon: true
-            show_label: true
-            color: var(--paper-item-icon-color)
-            icon: >
-              [[[
-                var timezone = "America/Los_Angeles";
-                var hourNamesIndexed = ["twelve", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"];
-                var timeParts = (new Date()).toLocaleTimeString("en-ZA", {timeZone: timezone, hour12: true}).split(':');
-                var hour = parseInt(timeParts[0]);
-                var minute = parseInt(timeParts[1]);
-                return "mdi:clock-time-" + hourNamesIndexed[hour] + "-outline";
-              ]]]
-            styles:
-              grid:
-                - grid-template-areas: '"n" "i" "s" "l"'
-              name:
-                - color: var(--secondary-text-color
-                - font-size: 1rem
-              state:
-                - color: var(--secondary-text-color)
-                - font-size: 0.8rem
-              label:
-                - color: var(--secondary-text-color
-                - font-size: 0.8rem
-            tap_action: none
           - type: custom:button-card
+            template: clock
+            variables:
+              timezone: Europe/London
             name: London
-            label: >
-              [[[
-                return (new Date()).toLocaleDateString("en-ZA", {timeZone: "Europe/London"});
-              ]]]
             entity: sensor.london
-            show_name: true
-            show_state: true
-            show_icon: true
-            show_label: true
-            color: var(--paper-item-icon-color)
-            icon: >
-              [[[
-                var timezone = "Europe/London";
-                var hourNamesIndexed = ["twelve", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"];
-                var timeParts = (new Date()).toLocaleTimeString("en-ZA", {timeZone: timezone, hour12: true}).split(':');
-                var hour = parseInt(timeParts[0]);
-                var minute = parseInt(timeParts[1]);
-                return "mdi:clock-time-" + hourNamesIndexed[hour] + "-outline";
-              ]]]
-            styles:
-              grid:
-                - grid-template-areas: '"n" "i" "s" "l"'
-              name:
-                - color: var(--secondary-text-color
-                - font-size: 1rem
-              state:
-                - color: var(--secondary-text-color)
-                - font-size: 0.8rem
-              label:
-                - color: var(--secondary-text-color
-                - font-size: 0.8rem
-            tap_action: none
   - type: vertical-stack
     cards:
     - type: custom:weather-card

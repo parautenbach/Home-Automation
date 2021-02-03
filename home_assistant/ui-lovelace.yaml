@@ -34,12 +34,12 @@ button_card_templates:
       grid:
         - grid-template-areas: '"n" "i" "s" "l"'
       name:
-        - color: var(--secondary-text-color
+        - color: var(--secondary-text-color)
         - font-size: 1rem
       state:
         - color: var(--secondary-text-color)
         - font-size: 0.8rem
       label:
-        - color: var(--secondary-text-color
+        - color: var(--secondary-text-color)
         - font-size: 0.8rem
     tap_action: none

@@ -59,7 +59,7 @@ cards:
             show_label: true
             label: >
               [[[
-                var b = states['light.smart_bulb_1'].attributes.brightness;
+                var b = entity.attributes.brightness;
                 return parseInt(b ? b/2.55 : '0') + '%';
               ]]]
             styles:
@@ -125,7 +125,7 @@ cards:
             show_label: true
             label: >
               [[[
-                var b = states['light.smart_bulb_2'].attributes.brightness;
+                var b = entity.attributes.brightness;
                 return parseInt(b ? b/2.55 : '0') + '%';
               ]]]
             styles:

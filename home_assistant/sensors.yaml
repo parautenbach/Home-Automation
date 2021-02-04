@@ -302,6 +302,10 @@
   name: london
   time_zone: Europe/London
 
+- platform: worldclock
+  name: sydney
+  time_zone: Australia/Sydney
+
 - platform: command_line
   name: internet_packet_loss
   command: 'ping -c 5 www.google.com | grep -o -P "(?<= )(\d+)(?=%)"'

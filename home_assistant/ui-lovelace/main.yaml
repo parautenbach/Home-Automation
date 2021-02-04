@@ -772,15 +772,21 @@ cards:
           - type: custom:button-card
             template: clock
             variables:
+              timezone: Europe/London
+            name: London
+            entity: sensor.london
+          - type: custom:button-card
+            template: clock
+            variables:
               timezone: America/Los_Angeles
             name: San Francisco
             entity: sensor.san_francisco
           - type: custom:button-card
             template: clock
             variables:
-              timezone: Europe/London
-            name: London
-            entity: sensor.london
+              timezone: Australia/Sydney
+            name: Sydney
+            entity: sensor.sydney
   - type: vertical-stack
     cards:
     - type: custom:weather-card

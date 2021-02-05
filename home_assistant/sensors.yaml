@@ -200,7 +200,7 @@
         {% set reversed_file_list = state_attr('sensor.home_assistant', 'file_list') | sort(reverse=True) %}
         {% set files_exist = (reversed_file_list | length) > 0 %}
         {% if (files_exist) %}
-          {% set last_backup_dt = strptime(reversed_file_list[1] | regex_findall_index(find='\d{8}'),'%Y%m%d') | as_local %}
+          {% set last_backup_dt = strptime(reversed_file_list[0] | regex_findall_index(find='\d{8}'),'%Y%m%d') | as_local %}
           {% if ((now() - (last_backup_dt)).days > 4) %}
             mdi:file-alert-outline
           {% else %}

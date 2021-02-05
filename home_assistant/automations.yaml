@@ -1091,6 +1091,7 @@
 # udevadm control --log-priority=debug
 # journalctl -f
 - alias: "Update Server Power Status"
+  initial_state: true
   trigger:
     - platform: webhook
       webhook_id: server_power_connected
@@ -1103,6 +1104,7 @@
         entity_id: input_boolean.server_power_connected
 
 - alias: "Proximity Updates"
+  initial_state: false
   trigger:
     - platform: state
       entity_id: proximity.home

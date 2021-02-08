@@ -211,7 +211,8 @@
         {% endif %}
     last_backup_relative:
       value_template: >-
-        {{ relative_time(strptime(states('sensor.last_backup'), "%Y-%m-%d %H:%M:%S%z")) ~ " ago" }}
+        {% set suffix = " ago" if (states('sensor.last_backup') != "unknown") else "" %}
+        {{ relative_time(strptime(states('sensor.last_backup'), "%Y-%m-%d %H:%M:%S%z")) ~ suffix }}
       icon_template: >-
         {{ state_attr('sensor.last_backup', 'icon') }}
       attribute_templates:

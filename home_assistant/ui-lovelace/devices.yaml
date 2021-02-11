@@ -50,6 +50,13 @@ cards:
           template: shutdown
           entity: binary_sensor.rasplay
           icon: mdi:music
+    - type: history-graph
+      hours_to_show: 24
+      entities:
+        - entity: binary_sensor.cctv
+        - entity: binary_sensor.thor
+        - entity: binary_sensor.rasplex
+        - entity: binary_sensor.rasplay
   - type: vertical-stack
     cards:
       - type: map

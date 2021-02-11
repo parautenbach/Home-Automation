@@ -21,6 +21,7 @@ homeassistant:
     - /tmp
     - /mnt/nas/Backups/home_assistant/
     - /sys/class/power_supply/
+    # - /home/homeassistant/scripts/
   media_dirs:
     gallery: /home/homeassistant/.homeassistant/www/gallery
   customize: !include customize.yaml
@@ -28,6 +29,7 @@ homeassistant:
 logger:
   default: warning
   # logs:
+  #   homeassistant.components.shell_command: debug
   #   homeassistant.components.linux_battery: debug
   #   homeassistant.components.automation: info
   #   homeassistant.components.python_script: debug
@@ -313,6 +315,7 @@ shell_command:
   # this is to avoid the distination from growing indefinitely
   sync_snapshots: "rsync -a `ls /tmp/camera.security_camera_*.jpg | sort | tail -n5` /home/homeassistant/.homeassistant/www/gallery/"
   trim_snapshots: "ls /home/homeassistant/.homeassistant/www/gallery/ | sort -r | tail -n +6 | xargs -I {} rm -- /home/homeassistant/.homeassistant/www/gallery/{}"
+  shudown_remote_host: "/home/homeassistant/scripts/shutdown_remote_host.sh {{ host }}"
 
 timer:
   motion_timer:

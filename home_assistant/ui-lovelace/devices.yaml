@@ -31,6 +31,25 @@ cards:
       title: Thor (WD Cloud Drive)
       entities:
         - sensor.thor_disk_usage
+    - type: horizontal-stack
+      title: Shutdown
+      cards:
+        - type: custom:button-card
+          template: shutdown
+          entity: binary_sensor.cctv
+          icon: mdi:cctv
+        - type: custom:button-card
+          template: shutdown
+          entity: binary_sensor.thor
+          icon: mdi:nas
+        - type: custom:button-card
+          template: shutdown
+          entity: binary_sensor.rasplex
+          icon: mdi:plex
+        - type: custom:button-card
+          template: shutdown
+          entity: binary_sensor.rasplay
+          icon: mdi:music
   - type: vertical-stack
     cards:
       - type: map

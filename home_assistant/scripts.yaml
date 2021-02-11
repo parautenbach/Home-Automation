@@ -619,6 +619,36 @@ force_on_smart_bulb:
       data:
         entity_id: "{{ light }}"
 
+shutdown_remote_host:
+  description: "Shut down a remote host via SSH"
+  # assumes ssh keys and a config map is set up
+  # https://askubuntu.com/questions/191257/how-could-i-shutdown-a-remote-host-in-my-network-thru-ssh-with-a-local-host
+  fields:
+    name:
+      description: "A display name for the host"
+      example: "Some Host"
+    host:
+      description: "The host as defined in the SSH config map"
+      example: "some_host"
+  mode: parallel
+  sequence:
+    - service: shell_command.shudown_remote_host
+      data:
+        host: "{{ host }}"
+    - delay:
+        seconds: 5
+    - service: homeassistant.update_entity
+      data:
+        entity_id: "binary_sensor.{{ host }}"
+    - service: persistent_notification.create
+      data:
+        title: System
+        message: >-
+          {% set user_id = states.script.shutdown_remote_host.context.user_id %}
+          {% set triggered_by = (states.person | selectattr('attributes.user_id','==', user_id)) | list | first or "system" %}
+          {% set first_name = "System" if triggered_by == "system" else state_attr(triggered_by.entity_id, "friendly_name").split()[0] %}
+          {{ first_name }} shut down {{ name }}.
+
 test:
   description: "Testing whether a template works in the collapse ID field"
   sequence:

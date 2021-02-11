@@ -81,6 +81,40 @@
         {{ -4 < state_attr('sun.sun','elevation') | float < 6 }}
       icon_template: mdi:weather-sunset
 
+# https://github.com/home-assistant/core/issues/43188
+# https://github.com/home-assistant/core/pull/43869
+- platform: command_line
+  name: CCTV
+  command: 'ping -n -q -W 1 -c 1 securitypi.local > /dev/null 2>&1 && echo success || echo fail'
+  device_class: connectivity
+  payload_on: "success"
+  payload_off: "fail"
+  scan_interval: 30
+
+- platform: command_line
+  name: Thor
+  command: 'ping -n -q -W 1 -c 1 thor.local > /dev/null 2>&1 && echo success || echo fail'
+  device_class: connectivity
+  payload_on: "success"
+  payload_off: "fail"
+  scan_interval: 30
+
+- platform: command_line
+  name: Rasplay
+  command: 'ping -n -q -W 1 -c 1 rasplay.local > /dev/null 2>&1 && echo success || echo fail'
+  device_class: connectivity
+  payload_on: "success"
+  payload_off: "fail"
+  scan_interval: 30
+
+- platform: command_line
+  name: Rasplex
+  command: 'ping -n -q -W 1 -c 1 rasplex.local > /dev/null 2>&1 && echo success || echo fail'
+  device_class: connectivity
+  payload_on: "success"
+  payload_off: "fail"
+  scan_interval: 30
+
 - platform: ping
   name: Internet
   host: www.google.com

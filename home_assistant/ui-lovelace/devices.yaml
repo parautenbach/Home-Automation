@@ -78,23 +78,6 @@ cards:
             name: Garage
   - type: vertical-stack
     cards:
-      - type: custom:mini-graph-card
-        name: Server Load
-        entities:
-          - entity: sensor.load_1m
-            name: 1 min
-          - entity: sensor.load_5m
-            name: 5 min
-          - entity: sensor.load_15m
-            name: 15 min
-        hours_to_show: 24
-        hour24: true
-        smoothing: true
-        points_per_hour: 12  # every 5 min
-        line_width: 2
-        show:
-          extrema: true
-          average: true
       - type: entities
         entities:
           - sensor.disk_use_percent
@@ -116,6 +99,24 @@ cards:
           - sensor.last_boot
         title: Server
         show_header_toggle: false
+        footer:
+          type: custom:mini-graph-card
+          name: Load
+          entities:
+            - entity: sensor.load_1m
+              name: 1 min
+            - entity: sensor.load_5m
+              name: 5 min
+            - entity: sensor.load_15m
+              name: 15 min
+          hours_to_show: 24
+          hour24: true
+          smoothing: true
+          points_per_hour: 12  # every 5 min
+          line_width: 2
+          show:
+            extrema: true
+            average: true
       - type: custom:mini-graph-card
         name: MQTT Broker Load
         icon: mdi:email-multiple-outline

@@ -32,7 +32,7 @@ cards:
       entities:
         - sensor.thor_disk_usage
     - type: horizontal-stack
-      title: Shutdown
+      title: Devices
       cards:
         - type: custom:button-card
           template: shutdown

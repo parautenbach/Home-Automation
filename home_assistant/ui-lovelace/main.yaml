@@ -55,6 +55,7 @@ cards:
             template: smart_bulb_light
             name: Pieter's Side
             entity: light.smart_bulb_1
+            icon: mdi:lamp
           - type: custom:button-card
             name: Tivoli
             entity: switch.smart_plug_1
@@ -91,6 +92,7 @@ cards:
             template: smart_bulb_light
             name: Rouvé's Side
             entity: light.smart_bulb_2
+            icon: mdi:lamp
       - type: horizontal-stack
         title: Inside Lights
         cards:
@@ -148,10 +150,12 @@ cards:
             template: smart_bulb_light
             name: Dining Room
             entity: light.smart_bulb_3
+            icon: mdi:dome-light
           - type: custom:button-card
             template: smart_bulb_light
             name: Music Room
             entity: light.smart_bulb_4
+            icon: mdi:dome-light
       - type: horizontal-stack
         title: Outside Lights
         cards:
@@ -461,6 +465,12 @@ cards:
                 - grid-template-rows: min-content 1fr min-content
                 - grid-template-columns: 1fr
             state:
+              - operator: template
+                value: >
+                  [[[
+                    return states['binary_sensor.gate_status'].state == 'unavailable'
+                  ]]]
+                color: var(--state-icon-unavailable-color)
               - value: 'unavailable'
                 styles:
                   icon:

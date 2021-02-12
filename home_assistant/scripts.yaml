@@ -657,7 +657,6 @@ make_backup:
     - service: homeassistant.update_entity
       data:
         entity_id: sensor.home_assistant
-    # todo: automation: backup state change notification
 
 test:
   description: "Testing whether a template works in the collapse ID field"

@@ -940,6 +940,24 @@
           push:
             thread-id: "system-backup"
 
+- alias: "Notify If New Backup Found"
+  trigger:
+    - platform: state
+      entity_id: sensor.last_backup
+  condition:
+    condition: template
+    value_template: >-
+      {% set last_backup = strptime(states('sensor.last_backup'), "%Y-%m-%dT%H:%M:%S%z") %}
+      {{ ((now() - last_backup).seconds) < 60 }}
+  action:
+    - service: notify.mobile_app_ceres
+      data:
+        title: "System"
+        message: "A new Home Assistant backup was made."
+        data:
+          push:
+            thread-id: "system-backup"
+
 - alias: "Low Server Battery"
   initial_state: true
   trigger:

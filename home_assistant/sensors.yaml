@@ -191,8 +191,8 @@
         {% set reversed_file_list = state_attr('sensor.home_assistant', 'file_list') | sort(reverse=True) %}
         {% set files_exist = (reversed_file_list | length) > 0 %}
         {% if (files_exist) %}
-          {% set last_backup_dt = strptime(reversed_file_list[0] | regex_findall_index(find='\d{8}'),'%Y%m%d') | as_local %}
-          {{ last_backup_dt }}
+          {% set last_backup_dt = strptime(reversed_file_list[0] | regex_findall_index(find='\d{8}_\d{6}'),'%Y%m%d_%H%M%S') | as_local %}
+          {{ last_backup_dt.isoformat() }}
         {% else %}
           unknown
         {% endif %}
@@ -200,8 +200,8 @@
         {% set reversed_file_list = state_attr('sensor.home_assistant', 'file_list') | sort(reverse=True) %}
         {% set files_exist = (reversed_file_list | length) > 0 %}
         {% if (files_exist) %}
-          {% set last_backup_dt = strptime(reversed_file_list[0] | regex_findall_index(find='\d{8}'),'%Y%m%d') | as_local %}
-          {% if ((now() - (last_backup_dt)).days > 4) %}
+          {% set last_backup_dt = strptime(reversed_file_list[0] | regex_findall_index(find='\d{8}_\d{6}'),'%Y%m%d_%H%M%S') %}
+          {% if ((utcnow().replace(tzinfo=None) - (last_backup_dt)).days > 4) %}
             mdi:file-alert-outline
           {% else %}
             mdi:file-outline
@@ -209,15 +209,6 @@
         {% else %}
           mdi:file-alert-outline
         {% endif %}
-    last_backup_relative:
-      value_template: >-
-        {% set suffix = " ago" if (states('sensor.last_backup') != "unknown") else "" %}
-        {{ relative_time(strptime(states('sensor.last_backup'), "%Y-%m-%d %H:%M:%S%z")) ~ suffix }}
-      icon_template: >-
-        {{ state_attr('sensor.last_backup', 'icon') }}
-      attribute_templates:
-        last_backup: >
-          {{ states('sensor.last_backup') }}
     home_assistant_server_battery_status:
       friendly_name: "Home Assistant Server Battery Status"
       device_class: battery

@@ -332,7 +332,7 @@ sensor.mqtt_broker_sent_messages_1min_load:
   friendly_name: MQTT broker messages out
 sensor.mqtt_broker_received_messages_1min_load:
   friendly_name: MQTT broker messages in
-sensor.last_backup_relative:
+sensor.last_backup:
   friendly_name: "Most recent backup"
 sensor.db_size:
   icon: mdi:database

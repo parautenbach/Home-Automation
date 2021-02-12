@@ -96,7 +96,26 @@ cards:
           - sensor.network_throughput_out_enp3s0
           - sensor.mqtt_broker_sent_messages_1min_load
           - sensor.mqtt_broker_received_messages_1min_load
-          - sensor.last_backup_relative
+          - entity: sensor.last_backup
+            # binary_sensor.no_recent_backup
+            # {{ "var(--state-icon-active-color)" if is_state('binary_sensor.updater', 'on') }}
+            # style: |
+            #   :host {
+            #     color: {{ "var(--custom-graph-color-red)" if is_state('binary_sensor.no_recent_backup', 'on') }};
+            style:
+              hui-generic-entity-row:
+                $:
+                  state-badge:
+                    $:
+                      ha-icon:
+                        $: |
+                          ha-svg-icon {
+                            color: {{ "var(--custom-graph-color-red)" if is_state('binary_sensor.no_recent_backup', 'on') }};
+                          }
+                  .: |
+                    .info {
+                      color: {{ "var(--custom-graph-color-red)" if is_state('binary_sensor.no_recent_backup', 'on') }};
+                    }
           - sensor.db_size
           - entity: sensor.home_assistant_server_battery
             name: Server battery

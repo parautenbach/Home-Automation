@@ -60,6 +60,7 @@ cards:
         - entity: binary_sensor.main_gate
         - entity: binary_sensor.garage_doors
         - entity: binary_sensor.power_meter
+        # todo: the two extenders
   - type: vertical-stack
     cards:
       - type: map

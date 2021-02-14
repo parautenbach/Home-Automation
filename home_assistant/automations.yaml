@@ -1004,7 +1004,7 @@
     - service: switch.turn_on
       entity_id: switch.guest_mode
 
-- alias: "Alert If Gate Or Garages Opened When Nobody Home"
+- alias: "Alert If Gate Or Garages Opened Or Closed When Nobody Home"
   initial_state: true
   trigger:
     platform: state
@@ -1012,7 +1012,12 @@
       - cover.main_gate
       - cover.lhs_garage_door
       - cover.rhs_garage_door
-    to: "open"
+    from:
+      - "open"
+      - "closed"
+    to:
+      - "open"
+      - "closed"
   condition:
     - condition: state
       entity_id: binary_sensor.anybody_home
@@ -1030,7 +1035,8 @@
           {% else %}
             {% set name = "The main gate" %}
           {% endif %}
-          {{ name }} has been opened when nobody's home.
+          {% set action = 'opened' if (trigger.to_state.state == 'open') else 'closed' %}
+          {{ name }} has been {{ action }} when nobody's home.
           {# todo: alert/call security company #}
         data:
           apns_headers:

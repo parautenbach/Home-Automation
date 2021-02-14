@@ -57,6 +57,9 @@ cards:
         - entity: binary_sensor.thor
         - entity: binary_sensor.rasplex
         - entity: binary_sensor.rasplay
+        - entity: binary_sensor.main_gate
+        - entity: binary_sensor.garage_doors
+        - entity: binary_sensor.power_meter
   - type: vertical-stack
     cards:
       - type: map

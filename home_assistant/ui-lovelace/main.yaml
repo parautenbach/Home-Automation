@@ -345,7 +345,7 @@ cards:
           smoothing: true
           points_per_hour: 12  # every 5 min
           line_width: 2
-          line_color: '#e74c3c'
+          line_color: var(--custom-graph-color-red)
           show:
             extrema: true
             name: false
@@ -591,7 +591,7 @@ cards:
         smoothing: true
         points_per_hour: 4  # every 15 min
         line_width: 2
-        line_color: '#3498db'
+        line_color: var(--custom-graph-color-blue)
         show:
           extrema: true
       - type: horizontal-stack
@@ -654,9 +654,9 @@ cards:
       entities:
         # currently down and generally very unreliable; need to use my own light meter
         # - entity: sensor.sun_illuminance
-        #   color: '#ff9800'
+        #   color: var(--custom-graph-color-yellow)
         - entity: sensor.solar_angle
-          color: '#e74c3c'
+          color: var(--custom-graph-color-red)
           y_axis: secondary
       hours_to_show: 24
       hour24: true
@@ -668,7 +668,7 @@ cards:
       color_thresholds:
         # needs to be the same as the automation's threshold to make sense
         - value: 15320
-          color: '#cccccc'
+          color: var(--custom-graph-color-gray)
         - value: 15321
-          color: var(--accent-color)
+          color: var(--custom-graph-color-yellow)
       color_thresholds_transition: hard

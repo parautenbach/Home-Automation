@@ -85,9 +85,9 @@ cards:
     icon: mdi:briefcase-clock
     entities:
       - entity: sensor.exchange_rate_1_btc
-        color: '#ff9800'
+        color: var(--custom-graph-color-yellow)
       - entity: sensor.trade_volume
-        color: '#3498db'
+        color: var(--custom-graph-color-blue)
         y_axis: secondary
     hours_to_show: 72
     hour24: true

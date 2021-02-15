@@ -21,3 +21,4 @@ document.documentElement.style.setProperty('--custom-graph-color-yellow',   '#ff
 document.documentElement.style.setProperty('--custom-graph-color-red',      '#e74c3c');  // slate: #b83829 - df342e
 document.documentElement.style.setProperty('--custom-graph-color-green',    '#70a03c');  // slate: #70a03c - 107001
 document.documentElement.style.setProperty('--custom-graph-color-magenta',  '#8840a7');  // slate: #xxxxxx - 8840a7
+document.documentElement.style.setProperty('--custom-graph-color-gray',     '#cccccc');

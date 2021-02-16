@@ -829,6 +829,7 @@
     to: "open"
   mode: queued
   condition:
+    # https://www.home-assistant.io/docs/scripts/conditions/#sunsetsunrise-condition
     - condition: or
       conditions:
         - condition: sun
@@ -836,7 +837,7 @@
           after_offset: "-01:30:00"
         - condition: sun
           before: sunrise
-          before_offset: "+01:30:00"
+          before_offset: "-01:30:00"
   action:
     - service: light.turn_on
       entity_id: light.garage_light

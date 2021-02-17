@@ -336,3 +336,5 @@ sensor.last_backup:
   friendly_name: "Most recent backup"
 sensor.db_size:
   icon: mdi:database
+binary_sensor.updater:
+  friendly_name: HA Updater

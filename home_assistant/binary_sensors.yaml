@@ -80,6 +80,10 @@
       value_template: >
         {{ -4 < state_attr('sun.sun','elevation') | float < 6 }}
       icon_template: mdi:weather-sunset
+    hacs_updater:
+      friendly_name: HACS Updater
+      value_template: >
+       {{ states('sensor.hacs') | int > 0 }}
 
 # https://github.com/home-assistant/core/issues/43188
 # https://github.com/home-assistant/core/pull/43869

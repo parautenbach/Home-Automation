@@ -10,7 +10,7 @@ badges:
             $:
               .value: |
                   ha-icon {
-                    color: {{ "var(--state-icon-active-color)" if is_state('binary_sensor.updater', 'on') }} !important;
+                    color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
                   }
   - entity: binary_sensor.motion_detected
     style:
@@ -20,7 +20,7 @@ badges:
             $:
               .value: |
                   ha-icon {
-                    color: {{ "var(--state-icon-active-color)" if is_state('binary_sensor.motion_detected', 'on') }} !important;
+                    color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
                   }
   - entity: person.pieter_rautenbach
   - entity: person.rouve_rautenbach
@@ -32,7 +32,7 @@ badges:
             $:
               .value: |
                   ha-icon {
-                    color: {{ "var(--state-icon-active-color)" if is_state('binary_sensor.electricity_feed', 'on') }} !important;
+                    color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
                   }
   - entity: binary_sensor.internet_connection
     style:
@@ -42,7 +42,7 @@ badges:
             $:
               .value: |
                   ha-icon {
-                    color: {{ "var(--state-icon-active-color)" if is_state('binary_sensor.internet_connection', 'on') }} !important;
+                    color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
                   }
 cards:
   - type: vertical-stack
@@ -295,6 +295,7 @@ cards:
               when_idle: false
               when_paused: false
               when_standby: false
+            background: '/local/apple_tv.jpg'
             shortcuts:
               columns: 4
               buttons:
@@ -323,6 +324,7 @@ cards:
               when_idle: false
               when_paused: false
               when_standby: false
+            background: '/local/tivoli-model-three.png'
       - type: entities
         title: Electricity Consumption
         show_header_toggle: false

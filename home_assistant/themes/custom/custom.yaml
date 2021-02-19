@@ -1,3 +1,2 @@
 custom-light-mode:
-  ha-card-border-radius: 10px
   mini-media-player-base-color: var(--paper-item-icon-color)

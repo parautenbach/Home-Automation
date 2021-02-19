@@ -22,3 +22,6 @@ document.documentElement.style.setProperty('--custom-graph-color-red',      '#e7
 document.documentElement.style.setProperty('--custom-graph-color-green',    '#70a03c');  // slate: #70a03c - 107001
 document.documentElement.style.setProperty('--custom-graph-color-magenta',  '#8840a7');  // slate: #xxxxxx - 8840a7
 document.documentElement.style.setProperty('--custom-graph-color-gray',     '#cccccc');
+
+document.documentElement.style.setProperty('--mini-media-player-background-opacity',  0.2);
+document.documentElement.style.setProperty('--mini-media-player-artwork-opacity',     0.8);

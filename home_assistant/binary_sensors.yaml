@@ -143,6 +143,22 @@
   payload_off: "fail"
   scan_interval: 30
 
+- platform: command_line
+  name: Home Extender
+  command: 'ping -n -q -W 1 -c 1 home_extender > /dev/null 2>&1 && echo success || echo fail'
+  device_class: connectivity
+  payload_on: "success"
+  payload_off: "fail"
+  scan_interval: 30
+
+- platform: command_line
+  name: Garage Extender
+  command: 'ping -n -q -W 1 -c 1 garage_extender > /dev/null 2>&1 && echo success || echo fail'
+  device_class: connectivity
+  payload_on: "success"
+  payload_off: "fail"
+  scan_interval: 30
+
 - platform: ping
   name: Internet
   host: www.google.com

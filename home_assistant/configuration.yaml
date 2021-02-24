@@ -348,6 +348,21 @@ media_player:
   - platform: shairport_sync
     name: Main Bedroom
     topic: shairport-sync/main-bedroom
+  - platform: universal
+    name: Main Bedroom Universal
+    children:
+      - media_player.main_bedroom
+    commands:
+      turn_on:
+        service: switch.turn_on
+        target:
+          entity_id: switch.smart_plug_1
+      turn_off:
+        service: switch.turn_off
+        target:
+          entity_id: switch.smart_plug_1
+    attributes:
+      state: switch.smart_plug_1
 
 media_source:
 

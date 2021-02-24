@@ -313,11 +313,12 @@ cards:
                   id: script.entertainment_off
           - type: custom:mini-media-player
             name: Main Bedroom
-            entity: media_player.main_bedroom
+            entity: media_player.main_bedroom_universal
             artwork: cover
             volume_stateless: true
             hide:
-              power: true
+              power: false
+              power_state: false
               volume: false
               mute: true
             idle_view:

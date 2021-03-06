@@ -84,6 +84,10 @@
       friendly_name: HACS Updater
       value_template: >
        {{ states('sensor.hacs') | int > 0 }}
+    ha_breaking_changes:
+      friendly_name: HA Breaking Changes
+      value_template: >
+        {{ states('sensor.potential_breaking_changes') | int > 0 }}
 
 # https://github.com/home-assistant/core/issues/43188
 # https://github.com/home-assistant/core/pull/43869

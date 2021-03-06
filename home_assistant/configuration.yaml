@@ -374,6 +374,8 @@ proximity:
     tolerance: 20
     unit_of_measurement: m
 
+breaking_changes:
+
 # https://community.home-assistant.io/t/control-recursion-in-the-folder-watcher-integration/200110
 # folder_watcher:
 #   - folder: /tmp/

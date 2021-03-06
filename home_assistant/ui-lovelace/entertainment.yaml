@@ -228,7 +228,7 @@ cards:
               haptic: light
               service: script.turn_on
               service_data:
-                entity_id: script.apple_tv_home_double
+                entity_id: script.apple_tv_home_double_press
             hold_action:
               action: call-service
               haptic: medium

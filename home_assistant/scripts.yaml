@@ -308,16 +308,14 @@ apple_tv_home:
         command:
           - b64:JgCoAAABJpURExM3EjcSNxITEzcSNxI3FDYTNhQ1FBEUEhIUEhISNxI3FDcTERMSExMRExQTERMSNxMTERMSExITExMTEhITEgAFlAABKEkTAAxOAAEnShIADE8AASdJFAAMTQABJ0oSAAxPAAEnShIADE8AASdJEwAMTwABJ0kTAAxOAAEnShIADE8AAShIFAAMTgABJ0kSAAxPAAEoSRMADE4AASZKEwANBQ==
 
-apple_tv_home_double:
+apple_tv_home_double_press:
   sequence:
     - service: remote.send_command
       data:
         entity_id: remote.living_room
         command: home
-    - service: remote.send_command
-      data:
-        entity_id: remote.living_room
-        command: home
+        num_repeats: 2
+        delay_secs: 0.1
 
 apple_tv_ok:
   sequence:

@@ -308,6 +308,17 @@ apple_tv_home:
         command:
           - b64:JgCoAAABJpURExM3EjcSNxITEzcSNxI3FDYTNhQ1FBEUEhIUEhISNxI3FDcTERMSExMRExQTERMSNxMTERMSExITExMTEhITEgAFlAABKEkTAAxOAAEnShIADE8AASdJFAAMTQABJ0oSAAxPAAEnShIADE8AASdJEwAMTwABJ0kTAAxOAAEnShIADE8AAShIFAAMTgABJ0kSAAxPAAEoSRMADE4AASZKEwANBQ==
 
+apple_tv_home_double:
+  sequence:
+    - service: remote.send_command
+      data:
+        entity_id: remote.living_room
+        command: home
+    - service: remote.send_command
+      data:
+        entity_id: remote.living_room
+        command: home
+
 apple_tv_ok:
   sequence:
     - service: remote.send_command
@@ -445,8 +456,10 @@ entertainment_apple_tv_on:
     - service: script.turn_on
       entity_id: script.hk_3380_power_on
     - delay: "00:00:01"
-    - service: script.turn_on
-      entity_id: script.apple_tv_menu
+    - service: remote.send_command
+      data:
+        entity_id: remote.living_room
+        command: wakeup
     - delay: "00:00:05"
     - service: script.turn_on
       entity_id: script.samsung_tv_hdmi2
@@ -472,15 +485,69 @@ entertainment_off:
     - delay: "00:00:01"
     - service: script.turn_on
       entity_id: script.hk_3380_power_off
+    # state is idle when not playing or off (suspended)
+    # in that case, just let it turn off automatically
+    # we just want to stop anything currently playing (e.g. streaming music) to stop
     - condition: state
-      entity_id: media_player.living_room_remote
+      entity_id: media_player.living_room
       state: "playing"
     # https://github.com/postlund/pyatv/blob/6018ba22851287afaf7c99dafa42de5766b97acf/pyatv/interface.py#L94
+    # the proper way to turn it off
     - service: remote.send_command
-      entity_id: remote.living_room_remote
       data:
-        command:
-          - suspend
+        entity_id: remote.living_room
+        command: home_hold
+    - delay: "00:00:02"
+    - service: remote.send_command
+      data:
+        entity_id: remote.living_room
+        command: select
+
+play_radio_paradise:
+  sequence:
+    - service: remote.send_command
+      data:
+        entity_id: remote.living_room
+        command: top_menu
+    - delay: "00:00:01"
+    - service: remote.send_command
+      data:
+        entity_id: remote.living_room
+        command: top_menu
+    - delay: "00:00:01"
+    - service: remote.send_command
+      data:
+        entity_id: remote.living_room
+        command: right
+    - delay: "00:00:01"
+    - service: remote.send_command
+      data:
+        entity_id: remote.living_room
+        command: right
+    - delay: "00:00:01"
+    - service: remote.send_command
+      data:
+        entity_id: remote.living_room
+        command: right
+    - delay: "00:00:01"
+    - service: remote.send_command
+      data:
+        entity_id: remote.living_room
+        command: down
+    - delay: "00:00:01"
+    - service: remote.send_command
+      data:
+        entity_id: remote.living_room
+        command: down
+    - delay: "00:00:01"
+    - service: remote.send_command
+      data:
+        entity_id: remote.living_room
+        command: select
+    - delay: "00:00:01"
+    - service: media_player.media_play
+      data:
+        entity_id: media_player.living_room
 
 security_camera_record_clip:
   sequence:

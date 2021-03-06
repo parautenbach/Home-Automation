@@ -223,6 +223,19 @@ cards:
               service: script.turn_on
               service_data:
                 entity_id: script.apple_tv_home
+            double_tap_action:
+              action: call-service
+              haptic: light
+              service: script.turn_on
+              service_data:
+                entity_id: script.apple_tv_home_double
+            hold_action:
+              action: call-service
+              haptic: medium
+              service: remote.send_command
+              service_data:
+                entity_id: remote.living_room
+                command: home_hold
       - type: horizontal-stack
         cards:
           - type: custom:button-card

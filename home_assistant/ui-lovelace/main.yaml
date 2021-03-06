@@ -297,11 +297,14 @@ cards:
               when_standby: false
             background: '/local/apple_tv.jpg'
             shortcuts:
-              columns: 4
+              columns: 5
               buttons:
                 - type: script
                   icon: mdi:apple
                   id: script.entertainment_apple_tv_on
+                - type: script
+                  icon: mdi:palm-tree
+                  id: script.play_radio_paradise
                 - type: script
                   icon: mdi:set-top-box
                   id: script.entertainment_satellite_on

@@ -542,7 +542,7 @@ play_radio_paradise:
       data:
         entity_id: remote.living_room
         command: select
-    - delay: "00:00:01"
+    - delay: "00:00:03"
     - service: media_player.media_play
       data:
         entity_id: media_player.living_room

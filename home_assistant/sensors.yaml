@@ -233,6 +233,26 @@
         {% else %}
           mdi:battery{{ charging }}-{{ suffix }}
         {% endif %}
+    weather_forecast_conditions_tomorrow:
+      friendly_name: "Weather Conditions Tomorrow"
+      value_template: >-
+        {{ state_attr('weather.home', 'forecast')[0]['condition'] }}
+      icon_template: >-
+        {% if state_attr('weather.home', 'forecast')[0]['condition'] == 'partlycloudy' %}
+          mdi:weather-partly-cloudy
+        {% else %}
+          mdi:weather-{{ states('weather.home') }}
+        {% endif %}
+    weather_forecast_precipitation_tomorrow:
+      friendly_name: "Weather Precipitation Tomorrow"
+      value_template: >-
+        {{ state_attr('weather.home', 'forecast')[0]['precipitation'] }}
+      icon_template: >-
+        {% if state_attr('weather.home', 'forecast')[0]['condition'] == 'partlycloudy' %}
+          mdi:weather-partly-cloudy
+        {% else %}
+          mdi:weather-{{ states('weather.home') }}
+        {% endif %}
 
 - platform: snmp
   name: snmp_wan_in

@@ -643,6 +643,13 @@ cards:
       details: false
       forecast: true
       number_of_forecasts: 5  # days
+    - type: history-graph
+      hours_to_show: 72
+      entities:
+        - entity: weather.home
+          name: Today
+        - entity: sensor.weather_forecast_conditions_tomorrow
+          name: Tomorrow
     - type: custom:mini-graph-card
       name: Home
       entities:

@@ -241,17 +241,17 @@
         {% if state_attr('weather.home', 'forecast')[0]['condition'] == 'partlycloudy' %}
           mdi:weather-partly-cloudy
         {% else %}
-          mdi:weather-{{ states('weather.home') }}
+          mdi:weather-{{ state_attr('weather.home', 'forecast')[0]['condition'] }}
         {% endif %}
     weather_forecast_precipitation_tomorrow:
       friendly_name: "Weather Precipitation Tomorrow"
       value_template: >-
         {{ state_attr('weather.home', 'forecast')[0]['precipitation'] }}
       icon_template: >-
-        {% if state_attr('weather.home', 'forecast')[0]['condition'] == 'partlycloudy' %}
-          mdi:weather-partly-cloudy
+        {% if state_attr('weather.home', 'forecast')[0]['precipitation'] > 0 %}
+          mdi:water
         {% else %}
-          mdi:weather-{{ states('weather.home') }}
+          mdi:water-off
         {% endif %}
 
 - platform: snmp

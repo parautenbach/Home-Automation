@@ -48,6 +48,16 @@ cards:
             name: Rouvé
           - entity: binary_sensor.rhs_garage_occupied
             name: Pieter
+      - type: history-graph
+        title: Covers
+        hours_to_show: 24
+        entities:
+          - entity: cover.main_gate
+            name: Gate
+          - entity: cover.lhs_garage_door
+            name: Rouvé
+          - entity: cover.rhs_garage_door
+            name: Pieter
   - type: vertical-stack
     cards:
       - type: picture-glance

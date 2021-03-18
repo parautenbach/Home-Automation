@@ -147,6 +147,18 @@
     internet_round_trip_time_mdev:
       value_template: "{{ state_attr('binary_sensor.internet', 'round_trip_time_mdev') }}"
       unit_of_measurement: 'ms'
+    front_extender_round_trip_time_avg:
+      value_template: "{{ state_attr('binary_sensor.front_extender', 'round_trip_time_avg') }}"
+      unit_of_measurement: 'ms'
+    front_extender_round_trip_time_mdev:
+      value_template: "{{ state_attr('binary_sensor.front_extender', 'round_trip_time_mdev') }}"
+      unit_of_measurement: 'ms'
+    back_extender_round_trip_time_avg:
+      value_template: "{{ state_attr('binary_sensor.back_extender', 'round_trip_time_avg') }}"
+      unit_of_measurement: 'ms'
+    back_extender_round_trip_time_mdev:
+      value_template: "{{ state_attr('binary_sensor.back_extender', 'round_trip_time_mdev') }}"
+      unit_of_measurement: 'ms'
     # https://companion.home-assistant.io/docs/core/sensors/
     pieter_activity_type:
       value_template: "{{ state_attr('sensor.ceres_activity', 'Types') | first }}"
@@ -324,6 +336,20 @@
   unit_of_measurement: "%"
   value_template: '{{ value | int }}'
   scan_interval: 180
+
+- platform: command_line
+  name: front_extender_packet_loss
+  command: 'ping -c 5 front_extender | grep -o -P "(?<= )(\d+)(?=%)"'
+  unit_of_measurement: "%"
+  value_template: '{{ value | int }}'
+  scan_interval: 30
+
+- platform: command_line
+  name: back_extender_packet_loss
+  command: 'ping -c 5 back_extender | grep -o -P "(?<= )(\d+)(?=%)"'
+  unit_of_measurement: "%"
+  value_template: '{{ value | int }}'
+  scan_interval: 30
 
 - platform: command_line
   name: thor_disk_usage

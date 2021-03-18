@@ -49,7 +49,7 @@ cards:
         icon: mdi:pulse
         show:
           state: false
-          icon: false
+          icon: true
           extrema: true
         entities:
           - entity: sensor.internet_speed_in

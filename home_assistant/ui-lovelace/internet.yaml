@@ -60,7 +60,7 @@ cards:
           - entity: sensor.monthly_internet_usage_out
             name: This Month
   - type: vertical-stack
-    title: Connection Details
+    title: Internet Connection
     cards:
       - type: history-graph
         hours_to_show: 24
@@ -70,9 +70,40 @@ cards:
       - type: entities
         show_header_toggle: false
         entities:
-          - sensor.internet_round_trip_time_avg
-          - sensor.internet_round_trip_time_mdev
-          - sensor.internet_packet_loss
+          - entity: sensor.internet_round_trip_time_avg
+            name: Mean Ping Time
+          - entity: sensor.internet_round_trip_time_mdev
+            name: Mean Ping Deviation
+          - entity: sensor.internet_packet_loss
+            name: Packet Loss
+  - type: vertical-stack
+    title: Home Network
+    cards:
+      - type: history-graph
+        hours_to_show: 24
+        entities:
+          - entity: binary_sensor.front_extender
+          - entity: binary_sensor.back_extender
+      - type: entities
+        title: Front Extender
+        show_header_toggle: false
+        entities:
+          - entity: sensor.front_extender_round_trip_time_avg
+            name: Mean Ping Time
+          - entity: sensor.front_extender_round_trip_time_mdev
+            name: Mean Ping Deviation
+          - entity: sensor.front_extender_packet_loss
+            name: Packet Loss
+      - type: entities
+        title: Back Extender
+        show_header_toggle: false
+        entities:
+          - entity: sensor.back_extender_round_trip_time_avg
+            name: Mean Ping Time
+          - entity: sensor.back_extender_round_trip_time_mdev
+            name: Mean Ping Deviation
+          - entity: sensor.back_extender_packet_loss
+            name: Packet Loss
   - type: custom:mini-graph-card
     name: Latency
     entities:

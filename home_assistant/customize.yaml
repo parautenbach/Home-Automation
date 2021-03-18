@@ -279,13 +279,31 @@ sensor.london:
 binary_sensor.gate_status:
   icon: mdi:gate
 sensor.internet_packet_loss:
-  friendly_name: Packet Loss
+  friendly_name: Internet Packet Loss
   icon: mdi:cancel
 sensor.internet_round_trip_time_avg:
-  friendly_name: Mean Ping Time
-  icon: mdi:timer
+  friendly_name: Internet Mean Ping Time
+  icon: mdi:timer-outline
 sensor.internet_round_trip_time_mdev:
-  friendly_name: Mean Ping Deviation
+  friendly_name: Internet Mean Ping Deviation
+  icon: mdi:sigma-lower
+sensor.front_extender_packet_loss:
+  friendly_name: Front Extender Packet Loss
+  icon: mdi:cancel
+sensor.front_extender_round_trip_time_avg:
+  friendly_name: Front Extender Mean Ping Time
+  icon: mdi:timer-outline
+sensor.front_extender_round_trip_time_mdev:
+  friendly_name: Front Extender Mean Ping Deviation
+  icon: mdi:sigma-lower
+sensor.back_extender_packet_loss:
+  friendly_name: Back Extender Packet Loss
+  icon: mdi:cancel
+sensor.back_extender_round_trip_time_avg:
+  friendly_name: Back Extender Mean Ping Time
+  icon: mdi:timer-outline
+sensor.back_extender_round_trip_time_mdev:
+  friendly_name: Back Extender Mean Ping Deviation
   icon: mdi:sigma-lower
 sensor.thor_disk_usage:
   friendly_name: Disk use (percent)

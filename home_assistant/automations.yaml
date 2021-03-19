@@ -440,6 +440,7 @@
         data:
           push:
             category: "contractor_mode_enabled"
+            thread-id: "contractor-mode"
 
 - alias: "Contractor Mode Disabled Alert"
   trigger:
@@ -454,6 +455,7 @@
         data:
           push:
             category: "contractor_mode_disabled"
+            thread-id: "contractor-mode"
 
 - alias: "Enable Contractor Mode"
   initial_state: false
@@ -1005,6 +1007,28 @@
   action:
     - service: switch.turn_off
       entity_id: switch.guest_mode
+
+- alias: "Guest Mode Enabled Alert"
+  trigger:
+    - platform: state
+      entity_id: switch.guest_mode
+      to: "on"
+  action:
+    - service: notify.mobile_app_ceres
+      data:
+        title: "Special Mode"
+        message: "Guest mode enabled."
+        data:
+          push:
+            category: "guest_mode_enabled"
+            thread-id: "guest-mode"
+
+- alias: "Guest Mode Disabled Alert"
+  trigger:
+    - platform: state
+      entity_id: switch.guest_mode
+      to: "off"
+  action:
     - service: notify.mobile_app_ceres
       data:
         title: "Special Mode"
@@ -1012,6 +1036,7 @@
         data:
           push:
             category: "guest_mode_disabled"
+            thread-id: "guest-mode"
 
 - alias: "Enable Guest Mode From Alert Action"
   initial_state: true
@@ -1022,6 +1047,17 @@
         actionName: ENABLE_GUEST_MODE
   action:
     - service: switch.turn_on
+      entity_id: switch.guest_mode
+
+- alias: "Disable Guest Mode From Alert Action"
+  initial_state: true
+  trigger:
+    - platform: event
+      event_type: ios.notification_action_fired
+      event_data:
+        actionName: DISABLE_GUEST_MODE
+  action:
+    - service: switch.turn_off
       entity_id: switch.guest_mode
 
 - alias: "Alert If Garages Opened Or Closed When Not Supposed To"

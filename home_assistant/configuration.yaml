@@ -181,6 +181,11 @@ ios:
         actions:
           - identifier: "ENABLE_CONTRACTOR_MODE"
             title: "Enable"
+      - name: Guest Mode Enabled
+        identifier: "guest_mode_enabled"
+        actions:
+          - identifier: "DISABLE_GUEST_MODE"
+            title: "Disable"
       - name: Guest Mode Disabled
         identifier: "guest_mode_disabled"
         actions:

@@ -440,6 +440,7 @@
         data:
           push:
             category: "contractor_mode_enabled"
+            # use threads but don't replace: we want to see whenever the state changed
             thread-id: "contractor-mode"
 
 - alias: "Contractor Mode Disabled Alert"

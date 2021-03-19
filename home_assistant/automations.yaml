@@ -456,6 +456,7 @@
             category: "contractor_mode_disabled"
 
 - alias: "Enable Contractor Mode"
+  initial_state: false
   trigger:
     - platform: time
       at: "07:00:00"
@@ -469,6 +470,7 @@
       entity_id: switch.contractor_mode
 
 - alias: "Disable Contractor Mode"
+  initial_state: true
   trigger:
     - platform: time
       at: "16:00:00"
@@ -482,6 +484,7 @@
       entity_id: switch.contractor_mode
 
 - alias: "Contractor Mode Still Enabled Alert"
+  initial_state: true
   trigger:
     - platform: time_pattern
       hours: "*"
@@ -1021,12 +1024,11 @@
     - service: switch.turn_on
       entity_id: switch.guest_mode
 
-- alias: "Alert If Gate Or Garages Opened Or Closed When Nobody Home"
+- alias: "Alert If Garages Opened Or Closed When Not Supposed To"
   initial_state: true
   trigger:
     platform: state
     entity_id:
-      - cover.main_gate
       - cover.lhs_garage_door
       - cover.rhs_garage_door
     from:
@@ -1047,13 +1049,54 @@
           {% set name = None %}
           {% if trigger.entity_id | regex_search("lhs", ignorecase=True) %}
             {% set name = "Rouvé's garage door" %}
-          {% elif trigger.entity_id | regex_search("rhs", ignorecase=True) %}
-            {% set name = "Pieter's garage door" %}
           {% else %}
-            {% set name = "The main gate" %}
+            {% set name = "Pieter's garage door" %}
           {% endif %}
           {% set action = 'opened' if (trigger.to_state.state == 'open') else 'closed' %}
-          {{ name }} has been {{ action }} when nobody's home.
+          {{ name }} has been {{ action }}.
+          {# todo: alert/call security company #}
+        data:
+          apns_headers:
+            # group notifications by the timer entity
+            'apns-collapse-id': "{{ trigger.entity_id }}"
+          push:
+            category: "cover_open"
+          action_data:
+            # convert this to the cover entity to use in the automation that receives this
+            cover_id: "{{ trigger.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
+            timer_id: "{{ trigger.entity_id }}"
+
+- alias: "Alert If Gate Opened Or Closed When Not Supposed To"
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id:
+      - cover.main_gate
+    from:
+      - "open"
+      - "closed"
+    to:
+      - "open"
+      - "closed"
+  condition:
+    condition: and
+    conditions:
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "off"
+      - condition: state
+        entity_id: binary_sensor.tenant_mobile_phone
+        state: "off"
+      - condition: state
+        entity_id: binary_sensor.housekeeper_mobile_phone
+        state: "off"
+  action:
+    - service: notify.mobile_app_ceres
+      data:
+        title: "Security"
+        message: >-
+          {% set action = 'opened' if (trigger.to_state.state == 'open') else 'closed' %}
+          The main gate has been {{ action }}.
           {# todo: alert/call security company #}
         data:
           apns_headers:

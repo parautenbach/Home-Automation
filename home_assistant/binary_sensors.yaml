@@ -147,6 +147,22 @@
   payload_off: "fail"
   scan_interval: 30
 
+- platform: command_line
+  name: Tenant Mobile Phone
+  command: 'ping -n -q -W 1 -c 1 tenant_mobile_phone > /dev/null 2>&1 && echo success || echo fail'
+  device_class: connectivity
+  payload_on: "success"
+  payload_off: "fail"
+  scan_interval: 30
+
+- platform: command_line
+  name: Housekeeper Mobile Phone
+  command: 'ping -n -q -W 1 -c 1 housekeeper_mobile_phone > /dev/null 2>&1 && echo success || echo fail'
+  device_class: connectivity
+  payload_on: "success"
+  payload_off: "fail"
+  scan_interval: 30
+
 - platform: ping
   name: Back Extender
   host: back_extender

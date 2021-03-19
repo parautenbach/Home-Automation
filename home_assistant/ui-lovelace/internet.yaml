@@ -62,18 +62,6 @@ cards:
         points_per_hour: 12  # every 5 min
         aggregate_func: max
         line_width: 2
-      - type: custom:mini-graph-card
-        name: Latency
-        entities:
-          - entity: sensor.internet_round_trip_time_avg
-        hours_to_show: 24
-        hour24: true
-        smoothing: true
-        points_per_hour: 12  # every 5 min
-        line_width: 2
-        show:
-          extrema: true
-          average: true
   - type: vertical-stack
     title: Internet Connection
     cards:
@@ -91,6 +79,19 @@ cards:
             name: Mean Ping Deviation
           - entity: sensor.internet_packet_loss
             name: Packet Loss
+        footer:
+          type: custom:mini-graph-card
+          name: Latency
+          entities:
+            - entity: sensor.internet_round_trip_time_avg
+          hours_to_show: 24
+          hour24: true
+          smoothing: true
+          points_per_hour: 12  # every 5 min
+          line_width: 2
+          show:
+            extrema: true
+            average: true
   - type: vertical-stack
     title: Home Network
     cards:
@@ -109,6 +110,19 @@ cards:
             name: Mean Ping Deviation
           - entity: sensor.front_extender_packet_loss
             name: Packet Loss
+        footer:
+          type: custom:mini-graph-card
+          name: Latency
+          entities:
+            - entity: sensor.front_extender_round_trip_time_avg
+          hours_to_show: 24
+          hour24: true
+          smoothing: true
+          points_per_hour: 12  # every 5 min
+          line_width: 2
+          show:
+            extrema: true
+            average: true
       - type: entities
         title: Back Extender
         show_header_toggle: false
@@ -119,3 +133,16 @@ cards:
             name: Mean Ping Deviation
           - entity: sensor.back_extender_packet_loss
             name: Packet Loss
+        footer:
+          type: custom:mini-graph-card
+          name: Latency
+          entities:
+            - entity: sensor.back_extender_round_trip_time_avg
+          hours_to_show: 24
+          hour24: true
+          smoothing: true
+          points_per_hour: 12  # every 5 min
+          line_width: 2
+          show:
+            extrema: true
+            average: true

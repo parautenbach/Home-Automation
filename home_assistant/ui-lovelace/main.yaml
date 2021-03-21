@@ -672,6 +672,8 @@ cards:
         # currently down and generally very unreliable; need to use my own light meter
         # - entity: sensor.sun_illuminance
         #   color: var(--custom-graph-color-yellow)
+        - entity: sensor.illuminance
+          color: var(--custom-graph-color-yellow)
         - entity: sensor.solar_angle
           color: var(--custom-graph-color-red)
           y_axis: secondary

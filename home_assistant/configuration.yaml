@@ -56,6 +56,8 @@ lovelace:
       type: module
     - url: /hacsfiles/ha-floorplan/floorplan.js
       type: module
+    - url: /hacsfiles/lovelace-state-switch/state-switch.js
+      type: module
     # manual
     - url: /local/floorplan/floorplan-card.js
       type: module
@@ -285,6 +287,17 @@ input_number:
   wan_traffic_delta_out:
     min: 0
     max: 4294967295
+
+input_select:
+  selected_remote:
+    name: Remote
+    options:
+      - TV
+      - Audio
+      - Apple TV
+      - Satellite
+    initial: Audio
+    icon: mdi:remote-tv
 
 tplink:
   discovery: false

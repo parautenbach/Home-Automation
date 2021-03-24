@@ -124,3 +124,35 @@ button_card_templates:
         host: "[[[ return entity.attributes.friendly_name.toLowerCase() ]]]"  # must match .ssh/config
       confirmation:
         text: "[[[ return `Are you sure you want to shut down ${entity.attributes.friendly_name}?` ]]]"
+  remote:
+    variables:
+      selection: "Remote State"
+    entity: input_select.selected_remote
+    name: "[[[ return variables.selection ]]]"
+    size: 50%
+    color_type: icon
+    styles:
+    styles:
+      name:
+        - color: var(--paper-item-icon-color)
+      label:
+        - color: var(--paper-item-icon-color)
+        - padding-left: 1ex
+      card:
+        - font-size: 12px
+      icon:
+        - color: |
+            [[[
+              if (entity.state == variables.selection) {
+                return 'var(--paper-item-icon-active-color)';
+              } else  {
+                return 'var(--paper-item-icon-color)';
+              }
+            ]]]
+    tap_action:
+      action: call-service
+      haptic: light
+      service: input_select.select_option
+      service_data:
+        entity_id: input_select.selected_remote
+        option: "[[[ return variables.selection ]]]"

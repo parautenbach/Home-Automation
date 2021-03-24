@@ -303,11 +303,11 @@ cards:
                   icon: mdi:apple
                   id: script.entertainment_apple_tv_on
                 - type: script
-                  icon: mdi:palm-tree
-                  id: script.play_radio_paradise
-                - type: script
                   icon: mdi:set-top-box
                   id: script.entertainment_satellite_on
+                - type: script
+                  icon: mdi:palm-tree
+                  id: script.play_radio_paradise
                 - type: script
                   icon: mdi:white-balance-sunny
                   id: script.hk_3380_dimmer

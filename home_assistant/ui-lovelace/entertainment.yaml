@@ -166,6 +166,7 @@ cards:
                   - type: custom:button-card
                     entity: script.hk_3380_vid1
                     show_name: false
+                    size: 45%
                     styles:
                       grid:
                         - position: relative
@@ -188,6 +189,7 @@ cards:
                   - type: custom:button-card
                     entity: script.hk_3380_vid2
                     show_name: false
+                    size: 45%
                     tap_action:
                       action: call-service
                       haptic: light
@@ -210,6 +212,7 @@ cards:
                   - type: entity-button
                     entity: script.hk_3380_dimmer
                     show_name: false
+                    size: 45%
                     tap_action:
                       action: call-service
                       service: script.turn_on

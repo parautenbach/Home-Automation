@@ -459,7 +459,7 @@
             thread-id: "contractor-mode"
 
 - alias: "Enable Contractor Mode"
-  initial_state: false
+  initial_state: true
   trigger:
     - platform: time
       at: "07:00:00"

@@ -165,7 +165,7 @@
   device_class: connectivity
   payload_on: "success"
   payload_off: "fail"
-  scan_interval: 90
+  scan_interval: 60
 
 - platform: command_line
   name: Housekeeper Mobile Phone
@@ -173,7 +173,7 @@
   device_class: connectivity
   payload_on: "success"
   payload_off: "fail"
-  scan_interval: 90
+  scan_interval: 60
 
 - platform: ping
   name: Back Extender

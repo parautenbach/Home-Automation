@@ -203,13 +203,14 @@
     #   below: 15320.0
     #   above: 0.0
     - platform: template
-      value_template: "{{ states('sensor.sun_illuminance') | int < 15320 }}"
+      value_template: "{{ states('sensor.illuminance') | int < 7500 }}"
+      # value_template: "{{ states('sensor.sun_illuminance') | int < 15320 }}"
   condition:
     - condition: state
       entity_id: binary_sensor.anybody_home
       state: "on"
     - condition: time
-      after: "16:00:00"
+      after: "08:00:00"
       before: "21:00:00"
     - condition: state
       entity_id: switch.living_room_lamp
@@ -223,7 +224,8 @@
   trigger:
     - platform: template
       # todo: make binary sensor
-      value_template: "{{ states('sensor.sun_illuminance') | int < 15320 }}"
+      value_template: "{{ states('sensor.illuminance') | int < 7500 }}"
+      # value_template: "{{ states('sensor.sun_illuminance') | int < 15320 }}"
   condition:
     - condition: time
       after: "16:00:00"
@@ -249,9 +251,13 @@
       offset: "01:30:00"
   # todo: if anybody home?
   condition:
-    - condition: sun
-      after: sunrise
-      after_offset: "01:30:00"
+    condition: and
+    conditions:
+      - condition: sun
+        after: sunrise
+        after_offset: "01:30:00"
+      - condition: template
+        value_template: "{{ states('sensor.illuminance') | int >= 7500 }}"
   action:
     - service: homeassistant.turn_off
       entity_id: group.main_bedroom

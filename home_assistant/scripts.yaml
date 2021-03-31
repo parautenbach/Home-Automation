@@ -628,7 +628,7 @@ open_pedestrian_gap:
       state: "closed"
     - service: switch.turn_on
       entity_id: switch.gate_remote
-    - delay: "00:00:03"
+    - delay: "00:00:05"
     - service: switch.turn_on
       entity_id: switch.gate_remote
 

@@ -265,6 +265,12 @@
         {% else %}
           mdi:water-off
         {% endif %}
+    outside_temperature:
+      friendly_name: "Outside Temperature"
+      value_template: >-
+        {{ state_attr('weather.home', 'temperature') }}
+      icon_template: >-
+        mdi:thermometer
 
 - platform: snmp
   name: snmp_wan_in

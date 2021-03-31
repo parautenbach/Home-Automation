@@ -658,7 +658,14 @@ cards:
       name: Home
       entities:
         - entity: sensor.conditions_temperature
+          name: Inside Temperature
+          color: var(--custom-graph-color-yellow)
+        - entity: sensor.outside_temperature
+          name: Outside Temperature
+          color: var(--custom-graph-color-red)
         - entity: sensor.conditions_humidity
+          name: Inside Humidity
+          color: var(--custom-graph-color-blue)
           y_axis: secondary
       hours_to_show: 24
       hour24: true

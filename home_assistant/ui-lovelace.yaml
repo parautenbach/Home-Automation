@@ -132,7 +132,6 @@ button_card_templates:
     size: 50%
     color_type: icon
     styles:
-    styles:
       name:
         - color: var(--paper-item-icon-color)
       label:

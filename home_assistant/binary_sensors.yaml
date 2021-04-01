@@ -13,13 +13,13 @@
     tenant_present:
       friendly_name: "Tenant Present"
       delay_off:
-        minutes: 10
+        minutes: 15
       value_template: >-
         {{ is_state("binary_sensor.tenant_mobile_phone", "on") }}
     housekeeper_present:
       friendly_name: "Housekeeper Present"
       delay_off:
-        minutes: 10
+        minutes: 15
       value_template: >-
         {{ is_state("binary_sensor.housekeeper_mobile_phone", "on") }}
     contractor_mode:

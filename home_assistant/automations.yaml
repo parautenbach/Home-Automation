@@ -927,6 +927,7 @@
     - service: shell_command.trim_snapshots
 
 # set up automation on device to immediately update the sensors
+# todo: switch off all lights except rouvé's (if on), or at least notify of lights still on
 - alias: "Switch Off Bedlamp When Plugging In Phone"
   trigger:
     platform: state

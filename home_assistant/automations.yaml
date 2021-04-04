@@ -48,7 +48,7 @@
       data:
         datetime: "{{ now() }}"
 
-- alias: "Switch On Living Room Lamp if Motion is Detected"
+- alias: "Switch On Lights If Motion Is Detected"
   # only at night though
   initial_state: false
   trigger:
@@ -70,19 +70,64 @@
       entity_id: switch.living_room_lamp
     - service: timer.start
       data:
-        entity_id: timer.motion_timer
-        duration: "00:05:00"
+        entity_id: timer.living_room_lamp_timer
+        duration: "00:01:00"
+    - service: scene.turn_on
+      entity_id: scene.security_foyer_light
+    - service: timer.start
+      data:
+        entity_id: timer.foyer_light_timer
+        duration: "00:01:00"
+    # todo: script with entity as param
 
-- alias: "Switch Off Living Room Lamp When Timer Expires"
+- alias: "Switch On Night Light If Motion Is Detected"
   initial_state: true
   trigger:
-    platform: event
-    event_type: timer.finished
-    event_data:
-      entity_id: timer.motion_timer
+    platform: state
+    entity_id: binary_sensor.motion_sensor_2
+    to: "on"
+  condition:
+    - condition: and
+      conditions:
+        # proxy for everybody in bed
+        - condition: state
+          entity_id: light.living_room_lamp
+          state: "off"
+        - condition: or
+          conditions:
+            - condition: time
+              after: "21:00:00"
+            - condition: sun
+              before: sunrise
+              before_offset: "-00:30:00"
   action:
-    - service: switch.turn_off
-      entity_id: switch.living_room_lamp
+    - service: scene.turn_on
+      entity_id: scene.night_foyer_light
+    - service: timer.start
+      data:
+        entity_id: timer.foyer_light_timer
+        duration: "00:03:00"
+
+- alias: "Switch Off Light When Timer Expires"
+  initial_state: true
+  trigger:
+    - platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.living_room_lamp_timer
+    - platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.front_door_light_timer
+    - platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.foyer_light_timer
+  mode: parallel
+  action:
+    - service: light.turn_off
+      data:
+        entity_id: "{{ trigger.event.data.entity_id | replace('_timer', '') | replace('timer', 'light') }}"
 
 - alias: "Motion Indicator On"
   initial_state: true
@@ -243,7 +288,6 @@
       entity_id: group.main_bedroom
 
 - alias: "Lights Off After Sunrise"
-  # todo: use illuminance
   initial_state: true
   trigger:
     - platform: sun
@@ -253,6 +297,7 @@
   condition:
     condition: and
     conditions:
+      # todo: remove
       - condition: sun
         after: sunrise
         after_offset: "01:30:00"
@@ -284,7 +329,7 @@
     - service: automation.turn_on
       entity_id: automation.take_motion_snapshots
     - service: automation.turn_on
-      entity_id: automation.switch_on_living_room_lamp_if_motion_is_detected
+      entity_id: automation.switch_on_lights_if_motion_is_detected
 
 - alias: "Home Mode"
   trigger:
@@ -299,7 +344,7 @@
     - service: automation.turn_off
       entity_id: automation.take_motion_snapshots
     - service: automation.turn_off
-      entity_id: automation.switch_on_living_room_lamp_if_motion_is_detected
+      entity_id: automation.switch_on_lights_if_motion_is_detected
 
 - alias: "Switch On The Front Door Light When Arriving Home"
   trigger:
@@ -325,17 +370,6 @@
         entity_id: timer.front_door_light_timer
         duration: "00:03:00"
 
-- alias: "Switch Off Front Door Light When Timer Expires"
-  initial_state: true
-  trigger:
-    platform: event
-    event_type: timer.finished
-    event_data:
-      entity_id: timer.front_door_light_timer
-  action:
-    - service: light.turn_off
-      entity_id: light.front_door_light
-
 - alias: "Open The Gate When Arriving Home"
   trigger:
     - platform: state
@@ -357,19 +391,23 @@
     - service: cover.open_cover
       entity_id: cover.main_gate
 
-- alias: "Stop Front Door Light Timer If Running When Switched Off"
+- alias: "Stop Light Timer If Running When Light Turned Off"
   initial_state: true
   trigger:
     platform: state
-    entity_id: light.front_door_light
+    entity_id:
+      - light.living_room_lamp
+      - light.front_door_light
+      - light.foyer_light
     to: "off"
+  mode: parallel
   condition:
-    - condition: state
-      entity_id: timer.front_door_light_timer
-      state: "active"
+    condition: template
+    value_template: "{{ is_state(trigger.entity_id | replace('light.', 'timer.') ~ '_timer', 'active') }}"
   action:
     - service: timer.cancel
-      entity_id: timer.front_door_light_timer
+      data:
+        entity_id: "{{ trigger.entity_id | replace('light.', 'timer.') }}_timer"
 
 # open garage door when arriving home:
 # when moving above a certain (last) speed (so i'm driving, not cycling or otherwise, or getting transported in some other way)
@@ -888,6 +926,7 @@
     - service: shell_command.sync_snapshots
     - service: shell_command.trim_snapshots
 
+# set up automation on device to immediately update the sensors
 - alias: "Switch Off Bedlamp When Plugging In Phone"
   trigger:
     platform: state
@@ -901,9 +940,11 @@
           entity_id: binary_sensor.pieter_present
           state: "on"
         # todo: maybe have different times over weekends or even skip
+        # "Time condition windows can span across the midnight threshold if both after and before keys are used."
+        # https://www.home-assistant.io/docs/scripts/conditions/#time-condition
         - condition: time
           after: "21:00:00"
-          before: "23:59:59"
+          before: "01:00:00"
         # proxy for nobody inside
         - condition: state
           entity_id: light.living_room_lamp
@@ -917,8 +958,7 @@
 
 - alias: "Turn Off Entertainment System When Idle Or Leaving Room"
   trigger:
-    # todo:
-    # we don't know the decoder's state so we could be turning off the tv just because the apple tv isn't playing...
+    # todo: we don't know the decoder's state so we could be turning off the tv just because the apple tv isn't playing...
     # - platform: state
     #   entity_id: media_player.living_room
     #   to: "idle"
@@ -1160,7 +1200,7 @@
         - light.smart_bulb_1
         - light.smart_bulb_2
         - light.smart_bulb_3
-        - light.smart_bulb_4
+        - light.foyer_light
   mode: parallel
   condition:
     # power was NOT recently restored (2 min), causing the light to turn on and connect to hass, and trigger this automation
@@ -1171,7 +1211,7 @@
       entity_id: binary_sensor.electricity_feed
       state: "on"
   action:
-    - service: "input_boolean.turn_{{ states(trigger.entity_id) }}"
+    - service: "input_boolean.turn_{{ 'on' if is_state(trigger.entity_id, 'on') else 'off' }}"
       data:
         entity_id: "{{ trigger.entity_id | replace('light.', 'input_boolean.') }}_state"
 
@@ -1185,7 +1225,7 @@
         - light.smart_bulb_1
         - light.smart_bulb_2
         - light.smart_bulb_3
-        - light.smart_bulb_4
+        - light.foyer_light
       to: "on"
   mode: parallel
   # some other ideas:

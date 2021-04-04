@@ -31,10 +31,22 @@ all_lights:
     - light.smart_bulb_1        # pieter
     - light.smart_bulb_2        # rouvé
     - light.smart_bulb_3        # dining
-    - light.smart_bulb_4        # music
+    - light.foyer_light         # tp-link smart bulb
     - light.front_door_light
     - light.garage_light
     - light.backyard_light
+
+motion_lights:
+  name: Motion Lights
+  entities:
+    - light.living_room_lamp
+    - light.foyer_light
+
+motion_timers:
+  name: Motion Timers
+  entities:
+    - timer.living_room_lamp_timer
+    - timer.foyer_light_timer
 
 living_room:
   name: Living Room
@@ -104,7 +116,7 @@ security_automations:
   name: Security Automations
   entities:
     - automation.take_motion_snapshots
-    - automation.switch_on_living_room_lamp_if_motion_is_detected
+    - automation.switch_on_lights_if_motion_is_detected
 
 server:
   name: Server

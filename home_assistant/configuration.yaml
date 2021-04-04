@@ -112,7 +112,7 @@ homekit:
       - light.smart_bulb_1
       - light.smart_bulb_2
       - light.smart_bulb_3
-      - light.smart_bulb_4
+      - light.foyer_light
       - light.front_door_light
       - light.backyard_light
       - light.garage_light
@@ -133,19 +133,19 @@ homekit:
     light.living_room_lamp:
       name: Living Room Lamp
     light.smart_bulb_1:
-      name: Pieter's Bedside Lamp
+      name: Pieter's Bedside
     light.smart_bulb_2:
-      name: Rouvé's Bedside Lamp
+      name: Rouvé's Bedside
     light.smart_bulb_3:
-      name: Dining Room Light
-    light.smart_bulb_4:
-      name: Music Room Light
+      name: Dining Room
+    light.foyer:
+      name: Foyer
     light.front_door_light:
-      name: Front Door Light
+      name: Front Door
     light.backyard_light:
-      name: Backyard Light
+      name: Backyard
     light.garage_light:
-      name: Garage Light
+      name: Garage
     light.led:
       name: Motion LED
     switch.smart_plug_1:
@@ -262,8 +262,8 @@ input_boolean:
   smart_bulb_3_state:
     name: Smart Bulb 3 State
     icon: mdi:lightbulb
-  smart_bulb_4_state:
-    name: Smart Bulb 4 State
+  foyer_light_state:
+    name: Foyer Light State
     icon: mdi:lightbulb
   server_power_connected:
     name: Server Power Connected
@@ -305,7 +305,7 @@ tplink:
     - host: 192.168.0.108  # smart bulb 1
     - host: 192.168.0.116  # smart bulb 2
     - host: 192.168.0.122  # smart bulb 3
-    - host: 192.168.0.123  # smart bulb 4
+    - host: 192.168.0.123  # foyer
   switch:
     - host: 192.168.0.115  # smart plug 1
 
@@ -323,6 +323,26 @@ light:
     name: garage_light
     entity_id: switch.shelly1_b95a0e
 
+scene:
+  - name: Normal Foyer Light
+    entities:
+      light.foyer_light:
+        state: on
+        xy_color: [0.323, 0.329]
+        brightness: 153
+  - name: Night Foyer Light
+    entities:
+      light.foyer_light:
+        state: on
+        xy_color: [0.701, 0.299]
+        brightness: 5
+  - name: Security Foyer Light
+    entities:
+      light.foyer_light:
+        state: on
+        xy_color: [0.323, 0.329]
+        brightness: 255
+
 shell_command:
   noop: ":"
   copy_last_snapshot_image: "cp `ls -t /tmp/camera.security_camera_*.jpg | head -n1` /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg"
@@ -336,7 +356,8 @@ shell_command:
   make_backup: "/home/homeassistant/scripts/backup.sh"
 
 timer:
-  motion_timer:
+  # format: <entity_id>_timer
+  living_room_lamp_timer:
     duration: "00:05:00"
   main_gate_timer:
     duration: "00:03:00"
@@ -345,6 +366,8 @@ timer:
   rhs_garage_door_timer:
     duration: "00:03:00"
   front_door_light_timer:
+    duration: "00:03:00"
+  foyer_light_timer:
     duration: "00:03:00"
 
 media_player:
@@ -393,6 +416,12 @@ proximity:
     unit_of_measurement: m
 
 breaking_changes:
+
+device_tracker:
+  - platform: bluetooth_le_tracker
+    interval_seconds: 60
+    new_device_defaults:
+      track_new_devices: false
 
 # https://community.home-assistant.io/t/control-recursion-in-the-folder-watcher-integration/200110
 # folder_watcher:

@@ -684,6 +684,30 @@ force_on_smart_bulb:
       data:
         entity_id: "{{ light }}"
 
+toggle_foyer_light:
+  description: "Toggle the foyer light using the normal scene if turned on"
+  fields:
+    scene:
+      description: "A scene entity"
+      example: "scene.normal_foyer_light"
+  sequence:
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: light.foyer_light
+              state: "off"
+          sequence:
+            - service: light.turn_on
+              target:
+                entity_id: light.foyer_light
+            - service: scene.turn_on
+              target:
+                entity_id: "{{ scene }}"
+      default:
+        - service: light.turn_off
+          target:
+            entity_id: light.foyer_light
+
 shutdown_remote_host:
   description: "Shut down a remote host via SSH"
   # assumes ssh keys and a config map is set up
@@ -691,7 +715,7 @@ shutdown_remote_host:
   fields:
     name:
       description: "A display name for the host"
-      example: "Some Host"
+      example: "example.local"
     host:
       description: "The host as defined in the SSH config map"
       example: "some_host"

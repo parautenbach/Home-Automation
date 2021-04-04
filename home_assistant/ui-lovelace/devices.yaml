@@ -92,7 +92,6 @@ cards:
         - entity: binary_sensor.main_gate
         - entity: binary_sensor.garage_doors
         - entity: binary_sensor.power_meter
-        # todo: the two extenders
   - type: vertical-stack
     cards:
       - type: map
@@ -111,8 +110,8 @@ cards:
             name: Living Room
           - entity: light.smart_bulb_3
             name: Dining Room
-          - entity: light.smart_bulb_4
-            name: Music Room
+          - entity: light.foyer_light
+            name: Foyer
           - entity: light.front_door_light
             name: Front Door
           - entity: light.backyard_light
@@ -157,7 +156,7 @@ cards:
             name: Server battery
           - entity: sensor.home_assistant_server_battery_status
             name: Battery status
-          # TODO: - binary_sensor.rpi_power_status
+          # todo: - binary_sensor.rpi_power_status
           - sensor.last_boot
         title: Server
         show_header_toggle: false

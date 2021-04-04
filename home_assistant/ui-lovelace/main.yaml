@@ -50,7 +50,7 @@ cards:
       - type: horizontal-stack
         title: Main Bedroom
         cards:
-          # todo: light profiles
+          # todo: light profiles/scenes
           - type: custom:button-card
             template: smart_bulb_light
             name: Pieter's Side
@@ -97,6 +97,74 @@ cards:
         title: Inside Lights
         cards:
           - type: custom:button-card
+            template: smart_bulb_light
+            name: Foyer
+            entity: light.foyer_light
+            icon: mdi:dome-light
+            styles:
+              grid:
+                - grid-template-areas: '"t s l" "i i i" "n n n"'
+                - grid-template-rows: min-content 1fr min-content
+                - grid-template-columns: 1fr min-content 1fr
+              name:
+                - margin-top: -1px
+                - margin-bottom: 0px
+              label:
+                - align-self: middle
+                - justify-self: start
+                - padding-right: 1ex
+              custom_fields:
+                s:
+                  - color: var(--paper-item-icon-color)
+                t:
+                  - align-self: middle
+                  - justify-self: end
+                  - padding-right: 1ex
+            custom_fields:
+              s: >
+                [[[ return '/' ]]]
+              t:
+                card:
+                  type: custom:button-card
+                  name: Timer
+                  entity: timer.foyer_light_timer
+                  show_name: false
+                  show_icon: false
+                  show_state: true
+                  styles:
+                    card:
+                      - margin-bottom: -1px
+                      - font-size: 12px
+                      - box-shadow: none
+                    state:
+                      - color: >
+                          [[[
+                            if (states['timer.foyer_light_timer'].state == 'idle')
+                              return "var(--paper-item-icon-color)";
+                            else
+                              return "red";
+                          ]]]
+            state:
+              - value: 'unavailable'
+                styles:
+                  icon:
+                    - color: var(--state-icon-unavailable-color)
+            tap_action:
+              haptic: light
+              action: call-service
+              service: script.toggle_foyer_light
+              service_data:
+                scene: scene.normal_foyer_light
+            double_tap_action:
+              haptic: medium
+              action: call-service
+              service: script.toggle_foyer_light
+              service_data:
+                scene: scene.night_foyer_light
+            hold_action:
+              haptic: selection
+              action: more-info
+          - type: custom:button-card
             name: Living Room
             entity: light.living_room_lamp
             size: 20%
@@ -106,7 +174,7 @@ cards:
                 card:
                   type: custom:button-card
                   name: Timer
-                  entity: timer.motion_timer
+                  entity: timer.living_room_lamp_timer
                   show_name: false
                   show_icon: false
                   show_state: true
@@ -119,7 +187,7 @@ cards:
                       - margin-bottom: -1ex
                       - color: >
                           [[[
-                            if (states['timer.motion_timer'].state == 'idle')
+                            if (states['timer.living_room_lamp_timer'].state == 'idle')
                               return "var(--paper-item-icon-color)";
                             else
                               return "red";
@@ -143,6 +211,12 @@ cards:
             tap_action:
               action: toggle
               haptic: light
+            double_tap_action:
+              action: call-service
+              haptic: medium
+              service: script.turn_on_light_and_timer
+              service_data:
+                light: "[[[ return entity.entity_id; ]]]"
             hold_action:
               action: more-info
               haptic: selection
@@ -150,11 +224,6 @@ cards:
             template: smart_bulb_light
             name: Dining Room
             entity: light.smart_bulb_3
-            icon: mdi:dome-light
-          - type: custom:button-card
-            template: smart_bulb_light
-            name: Music Room
-            entity: light.smart_bulb_4
             icon: mdi:dome-light
       - type: horizontal-stack
         title: Outside Lights

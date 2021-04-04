@@ -687,6 +687,11 @@
             'apns-collapse-id': "{{ trigger.event.data.entity_id }}"
           push:
             category: "cover_open"
+            # perhaps one day it will be possible to use a template to only make it critical under certain conditions
+            sound:
+              name: default
+              critical: 1
+              volume: 1.0
           action_data:
             # convert this to the cover entity to use in the automation that receives this
             cover_id: "{{ trigger.event.data.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"

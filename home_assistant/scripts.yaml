@@ -548,6 +548,7 @@ play_radio_paradise:
         entity_id: media_player.living_room
 
 security_camera_record_clip:
+  # todo: fire a custom event to catch in another automation and turn on the light (if dark and not already on, etc.)
   sequence:
     - service: input_datetime.set_datetime
       entity_id: input_datetime.security_camera_last_clip

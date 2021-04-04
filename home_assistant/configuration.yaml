@@ -417,12 +417,6 @@ proximity:
 
 breaking_changes:
 
-device_tracker:
-  - platform: bluetooth_le_tracker
-    interval_seconds: 60
-    new_device_defaults:
-      track_new_devices: false
-
 # https://community.home-assistant.io/t/control-recursion-in-the-folder-watcher-integration/200110
 # folder_watcher:
 #   - folder: /tmp/

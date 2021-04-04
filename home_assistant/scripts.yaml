@@ -448,6 +448,11 @@ samsung_tv_picture_mode:
 
 entertainment_apple_tv_on:
   sequence:
+    - service: input_select.select_option
+      target:
+        entity_id: input_select.selected_remote
+      data:
+        option: Apple TV
     - service: script.turn_on
       entity_id: script.samsung_tv_power_on
     - delay: "00:00:01"
@@ -464,6 +469,11 @@ entertainment_apple_tv_on:
 
 entertainment_satellite_on:
   sequence:
+    - service: input_select.select_option
+      target:
+        entity_id: input_select.selected_remote
+      data:
+        option: Satellite
     - service: script.turn_on
       entity_id: script.samsung_tv_power_on
     - delay: "00:00:01"
@@ -478,6 +488,11 @@ entertainment_satellite_on:
 
 entertainment_off:
   sequence:
+    - service: input_select.select_option
+      target:
+        entity_id: input_select.selected_remote
+      data:
+        option: Audio
     - service: script.turn_on
       entity_id: script.samsung_tv_power_off
     - delay: "00:00:01"

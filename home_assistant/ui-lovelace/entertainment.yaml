@@ -4,6 +4,21 @@ icon: mdi:audio-video
 badges: []
 cards:
   - type: custom:mini-media-player
+    name: Main Bedroom
+    entity: media_player.main_bedroom_universal
+    artwork: cover
+    volume_stateless: true
+    hide:
+      power: false
+      power_state: false
+      volume: false
+      mute: true
+    idle_view:
+      when_idle: false
+      when_paused: false
+      when_standby: false
+    background: '/local/tivoli-model-three.png'
+  - type: custom:mini-media-player
     name: Living Room
     entity: media_player.living_room_universal
     artwork: cover
@@ -35,21 +50,6 @@ cards:
         - type: script
           icon: mdi:power
           id: script.entertainment_off
-  - type: custom:mini-media-player
-    name: Main Bedroom
-    entity: media_player.main_bedroom_universal
-    artwork: cover
-    volume_stateless: true
-    hide:
-      power: false
-      power_state: false
-      volume: false
-      mute: true
-    idle_view:
-      when_idle: false
-      when_paused: false
-      when_standby: false
-    background: '/local/tivoli-model-three.png'
   - type: vertical-stack
     cards:
       - type: horizontal-stack

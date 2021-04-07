@@ -216,10 +216,6 @@ light.smart_bulb_3:
 light.foyer_light:
   friendly_name: Foyer Light
   icon: mdi:dome-light
-script.smart_bulb_1_soft_yellow:
-  icon: mdi:lightbulb-on-outline
-script.smart_bulb_1_bright_white:
-  icon: mdi:lightbulb-on-outline
 switch.shelly1_b961d2:
   friendly_name: Shelly1 Test
 switch.shelly1_b95a0e:

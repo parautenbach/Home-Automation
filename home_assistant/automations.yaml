@@ -845,7 +845,6 @@
           push:
             thread-id: "home-internet"
 
-
 - alias: "Notify If Electricity Feed Status Changed"
   initial_state: true
   trigger:
@@ -875,6 +874,36 @@
         data:
           push:
             thread-id: "home-electricity"
+
+- alias: "Switch On Front Door Light When Any Cover Opened"
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id:
+      - cover.main_gate
+      - cover.lhs_garage_door
+      - cover.rhs_garage_door
+    to: "open"
+  mode: queued
+  condition:
+    - condition: and
+      conditions:
+        - condition: or
+          conditions:
+            - condition: sun
+              after: sunset
+            - condition: sun
+              before: sunrise
+        - condition: state
+          entity_id: light.front_door_light
+          state: "off"
+  action:
+    - service: script.turn_on
+      target:
+        entity_id: script.turn_on_light_and_timer
+      data:
+        variables:
+          light: light.front_door_light
 
 - alias: "Switch On Garage Light When Any Garage Door Opened"
   initial_state: true

@@ -687,6 +687,7 @@ force_on_smart_bulb:
         entity_id: "{{ light }}"
 
 toggle_foyer_light:
+  # todo: timer variable?
   description: "Toggle the foyer light using the normal scene if turned on"
   fields:
     scene:
@@ -750,15 +751,28 @@ make_backup:
         entity_id: sensor.home_assistant
 
 test:
-  description: "Testing whether a template works in the collapse ID field"
+  description: "Test script"
+  fields:
+    param1:
+      description: "Parameter 1"
+      example: "Any text"
   sequence:
-    - service: notify.mobile_app_ceres
-      data:
-        title: "Testing"
-        message: "Test {{ now() }} {{ states('input_boolean.test') }}"
-        data:
-          apns_headers:
-            'apns-collapse-id': "{{ states('input_boolean.test') }}"
+    - choose:
+        - conditions:
+            # duh
+            # https://community.home-assistant.io/t/using-a-script-variable-field-in-a-choose-action/297289/2?u=parautenbach
+            - condition: template
+              value_template: "{{ param1 is not defined }}"
+          sequence:
+            - service: persistent_notification.create
+              data:
+                title: "Testing"
+                message: "Test: no param"
+      default:
+        - service: persistent_notification.create
+          data:
+            title: "Testing"
+            message: "Test: '{{ param1 }}'"
 
 test_snapshot:
   sequence:

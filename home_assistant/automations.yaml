@@ -882,6 +882,7 @@
   trigger:
     platform: state
     entity_id:
+      # todo: use group?
       - cover.main_gate
       - cover.lhs_garage_door
       - cover.rhs_garage_door
@@ -908,6 +909,10 @@
           light: light.front_door_light
 
 - alias: "Switch On Garage Light When The First Garage Door Opened"
+  # interesting edge case: if first cover opened before condition is true
+  # and then the second door after the condition will be true, the light
+  # won't turn on (e.g. 1h30 min before sunset). to solve this one needs
+  # to trigger on the individual state changes and have an xor condition.
   initial_state: true
   trigger:
     platform: state

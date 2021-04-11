@@ -907,13 +907,12 @@
         variables:
           light: light.front_door_light
 
-- alias: "Switch On Garage Light When Any Garage Door Opened"
+- alias: "Switch On Garage Light When The First Garage Door Opened"
   initial_state: true
   trigger:
     platform: state
     entity_id:
-      - cover.lhs_garage_door
-      - cover.rhs_garage_door
+      - group.garage_doors
     to: "open"
   mode: queued
   condition:
@@ -930,13 +929,12 @@
     - service: light.turn_on
       entity_id: light.garage_light
 
-- alias: "Switch Off Garage Light When Any Garage Door Closed"
+- alias: "Switch Off Garage Light When The Last Garage Door Closed"
   initial_state: true
   trigger:
     platform: state
     entity_id:
-      - cover.lhs_garage_door
-      - cover.rhs_garage_door
+      - group.garage_doors
     to: "closed"
   mode: queued
   condition:

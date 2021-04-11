@@ -137,3 +137,9 @@ family:
   entities:
     - person.pieter_rautenbach
     - person.rouve_rautenbach
+
+garage_doors:
+  name: Garage Doors
+  entities:
+    - cover.lhs_garage_door
+    - cover.rhs_garage_door

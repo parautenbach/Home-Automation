@@ -7,6 +7,7 @@
   condition:
     - condition: sun
       after: sunrise
+      after_offset: "-00:30:00"
   action:
     service: frontend.set_theme
     data:
@@ -21,6 +22,7 @@
   condition:
     - condition: sun
       after: sunset
+      after_offset: "00:30:00"
   action:
     service: frontend.set_theme
     data:

@@ -428,7 +428,7 @@
     - name: DB size
       # This is the fastest solution, available since sqlite 3.16.
       # It’s the same info as returned by ".dbinfo" in the sqlite3 cmdline client.
-      query: "SELECT (pg_database_size('homeassistant')/1024/1024) as db_size;"
+      query: "SELECT (pg_database_size('homeassistant')/1024/1024) AS db_size;"
       column: "db_size"
       unit_of_measurement: "MiB"
 

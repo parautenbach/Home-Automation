@@ -4,10 +4,11 @@
       event: start
     - platform: sun
       event: sunrise
+      offset: "-00:30:00"
+  # condition needed for the start trigger
   condition:
     - condition: sun
       after: sunrise
-      after_offset: "-00:30:00"
   action:
     service: frontend.set_theme
     data:
@@ -19,10 +20,11 @@
       event: start
     - platform: sun
       event: sunset
+      offset: "00:30:00"
+  # condition needed for the start trigger
   condition:
     - condition: sun
       after: sunset
-      after_offset: "00:30:00"
   action:
     service: frontend.set_theme
     data:
@@ -295,6 +297,8 @@
     - platform: sun
       event: sunrise
       offset: "01:30:00"
+    - platform: template
+      value_template: "{{ states('sensor.illuminance') | int >= 7500 }}"
   # todo: if anybody home?
   condition:
     condition: and

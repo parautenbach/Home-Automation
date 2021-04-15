@@ -4,7 +4,8 @@
       event: start
     - platform: sun
       event: sunrise
-      offset: "-00:30:00"
+      # 30 min after sunrise
+      offset: "00:30:00"
   # condition needed for the start trigger
   condition:
     - condition: sun
@@ -20,6 +21,7 @@
       event: start
     - platform: sun
       event: sunset
+      # 30 min after sunset
       offset: "00:30:00"
   # condition needed for the start trigger
   condition:

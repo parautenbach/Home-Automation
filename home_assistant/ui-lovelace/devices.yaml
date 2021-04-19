@@ -118,6 +118,47 @@ cards:
             name: Backyard
           - entity: light.garage_light
             name: Garage
+      - type: markdown
+        # https://community.home-assistant.io/t/sensor-count-the-installation-mine-is-bigger-than-yours-sensor/225959/27
+        # title: Components
+        content: >
+          Domain | Count
+             :---|---:
+          {% for domain in states | groupby('domain') %}
+          {% set name = domain[0].replace('_', ' ') | title %}
+          **{{ name }}** | {{ states[domain[0]] | count }}
+          {# leave blank line below otherwise table won't render #}
+
+          {% endfor %}
+          **Total** | {{ states | count }}
+        card_mod:
+          style:
+            ha-markdown:
+              $:
+                ha-markdown-element: |
+                  table {
+                    border-spacing: 0;
+                    width: 100%;
+                    padding: 8px;
+                    border-radius: var(--ha-card-border-radius);
+                  }
+                  th {
+                    background-color: var(--state-icon-color);
+                    color: white;
+                    padding: 4px;
+                  }
+                  th:first-child {
+                    border-top-left-radius: var(--ha-card-border-radius);
+                  }
+                  th:last-child {
+                    border-top-right-radius: var(--ha-card-border-radius);
+                  }
+                  td {
+                    padding: 4px;
+                  }
+                  tr:nth-child(even) {
+                    background-color: var(--table-row-background-color);
+                  }
   - type: vertical-stack
     cards:
       - type: entities

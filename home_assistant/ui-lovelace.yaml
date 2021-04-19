@@ -115,9 +115,9 @@ button_card_templates:
         - color: var(--paper-item-icon-color)
       card:
         - font-size: 12px
-    double_tap_action:
+    hold_action:
       action: call-service
-      haptic: medium
+      haptic: heavy
       service: script.shutdown_remote_host
       service_data:
         name: "[[[ return entity.attributes.friendly_name ]]]"

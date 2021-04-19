@@ -3,36 +3,6 @@ path: test
 icon: mdi:test-tube
 badges: []
 cards:
-  - type: custom:mini-media-player
-    name: Living Room
-    entity: media_player.living_room
-    artwork: cover
-    volume_stateless: true
-    hide:
-      power: true
-      volume: false
-      mute: true
-    idle_view:
-      when_idle: false
-      when_paused: false
-      when_standby: false
-  - type: media-control
-    entity: media_player.living_room
-  - type: custom:mini-media-player
-    name: Main Bedroom
-    entity: media_player.main_bedroom
-    artwork: cover
-    volume_stateless: true
-    hide:
-      power: true
-      volume: false
-      mute: true
-    idle_view:
-      when_idle: false
-      when_paused: false
-      when_standby: false
-  - type: media-control
-    entity: media_player.main_bedroom
   - type: custom:weather-card
     name: Stellies
     entity: weather.home_hourly
@@ -79,6 +49,17 @@ cards:
     entities:
       - entity: proximity.home
         name: Home
+  - type: history-graph
+    title: Garage Doors
+    hours_to_show: 24
+    entities:
+      - entity: cover.lhs_garage_door
+        name: Rouvé
+      - entity: cover.rhs_garage_door
+        name: Pieter
+      - entity: group.garage_doors
+        name: All Doors
+      - entity: light.garage_light
   - type: custom:mini-graph-card
     name: Bitcoin
     # name: Current Travel Time

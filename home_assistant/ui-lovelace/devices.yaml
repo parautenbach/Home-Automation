@@ -148,10 +148,10 @@ cards:
                     padding: 4px;
                   }
                   th:first-child {
-                    border-top-left-radius: var(--ha-card-border-radius);
+                    border-top-left-radius: min(var(--ha-card-border-radius)/2, 5px);
                   }
                   th:last-child {
-                    border-top-right-radius: var(--ha-card-border-radius);
+                    border-top-right-radius: min(var(--ha-card-border-radius)/2, 5px);
                   }
                   td {
                     padding: 4px;

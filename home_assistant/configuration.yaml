@@ -323,26 +323,6 @@ light:
     name: garage_light
     entity_id: switch.shelly1_b95a0e
 
-scene:
-  - name: Normal Foyer Light
-    entities:
-      light.foyer_light:
-        state: on
-        xy_color: [0.323, 0.329]
-        brightness: 153
-  - name: Night Foyer Light
-    entities:
-      light.foyer_light:
-        state: on
-        xy_color: [0.701, 0.299]
-        brightness: 5
-  - name: Security Foyer Light
-    entities:
-      light.foyer_light:
-        state: on
-        xy_color: [0.323, 0.329]
-        brightness: 255
-
 shell_command:
   noop: ":"
   copy_last_snapshot_image: "cp `ls -t /tmp/camera.security_camera_*.jpg | head -n1` /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg"

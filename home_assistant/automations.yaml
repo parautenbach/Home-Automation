@@ -33,11 +33,15 @@
       name: slate
 
 - alias: "Take Motion Snapshots"
-  initial_state: false
+  initial_state: true
   trigger:
     platform: state
     entity_id: binary_sensor.motion_sensor_2
     to: "on"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.anybody_home
+      state: "off"
   action:
     - service: script.turn_on
       entity_id: script.security_camera_create_snapshot
@@ -56,12 +60,15 @@
 
 - alias: "Switch On Lights If Motion Is Detected"
   # only at night though
-  initial_state: false
+  initial_state: true
   trigger:
     platform: state
     entity_id: binary_sensor.motion_sensor_2
     to: "on"
   condition:
+    - condition: state
+      entity_id: binary_sensor.anybody_home
+      state: "off"
     # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
     - condition: or
       conditions:
@@ -78,13 +85,17 @@
       data:
         entity_id: timer.living_room_lamp_timer
         duration: "00:01:00"
-    - service: scene.turn_on
-      entity_id: scene.security_foyer_light
+    - service: script.turn_on
+      target:
+        entity_id: script.turn_on_light
+      data:
+        variables:
+          light: light.foyer_light
+          profile: security
     - service: timer.start
       data:
         entity_id: timer.foyer_light_timer
         duration: "00:01:00"
-    # todo: script with entity as param
 
 - alias: "Switch On Night Light If Motion Is Detected"
   initial_state: true
@@ -95,9 +106,16 @@
   condition:
     - condition: and
       conditions:
+        - condition: state
+          entity_id: binary_sensor.anybody_home
+          state: "on"
         # proxy for everybody in bed
         - condition: state
           entity_id: light.living_room_lamp
+          state: "off"
+        # in case light was turned on manually, leave it
+        - condition: state
+          entity_id: light.foyer_light
           state: "off"
         - condition: or
           conditions:
@@ -107,8 +125,13 @@
               before: sunrise
               before_offset: "-00:30:00"
   action:
-    - service: scene.turn_on
-      entity_id: scene.night_foyer_light
+    - service: script.turn_on
+      target:
+        entity_id: script.turn_on_light
+      data:
+        variables:
+          light: light.foyer_light
+          profile: night
     - service: timer.start
       data:
         entity_id: timer.foyer_light_timer
@@ -334,25 +357,6 @@
       entity_id: script.entertainment_off
     - service: switch.turn_off
       entity_id: switch.smart_plug_1
-    - service: automation.turn_on
-      entity_id: automation.take_motion_snapshots
-    - service: automation.turn_on
-      entity_id: automation.switch_on_lights_if_motion_is_detected
-
-- alias: "Home Mode"
-  trigger:
-    platform: state
-    entity_id: binary_sensor.anybody_home
-    to: "on"
-  condition:
-    - condition: state
-      entity_id: binary_sensor.anybody_home
-      state: "on"
-  action:
-    - service: automation.turn_off
-      entity_id: automation.take_motion_snapshots
-    - service: automation.turn_off
-      entity_id: automation.switch_on_lights_if_motion_is_detected
 
 - alias: "Switch On The Front Door Light When Arriving Home"
   trigger:

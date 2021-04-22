@@ -25,9 +25,10 @@ cards:
           - entity: light.foyer_light
             tap_action:
               action: call-service
-              service: script.toggle_foyer_light
+              service: script.toggle_light
               service_data:
-                scene: scene.security_foyer_light
+                light: light.foyer_light
+                profile: security
           - group.security_automations
       - type: entities
         title: "Gates & Doors"

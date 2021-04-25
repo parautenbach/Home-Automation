@@ -108,8 +108,8 @@ button_card_templates:
       action: more-info
       haptic: selection
   shutdown:
-    name: "[[[ return entity.attributes.friendly_name ]]]"
-    size: 20%
+    name: "[[[ return entity.attributes.friendly_name; ]]]"
+    size: 30%
     styles:
       name:
         - color: var(--paper-item-icon-color)
@@ -120,10 +120,26 @@ button_card_templates:
       haptic: heavy
       service: script.shutdown_remote_host
       service_data:
-        name: "[[[ return entity.attributes.friendly_name ]]]"
-        host: "[[[ return entity.attributes.friendly_name.toLowerCase() ]]]"  # must match .ssh/config
+        name: "[[[ return entity.attributes.friendly_name; ]]]"
+        host: "[[[ return entity.attributes.friendly_name.toLowerCase(); ]]]"  # must match .ssh/config
       confirmation:
         text: "[[[ return `Are you sure you want to shut down ${entity.attributes.friendly_name}?` ]]]"
+  restart:
+    name: "[[[ return variables.name; ]]]"
+    size: 20%
+    styles:
+      name:
+        - color: var(--paper-item-icon-color)
+      card:
+        - font-size: 12px
+    double_tap_action:
+      action: call-service
+      haptic: medium
+      service: switch.turn_on
+      service_data:
+        entity_id: "[[[ return variables.switch_entity; ]]]"
+      confirmation:
+        text: "[[[ return `Are you sure you want to restart the ${variables.name.toLowerCase()} device?`; ]]]"
   remote:
     variables:
       selection: "Remote State"
@@ -154,4 +170,4 @@ button_card_templates:
       service: input_select.select_option
       service_data:
         entity_id: input_select.selected_remote
-        option: "[[[ return variables.selection ]]]"
+        option: "[[[ return variables.selection; ]]]"

@@ -61,8 +61,10 @@ cards:
       title: Thor (WD Cloud Drive)
       entities:
         - sensor.thor_disk_usage
-    - type: horizontal-stack
+    - type: markdown
       title: Devices
+      content: "Double tap will restart; hold will shut down (where supported)."
+    - type: horizontal-stack
       cards:
         - type: custom:button-card
           template: shutdown
@@ -80,6 +82,29 @@ cards:
           template: shutdown
           entity: binary_sensor.rasplay
           icon: mdi:music
+    - type: horizontal-stack
+      cards:
+        - type: custom:button-card
+          template: restart
+          entity: binary_sensor.main_gate
+          icon: mdi:gate
+          variables:
+            name: Main Gate
+            switch_entity: switch.gate_restart
+        - type: custom:button-card
+          template: restart
+          entity: binary_sensor.garage_doors
+          icon: mdi:garage-variant
+          variables:
+            name: Garage Doors
+            switch_entity: switch.garage_doors_restart
+        - type: custom:button-card
+          template: restart
+          entity: binary_sensor.power_meter
+          icon: mdi:power-plug
+          variables:
+            name: Power Meter
+            switch_entity: switch.electricity_pulse_counter_restart
     - type: history-graph
       hours_to_show: 24
       entities:

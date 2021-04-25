@@ -50,6 +50,9 @@ switch:
       - switch.turn_on: gate_control
       - delay: 1000ms
       - switch.turn_off: gate_control
+  - platform: restart
+    id: gate_restart
+    name: "Gate Restart"
 
 mqtt:
   broker: !secret mqtt_broker

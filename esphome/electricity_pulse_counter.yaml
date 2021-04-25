@@ -42,6 +42,11 @@ sensor:
     filters:
       - multiply: 60
 
+switch:
+  - platform: restart
+    id: electricity_pulse_counter_restart
+    name: "Electricity Pulse Counter Restart"
+
 mqtt:
   broker: !secret mqtt_broker
   discovery: True

@@ -94,6 +94,9 @@ switch:
       - switch.turn_on: lhs_garage_door_control
       - delay: 500ms
       - switch.turn_off: lhs_garage_door_control
+  - platform: restart
+    id: garage_doors_restart
+    name: "Garage Doors Restart"
 
 sensor:
   - platform: ultrasonic

@@ -447,6 +447,7 @@ samsung_tv_picture_mode:
           - b64:JgCMAI+UEzcSOBM2EhMTEhMSEhMSEhM3EjgTNxISExITEhMSExITEhMRExITNxMSEjgSEhMSEjgTNhQ2ExITNxITEjcTNxIABgOVkxM3EzYTNxMSExISEhMSExISOBI3EzcTEhMSExITERMSEhMTEhMSEzYTEhI4ExISExM3EjcTNhMSEjgSExM2EzcSAA0FAAAAAAAAAAAAAAAA"
 
 entertainment_apple_tv_on:
+  mode: single
   sequence:
     - service: input_select.select_option
       target:
@@ -468,6 +469,7 @@ entertainment_apple_tv_on:
       entity_id: script.samsung_tv_hdmi2
 
 entertainment_satellite_on:
+  mode: single
   sequence:
     - service: input_select.select_option
       target:
@@ -487,6 +489,7 @@ entertainment_satellite_on:
       entity_id: script.samsung_tv_hdmi1
 
 entertainment_off:
+  mode: single
   sequence:
     - service: input_select.select_option
       target:
@@ -517,6 +520,7 @@ entertainment_off:
         command: select
 
 play_radio_paradise:
+  mode: single
   sequence:
     - service: remote.send_command
       data:
@@ -564,6 +568,7 @@ play_radio_paradise:
 
 security_camera_record_clip:
   # todo: fire a custom event to catch in another automation and turn on the light (if dark and not already on, etc.)
+  mode: queued
   sequence:
     - service: input_datetime.set_datetime
       entity_id: input_datetime.security_camera_last_clip
@@ -583,6 +588,7 @@ security_camera_record_clip:
 
 security_camera_create_snapshot:
   # https://www.reddit.com/r/homeassistant/comments/9fz5e4/show_the_x_most_recent_pictures_in_a_directory/e69alpc/
+  mode: queued
   sequence:
     - service: input_datetime.set_datetime
       entity_id: input_datetime.security_camera_last_snapshot
@@ -616,6 +622,7 @@ security_camera_create_snapshot:
             # hide-thumbnail: false
 
 send_pieter_work_cape_town_to_home_eta:
+  mode: single
   sequence:
     - service: notify.family
       data:
@@ -695,6 +702,7 @@ turn_on_light:
     profile:
       description: "A light profile"
       example: "normal/night/security"
+  mode: parallel
   sequence:
     - service: light.turn_on
       target:
@@ -715,6 +723,7 @@ toggle_light:
     profile:
       description: "A light profile"
       example: "normal/night/security"
+  mode: parallel
   sequence:
     - choose:
         - conditions:

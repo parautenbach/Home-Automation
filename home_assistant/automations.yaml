@@ -324,6 +324,8 @@
       offset: "01:30:00"
     - platform: template
       value_template: "{{ states('sensor.illuminance') | int >= 7500 }}"
+      # to avoid the light turning of when there briefly is bright sunshine
+      for: "00:15:00"
   # todo: if anybody home?
   condition:
     condition: and
@@ -334,6 +336,7 @@
         after_offset: "01:30:00"
       - condition: template
         value_template: "{{ states('sensor.illuminance') | int >= 7500 }}"
+      # but not whan already near sunset
   action:
     - service: homeassistant.turn_off
       entity_id: group.main_bedroom
@@ -1018,6 +1021,7 @@
     - platform: state
       entity_id: light.living_room_lamp
       to: "off"
+  # condition: only after sunset
   # condition: if only we could know whether it's on
   action:
     - service: script.turn_on

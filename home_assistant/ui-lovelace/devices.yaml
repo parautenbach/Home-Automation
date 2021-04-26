@@ -206,11 +206,9 @@ cards:
         content: >
           Domain | Count
              :---|---:
-          {% for domain in states | groupby('domain') %}
-          {% set name = domain[0].replace('_', ' ') | title %}
-          **{{ name }}** | {{ states[domain[0]] | count }}
-          {# leave blank line below otherwise table won't render #}
-
+          {% for domain in states | groupby('domain') -%}
+            {%- set name = domain[0].replace('_', ' ') | title -%}
+            **{{ name }}** | {{ states[domain[0]] | count }}
           {% endfor %}
           **Total** | {{ states | count }}
         card_mod:

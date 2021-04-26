@@ -390,6 +390,7 @@ cards:
             entity: media_player.main_bedroom_universal
             artwork: cover
             volume_stateless: true
+            toggle_power: false  # make it use turn_on/turn_off
             hide:
               power: false
               power_state: false

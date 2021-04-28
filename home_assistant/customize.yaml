@@ -332,8 +332,8 @@ binary_sensor.lhs_garage_occupied:
   icon: mdi:car-connected
 binary_sensor.rhs_garage_occupied:
   icon: mdi:car-connected
-# sensor.sun_illuminance:
-#   friendly_name: Sun Illuminance
+sensor.sun_illuminance:
+  friendly_name: Sun Illuminance
 remote.living_room:
   friendly_name: Apple TV Remote
 remote.living_room_remote:

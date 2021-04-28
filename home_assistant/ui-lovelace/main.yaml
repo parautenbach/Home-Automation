@@ -748,10 +748,9 @@ cards:
         extrema: true
     - type: custom:mini-graph-card
       entities:
-        # currently down and generally very unreliable; need to use my own light meter
-        # - entity: sensor.sun_illuminance
-        #   color: var(--custom-graph-color-yellow)
-        - entity: sensor.illuminance
+        # can be very unreliable (operationally); need to use my own light meter
+        - entity: sensor.sun_illuminance
+        # - entity: sensor.illuminance
           # don't use this if you want to use thresholds (only for the primary y-axis)
           # color: var(--custom-graph-color-yellow)
         - entity: sensor.solar_angle
@@ -765,11 +764,11 @@ cards:
       show:
         extrema: true
       color_thresholds:
-        # needs to be the same as the automation's threshold to make sense
+        # needs to be the same as the low light binary sensor's threshold to make sense
         # https://community.home-assistant.io/t/outdoor-illuminance-template-sensor/228581
-        - value: 2500
+        - value: 15320
           color: var(--custom-graph-color-gray)
-        - value: 2501
+        - value: 15321
           color: var(--custom-graph-color-yellow)
       color_thresholds_transition: hard
     - type: history-graph

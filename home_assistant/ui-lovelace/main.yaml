@@ -772,3 +772,9 @@ cards:
         - value: 2501
           color: var(--custom-graph-color-yellow)
       color_thresholds_transition: hard
+    - type: history-graph
+      title: Low Light Sensor
+      hours_to_show: 24
+      entities:
+        - entity: binary_sensor.low_light
+          name: Low Light

@@ -119,7 +119,7 @@ cards:
         - entity: binary_sensor.power_meter
     - type: logbook
       title: Major Automations
-      hours_to_show: 3
+      hours_to_show: 24
       entities:
         - automation.alert_if_garages_opened_or_closed_when_not_supposed_to
         - automation.alert_if_gate_opened_or_closed_when_not_supposed_to

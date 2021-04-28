@@ -100,6 +100,14 @@
       friendly_name: HA Breaking Changes
       value_template: >
         {{ states('sensor.potential_breaking_changes') | int > 0 }}
+    low_light:
+      friendly_name: Low Light
+      value_template: >
+        {{ (states('sensor.illuminance') | int < 7500) or
+           'fog' in states('weather.home_hourly') or
+           states('weather.home_hourly') == 'cloudy' or
+           'rain' in states('weather.home_hourly') or
+           states('weather.home_hourly') == 'pouring' }}
 
 # https://github.com/home-assistant/core/issues/43188
 # https://github.com/home-assistant/core/pull/43869

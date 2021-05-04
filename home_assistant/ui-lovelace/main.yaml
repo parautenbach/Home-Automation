@@ -765,7 +765,7 @@ cards:
         #   color: var(--custom-graph-color-yellow)
         - entity: sensor.illuminance
           # don't use this if you want to use thresholds: color overrides
-          color: var(--custom-graph-color-yellow)
+          # color: var(--custom-graph-color-yellow)
         - entity: sensor.solar_angle
           color: var(--custom-graph-color-red)
           y_axis: secondary
@@ -776,14 +776,12 @@ cards:
       line_width: 2
       show:
         extrema: true
-      # color_thresholds:
-      #   # needs to be the same as the low light binary sensor's threshold to make sense
-      #   # https://community.home-assistant.io/t/outdoor-illuminance-template-sensor/228581
-      #   - value: 7000  # < 7500
-      #     color: var(--custom-graph-color-gray)
-      #   - value: 7001  # >= 7500
-      #     color: var(--custom-graph-color-yellow)
-      # color_thresholds_transition: hard
+      color_thresholds:
+        # https://community.home-assistant.io/t/outdoor-illuminance-template-sensor/228581
+        - value: 10  # min
+          color: var(--custom-graph-color-gray)
+        - value: 10000  # max
+          color: var(--custom-graph-color-yellow)
     - type: history-graph
       title: Low Light Sensor
       hours_to_show: 24

@@ -157,7 +157,7 @@ cards:
         - automation.notify_pieter_going_home_from_work_in_cape_town
         - automation.open_garage_door_when_arriving_by_car
         - automation.open_the_gate_when_arriving_home
-        - automation.replace_cover_notifications_when_closed
+        - automation.notify_if_cover_was_left_open
         - automation.restore_smart_bulb_statuses_after_power_restored
         - automation.set_dark_theme
         - automation.set_light_theme

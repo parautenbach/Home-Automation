@@ -755,7 +755,7 @@
       data:
         entity_id: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
 
-- alias: "Replace Cover Notifications When Closed"
+- alias: "Notify If Cover Was Left Open"
   initial_state: true
   trigger:
     platform: state
@@ -766,12 +766,12 @@
     to: "closed"
   condition:
     condition: template
-    # only when there's been at least one notification, which will be after the first timer expired (default 3 min)
-    # value_template: "{{ (as_timestamp(utcnow()) - as_timestamp(states['cover'][trigger.entity_id | replace('cover.', '')].last_changed)) + 200 | int > 180 }}"
-    # {% set cover_entity = trigger.entity_id | replace("cover.", "") %}
-    # {% set cover_last_changed = trigger.from_state.last_changed %}
     value_template: >-
-      {{ (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int > 180 }}
+      {% set timer_entity = trigger.entity_id | replace('cover', 'timer') ~ "_timer" %}
+      {% set duration = state_attr(timer_entity, 'duration') %}
+      {% set (hours, minutes, seconds) = duration.split(':') | map('int') %}
+      {% set threshold =  minutes*60 + seconds %}
+      {{ (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int >= threshold }}
   action:
     - service: notify.mobile_app_ceres
       data:

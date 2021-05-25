@@ -11,19 +11,19 @@ cards:
           - type: gauge
             entity: sensor.internet_speed_in
             min: 0
-            max: 10
+            max: 30
             severity:
               green: 0
-              yellow: 4
-              red: 8
+              yellow: 15
+              red: 25
           - type: gauge
             entity: sensor.internet_speed_out
             min: 0
-            max: 5
+            max: 3
             severity:
               green: 0
-              yellow: 2
-              red: 4
+              yellow: 1.5
+              red: 2.5
       - type: horizontal-stack
         cards:
           - type: glance

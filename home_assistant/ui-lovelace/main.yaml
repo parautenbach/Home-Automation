@@ -455,6 +455,12 @@ cards:
                     return states['binary_sensor.lhs_garage_occupied'].state == 'off'
                   ]]]
                 color: var(--paper-item-icon-color)
+              - operator: template
+                value: >
+                  [[[
+                    return states['binary_sensor.lhs_garage_occupied'].state == 'unavailable'
+                  ]]]
+                color: var(--state-icon-unavailable-color)
               - value: 'unavailable'
                 styles:
                   icon:
@@ -593,6 +599,12 @@ cards:
                     return states['binary_sensor.rhs_garage_occupied'].state == 'off'
                   ]]]
                 color: var(--paper-item-icon-color)
+              - operator: template
+                value: >
+                  [[[
+                    return states['binary_sensor.rhs_garage_occupied'].state == 'unavailable'
+                  ]]]
+                color: var(--state-icon-unavailable-color)
               - value: 'unavailable'
                 styles:
                   icon:

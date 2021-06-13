@@ -28,6 +28,7 @@ homeassistant:
 logger:
   default: warning
   # logs:
+  #   homeassistant.components.tplink: debug
   #   homeassistant.components.shell_command: debug
   #   homeassistant.components.linux_battery: debug
   #   homeassistant.components.automation: info

@@ -110,6 +110,11 @@
            'cloudy' in states('weather.home_hourly') or
            'rain' in states('weather.home_hourly') or
            'pouring' in states('weather.home_hourly') }}
+    workday:
+      friendly_name: General Workday
+      value_template: >
+        {% set personal_holiday = as_timestamp(states('input_datetime.holiday_start')) <= as_timestamp(now().date()) <= as_timestamp(states('input_datetime.holiday_end')) %}
+        {{ is_state('binary_sensor.workday_sensor', 'on') and not personal_holiday }}
 
 # https://github.com/home-assistant/core/issues/43188
 # https://github.com/home-assistant/core/pull/43869
@@ -202,3 +207,8 @@
   host: www.google.com
   count: 5
   scan_interval: 180
+
+- platform: workday
+  country: ZA
+  workdays: [mon, tue, wed, thu, fri]
+  excludes: [sat, sun, holiday]

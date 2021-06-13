@@ -727,6 +727,18 @@ cards:
               timezone: Australia/Sydney
             name: Sydney
             entity: sensor.sydney
+      - type: entities
+        title: Schedule
+        show_header_toggle: false
+        entities:
+          - entity: input_datetime.wake_up_time
+            name: Wake-up Time
+          - entity: input_datetime.holiday_start
+            name: Holiday Start
+          - entity: input_datetime.holiday_end
+            name: Holiday End
+          - entity: binary_sensor.workday
+            name: Workday
   - type: vertical-stack
     cards:
     - type: custom:weather-card

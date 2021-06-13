@@ -97,6 +97,23 @@
         entity_id: timer.foyer_light_timer
         duration: "00:01:00"
 
+- alias: "Switch On Lights At Wake Up Time"
+  initial_state: true
+  trigger:
+    - platform: time
+      at: input_datetime.wake_up_time
+  condition:
+    - condition: state
+      entity_id: binary_sensor.workday
+      state: "on"
+  action:
+    # todo: use transition (once bug is fixed)
+    - service: light.turn_on
+      target:
+        entity_id: light.living_room_lamp
+    - service: homeassistant.turn_on
+      entity_id: group.main_bedroom
+
 - alias: "Switch On Night Light If Motion Is Detected"
   initial_state: true
   trigger:
@@ -222,6 +239,9 @@
     - condition: state
       entity_id: binary_sensor.anybody_home
       state: "on"
+    - condition: state
+      entity_id: binary_sensor.low_light
+      state: "on"
     # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
     - condition: or
       conditions:
@@ -275,6 +295,11 @@
     - platform: state
       entity_id: binary_sensor.low_light
       to: "on"
+    - platform: time
+      at: "08:00:00"
+    - platform: state
+      entity_id: binary_sensor.anybody_home
+      to: "on"
   condition:
     - condition: state
       entity_id: binary_sensor.anybody_home
@@ -320,7 +345,7 @@
     - platform: state
       entity_id: binary_sensor.low_light
       to: "off"
-      # to avoid the light turning of when there briefly is bright sunshine
+      # to avoid the light turning off when there briefly is bright sunshine
       for:
         minutes: 15
   # todo: if anybody home?
@@ -335,10 +360,18 @@
         entity_id: binary_sensor.low_light
         state: "off"
   action:
-    - service: homeassistant.turn_off
-      entity_id: group.main_bedroom
     - service: switch.turn_off
       entity_id: switch.living_room_lamp
+
+- alias: "Bedlamps Off After Sunrise"
+  initial_state: true
+  trigger:
+    - platform: sun
+      event: sunrise
+      offset: "01:30:00"
+  action:
+    - service: homeassistant.turn_off
+      entity_id: group.main_bedroom
 
 - alias: "Away Mode"
   initial_state: true
@@ -1018,7 +1051,10 @@
     - platform: state
       entity_id: light.living_room_lamp
       to: "off"
-  # condition: only after sunset
+  condition:
+    - condition: time
+      after: "18:00:00"
+      before: "01:00:00"
   # condition: if only we could know whether it's on
   action:
     - service: script.turn_on

@@ -305,6 +305,16 @@ input_select:
     initial: Audio
     icon: mdi:remote-tv
 
+tplink:
+  discovery: false
+  light:
+    - host: 192.168.0.108  # smart bulb 1 / pieter
+    - host: 192.168.0.116  # smart bulb 2 / rouvé
+    - host: 192.168.0.122  # smart bulb 3 / dining
+    - host: 192.168.0.123  # smart bulb 4 / foyer
+  switch:
+    - host: 192.168.0.115  # smart plug 1 / tivoli
+
 light:
   - platform: switch
     name: living_room_lamp

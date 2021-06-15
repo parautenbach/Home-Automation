@@ -289,6 +289,9 @@
     - service: homeassistant.turn_on
       entity_id: group.main_bedroom
 
+# might need to specialise this a bit more in future:
+# e.g. switch on from 6 am when arriving home and light is low
+# separate from the default on at 8 am (and maybe only on workdays)
 - alias: "Lights On Upon Low Light"
   initial_state: true
   trigger:

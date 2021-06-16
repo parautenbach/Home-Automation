@@ -3,629 +3,640 @@ path: entertainment
 icon: mdi:audio-video
 badges: []
 cards:
-  - type: custom:mini-media-player
-    name: Main Bedroom
-    entity: media_player.main_bedroom_universal
-    artwork: cover
-    volume_stateless: true
-    toggle_power: false  # make it use turn_on/turn_off
-    hide:
-      power: false
-      power_state: false
-      volume: false
-      mute: true
-    idle_view:
-      when_idle: false
-      when_paused: false
-      when_standby: false
-    background: '/local/tivoli-model-three.png'
-  - type: custom:mini-media-player
-    name: Living Room
-    entity: media_player.living_room_universal
-    artwork: cover
-    volume_stateless: true
-    hide:
-      power: true
-      volume: false
-      mute: true
-    idle_view:
-      when_idle: false
-      when_paused: false
-      when_standby: false
-    background: '/local/apple_tv.jpg'
-    shortcuts:
-      columns: 5
-      buttons:
-        - type: script
-          icon: mdi:apple
-          id: script.entertainment_apple_tv_on
-        - type: script
-          icon: mdi:set-top-box
-          id: script.entertainment_satellite_on
-        - type: script
-          icon: mdi:palm-tree
-          id: script.play_radio_paradise
-        - type: script
-          icon: mdi:white-balance-sunny
-          id: script.hk_3380_dimmer
-        - type: script
-          icon: mdi:power
-          id: script.entertainment_off
   - type: vertical-stack
     cards:
-      - type: horizontal-stack
+      - type: custom:mini-media-player
+        name: Main Bedroom
+        entity: media_player.main_bedroom_universal
+        artwork: cover
+        volume_stateless: true
+        toggle_power: false  # make it use turn_on/turn_off
+        hide:
+          power: false
+          power_state: false
+          volume: false
+          mute: true
+        idle_view:
+          when_idle: false
+          when_paused: false
+          when_standby: false
+        background: '/local/tivoli-model-three.png'
+      - type: custom:mini-media-player
+        name: Living Room
+        entity: media_player.living_room_universal
+        artwork: cover
+        volume_stateless: true
+        hide:
+          power: true
+          volume: false
+          mute: true
+        idle_view:
+          when_idle: false
+          when_paused: false
+          when_standby: false
+        background: '/local/apple_tv.jpg'
+        shortcuts:
+          columns: 5
+          buttons:
+            - type: script
+              icon: mdi:apple
+              id: script.entertainment_apple_tv_on
+            - type: script
+              icon: mdi:set-top-box
+              id: script.entertainment_satellite_on
+            - type: script
+              icon: mdi:palm-tree
+              id: script.play_radio_paradise
+            - type: script
+              icon: mdi:white-balance-sunny
+              id: script.hk_3380_dimmer
+            - type: script
+              icon: mdi:power
+              id: script.entertainment_off
+      - type: vertical-stack
         cards:
-          - type: custom:button-card
-            template: remote
-            variables:
-              selection: TV
-            icon: mdi:television
-          - type: custom:button-card
-            template: remote
-            variables:
-              selection: Audio
-            icon: mdi:audio-video
-          - type: custom:button-card
-            template: remote
-            variables:
-              selection: Apple TV
-            icon: mdi:apple
-          - type: custom:button-card
-            template: remote
-            variables:
-              selection: Satellite
-            icon: mdi:set-top-box
-      - type: custom:state-switch
-        entity: input_select.selected_remote
-        states:
-          TV:
-            type: vertical-stack
+          - type: horizontal-stack
             cards:
-              - type: horizontal-stack
+              - type: custom:button-card
+                template: remote
+                variables:
+                  selection: TV
+                icon: mdi:television
+              - type: custom:button-card
+                template: remote
+                variables:
+                  selection: Audio
+                icon: mdi:audio-video
+              - type: custom:button-card
+                template: remote
+                variables:
+                  selection: Apple TV
+                icon: mdi:apple
+              - type: custom:button-card
+                template: remote
+                variables:
+                  selection: Satellite
+                icon: mdi:set-top-box
+          - type: custom:state-switch
+            entity: input_select.selected_remote
+            states:
+              TV:
+                type: vertical-stack
                 cards:
-                  - type: custom:button-card
-                    entity: script.samsung_tv_power
-                    size: 45%
-                    styles:
-                      icon:
-                        - color: rgb(255, 0, 0)
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      haptic: light
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.samsung_tv_power
-                  - type: entity-button
-                    entity: script.samsung_tv_hdmi
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.samsung_tv_hdmi
-                  - type: entity-button
-                    entity: script.samsung_tv_picture_mode
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.samsung_tv_picture_mode
-              - type: horizontal-stack
+                  - type: horizontal-stack
+                    cards:
+                      - type: custom:button-card
+                        entity: script.samsung_tv_power
+                        size: 45%
+                        styles:
+                          icon:
+                            - color: rgb(255, 0, 0)
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          haptic: light
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.samsung_tv_power
+                      - type: entity-button
+                        entity: script.samsung_tv_hdmi
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.samsung_tv_hdmi
+                      - type: entity-button
+                        entity: script.samsung_tv_picture_mode
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.samsung_tv_picture_mode
+                  - type: horizontal-stack
+                    cards:
+                      - type: custom:button-card
+                        entity: script.samsung_tv_hdmi2
+                        aspect_ratio: 3.2
+                        show_name: false
+                        icon: mdi:apple
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.samsung_tv_hdmi2
+                      - type: custom:button-card
+                        entity: script.samsung_tv_hdmi1
+                        aspect_ratio: 3.2
+                        show_name: false
+                        icon: mdi:set-top-box
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.samsung_tv_hdmi1
+              Audio:
+                type: vertical-stack
                 cards:
-                  - type: custom:button-card
-                    entity: script.samsung_tv_hdmi2
-                    aspect_ratio: 3.2
-                    show_name: false
-                    icon: mdi:apple
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.samsung_tv_hdmi2
-                  - type: custom:button-card
-                    entity: script.samsung_tv_hdmi1
-                    aspect_ratio: 3.2
-                    show_name: false
-                    icon: mdi:set-top-box
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.samsung_tv_hdmi1
-          Audio:
-            type: vertical-stack
-            cards:
-              - type: horizontal-stack
+                  - type: horizontal-stack
+                    cards:
+                      - type: custom:button-card
+                        entity: script.hk_3380_power_on
+                        aspect_ratio: 3.2
+                        show_name: false
+                        styles:
+                          icon:
+                            - color: rgb(255, 0, 0)
+                        tap_action:
+                          action: call-service
+                          haptic: light
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.hk_3380_power_on
+                      - type: custom:button-card
+                        entity: script.hk_3380_power_off
+                        aspect_ratio: 3.2
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          haptic: light
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.hk_3380_power_off
+                  - type: horizontal-stack
+                    cards:
+                      - type: custom:button-card
+                        entity: script.hk_3380_vid1
+                        show_name: false
+                        size: 45%
+                        styles:
+                          grid:
+                            - position: relative
+                          custom_fields:
+                            source:
+                              - position: absolute
+                              - left: 80%
+                              - top: 60%
+                              - height: 20px
+                              - width: 20px
+                        custom_fields:
+                          source: >
+                            [[[ return `<ha-icon icon="mdi:numeric-1" style="color: var(--paper-item-icon-color);"></ha-icon>` ]]]
+                        tap_action:
+                          action: call-service
+                          haptic: light
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.hk_3380_vid1
+                      - type: custom:button-card
+                        entity: script.hk_3380_vid2
+                        show_name: false
+                        size: 45%
+                        tap_action:
+                          action: call-service
+                          haptic: light
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.hk_3380_vid2
+                        styles:
+                          grid:
+                            - position: relative
+                          custom_fields:
+                            source:
+                              - position: absolute
+                              - left: 80%
+                              - top: 60%
+                              - height: 20px
+                              - width: 20px
+                        custom_fields:
+                          source: >
+                            [[[ return `<ha-icon icon="mdi:numeric-2" style="color: var(--paper-item-icon-color);"></ha-icon>` ]]]
+                      - type: entity-button
+                        entity: script.hk_3380_dimmer
+                        show_name: false
+                        size: 45%
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.hk_3380_dimmer
+                  - type: horizontal-stack
+                    cards:
+                      - type: custom:button-card
+                        entity: script.hk_3380_vol_down
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          haptic: light
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.hk_3380_vol_down
+                        hold_action:
+                          repeat: 200
+                          action: call-service
+                          haptic: selection
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.hk_3380_vol_down
+                        double_tap_action:
+                          action: call-service
+                          haptic: medium
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.hk_3380_vol_down_minus_5
+                      - type: custom:button-card
+                        entity: script.hk_3380_vol_up
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          haptic: light
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.hk_3380_vol_up
+                        hold_action:
+                          repeat: 200
+                          action: call-service
+                          haptic: selection
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.hk_3380_vol_up
+                        double_tap_action:
+                          action: call-service
+                          haptic: medium
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.hk_3380_vol_up_plus_5
+                      - type: custom:button-card
+                        entity: script.hk_3380_mute
+                        show_name: false
+                        styles:
+                          icon:
+                            - color: rgb(255, 0, 0)
+                        tap_action:
+                          action: call-service
+                          haptic: light
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.hk_3380_mute
+              "Apple TV":
+                type: vertical-stack
                 cards:
-                  - type: custom:button-card
-                    entity: script.hk_3380_power_on
-                    aspect_ratio: 3.2
-                    show_name: false
-                    styles:
-                      icon:
-                        - color: rgb(255, 0, 0)
-                    tap_action:
-                      action: call-service
-                      haptic: light
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.hk_3380_power_on
-                  - type: custom:button-card
-                    entity: script.hk_3380_power_off
-                    aspect_ratio: 3.2
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      haptic: light
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.hk_3380_power_off
-              - type: horizontal-stack
+                  - type: horizontal-stack
+                    cards:
+                      - type: custom:button-card
+                        entity: script.apple_tv_menu
+                        aspect_ratio: 3.2
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          haptic: light
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.apple_tv_menu
+                      - type: custom:button-card
+                        entity: script.apple_tv_home
+                        aspect_ratio: 3.2
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          haptic: light
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.apple_tv_home
+                        double_tap_action:
+                          action: call-service
+                          haptic: light
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.apple_tv_home_double_press
+                        hold_action:
+                          action: call-service
+                          haptic: medium
+                          service: remote.send_command
+                          service_data:
+                            entity_id: remote.living_room
+                            command: home_hold
+                  - type: horizontal-stack
+                    cards:
+                      - type: custom:button-card
+                        color_type: blank-card
+                      - type: entity-button
+                        entity: script.apple_tv_up
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.apple_tv_up
+                      - type: custom:button-card
+                        color_type: blank-card
+                  - type: horizontal-stack
+                    cards:
+                      - type: entity-button
+                        entity: script.apple_tv_left
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.apple_tv_left
+                      - type: entity-button
+                        entity: script.apple_tv_ok
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.apple_tv_ok
+                      - type: entity-button
+                        entity: script.apple_tv_right
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.apple_tv_right
+                  - type: horizontal-stack
+                    cards:
+                      - type: custom:button-card
+                        color_type: blank-card
+                      - type: entity-button
+                        entity: script.apple_tv_down
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.apple_tv_down
+                      - type: custom:button-card
+                        color_type: blank-card
+                  - type: horizontal-stack
+                    cards:
+                      - type: entity-button
+                        entity: script.apple_tv_skip_backward
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.apple_tv_skip_backward
+                      - type: entity-button
+                        entity: script.apple_tv_play_pause
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.apple_tv_play_pause
+                      - type: entity-button
+                        entity: script.apple_tv_skip_forward
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.apple_tv_skip_forward
+              Satellite:
+                type: vertical-stack
                 cards:
-                  - type: custom:button-card
-                    entity: script.hk_3380_vid1
-                    show_name: false
-                    size: 45%
-                    styles:
-                      grid:
-                        - position: relative
-                      custom_fields:
-                        source:
-                          - position: absolute
-                          - left: 80%
-                          - top: 60%
-                          - height: 20px
-                          - width: 20px
-                    custom_fields:
-                      source: >
-                        [[[ return `<ha-icon icon="mdi:numeric-1" style="color: var(--paper-item-icon-color);"></ha-icon>` ]]]
-                    tap_action:
-                      action: call-service
-                      haptic: light
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.hk_3380_vid1
-                  - type: custom:button-card
-                    entity: script.hk_3380_vid2
-                    show_name: false
-                    size: 45%
-                    tap_action:
-                      action: call-service
-                      haptic: light
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.hk_3380_vid2
-                    styles:
-                      grid:
-                        - position: relative
-                      custom_fields:
-                        source:
-                          - position: absolute
-                          - left: 80%
-                          - top: 60%
-                          - height: 20px
-                          - width: 20px
-                    custom_fields:
-                      source: >
-                        [[[ return `<ha-icon icon="mdi:numeric-2" style="color: var(--paper-item-icon-color);"></ha-icon>` ]]]
-                  - type: entity-button
-                    entity: script.hk_3380_dimmer
-                    show_name: false
-                    size: 45%
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.hk_3380_dimmer
-              - type: horizontal-stack
-                cards:
-                  - type: custom:button-card
-                    entity: script.hk_3380_vol_down
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      haptic: light
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.hk_3380_vol_down
-                    hold_action:
-                      repeat: 200
-                      action: call-service
-                      haptic: selection
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.hk_3380_vol_down
-                    double_tap_action:
-                      action: call-service
-                      haptic: medium
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.hk_3380_vol_down_minus_5
-                  - type: custom:button-card
-                    entity: script.hk_3380_vol_up
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      haptic: light
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.hk_3380_vol_up
-                    hold_action:
-                      repeat: 200
-                      action: call-service
-                      haptic: selection
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.hk_3380_vol_up
-                    double_tap_action:
-                      action: call-service
-                      haptic: medium
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.hk_3380_vol_up_plus_5
-                  - type: custom:button-card
-                    entity: script.hk_3380_mute
-                    show_name: false
-                    styles:
-                      icon:
-                        - color: rgb(255, 0, 0)
-                    tap_action:
-                      action: call-service
-                      haptic: light
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.hk_3380_mute
-          "Apple TV":
-            type: vertical-stack
-            cards:
-              - type: horizontal-stack
-                cards:
-                  - type: custom:button-card
-                    entity: script.apple_tv_menu
-                    aspect_ratio: 3.2
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      haptic: light
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.apple_tv_menu
-                  - type: custom:button-card
-                    entity: script.apple_tv_home
-                    aspect_ratio: 3.2
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      haptic: light
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.apple_tv_home
-                    double_tap_action:
-                      action: call-service
-                      haptic: light
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.apple_tv_home_double_press
-                    hold_action:
-                      action: call-service
-                      haptic: medium
-                      service: remote.send_command
-                      service_data:
-                        entity_id: remote.living_room
-                        command: home_hold
-              - type: horizontal-stack
-                cards:
-                  - type: custom:button-card
-                    color_type: blank-card
-                  - type: entity-button
-                    entity: script.apple_tv_up
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.apple_tv_up
-                  - type: custom:button-card
-                    color_type: blank-card
-              - type: horizontal-stack
-                cards:
-                  - type: entity-button
-                    entity: script.apple_tv_left
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.apple_tv_left
-                  - type: entity-button
-                    entity: script.apple_tv_ok
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.apple_tv_ok
-                  - type: entity-button
-                    entity: script.apple_tv_right
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.apple_tv_right
-              - type: horizontal-stack
-                cards:
-                  - type: custom:button-card
-                    color_type: blank-card
-                  - type: entity-button
-                    entity: script.apple_tv_down
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.apple_tv_down
-                  - type: custom:button-card
-                    color_type: blank-card
-              - type: horizontal-stack
-                cards:
-                  - type: entity-button
-                    entity: script.apple_tv_skip_backward
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.apple_tv_skip_backward
-                  - type: entity-button
-                    entity: script.apple_tv_play_pause
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.apple_tv_play_pause
-                  - type: entity-button
-                    entity: script.apple_tv_skip_forward
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.apple_tv_skip_forward
-          Satellite:
-            type: vertical-stack
-            cards:
-              - type: horizontal-stack
-                cards:
-                  - type: custom:button-card
-                    entity: script.dstv_power
-                    size: 45%
-                    styles:
-                      icon:
-                        - color: rgb(255, 0, 0)
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      haptic: light
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_power
-                  - type: entity-button
-                    entity: script.dstv_up
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_up
-                  - type: entity-button
-                    entity: script.dstv_menu
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_menu
-              - type: horizontal-stack
-                cards:
-                  - type: entity-button
-                    entity: script.dstv_left
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_left
-                  - type: entity-button
-                    entity: script.dstv_ok
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_ok
-                  - type: entity-button
-                    entity: script.dstv_right
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_right
-              - type: horizontal-stack
-                cards:
-                  - type: entity-button
-                    entity: script.dstv_info
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_info
-                  - type: entity-button
-                    entity: script.dstv_down
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_down
-                  - type: entity-button
-                    entity: script.dstv_back
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_back
-              - type: horizontal-stack
-                cards:
-                  - type: entity-button
-                    entity: script.dstv_ch_minus
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_ch_minus
-                  - type: entity-button
-                    entity: script.dstv_ch_plus
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_ch_plus
-                  - type: entity-button
-                    entity: script.dstv_alt
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_alt
-              - type: horizontal-stack
-                cards:
-                  - type: entity-button
-                    entity: script.dstv_vol_down
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_vol_down
-                  - type: entity-button
-                    entity: script.dstv_vol_up
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_vol_up
-                  - type: custom:button-card
-                    entity: script.dstv_mute
-                    show_name: false
-                    styles:
-                      icon:
-                        - color: rgb(255, 0, 0)
-                    tap_action:
-                      action: call-service
-                      haptic: light
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_mute
-              - type: horizontal-stack
-                cards:
-                  - type: entity-button
-                    entity: script.dstv_1
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_1
-                  - type: entity-button
-                    entity: script.dstv_2
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_2
-                  - type: entity-button
-                    entity: script.dstv_3
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_3
-              - type: horizontal-stack
-                cards:
-                  - type: entity-button
-                    entity: script.dstv_4
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_4
-                  - type: entity-button
-                    entity: script.dstv_5
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_5
-                  - type: entity-button
-                    entity: script.dstv_6
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_6
-              - type: horizontal-stack
-                cards:
-                  - type: entity-button
-                    entity: script.dstv_7
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_7
-                  - type: entity-button
-                    entity: script.dstv_8
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_8
-                  - type: entity-button
-                    entity: script.dstv_9
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_9
-              - type: horizontal-stack
-                cards:
-                  - type: custom:button-card
-                    color_type: blank-card
-                  - type: entity-button
-                    entity: script.dstv_0
-                    show_name: false
-                    tap_action:
-                      action: call-service
-                      service: script.turn_on
-                      service_data:
-                        entity_id: script.dstv_0
-                  - type: custom:button-card
-                    color_type: blank-card
+                  - type: horizontal-stack
+                    cards:
+                      - type: custom:button-card
+                        entity: script.dstv_power
+                        size: 45%
+                        styles:
+                          icon:
+                            - color: rgb(255, 0, 0)
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          haptic: light
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_power
+                      - type: entity-button
+                        entity: script.dstv_up
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_up
+                      - type: entity-button
+                        entity: script.dstv_menu
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_menu
+                  - type: horizontal-stack
+                    cards:
+                      - type: entity-button
+                        entity: script.dstv_left
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_left
+                      - type: entity-button
+                        entity: script.dstv_ok
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_ok
+                      - type: entity-button
+                        entity: script.dstv_right
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_right
+                  - type: horizontal-stack
+                    cards:
+                      - type: entity-button
+                        entity: script.dstv_info
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_info
+                      - type: entity-button
+                        entity: script.dstv_down
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_down
+                      - type: entity-button
+                        entity: script.dstv_back
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_back
+                  - type: horizontal-stack
+                    cards:
+                      - type: entity-button
+                        entity: script.dstv_ch_minus
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_ch_minus
+                      - type: entity-button
+                        entity: script.dstv_ch_plus
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_ch_plus
+                      - type: entity-button
+                        entity: script.dstv_alt
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_alt
+                  - type: horizontal-stack
+                    cards:
+                      - type: entity-button
+                        entity: script.dstv_vol_down
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_vol_down
+                      - type: entity-button
+                        entity: script.dstv_vol_up
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_vol_up
+                      - type: custom:button-card
+                        entity: script.dstv_mute
+                        show_name: false
+                        styles:
+                          icon:
+                            - color: rgb(255, 0, 0)
+                        tap_action:
+                          action: call-service
+                          haptic: light
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_mute
+                  - type: horizontal-stack
+                    cards:
+                      - type: entity-button
+                        entity: script.dstv_1
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_1
+                      - type: entity-button
+                        entity: script.dstv_2
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_2
+                      - type: entity-button
+                        entity: script.dstv_3
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_3
+                  - type: horizontal-stack
+                    cards:
+                      - type: entity-button
+                        entity: script.dstv_4
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_4
+                      - type: entity-button
+                        entity: script.dstv_5
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_5
+                      - type: entity-button
+                        entity: script.dstv_6
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_6
+                  - type: horizontal-stack
+                    cards:
+                      - type: entity-button
+                        entity: script.dstv_7
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_7
+                      - type: entity-button
+                        entity: script.dstv_8
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_8
+                      - type: entity-button
+                        entity: script.dstv_9
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_9
+                  - type: horizontal-stack
+                    cards:
+                      - type: custom:button-card
+                        color_type: blank-card
+                      - type: entity-button
+                        entity: script.dstv_0
+                        show_name: false
+                        tap_action:
+                          action: call-service
+                          service: script.turn_on
+                          service_data:
+                            entity_id: script.dstv_0
+                      - type: custom:button-card
+                        color_type: blank-card
+      - type: entity
+        entity: sensor.apple_tv_playing_hours_minutes
+        name: Playing Today
+        icon: mdi:audio-video
+        # unit:
+      - type: history-graph
+        entities:
+          - media_player.living_room
+        hours_to_show: 24

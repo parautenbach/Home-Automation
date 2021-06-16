@@ -3,35 +3,38 @@ path: devices
 icon: mdi:devices
 badges:
   - entity: binary_sensor.updater
-    style:
-      ha-state-label-badge:
-        $:
-          ha-label-badge:
-            $:
-              .value: |
-                  ha-icon {
-                    color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
-                  }
+    card_mod:
+      style:
+        ha-state-label-badge:
+          $:
+            ha-label-badge:
+              $:
+                .value: |
+                    ha-icon {
+                      color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
+                    }
   - entity: binary_sensor.ha_breaking_changes
-    style:
-      ha-state-label-badge:
-        $:
-          ha-label-badge:
-            $:
-              .value: |
-                  ha-icon {
-                    color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
-                  }
+    card_mod:
+      style:
+        ha-state-label-badge:
+          $:
+            ha-label-badge:
+              $:
+                .value: |
+                    ha-icon {
+                      color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
+                    }
   - entity: binary_sensor.hacs_updater
-    style:
-      ha-state-label-badge:
-        $:
-          ha-label-badge:
-            $:
-              .value: |
-                  ha-icon {
-                    color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
-                  }
+    card_mod:
+      style:
+        ha-state-label-badge:
+          $:
+            ha-label-badge:
+              $:
+                .value: |
+                    ha-icon {
+                      color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
+                    }
 cards:
   - type: vertical-stack
     cards:
@@ -259,20 +262,21 @@ cards:
             # style: |
             #   :host {
             #     color: {{ "var(--custom-graph-color-red)" if is_state('binary_sensor.no_recent_backup', 'on') }};
-            style:
-              hui-generic-entity-row:
-                $:
-                  state-badge:
-                    $:
-                      ha-icon:
-                        $: |
-                          ha-svg-icon {
-                            color: {{ "var(--custom-graph-color-red)" if is_state('binary_sensor.no_recent_backup', 'on') }};
-                          }
-                  .: |
-                    .info {
-                      color: {{ "var(--custom-graph-color-red)" if is_state('binary_sensor.no_recent_backup', 'on') }};
-                    }
+            card_mod:
+              style:
+                hui-generic-entity-row:
+                  $:
+                    state-badge:
+                      $:
+                        ha-icon:
+                          $: |
+                            ha-svg-icon {
+                              color: {{ "var(--custom-graph-color-red)" if is_state('binary_sensor.no_recent_backup', 'on') }};
+                            }
+                    .: |
+                      .info {
+                        color: {{ "var(--custom-graph-color-red)" if is_state('binary_sensor.no_recent_backup', 'on') }};
+                      }
           - sensor.db_size
           - entity: sensor.home_assistant_server_battery
             name: Server battery

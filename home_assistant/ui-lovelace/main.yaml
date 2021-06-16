@@ -3,47 +3,51 @@ title: Main
 icon: mdi:home
 badges:
   - entity: binary_sensor.updater
-    style:
-      ha-state-label-badge:
-        $:
-          ha-label-badge:
-            $:
-              .value: |
-                  ha-icon {
-                    color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
-                  }
+    card_mod:
+      style:
+        ha-state-label-badge:
+          $:
+            ha-label-badge:
+              $:
+                .value: |
+                    ha-icon {
+                      color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
+                    }
   - entity: binary_sensor.motion_detected
-    style:
-      ha-state-label-badge:
-        $:
-          ha-label-badge:
-            $:
-              .value: |
-                  ha-icon {
-                    color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
-                  }
+    card_mod:
+      style:
+        ha-state-label-badge:
+          $:
+            ha-label-badge:
+              $:
+                .value: |
+                    ha-icon {
+                      color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
+                    }
   - entity: person.pieter_rautenbach
   - entity: person.rouve_rautenbach
   - entity: binary_sensor.electricity_feed
-    style:
-      ha-state-label-badge:
-        $:
-          ha-label-badge:
-            $:
-              .value: |
-                  ha-icon {
-                    color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
-                  }
+    card_mod:
+      style:
+        ha-state-label-badge:
+          $:
+            ha-label-badge:
+              $:
+                .value: |
+                    ha-icon {
+                      color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
+                    }
   - entity: binary_sensor.internet_connection
-    style:
-      ha-state-label-badge:
-        $:
-          ha-label-badge:
-            $:
-              .value: |
-                  ha-icon {
-                    color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
-                  }
+    card_mod:
+      style:
+        ha-state-label-badge:
+          $:
+            ha-label-badge:
+              $:
+                .value: |
+                    ha-icon {
+                      color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
+                    }
 cards:
   - type: vertical-stack
     cards:

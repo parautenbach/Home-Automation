@@ -70,18 +70,20 @@ cards:
         title: Last Snapshot Captured
         camera_image: camera.security_camera_last_snapshot
         entities: []
-        style: |
-          .title:after {
-            content: ": {{ states('sensor.security_camera_last_snapshot_relative') }}";
-          }
+        card_mod:
+          style: |
+            .title:after {
+              content: ": {{ states('sensor.security_camera_last_snapshot_relative') }}";
+            }
       - type: picture-glance
         title: Last Clip Captured
         camera_image: camera.security_camera_last_clip
         entities: []
-        style: |
-          .title:after {
-            content: ": {{ states('sensor.security_camera_last_clip_relative') }}";
-          }
+        card_mod:
+          style: |
+            .title:after {
+              content: ": {{ states('sensor.security_camera_last_clip_relative') }}";
+            }
       - type: entities
         entities:
           - entity: sensor.motion_detected_last_relative

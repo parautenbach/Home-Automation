@@ -404,6 +404,11 @@ proximity:
 
 breaking_changes:
 
+google:
+  client_id: !secret google_calendar_client_id
+  client_secret: !secret google_calendar_client_secret
+  track_new_calendar: false
+
 # https://community.home-assistant.io/t/control-recursion-in-the-folder-watcher-integration/200110
 # folder_watcher:
 #   - folder: /tmp/

@@ -633,8 +633,8 @@ cards:
                         color_type: blank-card
       - type: entity
         entity: sensor.apple_tv_playing_hours_minutes
-        name: Playing Today
-        icon: mdi:audio-video
+        name: Playing Time Today
+        icon: mdi:apple
         # unit:
       - type: history-graph
         entities:

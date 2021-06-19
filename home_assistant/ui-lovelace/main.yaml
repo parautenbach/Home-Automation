@@ -737,10 +737,10 @@ cards:
         entities:
           - entity: input_datetime.wake_up_time
             name: Wake-up Time
-          - entity: input_datetime.holiday_start
-            name: Holiday Start
-          - entity: input_datetime.holiday_end
-            name: Holiday End
+          - entity: input_datetime.vacation_start
+            name: Vacation Start
+          - entity: input_datetime.vacation_end
+            name: Vacation End
           - entity: binary_sensor.workday
             name: Workday
   - type: vertical-stack

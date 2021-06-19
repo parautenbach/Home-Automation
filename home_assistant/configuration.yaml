@@ -282,9 +282,9 @@ input_datetime:
     has_time: true
   wake_up_time:
     has_time: true
-  holiday_start:
+  vacation_start:
     has_date: true
-  holiday_end:
+  vacation_end:
     has_date: true
 
 input_number:

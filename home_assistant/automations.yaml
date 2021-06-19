@@ -553,13 +553,9 @@
 - alias: "Enable Contractor Mode"
   initial_state: true
   trigger:
-    - platform: time
-      at: "07:00:00"
-  condition:
-    - condition: time
-      after: "07:00:00"
-      weekday:
-        - wed
+    - platform: state
+      entity_id: calendar.housekeeping
+      to: "on"
   action:
     - service: switch.turn_on
       entity_id: switch.contractor_mode
@@ -570,10 +566,9 @@
     - platform: time
       at: "16:00:00"
   condition:
-    - condition: time
-      after: "16:00:00"
-      weekday:
-        - wed
+    - condition: state
+      entity_id: switch.contractor_mode
+      state: "on"
   action:
     - service: switch.turn_off
       entity_id: switch.contractor_mode
@@ -622,6 +617,21 @@
   action:
     - service: switch.turn_on
       entity_id: switch.contractor_mode
+
+- alias: "Set Vacation"
+  trigger:
+    - platform: state
+      entity_id: calendar.vacation
+      to: "on"
+  action:
+    - service: input_datetime.set_datetime
+      entity_id: input_datetime.vacation_start
+      data:
+        datetime: "{{ strptime(state_attr('calendar.vacation', 'start_time'), '%Y-%m-%d %H:%M:%S').date() }}"
+    - service: input_datetime.set_datetime
+      entity_id: input_datetime.vacation_end
+      data:
+        datetime: "{{ strptime(state_attr('calendar.vacation', 'end_time'), '%Y-%m-%d %H:%M:%S').date() }}"
 
 # https://community.home-assistant.io/t/snmp-bandwidth-monitor/7122
 - alias: "Monitor Inbound Internet Traffic"

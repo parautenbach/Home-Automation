@@ -113,8 +113,8 @@
     workday:
       friendly_name: General Workday
       value_template: >
-        {% set personal_holiday = as_timestamp(states('input_datetime.holiday_start')) <= as_timestamp(now().date()) <= as_timestamp(states('input_datetime.holiday_end')) %}
-        {{ is_state('binary_sensor.workday_sensor', 'on') and not personal_holiday }}
+        {% set on_vacation = as_timestamp(states('input_datetime.vacation_start')) <= as_timestamp(now().date()) <= as_timestamp(states('input_datetime.vacation_end')) %}
+        {{ is_state('binary_sensor.workday_sensor', 'on') and not on_vacation }}
 
 # https://github.com/home-assistant/core/issues/43188
 # https://github.com/home-assistant/core/pull/43869

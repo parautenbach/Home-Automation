@@ -1383,3 +1383,39 @@
         title: Proximity
         message: >-
           Distance: {{ states('proximity.home') }}{{ state_attr('proximity.home', 'unit_of_measurement') }}; Direction of travel: {{ state_attr('proximity.home', 'dir_of_travel') }}.
+
+- alias: "Shut Down Devices Before Loadshedding"
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: calendar.loadshedding
+      to: "on"
+  action:
+    - service: script.turn_on
+      target:
+        entity_id: script.shutdown_remote_host
+      data:
+        variables:
+          name: Thor
+          host: thor
+    - service: script.turn_on
+      target:
+        entity_id: script.shutdown_remote_host
+      data:
+        variables:
+          name: CCTV
+          host: cctv
+    - service: script.turn_on
+      target:
+        entity_id: script.shutdown_remote_host
+      data:
+        variables:
+          name: Rasplex
+          host: rasplex
+    - service: script.turn_on
+      target:
+        entity_id: script.shutdown_remote_host
+      data:
+        variables:
+          name: Rasplay
+          host: rasplay

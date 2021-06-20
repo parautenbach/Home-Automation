@@ -166,6 +166,7 @@ cards:
         - automation.set_light_theme
         - automation.set_pieters_driving_state
         - automation.set_vacation
+        - automation.shut_down_devices_before_loadshedding
         - automation.switch_off_bedlamp_when_plugging_in_phone
         - automation.switch_off_garage_light_when_the_last_garage_door_closed
         - automation.switch_off_light_when_timer_expires

@@ -667,6 +667,9 @@ turn_on_light_and_timer:
     light:
       description: "A light entity"
       example: "light.front_door_light"
+    duration:
+      description: "A duration in %H:%M:%S format"
+      example: "03:00:00"
   mode: single
   sequence:
     # https://www.home-assistant.io/docs/scripts/conditions/
@@ -676,7 +679,7 @@ turn_on_light_and_timer:
     - service: timer.start
       data:
         entity_id: "{{ light | replace('light.', 'timer.') }}_timer"
-        duration: "00:03:00"
+        duration: "{{ duration }}"
 
 force_on_smart_bulb:
   description: "Force a smart bulb to turn on"

@@ -964,6 +964,7 @@
         variables:
           # todo: renamde light to entity_id?
           light: light.front_door_light
+          duration: "00:03:00"
 
 - alias: "Switch On Garage Light When The First Garage Door Opened"
   # interesting edge case: if first cover opened before condition is true

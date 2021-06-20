@@ -223,6 +223,7 @@ cards:
               service: script.turn_on_light_and_timer
               service_data:
                 light: "[[[ return entity.entity_id; ]]]"
+                duration: "03:00:00"
             hold_action:
               action: more-info
               haptic: selection
@@ -287,6 +288,7 @@ cards:
               service: script.turn_on_light_and_timer
               service_data:
                 light: "[[[ return entity.entity_id; ]]]"
+                duration: "03:00:00"
             hold_action:
               action: more-info
               haptic: selection

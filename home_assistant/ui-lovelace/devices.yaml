@@ -171,6 +171,7 @@ cards:
         - automation.switch_off_garage_light_when_the_last_garage_door_closed
         - automation.switch_off_light_when_timer_expires
         - automation.switch_on_front_door_light_when_any_cover_opened
+        - automation.switch_on_or_extend_front_door_light_when_cover_closed
         - automation.switch_on_garage_light_when_the_first_garage_door_opened
         - automation.switch_on_lights_at_wake_up_time
         - automation.switch_on_lights_if_motion_is_detected

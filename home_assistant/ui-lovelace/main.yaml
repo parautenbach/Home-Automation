@@ -745,6 +745,12 @@ cards:
             name: Vacation End
           - entity: binary_sensor.workday
             name: Workday
+      - type: custom:atomic-calendar-revive
+        entities:
+          - entity: calendar.vacation
+            icon: mdi:palm-tree
+          - entity: calendar.housekeeping
+            icon: mdi:account-hard-hat
   - type: vertical-stack
     cards:
     - type: custom:weather-card

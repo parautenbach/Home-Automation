@@ -59,6 +59,10 @@ lovelace:
       type: module
     - url: /hacsfiles/lovelace-state-switch/state-switch.js
       type: module
+    - url: /hacsfiles/timer-bar-card/timer-bar-card.js
+      type: module
+    - url: /hacsfiles/atomic-calendar-revive/atomic-calendar-revive.js
+      type: module
     # manual
     - url: /local/floorplan/floorplan-card.js
       type: module

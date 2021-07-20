@@ -302,14 +302,6 @@
   name: 'Internet Traffic Out'
   entity_id: sensor.internet_speed_out
 
-- platform: google_travel_time
-  api_key: !secret google_maps_api_key
-  origin: zone.pieter_work_cape_town
-  destination: zone.home
-  options:
-    mode: driving
-    departure_time: now
-
 - platform: filter
   name: google_travel_time_filtered
   entity_id: sensor.google_travel_time_driving

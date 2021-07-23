@@ -746,6 +746,8 @@ cards:
           - entity: binary_sensor.workday
             name: Workday
       - type: custom:atomic-calendar-revive
+        showLocation: false
+        showMonth: true
         entities:
           - entity: calendar.vacation
             icon: mdi:palm-tree

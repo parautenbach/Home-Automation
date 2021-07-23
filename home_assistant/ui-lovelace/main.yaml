@@ -748,6 +748,7 @@ cards:
       - type: custom:atomic-calendar-revive
         showLocation: false
         showMonth: true
+        showProgressBar: false
         entities:
           - entity: calendar.vacation
             icon: mdi:palm-tree

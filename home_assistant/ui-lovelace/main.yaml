@@ -697,7 +697,7 @@ cards:
         # name: Current Travel Time
         icon: mdi:briefcase-clock
         entities:
-          - entity: sensor.google_travel_time_driving
+          - entity: sensor.google_travel_time
         hours_to_show: 24
         hour24: true
         smoothing: true

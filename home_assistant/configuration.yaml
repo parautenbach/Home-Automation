@@ -27,7 +27,8 @@ homeassistant:
 
 logger:
   default: warning
-  # logs:
+  logs:
+    homeassistant.components.ambee: debug
   #   homeassistant.components.tplink: debug
   #   homeassistant.components.shell_command: debug
   #   homeassistant.components.linux_battery: debug
@@ -171,47 +172,6 @@ homekit:
       name: Open Pedestrian Gap
 
 ios:
-  push:
-    categories:
-      - name: Contractor Mode Still Enabled Alert
-        identifier: "contractor_mode_still_enabled_alert"
-        actions:
-          - identifier: "DISABLE_CONTRACTOR_MODE"
-            title: "Disable"
-      - name: Contractor Mode Enabled
-        identifier: "contractor_mode_enabled"
-        actions:
-          - identifier: "DISABLE_CONTRACTOR_MODE"
-            title: "Disable"
-      - name: Contractor Mode Disabled
-        identifier: "contractor_mode_disabled"
-        actions:
-          - identifier: "ENABLE_CONTRACTOR_MODE"
-            title: "Enable"
-      - name: Guest Mode Enabled
-        identifier: "guest_mode_enabled"
-        actions:
-          - identifier: "DISABLE_GUEST_MODE"
-            title: "Disable"
-      - name: Guest Mode Disabled
-        identifier: "guest_mode_disabled"
-        actions:
-          - identifier: "ENABLE_GUEST_MODE"
-            title: "Enable"
-      - name: Cover Open
-        identifier: "cover_open"
-        actions:
-          - identifier: "CLOSE_COVER"
-            title: "Close now"
-          - identifier: "EXTEND_COVER_TIMEOUT_05_MIN"
-            title: "Wait 5 min"
-          - identifier: "EXTEND_COVER_TIMEOUT_10_MIN"
-            title: "Wait 10 min"
-      - name: Test
-        identifier: 'test'
-        actions:
-          - identifier: 'TEST'
-            title: 'Test Action'
 
 zone:
   - name: Home

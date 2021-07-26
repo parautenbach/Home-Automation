@@ -516,8 +516,7 @@
         title: "System"
         message: "Server disk usage is {{ states('sensor.disk_use_percent') }}%!"
         data:
-          push:
-            thread-id: "system-disk-space"
+          group: "system-disk-space"
 
 - alias: "Contractor Mode Enabled Alert"
   trigger:
@@ -530,10 +529,11 @@
         title: "Special Mode"
         message: "Contractor mode enabled."
         data:
-          push:
-            category: "contractor_mode_enabled"
-            # use threads but don't replace: we want to see whenever the state changed
-            thread-id: "contractor-mode"
+          actions:
+            - action: "DISABLE_CONTRACTOR_MODE"
+              title: "Disable"
+          # use threads but don't replace: we want to see whenever the state changed
+          group: "contractor-mode"
 
 - alias: "Contractor Mode Disabled Alert"
   trigger:
@@ -546,9 +546,10 @@
         title: "Special Mode"
         message: "Contractor mode disabled."
         data:
-          push:
-            category: "contractor_mode_disabled"
-            thread-id: "contractor-mode"
+          actions:
+            - action: "ENABLE_CONTRACTOR_MODE"
+              title: "Enable"
+          group: "contractor-mode"
 
 - alias: "Enable Contractor Mode"
   initial_state: true
@@ -595,15 +596,17 @@
         title: "Special Mode"
         message: "Contractor mode is still enabled."
         data:
-          push:
-            category: "contractor_mode_still_enabled_alert"
+          actions:
+            - action: "DISABLE_CONTRACTOR_MODE"
+              title: "Disable"
+          group: "contractor-mode"
 
 - alias: "Disable Contractor Mode From Alert Action"
   trigger:
     - platform: event
-      event_type: ios.notification_action_fired
+      event_type: mobile_app_notification_action
       event_data:
-        actionName: DISABLE_CONTRACTOR_MODE
+        action: DISABLE_CONTRACTOR_MODE
   action:
     - service: switch.turn_off
       entity_id: switch.contractor_mode
@@ -611,9 +614,9 @@
 - alias: "Enable Contractor Mode From Alert Action"
   trigger:
     - platform: event
-      event_type: ios.notification_action_fired
+      event_type: mobile_app_notification_action
       event_data:
-        actionName: ENABLE_CONTRACTOR_MODE
+        action: ENABLE_CONTRACTOR_MODE
   action:
     - service: switch.turn_on
       entity_id: switch.contractor_mode
@@ -623,6 +626,7 @@
     - platform: state
       entity_id: calendar.vacation
       to: "on"
+    # add daily trigger too in case changes are made to the event
   action:
     - service: input_datetime.set_datetime
       entity_id: input_datetime.vacation_start
@@ -740,20 +744,26 @@
           # https://github.com/home-assistant/iOS/issues/215
           # https://companion.home-assistant.io/docs/notifications/notifications-basic (to clear and/or replace; note the quotes around 'apns-collapse-id')
           # https://developer.apple.com/documentation/usernotifications/unnotificationrequest/1649634-identifier
-          apns_headers:
-            # group notifications by the timer entity
-            'apns-collapse-id': "{{ trigger.event.data.entity_id }}"
+          # by apple rules, critical notifications can't be grouped or replaced
+          # group notifications by the timer entity
+          group: "{{ trigger.event.data.entity_id }}"
+          actions:
+            - action: "CLOSE_COVER"
+              title: "Close now"
+            - action: "EXTEND_COVER_TIMEOUT_05_MIN"
+              title: "Wait 5 min"
+            - action: "EXTEND_COVER_TIMEOUT_10_MIN"
+              title: "Wait 10 min"
+          action_data:
+            # convert this to the cover entity to use in the automation that receives this
+            cover_id: "{{ trigger.event.data.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
+            timer_id: "{{ trigger.event.data.entity_id }}"
           push:
-            category: "cover_open"
             # perhaps one day it will be possible to use a template to only make it critical under certain conditions
             sound:
               name: default
               critical: 1
               volume: 1.0
-          action_data:
-            # convert this to the cover entity to use in the automation that receives this
-            cover_id: "{{ trigger.event.data.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
-            timer_id: "{{ trigger.event.data.entity_id }}"
     - service: timer.start
       data:
         entity_id: "{{ trigger.event.data.entity_id }}"
@@ -761,9 +771,9 @@
 - alias: "Close Cover From Alert Action"
   trigger:
     - platform: event
-      event_type: ios.notification_action_fired
+      event_type: mobile_app_notification_action
       event_data:
-        actionName: CLOSE_COVER
+        action: CLOSE_COVER
   action:
     - service: cover.close_cover
       data:
@@ -772,19 +782,31 @@
 - alias: "Extend Cover Timeout From Alert Action"
   trigger:
     - platform: event
-      event_type: ios.notification_action_fired
+      event_type: mobile_app_notification_action
       event_data:
-        actionName: EXTEND_COVER_TIMEOUT_05_MIN
+        action: EXTEND_COVER_TIMEOUT_05_MIN
     - platform: event
-      event_type: ios.notification_action_fired
+      event_type: mobile_app_notification_action
       event_data:
-        actionName: EXTEND_COVER_TIMEOUT_10_MIN
+        action: EXTEND_COVER_TIMEOUT_10_MIN
   action:
     - service: timer.start
       data:
+        # {
+        #   'id': '0', 
+        #   'idx': '0', 
+        #   'platform': 
+        #     'event', 
+        #     'event': <Event mobile_app_notification_action[R]: 
+        #       action=EXTEND_COVER_TIMEOUT_05_MIN, 
+        #       action_data=
+        #         cover_id=cover.rhs_garage_door, 
+        #         timer_id=timer.rhs_garage_door_timer>, 
+        #       'description': "event 'mobile_app_notification_action'"
+        # }
         entity_id: "{{ trigger.event.data.action_data.timer_id }}"
         # in seconds
-        duration: "{{ trigger.event.data.actionName | regex_findall_index(find='\\d+', index=0, ignorecase=False) | int * 60 }}"
+        duration: "{{ trigger.event.data.action | regex_findall_index(find='\\d+', index=0, ignorecase=False) | int * 60 }}"
 
 - alias: "Stop Cover Timer When Closed"
   initial_state: true
@@ -834,10 +856,9 @@
           {% endif %}
           {{ name }} has been closed after {{ ((as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) // 60) | int }} min.
         data:
-          apns_headers:
-            # the timer entity
-            # cover.rhs_garage_door -> timer.rhs_garage_door_timer
-            'apns-collapse-id': "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
+          # the timer entity
+          # cover.rhs_garage_door -> timer.rhs_garage_door_timer
+          group: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
 
 - alias: "Notify If Server Load High"
   initial_state: true
@@ -854,8 +875,7 @@
         # https://community.home-assistant.io/t/convert-trigger-for-into-a-relative-age/196979
         message: "The server load has been {{ states('sensor.load_15m') }} for {{ trigger.for.seconds // 60 }} minutes."
         data:
-          push:
-            thread-id: "system-load"
+          group: "system-load"
 
 - alias: "Set Pieter's Driving State"
   initial_state: true
@@ -900,8 +920,7 @@
         title: "Home"
         message: "The Internet is {{ 'available' if is_state('binary_sensor.internet_connection', 'on') else 'unavailable' }}."
         data:
-          push:
-            thread-id: "home-internet"
+          group: "home-internet"
 
 - alias: "Notify If Electricity Feed Status Changed"
   initial_state: true
@@ -930,8 +949,7 @@
           {% endif %}
           "The electricity feed has been {{ 'restored after ' ~  after ~ '.' if is_state('binary_sensor.electricity_feed', 'on') else 'cut.' }}"
         data:
-          push:
-            thread-id: "home-electricity"
+          group: "home-electricity"
 
 - alias: "Switch On Front Door Light When Any Cover Opened"
   initial_state: true
@@ -1142,8 +1160,7 @@
         title: "System"
         message: "No recent backup found."
         data:
-          push:
-            thread-id: "system-backup"
+          group: "system-backup"
 
 - alias: "Notify If New Backup Found"
   trigger:
@@ -1160,8 +1177,7 @@
         title: "System"
         message: "A new Home Assistant backup was made."
         data:
-          push:
-            thread-id: "system-backup"
+          group: "system-backup"
 
 - alias: "Low Server Battery"
   initial_state: true
@@ -1174,8 +1190,7 @@
         title: "System"
         message: "Server battery is running low!"
         data:
-          push:
-            thread-id: "system-battery"
+          group: "system-battery"
 
 - alias: "Disable Guest Mode When Getting Home"
   initial_state: true
@@ -1202,9 +1217,10 @@
         title: "Special Mode"
         message: "Guest mode enabled."
         data:
-          push:
-            category: "guest_mode_enabled"
-            thread-id: "guest-mode"
+          actions:
+            - action: "DISABLE_GUEST_MODE"
+              title: "Disable"
+          group: "guest-mode"
 
 - alias: "Guest Mode Disabled Alert"
   trigger:
@@ -1217,17 +1233,18 @@
         title: "Special Mode"
         message: "Guest mode disabled."
         data:
-          push:
-            category: "guest_mode_disabled"
-            thread-id: "guest-mode"
+          actions:
+            - action: "ENABLE_GUEST_MODE"
+              title: "Enable"
+          group: "guest-mode"
 
 - alias: "Enable Guest Mode From Alert Action"
   initial_state: true
   trigger:
     - platform: event
-      event_type: ios.notification_action_fired
+      event_type: mobile_app_notification_action
       event_data:
-        actionName: ENABLE_GUEST_MODE
+        action: ENABLE_GUEST_MODE
   action:
     - service: switch.turn_on
       entity_id: switch.guest_mode
@@ -1236,9 +1253,9 @@
   initial_state: true
   trigger:
     - platform: event
-      event_type: ios.notification_action_fired
+      event_type: mobile_app_notification_action
       event_data:
-        actionName: DISABLE_GUEST_MODE
+        action: DISABLE_GUEST_MODE
   action:
     - service: switch.turn_off
       entity_id: switch.guest_mode
@@ -1275,15 +1292,19 @@
           {{ name }} has been {{ action }}.
           {# todo: alert/call security company #}
         data:
-          apns_headers:
-            # group notifications by the timer entity
-            'apns-collapse-id': "{{ trigger.entity_id }}"
-          push:
-            category: "cover_open"
+          group: "{{ trigger.entity_id }}"
+          actions:
+            - action: "CLOSE_COVER"
+              title: "Close now"
+            - action: "EXTEND_COVER_TIMEOUT_05_MIN"
+              title: "Wait 5 min"
+            - action: "EXTEND_COVER_TIMEOUT_10_MIN"
+              title: "Wait 10 min"
           action_data:
             # convert this to the cover entity to use in the automation that receives this
             cover_id: "{{ trigger.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
             timer_id: "{{ trigger.entity_id }}"
+          # todo: make critical?
 
 - alias: "Alert If Gate Opened Or Closed When Not Supposed To"
   initial_state: true
@@ -1318,15 +1339,19 @@
           The main gate has been {{ action }}.
           {# todo: alert/call security company #}
         data:
-          apns_headers:
-            # group notifications by the timer entity
-            'apns-collapse-id': "{{ trigger.entity_id }}"
-          push:
-            category: "cover_open"
+          group: "{{ trigger.entity_id }}"
+          actions:
+            - action: "CLOSE_COVER"
+              title: "Close now"
+            - action: "EXTEND_COVER_TIMEOUT_05_MIN"
+              title: "Wait 5 min"
+            - action: "EXTEND_COVER_TIMEOUT_10_MIN"
+              title: "Wait 10 min"
           action_data:
             # convert this to the cover entity to use in the automation that receives this
             cover_id: "{{ trigger.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
             timer_id: "{{ trigger.entity_id }}"
+          # todo: make critical?
 
 - alias: "Save Last Smart Bulb State"
   initial_state: true

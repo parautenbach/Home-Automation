@@ -350,7 +350,7 @@
       to: "off"
       # to avoid the light turning off when there briefly is bright sunshine
       for:
-        minutes: 15
+        minutes: 5
   # todo: if anybody home?
   condition:
     condition: and
@@ -361,6 +361,10 @@
         after_offset: "01:30:00"
       - condition: state
         entity_id: binary_sensor.low_light
+        state: "off"
+      # not for as long as we're working from home
+      - condition: state
+        entity_id: binary_sensor.workday
         state: "off"
   action:
     - service: switch.turn_off

@@ -78,6 +78,9 @@
         - condition: sun
           before: sunrise
           before_offset: "-00:30:00"
+        - condition: state
+          entity_id: binary_sensor.low_light
+          state: "on"
   action:
     - service: switch.turn_on
       entity_id: switch.living_room_lamp

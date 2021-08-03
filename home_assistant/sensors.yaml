@@ -304,7 +304,7 @@
 
 - platform: filter
   name: google_travel_time_filtered
-  entity_id: sensor.google_travel_time_driving
+  entity_id: sensor.google_travel_time
   filters:
     filter: lowpass
     time_constant: 10

@@ -799,12 +799,12 @@ cards:
         extrema: true
     - type: custom:mini-graph-card
       entities:
+        # don't use this if you want to use thresholds: color overrides
         # sensor.sun_illuminance can be very unreliable (operationally); need to use my own light meter
-        # - entity: sensor.sun_illuminance
-        #   color: var(--custom-graph-color-yellow)
-        - entity: sensor.illuminance
-          # don't use this if you want to use thresholds: color overrides
+        - entity: sensor.sun_illuminance
           color: var(--custom-graph-color-yellow)
+        # - entity: sensor.illuminance
+        #   color: var(--custom-graph-color-yellow)
         - entity: sensor.solar_angle
           color: var(--custom-graph-color-red)
           y_axis: secondary

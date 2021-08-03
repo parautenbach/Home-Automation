@@ -105,6 +105,8 @@
       friendly_name: Low Light
       value_template: >
         {{ (states('sensor.illuminance') | int < 7500) or
+           (states('sensor.sun_illuminance') not in ['unavailable', 'unknown', 'none'] and
+            (states('sensor.sun_illuminance') | int < 15320)) or
            states('sensor.solar_angle') | int < 5 or
            'fog' in states('weather.home_hourly') or
            'cloudy' in states('weather.home_hourly') or

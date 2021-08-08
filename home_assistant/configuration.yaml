@@ -378,13 +378,17 @@ template:
       - platform: time_pattern
         minutes: "*"
     sensor:
+      # https://community.home-assistant.io/t/sensor-unavailable-offline-detection/147618
+      # https://community.home-assistant.io/t/how-to-list-all-sensors-with-state-unavailable-none-or-unknown/154606
       - name: Unavailable Entities
         icon: mdi:help-circle-outline
-        state: "{{ states | selectattr('state', 'in', ['unavailable', 'unknown', 'none']) | list | length }}"
+        state: "{{ states | selectattr('state', 'in', ['unavailable', 'unknown', 'none']) | reject('==', 'sensor.unavailable_entities') | list | length }}"
+        unit_of_measurement: entities
+        state_class: measurement
         attributes:
-          unavailable: "{{ states | selectattr('state', 'in', ['unavailable']) | map(attribute='entity_id') | list }}"
-          unknown: "{{ states | selectattr('state', 'in', ['unknown']) | map(attribute='entity_id') | list }}"
-          none: "{{ states | selectattr('state', 'in', ['none']) | map(attribute='entity_id') | list }}"
+          unavailable: "{{ states | selectattr('state', 'in', ['unavailable']) | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
+          unknown: "{{ states | selectattr('state', 'in', ['unknown']) | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
+          none: "{{ states | selectattr('state', 'in', ['none']) | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
 
 # https://community.home-assistant.io/t/control-recursion-in-the-folder-watcher-integration/200110
 # folder_watcher:

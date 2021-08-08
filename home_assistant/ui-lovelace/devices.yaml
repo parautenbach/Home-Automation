@@ -246,6 +246,23 @@ cards:
                   tr:nth-child(even) {
                     background-color: var(--table-row-background-color);
                   }
+      - type: custom:mini-graph-card
+        entities:
+          - entity: sensor.unavailable_entities
+        hours_to_show: 24
+        hour24: true
+        smoothing: false
+        points_per_hour: 60
+        aggregate_func: max
+        lower_bound: 0
+        line_width: 2
+        line_color: var(--custom-graph-color-red)
+        show:
+          extrema: true
+          name: true
+          icon: true
+          average: true
+          state: true
   - type: vertical-stack
     cards:
       - type: entities

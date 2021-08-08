@@ -373,6 +373,19 @@ google:
   client_secret: !secret google_calendar_client_secret
   track_new_calendar: false
 
+template:
+  - trigger:
+      - platform: time_pattern
+        minutes: "*"
+    sensor:
+      - name: Unavailable Entities
+        icon: mdi:help-circle-outline
+        state: "{{ states | selectattr('state', 'in', ['unavailable', 'unknown', 'none']) | list | length }}"
+        attributes:
+          unavailable: "{{ states | selectattr('state', 'in', ['unavailable']) | map(attribute='entity_id') | list }}"
+          unknown: "{{ states | selectattr('state', 'in', ['unknown']) | map(attribute='entity_id') | list }}"
+          none: "{{ states | selectattr('state', 'in', ['none']) | map(attribute='entity_id') | list }}"
+
 # https://community.home-assistant.io/t/control-recursion-in-the-folder-watcher-integration/200110
 # folder_watcher:
 #   - folder: /tmp/

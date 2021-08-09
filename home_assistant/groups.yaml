@@ -8,7 +8,6 @@ default_view:
     - binary_sensor.anybody_home
     - binary_sensor.pieter_present
     - binary_sensor.rouve_present
-    - group.ambient_sensor
     - group.living_room
     - group.multimedia
     - group.hk_3380
@@ -17,12 +16,6 @@ default_view:
     - group.device_ceres
     - group.device_rouve
     - group.server
-
-ambient_sensor:
-  name: Environment
-  entities:
-    - sensor.conditions_temperature
-    - sensor.conditions_humidity
 
 all_lights:
   name: All Lights
@@ -117,20 +110,6 @@ security_automations:
   entities:
     - automation.take_motion_snapshots
     - automation.switch_on_lights_if_motion_is_detected
-
-server:
-  name: Server
-  entities:
-    - sensor.disk_use_percent
-    - sensor.memory_use_percent
-    - sensor.processor_use
-    - sensor.load_1m
-    - sensor.load_5m
-    - sensor.load_15m
-    - sensor.server_cpu_temp
-    - sensor.network_throughput_in_enp3s0
-    - sensor.network_throughput_out_enp3s0
-    - sensor.last_boot
 
 family:
   name: Family

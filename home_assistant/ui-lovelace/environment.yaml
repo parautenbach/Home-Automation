@@ -1,0 +1,100 @@
+path: environment
+title: Environment
+icon: mdi:weather-partly-snowy-rainy
+badges: []
+cards:
+  - type: vertical-stack
+    cards:
+    - type: custom:weather-card
+      name: Stellies
+      entity: weather.home_hourly
+      current: true
+      details: true
+      forecast: true
+      hourly_forecast: true
+      number_of_forecasts: 5  # hours
+    - type: custom:weather-card
+      entity: weather.home
+      current: false
+      details: false
+      forecast: true
+      number_of_forecasts: 5  # days
+    - type: history-graph
+      hours_to_show: 72
+      entities:
+        - entity: weather.home
+          name: Today
+        - entity: sensor.weather_forecast_conditions_tomorrow
+          name: Tomorrow
+  - type: vertical-stack
+    cards:
+    - type: custom:mini-graph-card
+      name: Home
+      entities:
+        - entity: sensor.conditions_temperature
+          name: Inside Temperature
+          color: var(--custom-graph-color-yellow)
+        - entity: sensor.outside_temperature
+          name: Outside Temperature
+          color: var(--custom-graph-color-red)
+        - entity: sensor.conditions_humidity
+          name: Inside Humidity
+          color: var(--custom-graph-color-blue)
+          y_axis: secondary
+      hours_to_show: 24
+      hour24: true
+      smoothing: true
+      points_per_hour: 2  # every 30 min
+      line_width: 2
+      show:
+        extrema: true
+    - type: custom:mini-graph-card
+      entities:
+        # don't use this if you want to use thresholds: color overrides
+        # sensor.sun_illuminance can be very unreliable (operationally); need to use my own light meter
+        - entity: sensor.sun_illuminance
+          color: var(--custom-graph-color-yellow)
+        # - entity: sensor.illuminance
+        #   color: var(--custom-graph-color-yellow)
+        - entity: sensor.solar_angle
+          color: var(--custom-graph-color-red)
+          y_axis: secondary
+      hours_to_show: 24
+      hour24: true
+      smoothing: true
+      points_per_hour: 12  # every 5 min
+      line_width: 2
+      show:
+        extrema: true
+      # color_thresholds:
+      #   # https://community.home-assistant.io/t/outdoor-illuminance-template-sensor/228581
+      #   - value: 10  # min
+      #     color: var(--custom-graph-color-gray)
+      #   - value: 10000  # max
+      #     color: var(--custom-graph-color-yellow)
+    - type: history-graph
+      title: Low Light Sensor
+      hours_to_show: 24
+      entities:
+        - entity: binary_sensor.low_light
+          name: Low Light
+  - type: vertical-stack
+    cards:
+    - type: custom:mini-graph-card
+      name: UV Index
+      entities:
+        - entity: sensor.current_uv_index
+      hours_to_show: 24
+      hour24: true
+      smoothing: true
+      points_per_hour: 1
+      line_width: 2
+      show:
+        extrema: true
+      color_thresholds:
+        - value: 0
+          color: var(--custom-graph-color-green)
+        - value: 4
+          color: var(--custom-graph-color-yellow)
+        - value: 7
+          color: var(--custom-graph-color-red)

@@ -1486,3 +1486,17 @@
         variables:
           name: Rasplay
           host: rasplay
+
+- alias: "Update OpenUV every 20 minutes during the daytime"
+  trigger:
+    platform: time_pattern
+    minutes: "/20"
+  condition:
+    condition: and
+    conditions:
+      - condition: sun
+        after: sunrise
+      - condition: sun
+        before: sunset
+  action:
+    service: openuv.update_uv_index_data

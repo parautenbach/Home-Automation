@@ -80,21 +80,26 @@ cards:
           name: Low Light
   - type: vertical-stack
     cards:
-    - type: custom:mini-graph-card
-      name: UV Index
-      entities:
-        - entity: sensor.current_uv_index
-      hours_to_show: 24
-      hour24: true
-      smoothing: true
-      points_per_hour: 1
-      line_width: 2
-      show:
-        extrema: true
-      color_thresholds:
-        - value: 0
-          color: var(--custom-graph-color-green)
-        - value: 4
-          color: var(--custom-graph-color-yellow)
-        - value: 7
-          color: var(--custom-graph-color-red)
+      # https://www.wikihow.com/Compute-the-UV-Index
+      # https://www.ehso.com/uvIndexCalc.htm
+      # https://www.who.int/news-room/q-a-detail/radiation-ultraviolet-(uv)
+      # https://en.wikipedia.org/wiki/Ultraviolet_index
+      - type: custom:mini-graph-card
+        name: UV Index
+        entities:
+          - entity: sensor.current_uv_index
+            # color: var(--custom-graph-color-magenta)
+        hours_to_show: 24
+        hour24: true
+        smoothing: true
+        points_per_hour: 1
+        line_width: 2
+        show:
+          extrema: true
+        color_thresholds:
+          - value: 0
+            color: var(--custom-graph-color-green)
+          - value: 4
+            color: var(--custom-graph-color-yellow)
+          - value: 7
+            color: var(--custom-graph-color-red)

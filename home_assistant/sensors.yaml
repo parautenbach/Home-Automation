@@ -277,17 +277,10 @@
         {% set hours = (decimal_hours - (decimal_hours % 1)) | int %}
         {% set minutes = ((decimal_hours % 1) * 60) | int %}
         {{ '%02i:%02i'%(hours, minutes) }}
-    daylight:
-      # https://community.home-assistant.io/t/hours-of-daylight/59422/18
-      friendly_name: 'Daylight Length'
-      value_template: >
-        {% set nr = as_timestamp(state_attr('sun.sun','next_rising')) %}
-        {% set ns = as_timestamp(state_attr('sun.sun','next_setting')) %}
-        {% if nr > ns %}
-          {% set nr = nr - 60*60*24 %}
-        {% endif %}
-        {{ (ns - nr)|timestamp_custom('%H:%M',false) }}
-      icon_template: mdi:sun
+
+- platform: sun2
+  monitored_conditions:
+    - daylight
 
 - platform: snmp
   name: snmp_wan_in

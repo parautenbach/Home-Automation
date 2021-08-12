@@ -26,6 +26,10 @@ cards:
           name: Today
         - entity: sensor.weather_forecast_conditions_tomorrow
           name: Tomorrow
+    - type: entities
+      show_header_toggle: false
+      entities:
+        - sensor.daylight
   - type: vertical-stack
     cards:
     - type: custom:mini-graph-card

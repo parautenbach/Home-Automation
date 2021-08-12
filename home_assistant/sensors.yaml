@@ -282,6 +282,9 @@
   monitored_conditions:
     - daylight
 
+- platform: temperature_feels_like
+  source: weather.home
+
 - platform: snmp
   name: snmp_wan_in
   host: 192.168.0.1

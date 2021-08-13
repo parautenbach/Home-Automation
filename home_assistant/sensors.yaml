@@ -268,7 +268,7 @@
     outside_temperature:
       friendly_name: "Outside Temperature"
       value_template: >-
-        {{ state_attr('weather.home', 'temperature') }}
+        {{ state_attr('weather.home', 'temperature') | float }}
       icon_template: >-
         mdi:thermometer
     apple_tv_playing_hours_minutes:

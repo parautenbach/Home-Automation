@@ -47,6 +47,9 @@ cards:
         - entity: sensor.outside_temperature
           name: Outside Temperature
           color: var(--custom-graph-color-red)
+        - entity: sensor.home_temperature_feels_like
+          name: Feels Like
+          color: var(--custom-graph-color-magenta)
         - entity: sensor.conditions_humidity
           name: Inside Humidity
           color: var(--custom-graph-color-blue)

@@ -267,6 +267,7 @@
         {% endif %}
     outside_temperature:
       friendly_name: "Outside Temperature"
+      device_class: temperature
       value_template: >-
         {{ state_attr('weather.home', 'temperature') | float }}
       icon_template: >-

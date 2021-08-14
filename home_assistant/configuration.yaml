@@ -27,8 +27,8 @@ homeassistant:
 
 logger:
   default: warning
-  logs:
-    homeassistant.components.ambee: debug
+  # logs:
+  #   homeassistant.components.openuv: debug
   #   homeassistant.components.tplink: debug
   #   homeassistant.components.shell_command: debug
   #   homeassistant.components.linux_battery: debug

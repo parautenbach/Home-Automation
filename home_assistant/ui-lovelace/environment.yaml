@@ -31,6 +31,10 @@ cards:
       entities:
         - entity: sensor.home_temperature_feels_like
           name: Feels Like
+        - entity: sensor.uva
+          name: UVA
+        - entity: sensor.uvb
+          name: UVB
         # https://community.home-assistant.io/t/hours-of-daylight/59422/
         # https://community.home-assistant.io/t/enhanced-sun-component/63553
         - type: attribute

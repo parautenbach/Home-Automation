@@ -350,3 +350,7 @@ sensor.db_size:
   icon: mdi:database
 binary_sensor.updater:
   friendly_name: HA Updater
+sensor.uva:
+  icon: mdi:weather-sunny-alert
+sensor.uvb:
+  icon: mdi:weather-sunny-alert

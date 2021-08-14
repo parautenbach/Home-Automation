@@ -1,0 +1,26 @@
+- resource_template: 'http://weather.sun.ac.za/api/getSonbesie.php?start={{ utcnow() | as_timestamp | int - 300 }}&end={{ utcnow() | as_timestamp | int }}'
+  method: GET
+  scan_interval: 300
+  timeout: 15
+  sensor:
+    - name: Sun Illuminance
+      device_class: illuminance
+      # we're using the GHI (global horizontal irradiance here)
+      # https://www.ammonit.com/en/wind-solar-wissen/solarmessung
+      # https://www.nrel.gov/grid/solar-resource/solar-glossary.html#globalhorizontalradiation
+      # GHI = DHI + DNI · cos (θ) (where θ is the solar zenith angle)
+      # The total amount of radiation received from above by a horizontal surface. This value includes both Direct Normal Irradiation (DNI) and Diffuse Horizontal Irradiation (DHI).
+      # https://physics.stackexchange.com/questions/135618/rm-lux-and-w-m2-relationship
+      # https://www.nasa.gov/pdf/583137main_Inverse_Square_Law_of_Light.pdf
+      # Identification of residential electricity consumption profiles for building dynamic simulation through smart-meter data:
+      # There is no simple conversion from lux to W/m2, since it depends on the wavelength or color of the light. However, a simplification was adapted: for the sun light there is
+      # an approximate conversion of 0.0079 W/m2 per lux [72], valid for direct sunlight, while for daylight the appropriate conversion drops to 10% of that value [73].
+      # https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjFuLDfl6TwAhXISxUIHQ_yA8sQFjAFegQICBAD&url=https%3A%2F%2Ffenix.tecnico.ulisboa.pt%2FdownloadFile%2F1970719973966843%2FMasterThesis_70481.pdf&usg=AOvVaw35OzdODshLT6JlqkKa_hGJ
+      value_template: '{{ value_json[-1].SunWM_Avg | float | multiply(1/0.0079*10) }}'
+      unit_of_measurement: "lx"
+    - name: UVA
+      value_template: '{{ value_json[-1].UVA_Avg | float }}'
+      unit_of_measurement: "W/m²"
+    - name: UVB
+      value_template: '{{ value_json[-1].UVB_Avg | float }}'
+      unit_of_measurement: "W/m²"

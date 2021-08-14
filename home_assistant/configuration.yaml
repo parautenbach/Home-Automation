@@ -9,6 +9,7 @@ switch: !include switches.yaml
 utility_meter: !include utility_meters.yaml
 cover: !include covers.yaml
 script: !include scripts.yaml
+rest: !include rest.yaml
 
 homeassistant:
   name: Home

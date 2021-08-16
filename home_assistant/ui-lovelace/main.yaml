@@ -717,7 +717,9 @@ cards:
           - entity: input_datetime.vacation_end
             name: Vacation End
           - entity: binary_sensor.workday
-            name: Workday
+            name: Workday Today
+          - entity: binary_sensor.workday_tomorrow
+            name: Workday Tomorrow
       - type: custom:atomic-calendar-revive
         showLocation: false
         showMonth: true

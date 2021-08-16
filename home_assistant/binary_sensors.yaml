@@ -117,6 +117,11 @@
       value_template: >
         {% set on_vacation = as_timestamp(states('input_datetime.vacation_start')) <= as_timestamp(now().date()) <= as_timestamp(states('input_datetime.vacation_end')) %}
         {{ is_state('binary_sensor.workday_sensor', 'on') and not on_vacation }}
+    workday_tomorrow:
+      friendly_name: General Workday
+      value_template: >
+        {% set on_vacation_tomorrow = as_timestamp(states('input_datetime.vacation_start')) <= as_timestamp((now() + timedelta(days=1)).date()) <= as_timestamp(states('input_datetime.vacation_end')) %}
+        {{ is_state('binary_sensor.workday_sensor_tomorrow', 'on') and not on_vacation_tomorrow }}
 
 # https://github.com/home-assistant/core/issues/43188
 # https://github.com/home-assistant/core/pull/43869
@@ -214,3 +219,10 @@
   country: ZA
   workdays: [mon, tue, wed, thu, fri]
   excludes: [sat, sun, holiday]
+
+- platform: workday
+  name: Workday Sensor Tomorrow
+  country: ZA
+  workdays: [mon, tue, wed, thu, fri]
+  excludes: [sat, sun, holiday]
+  days_offset: 1  # tomorrow

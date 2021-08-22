@@ -5,27 +5,20 @@ badges: []
 cards:
   - type: custom:weather-card
     name: Stellies
-    entity: weather.home_hourly
+    entity: weather.openweathermap_hourly
     current: true
     details: true
     forecast: true
     hourly_forecast: true
-    number_of_forecasts: 10
+    number_of_forecasts: 5
   - type: custom:weather-card
-    entity: weather.home
+    entity: weather.openweathermap_daily
     current: false
     details: false
     forecast: true
-  - type: custom:weather-card-chart
-    title: Weather
-    weather: weather.home
-    mode: daily
-  - type: custom:weather-card-chart
-    title: Weather
-    weather: weather.home_hourly
-    mode: hourly
+    hourly_forecast: false
   - type: custom:weather-card
-    entity: weather.home
+    entity: weather.openweathermap_daily
     current: true
     details: true
     forecast: true
@@ -42,6 +35,10 @@ cards:
       - sensor.conditions_temperature
       - sensor.conditions_humidity
       - proximity.home
+      - light.shellybulbduo_8caab5616d67
+      - light.shellybulbduo_8caab56163ff
+      - input_boolean.pieter_present
+      - input_boolean.rouve_present
     show_header_toggle: true
   - type: history-graph
     title: Proximity

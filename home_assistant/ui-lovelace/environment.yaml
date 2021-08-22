@@ -32,10 +32,6 @@ cards:
       entities:
         - entity: sensor.openweathermap_feels_like_temperature
           name: Feels Like
-        - entity: sensor.uva_irradiance
-          name: UVA
-        - entity: sensor.uvb_irradiance
-          name: UVB
         # https://community.home-assistant.io/t/hours-of-daylight/59422/
         # https://community.home-assistant.io/t/enhanced-sun-component/63553
         - type: attribute
@@ -103,11 +99,11 @@ cards:
       # https://www.who.int/news-room/q-a-detail/radiation-ultraviolet-(uv)
       # https://en.wikipedia.org/wiki/Ultraviolet_index
       - type: custom:mini-graph-card
-        name: UV Index
+        name: UV
+        icon: mdi:weather-sunny-alert
         entities:
-          - entity: sensor.current_uv_index
           - entity: sensor.openweathermap_uv_index
-          - entity: sensor.owm_ultraviolet_index
+            name: UV Index
         hours_to_show: 24
         hour24: true
         smoothing: true
@@ -122,3 +118,49 @@ cards:
             color: var(--custom-graph-color-yellow)
           - value: 7
             color: var(--custom-graph-color-red)
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - entity: sensor.uva_irradiance
+            name: UVA
+          - entity: sensor.uvb_irradiance
+            name: UVB
+      - type: custom:mini-graph-card
+        name: Air Quality
+        icon: mdi:lungs
+        entities:
+          - entity: sensor.owm_pollution_overall_air_quality
+            name: AQI
+        hours_to_show: 24
+        hour24: true
+        smoothing: true
+        points_per_hour: 1
+        line_width: 2
+        show:
+          extrema: true
+        color_thresholds:
+          - value: 0
+            color: var(--custom-graph-color-green)
+          - value: 50
+            color: var(--custom-graph-color-yellow)
+          - value: 100
+            color: var(--custom-graph-color-red)
+      - type: entities
+        show_header_toggle: true
+        entities:
+          - entity: sensor.owm_pollution_fine_particles_pm2_5
+            name: Fine particles (PM2.5)
+          - entity: sensor.owm_pollution_coarse_particles_pm10
+            name: Fine particles (PM10)
+          - entity: sensor.owm_pollution_carbon_monoxide_co
+            name: Carbon monoxide (CO)
+          - entity: sensor.owm_pollution_nitrogen_monoxide_no
+            name: Nitrogen monoxide (NO)
+          - entity: sensor.owm_pollution_nitrogen_dioxide_no2
+            name: Nitrogen dioxide (NO₂)
+          - entity: sensor.owm_pollution_sulphur_dioxide_so2
+            name: Sulphur dioxide (SO₂)
+          - entity: sensor.owm_pollution_ammonia_nh3
+            name: Ammonia (NH₃)
+          - entity: sensor.owm_pollution_ozone_o3
+            name: Ozone (O₃)

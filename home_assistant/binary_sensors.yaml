@@ -108,10 +108,10 @@
            (states('sensor.sun_illuminance') not in ['unavailable', 'unknown', 'none'] and
             (states('sensor.sun_illuminance') | int < 1532)) or
            states('sensor.solar_angle') | int < 5 or
-           'fog' in states('weather.home_hourly') or
-           'cloudy' in states('weather.home_hourly') or
-           'rain' in states('weather.home_hourly') or
-           'pouring' in states('weather.home_hourly') }}
+           'fog' in states('weather.openweathermap_hourly') or
+           'cloudy' in states('weather.openweathermap_hourly') or
+           'rain' in states('weather.openweathermap_hourly') or
+           'pouring' in states('weather.openweathermap_hourly') }}
     workday:
       friendly_name: General Workday
       value_template: >

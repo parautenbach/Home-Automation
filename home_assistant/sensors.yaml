@@ -248,19 +248,19 @@
     weather_forecast_conditions_tomorrow:
       friendly_name: "Weather Conditions Tomorrow"
       value_template: >-
-        {{ state_attr('weather.home', 'forecast')[0]['condition'] }}
+        {{ state_attr('weather.openweathermap_daily', 'forecast')[0]['condition'] }}
       icon_template: >-
-        {% if state_attr('weather.home', 'forecast')[0]['condition'] == 'partlycloudy' %}
+        {% if state_attr('weather.openweathermap_daily', 'forecast')[0]['condition'] == 'partlycloudy' %}
           mdi:weather-partly-cloudy
         {% else %}
-          mdi:weather-{{ state_attr('weather.home', 'forecast')[0]['condition'] }}
+          mdi:weather-{{ state_attr('weather.openweathermap_daily', 'forecast')[0]['condition'] }}
         {% endif %}
     weather_forecast_precipitation_tomorrow:
       friendly_name: "Weather Precipitation Tomorrow"
       value_template: >-
-        {{ state_attr('weather.home', 'forecast')[0]['precipitation'] }}
+        {{ state_attr('weather.openweathermap_daily', 'forecast')[0]['precipitation'] }}
       icon_template: >-
-        {% if state_attr('weather.home', 'forecast')[0]['precipitation'] > 0 %}
+        {% if state_attr('weather.openweathermap_daily', 'forecast')[0]['precipitation'] > 0 %}
           mdi:water
         {% else %}
           mdi:water-off
@@ -269,7 +269,7 @@
       friendly_name: "Outside Temperature"
       device_class: temperature
       value_template: >-
-        {{ state_attr('weather.home', 'temperature') | float }}
+        {{ state_attr('weather.openweathermap_daily', 'temperature') | float }}
       icon_template: >-
         mdi:thermometer
     apple_tv_playing_hours_minutes:
@@ -282,9 +282,6 @@
 - platform: sun2
   monitored_conditions:
     - daylight
-
-- platform: temperature_feels_like
-  source: weather.home
 
 - platform: snmp
   name: snmp_wan_in
@@ -382,7 +379,7 @@
 # https://community.home-assistant.io/t/automations-to-turn-on-lights-based-on-actual-season/252830/19
 # https://www.engineeringtoolbox.com/light-level-rooms-d_708.html
 - platform: illuminance
-  entity_id: weather.home
+  entity_id: weather.openweathermap_daily
 
 - platform: mqtt
   name: MQTT Broker Received Messages (1min load)
@@ -453,3 +450,8 @@
   type: time
   start: "{{ now().replace(hour=0, minute=0, second=0) }}"
   end: "{{ now() }}"
+
+- platform: openweathermap_all
+  api_key: !secret open_weather_map_api_key
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude

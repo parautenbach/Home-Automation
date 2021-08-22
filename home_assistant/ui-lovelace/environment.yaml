@@ -7,29 +7,30 @@ cards:
     cards:
     - type: custom:weather-card
       name: Stellies
-      entity: weather.home_hourly
+      entity: weather.openweathermap_hourly
       current: true
       details: true
       forecast: true
       hourly_forecast: true
       number_of_forecasts: 5  # hours
     - type: custom:weather-card
-      entity: weather.home
+      entity: weather.openweathermap_daily
       current: false
       details: false
       forecast: true
+      hourly_forecast: false
       number_of_forecasts: 5  # days
     - type: history-graph
       hours_to_show: 72
       entities:
-        - entity: weather.home
+        - entity: weather.openweathermap_daily
           name: Today
         - entity: sensor.weather_forecast_conditions_tomorrow
           name: Tomorrow
     - type: entities
       show_header_toggle: false
       entities:
-        - entity: sensor.home_temperature_feels_like
+        - entity: sensor.openweathermap_feels_like_temperature
           name: Feels Like
         - entity: sensor.uva_irradiance
           name: UVA
@@ -51,7 +52,7 @@ cards:
         - entity: sensor.outside_temperature
           name: Outside Temperature
           color: var(--custom-graph-color-red)
-        - entity: sensor.home_temperature_feels_like
+        - entity: sensor.openweathermap_feels_like_temperature
           name: Feels Like
           color: var(--custom-graph-color-magenta)
         - entity: sensor.conditions_humidity
@@ -105,7 +106,8 @@ cards:
         name: UV Index
         entities:
           - entity: sensor.current_uv_index
-            # color: var(--custom-graph-color-magenta)
+          - entity: sensor.openweathermap_uv_index
+          - entity: sensor.owm_ultraviolet_index
         hours_to_show: 24
         hour24: true
         smoothing: true

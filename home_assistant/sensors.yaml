@@ -270,6 +270,7 @@
       device_class: temperature
       value_template: >-
         {{ state_attr('weather.openweathermap_daily', 'temperature') | float }}
+      unit_of_measurement: "°C"
       icon_template: >-
         mdi:thermometer
     apple_tv_playing_hours_minutes:

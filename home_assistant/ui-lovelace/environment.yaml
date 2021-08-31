@@ -5,99 +5,97 @@ badges: []
 cards:
   - type: vertical-stack
     cards:
-    - type: custom:weather-card
-      name: Stellies
-      entity: weather.openweathermap_hourly
-      current: true
-      details: true
-      forecast: true
-      hourly_forecast: true
-      number_of_forecasts: 5  # hours
-    - type: custom:weather-card
-      entity: weather.openweathermap_daily
-      current: false
-      details: false
-      forecast: true
-      hourly_forecast: false
-      number_of_forecasts: 5  # days
-    - type: history-graph
-      hours_to_show: 72
-      entities:
-        - entity: weather.openweathermap_daily
-          name: Today
-        - entity: sensor.weather_forecast_conditions_tomorrow
-          name: Tomorrow
-    - type: entities
-      show_header_toggle: false
-      entities:
-        - entity: sensor.openweathermap_feels_like_temperature
-          name: Feels Like
-        # https://community.home-assistant.io/t/hours-of-daylight/59422/
-        # https://community.home-assistant.io/t/enhanced-sun-component/63553
-        - type: attribute
-          entity: sensor.daylight
-          attribute: today_hms
+      - type: custom:weather-card
+        name: Stellies
+        entity: weather.openweathermap_hourly
+        current: true
+        details: true
+        forecast: true
+        hourly_forecast: true
+        number_of_forecasts: 5  # hours
+      - type: custom:weather-card
+        entity: weather.openweathermap_daily
+        current: false
+        details: false
+        forecast: true
+        hourly_forecast: false
+        number_of_forecasts: 5  # days
+      - type: history-graph
+        hours_to_show: 72
+        entities:
+          - entity: weather.openweathermap_daily
+            name: Today
+          - entity: sensor.weather_forecast_conditions_tomorrow
+            name: Tomorrow
+      - type: custom:mini-graph-card
+        name: Home
+        entities:
+          - entity: sensor.conditions_temperature
+            name: Inside Temperature
+            color: var(--custom-graph-color-yellow)
+          - entity: sensor.outside_temperature
+            name: Outside Temperature
+            color: var(--custom-graph-color-red)
+          - entity: sensor.openweathermap_feels_like_temperature
+            name: Feels Like
+            color: var(--custom-graph-color-magenta)
+          - entity: sensor.conditions_humidity
+            name: Inside Humidity
+            color: var(--custom-graph-color-blue)
+            y_axis: secondary
+        hours_to_show: 24
+        hour24: true
+        smoothing: true
+        points_per_hour: 2  # every 30 min
+        line_width: 2
+        show:
+          extrema: true
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - entity: sensor.openweathermap_feels_like_temperature
+            name: Feels Like
+          # https://community.home-assistant.io/t/hours-of-daylight/59422/
+          # https://community.home-assistant.io/t/enhanced-sun-component/63553
+          - type: attribute
+            entity: sensor.daylight
+            attribute: today_hms
   - type: vertical-stack
     cards:
-    - type: custom:mini-graph-card
-      name: Home
-      entities:
-        - entity: sensor.conditions_temperature
-          name: Inside Temperature
-          color: var(--custom-graph-color-yellow)
-        - entity: sensor.outside_temperature
-          name: Outside Temperature
-          color: var(--custom-graph-color-red)
-        - entity: sensor.openweathermap_feels_like_temperature
-          name: Feels Like
-          color: var(--custom-graph-color-magenta)
-        - entity: sensor.conditions_humidity
-          name: Inside Humidity
-          color: var(--custom-graph-color-blue)
-          y_axis: secondary
-      hours_to_show: 24
-      hour24: true
-      smoothing: true
-      points_per_hour: 2  # every 30 min
-      line_width: 2
-      show:
-        extrema: true
-    - type: custom:mini-graph-card
-      entities:
-        # don't use this if you want to use thresholds: color overrides
-        # sensor.sun_illuminance can be very unreliable (operationally); need to use my own light meter
-        - entity: sensor.sun_illuminance
-          color: var(--custom-graph-color-yellow)
-        # - entity: sensor.illuminance
-        #   color: var(--custom-graph-color-yellow)
-        - entity: sensor.solar_angle
-          color: var(--custom-graph-color-red)
-          y_axis: secondary
-      hours_to_show: 24
-      hour24: true
-      smoothing: true
-      points_per_hour: 12  # every 5 min
-      line_width: 2
-      show:
-        extrema: true
-      # color_thresholds:
-      #   # https://community.home-assistant.io/t/outdoor-illuminance-template-sensor/228581
-      #   - value: 10  # min
-      #     color: var(--custom-graph-color-gray)
-      #   - value: 10000  # max
-      #     color: var(--custom-graph-color-yellow)
-    - type: history-graph
-      title: Low Light Sensor
-      hours_to_show: 24
-      entities:
-        - entity: binary_sensor.low_light
-          name: Low Light
-  - type: vertical-stack
-    cards:
-      # https://www.wikihow.com/Compute-the-UV-Index
-      # https://www.ehso.com/uvIndexCalc.htm
-      # https://www.who.int/news-room/q-a-detail/radiation-ultraviolet-(uv)
-      # https://en.wikipedia.org/wiki/Ultraviolet_index
+      - type: custom:mini-graph-card
+        entities:
+          # don't use this if you want to use thresholds: color overrides
+          # sensor.sun_illuminance can be very unreliable (operationally); need to use my own light meter
+          - entity: sensor.sun_illuminance
+            color: var(--custom-graph-color-yellow)
+          # - entity: sensor.illuminance
+          #   color: var(--custom-graph-color-yellow)
+          - entity: sensor.solar_angle
+            color: var(--custom-graph-color-red)
+            y_axis: secondary
+        hours_to_show: 24
+        hour24: true
+        smoothing: true
+        points_per_hour: 12  # every 5 min
+        line_width: 2
+        show:
+          extrema: true
+        # color_thresholds:
+        #   # https://community.home-assistant.io/t/outdoor-illuminance-template-sensor/228581
+        #   - value: 10  # min
+        #     color: var(--custom-graph-color-gray)
+        #   - value: 10000  # max
+        #     color: var(--custom-graph-color-yellow)
+      - type: history-graph
+        title: Low Light Sensor
+        hours_to_show: 24
+        entities:
+          - entity: binary_sensor.low_light
+            name: Low Light
+        # https://www.wikihow.com/Compute-the-UV-Index
+        # https://www.ehso.com/uvIndexCalc.htm
+        # https://www.who.int/news-room/q-a-detail/radiation-ultraviolet-(uv)
+        # https://en.wikipedia.org/wiki/Ultraviolet_index
       - type: custom:mini-graph-card
         name: UV
         icon: mdi:weather-sunny-alert
@@ -126,6 +124,8 @@ cards:
             name: UVA
           - entity: sensor.uvb_irradiance
             name: UVB
+  - type: vertical-stack
+    cards:
       - type: custom:mini-graph-card
         name: Air Quality
         icon: mdi:lungs
@@ -147,6 +147,89 @@ cards:
             color: var(--custom-graph-color-yellow)
           - value: 100
             color: var(--custom-graph-color-red)
+      - type: horizontal-stack
+        cards:
+          # https://en.wikipedia.org/wiki/Air_quality_index
+          # https://www.environment.gov.za/sites/default/files/legislations/nemaqa_airquality_g32816gon1210_0.pdf
+          # https://www.airveda.com/blog/AQI-calculation-update
+          - type: gauge
+            name: PM2.5
+            entity: sensor.owm_pollution_fine_particles_pm2_5
+            min: 0
+            max: 400
+            severity:
+              green: 0
+              yellow: 90
+              red: 180
+          - type: gauge
+            name: PM10
+            entity: sensor.owm_pollution_coarse_particles_pm10
+            min: 0
+            max: 430
+            severity:
+              green: 0
+              yellow: 100
+              red: 250
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            name: NO₂
+            entity: sensor.owm_pollution_nitrogen_dioxide_no2
+            min: 0
+            max: 400
+            severity:
+              green: 0
+              yellow: 80
+              red: 180
+          - type: gauge
+            name: SO₂
+            entity: sensor.owm_pollution_sulphur_dioxide_so2
+            min: 0
+            max: 1600
+            severity:
+              green: 0
+              yellow: 80
+              red: 380
+          - type: gauge
+            name: O₃
+            entity: sensor.owm_pollution_ozone_o3
+            min: 0
+            max: 170
+            severity:
+              green: 0
+              yellow: 100
+              red: 170
+      - type: horizontal-stack
+        cards:
+          - type: gauge
+            name: "NO"
+            entity: sensor.owm_pollution_nitrogen_monoxide_no
+            # hard to find these... just setting it the same as for no2
+            # https://apps.who.int/iris/bitstream/handle/10665/39555/9241540648-eng.pdf
+            min: 0
+            max: 400
+            severity:
+              green: 0
+              yellow: 80
+              red: 180
+          - type: gauge
+            name: CO
+            entity: sensor.owm_pollution_carbon_monoxide_co
+            min: 0
+            max: 34000
+            severity:
+              green: 0
+              yellow: 2000
+              red: 10000
+          - type: gauge
+            name: NH₃
+            entity: sensor.owm_pollution_ammonia_nh3
+            min: 0
+            max: 1800
+            severity:
+              green: 0
+              yellow: 400
+              red: 800
       - type: entities
         show_header_toggle: true
         entities:

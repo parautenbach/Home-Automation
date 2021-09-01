@@ -354,3 +354,15 @@ sensor.uva_irradiance:
   icon: mdi:weather-sunny-alert
 sensor.uvb_irradiance:
   icon: mdi:weather-sunny-alert
+sensor.saaqis_pm_coarse:
+  icon: mdi:grain
+sensor.saaqis_pm_10:
+  icon: mdi:grain
+sensor.saaqis_pm_2_5:
+  icon: mdi:grain
+sensor.saaqis_o3:
+  icon: mdi:skull-outline
+sensor.saaqis_no2:
+  icon: mdi:smog
+sensor.saaqis_so2:
+  icon: mdi:smog

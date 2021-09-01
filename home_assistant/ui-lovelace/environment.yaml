@@ -234,18 +234,37 @@ cards:
         show_header_toggle: true
         entities:
           - entity: sensor.owm_pollution_fine_particles_pm2_5
+            type: custom:multiple-entity-row
             name: Fine particles (PM2.5)
+            state_header: OWM
+            entities:
+              - entity: sensor.saaqis_pm_2_5
+                name: SAAQIS
           - entity: sensor.owm_pollution_coarse_particles_pm10
+            type: custom:multiple-entity-row
             name: Fine particles (PM10)
-          - entity: sensor.owm_pollution_carbon_monoxide_co
-            name: Carbon monoxide (CO)
-          - entity: sensor.owm_pollution_nitrogen_monoxide_no
-            name: Nitrogen monoxide (NO)
+            state_header: OWM
+            entities:
+              - entity: sensor.saaqis_pm_10
+                name: SAAQIS
           - entity: sensor.owm_pollution_nitrogen_dioxide_no2
+            type: custom:multiple-entity-row
             name: Nitrogen dioxide (NO₂)
+            state_header: OWM
+            entities:
+              - entity: sensor.saaqis_no2
+                name: SAAQIS
           - entity: sensor.owm_pollution_sulphur_dioxide_so2
+            type: custom:multiple-entity-row
             name: Sulphur dioxide (SO₂)
-          - entity: sensor.owm_pollution_ammonia_nh3
-            name: Ammonia (NH₃)
+            state_header: OWM
+            entities:
+              - entity: sensor.saaqis_so2
+                name: SAAQIS
           - entity: sensor.owm_pollution_ozone_o3
+            type: custom:multiple-entity-row
             name: Ozone (O₃)
+            state_header: OWM
+            entities:
+              - entity: sensor.saaqis_o3
+                name: SAAQIS

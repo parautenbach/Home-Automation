@@ -55,3 +55,107 @@
     - name: UVB Irradiance
       value_template: '{{ value_json[-1].UVB_Avg | float }}'
       unit_of_measurement: "W/m²"
+- resource_template: >-
+    {# station ID: 156 (Stellenbosch) #}
+    {% set next = now() + timedelta(hours=1) %}
+    {% set ts = next | as_timestamp | timestamp_custom('%Y-%m-%dT%H:00') %}
+    https://saaqis.online:44301/v1/envista//stations/156/RunningAverage/?from={{ ts }}&to={{ ts }}&fromTimebase=60&toTimebase=1440&useBackWard=true&reportTimebase=60&precentValid=75&timeBeginning=false
+  headers:
+    Accept-Language: 'en-ZA;q=1.0'
+    User-Agent: 'SouthAfricaAQM/2.0.28 (com.Envitech.SouthAfricaAQM; build:1.0.0; iOS 14.7.1) Alamofire/4.0.1'
+    Accept: '*/*'
+    Authorization: !secret saaqis_api_token
+  method: GET
+  verify_ssl: false
+  scan_interval: 1800  # 30 min
+  timeout: 15
+  sensor:
+    - name: SAAQIS PM Coarse
+      value_template: >-
+        {% set data = (value_json.data | last).channels | selectattr('name', '==', 'PM Coarse') | first %}
+        {% if data.valid %}
+          {% if data.value >= 0 %}
+            {{ data.value }}
+          {% else %}
+            0
+          {% endif %}
+        {% else %}
+        None
+        {% endif %}
+      unit_of_measurement: "µg/m³"
+    - name: SAAQIS PM 10
+      value_template: >-
+        {% set data = (value_json.data | last).channels | selectattr('name', '==', 'PM10') | first %}
+        {% if data.valid %}
+          {% if data.value >= 0 %}
+            {{ data.value }}
+          {% else %}
+            0
+          {% endif %}
+        {% else %}
+        None
+        {% endif %}
+      unit_of_measurement: "µg/m³"
+    - name: SAAQIS PM 2.5
+      value_template: >-
+        {% set data = (value_json.data | last).channels | selectattr('name', '==', 'PM2.5') | first %}
+        {% if data.valid %}
+          {% if data.value >= 0 %}
+            {{ data.value }}
+          {% else %}
+            0
+          {% endif %}
+        {% else %}
+        None
+        {% endif %}
+      unit_of_measurement: "µg/m³"
+    # https://www2.dmu.dk/atmosphericenvironment/expost/database/docs/ppm_conversion.pdf
+    # https://cfpub.epa.gov/ncer_abstracts/index.cfm/fuseaction/display.files/fileid/14285
+    - name: SAAQIS O3
+      value_template: >-
+        {% set data = (value_json.data | last).channels | selectattr('name', '==', 'O3') | first %}
+        {% if data.valid %}
+          {% if data.value >= 0 %}
+            {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float %}
+            {% set const = 12.187 %}
+            {% set molecular_weight = 48 %}
+            {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
+          {% else %}
+            0
+          {% endif %}
+        {% else %}
+        None
+        {% endif %}
+      unit_of_measurement: "µg/m³"
+    - name: SAAQIS NO2
+      value_template: >-
+        {% set data = (value_json.data | last).channels | selectattr('name', '==', 'NO2') | first %}
+        {% if data.valid %}
+          {% if data.value >= 0 %}
+            {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float %}
+            {% set const = 12.187 %}
+            {% set molecular_weight = 46.0055 %}
+            {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
+          {% else %}
+            0
+          {% endif %}
+        {% else %}
+        None
+        {% endif %}
+      unit_of_measurement: "µg/m³"
+    - name: SAAQIS SO2
+      value_template: >-
+        {% set data = (value_json.data | last).channels | selectattr('name', '==', 'SO2') | first %}
+        {% if data.valid %}
+          {% if data.value >= 0 %}
+            {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float %}
+            {% set const = 12.187 %}
+            {% set molecular_weight = 64.066 %}
+            {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
+          {% else %}
+            0
+          {% endif %}
+        {% else %}
+        None
+        {% endif %}
+      unit_of_measurement: "µg/m³"

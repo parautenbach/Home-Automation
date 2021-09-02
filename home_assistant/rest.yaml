@@ -159,3 +159,40 @@
         None
         {% endif %}
       unit_of_measurement: "µg/m³"
+- resource: !secret breezometer_url
+  method: GET
+  scan_interval: 1800  # 30 min
+  timeout: 15
+  sensor:
+    - name: BreezoMeter PM 2.5
+      value_template: >-
+        {{ value_json.data.pollutants.pm25.concentration.value }}
+      unit_of_measurement: "µg/m³"
+    - name: BreezoMeter PM 10
+      value_template: >-
+        {{ value_json.data.pollutants.pm10.concentration.value }}
+      unit_of_measurement: "µg/m³"
+    - name: BreezoMeter O3
+      value_template: >-
+        {% set value_ppb = value_json.data.pollutants.o3.concentration.value %}
+        {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float %}
+        {% set const = 12.187 %}
+        {% set molecular_weight = 48 %}
+        {{ (value_ppb*const*molecular_weight/temp_kelvin) | round(3) }}
+      unit_of_measurement: "µg/m³"
+    - name: BreezoMeter NO2
+      value_template: >-
+        {% set value_ppb = value_json.data.pollutants.no2.concentration.value %}
+        {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float %}
+        {% set const = 12.187 %}
+        {% set molecular_weight = 46.0055 %}
+        {{ (value_ppb*const*molecular_weight/temp_kelvin) | round(3) }}
+      unit_of_measurement: "µg/m³"
+    - name: BreezoMeter SO2
+      value_template: >-
+        {% set value_ppb = value_json.data.pollutants.so2.concentration.value %}
+        {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float %}
+        {% set const = 12.187 %}
+        {% set molecular_weight = 64.066 %}
+        {{ (value_ppb*const*molecular_weight/temp_kelvin) | round(3) }}
+      unit_of_measurement: "µg/m³"

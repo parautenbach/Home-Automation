@@ -708,9 +708,6 @@ turn_on_light:
     - service: light.turn_on
       target:
         entity_id: "{{ light }}"
-    - service: light.turn_on
-      target:
-        entity_id: "{{ light }}"
       data:
         profile: "{{ profile }}"
 

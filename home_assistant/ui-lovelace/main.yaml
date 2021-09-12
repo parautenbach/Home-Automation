@@ -57,6 +57,8 @@ cards:
           # todo: light profiles/scenes
           - type: custom:button-card
             template: smart_bulb_light
+            variables:
+              profile: pieter
             name: Pieter's Side
             entity: light.smart_bulb_1
             icon: mdi:lamp
@@ -94,9 +96,12 @@ cards:
               haptic: selection
           - type: custom:button-card
             template: smart_bulb_light
+            variables:
+              profile: rouve
             name: Rouvé's Side
             entity: light.smart_bulb_2
             icon: mdi:lamp
+      # scenes: low, default, bright
       - type: horizontal-stack
         title: Inside Lights
         cards:

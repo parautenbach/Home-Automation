@@ -97,8 +97,12 @@ button_card_templates:
           icon:
             - color: var(--state-icon-unavailable-color)
     tap_action:
-      action: toggle
       haptic: light
+      action: call-service
+      service: script.toggle_light
+      service_data:
+        light: light.foyer_light
+        profile: "[[[ return variables.profile; ]]]"
     double_tap_action:
       action: call-service
       haptic: medium

@@ -161,7 +161,7 @@
       unit_of_measurement: "µg/m³"
 - resource: !secret breezometer_url
   method: GET
-  scan_interval: 1800  # 30 min
+  scan_interval: 3600  # 60 min
   timeout: 15
   sensor:
     - name: BreezoMeter PM 2.5

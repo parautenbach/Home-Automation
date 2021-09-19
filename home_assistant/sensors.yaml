@@ -129,12 +129,13 @@
         {% else %}
           unknown
         {% endif %}
+    # https://github.com/home-assistant/core/blob/dev/homeassistant/const.py#L571
     internet_speed_in:
       value_template: '{{ ((states.input_number.wan_traffic_delta_in.state  | float ) / 1000000 ) | round(3) }}'
-      unit_of_measurement: 'Mbps'
+      unit_of_measurement: 'Mbit/s'
     internet_speed_out:
       value_template: '{{ ((states.input_number.wan_traffic_delta_out.state | float ) / 1000000 ) | round(3) }}'
-      unit_of_measurement: 'Mbps'
+      unit_of_measurement: 'Mbit/s'
     internet_usage_in:
       value_template: "{{ ((states('sensor.snmp_wan_in')  | float ) / 1000000000 ) | round(3) }}"
       unit_of_measurement: 'GB'

@@ -22,6 +22,7 @@ homeassistant:
     - /tmp
     - /mnt/nas/Backups/home_assistant/
     - /sys/class/power_supply/
+    - /home/homeassistant/.homeassistant/downloads
   media_dirs:
     gallery: /home/homeassistant/.homeassistant/www/gallery
   customize: !include customize.yaml
@@ -308,6 +309,7 @@ shell_command:
   trim_snapshots: "ls /home/homeassistant/.homeassistant/www/gallery/ | sort -r | tail -n +6 | xargs -I {} rm -- /home/homeassistant/.homeassistant/www/gallery/{}"
   shudown_remote_host: "/home/homeassistant/scripts/shutdown_remote_host.sh {{ host }}"
   make_backup: "/home/homeassistant/scripts/backup.sh"
+  download_latest_dam_levels: "/home/homeassistant/scripts/download_latest_dam_levels.sh"
 
 timer:
   # format: <entity_id>_timer

@@ -124,6 +124,26 @@ cards:
             name: UVA
           - entity: sensor.uvb_irradiance
             name: UVB
+      - type: entities
+        title: Dam Levels
+        show_header_toggle: false
+        entities:
+          - entity: sensor.steenbras_upper_dam_level
+            name: Steenbras Upper
+          - entity: sensor.steenbras_lower_dam_level
+            name: Steenbras Lower
+          - entity: sensor.bergrivier_dam_level
+            name: Bergrivier
+          - entity: sensor.theewaterskloof_dam_level
+            name: Theewaterskloof
+          - entity: sensor.voelvlei_dam_level
+            name: Voëlvlei
+          - entity: sensor.wemmershoek_dam_level
+            name: Wemmershoek
+          - entity: sensor.total_dam_level
+            name: Overall
+          - entity: sensor.dam_levels_last_update
+            name: Last Update
   - type: vertical-stack
     cards:
       - type: custom:mini-graph-card

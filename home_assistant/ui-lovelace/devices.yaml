@@ -141,6 +141,7 @@ cards:
         - automation.disable_contractor_mode_from_alert_action
         - automation.disable_guest_mode_from_alert_action
         - automation.disable_guest_mode_when_getting_home
+        - automation.download_damlevels_data
         - automation.enable_contractor_mode
         - automation.enable_contractor_mode_from_alert_action
         - automation.enable_guest_mode_from_alert_action

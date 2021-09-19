@@ -467,6 +467,9 @@
 
 # scraping example if i even want to get data from http://www.dwa.gov.za/Hydrology/Weekly/ProvinceWeek.aspx?region=WC instead
 # https://community.home-assistant.io/t/hours-of-daylight/59422/152
+# fixed decimals formatting:
+# https://stackoverflow.com/questions/12681036/is-there-a-direct-approach-to-format-numbers-in-jinja2/12681178
+# https://support.sendwithus.com/jinja/formatting_numbers/
 - platform: file
   file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
   name: Steenbras Lower Dam Level

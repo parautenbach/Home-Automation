@@ -465,6 +465,8 @@
   value_template: "{{ '%0.2f'| format(value.split(',')[3] | round(2)) }}"
   scan_interval: 86400
 
+# scraping example if i even want to get data from http://www.dwa.gov.za/Hydrology/Weekly/ProvinceWeek.aspx?region=WC instead
+# https://community.home-assistant.io/t/hours-of-daylight/59422/152
 - platform: file
   file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
   name: Steenbras Lower Dam Level

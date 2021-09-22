@@ -383,3 +383,5 @@ sensor.total_dam_level:
 sensor.dam_levels_last_update:
   icon: mdi:update
   device_class: "timestamp"
+sensor.owm_pollution_overall_air_quality:
+  unit_of_measurement: aqi

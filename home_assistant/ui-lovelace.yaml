@@ -101,7 +101,7 @@ button_card_templates:
       action: call-service
       service: script.toggle_light
       service_data:
-        light: light.foyer_light
+        light: "[[[ return entity.entity_id; ]]]"
         profile: "[[[ return variables.profile; ]]]"
     double_tap_action:
       action: call-service

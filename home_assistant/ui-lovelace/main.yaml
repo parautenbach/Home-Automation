@@ -676,6 +676,7 @@ cards:
           - entity: sensor.google_travel_time
         hours_to_show: 24
         hour24: true
+        lower_bound: 0
         smoothing: true
         points_per_hour: 4  # every 15 min
         line_width: 2
@@ -753,6 +754,7 @@ cards:
             - entity: sensor.current_power
           hours_to_show: 24
           hour24: true
+          lower_bound: 0
           smoothing: true
           points_per_hour: 12  # every 5 min
           line_width: 2

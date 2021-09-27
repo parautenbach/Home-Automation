@@ -74,3 +74,14 @@ cards:
     line_width: 2
     show:
       extrema: true
+  - type: statistics-graph
+    entities:
+      - sensor.total_electricity_consumption
+    days_to_show: 7
+    chart_type: bar
+    stat_types:
+      - min
+      - max
+      - mean
+      - sum
+    title: Power Consumption

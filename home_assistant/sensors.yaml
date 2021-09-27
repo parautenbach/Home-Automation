@@ -372,10 +372,11 @@
 - platform: integration
   name: "Total Electricity Consumption"
   source: sensor.current_energy
-  round: 3
-  unit_prefix: k
+  method: left
   unit_time: min
+  round: 3
   unit: "kWh"
+  unit_prefix: k
 
 # https://community.home-assistant.io/t/outdoor-illuminance-template-sensor/228581
 # https://community.home-assistant.io/t/automations-to-turn-on-lights-based-on-actual-season/252830/19

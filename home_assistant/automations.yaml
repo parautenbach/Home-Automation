@@ -1046,12 +1046,11 @@
 - alias: "Switch On Or Extend Front Door Light When Cover Closed"
   initial_state: true
   trigger:
-    platform: state
-    entity_id:
-      - cover.main_gate
-      - cover.lhs_garage_door
-      - cover.rhs_garage_door
-    to: "closed"
+    - platform: event
+      event_type: call_service
+      event_data:
+        domain: cover
+        service: close_cover
   mode: queued
   condition:
     - condition: and
@@ -1067,7 +1066,7 @@
             {# if the timer has already run out or it's about to, turn it on for another brief moment #}
             {% set timer = 'timer.front_door_light_timer' %}
             {% set finishes_at = strptime(state_attr(timer, 'finishes_at'), '%Y-%m-%dT%H:%M:%S%z') %}
-            {{ finishes_at == None or (finishes_at - now()).seconds < 30 }}
+            {{ finishes_at == None or (finishes_at - now()).seconds < 60 }}
   action:
     - service: script.turn_on
       target:

@@ -351,8 +351,6 @@ cards:
             entities:
               - entity: sensor.saaqis_pm_2_5
                 name: SAAQIS
-              - entity: sensor.breezometer_pm_2_5
-                name: BreezoMeter
           - entity: sensor.owm_pollution_coarse_particles_pm10
             type: custom:multiple-entity-row
             name: PM10
@@ -360,8 +358,6 @@ cards:
             entities:
               - entity: sensor.saaqis_pm_10
                 name: SAAQIS
-              - entity: sensor.breezometer_pm_10
-                name: BreezoMeter
           - entity: sensor.owm_pollution_nitrogen_dioxide_no2
             type: custom:multiple-entity-row
             name: NO₂
@@ -369,8 +365,6 @@ cards:
             entities:
               - entity: sensor.saaqis_no2
                 name: SAAQIS
-              - entity: sensor.breezometer_no2
-                name: BreezoMeter
           - entity: sensor.owm_pollution_sulphur_dioxide_so2
             type: custom:multiple-entity-row
             name: SO₂
@@ -378,8 +372,6 @@ cards:
             entities:
               - entity: sensor.saaqis_so2
                 name: SAAQIS
-              - entity: sensor.breezometer_so2
-                name: BreezoMeter
           - entity: sensor.owm_pollution_ozone_o3
             type: custom:multiple-entity-row
             name: O₃
@@ -387,5 +379,3 @@ cards:
             entities:
               - entity: sensor.saaqis_o3
                 name: SAAQIS
-              - entity: sensor.breezometer_o3
-                name: BreezoMeter

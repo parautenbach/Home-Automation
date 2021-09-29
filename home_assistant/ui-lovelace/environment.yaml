@@ -146,27 +146,118 @@ cards:
             name: Last Update
   - type: vertical-stack
     cards:
-      - type: custom:mini-graph-card
-        name: Air Quality
-        icon: mdi:lungs
-        entities:
-          - entity: sensor.owm_pollution_overall_air_quality
-            name: AQI
-        lower_bound: 0
-        hours_to_show: 24
-        hour24: true
-        smoothing: true
-        points_per_hour: 1
-        line_width: 2
-        show:
-          extrema: true
-        color_thresholds:
-          - value: 0
-            color: var(--custom-graph-color-green)
-          - value: 50
-            color: var(--custom-graph-color-yellow)
-          - value: 100
-            color: var(--custom-graph-color-red)
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+          - type: custom:mini-graph-card
+            name: Air Quality
+            icon: mdi:lungs
+            entities:
+              - entity: sensor.owm_pollution_overall_air_quality
+                name: AQI
+            lower_bound: 0
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 1
+            line_width: 2
+            show:
+              extrema: true
+            color_thresholds:
+              - value: 0
+                color: var(--custom-graph-color-green)
+              - value: 50
+                color: var(--custom-graph-color-yellow)
+              - value: 100
+                color: var(--custom-graph-color-red)
+          - type: custom:mini-graph-card
+            name: PM 2.5
+            icon: mdi:grain
+            entities:
+              - entity: sensor.owm_pollution_fine_particles_pm2_5
+                name: OWM
+              - entity: sensor.saaqis_pm_2_5
+                name: SAAQIS
+                y_axis: secondary
+            lower_bound: 0
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 1
+            line_width: 2
+            show:
+              extrema: true
+          - type: custom:mini-graph-card
+            name: PM 10
+            icon: mdi:grain
+            entities:
+              - entity: sensor.owm_pollution_coarse_particles_pm10
+                name: OWM
+              - entity: sensor.saaqis_pm_10
+                name: SAAQIS
+                y_axis: secondary
+            lower_bound: 0
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 1
+            line_width: 2
+            show:
+              extrema: true
+          - type: custom:mini-graph-card
+            name: NO₂
+            icon: mdi:smog
+            entities:
+              - entity: sensor.owm_pollution_nitrogen_dioxide_no2
+                name: OWM
+              - entity: sensor.saaqis_no2
+                name: SAAQIS
+                y_axis: secondary
+            lower_bound: 0
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 1
+            line_width: 2
+            show:
+              extrema: true
+          - type: custom:mini-graph-card
+            name: SO₂
+            icon: mdi:smog
+            entities:
+              - entity: sensor.owm_pollution_sulphur_dioxide_so2
+                name: OWM
+              - entity: sensor.saaqis_so2
+                name: SAAQIS
+                y_axis: secondary
+            lower_bound: 0
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 1
+            line_width: 2
+            show:
+              extrema: true
+          - type: custom:mini-graph-card
+            name: O₃
+            icon: mdi:skull-outline
+            entities:
+              - entity: sensor.owm_pollution_ozone_o3
+                name: OWM
+              - entity: sensor.saaqis_o3
+                name: SAAQIS
+                y_axis: secondary
+            lower_bound: 0
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 1
+            line_width: 2
+            show:
+              extrema: true
       - type: horizontal-stack
         cards:
           # https://en.wikipedia.org/wiki/Air_quality_index

@@ -68,6 +68,8 @@ lovelace:
       type: module
     - url: /hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js
       type: module
+    - url: /hacsfiles/swipe-card/swipe-card.js
+      type: module
     # manual
     - url: /local/floorplan/floorplan-card.js
       type: module

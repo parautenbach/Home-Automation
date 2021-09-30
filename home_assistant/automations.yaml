@@ -486,6 +486,7 @@
   condition:
     - condition: and
       conditions:
+        # prevent a glitch in case the cover was recently closed
         - condition: state
           entity_id: cover.main_gate
           state: "closed"
@@ -535,9 +536,12 @@
   condition:
     - condition: and
       conditions:
+        # prevent a glitch in case the cover was recently closed
         - condition: state
           entity_id: cover.rhs_garage_door
           state: "closed"
+          for:
+            minutes: 5
         - condition: time
           after: "07:00:00"
           before: "23:00:00"

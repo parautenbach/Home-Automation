@@ -469,6 +469,9 @@
           after: sunset
         - condition: sun
           before: sunrise
+    - condition: state
+      entity_id: light.front_door_light
+      state: "off"
   action:
     - service: light.turn_on
       entity_id: light.front_door_light

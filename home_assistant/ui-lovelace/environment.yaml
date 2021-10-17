@@ -60,6 +60,7 @@ cards:
           - type: attribute
             entity: sensor.daylight
             attribute: today_hms
+          - entity: sensor.moon
   - type: vertical-stack
     cards:
       - type: custom:mini-graph-card

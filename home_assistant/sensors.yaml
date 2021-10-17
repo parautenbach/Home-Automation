@@ -518,3 +518,5 @@
   name: Dam Levels Last Update
   value_template: "{{ strptime(value.split(',')[0], '%d-%b-%y').date() }}"
   scan_interval: 86400
+
+- platform: moon

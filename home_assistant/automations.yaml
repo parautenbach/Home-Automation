@@ -701,7 +701,8 @@
     - service: input_datetime.set_datetime
       entity_id: input_datetime.vacation_end
       data:
-        datetime: "{{ strptime(state_attr('calendar.vacation', 'end_time'), '%Y-%m-%d %H:%M:%S').date() }}"
+        # all-day events are set by google to until midnight of the next day
+        datetime: "{{ (strptime(state_attr('calendar.vacation', 'end_time'), '%Y-%m-%d %H:%M:%S') - timedelta(seconds=1)).date() }}"
 
 # https://community.home-assistant.io/t/snmp-bandwidth-monitor/7122
 - alias: "Monitor Inbound Internet Traffic"

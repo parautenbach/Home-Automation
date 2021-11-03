@@ -1131,6 +1131,26 @@
     - service: light.turn_off
       entity_id: light.garage_light
 
+# needed because of poor wifi connectivity
+# if the last door has been closed for a minute and the light is still on, turn it off
+- alias: "Switch Off Garage Light When The Last Garage Door Was Already Closed"
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id:
+      - group.garage_doors
+    to: "closed"
+    for:
+      minutes: 1
+  mode: queued
+  condition:
+    - condition: state
+      entity_id: light.garage_light
+      state: "on"
+  action:
+    - service: light.turn_off
+      entity_id: light.garage_light
+
 - alias: "Update Security Camera Snapshot Gallery"
   trigger:
     - platform: state

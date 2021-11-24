@@ -1141,7 +1141,7 @@
       - group.garage_doors
     to: "closed"
     for:
-      minutes: 1
+      minutes: 5
   mode: queued
   condition:
     - condition: state

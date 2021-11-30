@@ -274,6 +274,7 @@
       unit_of_measurement: "°C"
       icon_template: >-
         mdi:thermometer
+    # consider https://www.home-assistant.io/integrations/history_stats/
     apple_tv_playing_hours_minutes:
       value_template: >
         {% set decimal_hours = states('sensor.apple_tv_playing') | float %}
@@ -520,3 +521,20 @@
   scan_interval: 86400
 
 - platform: moon
+
+# https://community.home-assistant.io/t/prevent-zone-automation-from-triggering-when-briefly-entering-zone/360107/4
+- platform: history_stats
+  name: Duration Pieter Work Cape Town
+  entity_id: person.pieter_rautenbach
+  state: "Work (Takealot HQ)"
+  type: time
+  start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+  end: "{{ now() }}"
+
+- platform: history_stats
+  name: Duration Pieter Work Stellenbosch
+  entity_id: person.pieter_rautenbach
+  state: "Work (Takealot STB)"
+  type: time
+  start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+  end: "{{ now() }}"

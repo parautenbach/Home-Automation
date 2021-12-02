@@ -374,6 +374,8 @@ cards:
               power: true
               volume: false
               mute: true
+              runtime: false
+              runtime_remaining: false
             idle_view:
               when_idle: false
               when_paused: false

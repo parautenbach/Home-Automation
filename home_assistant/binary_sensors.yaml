@@ -91,7 +91,7 @@
       friendly_name: HACS Updater
       device_class: update
       value_template: >
-       {{ states('sensor.hacs') | int > 0 }}
+       {{ states('sensor.hacs') | int(0) > 0 }}
     ha_breaking_changes:
       friendly_name: HA Breaking Changes
       device_class: update

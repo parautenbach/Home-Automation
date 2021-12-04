@@ -116,7 +116,7 @@
         {% set data = (value_json.data | last).channels | selectattr('name', '==', 'O3') | first %}
         {% if data.valid %}
           {% if data.value >= 0 %}
-            {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float %}
+            {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
             {% set const = 12.187 %}
             {% set molecular_weight = 48 %}
             {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
@@ -132,7 +132,7 @@
         {% set data = (value_json.data | last).channels | selectattr('name', '==', 'NO2') | first %}
         {% if data.valid %}
           {% if data.value >= 0 %}
-            {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float %}
+            {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
             {% set const = 12.187 %}
             {% set molecular_weight = 46.0055 %}
             {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
@@ -148,7 +148,7 @@
         {% set data = (value_json.data | last).channels | selectattr('name', '==', 'SO2') | first %}
         {% if data.valid %}
           {% if data.value >= 0 %}
-            {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float %}
+            {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
             {% set const = 12.187 %}
             {% set molecular_weight = 64.066 %}
             {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}

@@ -26,10 +26,10 @@
       # https://www.jvejournals.com/article/21667
       # https://bg.copernicus.org/preprints/6/10625/2009/bgd-6-10625-2009.pdf
       # https://www.nrel.gov/docs/legosti/old/2436.pdf
-      value_template: '{{ value_json[-1].SunWM_Avg | float | multiply(1/0.0079) }}'
+      value_template: "{{ value_json[-1].SunWM_Avg | float | multiply(1/0.0079) if value_json else 'unknown' }}"
       unit_of_measurement: "lx"
     - name: Sun Irradiance
-      value_template: '{{ value_json[-1].SunWM_Avg | float }}'
+      value_template: "{{ value_json[-1].SunWM_Avg | float if value_json else 'unknown' }}"
       unit_of_measurement: "W/m²"
     # https://www.epa.gov/sunsafety/calculating-uv-index-0
     # https://www.canada.ca/en/conservation-institute/services/conservation-preservation-publications/canadian-conservation-institute-notes/measurement-ultraviolet-radiation.html
@@ -50,10 +50,10 @@
     # https://www.who.int/uv/publications/Protecting_Workers_UV_pub.pdf
     # http://strang.smhi.se/extraction/units-conversion.html
     - name: UVA Irradiance
-      value_template: '{{ value_json[-1].UVA_Avg | float }}'
+      value_template: "{{ value_json[-1].UVA_Avg | float if value_json else 'unknown' }}"
       unit_of_measurement: "W/m²"
     - name: UVB Irradiance
-      value_template: '{{ value_json[-1].UVB_Avg | float }}'
+      value_template: "{{ value_json[-1].UVB_Avg | float if value_json else 'unknown' }}"
       unit_of_measurement: "W/m²"
 - resource_template: >-
     {# station ID: 156 (Stellenbosch) #}

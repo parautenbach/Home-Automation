@@ -77,7 +77,7 @@
       device_class: problem
       # get the last file, extract the date and compare
       value_template: >-
-        {% set last_backup = strptime(states('sensor.last_backup'), "%Y-%m-%dT%H:%M:%S%z") %}
+        {% set last_backup = strptime(states('sensor.last_backup'), "%Y-%m-%dT%H:%M:%S%z", None) %}
         {{ 'on' if ((states('sensor.last_backup') == 'unknown') or ((now() - last_backup).days > 4)) else 'off' }}
       icon_template: >-
         {{ state_attr('sensor.last_backup', 'icon') }}

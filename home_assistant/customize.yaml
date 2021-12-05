@@ -385,3 +385,9 @@ sensor.dam_levels_last_update:
   device_class: "timestamp"
 sensor.owm_pollution_overall_air_quality:
   unit_of_measurement: aqi
+sensor.shellybutton1_c45bbe6bacf8_battery:
+  friendly_name: Pieter's Bedside Button
+sensor.shellybutton1_c45bbe6a3544_battery:
+  friendly_name: Rouvé's Bedside Button
+sensor.shellybutton1_c45bbe6a3a80_battery:
+  friendly_name: Dining Room Button

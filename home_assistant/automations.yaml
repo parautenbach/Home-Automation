@@ -1594,3 +1594,86 @@
       at: "05:00:00"
   action:
     - service: shell_command.download_latest_dam_levels
+- alias: "Toggle Pieter's Bedside Lamp"
+  initial_state: true
+  trigger:
+    - platform: event
+      event_type: shelly.click
+      event_data:
+        click_type: single
+        device_id: ed95f30c451de3426bc63770935ebc18
+  action:
+    - service: script.turn_on
+      target:
+        entity_id: script.toggle_light
+      data:
+        variables:
+          light: light.smart_bulb_1
+          profile: pieter
+
+- alias: "Pieter's Bedside Lamp Full Brightness"
+  initial_state: true
+  trigger:
+    - platform: event
+      event_type: shelly.click
+      event_data:
+        click_type: double
+        device_id: ed95f30c451de3426bc63770935ebc18
+  action:
+    - service: script.turn_on
+      target:
+        entity_id: script.turn_on_light
+      data:
+        variables:
+          light: light.smart_bulb_1
+          profile: security
+
+- alias: "Toggle Rouvé's Bedside Lamp"
+  initial_state: true
+  trigger:
+    - platform: event
+      event_type: shelly.click
+      event_data:
+        click_type: single
+        device_id: b7cb6f66fe4f1eefbf0de8480962bd23
+  action:
+    - service: script.turn_on
+      target:
+        entity_id: script.toggle_light
+      data:
+        variables:
+          light: light.smart_bulb_2
+          profile: rouve
+
+- alias: "Rouvé's Bedside Lamp Full Brightness"
+  initial_state: true
+  trigger:
+    - platform: event
+      event_type: shelly.click
+      event_data:
+        click_type: double
+        device_id: b7cb6f66fe4f1eefbf0de8480962bd23
+  action:
+    - service: script.turn_on
+      target:
+        entity_id: script.turn_on_light
+      data:
+        variables:
+          light: light.smart_bulb_2
+          profile: security
+
+- alias: "Toggle Dining Room Light"
+  initial_state: true
+  trigger:
+    - platform: event
+      event_type: shelly.click
+      event_data:
+        click_type: single
+        device_id: f1a926dd450fbe85ed9bafece8b719b3
+  action:
+    - service: script.turn_on
+      target:
+        entity_id: script.toggle_light
+      data:
+        variables:
+          light: light.smart_bulb_3

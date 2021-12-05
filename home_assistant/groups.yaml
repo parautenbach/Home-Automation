@@ -122,3 +122,10 @@ garage_doors:
   entities:
     - cover.lhs_garage_door
     - cover.rhs_garage_door
+
+batteries:
+  name: Batteries
+  entities:
+    - sensor.shellybutton1_c45bbe6bacf8_battery  # pieter
+    - sensor.shellybutton1_c45bbe6a3544_battery  # rouvé
+    - sensor.shellybutton1_c45bbe6a3a80_battery  # dining

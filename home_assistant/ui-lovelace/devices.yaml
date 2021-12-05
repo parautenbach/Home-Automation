@@ -120,6 +120,15 @@ cards:
         - entity: binary_sensor.main_gate
         - entity: binary_sensor.garage_doors
         - entity: binary_sensor.power_meter
+    - type: custom:battery-state-card
+      title: Batteries
+      entities:
+        - entity: sensor.shellybutton1_c45bbe6bacf8_battery  # pieter
+          tap_action: more-info
+        - entity: sensor.shellybutton1_c45bbe6a3544_battery  # rouvé
+          tap_action: more-info
+        - entity: sensor.shellybutton1_c45bbe6a3a80_battery  # dining
+          tap_action: more-info
     - type: logbook
       title: Major Automations
       hours_to_show: 24

@@ -27,29 +27,51 @@ cards:
             name: Today
           - entity: sensor.weather_forecast_conditions_tomorrow
             name: Tomorrow
-      - type: custom:mini-graph-card
-        name: Home
-        entities:
-          - entity: sensor.conditions_temperature
-            name: Inside Temperature
-            color: var(--custom-graph-color-yellow)
-          - entity: sensor.outside_temperature
-            name: Outside Temperature
-            color: var(--custom-graph-color-red)
-          - entity: sensor.openweathermap_feels_like_temperature
-            name: Feels Like
-            color: var(--custom-graph-color-magenta)
-          - entity: sensor.conditions_humidity
-            name: Inside Humidity
-            color: var(--custom-graph-color-blue)
-            y_axis: secondary
-        hours_to_show: 24
-        hour24: true
-        smoothing: true
-        points_per_hour: 2  # every 30 min
-        line_width: 2
-        show:
-          extrema: true
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+          - type: custom:mini-graph-card
+            name: Temperature
+            entities:
+              - entity: sensor.shellyht_6ba49c_temperature
+                name: Living Room
+                color: var(--custom-graph-color-yellow)
+              - entity: sensor.shellyht_6a3de7_temperature
+                name: Main Bedroom
+                color: var(--custom-graph-color-green)
+              - entity: sensor.outside_temperature
+                name: Outside
+                color: var(--custom-graph-color-red)
+              - entity: sensor.openweathermap_feels_like_temperature
+                name: Feels Like
+                color: var(--custom-graph-color-magenta)
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 12  # every 5 min
+            line_width: 2
+            show:
+              extrema: true
+              average: true
+          - type: custom:mini-graph-card
+            name: Humidity
+            entities:
+              - entity: sensor.shellyht_6ba49c_humidity
+                name: Living Room
+                color: var(--custom-graph-color-blue)
+              - entity: sensor.shellyht_6a3de7_humidity
+                name: Living Room
+                color: var(--custom-graph-color-magenta)
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 2  # every 30 min
+            line_width: 2
+            show:
+              extrema: true
       - type: entities
         show_header_toggle: false
         entities:

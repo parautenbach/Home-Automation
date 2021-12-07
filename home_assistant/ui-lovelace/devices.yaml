@@ -126,6 +126,10 @@ cards:
           tap_action: more-info
         - entity: sensor.shellybutton1_c45bbe6a3a80_battery  # dining
           tap_action: more-info
+        - entity: sensor.shellyht_6ba49c_battery  # living
+          tap_action: more-info
+        - entity: sensor.shellyht_6a3de7_battery  # main bedroom
+          tap_action: more-info
     - type: logbook
       title: Major Automations
       hours_to_show: 24
@@ -339,6 +343,23 @@ cards:
             name: Sent
           - entity: sensor.mqtt_broker_received_messages_1min_load
             name: Received
+        hours_to_show: 24
+        hour24: true
+        smoothing: true
+        points_per_hour: 12  # every 5 min
+        line_width: 2
+        show:
+          extrema: true
+          average: true
+      - type: custom:mini-graph-card
+        name: Temperature
+        entities:
+          - entity: sensor.conditions_temperature
+            name: Security Camera External
+            color: var(--custom-graph-color-yellow)
+          - entity: sensor.server_cpu_temp
+            name: Security Camera CPU
+            color: var(--custom-graph-color-red)
         hours_to_show: 24
         hour24: true
         smoothing: true

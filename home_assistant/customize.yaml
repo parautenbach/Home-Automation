@@ -391,3 +391,15 @@ sensor.shellybutton1_c45bbe6a3544_battery:
   friendly_name: Rouvé's Bedside Button
 sensor.shellybutton1_c45bbe6a3a80_battery:
   friendly_name: Dining Room Button
+sensor.shellyht_6ba49c_temperature:
+  friendly_name: Living Room Temperature
+sensor.shellyht_6ba49c_humidity:
+  friendly_name: Living Room Humidity
+sensor.shellyht_6ba49c_battery:
+  friendly_name: Living Room H&T Battery
+sensor.shellyht_6a3de7_temperature:
+  friendly_name: Main Bedroom Temperature
+sensor.shellyht_6a3de7_humidity:
+  friendly_name: Main Bedroom Humidity
+sensor.shellyht_6a3de7_battery:
+  friendly_name: Main Bedroom H&T Battery

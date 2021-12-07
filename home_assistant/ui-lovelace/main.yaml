@@ -2,17 +2,19 @@ path: main
 title: Main
 icon: mdi:home
 badges:
+  # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/2425
+  # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/1396
+  # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/1310
   - entity: binary_sensor.updater
     card_mod:
       style:
         ha-state-label-badge:
           $:
             ha-label-badge:
-              $:
-                .value: |
-                    ha-icon {
-                      color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
-                    }
+              $: |
+                .value {
+                    color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
+                  }
   - entity: binary_sensor.motion_detected
     name: Foyer Motion
     card_mod:
@@ -20,11 +22,10 @@ badges:
         ha-state-label-badge:
           $:
             ha-label-badge:
-              $:
-                .value: |
-                    ha-icon {
-                      color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
-                    }
+              $: |
+                .value {
+                  color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
+                }
   - entity: person.pieter_rautenbach
   - entity: person.rouve_rautenbach
   - entity: binary_sensor.electricity_feed
@@ -33,22 +34,20 @@ badges:
         ha-state-label-badge:
           $:
             ha-label-badge:
-              $:
-                .value: |
-                  ha-icon {
-                    color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
-                  }
+              $: |
+                .value {
+                  color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
+                }
   - entity: binary_sensor.internet_connection
     card_mod:
       style:
         ha-state-label-badge:
           $:
             ha-label-badge:
-              $:
-                .value: |
-                  ha-icon {
-                    color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
-                  }
+              $: |
+                .value {
+                  color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
+                }
 cards:
   - type: vertical-stack
     cards:

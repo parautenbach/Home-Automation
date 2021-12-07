@@ -8,33 +8,30 @@ badges:
         ha-state-label-badge:
           $:
             ha-label-badge:
-              $:
-                .value: |
-                  ha-icon {
-                    color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
-                  }
+              $: |
+                .value {
+                  color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
+                }
   - entity: binary_sensor.ha_breaking_changes
     card_mod:
       style:
         ha-state-label-badge:
           $:
             ha-label-badge:
-              $:
-                .value: |
-                  ha-icon {
-                    color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
-                  }
+              $: |
+                .value {
+                  color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
+                }
   - entity: binary_sensor.hacs_updater
     card_mod:
       style:
         ha-state-label-badge:
           $:
             ha-label-badge:
-              $:
-                .value: |
-                  ha-icon {
-                    color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
-                  }
+              $: |
+                .value {
+                  color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
+                }
 cards:
   - type: vertical-stack
     cards:

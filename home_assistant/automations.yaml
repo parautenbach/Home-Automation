@@ -1570,6 +1570,12 @@
         variables:
           name: Rasplay
           host: rasplay
+    - service: notify.mobile_app_ceres
+      data:
+        title: "System"
+        message: "Systems shut down prior to loadshedding."
+        data:
+          group: "system-general"
 
 - alias: "Update OpenUV every 20 minutes during the daytime"
   # server seems to 500 quite often:

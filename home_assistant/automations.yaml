@@ -1679,3 +1679,21 @@
       data:
         variables:
           light: light.smart_bulb_3
+          profile: dim
+
+- alias: "Dining Room Light Full Brightness"
+  initial_state: true
+  trigger:
+    - platform: event
+      event_type: shelly.click
+      event_data:
+        click_type: double
+        device_id: f1a926dd450fbe85ed9bafece8b719b3
+  action:
+    - service: script.turn_on
+      target:
+        entity_id: script.turn_on_light
+      data:
+        variables:
+          light: light.smart_bulb_3
+          profile: security

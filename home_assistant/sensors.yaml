@@ -275,6 +275,19 @@
         {% set hours = (decimal_hours - (decimal_hours % 1)) | int(0) %}
         {% set minutes = ((decimal_hours % 1) * 60) | int(0) %}
         {{ '%02i:%02i'%(hours, minutes) }}
+    outside_feels_like:
+      friendly_name: "Outside Temperature Feels Like"
+      value_template: >-
+        {{ states('sensor.openweathermap_feels_like_temperature') | round(1)  }}
+      unit_of_measurement: "°C"
+      icon_template: >-
+        mdi:thermometer
+    daylight_hm:
+      friendly_name: "Daylight Length"
+      value_template: >-
+        {{ state_attr('sensor.daylight', 'today_hms')[:5] }}
+      icon_template: >-
+        mdi:weather-sunny
 
 - platform: sun2
   monitored_conditions:

@@ -1,7 +1,21 @@
 path: environment
 title: Environment
 icon: mdi:weather-partly-snowy-rainy
-badges: []
+badges:
+  - entity: sensor.shellyht_6ba49c_temperature
+    name: Living Room
+  - entity: sensor.shellyht_6a3de7_temperature
+    name: Main Bedroom
+  - entity: sensor.outside_temperature
+    name: Outside
+  - entity: sensor.outside_feels_like
+    name: Feels Like
+  # https://community.home-assistant.io/t/hours-of-daylight/59422/
+  # https://community.home-assistant.io/t/enhanced-sun-component/63553
+  - entity: sensor.daylight_hm
+    name: Daylight
+  - entity: sensor.moon
+    name: Moon Phase
 cards:
   - type: vertical-stack
     cards:
@@ -45,7 +59,7 @@ cards:
               - entity: sensor.outside_temperature
                 name: Outside
                 color: var(--custom-graph-color-red)
-              - entity: sensor.openweathermap_feels_like_temperature
+              - entity: sensor.outside_feels_like
                 name: Feels Like
                 color: var(--custom-graph-color-magenta)
             hours_to_show: 24
@@ -72,17 +86,6 @@ cards:
             line_width: 2
             show:
               extrema: true
-      - type: entities
-        show_header_toggle: false
-        entities:
-          - entity: sensor.openweathermap_feels_like_temperature
-            name: Feels Like
-          # https://community.home-assistant.io/t/hours-of-daylight/59422/
-          # https://community.home-assistant.io/t/enhanced-sun-component/63553
-          - type: attribute
-            entity: sensor.daylight
-            attribute: today_hms
-          - entity: sensor.moon
   - type: vertical-stack
     cards:
       - type: custom:mini-graph-card

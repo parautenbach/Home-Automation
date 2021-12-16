@@ -1600,6 +1600,26 @@
       at: "05:00:00"
   action:
     - service: shell_command.download_latest_dam_levels
+
+- alias: "Notify Doorbell Rang"
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.doorbell_rang
+      to: "on"
+  mode: queued
+  action:
+    - service: persistent_notification.create
+      data:
+        title: Security
+        message: >-
+          "Someone rang the doorbell"
+    - service: camera.snapshot
+      data:
+        entity_id: camera.doorbell
+        # todo: update security view; make capture scripts generic
+        filename: '/tmp/camera.doorbell_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+
 # can the following number of automations be simplified?
 # https://www.home-assistant.io/docs/scripts/conditions/#trigger-condition
 - alias: "Toggle Pieter's Bedside Lamp"

@@ -375,6 +375,21 @@ google:
   client_secret: !secret google_calendar_client_secret
   track_new_calendar: false
 
+# https://www.dahuasecurity.com/products/All-Products/Video-Intercoms/IP-Products/Door-Stations/VTO2211G-WP
+# https://amcrest.com/smarthome-2-megapixel-wireless-doorbell-security-camera-1920-x-1080p-wifi-doorbell-camera-ip55-weatherproof-two-way-audio-ad110.html
+# https://www.hikvision.com/en/products/Video-Intercom-Products/
+# https://github.com/rroller/dahua
+# https://community.home-assistant.io/t/amcrest-doorbell-ad110-api-local-only/223838
+# https://community.home-assistant.io/t/dahua-vto-custom-integration/293693
+amcrest:
+  - name: Doorbell
+    host: !secret doorbell_host
+    username: !secret doorbell_username
+    password: !secret doorbell_password
+    binary_sensors:
+      - motion_detected
+      - online
+
 template:
   - trigger:
       - platform: time_pattern
@@ -391,6 +406,43 @@ template:
           unavailable: "{{ states | selectattr('state', 'in', ['unavailable']) | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
           unknown: "{{ states | selectattr('state', 'in', ['unknown']) | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
           none: "{{ states | selectattr('state', 'in', ['none']) | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
+  # Example:
+  # {
+  #     "event_type": "amcrest",
+  #     "data": {
+  #         "camera": "Doorbell",
+  #         "event": "CallNoAnswered",
+  #         "payload": {
+  #             "Code": "CallNoAnswered",
+  #             "action": "Start",
+  #             "index": "0",
+  #             "data": {
+  #                 "CallID": "3"
+  #             }
+  #         }
+  #     },
+  #     "origin": "LOCAL",
+  #     "time_fired": "2021-10-16T14:59:57.236917+00:00",
+  #     "context": {
+  #         "id": "381f8debeef10751b18edc4acf3f4491",
+  #         "parent_id": null,
+  #         "user_id": null
+  #     }
+  # }
+  - trigger:
+    - platform: event
+      event_type: amcrest
+      event_data:
+        event: CallNoAnswered
+        payload:
+          action: Start
+    binary_sensor:
+      name: Doorbell Rang
+      icon: mdi:bell-outline
+      # https://github.com/home-assistant/core/issues/39932
+      # icon: "{{ 'mdi:bell-ring-outline' if is_state('binary_sensor.doorbell_rang', 'on') else 'mdi:bell-outline' }}"
+      state: true
+      auto_off: 5  # seconds
 
 # https://community.home-assistant.io/t/control-recursion-in-the-folder-watcher-integration/200110
 # folder_watcher:

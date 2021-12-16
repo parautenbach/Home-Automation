@@ -202,21 +202,21 @@ cards:
         title: Lights
         hours_to_show: 24
         entities:
-          - entity: light.smart_bulb_1
+          - entity: light.pieter_bedside
             name: Pieter's Side
-          - entity: light.smart_bulb_2
+          - entity: light.rouve_bedside
             name: Rouvé's Side
           - entity: light.living_room_lamp
             name: Living Room
-          - entity: light.smart_bulb_3
+          - entity: light.dining_room
             name: Dining Room
-          - entity: light.foyer_light
+          - entity: light.foyer
             name: Foyer
-          - entity: light.front_door_light
+          - entity: light.front_door
             name: Front Door
-          - entity: light.backyard_light
+          - entity: light.backyard
             name: Backyard
-          - entity: light.garage_light
+          - entity: light.garage
             name: Garage
       - type: markdown
         # https://community.home-assistant.io/t/sensor-count-the-installation-mine-is-bigger-than-yours-sensor/225959/27

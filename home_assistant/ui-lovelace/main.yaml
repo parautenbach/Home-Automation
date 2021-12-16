@@ -60,11 +60,11 @@ cards:
             variables:
               profile: pieter
             name: Pieter's Side
-            entity: light.smart_bulb_1
+            entity: light.pieter_bedside
             icon: mdi:lamp
           - type: custom:button-card
             name: Tivoli
-            entity: switch.smart_plug_1
+            entity: switch.tivoli_audio
             size: 20%
             show_label: true
             # the label plus the label colour is a hack to create a phantom space
@@ -99,7 +99,7 @@ cards:
             variables:
               profile: rouve
             name: Rouvé's Side
-            entity: light.smart_bulb_2
+            entity: light.rouve_bedside
             icon: mdi:lamp
       # scenes: low, default, bright
       - type: horizontal-stack
@@ -108,7 +108,7 @@ cards:
           - type: custom:button-card
             template: smart_bulb_light
             name: Foyer
-            entity: light.foyer_light
+            entity: light.foyer
             icon: mdi:dome-light
             styles:
               grid:
@@ -136,7 +136,7 @@ cards:
                 card:
                   type: custom:button-card
                   name: Timer
-                  entity: timer.foyer_light_timer
+                  entity: timer.foyer_timer
                   show_name: false
                   show_icon: false
                   show_state: true
@@ -148,7 +148,7 @@ cards:
                     state:
                       - color: >
                           [[[
-                            if (states['timer.foyer_light_timer'].state == 'idle')
+                            if (states['timer.foyer_timer'].state == 'idle')
                               return "var(--paper-item-icon-color)";
                             else
                               return "red";
@@ -163,14 +163,14 @@ cards:
               action: call-service
               service: script.toggle_light
               service_data:
-                light: light.foyer_light
+                light: light.foyer
                 profile: normal
             double_tap_action:
               haptic: medium
               action: call-service
               service: script.toggle_light
               service_data:
-                light: light.foyer_light
+                light: light.foyer
                 profile: night
             hold_action:
               haptic: selection
@@ -235,14 +235,14 @@ cards:
           - type: custom:button-card
             template: smart_bulb_light
             name: Dining Room
-            entity: light.smart_bulb_3
+            entity: light.dining_room
             icon: mdi:dome-light
       - type: horizontal-stack
         title: Outside Lights
         cards:
           - type: custom:button-card
             name: Front Door
-            entity: light.front_door_light
+            entity: light.front_door
             size: 20%
             color: var(--button-card-light-color)
             styles:
@@ -261,7 +261,7 @@ cards:
                 card:
                   type: custom:button-card
                   name: Timer
-                  entity: timer.front_door_light_timer
+                  entity: timer.front_door_timer
                   show_name: false
                   show_icon: false
                   show_state: true
@@ -274,7 +274,7 @@ cards:
                       - margin-bottom: -1ex
                       - color: >
                           [[[
-                            if (states['timer.front_door_light_timer'].state == 'idle')
+                            if (states['timer.front_door_timer'].state == 'idle')
                               return "var(--paper-item-icon-color)";
                             else
                               return "red";
@@ -299,7 +299,7 @@ cards:
               haptic: selection
           - type: custom:button-card
             name: Garage
-            entity: light.garage_light
+            entity: light.garage
             size: 20%
             color: var(--button-card-light-color)
             show_label: true
@@ -331,7 +331,7 @@ cards:
               haptic: selection
           - type: custom:button-card
             name: Backyard
-            entity: light.backyard_light
+            entity: light.backyard
             size: 20%
             color: var(--button-card-light-color)
             show_label: true

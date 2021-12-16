@@ -664,10 +664,10 @@ turn_on_light_and_timer:
   fields:
     light:
       description: "A light entity"
-      example: "light.front_door_light"
+      example: "light.my_light"
     duration:
       description: "A duration in %H:%M:%S format"
-      example: "03:00:00"
+      example: "00:03:00"
   mode: single
   sequence:
     # https://www.home-assistant.io/docs/scripts/conditions/
@@ -684,7 +684,7 @@ force_on_smart_bulb:
   fields:
     light:
       description: "A smart bulb"
-      example: "light.smart_bulb_1"
+      example: "light.my_smart_bulb"
   mode: parallel
   sequence:
     - service: input_boolean.turn_on
@@ -699,7 +699,7 @@ turn_on_light:
   fields:
     light:
       description: "A light entity"
-      example: "light.foyer_light"
+      example: "light.my_light"
     profile:
       description: "A light profile"
       example: "normal/night/security"
@@ -717,7 +717,7 @@ toggle_light:
   fields:
     light:
       description: "A light entity"
-      example: "light.foyer_light"
+      example: "light.my_light"
     profile:
       description: "A light profile"
       example: "normal/night/security"
@@ -749,9 +749,9 @@ test_foyer_light:
         message: "Test: '{{ profile }}'"
     - service: light.turn_on
       target:
-        entity_id: light.foyer_light
+        entity_id: light.foyer
       data:
-        # entity_id: light.foyer_light
+        # entity_id: light.foyer
         profile: "{{ profile }}"
 
 shutdown_remote_host:

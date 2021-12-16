@@ -21,25 +21,25 @@ all_lights:
   name: All Lights
   entities:
     - switch.living_room_lamp
-    - light.smart_bulb_1        # pieter
-    - light.smart_bulb_2        # rouvé
-    - light.smart_bulb_3        # dining
-    - light.foyer_light         # tp-link smart bulb
-    - light.front_door_light
-    - light.garage_light
-    - light.backyard_light
+    - light.pieter_bedside
+    - light.rouve_bedside
+    - light.dining_room
+    - light.foyer
+    - light.front_door
+    - light.garage
+    - light.backyard
 
 motion_lights:
   name: Motion Lights
   entities:
     - light.living_room_lamp
-    - light.foyer_light
+    - light.foyer
 
 motion_timers:
   name: Motion Timers
   entities:
     - timer.living_room_lamp_timer
-    - timer.foyer_light_timer
+    - timer.foyer_timer
 
 living_room:
   name: Living Room
@@ -49,8 +49,8 @@ living_room:
 main_bedroom:
   name: Main Bedroom
   entities:
-    - light.smart_bulb_1
-    - light.smart_bulb_2
+    - light.pieter_bedside
+    - light.rouve_bedside
 
 multimedia:
   name: Multimedia

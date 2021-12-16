@@ -122,15 +122,15 @@ homekit:
       - sensor.conditions_temperature  # from homebridge
       - sensor.conditions_humidity  # from homebridge
       - light.living_room_lamp
-      - light.smart_bulb_1
-      - light.smart_bulb_2
-      - light.smart_bulb_3
-      - light.foyer_light
-      - light.front_door_light
-      - light.backyard_light
-      - light.garage_light
+      - light.pieter_bedside
+      - light.rouve_bedside
+      - light.dining_room
+      - light.foyer
+      - light.front_door
+      - light.backyard
+      - light.garage
       - light.led  # from homebridge
-      - switch.smart_plug_1
+      - switch.tivoli_audio
       - cover.main_gate
       - cover.lhs_garage_door
       - cover.rhs_garage_door
@@ -145,23 +145,23 @@ homekit:
       name: Living Room Humidity
     light.living_room_lamp:
       name: Living Room Lamp
-    light.smart_bulb_1:
+    light.pieter_bedside:
       name: Pieter's Bedside
-    light.smart_bulb_2:
+    light.rouve_bedside:
       name: Rouvé's Bedside
-    light.smart_bulb_3:
+    light.dining_room:
       name: Dining Room
     light.foyer:
       name: Foyer
-    light.front_door_light:
+    light.front_door:
       name: Front Door
-    light.backyard_light:
+    light.backyard:
       name: Backyard
-    light.garage_light:
+    light.garage:
       name: Garage
     light.led:
       name: Motion LED
-    switch.smart_plug_1:
+    switch.tivoli_audio:
       name: Tivoli Audio
     cover.main_gate:
       name: Main Gate
@@ -228,17 +228,17 @@ input_boolean:
   pieter_driving:
     name: Pieter Driving
     icon: mdi:car
-  smart_bulb_1_state:
-    name: Smart Bulb 1 State
+  pieter_bedside_state:
+    name: Pieter Bedside State
     icon: mdi:lightbulb
-  smart_bulb_2_state:
-    name: Smart Bulb 2 State
+  rouve_bedside_state:
+    name: Rouvé Bedside State
     icon: mdi:lightbulb
-  smart_bulb_3_state:
-    name: Smart Bulb 3 State
+  dining_room_state:
+    name: Dining Room State
     icon: mdi:lightbulb
-  foyer_light_state:
-    name: Foyer Light State
+  foyer_state:
+    name: Foyer State
     icon: mdi:lightbulb
   server_power_connected:
     name: Server Power Connected
@@ -285,13 +285,13 @@ light:
     name: living_room_lamp
     entity_id: switch.living_room_lamp
   - platform: switch
-    name: front_door_light
+    name: front_door
     entity_id: switch.shelly1_77128c
   - platform: switch
-    name: backyard_light
+    name: backyard
     entity_id: switch.shelly1_b91f6f
   - platform: switch
-    name: garage_light
+    name: garage
     entity_id: switch.shelly1_b95a0e
 
 shell_command:
@@ -317,9 +317,9 @@ timer:
     duration: "00:03:00"
   rhs_garage_door_timer:
     duration: "00:03:00"
-  front_door_light_timer:
+  front_door_timer:
     duration: "00:03:00"
-  foyer_light_timer:
+  foyer_timer:
     duration: "00:03:00"
 
 media_player:
@@ -349,13 +349,13 @@ media_player:
       turn_on:
         service: switch.turn_on
         target:
-          entity_id: switch.smart_plug_1
+          entity_id: switch.tivoli_audio
       turn_off:
         service: switch.turn_off
         target:
-          entity_id: switch.smart_plug_1
+          entity_id: switch.tivoli_audio
     attributes:
-      state: switch.smart_plug_1
+      state: switch.tivoli_audio
 
 media_source:
 

@@ -35,8 +35,6 @@ cards:
       - sensor.conditions_temperature
       - sensor.conditions_humidity
       - proximity.home
-      - light.shellybulbduo_8caab5616d67
-      - light.shellybulbduo_8caab56163ff
       - input_boolean.pieter_present
       - input_boolean.rouve_present
     show_header_toggle: true
@@ -56,7 +54,7 @@ cards:
         name: Pieter
       - entity: group.garage_doors
         name: All Doors
-      - entity: light.garage_light
+      - entity: light.garage
   - type: custom:mini-graph-card
     name: Bitcoin
     # name: Current Travel Time

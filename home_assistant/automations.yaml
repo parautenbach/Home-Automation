@@ -93,11 +93,11 @@
         entity_id: script.turn_on_light
       data:
         variables:
-          light: light.foyer_light
+          light: light.foyer
           profile: security
     - service: timer.start
       data:
-        entity_id: timer.foyer_light_timer
+        entity_id: timer.foyer_timer
         duration: "00:01:00"
 
 - alias: "Switch On Lights At Wake Up Time"
@@ -119,14 +119,14 @@
         entity_id: script.turn_on_light
       data:
         variables:
-          light: light.smart_bulb_1
+          light: light.pieter_bedside
           profile: low
     - service: script.turn_on
       target:
         entity_id: script.turn_on_light
       data:
         variables:
-          light: light.smart_bulb_2
+          light: light.rouve_bedside
           profile: low
     - delay:
         minutes: 3
@@ -135,14 +135,14 @@
         entity_id: script.turn_on_light
       data:
         variables:
-          light: light.smart_bulb_1
+          light: light.pieter_bedside
           profile: pieter
     - service: script.turn_on
       target:
         entity_id: script.turn_on_light
       data:
         variables:
-          light: light.smart_bulb_2
+          light: light.rouve_bedside
           profile: rouve
 
 - alias: "Switch On Night Light If Motion Is Detected"
@@ -163,7 +163,7 @@
           state: "off"
         # in case light was turned on manually, leave it
         - condition: state
-          entity_id: light.foyer_light
+          entity_id: light.foyer
           state: "off"
         - condition: or
           conditions:
@@ -178,11 +178,11 @@
         entity_id: script.turn_on_light
       data:
         variables:
-          light: light.foyer_light
+          light: light.foyer
           profile: night
     - service: timer.start
       data:
-        entity_id: timer.foyer_light_timer
+        entity_id: timer.foyer_timer
         duration: "00:03:00"
 
 - alias: "Switch Off Light When Timer Expires"
@@ -195,11 +195,11 @@
     - platform: event
       event_type: timer.finished
       event_data:
-        entity_id: timer.front_door_light_timer
+        entity_id: timer.front_door_timer
     - platform: event
       event_type: timer.finished
       event_data:
-        entity_id: timer.foyer_light_timer
+        entity_id: timer.foyer_timer
   mode: parallel
   action:
     - service: light.turn_off
@@ -322,14 +322,14 @@
         entity_id: script.turn_on_light
       data:
         variables:
-          light: light.smart_bulb_1
+          light: light.pieter_bedside
           profile: pieter
     - service: script.turn_on
       target:
         entity_id: script.turn_on_light
       data:
         variables:
-          light: light.smart_bulb_2
+          light: light.rouve_bedside
           profile: rouve
 
 # might need to specialise this a bit more in future:
@@ -384,14 +384,14 @@
         entity_id: script.turn_on_light
       data:
         variables:
-          light: light.smart_bulb_1
+          light: light.pieter_bedside
           profile: pieter
     - service: script.turn_on
       target:
         entity_id: script.turn_on_light
       data:
         variables:
-          light: light.smart_bulb_2
+          light: light.rouve_bedside
           profile: rouve
 
 - alias: "Lights Off After Sunrise"
@@ -451,7 +451,7 @@
     - service: script.turn_on
       entity_id: script.entertainment_off
     - service: switch.turn_off
-      entity_id: switch.smart_plug_1
+      entity_id: switch.tivoli_audio
 
 - alias: "Switch On The Front Door Light When Arriving Home"
   trigger:
@@ -470,14 +470,14 @@
         - condition: sun
           before: sunrise
     - condition: state
-      entity_id: light.front_door_light
+      entity_id: light.front_door
       state: "off"
   action:
     - service: light.turn_on
-      entity_id: light.front_door_light
+      entity_id: light.front_door
     - service: timer.start
       data:
-        entity_id: timer.front_door_light_timer
+        entity_id: timer.front_door_timer
         duration: "00:03:00"
 
 - alias: "Open The Gate When Arriving Home"
@@ -508,8 +508,8 @@
     platform: state
     entity_id:
       - light.living_room_lamp
-      - light.front_door_light
-      - light.foyer_light
+      - light.front_door
+      - light.foyer
     to: "off"
   mode: parallel
   condition:
@@ -1044,7 +1044,7 @@
             - condition: sun
               before: sunrise
         - condition: state
-          entity_id: light.front_door_light
+          entity_id: light.front_door
           state: "off"
   action:
     - service: script.turn_on
@@ -1053,7 +1053,7 @@
       data:
         variables:
           # todo: renamde light to entity_id?
-          light: light.front_door_light
+          light: light.front_door
           duration: "00:03:00"
 
 - alias: "Switch On Or Extend Front Door Light When Cover Closed"
@@ -1077,7 +1077,7 @@
         - condition: template
           value_template: >-
             {# if the timer has already run out or it's about to, turn it on for another brief moment #}
-            {% set timer = 'timer.front_door_light_timer' %}
+            {% set timer = 'timer.front_door_timer' %}
             {% set finishes_at = strptime(state_attr(timer, 'finishes_at'), '%Y-%m-%dT%H:%M:%S%z') %}
             {{ finishes_at == None or (finishes_at - now()).seconds < 60 }}
   action:
@@ -1086,7 +1086,7 @@
         entity_id: script.turn_on_light_and_timer
       data:
         variables:
-          light: light.front_door_light
+          light: light.front_door
           duration: "00:00:30"
 
 - alias: "Switch On Garage Light When The First Garage Door Opened"
@@ -1113,7 +1113,7 @@
           before_offset: "01:30:00"
   action:
     - service: light.turn_on
-      entity_id: light.garage_light
+      entity_id: light.garage
 
 - alias: "Switch Off Garage Light When The Last Garage Door Closed"
   initial_state: true
@@ -1134,7 +1134,7 @@
           before_offset: "+01:00:00"
   action:
     - service: light.turn_off
-      entity_id: light.garage_light
+      entity_id: light.garage
 
 # needed because of poor wifi connectivity
 # if the last door has been closed for a minute and the light is still on, turn it off
@@ -1150,11 +1150,11 @@
   mode: queued
   condition:
     - condition: state
-      entity_id: light.garage_light
+      entity_id: light.garage
       state: "on"
   action:
     - service: light.turn_off
-      entity_id: light.garage_light
+      entity_id: light.garage
 
 - alias: "Update Security Camera Snapshot Gallery"
   trigger:
@@ -1191,11 +1191,11 @@
           entity_id: light.living_room_lamp
           state: "off"
         - condition: state
-          entity_id: light.smart_bulb_1
+          entity_id: light.pieter_bedside
           state: "on"
   action:
     - service: light.turn_off
-      entity_id: light.smart_bulb_1
+      entity_id: light.pieter_bedside
 
 - alias: "Turn Off Entertainment System When Idle Or Leaving Room"
   trigger:
@@ -1449,10 +1449,10 @@
   trigger:
     - platform: state
       entity_id:
-        - light.smart_bulb_1
-        - light.smart_bulb_2
-        - light.smart_bulb_3
-        - light.foyer_light
+        - light.pieter_bedside
+        - light.rouve_bedside
+        - light.dining_room
+        - light.foyer
   mode: parallel
   condition:
     # power was NOT recently restored (2 min), causing the light to turn on and connect to hass, and trigger this automation
@@ -1474,10 +1474,10 @@
     # this will thus trigger the moment the smart bulb reconnects to the network and hass
     - platform: state
       entity_id:
-        - light.smart_bulb_1
-        - light.smart_bulb_2
-        - light.smart_bulb_3
-        - light.foyer_light
+        - light.pieter_bedside
+        - light.rouve_bedside
+        - light.dining_room
+        - light.foyer
       to: "on"
   mode: parallel
   # some other ideas:
@@ -1636,7 +1636,7 @@
         entity_id: script.toggle_light
       data:
         variables:
-          light: light.smart_bulb_1
+          light: light.pieter_bedside
           profile: pieter
 
 - alias: "Pieter's Bedside Lamp Full Brightness"
@@ -1653,7 +1653,7 @@
         entity_id: script.turn_on_light
       data:
         variables:
-          light: light.smart_bulb_1
+          light: light.pieter_bedside
           profile: security
 
 - alias: "Toggle Rouvé's Bedside Lamp"
@@ -1670,7 +1670,7 @@
         entity_id: script.toggle_light
       data:
         variables:
-          light: light.smart_bulb_2
+          light: light.rouve_bedside
           profile: rouve
 
 - alias: "Rouvé's Bedside Lamp Full Brightness"
@@ -1687,7 +1687,7 @@
         entity_id: script.turn_on_light
       data:
         variables:
-          light: light.smart_bulb_2
+          light: light.rouve_bedside
           profile: security
 
 - alias: "Toggle Dining Room Light"
@@ -1704,7 +1704,7 @@
         entity_id: script.toggle_light
       data:
         variables:
-          light: light.smart_bulb_3
+          light: light.dining_room
           profile: dim
 
 - alias: "Dining Room Light Full Brightness"
@@ -1721,5 +1721,5 @@
         entity_id: script.turn_on_light
       data:
         variables:
-          light: light.smart_bulb_3
+          light: light.dining_room
           profile: security

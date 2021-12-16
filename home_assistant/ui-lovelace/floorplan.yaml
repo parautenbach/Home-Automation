@@ -66,8 +66,8 @@ cards:
               class: 'light-off'
         - action:
             service: light.toggle
-          element: light.smart_bulb_1
-          entity: light.smart_bulb_1  # pieter's bedside lamp
+          element: light.pieter_bedside
+          entity: light.pieter_bedside
           states:
             - state: 'on'
               class: 'light-on'
@@ -75,8 +75,8 @@ cards:
               class: 'light-off'
         - action:
             service: light.toggle
-          element: light.smart_bulb_2
-          entity: light.smart_bulb_2  # rouvé's bedside lamp
+          element: light.rouve_bedside
+          entity: light.rouve_bedside
           states:
             - state: 'on'
               class: 'light-on'
@@ -84,8 +84,8 @@ cards:
               class: 'light-off'
         - action:
             service: light.toggle
-          element: light.smart_bulb_3
-          entity: light.smart_bulb_3  # dining room light
+          element: light.dining_room
+          entity: light.dining_room
           image_template: '/local/floorplan/mdi-dome-light-${entity.state}.svg'
         - action:
             service: light.toggle
@@ -98,8 +98,8 @@ cards:
               class: 'light-off'
         - action:
             service: light.toggle
-          element: light.front_door_light
-          entity: light.front_door_light
+          element: light.front_door
+          entity: light.front_door
           states:
             - state: 'on'
               class: 'light-on'
@@ -107,8 +107,8 @@ cards:
               class: 'light-off'
         - action:
             service: light.toggle
-          element: light.garage_light
-          entity: light.garage_light
+          element: light.garage
+          entity: light.garage
           states:
             - state: 'on'
               class: 'light-on'
@@ -116,8 +116,8 @@ cards:
               class: 'light-off'
         - action:
             service: light.toggle
-          element: light.backyard_light
-          entity: light.backyard_light
+          element: light.backyard
+          entity: light.backyard
           states:
             - state: 'on'
               class: 'light-on'

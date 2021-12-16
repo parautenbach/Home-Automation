@@ -9,7 +9,7 @@ binary_sensor.motion_sensor_2:
   icon: mdi:motion-sensor
 light.led:
   icon: mdi:motion-sensor
-  friendly_name: Motion LED
+  friendly_name: Foyer Motion LED
 sensor.server_cpu_temp:
   friendly_name: CPU temperature
 script.hk_3380_vol_up:
@@ -235,7 +235,7 @@ switch.shelly1_b91f6f:
   icon: mdi:track-light
 light.backyard_light:
   friendly_name: Backyard Light
-  icon: mdi:track-light
+  icon: mdi:light-flood-down
 sensor.internet_speed_in:
   friendly_name: 'Download Traffic'
   icon: mdi:download
@@ -403,3 +403,6 @@ sensor.shellyht_6a3de7_humidity:
   friendly_name: Main Bedroom Humidity
 sensor.shellyht_6a3de7_battery:
   friendly_name: Main Bedroom H&T Battery
+light.kitchen_counter:
+  friendly_name: Kitchen Counter Lights
+  icon: mdi:led-strip-variant

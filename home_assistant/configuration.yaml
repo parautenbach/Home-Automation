@@ -195,7 +195,7 @@ camera:
     # https://stackoverflow.com/questions/6195872/applying-multiple-filters-at-once-with-ffmpeg
     # https://einar.slaskete.net/2011/09/05/adding-time-stamp-overlay-to-video-stream-using-ffmpeg/
     extra_arguments: >-
-      -vf "hue=s=0, drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf: text='%{localtime\:%Y-%m-%d %T}': fontcolor=white@0.8: x=10: y=10"
+      -vf "hue=s=0, drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='%{localtime\:%Y-%m-%d %T}':fontcolor=white@0.8:x=10:y=10"
   - platform: local_file
     name: security_camera_last_snapshot
     file_path: /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg

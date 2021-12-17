@@ -139,6 +139,14 @@ homekit:
       - script.entertainment_off
       - script.open_pedestrian_gap
   entity_config:
+    sensor.living_room_ht_temperature:
+      linked_battery_sensor: sensor.living_room_ht_battery
+    sensor.living_room_ht_humidity:
+      linked_battery_sensor: sensor.living_room_ht_battery
+    sensor.main_bedroom_ht_temperature:
+      linked_battery_sensor: sensor.main_bedroom_ht_battery
+    sensor.main_bedroom_ht_humidity:
+      linked_battery_sensor: sensor.main_bedroom_ht_battery
     sensor.conditions_temperature:
       name: Living Room Temperature
     sensor.conditions_humidity:
@@ -147,10 +155,13 @@ homekit:
       name: Living Room Lamp
     light.pieter_bedside:
       name: Pieter's Bedside
+      linked_battery_sensor: sensor.pieter_bedside_light_button_battery
     light.rouve_bedside:
       name: Rouvé's Bedside
+      linked_battery_sensor: sensor.rouve_bedside_light_button_battery
     light.dining_room:
       name: Dining Room
+      linked_battery_sensor: sensor.dining_room_light_button_battery
     light.foyer:
       name: Foyer
     light.front_door:

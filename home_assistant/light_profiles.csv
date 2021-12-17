@@ -1,8 +1,8 @@
-id,x,y,brightness
+profile,x,y,brightness
 normal,0.323,0.329,153
 night,0.701,0.299,5
 security,0.323,0.329,255
 dim,0.323,0.329,71
-pieter,0.417,0.410,8
-rouve,0.417,0.410,36
+pieter,0.468,0.377,51
+rouve,0.468,0.377,102
 low,0.417,0.410,1

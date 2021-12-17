@@ -2,9 +2,9 @@ path: environment
 title: Environment
 icon: mdi:weather-partly-snowy-rainy
 badges:
-  - entity: sensor.shellyht_6ba49c_temperature
+  - entity: sensor.living_room_ht_temperature
     name: Living Room
-  - entity: sensor.shellyht_6a3de7_temperature
+  - entity: sensor.main_bedroom_ht_temperature
     name: Main Bedroom
   - entity: sensor.outside_temperature
     name: Outside
@@ -50,10 +50,10 @@ cards:
           - type: custom:mini-graph-card
             name: Temperature
             entities:
-              - entity: sensor.shellyht_6ba49c_temperature
+              - entity: sensor.living_room_ht_temperature
                 name: Living Room
                 color: var(--custom-graph-color-yellow)
-              - entity: sensor.shellyht_6a3de7_temperature
+              - entity: sensor.main_bedroom_ht_temperature
                 name: Main Bedroom
                 color: var(--custom-graph-color-green)
               - entity: sensor.outside_temperature
@@ -73,10 +73,10 @@ cards:
           - type: custom:mini-graph-card
             name: Humidity
             entities:
-              - entity: sensor.shellyht_6ba49c_humidity
+              - entity: sensor.living_room_ht_humidity
                 name: Living Room
                 color: var(--custom-graph-color-blue)
-              - entity: sensor.shellyht_6a3de7_humidity
+              - entity: sensor.main_bedroom_ht_humidity
                 name: Main Bedroom
                 color: var(--custom-graph-color-magenta)
             hours_to_show: 24

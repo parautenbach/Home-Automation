@@ -120,15 +120,15 @@ cards:
     - type: custom:battery-state-card
       title: Batteries
       entities:
-        - entity: sensor.shellybutton1_c45bbe6bacf8_battery  # pieter
+        - entity: sensor.pieter_bedside_light_button_battery
           tap_action: more-info
-        - entity: sensor.shellybutton1_c45bbe6a3544_battery  # rouvé
+        - entity: sensor.rouve_bedside_light_button_battery
           tap_action: more-info
-        - entity: sensor.shellybutton1_c45bbe6a3a80_battery  # dining
+        - entity: sensor.dining_room_light_button_battery
           tap_action: more-info
-        - entity: sensor.shellyht_6ba49c_battery  # living
+        - entity: sensor.living_room_ht_battery
           tap_action: more-info
-        - entity: sensor.shellyht_6a3de7_battery  # main bedroom
+        - entity: sensor.main_bedroom_ht_battery
           tap_action: more-info
     - type: logbook
       title: Major Automations

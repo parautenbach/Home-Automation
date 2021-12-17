@@ -386,23 +386,23 @@ sensor.dam_levels_last_update:
   device_class: "timestamp"
 sensor.owm_pollution_overall_air_quality:
   unit_of_measurement: aqi
-sensor.shellybutton1_c45bbe6bacf8_battery:
-  friendly_name: Pieter's Bedside Button
-sensor.shellybutton1_c45bbe6a3544_battery:
-  friendly_name: Rouvé's Bedside Button
-sensor.shellybutton1_c45bbe6a3a80_battery:
-  friendly_name: Dining Room Button
-sensor.shellyht_6ba49c_temperature:
+sensor.pieter_bedside_light_button_battery:
+  friendly_name: Pieter's Bedside Light Button Battery
+sensor.rouve_bedside_light_button_battery:
+  friendly_name: Rouvé's Bedside Light Button Battery
+sensor.dining_room_light_button_battery:
+  friendly_name: Dining Room Light Button Battery
+sensor.living_room_ht_temperature:
   friendly_name: Living Room Temperature
-sensor.shellyht_6ba49c_humidity:
+sensor.living_room_ht_humidity:
   friendly_name: Living Room Humidity
-sensor.shellyht_6ba49c_battery:
+sensor.living_room_ht_battery:
   friendly_name: Living Room H&T Battery
-sensor.shellyht_6a3de7_temperature:
+sensor.main_bedroom_ht_temperature:
   friendly_name: Main Bedroom Temperature
-sensor.shellyht_6a3de7_humidity:
+sensor.main_bedroom_ht_humidity:
   friendly_name: Main Bedroom Humidity
-sensor.shellyht_6a3de7_battery:
+sensor.main_bedroom_ht_battery:
   friendly_name: Main Bedroom H&T Battery
 light.kitchen_counter:
   friendly_name: Kitchen Counter Lights

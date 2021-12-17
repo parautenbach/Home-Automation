@@ -121,6 +121,10 @@ homekit:
       - binary_sensor.motion_detected
       - sensor.conditions_temperature  # from homebridge
       - sensor.conditions_humidity  # from homebridge
+      - sensor.living_room_ht_temperature
+      - sensor.living_room_ht_humidity
+      - sensor.main_bedroom_ht_temperature
+      - sensor.main_bedroom_ht_humidity
       - light.living_room_lamp
       - light.pieter_bedside
       - light.rouve_bedside

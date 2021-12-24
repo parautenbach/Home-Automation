@@ -238,6 +238,33 @@ cards:
             entity: light.dining_room
             icon: mdi:dome-light
       - type: horizontal-stack
+        cards:
+          - type: custom:button-card
+            template: smart_bulb_light
+            name: Kitchen Counter
+            entity: light.kitchen_counter
+            tap_action:
+              haptic: light
+              action: call-service
+              service: script.toggle_light
+              service_data:
+                light: light.kitchen_counter
+                profile: kitchen
+            double_tap_action:
+              haptic: medium
+              action: call-service
+              service: script.toggle_light
+              service_data:
+                light: light.kitchen_counter
+                profile: night
+            hold_action:
+              haptic: selection
+              action: more-info
+          - type: custom:button-card
+            color_type: blank-card
+          - type: custom:button-card
+            color_type: blank-card
+      - type: horizontal-stack
         title: Outside Lights
         cards:
           - type: custom:button-card

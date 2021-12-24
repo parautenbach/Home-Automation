@@ -184,6 +184,17 @@
       data:
         entity_id: timer.foyer_timer
         duration: "00:03:00"
+    - service: script.turn_on
+      target:
+        entity_id: script.turn_on_light
+      data:
+        variables:
+          light: light.kitchen_counter
+          profile: night
+    - service: timer.start
+      data:
+        entity_id: timer.kitchen_counter_timer
+        duration: "00:03:00"
 
 - alias: "Switch Off Light When Timer Expires"
   initial_state: true
@@ -200,6 +211,10 @@
       event_type: timer.finished
       event_data:
         entity_id: timer.foyer_timer
+    - platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.kitchen_counter_timer
   mode: parallel
   action:
     - service: light.turn_off

@@ -261,7 +261,10 @@ cards:
               haptic: selection
               action: more-info
           - type: custom:button-card
-            color_type: blank-card
+            template: smart_bulb_light
+            name: Music Room
+            entity: light.music_room
+            icon: mdi:dome-light
           - type: custom:button-card
             color_type: blank-card
       - type: horizontal-stack

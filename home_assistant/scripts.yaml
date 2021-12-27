@@ -525,46 +525,16 @@ play_radio_paradise:
     - service: remote.send_command
       data:
         entity_id: remote.living_room
-        command: top_menu
-    - delay: "00:00:01"
-    - service: remote.send_command
-      data:
-        entity_id: remote.living_room
-        command: top_menu
-    - delay: "00:00:01"
-    - service: remote.send_command
-      data:
-        entity_id: remote.living_room
-        command: right
-    - delay: "00:00:01"
-    - service: remote.send_command
-      data:
-        entity_id: remote.living_room
-        command: right
-    - delay: "00:00:01"
-    - service: remote.send_command
-      data:
-        entity_id: remote.living_room
-        command: right
-    - delay: "00:00:01"
-    - service: remote.send_command
-      data:
-        entity_id: remote.living_room
-        command: down
-    - delay: "00:00:01"
-    - service: remote.send_command
-      data:
-        entity_id: remote.living_room
-        command: down
-    - delay: "00:00:01"
-    - service: remote.send_command
-      data:
-        entity_id: remote.living_room
-        command: select
-    - delay: "00:00:03"
-    - service: media_player.media_play
-      data:
+        command: wakeup
+    - delay: "00:00:05"
+    - service: media_player.select_source
+      target:
         entity_id: media_player.living_room
+      data:
+        source: "Radio Paradise"
+    - delay: "00:00:05"
+    - service: script.turn_on
+      entity_id: script.apple_tv_play_pause
 
 security_camera_record_clip:
   # todo: fire a custom event to catch in another automation and turn on the light (if dark and not already on, etc.)

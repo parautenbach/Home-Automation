@@ -540,10 +540,6 @@ security_camera_record_clip:
   # todo: fire a custom event to catch in another automation and turn on the light (if dark and not already on, etc.)
   mode: queued
   sequence:
-    - service: input_datetime.set_datetime
-      entity_id: input_datetime.security_camera_last_clip
-      data:
-        datetime: "{{ now() }}"
     - service: camera.record
       # https://github.com/home-assistant/core/issues/40241
       # entity_id: camera.security_camera
@@ -555,15 +551,15 @@ security_camera_record_clip:
         duration: 10
     - delay: "00:00:15"
     - service: shell_command.copy_last_video_clip
+    - service: input_datetime.set_datetime
+      entity_id: input_datetime.security_camera_last_clip
+      data:
+        datetime: "{{ now() }}"
 
 security_camera_create_snapshot:
   # https://www.reddit.com/r/homeassistant/comments/9fz5e4/show_the_x_most_recent_pictures_in_a_directory/e69alpc/
   mode: queued
   sequence:
-    - service: input_datetime.set_datetime
-      entity_id: input_datetime.security_camera_last_snapshot
-      data:
-        datetime: "{{ now() }}"
     - service: camera.snapshot
       # https://github.com/home-assistant/core/issues/40241
       # entity_id: camera.security_camera
@@ -572,6 +568,10 @@ security_camera_create_snapshot:
         # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
         # filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
         filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+    - service: input_datetime.set_datetime
+      entity_id: input_datetime.security_camera_last_snapshot
+      data:
+        datetime: "{{ now() }}"
     - service: shell_command.copy_last_snapshot_image
     - condition: state
       entity_id: group.security_automations

@@ -522,11 +522,6 @@ entertainment_off:
 play_radio_paradise:
   mode: single
   sequence:
-    - service: remote.send_command
-      data:
-        entity_id: remote.living_room
-        command: wakeup
-    - delay: "00:00:05"
     - service: media_player.select_source
       target:
         entity_id: media_player.living_room

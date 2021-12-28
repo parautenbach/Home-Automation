@@ -92,10 +92,10 @@ cards:
         entities:
           # don't use this if you want to use thresholds: color overrides
           # sensor.sun_illuminance can be very unreliable (operationally); need to use my own light meter
-          - entity: sensor.sun_illuminance
-            color: var(--custom-graph-color-yellow)
-          # - entity: sensor.illuminance
+          # - entity: sensor.sun_illuminance
           #   color: var(--custom-graph-color-yellow)
+          - entity: sensor.illuminance
+            color: var(--custom-graph-color-yellow)
           - entity: sensor.solar_angle
             color: var(--custom-graph-color-red)
             y_axis: secondary
@@ -104,6 +104,8 @@ cards:
         smoothing: true
         points_per_hour: 12  # every 5 min
         line_width: 2
+        lower_bound: 0
+        upper_bound: 10000
         show:
           extrema: true
         # color_thresholds:

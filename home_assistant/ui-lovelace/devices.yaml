@@ -267,7 +267,7 @@ cards:
         aggregate_func: max
         lower_bound: 0
         line_width: 2
-        line_color: var(--custom-graph-color-red)
+        line_color: var(--custom-color-red)
         show:
           extrema: true
           name: true
@@ -292,7 +292,7 @@ cards:
             # {{ "var(--state-icon-active-color)" if is_state('binary_sensor.updater', 'on') }}
             # style: |
             #   :host {
-            #     color: {{ "var(--custom-graph-color-red)" if is_state('binary_sensor.no_recent_backup', 'on') }};
+            #     color: {{ "var(--custom-color-red)" if is_state('binary_sensor.no_recent_backup', 'on') }};
             card_mod:
               style:
                 hui-generic-entity-row:
@@ -302,11 +302,11 @@ cards:
                         ha-icon:
                           $: |
                             ha-svg-icon {
-                              color: {{ "var(--custom-graph-color-red)" if is_state('binary_sensor.no_recent_backup', 'on') }};
+                              color: {{ "var(--custom-color-red)" if is_state('binary_sensor.no_recent_backup', 'on') }};
                             }
                     .: |
                       .info {
-                        color: {{ "var(--custom-graph-color-red)" if is_state('binary_sensor.no_recent_backup', 'on') }};
+                        color: {{ "var(--custom-color-red)" if is_state('binary_sensor.no_recent_backup', 'on') }};
                       }
           - sensor.db_size
           - entity: sensor.home_assistant_server_battery
@@ -356,10 +356,10 @@ cards:
         entities:
           - entity: sensor.conditions_temperature
             name: Security Camera External
-            color: var(--custom-graph-color-yellow)
+            color: var(--custom-color-yellow)
           - entity: sensor.server_cpu_temp
             name: Security Camera CPU
-            color: var(--custom-graph-color-red)
+            color: var(--custom-color-red)
         hours_to_show: 24
         hour24: true
         smoothing: true

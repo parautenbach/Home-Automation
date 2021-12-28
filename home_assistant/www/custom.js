@@ -16,12 +16,12 @@ Also see: https://github.com/home-assistant/frontend/blob/master/src/resources/h
 */
 
 document.documentElement.style.setProperty('--ha-card-border-radius',       '10px');
-document.documentElement.style.setProperty('--custom-graph-color-blue',     '#3498db');  // slate: #2980b9 - 2b84d2
-document.documentElement.style.setProperty('--custom-graph-color-yellow',   '#ff9800');  // slate: #b58e31 - fd8509
-document.documentElement.style.setProperty('--custom-graph-color-red',      '#e74c3c');  // slate: #b83829 - df342e
-document.documentElement.style.setProperty('--custom-graph-color-green',    '#70a03c');  // slate: #70a03c - 107001
-document.documentElement.style.setProperty('--custom-graph-color-magenta',  '#8840a7');  // slate: #xxxxxx - 8840a7
-document.documentElement.style.setProperty('--custom-graph-color-gray',     '#cccccc');
+document.documentElement.style.setProperty('--custom-color-blue',     '#3498db');  // slate: #2980b9 - 2b84d2
+document.documentElement.style.setProperty('--custom-color-yellow',   '#ff9800');  // slate: #b58e31 - fd8509
+document.documentElement.style.setProperty('--custom-color-red',      '#e74c3c');  // slate: #b83829 - df342e
+document.documentElement.style.setProperty('--custom-color-green',    '#70a03c');  // slate: #70a03c - 107001
+document.documentElement.style.setProperty('--custom-color-magenta',  '#8840a7');  // slate: #xxxxxx - 8840a7
+document.documentElement.style.setProperty('--custom-color-gray',     '#cccccc');
 
 document.documentElement.style.setProperty('--mini-media-player-background-opacity',  0.2);
 document.documentElement.style.setProperty('--mini-media-player-artwork-opacity',     0.8);

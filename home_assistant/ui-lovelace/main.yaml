@@ -151,7 +151,7 @@ cards:
                             if (states['timer.foyer_timer'].state == 'idle')
                               return "var(--paper-item-icon-color)";
                             else
-                              return "red";
+                              return "var(--custom-color-red)";
                           ]]]
             state:
               - value: 'unavailable'
@@ -713,7 +713,7 @@ cards:
         smoothing: true
         points_per_hour: 4  # every 15 min
         line_width: 2
-        line_color: var(--custom-graph-color-blue)
+        line_color: var(--custom-color-blue)
         show:
           extrema: true
   - type: vertical-stack
@@ -793,7 +793,7 @@ cards:
           smoothing: true
           points_per_hour: 12  # every 5 min
           line_width: 2
-          line_color: var(--custom-graph-color-red)
+          line_color: var(--custom-color-red)
           show:
             extrema: true
             name: false

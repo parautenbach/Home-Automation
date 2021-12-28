@@ -129,11 +129,13 @@ homekit:
       - light.pieter_bedside
       - light.rouve_bedside
       - light.dining_room
+      - light.music_room
       - light.foyer
       - light.front_door
       - light.backyard
       - light.garage
       - light.led  # from homebridge
+      - light.kitchen_counter
       - switch.tivoli_audio
       - cover.main_gate
       - cover.lhs_garage_door

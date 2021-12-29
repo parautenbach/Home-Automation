@@ -137,6 +137,16 @@ cards:
                           service: script.turn_on
                           service_data:
                             entity_id: script.samsung_tv_hdmi1
+                  # this is a hack, because the state switch card "bleeds" the next setting at the bottom
+                  # trying to improve this with card-mod seemed didn't help
+                  # inserting a phantom row still make it look like there is a faint divider
+                  # but at least the shadows of the last button row isn't obscured
+                  # this hack gets repeated for every selector
+                  # https://github.com/thomasloven/lovelace-state-switch/issues/67
+                  - type: horizontal-stack
+                    cards:
+                      - type: custom:button-card
+                        color_type: blank-card
               Audio:
                 type: vertical-stack
                 cards:
@@ -280,6 +290,11 @@ cards:
                           service: script.turn_on
                           service_data:
                             entity_id: script.hk_3380_mute
+                  # this is a hack
+                  - type: horizontal-stack
+                    cards:
+                      - type: custom:button-card
+                        color_type: blank-card
               "Apple TV":
                 type: vertical-stack
                 cards:
@@ -398,6 +413,11 @@ cards:
                           service: script.turn_on
                           service_data:
                             entity_id: script.apple_tv_skip_forward
+                  # this is a hack
+                  - type: horizontal-stack
+                    cards:
+                      - type: custom:button-card
+                        color_type: blank-card
               Satellite:
                 type: vertical-stack
                 cards:
@@ -630,6 +650,11 @@ cards:
                           service: script.turn_on
                           service_data:
                             entity_id: script.dstv_0
+                      - type: custom:button-card
+                        color_type: blank-card
+                  # this is a hack
+                  - type: horizontal-stack
+                    cards:
                       - type: custom:button-card
                         color_type: blank-card
       - type: entity

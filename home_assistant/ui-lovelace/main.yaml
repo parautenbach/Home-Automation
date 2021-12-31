@@ -56,46 +56,18 @@ cards:
         cards:
           # todo: light profiles/scenes
           - type: custom:button-card
-            template: smart_bulb_light
+            template: rgb_light
             variables:
               profile: pieter
             name: Pieter's Side
             entity: light.pieter_bedside
             icon: mdi:lamp
           - type: custom:button-card
+            template: basic
             name: Tivoli
             entity: switch.tivoli_audio
-            size: 20%
-            show_label: true
-            # the label plus the label colour is a hack to create a phantom space
-            label: >
-              [[[
-                return '_';
-              ]]]
-            styles:
-              name:
-                - color: var(--paper-item-icon-color)
-              label:
-                - color: var(--primary-background-color)
-              card:
-                - font-size: 12px
-              grid:
-                - grid-template-areas: '"l" "i" "n"'
-                - grid-template-rows: min-content 1fr min-content
-                - grid-template-columns: 1fr
-            state:
-              - value: 'unavailable'
-                styles:
-                  icon:
-                    - color: var(--state-icon-unavailable-color)
-            tap_action:
-              action: toggle
-              haptic: light
-            hold_action:
-              action: more-info
-              haptic: selection
           - type: custom:button-card
-            template: smart_bulb_light
+            template: rgb_light
             variables:
               profile: rouve
             name: Rouvé's Side
@@ -106,162 +78,35 @@ cards:
         title: Inside Lights
         cards:
           - type: custom:button-card
-            template: smart_bulb_light
+            template:
+              - rgb_light
+              - rgb_light_with_timer
+            variables:
+              profile: normal
             name: Foyer
             entity: light.foyer
             icon: mdi:dome-light
-            styles:
-              grid:
-                - grid-template-areas: '"t s l" "i i i" "n n n"'
-                - grid-template-rows: min-content 1fr min-content
-                - grid-template-columns: 1fr min-content 1fr
-              name:
-                - margin-top: -1px
-                - margin-bottom: 0px
-              label:
-                - align-self: middle
-                - justify-self: start
-                - padding-right: 1ex
-              custom_fields:
-                s:
-                  - color: var(--paper-item-icon-color)
-                t:
-                  - align-self: middle
-                  - justify-self: end
-                  - padding-right: 1ex
-            custom_fields:
-              s: >
-                [[[ return '/' ]]]
-              t:
-                card:
-                  type: custom:button-card
-                  name: Timer
-                  entity: timer.foyer_timer
-                  show_name: false
-                  show_icon: false
-                  show_state: true
-                  styles:
-                    card:
-                      - margin-bottom: -1px
-                      - font-size: 12px
-                      - box-shadow: none
-                    state:
-                      - color: >
-                          [[[
-                            if (states['timer.foyer_timer'].state == 'idle')
-                              return "var(--paper-item-icon-color)";
-                            else
-                              return "var(--custom-color-red)";
-                          ]]]
-            state:
-              - value: 'unavailable'
-                styles:
-                  icon:
-                    - color: var(--state-icon-unavailable-color)
-            tap_action:
-              haptic: light
-              action: call-service
-              service: script.toggle_light
-              service_data:
-                light: light.foyer
-                profile: normal
-            double_tap_action:
-              haptic: medium
-              action: call-service
-              service: script.toggle_light
-              service_data:
-                light: light.foyer
-                profile: night
-            hold_action:
-              haptic: selection
-              action: more-info
           - type: custom:button-card
+            template: light_with_timer
             name: Living Room
             entity: light.living_room_lamp
-            size: 20%
-            color: var(--button-card-light-color)
-            custom_fields:
-              t:
-                card:
-                  type: custom:button-card
-                  name: Timer
-                  entity: timer.living_room_lamp_timer
-                  show_name: false
-                  show_icon: false
-                  show_state: true
-                  styles:
-                    card:
-                      - font-size: 12px
-                      - box-shadow: none
-                    state:
-                      - margin-top: -1ex
-                      - margin-bottom: -1ex
-                      - color: >
-                          [[[
-                            if (states['timer.living_room_lamp_timer'].state == 'idle')
-                              return "var(--paper-item-icon-color)";
-                            else
-                              return "red";
-                          ]]]
-            styles:
-              name:
-                - color: var(--paper-item-icon-color)
-              label:
-                - color: var(--primary-background-color)
-              card:
-                - font-size: 12px
-              grid:
-                - grid-template-areas: '"t" "i" "n"'
-                - grid-template-rows: min-content 1fr min-content
-                - grid-template-columns: 1fr
-            state:
-              - value: 'unavailable'
-                styles:
-                  icon:
-                    - color: var(--state-icon-unavailable-color)
-            tap_action:
-              action: toggle
-              haptic: light
-            double_tap_action:
-              action: call-service
-              haptic: medium
-              service: script.turn_on_light_and_timer
-              service_data:
-                light: "[[[ return entity.entity_id; ]]]"
-                duration: "03:00:00"
-            hold_action:
-              action: more-info
-              haptic: selection
           - type: custom:button-card
-            template: smart_bulb_light
+            template: rgb_light
             name: Dining Room
             entity: light.dining_room
             icon: mdi:dome-light
       - type: horizontal-stack
         cards:
           - type: custom:button-card
-            template: smart_bulb_light
+            template:
+              - rgb_light
+              - rgb_light_with_timer
+            variables:
+              profile: kitchen
             name: Kitchen Counter
             entity: light.kitchen_counter
-            tap_action:
-              haptic: light
-              action: call-service
-              service: script.toggle_light
-              service_data:
-                light: light.kitchen_counter
-                profile: kitchen
-            double_tap_action:
-              haptic: medium
-              action: call-service
-              service: script.toggle_light
-              service_data:
-                light: light.kitchen_counter
-                profile: night
-            hold_action:
-              haptic: selection
-              action: more-info
           - type: custom:button-card
-            template: smart_bulb_light
+            template: rgb_light
             name: Music Room
             entity: light.music_room
             icon: mdi:dome-light
@@ -271,126 +116,17 @@ cards:
         title: Outside Lights
         cards:
           - type: custom:button-card
+            template: light_with_timer
             name: Front Door
             entity: light.front_door
-            size: 20%
-            color: var(--button-card-light-color)
-            styles:
-              name:
-                - color: var(--paper-item-icon-color)
-              label:
-                - color: var(--primary-background-color)
-              card:
-                - font-size: 12px
-              grid:
-                - grid-template-areas: '"t" "i" "n"'
-                - grid-template-rows: min-content 1fr min-content
-                - grid-template-columns: 1fr
-            custom_fields:
-              t:
-                card:
-                  type: custom:button-card
-                  name: Timer
-                  entity: timer.front_door_timer
-                  show_name: false
-                  show_icon: false
-                  show_state: true
-                  styles:
-                    card:
-                      - font-size: 12px
-                      - box-shadow: none
-                    state:
-                      - margin-top: -1ex
-                      - margin-bottom: -1ex
-                      - color: >
-                          [[[
-                            if (states['timer.front_door_timer'].state == 'idle')
-                              return "var(--paper-item-icon-color)";
-                            else
-                              return "red";
-                          ]]]
-            state:
-              - value: 'unavailable'
-                styles:
-                  icon:
-                    - color: var(--state-icon-unavailable-color)
-            tap_action:
-              action: toggle
-              haptic: light
-            double_tap_action:
-              action: call-service
-              haptic: medium
-              service: script.turn_on_light_and_timer
-              service_data:
-                light: "[[[ return entity.entity_id; ]]]"
-                duration: "03:00:00"
-            hold_action:
-              action: more-info
-              haptic: selection
           - type: custom:button-card
+            template: basic
             name: Garage
             entity: light.garage
-            size: 20%
-            color: var(--button-card-light-color)
-            show_label: true
-            label: >
-              [[[
-                return '_';
-              ]]]
-            styles:
-              name:
-                - color: var(--paper-item-icon-color)
-              label:
-                - color: var(--primary-background-color)
-              card:
-                - font-size: 12px
-              grid:
-                - grid-template-areas: '"l" "i" "n"'
-                - grid-template-rows: min-content 1fr min-content
-                - grid-template-columns: 1fr
-            state:
-              - value: 'unavailable'
-                styles:
-                  icon:
-                    - color: var(--state-icon-unavailable-color)
-            tap_action:
-              action: toggle
-              haptic: light
-            hold_action:
-              action: more-info
-              haptic: selection
           - type: custom:button-card
+            template: basic
             name: Backyard
             entity: light.backyard
-            size: 20%
-            color: var(--button-card-light-color)
-            show_label: true
-            label: >
-              [[[
-                return '_';
-              ]]]
-            styles:
-              name:
-                - color: var(--paper-item-icon-color)
-              label:
-                - color: var(--primary-background-color)
-              card:
-                - font-size: 12px
-              grid:
-                - grid-template-areas: '"l" "i" "n"'
-                - grid-template-rows: min-content 1fr min-content
-                - grid-template-columns: 1fr
-            state:
-              - value: 'unavailable'
-                styles:
-                  icon:
-                    - color: var(--state-icon-unavailable-color)
-            tap_action:
-              action: toggle
-              haptic: light
-            hold_action:
-              action: more-info
-              haptic: selection
       - type: vertical-stack
         title: Entertainment
         cards:

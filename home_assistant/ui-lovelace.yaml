@@ -44,7 +44,94 @@ button_card_templates:
         - color: var(--secondary-text-color)
         - font-size: 0.8rem
     tap_action: none
-  smart_bulb_light:
+  basic:
+    size: 20%
+    show_label: true
+    color: var(--button-card-light-color)
+    # this is just to create a phantom space to have it align better with other buttons on the same row
+    label: >
+      [[[
+        return '_';
+      ]]]
+    styles:
+      name:
+        - color: var(--paper-item-icon-color)
+      label:
+        - color: var(--primary-background-color)
+      card:
+        - font-size: 12px
+      grid:
+        - grid-template-areas: '"l" "i" "n"'
+        - grid-template-rows: min-content 1fr min-content
+        - grid-template-columns: 1fr
+    state:
+      - value: 'unavailable'
+        styles:
+          icon:
+            - color: var(--state-icon-unavailable-color)
+    tap_action:
+      action: toggle
+      haptic: light
+    hold_action:
+      action: more-info
+      haptic: selection
+  light_with_timer:
+    triggers_update: all
+    size: 20%
+    color: var(--button-card-light-color)
+    styles:
+      name:
+        - color: var(--paper-item-icon-color)
+      label:
+        - color: var(--primary-background-color)
+      card:
+        - font-size: 12px
+      grid:
+        - grid-template-areas: '"t" "i" "n"'
+        - grid-template-rows: min-content 1fr min-content
+        - grid-template-columns: 1fr
+    custom_fields:
+      t:
+        card:
+          type: custom:button-card
+          name: Timer
+          entity: "[[[ return entity.entity_id.replace('light.', 'timer.') + '_timer'; ]]]"
+          show_name: false
+          show_icon: false
+          show_state: true
+          styles:
+            card:
+              - font-size: 12px
+              - box-shadow: none
+            state:
+              - margin-top: -1ex
+              - margin-bottom: -1ex
+              - color: >
+                  [[[
+                    if (states[`${entity.entity_id}`.replace('light.', 'timer.') + '_timer'].state == 'idle')
+                      return "var(--paper-item-icon-color)";
+                    else
+                      return "var(--custom-color-red)";
+                  ]]]
+    state:
+      - value: 'unavailable'
+        styles:
+          icon:
+            - color: var(--state-icon-unavailable-color)
+    tap_action:
+      action: toggle
+      haptic: light
+    double_tap_action:
+      action: call-service
+      haptic: medium
+      service: script.turn_on_light_and_timer
+      service_data:
+        light: "[[[ return entity.entity_id; ]]]"
+        duration: "00:03:00"
+    hold_action:
+      action: more-info
+      haptic: selection
+  rgb_light:
     variables:
       above_threshold: |
         [[[
@@ -112,6 +199,73 @@ button_card_templates:
     hold_action:
       action: more-info
       haptic: selection
+  rgb_light_with_timer:
+    triggers_update: all
+    styles:
+      grid:
+        - grid-template-areas: '"t s l" "i i i" "n n n"'
+        - grid-template-rows: min-content 1fr min-content
+        - grid-template-columns: 1fr min-content 1fr
+      name:
+        - margin-top: -1px
+        - margin-bottom: 0px
+      label:
+        - align-self: middle
+        - justify-self: start
+        - padding-right: 1ex
+      custom_fields:
+        s:
+          - color: var(--paper-item-icon-color)
+        t:
+          - align-self: middle
+          - justify-self: end
+          - padding-right: 1ex
+    custom_fields:
+      s: >
+        [[[ return '/' ]]]
+      t:
+        card:
+          type: custom:button-card
+          name: Timer
+          entity: "[[[ return entity.entity_id.replace('light.', 'timer.') + '_timer'; ]]]"
+          show_name: false
+          show_icon: false
+          show_state: true
+          styles:
+            card:
+              - margin-bottom: -1px
+              - font-size: 12px
+              - box-shadow: none
+            state:
+              - color: >
+                  [[[
+                    if (states[`${entity.entity_id}`.replace('light.', 'timer.') + '_timer'].state == 'idle')
+                      return "var(--paper-item-icon-color)";
+                    else
+                      return "var(--custom-color-red)";
+                  ]]]
+    state:
+      - value: 'unavailable'
+        styles:
+          icon:
+            - color: var(--state-icon-unavailable-color)
+    tap_action:
+      haptic: light
+      action: call-service
+      service: script.toggle_light
+      service_data:
+        light: "[[[ return entity.entity_id; ]]]"
+        profile: "[[[ return variables.profile; ]]]"
+    double_tap_action:
+      haptic: medium
+      action: call-service
+      service: script.toggle_light
+      service_data:
+        light: "[[[ return entity.entity_id; ]]]"
+        profile: night
+    hold_action:
+      haptic: selection
+      action: more-info
   shutdown:
     name: "[[[ return entity.attributes.friendly_name; ]]]"
     size: 30%

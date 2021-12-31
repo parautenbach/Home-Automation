@@ -80,7 +80,24 @@ frontend:
   themes: !include_dir_merge_named themes
   extra_module_url:
     - /local/custom.js
+    - /local/panel_redirect.js
     - /hacsfiles/lovelace-card-mod/card-mod.js
+
+panel_custom:
+  - name: panel-redirect
+    url_path: redirect-server-controls
+    sidebar_title: Server Controls
+    sidebar_icon: mdi:server
+    module_url: /local/panel-redirect.js
+    config:
+      target: /config/server_control
+  - name: panel-redirect
+    url_path: redirect-devices
+    sidebar_title: Devices & Services
+    sidebar_icon: mdi:devices
+    module_url: /local/panel-redirect.js
+    config:
+      target: /config/integrations
 
 recorder:
   db_url: postgresql://@/homeassistant

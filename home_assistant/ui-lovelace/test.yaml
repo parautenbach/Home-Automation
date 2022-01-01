@@ -28,10 +28,10 @@ cards:
     entities:
       - input_boolean.test
       - sensor.motion_detected_last_relative
-      - binary_sensor.motion_detected
+      - binary_sensor.foyer_motion_detected
       - light.led
-      - binary_sensor.motion_sensor_2
-      - binary_sensor.motion_sensor_3
+      - binary_sensor.foyer_motion_homebridge
+      - binary_sensor.foyer_occupancy_homebridge
       - sensor.conditions_temperature
       - sensor.conditions_humidity
       - proximity.home

@@ -1,6 +1,6 @@
 default_view:
   entities:
-    - binary_sensor.motion_sensor_2
+    - binary_sensor.foyer_motion_homebridge
     - binary_sensor.updater
     - sun.sun
     - person.pieter_rautenbach

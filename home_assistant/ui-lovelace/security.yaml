@@ -14,7 +14,7 @@ badges:
                   color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
                 }
   - entity: binary_sensor.doorbell_rang
-  - entity: binary_sensor.motion_detected
+  - entity: binary_sensor.foyer_motion_detected
     name: Foyer Motion
     card_mod:
       style:
@@ -32,7 +32,7 @@ cards:
         title: Security Camera
         camera_image: camera.security_camera
         entities:
-          - binary_sensor.motion_detected
+          - binary_sensor.foyer_motion_detected
           - entity: script.security_camera_create_snapshot
             tap_action:
               action: call-service
@@ -121,5 +121,5 @@ cards:
         title: Motion
         hours_to_show: 24
         entities:
-          - entity: binary_sensor.motion_sensor_3
+          - entity: binary_sensor.foyer_occupancy_homebridge
             name: Security Camera

@@ -104,7 +104,7 @@
     motion_detected_last_relative:
       value_template: >
         {%- set _ = states('sensor.time') %}
-        {%- set t = state_attr('input_datetime.motion_detected_last', 'timestamp') %}
+        {%- set t = state_attr('input_datetime.foyer_motion_detected_last', 'timestamp') %}
         {%- if t != None %}
           {%- set n = now().timestamp() %}
           {%- set d = n-t %}

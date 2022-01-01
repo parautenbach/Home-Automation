@@ -135,7 +135,7 @@ homekit:
       - input_boolean.pieter_driving
       - binary_sensor.electricity_feed
       - binary_sensor.internet_connection
-      - binary_sensor.motion_detected
+      - binary_sensor.foyer_motion_detected
       - sensor.conditions_temperature  # from homebridge
       - sensor.conditions_humidity  # from homebridge
       - sensor.living_room_ht_temperature
@@ -285,7 +285,7 @@ input_datetime:
   security_camera_last_clip:
     has_date: true
     has_time: true
-  motion_detected_last:
+  foyer_motion_detected_last:
     has_date: true
     has_time: true
   wake_up_time:

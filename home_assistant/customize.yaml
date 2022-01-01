@@ -4,8 +4,8 @@ sensor.conditions_humidity:
   friendly_name: Humidity
 camera.security_camera:
   friendly_name: Security Camera
-binary_sensor.motion_sensor_2:
-  friendly_name: Motion Sensor
+binary_sensor.foyer_motion_homebridge:
+  friendly_name: Foyer Motion Sensor
   icon: mdi:motion-sensor
 light.led:
   icon: mdi:motion-sensor

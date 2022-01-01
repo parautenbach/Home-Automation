@@ -36,7 +36,7 @@
   initial_state: true
   trigger:
     platform: state
-    entity_id: binary_sensor.motion_sensor_2
+    entity_id: binary_sensor.foyer_motion_homebridge
     to: "on"
   condition:
     - condition: state
@@ -50,15 +50,15 @@
     - service: script.turn_on
       entity_id: script.security_camera_create_snapshot
 
-- alias: "Motion Detected Last"
+- alias: "Foyer Motion Detected Last"
   initial_state: true
   trigger:
     platform: state
-    entity_id: binary_sensor.motion_sensor_2
+    entity_id: binary_sensor.foyer_motion_homebridge
     to: "on"
   action:
     - service: input_datetime.set_datetime
-      entity_id: input_datetime.motion_detected_last
+      entity_id: input_datetime.foyer_motion_detected_last
       data:
         datetime: "{{ now() }}"
 
@@ -67,7 +67,7 @@
   initial_state: true
   trigger:
     platform: state
-    entity_id: binary_sensor.motion_sensor_2
+    entity_id: binary_sensor.foyer_motion_homebridge
     to: "on"
   condition:
     - condition: state
@@ -159,7 +159,7 @@
   initial_state: true
   trigger:
     platform: state
-    entity_id: binary_sensor.motion_sensor_2
+    entity_id: binary_sensor.foyer_motion_homebridge
     to: "on"
   condition:
     - condition: and
@@ -235,7 +235,7 @@
   initial_state: true
   trigger:
     platform: state
-    entity_id: binary_sensor.motion_detected
+    entity_id: binary_sensor.foyer_motion_detected
     to: "on"
   action:
     - service: light.turn_on
@@ -245,7 +245,7 @@
   initial_state: true
   trigger:
     platform: state
-    entity_id: binary_sensor.motion_detected
+    entity_id: binary_sensor.foyer_motion_detected
     to: "off"
   action:
     - service: light.turn_off

@@ -312,10 +312,16 @@
 - platform: statistics
   name: 'Internet Traffic In'
   entity_id: sensor.internet_speed_in
+  state_characteristic: mean
+  max_age:
+    minutes: 1
 
 - platform: statistics
   name: 'Internet Traffic Out'
   entity_id: sensor.internet_speed_out
+  state_characteristic: mean
+  max_age:
+    minutes: 1
 
 - platform: filter
   name: google_travel_time_filtered

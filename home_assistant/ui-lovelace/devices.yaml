@@ -160,7 +160,7 @@ cards:
         - automation.guest_mode_enabled_alert
         - automation.lights_off_after_sunrise
         - automation.lights_on_upon_low_light
-        - automation.living_room_lamp_auto_on_upon_sunset_or_arrival
+        - automation.inside_lights_auto_on_upon_sunset_or_arrival
         - automation.low_server_battery
         - automation.notify_if_driving_state_changed
         - automation.notify_if_electricity_feed_status_changed

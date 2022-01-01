@@ -104,8 +104,8 @@
       data:
         entity_id: timer.foyer_timer
         duration: "00:01:00"
-    - service: switch.turn_on
-      entity_id: switch.living_room_lamp
+    - service: light.turn_on
+      entity_id: light.living_room_lamp
     - service: timer.start
       data:
         entity_id: timer.living_room_lamp_timer
@@ -282,7 +282,7 @@
     - service: automation.turn_on
       entity_id: automation.motion_indicator_on
 
-- alias: "Living Room Lamp Auto On Upon Sunset or Arrival"
+- alias: "Inside Lights Auto On Upon Sunset or Arrival"
   initial_state: true
   trigger:
     # https://www.home-assistant.io/cookbook/automation_sun/
@@ -309,8 +309,10 @@
           before: sunrise
           before_offset: "-01:00:00"
   action:
-    - service: switch.turn_on
-      entity_id: switch.living_room_lamp
+    - service: light.turn_on
+      entity_id: light.living_room_lamp
+    - service: light.turn_on
+      entity_id: light.kitchen_counter
 
 - alias: "Bedlamps Auto On Upon Sunset or Arrival"
   initial_state: true
@@ -380,11 +382,13 @@
       after: "08:00:00"
       before: "21:00:00"
     - condition: state
-      entity_id: switch.living_room_lamp
+      entity_id: light.living_room_lamp
       state: "off"
   action:
-    - service: switch.turn_on
-      entity_id: switch.living_room_lamp
+    - service: light.turn_on
+      entity_id: light.living_room_lamp
+    - service: light.turn_on
+      entity_id: light.kitchen_counter
 
 - alias: "Bedlamps On Upon Low Light"
   initial_state: true
@@ -448,8 +452,10 @@
         entity_id: binary_sensor.workday
         state: "off"
   action:
-    - service: switch.turn_off
-      entity_id: switch.living_room_lamp
+    - service: light.turn_off
+      entity_id: light.living_room_lamp
+    - service: light.turn_on
+      entity_id: light.kitchen_counter
 
 - alias: "Bedlamps Off After Sunrise"
   initial_state: true

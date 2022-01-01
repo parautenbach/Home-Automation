@@ -266,6 +266,86 @@ button_card_templates:
     hold_action:
       haptic: selection
       action: more-info
+  cover_with_timer:
+    triggers_update: all
+    size: 20%
+    show_name: true
+    color_type: icon
+    color: var(--paper-item-icon-color)
+    custom_fields:
+      t:
+        card:
+          type: custom:button-card
+          name: Timer
+          entity: "[[[ return entity.entity_id.replace('cover.', 'timer.') + '_timer'; ]]]"
+          show_name: false
+          show_icon: false
+          show_state: true
+          styles:
+            card:
+              - font-size: 12px
+              - box-shadow: none
+            state:
+              - margin-top: -1ex
+              - margin-bottom: -1ex
+              - color: >
+                  [[[
+                    if (states[`${entity.entity_id}`.replace('cover.', 'timer.') + '_timer'].state == 'idle')
+                      return "var(--paper-item-icon-color)";
+                    else
+                      return "var(--custom-color-red)";
+                  ]]]
+    styles:
+      name:
+        - color: var(--paper-item-icon-color)
+      card:
+        - font-size: 12px
+      grid:
+        - grid-template-areas: '"t" "i" "n"'
+        - grid-template-rows: min-content 1fr min-content
+        - grid-template-columns: 1fr
+    state:
+      - value: 'unavailable'
+        styles:
+          icon:
+            - color: var(--state-icon-unavailable-color)
+    tap_action:
+      action: toggle
+      haptic: light
+    hold_action:
+      action: call-service
+      haptic: heavy
+      service: timer.start
+      service_data:
+        entity_id: "[[[ return entity.entity_id.replace('cover.', 'timer.') + '_timer'; ]]]"
+        duration: "00:10:00"
+  cover_with_occupancy:
+    triggers_update: all
+    state:
+      - operator: template
+        value: >
+          [[[
+            return states[`${variables.occupancy_entity}`].state == 'on'
+          ]]]
+        color: var(--paper-item-icon-active-color)
+      - operator: template
+        value: >
+          [[[
+            return states[`${variables.occupancy_entity}`].state == 'off'
+          ]]]
+        color: var(--paper-item-icon-color)
+      - operator: template
+        value: >
+          [[[
+            return states[`${variables.occupancy_entity}`].state == 'unavailable'
+          ]]]
+        color: var(--state-icon-unavailable-color)
+    double_tap_action:
+      action: call-service
+      haptic: medium
+      service: script.close_garage_door_and_main_gate
+      service_data:
+        garage_door: "[[[ return entity.entity_id; ]]]"
   shutdown:
     name: "[[[ return entity.attributes.friendly_name; ]]]"
     size: 30%

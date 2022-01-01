@@ -42,6 +42,10 @@
     - condition: state
       entity_id: binary_sensor.anybody_home
       state: "off"
+    - condition: template
+      value_template: >-
+        {# prevent the light turning off after the last trigger to trigger the motion sensor again immediately #}
+        {{ (utcnow() - states.light.foyer.last_changed).seconds >= 1 }}
   action:
     - service: script.turn_on
       entity_id: script.security_camera_create_snapshot
@@ -81,13 +85,13 @@
         - condition: state
           entity_id: binary_sensor.low_light
           state: "on"
+        - condition: template
+          value_template: >-
+            {# prevent the light turning off after the last trigger to trigger the motion sensor again immediately #}
+            {{ (utcnow() - states.light.foyer.last_changed).seconds >= 1 }}
   action:
-    - service: switch.turn_on
-      entity_id: switch.living_room_lamp
-    - service: timer.start
-      data:
-        entity_id: timer.living_room_lamp_timer
-        duration: "00:01:00"
+    # turn on this light first, as it will run at the same time as the "Take Motion Snapshots" automation and
+    # we want the light on when the snapshot is taken
     - service: script.turn_on
       target:
         entity_id: script.turn_on_light
@@ -98,6 +102,12 @@
     - service: timer.start
       data:
         entity_id: timer.foyer_timer
+        duration: "00:01:00"
+    - service: switch.turn_on
+      entity_id: switch.living_room_lamp
+    - service: timer.start
+      data:
+        entity_id: timer.living_room_lamp_timer
         duration: "00:01:00"
 
 - alias: "Switch On Lights At Wake Up Time"

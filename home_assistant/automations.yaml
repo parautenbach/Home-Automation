@@ -32,7 +32,7 @@
     data:
       name: slate
 
-- alias: "Take Motion Snapshots"
+- alias: "Take Foyer Motion Snapshots"
   initial_state: true
   trigger:
     platform: state
@@ -73,6 +73,11 @@
     - condition: state
       entity_id: binary_sensor.anybody_home
       state: "off"
+    - condition: template
+      # todo: might need to check the light state? implicitly assuming here that the last state change was to "off"
+      value_template: >-
+        {# prevent the light turning off after the last trigger to trigger the motion sensor again immediately #}
+        {{ (utcnow() - states.light.foyer.last_changed).seconds >= 1 }}
     # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
     - condition: or
       conditions:
@@ -85,10 +90,6 @@
         - condition: state
           entity_id: binary_sensor.low_light
           state: "on"
-        - condition: template
-          value_template: >-
-            {# prevent the light turning off after the last trigger to trigger the motion sensor again immediately #}
-            {{ (utcnow() - states.light.foyer.last_changed).seconds >= 1 }}
   action:
     # turn on this light first, as it will run at the same time as the "Take Motion Snapshots" automation and
     # we want the light on when the snapshot is taken

@@ -188,7 +188,7 @@ cards:
         - automation.switch_on_lights_if_motion_is_detected
         - automation.switch_on_night_light_if_motion_is_detected
         - automation.switch_on_the_front_door_light_when_arriving_home
-        - automation.take_motion_snapshots
+        - automation.take_foyer_motion_snapshots
         - automation.turn_off_entertainment_system_when_idle_or_leaving_room
         - automation.update_security_camera_snapshot_gallery
         - automation.update_server_power_status

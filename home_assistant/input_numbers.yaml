@@ -1,0 +1,6 @@
+wan_traffic_delta_in:
+  min: 0
+  max: 4294967295
+wan_traffic_delta_out:
+  min: 0
+  max: 4294967295

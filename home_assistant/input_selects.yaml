@@ -1,0 +1,9 @@
+selected_remote:
+  name: Remote
+  options:
+    - TV
+    - Audio
+    - Apple TV
+    - Satellite
+  initial: Audio
+  icon: mdi:remote-tv

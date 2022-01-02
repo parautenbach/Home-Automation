@@ -1,0 +1,90 @@
+name: Home Assistant
+filter:
+  include_entities:
+    - input_boolean.test
+    - input_boolean.pieter_present
+    - input_boolean.rouve_present
+    - input_boolean.guest_mode
+    - input_boolean.contractor_mode
+    - input_boolean.pieter_driving
+    - binary_sensor.electricity_feed
+    - binary_sensor.internet_connection
+    - binary_sensor.foyer_motion_detected
+    - sensor.conditions_temperature  # from homebridge
+    - sensor.conditions_humidity  # from homebridge
+    - sensor.living_room_ht_temperature
+    - sensor.living_room_ht_humidity
+    - sensor.main_bedroom_ht_temperature
+    - sensor.main_bedroom_ht_humidity
+    - light.living_room_lamp
+    - light.pieter_bedside
+    - light.rouve_bedside
+    - light.dining_room
+    - light.music_room
+    - light.foyer
+    - light.front_door
+    - light.backyard
+    - light.garage
+    - light.led  # from homebridge
+    - light.kitchen_counter
+    - switch.tivoli_audio
+    - cover.main_gate
+    - cover.lhs_garage_door
+    - cover.rhs_garage_door
+    - script.entertainment_apple_tv_on
+    - script.entertainment_satellite_on
+    - script.entertainment_off
+    - script.open_pedestrian_gap
+    - camera.security_camera
+    - camera.doorbell
+entity_config:
+  sensor.living_room_ht_temperature:
+    linked_battery_sensor: sensor.living_room_ht_battery
+  sensor.living_room_ht_humidity:
+    linked_battery_sensor: sensor.living_room_ht_battery
+  sensor.main_bedroom_ht_temperature:
+    linked_battery_sensor: sensor.main_bedroom_ht_battery
+  sensor.main_bedroom_ht_humidity:
+    linked_battery_sensor: sensor.main_bedroom_ht_battery
+  sensor.conditions_temperature:
+    name: Living Room Temperature
+  sensor.conditions_humidity:
+    name: Living Room Humidity
+  light.living_room_lamp:
+    name: Living Room Lamp
+  light.pieter_bedside:
+    name: Pieter's Bedside
+    linked_battery_sensor: sensor.pieter_bedside_light_button_battery
+  light.rouve_bedside:
+    name: Rouvé's Bedside
+    linked_battery_sensor: sensor.rouve_bedside_light_button_battery
+  light.dining_room:
+    name: Dining Room
+    linked_battery_sensor: sensor.dining_room_light_button_battery
+  light.foyer:
+    name: Foyer
+  light.front_door:
+    name: Front Door
+  light.backyard:
+    name: Backyard
+  light.garage:
+    name: Garage
+  light.led:
+    name: Motion LED
+  switch.tivoli_audio:
+    name: Tivoli Audio
+  cover.main_gate:
+    name: Main Gate
+  cover.lhs_garage_door:
+    name: Rouvé's Garage Door
+  cover.rhs_garage_door:
+    name: Pieter's Garage Door
+  script.entertainment_apple_tv_on:
+    name: Apple TV Sys On
+  script.entertainment_satellite_on:
+    name: Satellite Sys On
+  script.entertainment_off:
+    name: Entertainment Sys Off
+  script.open_pedestrian_gap:
+    name: Open Pedestrian Gap
+  # todo: linked_motion_sensor, https://www.home-assistant.io/integrations/homekit/#linked_motion_sensor (for cameras)

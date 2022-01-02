@@ -1,0 +1,15 @@
+security_camera_last_snapshot:
+  has_date: true
+  has_time: true
+security_camera_last_clip:
+  has_date: true
+  has_time: true
+foyer_motion_detected_last:
+  has_date: true
+  has_time: true
+wake_up_time:
+  has_time: true
+vacation_start:
+  has_date: true
+vacation_end:
+  has_date: true

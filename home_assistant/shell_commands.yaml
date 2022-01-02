@@ -1,0 +1,11 @@
+noop: ":"
+copy_last_snapshot_image: "cp `ls -t /tmp/camera.security_camera_*.jpg | head -n1` /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg"
+copy_last_video_clip: "cp `ls -t /tmp/camera.security_camera_*.mp4 | head -n1` /home/homeassistant/.homeassistant/www/camera.security_camera_last.mp4"
+# keep a rolling buffer of n snapshots by always copying only the latest ones and removing the oldest
+# rsync will only copy what's new up to n and the second command will remove what's extra (can't do it with rsync's --delete unless the source is a directory)
+# this is to avoid the distination from growing indefinitely
+sync_snapshots: "rsync -a `ls /tmp/camera.security_camera_*.jpg | sort | tail -n5` /home/homeassistant/.homeassistant/www/gallery/"
+trim_snapshots: "ls /home/homeassistant/.homeassistant/www/gallery/ | sort -r | tail -n +6 | xargs -I {} rm -- /home/homeassistant/.homeassistant/www/gallery/{}"
+shudown_remote_host: "/home/homeassistant/scripts/shutdown_remote_host.sh {{ host }}"
+make_backup: "/home/homeassistant/scripts/backup.sh"
+download_latest_dam_levels: "/home/homeassistant/scripts/download_latest_dam_levels.sh"

@@ -542,6 +542,7 @@
       - light.living_room_lamp
       - light.front_door
       - light.foyer
+      - light.kitchen_counter
     to: "off"
   mode: parallel
   condition:

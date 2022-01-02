@@ -10,3 +10,7 @@
 - platform: switch
   name: garage
   entity_id: switch.shelly1_b95a0e
+  name: Normal Light Group
+  entities:
+    - light.living_room_lamp
+    - light.kitchen_counter

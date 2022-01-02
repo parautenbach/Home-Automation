@@ -121,10 +121,10 @@
       entity_id: binary_sensor.workday
       state: "on"
   action:
-    # todo: use transition (once bug is fixed)
     - service: light.turn_on
       target:
-        entity_id: light.living_room_lamp
+        entity_id: light.normal_light_group
+    # todo: use transition (bug has been fixed)
     - service: script.turn_on
       target:
         entity_id: script.turn_on_light
@@ -310,9 +310,7 @@
           before_offset: "-01:00:00"
   action:
     - service: light.turn_on
-      entity_id: light.living_room_lamp
-    - service: light.turn_on
-      entity_id: light.kitchen_counter
+      entity_id: light.normal_light_group
 
 - alias: "Bedlamps Auto On Upon Sunset or Arrival"
   initial_state: true
@@ -386,9 +384,7 @@
       state: "off"
   action:
     - service: light.turn_on
-      entity_id: light.living_room_lamp
-    - service: light.turn_on
-      entity_id: light.kitchen_counter
+      entity_id: light.normal_light_group
 
 - alias: "Bedlamps On Upon Low Light"
   initial_state: true
@@ -453,9 +449,7 @@
         state: "off"
   action:
     - service: light.turn_off
-      entity_id: light.living_room_lamp
-    - service: light.turn_off
-      entity_id: light.kitchen_counter
+      entity_id: light.normal_light_group
 
 - alias: "Bedlamps Off After Sunrise"
   initial_state: true
@@ -1249,6 +1243,8 @@
   action:
     - service: script.turn_on
       entity_id: script.entertainment_off
+    - service: light.turn_off
+      entity_id: light.normal_light_group
 
 - alias: "Backup Home Assistant"
   trigger:

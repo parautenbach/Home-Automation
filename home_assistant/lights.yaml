@@ -14,3 +14,8 @@
   entities:
     - light.living_room_lamp
     - light.kitchen_counter
+- platform: group
+  name: Night Group
+  entities:
+    - light.foyer
+    - light.kitchen_counter

@@ -296,9 +296,6 @@
     - condition: state
       entity_id: binary_sensor.anybody_home
       state: "on"
-    - condition: state
-      entity_id: binary_sensor.low_light
-      state: "on"
     # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
     - condition: or
       conditions:
@@ -308,6 +305,9 @@
         - condition: sun
           before: sunrise
           before_offset: "-01:00:00"
+        - condition: state
+          entity_id: binary_sensor.low_light
+          state: "on"
   action:
     - service: light.turn_on
       entity_id: light.normal_light_group
@@ -367,14 +367,17 @@
     - platform: state
       entity_id: binary_sensor.low_light
       to: "on"
-    - platform: time
-      at: "08:00:00"
+    - platform: time_pattern
+      minutes: "*"
     - platform: state
       entity_id: binary_sensor.anybody_home
       to: "on"
   condition:
     - condition: state
       entity_id: binary_sensor.anybody_home
+      state: "on"
+    - condition: state
+      entity_id: binary_sensor.low_light
       state: "on"
     - condition: time
       after: "08:00:00"

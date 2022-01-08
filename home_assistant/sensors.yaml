@@ -38,14 +38,14 @@
       value_template: "{{ '%+.1f' | format(state_attr('sun.sun', 'elevation')) }}"
     security_camera_last_clip:
       device_class: timestamp
-      value_template: "{{ states('input_datetime.security_camera_last_clip') }}"
+      value_template: "{{ states('input_datetime.security_camera_last_clip') | as_datetime | as_local }}"
     security_camera_last_clip_relative:
       value_template: >
         {%- set _ = states('sensor.time') %}
         {%- set t = state_attr('input_datetime.security_camera_last_clip', 'timestamp') %}
         {%- if t != None %}
           {%- set n = now().timestamp() %}
-          {%- set d = n-t %}
+          {%- set d = n - t %}
           {%- set midnight_today = as_timestamp(strptime(now().date() | string, "%Y-%m-%d")) %}
           {%- set midnight_yesterday = midnight_today - 86400 %}
           {%- set midnight_week_ago = midnight_today - 604800 %}
@@ -55,21 +55,21 @@
             1 minute ago
           {%- elif d < 3600 %}
             {{ (d // 60) | int }} minutes ago
-          {%- elif d < n-midnight_today %}
+          {%- elif d < n - midnight_today %}
             Today at {{ t | timestamp_custom('%H:%M') }}
-          {%- elif d < n-midnight_yesterday %}
+          {%- elif d < n - midnight_yesterday %}
             Yesterday at {{ t | timestamp_custom('%H:%M') }}
-          {%- elif d < n-midnight_week_ago %}
+          {%- elif d < n - midnight_week_ago %}
             {{ t | timestamp_custom('%A at %H:%M') }}
           {%- else %}
-            {{ t | timestamp_local }}
+            {{ t | timestamp_custom('%Y-%m-%d %H:%M:%S') }}
           {%- endif %}
         {% else %}
           unknown
         {% endif %}
     security_camera_last_snapshot:
       device_class: timestamp
-      value_template: "{{ states('input_datetime.security_camera_last_snapshot') }}"
+      value_template: "{{ states('input_datetime.security_camera_last_snapshot') | as_datetime | as_local }}"
     security_camera_last_snapshot_relative:
       # the first line is a hack to avoid having to write an automation
       # - https://www.home-assistant.io/integrations/template/#working-without-entities
@@ -96,7 +96,7 @@
           {%- elif d < n-midnight_week_ago %}
             {{ t | timestamp_custom('%A at %H:%M') }}
           {%- else %}
-            {{ t | timestamp_local }}
+            {{ t | timestamp_custom('%Y-%m-%d %H:%M:%S') }}
           {%- endif %}
         {% else %}
           unknown

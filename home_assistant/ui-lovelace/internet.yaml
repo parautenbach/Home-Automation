@@ -62,9 +62,6 @@ cards:
         points_per_hour: 12  # every 5 min
         aggregate_func: max
         line_width: 2
-  - type: vertical-stack
-    title: Internet Connection
-    cards:
       - type: history-graph
         hours_to_show: 24
         entities:
@@ -146,3 +143,14 @@ cards:
           show:
             extrema: true
             average: true
+  - type: vertical-stack
+    title: Join Home Network
+    cards:
+      - type: picture
+        # generated with https://qifi.org/
+        image: /local/join_home_internet.png
+        card_mod:
+          style: |
+            img {
+              transform: scale(0.8);
+            }

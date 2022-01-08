@@ -202,13 +202,13 @@
       device_class: timestamp
       value_template: >-
         {% set last_backup_file = state_attr('sensor.home_assistant', 'file_list') | sort(reverse=True) | first %}
-        {{ 'unknown' if last_backup_file is not defined else (last_backup_file[-19:-4].replace('_', ' ') | as_datetime).astimezone().isoformat() }}
+        {{ 'unknown' if last_backup_file is not defined else strptime(last_backup_file[-19:-4] ~ '+0000', '%Y%m%d_%H%M%S%z', None).isoformat() }}
       icon_template: >-
         {% set reversed_file_list = state_attr('sensor.home_assistant', 'file_list') | sort(reverse=True) %}
         {% set last_backup_file = state_attr('sensor.home_assistant', 'file_list') | sort(reverse=True) | first %}
         {% if (last_backup_file) %}
-          {% set last_backup_dt = last_backup_file[-19:-4].replace('_', ' ') | as_datetime %}
-          {% if ((utcnow().replace(tzinfo=None) - (last_backup_dt)).days > 4) %}
+          {% set last_backup_dt = strptime(last_backup_file[-19:-4] ~ '+0000', '%Y%m%d_%H%M%S%z', None) %}
+          {% if (utcnow() - last_backup_dt).days > 4 %}
             mdi:file-alert-outline
           {% else %}
             mdi:file-outline

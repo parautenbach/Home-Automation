@@ -44,7 +44,7 @@
       state: "off"
     - condition: template
       value_template: >-
-        {# prevent the light turning off after the last trigger to trigger the motion sensor again immediately #}
+        {# prevent the action of the light turning off after the last trigger to trigger the motion sensor again immediately #}
         {{ (utcnow() - states.light.foyer.last_changed).seconds >= 1 }}
   action:
     - service: script.turn_on

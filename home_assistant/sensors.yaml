@@ -202,7 +202,7 @@
       device_class: timestamp
       value_template: >-
         {% set last_backup_file = state_attr('sensor.home_assistant', 'file_list') | sort(reverse=True) | first %}
-        {{ 'unknown' if last_backup_file is not defined else strptime(last_backup_file[-19:-4] ~ '+0000', '%Y%m%d_%H%M%S%z', None).isoformat() }}
+        {{ (0 | as_datetime) if last_backup_file is not defined else strptime(last_backup_file[-19:-4] ~ '+0000', '%Y%m%d_%H%M%S%z', None).isoformat() }}
       icon_template: >-
         {% set reversed_file_list = state_attr('sensor.home_assistant', 'file_list') | sort(reverse=True) %}
         {% set last_backup_file = state_attr('sensor.home_assistant', 'file_list') | sort(reverse=True) | first %}

@@ -210,6 +210,7 @@
 - alias: "Switch Off Light When Timer Expires"
   initial_state: true
   trigger:
+    # same entities as for "Stop Light Timer If Running When Light Turned Off"
     - platform: event
       event_type: timer.finished
       event_data:
@@ -434,7 +435,7 @@
       to: "off"
       # to avoid the light turning off when there briefly is bright sunshine
       for:
-        minutes: 5
+        minutes: 15
   # todo: if anybody home?
   condition:
     condition: and
@@ -452,6 +453,7 @@
         state: "off"
   action:
     - service: light.turn_off
+      # todo: all? (all would cover bedlights too, which has its own automation)
       entity_id: light.normal_light_group
 
 - alias: "Bedlamps Off After Sunrise"
@@ -536,6 +538,7 @@
   trigger:
     platform: state
     entity_id:
+      # same entities as for "Switch Off Light When Timer Expires"
       - light.living_room_lamp
       - light.front_door
       - light.foyer
@@ -1082,7 +1085,6 @@
         entity_id: script.turn_on_light_and_timer
       data:
         variables:
-          # todo: renamde light to entity_id?
           light: light.front_door
           duration: "00:03:00"
 
@@ -1292,8 +1294,8 @@
   condition:
     condition: template
     value_template: >-
-      {% set last_backup = strptime(states('sensor.last_backup'), "%Y-%m-%dT%H:%M:%S%z") %}
-      {{ ((now() - last_backup).seconds) < 60 }}
+      {% set last_backup = states('sensor.last_backup') | as_datetime %}
+      {{ ((utcnow() - last_backup).seconds) < 60 }}
   action:
     - service: notify.mobile_app_ceres
       data:
@@ -1484,6 +1486,7 @@
         - light.pieter_bedside
         - light.rouve_bedside
         - light.dining_room
+        - light.music_room
         - light.foyer
   mode: parallel
   condition:
@@ -1509,6 +1512,7 @@
         - light.pieter_bedside
         - light.rouve_bedside
         - light.dining_room
+        - light.music_room
         - light.foyer
       to: "on"
   mode: parallel

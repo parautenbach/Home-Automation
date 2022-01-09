@@ -655,11 +655,12 @@ turn_on_light_and_timer:
   sequence:
     # https://www.home-assistant.io/docs/scripts/conditions/
     - service: light.turn_on
-      data:
+      target:
         entity_id: "{{ light }}"
     - service: timer.start
-      data:
+      target:
         entity_id: "{{ light | replace('light.', 'timer.') }}_timer"
+      data:
         duration: "{{ duration }}"
 
 force_on_smart_bulb:

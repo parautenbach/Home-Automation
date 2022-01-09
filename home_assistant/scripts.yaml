@@ -721,6 +721,22 @@ toggle_light:
           target:
             entity_id: "{{ light }}"
 
+# https://community.home-assistant.io/t/iterate-through-gruop-to-call-an-action-per-entity/35844/9
+turn_on_light_group_timers:
+  fields:
+    light_group:
+      description: "A light group entity"
+      example: "light.night_group"
+  sequence:
+    - repeat:
+        count: "{{ state_attr(light_group, 'entity_id') | length }}"
+        sequence:
+          - service: timer.start
+            target:
+              entity_id: "{{ state_attr(light_group, 'entity_id')[repeat.index - 1] | replace('light.', 'timer.') ~ '_timer' }}"
+            data:
+              duration: "00:03:00"
+
 test_foyer_light:
   fields:
     profile:

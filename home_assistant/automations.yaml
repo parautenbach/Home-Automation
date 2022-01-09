@@ -91,25 +91,15 @@
           entity_id: binary_sensor.low_light
           state: "on"
   action:
-    # turn on this light first, as it will run at the same time as the "Take Motion Snapshots" automation and
-    # we want the light on when the snapshot is taken
+    - service: scene.turn_on
+      target:
+        entity_id: scene.inside_security_lights
     - service: script.turn_on
       target:
-        entity_id: script.turn_on_light
+        entity_id: script.turn_on_light_group_timers
       data:
         variables:
-          light: light.foyer
-          profile: security
-    - service: timer.start
-      data:
-        entity_id: timer.foyer_timer
-        duration: "00:01:00"
-    - service: light.turn_on
-      entity_id: light.living_room_lamp
-    - service: timer.start
-      data:
-        entity_id: timer.living_room_lamp_timer
-        duration: "00:01:00"
+          light_group: light.inside_security_group
 
 - alias: "Switch On Lights At Wake Up Time"
   initial_state: true
@@ -184,28 +174,15 @@
               before: sunrise
               before_offset: "-00:30:00"
   action:
+    - service: scene.turn_on
+      target:
+        entity_id: scene.night_lights
     - service: script.turn_on
       target:
-        entity_id: script.turn_on_light
+        entity_id: script.turn_on_light_group_timers
       data:
         variables:
-          light: light.foyer
-          profile: night
-    - service: timer.start
-      data:
-        entity_id: timer.foyer_timer
-        duration: "00:03:00"
-    - service: script.turn_on
-      target:
-        entity_id: script.turn_on_light
-      data:
-        variables:
-          light: light.kitchen_counter
-          profile: night
-    - service: timer.start
-      data:
-        entity_id: timer.kitchen_counter_timer
-        duration: "00:03:00"
+          light_group: light.night_group
 
 - alias: "Switch Off Light When Timer Expires"
   initial_state: true
@@ -310,8 +287,9 @@
           entity_id: binary_sensor.low_light
           state: "on"
   action:
-    - service: light.turn_on
-      entity_id: light.normal_light_group
+    - service: scene.turn_on
+      target:
+        entity_id: scene.normal_lights
 
 - alias: "Bedlamps Auto On Upon Sunset or Arrival"
   initial_state: true
@@ -387,8 +365,9 @@
       entity_id: light.living_room_lamp
       state: "off"
   action:
-    - service: light.turn_on
-      entity_id: light.normal_light_group
+    - service: scene.turn_on
+      target:
+        entity_id: scene.normal_lights
 
 - alias: "Bedlamps On Upon Low Light"
   initial_state: true
@@ -463,8 +442,8 @@
       event: sunrise
       offset: "01:30:00"
   action:
-    - service: homeassistant.turn_off
-      entity_id: group.main_bedroom
+    - service: light.turn_off
+      entity_id: light.main_bedroom_group
 
 - alias: "Away Mode"
   initial_state: true
@@ -504,12 +483,13 @@
       entity_id: light.front_door
       state: "off"
   action:
-    - service: light.turn_on
-      entity_id: light.front_door
-    - service: timer.start
+    - service: script.turn_on
+      target:
+        entity_id: script.turn_on_light_and_timer
       data:
-        entity_id: timer.front_door_timer
-        duration: "00:03:00"
+        variables:
+          light: light.front_door
+          duration: "00:03:00"
 
 - alias: "Open The Gate When Arriving Home"
   trigger:

@@ -1,34 +1,3 @@
-default_view:
-  entities:
-    - binary_sensor.foyer_motion_homebridge
-    - binary_sensor.updater
-    - sun.sun
-    - person.pieter_rautenbach
-    - person.rouve_rautenbach
-    - binary_sensor.anybody_home
-    - binary_sensor.pieter_present
-    - binary_sensor.rouve_present
-    - group.living_room
-    - group.multimedia
-    - group.hk_3380
-    - group.dstv
-    - group.security
-    - group.device_ceres
-    - group.device_rouve
-    - group.server
-
-all_lights:
-  name: All Lights
-  entities:
-    - switch.living_room_lamp
-    - light.pieter_bedside
-    - light.rouve_bedside
-    - light.dining_room
-    - light.foyer
-    - light.front_door
-    - light.garage
-    - light.backyard
-
 motion_lights:
   name: Motion Lights
   entities:
@@ -45,12 +14,6 @@ living_room:
   name: Living Room
   entities:
     - switch.living_room_lamp
-
-main_bedroom:
-  name: Main Bedroom
-  entities:
-    - light.pieter_bedside
-    - light.rouve_bedside
 
 multimedia:
   name: Multimedia

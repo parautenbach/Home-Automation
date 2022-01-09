@@ -14,6 +14,7 @@ input_select: !include input_selects.yaml
 light: !include lights.yaml
 media_player: !include media_players.yaml
 rest: !include rest.yaml
+scene: !include scenes.yaml
 script: !include scripts.yaml
 sensor: !include sensors.yaml
 shell_command: !include shell_commands.yaml

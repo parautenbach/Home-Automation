@@ -10,6 +10,13 @@
 - platform: switch
   name: garage
   entity_id: switch.shelly1_b95a0e
+- platform: group
+  name: Living Area Group
+  entities:
+    - light.foyer
+    - light.dining_room
+    - light.music_room
+- platform: group
   name: Normal Light Group
   entities:
     - light.living_room_lamp
@@ -19,3 +26,18 @@
   entities:
     - light.foyer
     - light.kitchen_counter
+- platform: group
+  name: Yard Group
+  entities:
+    - light.front_door
+    - light.backyard
+- platform: group
+  name: Inside Security Group
+  entities:
+    - light.foyer
+    - light.living_room_lamp
+- platform: group
+  name: Main Bedroom Group
+  entities:
+    - light.pieter_bedside
+    - light.rouve_bedside

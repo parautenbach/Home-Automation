@@ -1,0 +1,36 @@
+- name: Normal Lights
+  # keep in sync with light.normal_group
+  icon: mdi:brightness-5
+  entities:
+    light.living_room_lamp:
+      state: "on"
+    light.kitchen_counter:
+      state: "on"
+      brightness: 255
+      color_mode: "xy"
+      xy_color: [0.544, 0.394]
+- name: Night Lights
+  # keep in sync with light.night_group
+  icon: mdi:brightness-4
+  entities:
+    light.foyer:
+      state: "on"
+      brightness: 5
+      color_mode: "xy"
+      xy_color: [0.701, 0.299]
+    light.kitchen_counter:
+      state: "on"
+      brightness: 5
+      color_mode: "xy"
+      xy_color: [0.701, 0.299]
+- name: Inside Security Lights
+  # keep in sync with light.inside_security_group
+  icon: mdi:brightness-7
+  entities:
+    light.foyer:
+      state: "on"
+      brightness: 255
+      color_mode: "xy"
+      xy_color: [0.323, 0.329]
+    light.living_room_lamp:
+      state: "on"

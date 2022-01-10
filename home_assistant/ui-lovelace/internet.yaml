@@ -153,4 +153,7 @@ cards:
           style: |
             img {
               transform: scale(0.8);
+              border: 10px;
+              border-style: solid;
+              border-color: white;
             }

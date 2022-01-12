@@ -706,6 +706,10 @@
       entity_id: calendar.vacation
       to: "on"
     # add daily trigger too in case changes are made to the event
+    # this will override any manual changes by setting the input datetimes directly
+    - platform: time
+      at:
+        - "01:00:00"
   action:
     - service: input_datetime.set_datetime
       entity_id: input_datetime.vacation_start

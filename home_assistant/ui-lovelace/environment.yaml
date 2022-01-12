@@ -84,6 +84,8 @@ cards:
             smoothing: true
             points_per_hour: 2  # every 30 min
             line_width: 2
+            lower_bound: 0
+            upper_bound: 100
             show:
               extrema: true
   - type: vertical-stack

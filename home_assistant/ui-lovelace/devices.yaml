@@ -178,12 +178,11 @@ cards:
         - automation.set_pieters_driving_state
         - automation.set_vacation
         - automation.shut_down_devices_before_loadshedding
+        - automation.switch_garage_light_according_to_door_status_and_light_conditions
         - automation.switch_off_bedlamp_when_plugging_in_phone
-        - automation.switch_off_garage_light_when_the_last_garage_door_closed
         - automation.switch_off_light_when_timer_expires
         - automation.switch_on_front_door_light_when_any_cover_opened
         - automation.switch_on_or_extend_front_door_light_when_cover_closed
-        - automation.switch_on_garage_light_when_the_first_garage_door_opened
         - automation.switch_on_lights_at_wake_up_time
         - automation.switch_on_lights_if_motion_is_detected
         - automation.switch_on_night_light_if_motion_is_detected

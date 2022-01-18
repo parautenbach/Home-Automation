@@ -1105,72 +1105,52 @@
           light: light.front_door
           duration: "00:00:30"
 
-- alias: "Switch On Garage Light When The First Garage Door Opened"
-  # interesting edge case: if first cover opened before condition is true
-  # and then the second door after the condition will be true, the light
-  # won't turn on (e.g. 1h30 min before sunset). to solve this one needs
-  # to trigger on the individual state changes and have an xor condition.
+- alias: "Switch Garage Light According To Door Status And Light Conditions"
   initial_state: true
   trigger:
-    platform: state
-    entity_id:
-      - group.garage_doors
-    to: "open"
-  mode: queued
-  condition:
-    # https://www.home-assistant.io/docs/scripts/conditions/#sunsetsunrise-condition
-    - condition: or
-      conditions:
-        - condition: sun
-          after: sunset
-          after_offset: "-01:30:00"
-        - condition: sun
-          before: sunrise
-          before_offset: "01:30:00"
-  action:
-    - service: light.turn_on
-      entity_id: light.garage
-
-- alias: "Switch Off Garage Light When The Last Garage Door Closed"
-  initial_state: true
-  trigger:
-    platform: state
-    entity_id:
-      - group.garage_doors
-    to: "closed"
+    - platform: state
+      entity_id:
+        - group.garage_doors
+      id: "garage_door_trigger"
+    - platform: state
+      entity_id: binary_sensor.low_light
+      id: "low_light_trigger"
   mode: queued
   condition:
     - condition: or
       conditions:
-        - condition: sun
-          after: sunset
-          after_offset: "-01:00:00"
-        - condition: sun
-          before: sunrise
-          before_offset: "+01:00:00"
+        - condition: and
+          conditions:
+            - condition: trigger
+              id: "garage_door_trigger"
+            - condition: state
+              entity_id: binary_sensor.low_light
+              state: "on"
+        - condition: and
+          conditions:
+            - condition: trigger
+              id: "low_light_trigger"
+            - condition: state
+              entity_id: group.garage_doors
+              state: "open"
   action:
-    - service: light.turn_off
-      entity_id: light.garage
-
-# needed because of poor wifi connectivity
-# if the last door has been closed for a minute and the light is still on, turn it off
-- alias: "Switch Off Garage Light When The Last Garage Door Was Already Closed"
-  initial_state: true
-  trigger:
-    platform: state
-    entity_id:
-      - group.garage_doors
-    to: "closed"
-    for:
-      minutes: 5
-  mode: queued
-  condition:
-    - condition: state
-      entity_id: light.garage
-      state: "on"
-  action:
-    - service: light.turn_off
-      entity_id: light.garage
+    # needed because of poor wifi connectivity
+    # todo: also needed for turning on
+    # if the last door has been closed for a minute and the light is still on, turn it off
+    # alternative:
+    # https://community.home-assistant.io/t/most-efficient-way-to-track-if-lights-has-been-left-on-for-over-x-minutes/374544/12
+    # https://www.home-assistant.io/docs/scripts/#wait-for-trigger
+    repeat:
+      sequence:
+        - service: "light.turn_{{ 'on' if is_state('group.garage_doors', 'open') else 'off' }}"
+          entity_id: light.garage
+        - delay:
+            seconds: 30
+      until:
+        - condition: template
+          value_template: >-
+            {% set light_state = 'on' if is_state('group.garage_doors', 'open') else 'off' %}
+            {{ is_state('light.garage', light_state) }}
 
 - alias: "Update Security Camera Snapshot Gallery"
   trigger:

@@ -41,7 +41,7 @@ cards:
       - light.normal_light_group
       - light.night_group
       - light.yard_group
-      - light.security_group
+      - light.inside_security_group
       - scene.night_lights
       - scene.normal_lights
     show_header_toggle: true

@@ -205,6 +205,8 @@ cards:
             name: Pieter's Side
           - entity: light.rouve_bedside
             name: Rouvé's Side
+          - entity: light.kitchen_counter
+            name: Kitchen Cntr
           - entity: light.living_room_lamp
             name: Living Room
           - entity: light.dining_room

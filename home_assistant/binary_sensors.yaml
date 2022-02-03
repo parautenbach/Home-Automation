@@ -77,10 +77,10 @@
       device_class: problem
       # get the last file, extract the date and compare
       value_template: >-
-        {% set last_backup = states('sensor.last_backup') or 0 | as_datetime %}
+        {% set last_backup = (states('sensor.last_backup') or 0) | as_datetime %}
         {{ 'on' if ((utcnow() - last_backup).days > 4) else 'off' }}
       icon_template: >-
-        {{ state_attr('sensor.last_backup', 'icon') }}
+        {{ state_attr('sensor.last_backup', 'icon') or "mdi:file-alert-outline" }}
     golden_hour:
       # https://community.home-assistant.io/t/wth-is-there-no-golden-hour-data-available-to-trigger-light-automations/220359/3
       friendly_name: Golden Hour

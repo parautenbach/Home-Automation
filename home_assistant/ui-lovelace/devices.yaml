@@ -300,14 +300,16 @@ cards:
                   $:
                     state-badge:
                       $:
-                        ha-icon:
-                          $: |
-                            ha-svg-icon {
-                              color: {{ "var(--custom-color-red)" if is_state('binary_sensor.no_recent_backup', 'on') }};
-                            }
+                        ha-state-icon:
+                          $:
+                            ha-icon:
+                              $: |
+                                ha-svg-icon {
+                                  color: {{ "var(--custom-color-red)" if not is_state('binary_sensor.no_recent_backup', 'off') }};
+                                }
                     .: |
                       .info {
-                        color: {{ "var(--custom-color-red)" if is_state('binary_sensor.no_recent_backup', 'on') }};
+                        color: {{ "var(--custom-color-red)" if not is_state('binary_sensor.no_recent_backup', 'off') }};
                       }
           - sensor.db_size
           - entity: sensor.home_assistant_server_battery

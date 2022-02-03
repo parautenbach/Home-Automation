@@ -289,11 +289,6 @@ cards:
           - sensor.mqtt_broker_sent_messages_1min_load
           - sensor.mqtt_broker_received_messages_1min_load
           - entity: sensor.last_backup
-            # binary_sensor.no_recent_backup
-            # {{ "var(--state-icon-active-color)" if is_state('binary_sensor.updater', 'on') }}
-            # style: |
-            #   :host {
-            #     color: {{ "var(--custom-color-red)" if is_state('binary_sensor.no_recent_backup', 'on') }};
             card_mod:
               style:
                 hui-generic-entity-row:

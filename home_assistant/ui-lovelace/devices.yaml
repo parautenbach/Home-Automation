@@ -273,7 +273,7 @@ cards:
           extrema: true
           name: true
           icon: true
-          average: true
+          average: false
           state: true
   - type: vertical-stack
     cards:

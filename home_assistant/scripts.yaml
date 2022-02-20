@@ -544,6 +544,7 @@ security_camera_record_clip:
         # filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
         filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
         duration: 10
+    # would love to get rid of this. maybe watch for an updated timestamp on the file?
     - delay: "00:00:15"
     - service: shell_command.copy_last_video_clip
     - service: input_datetime.set_datetime
@@ -793,6 +794,15 @@ make_backup:
     - service: homeassistant.update_entity
       data:
         entity_id: sensor.home_assistant
+
+test_nav:
+  sequence:
+    - service: notify.mobile_app_ceres
+      data:
+        title: "Test"
+        message: "Navigate"
+        data:
+          url: homeassistant://navigate/lovelace/gallery
 
 test:
   description: "Test script"

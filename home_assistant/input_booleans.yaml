@@ -24,6 +24,9 @@ rouve_bedside_state:
 dining_room_state:
   name: Dining Room State
   icon: mdi:lightbulb
+music_room_state:
+  name: Music Room State
+  icon: mdi:lightbulb
 foyer_state:
   name: Foyer State
   icon: mdi:lightbulb

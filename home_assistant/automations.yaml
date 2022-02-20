@@ -722,6 +722,7 @@
         datetime: "{{ (strptime(state_attr('calendar.vacation', 'end_time'), '%Y-%m-%d %H:%M:%S') - timedelta(seconds=1)).date() }}"
 
 # https://community.home-assistant.io/t/snmp-bandwidth-monitor/7122
+# https://community.home-assistant.io/t/snmp-bandwidth-monitor-using-statistics-and-a-utility-meter/176971
 - alias: "Monitor Inbound Internet Traffic"
   trigger:
     platform: state

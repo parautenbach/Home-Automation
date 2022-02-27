@@ -1,26 +1,3 @@
-motion_lights:
-  name: Motion Lights
-  entities:
-    - light.living_room_lamp
-    - light.foyer
-
-motion_timers:
-  name: Motion Timers
-  entities:
-    - timer.living_room_lamp_timer
-    - timer.foyer_timer
-
-living_room:
-  name: Living Room
-  entities:
-    - switch.living_room_lamp
-
-multimedia:
-  name: Multimedia
-  entities:
-    - script.hk_3380_vol_up
-    - script.hk_3380_vol_down
-
 hk_3380:
   name: Sound
   entities:
@@ -60,13 +37,6 @@ dstv:
     - script.dstv_7
     - script.dstv_8
     - script.dstv_9
-
-security:
-  name: Security
-  entities:
-    - camera.security_camera
-    - light.led
-    - automation.motion_snapshots
 
 security_automations:
   name: Security Automations

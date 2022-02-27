@@ -592,7 +592,6 @@ security_camera_create_snapshot:
       state: "on"
     - service: notify.family
       data:
-        title: Security Camera
         title: Security
         message: "Motion detected!"
         data:

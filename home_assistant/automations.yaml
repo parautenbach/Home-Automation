@@ -1282,6 +1282,7 @@
   trigger:
     - platform: state
       entity_id: sensor.last_backup
+  mode: single
   condition:
     condition: template
     value_template: >-

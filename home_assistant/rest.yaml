@@ -72,12 +72,16 @@
   sensor:
     - name: SAAQIS PM Coarse
       value_template: >-
-        {% set data = (value_json.data | last).channels | selectattr('name', '==', 'PM Coarse') | first %}
-        {% if data.valid %}
-          {% if data.value >= 0 %}
-            {{ data.value }}
+        {% if value_json %}
+          {% set data = (value_json.data | last).channels | selectattr('name', '==', 'PM Coarse') | first %}
+          {% if data.valid %}
+            {% if data.value >= 0 %}
+              {{ data.value }}
+            {% else %}
+              0
+            {% endif %}
           {% else %}
-            0
+          None
           {% endif %}
         {% else %}
         None
@@ -85,12 +89,16 @@
       unit_of_measurement: "µg/m³"
     - name: SAAQIS PM 10
       value_template: >-
-        {% set data = (value_json.data | last).channels | selectattr('name', '==', 'PM10') | first %}
-        {% if data.valid %}
-          {% if data.value >= 0 %}
-            {{ data.value }}
+        {% if value_json %}
+          {% set data = (value_json.data | last).channels | selectattr('name', '==', 'PM10') | first %}
+          {% if data.valid %}
+            {% if data.value >= 0 %}
+              {{ data.value }}
+            {% else %}
+              0
+            {% endif %}
           {% else %}
-            0
+          None
           {% endif %}
         {% else %}
         None
@@ -98,12 +106,16 @@
       unit_of_measurement: "µg/m³"
     - name: SAAQIS PM 2.5
       value_template: >-
-        {% set data = (value_json.data | last).channels | selectattr('name', '==', 'PM2.5') | first %}
-        {% if data.valid %}
-          {% if data.value >= 0 %}
-            {{ data.value }}
+        {% if value_json %}
+          {% set data = (value_json.data | last).channels | selectattr('name', '==', 'PM2.5') | first %}
+          {% if data.valid %}
+            {% if data.value >= 0 %}
+              {{ data.value }}
+            {% else %}
+              0
+            {% endif %}
           {% else %}
-            0
+          None
           {% endif %}
         {% else %}
         None
@@ -113,15 +125,19 @@
     # https://cfpub.epa.gov/ncer_abstracts/index.cfm/fuseaction/display.files/fileid/14285
     - name: SAAQIS O3
       value_template: >-
-        {% set data = (value_json.data | last).channels | selectattr('name', '==', 'O3') | first %}
-        {% if data.valid %}
-          {% if data.value >= 0 %}
-            {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
-            {% set const = 12.187 %}
-            {% set molecular_weight = 48 %}
-            {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
+        {% if value_json %}
+          {% set data = (value_json.data | last).channels | selectattr('name', '==', 'O3') | first %}
+          {% if data.valid %}
+            {% if data.value >= 0 %}
+              {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
+              {% set const = 12.187 %}
+              {% set molecular_weight = 48 %}
+              {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
+            {% else %}
+              0
+            {% endif %}
           {% else %}
-            0
+          None
           {% endif %}
         {% else %}
         None
@@ -129,15 +145,19 @@
       unit_of_measurement: "µg/m³"
     - name: SAAQIS NO2
       value_template: >-
-        {% set data = (value_json.data | last).channels | selectattr('name', '==', 'NO2') | first %}
-        {% if data.valid %}
-          {% if data.value >= 0 %}
-            {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
-            {% set const = 12.187 %}
-            {% set molecular_weight = 46.0055 %}
-            {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
+        {% if value_json %}
+          {% set data = (value_json.data | last).channels | selectattr('name', '==', 'NO2') | first %}
+          {% if data.valid %}
+            {% if data.value >= 0 %}
+              {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
+              {% set const = 12.187 %}
+              {% set molecular_weight = 46.0055 %}
+              {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
+            {% else %}
+              0
+            {% endif %}
           {% else %}
-            0
+          None
           {% endif %}
         {% else %}
         None
@@ -145,15 +165,19 @@
       unit_of_measurement: "µg/m³"
     - name: SAAQIS SO2
       value_template: >-
-        {% set data = (value_json.data | last).channels | selectattr('name', '==', 'SO2') | first %}
-        {% if data.valid %}
-          {% if data.value >= 0 %}
-            {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
-            {% set const = 12.187 %}
-            {% set molecular_weight = 64.066 %}
-            {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
+        {% if value_json %}
+          {% set data = (value_json.data | last).channels | selectattr('name', '==', 'SO2') | first %}
+          {% if data.valid %}
+            {% if data.value >= 0 %}
+              {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
+              {% set const = 12.187 %}
+              {% set molecular_weight = 64.066 %}
+              {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
+            {% else %}
+              0
+            {% endif %}
           {% else %}
-            0
+          None
           {% endif %}
         {% else %}
         None

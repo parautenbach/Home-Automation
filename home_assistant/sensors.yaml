@@ -222,7 +222,7 @@
       value_template: >-
         {{ state_attr('sensor.home_assistant_server_battery', 'status') }}
       icon_template: >-
-        {% set state = states('sensor.home_assistant_server_battery') | int %}
+        {% set state = states('sensor.home_assistant_server_battery') | int(0) %}
         {% set charging = "-charging" if states('sensor.home_assistant_server_battery_status') == "Charging" else "" %}
         {% set suffix = (state // 10) * 10 %}
         {# empty #}

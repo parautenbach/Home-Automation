@@ -114,37 +114,18 @@
     - service: scene.turn_on
       target:
         entity_id: scene.normal_lights
-    # todo: use transition (bug has been fixed)
-    - service: script.turn_on
+    - service: light.turn_on
       target:
-        entity_id: script.turn_on_light
+        entity_id: light.pieter_bedside
       data:
-        variables:
-          light: light.pieter_bedside
-          profile: low
-    - service: script.turn_on
+        transition: 60
+        profile: pieter
+    - service: light.turn_on
       target:
-        entity_id: script.turn_on_light
+        entity_id: light.rouve_bedside
       data:
-        variables:
-          light: light.rouve_bedside
-          profile: low
-    - delay:
-        minutes: 3
-    - service: script.turn_on
-      target:
-        entity_id: script.turn_on_light
-      data:
-        variables:
-          light: light.pieter_bedside
-          profile: pieter
-    - service: script.turn_on
-      target:
-        entity_id: script.turn_on_light
-      data:
-        variables:
-          light: light.rouve_bedside
-          profile: rouve
+        transition: 60
+        profile: rouve
 
 - alias: "Switch On Night Light If Motion Is Detected"
   initial_state: true

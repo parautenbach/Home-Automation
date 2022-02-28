@@ -699,12 +699,12 @@
     - service: input_datetime.set_datetime
       entity_id: input_datetime.vacation_start
       data:
-        datetime: "{{ strptime(state_attr('calendar.vacation', 'start_time'), '%Y-%m-%d %H:%M:%S').date() }}"
+        datetime: "{{ ((state_attr('calendar.vacation', 'start_time') or states('input_datetime.vacation_start')) | as_datetime).date() }}"
     - service: input_datetime.set_datetime
       entity_id: input_datetime.vacation_end
       data:
         # all-day events are set by google to until midnight of the next day
-        datetime: "{{ (strptime(state_attr('calendar.vacation', 'end_time'), '%Y-%m-%d %H:%M:%S') - timedelta(seconds=1)).date() }}"
+        datetime: "{{ ((state_attr('calendar.vacation', 'end_time') or states('input_datetime.vacation_end')) | as_datetime).date() }}"
 
 # https://community.home-assistant.io/t/snmp-bandwidth-monitor/7122
 # https://community.home-assistant.io/t/snmp-bandwidth-monitor-using-statistics-and-a-utility-meter/176971

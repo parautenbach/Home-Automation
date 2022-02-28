@@ -1100,8 +1100,9 @@
         - condition: template
           value_template: >-
             {# if the timer has already run out or it's about to, turn it on for another brief moment #}
+            {# https://community.home-assistant.io/t/strptime-vs-as-datetime/381500/7 #}
             {% set timer = 'timer.front_door_timer' %}
-            {% set finishes_at = strptime(state_attr(timer, 'finishes_at'), '%Y-%m-%dT%H:%M:%S%z') %}
+            {% set finishes_at = (state_attr(timer, 'finishes_at') | as_datetime) if state_attr(timer, 'finishes_at') else None %}
             {{ finishes_at == None or (finishes_at - now()).seconds < 60 }}
   action:
     - service: script.turn_on
@@ -1511,7 +1512,7 @@
           value_template: "{{ ((as_timestamp(utcnow()) - as_timestamp(states.binary_sensor.electricity_feed.last_changed)) / 60) <= 2 }}"
         # but the electricity feed sensor didn't update due to a hass restart (2 min)
         - condition: template
-          value_template: "{{ (utcnow() - strptime(states('sensor.home_assistant_uptime'), '%Y-%m-%dT%H:%M:%S.%f%z')).seconds / 60 > 2 }}"
+          value_template: "{{ (utcnow() - states('sensor.home_assistant_uptime') | as_datetime).seconds / 60 > 2 }}"
   action:
     - service: light.turn_off
       data:

@@ -180,15 +180,15 @@
 
 - platform: command_line
   name: Tenant Mobile Phone
-  command: 'ping -n -q -W 1 -c 2 tenant_mobile_phone > /dev/null 2>&1 && echo success || echo fail'
+  command: 'ping -n -q -W 1 -c 3 tenant_mobile_phone > /dev/null 2>&1 && echo success || echo fail'
   device_class: connectivity
   payload_on: "success"
   payload_off: "fail"
-  scan_interval: 30
+  scan_interval: 15
 
 - platform: command_line
   name: Housekeeper Mobile Phone
-  command: 'ping -n -q -W 1 -c 2 housekeeper_mobile_phone > /dev/null 2>&1 && echo success || echo fail'
+  command: 'ping -n -q -W 1 -c 3 housekeeper_mobile_phone > /dev/null 2>&1 && echo success || echo fail'
   device_class: connectivity
   payload_on: "success"
   payload_off: "fail"

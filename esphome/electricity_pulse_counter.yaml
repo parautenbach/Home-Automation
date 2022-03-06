@@ -1,5 +1,5 @@
 esphome:
-  name: electricity_pulse_counter
+  name: electricity-pulse-counter
   platform: ESP32
   board: esp32doit-devkit-v1
 
@@ -11,8 +11,6 @@ wifi:
     subnet: 255.255.255.0
   networks:
     - ssid: !secret wifi_ssid
-      password: !secret wifi_password
-    - ssid: !secret wifi_alt_ssid
       password: !secret wifi_password
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:

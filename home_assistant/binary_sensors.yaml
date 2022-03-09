@@ -156,7 +156,7 @@
 
 - platform: command_line
   name: Main Gate
-  command: 'ping -n -q -W 1 -c 1 main_gate.local > /dev/null 2>&1 && echo success || echo fail'
+  command: 'ping -n -q -W 1 -c 1 main-gate.local > /dev/null 2>&1 && echo success || echo fail'
   device_class: connectivity
   payload_on: "success"
   payload_off: "fail"
@@ -164,7 +164,7 @@
 
 - platform: command_line
   name: Garage Doors
-  command: 'ping -n -q -W 1 -c 1 garage_doors.local > /dev/null 2>&1 && echo success || echo fail'
+  command: 'ping -n -q -W 1 -c 1 garage-doors.local > /dev/null 2>&1 && echo success || echo fail'
   device_class: connectivity
   payload_on: "success"
   payload_off: "fail"
@@ -172,7 +172,7 @@
 
 - platform: command_line
   name: Power Meter
-  command: 'ping -n -q -W 1 -c 1 electricity_pulse_counter.local > /dev/null 2>&1 && echo success || echo fail'
+  command: 'ping -n -q -W 1 -c 1 electricity-pulse-counter.local > /dev/null 2>&1 && echo success || echo fail'
   device_class: connectivity
   payload_on: "success"
   payload_off: "fail"

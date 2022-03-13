@@ -1056,7 +1056,7 @@
               {% set after = h ~ "h" ~ m %}
             {% endif %}
           {% endif %}
-          "The electricity feed has been {{ 'restored after ' ~  after ~ '.' if is_state('binary_sensor.electricity_feed', 'on') else 'cut.' }}"
+          The electricity feed has been {{ 'restored after ' ~  after ~ '.' if is_state('binary_sensor.electricity_feed', 'on') else 'cut.' }}
         data:
           group: "home-electricity"
           url: homeassistant://navigate/lovelace/main

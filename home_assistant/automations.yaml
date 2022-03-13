@@ -1611,6 +1611,7 @@
           url: homeassistant://navigate/lovelace/devices
 
 - alias: "Update OpenUV every 20 minutes during the daytime"
+  initial_state: false
   # server seems to 500 quite often:
   # https://github.com/bachya/pyopenuv/issues/48
   # https://github.com/home-assistant/core/pull/54436

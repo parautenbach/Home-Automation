@@ -14,7 +14,7 @@
         unavailable: "{{ states | selectattr('state', 'in',['unavailable']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
         unknown: "{{ states | selectattr('state', 'in',['unknown']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
         none: "{{ states | selectattr('state', 'in',['none']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
-# Example:
+# example:
 # {
 #     "event_type": "amcrest",
 #     "data": {
@@ -37,21 +37,31 @@
 #         "user_id": null
 #     }
 # }
+# explanation:
+# the first trigger updates the state to true, but at this point the icon template
+# using the sensor itself will still have the old value. the second trigger will be
+# triggered when the state changes due to the first trigger. this will cause the
+# icon template to update to whatever the current state of the sensor is. at the same
+# time, one must prevent an infinite loop, because even if the state doesn't get
+# updated, there will still be an event emitted. this is why the state template needs
+# to update only when the first trigger gets triggered. 
 - trigger:
-  - platform: event
-    event_type: amcrest
-    event_data:
-      event: CallNoAnswered
-      payload:
-        action: Start
-  - platform: state
-    entity_id: binary_sensor.doorbell_rang
-    to: ~
+    - platform: event
+      event_type: amcrest
+      event_data:
+        event: CallNoAnswered
+        payload:
+          action: Start
+    - platform: state
+      entity_id: binary_sensor.doorbell_rang
+      to: ~
   binary_sensor:
     name: Doorbell Rang
-    # icon: mdi:bell-outline
     # https://github.com/home-assistant/core/issues/39932
     # https://github.com/home-assistant/core/issues/58056
+    # https://github.com/home-assistant/core/issues/66459
     icon: "{{ 'mdi:bell-ring-outline' if is_state('binary_sensor.doorbell_rang', 'on') else 'mdi:bell-outline' }}"
-    state: true
-    auto_off: 5  # seconds
+    state: "{{ trigger.platform == 'event' or states('binary_sensor.doorbell_rang') }}"
+    # https://github.com/home-assistant/core/issues/67397
+    auto_off:
+      seconds: 5

@@ -54,14 +54,15 @@
           action: Start
     - platform: state
       entity_id: binary_sensor.doorbell_rang
-      to: ~
+      to: "off"
   binary_sensor:
     name: Doorbell Rang
     # https://github.com/home-assistant/core/issues/39932
     # https://github.com/home-assistant/core/issues/58056
     # https://github.com/home-assistant/core/issues/66459
-    icon: "{{ 'mdi:bell-ring-outline' if is_state('binary_sensor.doorbell_rang', 'on') else 'mdi:bell-outline' }}"
-    state: "{{ trigger.platform == 'event' or states('binary_sensor.doorbell_rang') }}"
+    # https://github.com/home-assistant/home-assistant.io/pull/22021
+    icon: "{{ (trigger.platform == 'event') | iif('mdi:bell-ring-outline', 'mdi:bell-outline') }}"
+    state: "{{ trigger.platform == 'event' }}"
     # https://github.com/home-assistant/core/issues/67397
     auto_off:
       seconds: 5

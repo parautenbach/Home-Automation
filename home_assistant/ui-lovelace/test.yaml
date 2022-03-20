@@ -62,23 +62,6 @@ cards:
       - entity: group.garage_doors
         name: All Doors
       - entity: light.garage
-  - type: custom:mini-graph-card
-    name: Bitcoin
-    # name: Current Travel Time
-    icon: mdi:briefcase-clock
-    entities:
-      - entity: sensor.exchange_rate_1_btc
-        color: var(--custom-color-yellow)
-      - entity: sensor.trade_volume
-        color: var(--custom-color-blue)
-        y_axis: secondary
-    hours_to_show: 72
-    hour24: true
-    smoothing: true
-    points_per_hour: 4  # every 15 min
-    line_width: 2
-    show:
-      extrema: true
   - type: statistics-graph
     entities:
       - sensor.total_electricity_consumption

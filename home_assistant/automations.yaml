@@ -1397,6 +1397,15 @@
       entity_id: binary_sensor.anybody_home
       state: "off"
   action:
+    # https://companion.home-assistant.io/docs/notifications/notification-commands#request-location-updates
+    - service: notify.mobile_app_ceres
+      data:
+        message: "request_location_update"
+    - service: notify.mobile_app_rouve
+      data:
+        message: "request_location_update"
+    - delay:
+        seconds: 10
     - service: notify.mobile_app_ceres
       data:
         title: "Security"
@@ -1451,6 +1460,18 @@
         entity_id: binary_sensor.housekeeper_mobile_phone
         state: "off"
   action:
+    # https://companion.home-assistant.io/docs/notifications/notification-commands#request-location-updates
+    - service: notify.mobile_app_ceres
+      data:
+        message: "request_location_update"
+    - service: notify.mobile_app_rouve
+      data:
+        message: "request_location_update"
+    - service: homeassistant.update_entity
+      target:
+        entity_id: binary_sensor.tenant_mobile_phone
+    - delay:
+        seconds: 10
     - service: notify.mobile_app_ceres
       data:
         title: "Security"

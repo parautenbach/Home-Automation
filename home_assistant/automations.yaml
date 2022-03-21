@@ -1401,18 +1401,7 @@
       entity_id: binary_sensor.anybody_home
       state: "off"
   action:
-    # https://companion.home-assistant.io/docs/notifications/notification-commands#request-location-updates
-    - service: notify.mobile_app_ceres
-      data:
-        message: "request_location_update"
-    - service: notify.mobile_app_rouve
-      data:
-        message: "request_location_update"
-    - delay:
-        seconds: 10
-    - service: notify.mobile_app_ceres
-      data:
-        title: "Security"
+    - variables:
         message: >-
           {% set name = None %}
           {% if trigger.entity_id | regex_search("lhs", ignorecase=True) %}
@@ -1422,22 +1411,44 @@
           {% endif %}
           {% set action = 'opened' if (trigger.to_state.state == 'open') else 'closed' %}
           {{ name }} has been {{ action }}.
-          {# todo: alert/call security company #}
-        data:
-          group: "{{ trigger.entity_id }}"
-          url: homeassistant://navigate/lovelace/main
-          actions:
-            - action: "CLOSE_COVER"
-              title: "Close now"
-            - action: "EXTEND_COVER_TIMEOUT_05_MIN"
-              title: "Wait 5 min"
-            - action: "EXTEND_COVER_TIMEOUT_10_MIN"
-              title: "Wait 10 min"
-          action_data:
-            # convert this to the cover entity to use in the automation that receives this
-            cover_id: "{{ trigger.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
-            timer_id: "{{ trigger.entity_id }}"
-          # todo: make critical?
+    # https://companion.home-assistant.io/docs/notifications/notification-commands#request-location-updates
+    - service: notify.mobile_app_ceres
+      data:
+        message: "request_location_update"
+    - service: notify.mobile_app_rouve
+      data:
+        message: "request_location_update"
+    - delay:
+        seconds: 10
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: "{{ trigger.to_state.state == 'open' }}"
+          sequence:
+            - service: notify.mobile_app_ceres
+              data:
+                title: "Security"
+                message: "{{ message }}"
+                data:
+                  group: "{{ trigger.entity_id }}"
+                  url: homeassistant://navigate/lovelace/main
+                  actions:
+                    - action: "CLOSE_COVER"
+                      title: "Close now"
+                  action_data:
+                    # convert this to the cover entity to use in the automation that receives this
+                    cover_id: "{{ trigger.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
+                    timer_id: "{{ trigger.entity_id }}"
+                  # todo: make critical?
+                  # todo: alert/call security company
+      default:
+        - service: notify.mobile_app_ceres
+          data:
+            title: "Security"
+            message: "{{ message }}"
+            data:
+              group: "{{ trigger.entity_id }}"
+              url: homeassistant://navigate/lovelace/main
 
 - alias: "Alert If Gate Opened Or Closed When Not Supposed To"
   initial_state: true
@@ -1464,6 +1475,10 @@
         entity_id: binary_sensor.housekeeper_mobile_phone
         state: "off"
   action:
+    - variables:
+        message: >-
+          {% set action = 'opened' if (trigger.to_state.state == 'open') else 'closed' %}
+          The main gate has been {{ action }}.
     # https://companion.home-assistant.io/docs/notifications/notification-commands#request-location-updates
     - service: notify.mobile_app_ceres
       data:
@@ -1476,25 +1491,36 @@
         entity_id: binary_sensor.tenant_mobile_phone
     - delay:
         seconds: 10
-    - service: notify.mobile_app_ceres
-      data:
-        title: "Security"
-        message: >-
-          {% set action = 'opened' if (trigger.to_state.state == 'open') else 'closed' %}
-          The main gate has been {{ action }}.
-          {# todo: alert/call security company #}
-        data:
-          group: "{{ trigger.entity_id }}"
-          url: homeassistant://navigate/lovelace/main
-          # https://companion.home-assistant.io/docs/notifications/actionable-notifications#building-notification-action-scripts
-          actions:
-            - action: "CLOSE_COVER"
-              title: "Close now"
-          action_data:
-            # convert this to the cover entity to use in the automation that receives this
-            cover_id: "{{ trigger.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
-            timer_id: "{{ trigger.entity_id }}"
-          # todo: make critical?
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: "{{ trigger.to_state.state == 'open' }}"
+          sequence:
+            - service: notify.mobile_app_ceres
+              data:
+                title: "Security"
+                message: "{{ message }}"
+                data:
+                  group: "{{ trigger.entity_id }}"
+                  url: homeassistant://navigate/lovelace/main
+                  # https://companion.home-assistant.io/docs/notifications/actionable-notifications#building-notification-action-scripts
+                  actions:
+                    - action: "CLOSE_COVER"
+                      title: "Close now"
+                  action_data:
+                    # convert this to the cover entity to use in the automation that receives this
+                    cover_id: "{{ trigger.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
+                    timer_id: "{{ trigger.entity_id }}"
+                  # todo: make critical?
+                  # todo: alert/call security company
+      default:
+        - service: notify.mobile_app_ceres
+          data:
+            title: "Security"
+            message: "{{ message }}"
+            data:
+              group: "{{ trigger.entity_id }}"
+              url: homeassistant://navigate/lovelace/main
 
 - alias: "Save Last Smart Bulb State"
   initial_state: true

@@ -1811,3 +1811,33 @@
         variables:
           light: light.dining_room
           profile: security
+
+- alias: "Alert Vacation Start"
+  initial_state: true
+  trigger:
+    platform: time
+    at: "21:00:00"
+  condition: "{{ (states('input_datetime.vacation_start') | as_datetime - timedelta(days=1)).date() == now().date() }}"
+  action:
+    - service: notify.mobile_app_ceres
+      data:
+        title: "Routine Change"
+        message: "Wake-up lights will be suspended from tomorrow until {{ states('input_datetime.vacation_end') }}."
+        data:
+          group: "routine-change"
+          url: homeassistant://navigate/lovelace/main
+
+- alias: "Alert Vacation End"
+  initial_state: true
+  trigger:
+    platform: time
+    at: "21:00:00"
+  condition: "{{ (states('input_datetime.vacation_end') | as_datetime - timedelta(days=1)).date() == now().date() }}"
+  action:
+    - service: notify.mobile_app_ceres
+      data:
+        title: "Routine Change"
+        message: "Wake-up lights will be resumed from tomorrow at {{ states('input_datetime.wake_up_time')[:5] }}."
+        data:
+          group: "routine-change"
+          url: homeassistant://navigate/lovelace/main

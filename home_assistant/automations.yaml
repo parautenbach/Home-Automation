@@ -1419,7 +1419,7 @@
       data:
         message: "request_location_update"
     - delay:
-        seconds: 10
+        seconds: 30
     - choose:
         - conditions:
             - condition: template
@@ -1469,7 +1469,7 @@
         entity_id: binary_sensor.anybody_home
         state: "off"
       - condition: state
-        entity_id: binary_sensor.tenant_mobile_phone
+        entity_id: binary_sensor.tenant_present
         state: "off"
       - condition: state
         entity_id: binary_sensor.housekeeper_mobile_phone
@@ -1490,7 +1490,7 @@
       target:
         entity_id: binary_sensor.tenant_mobile_phone
     - delay:
-        seconds: 10
+        seconds: 30
     - choose:
         - conditions:
             - condition: template

@@ -80,6 +80,12 @@ cards:
             name: Rouvé
           - entity: cover.rhs_garage_door
             name: Pieter
+          - entity: light.garage
+            name: Garage
+          - entity: light.front_door
+            name: Front Door
+          - entity: light.backyard
+            name: Backyard
       - type: entities
         entities:
           - entity: timer.main_gate_timer
@@ -132,3 +138,7 @@ cards:
         entities:
           - entity: binary_sensor.foyer_occupancy_homebridge
             name: Security Camera
+          - entity: light.foyer
+            name: Foyer
+          - entity: light.living_room_lamp
+            name: Living Room

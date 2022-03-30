@@ -66,3 +66,13 @@
     # https://github.com/home-assistant/core/issues/67397
     auto_off:
       seconds: 5
+
+- sensor:
+    - name: Monitored Batteries
+      icon: mdi:battery-alert
+      state: "{{ states.sensor | selectattr('attributes.monitor','eq',True) | map(attribute='entity_id') | list | count }}"
+      unit_of_measurement: batteries
+      state_class: measurement
+      attributes:
+        # https://community.home-assistant.io/t/recommended-ways-to-manage-devices-and-entities-names/243815/12
+        batteries: "{{ states.sensor | selectattr('attributes.monitor','eq',True) | map(attribute='entity_id') | list }}"

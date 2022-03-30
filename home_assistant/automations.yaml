@@ -1841,3 +1841,30 @@
         data:
           group: "routine-change"
           url: homeassistant://navigate/lovelace/main
+
+- alias: "Check For Low Batteries"
+  initial_state: true
+  trigger:
+    platform: time
+    at: "09:00:00"
+  action:
+    - variables:
+        # https://community.home-assistant.io/t/recommended-ways-to-manage-devices-and-entities-names/243815/12
+        batteries: "{{ states.sensor | selectattr('attributes.monitor','eq',True) | map(attribute='entity_id') | list }}"
+    - service: notify.mobile_app_ceres
+      data:
+        # icon: https://companion.home-assistant.io/docs/notifications/notifications-basic/#notification-icon
+        #       https://companion.home-assistant.io/docs/notifications/actionable-notifications/#icon-values
+        title: "Batteries"
+        message: >
+          {%- set threshold = 15 %}
+          {%- set batteries = states.sensor | selectattr('attributes.monitor','eq',True) | map(attribute='entity_id') %}
+          The following devices have less than {{ threshold }}% charge:
+          {%- for b in batteries %}
+          {%- if states(b) | int < threshold %}
+           - {{ state_attr(b, 'friendly_name') | replace(' Battery', '') }}: {{ states(b) | int }}%
+          {%- endif -%}
+          {%- endfor %}
+        data:
+          group: "batteries"
+          url: homeassistant://navigate/lovelace/devices

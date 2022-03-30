@@ -391,22 +391,28 @@ sensor.owm_pollution_overall_air_quality:
   unit_of_measurement: aqi
 sensor.pieter_bedside_light_button_battery:
   friendly_name: Pieter's Bedside Light Button Battery
+  # https://community.home-assistant.io/t/recommended-ways-to-manage-devices-and-entities-names/243815/12
+  monitor: True
 sensor.rouve_bedside_light_button_battery:
   friendly_name: Rouvé's Bedside Light Button Battery
+  monitor: True
 sensor.dining_room_light_button_battery:
   friendly_name: Dining Room Light Button Battery
+  monitor: True
 sensor.living_room_ht_temperature:
   friendly_name: Living Room Temperature
 sensor.living_room_ht_humidity:
   friendly_name: Living Room Humidity
 sensor.living_room_ht_battery:
   friendly_name: Living Room H&T Battery
+  monitor: True
 sensor.main_bedroom_ht_temperature:
   friendly_name: Main Bedroom Temperature
 sensor.main_bedroom_ht_humidity:
   friendly_name: Main Bedroom Humidity
 sensor.main_bedroom_ht_battery:
   friendly_name: Main Bedroom H&T Battery
+  monitor: True
 light.kitchen_counter:
   friendly_name: Kitchen Counter Lights
   icon: mdi:led-strip-variant

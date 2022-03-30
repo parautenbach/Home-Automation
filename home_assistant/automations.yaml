@@ -1190,6 +1190,30 @@
     - service: shell_command.sync_snapshots
     - service: shell_command.trim_snapshots
 
+- alias: "Switch On Inside Lights When Unplugging Phone"
+  trigger:
+    platform: state
+    entity_id: sensor.ceres_battery_state
+    to: 'Not Charging'  # Can be to Charging or Full
+  mode: single
+  condition:
+    - condition: and
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.pieter_present
+          state: "on"
+        - condition: time
+          after: "05:00:00"
+          before: "09:00:00"
+        # proxy for nobody inside
+        - condition: state
+          entity_id: light.living_room_lamp
+          state: "off"
+  action:
+    - service: scene.turn_on
+      target:
+        entity_id: scene.normal_lights
+
 # set up automation on device to immediately update the sensors
 # todo: switch off all lights except rouvé's (if on), or at least notify of lights still on
 - alias: "Switch Off Bedlamp When Plugging In Phone"

@@ -1868,27 +1868,44 @@
 
 - alias: "Check For Low Batteries"
   initial_state: true
+  variables:
+    threshold: 15
   trigger:
     platform: time
     at: "09:00:00"
+  condition: >
+    {{ states.sensor
+         | selectattr('attributes.monitor','eq',True)
+         | selectattr('attributes.device_class','eq','battery')
+         | map(attribute='state')
+         | map('int')
+         | select('le', threshold)
+         | list
+         | count
+       > 0
+    }}
   action:
-    - variables:
-        # https://community.home-assistant.io/t/recommended-ways-to-manage-devices-and-entities-names/243815/12
-        batteries: "{{ states.sensor | selectattr('attributes.monitor','eq',True) | map(attribute='entity_id') | list }}"
     - service: notify.mobile_app_ceres
       data:
         # icon: https://companion.home-assistant.io/docs/notifications/notifications-basic/#notification-icon
         #       https://companion.home-assistant.io/docs/notifications/actionable-notifications/#icon-values
         title: "Batteries"
+        # https://community.home-assistant.io/t/recommended-ways-to-manage-devices-and-entities-names/243815/12
         message: >
-          {%- set threshold = 15 %}
-          {%- set batteries = states.sensor | selectattr('attributes.monitor','eq',True) | map(attribute='entity_id') %}
+          {%- set batteries = states.sensor
+                                | selectattr('attributes.monitor','eq',True)
+                                | selectattr('attributes.device_class','eq','battery')
+                                | map(attribute='entity_id')
+          %}
           The following devices have less than {{ threshold }}% charge:
           {%- for b in batteries %}
-          {%- if states(b) | int < threshold %}
+            {%- if states(b) | int < threshold %}
            - {{ state_attr(b, 'friendly_name') | replace(' Battery', '') }}: {{ states(b) | int }}%
-          {%- endif -%}
+            {%- endif -%}
           {%- endfor %}
         data:
           group: "batteries"
           url: homeassistant://navigate/lovelace/devices
+          # https://companion.home-assistant.io/docs/notifications/notifications-basic/#notification-icon
+          # https://community.home-assistant.io/t/mobile-notification-icon-not-showing-up/408050
+          # icon_url: "https://github.com/home-assistant/assets/blob/master/logo/logo-small.png?raw=true"

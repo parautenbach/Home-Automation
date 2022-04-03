@@ -720,7 +720,8 @@
       entity_id: input_datetime.vacation_end
       data:
         # all-day events are set by google to until midnight of the next day
-        datetime: "{{ ((state_attr('calendar.vacation', 'end_time') or states('input_datetime.vacation_end')) | as_datetime).date() }}"
+        datetime: "{{ ((state_attr('calendar.vacation', 'end_time') | as_datetime - timedelta(seconds=1)) or (states('input_datetime.vacation_end') | as_datetime)).date() }}
+"
 
 # https://community.home-assistant.io/t/snmp-bandwidth-monitor/7122
 # https://community.home-assistant.io/t/snmp-bandwidth-monitor-using-statistics-and-a-utility-meter/176971

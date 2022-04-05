@@ -744,6 +744,95 @@ turn_on_light_group_timers:
             data:
               duration: "00:03:00"
 
+# https://community.home-assistant.io/t/yaml-light-fader-for-light-entities-that-dont-support-transition/215508
+# https://community.home-assistant.io/t/how-can-i-make-automations-with-transition-while-the-device-doesnt-support-it/357035/8
+fade_light:
+  fields:
+    light:
+      name: Light
+      description: "A light entity"
+      example: "light.my_light"
+      required: true
+      selector:
+        entity:
+          domain: light
+    initial_profile:
+      name: Initial Light Profile
+      description: "The initial light profile when turning on the light as defined in light_profiles.csv"
+      example: "normal/night/security"
+      selector:
+        text:
+    target_brightness_pct:
+      name: Target Brightness
+      description: "Target brightness as a percentage between 0 and 100 inclusive"
+      example: 80
+      default: 80
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 100
+          step: 1
+          mode: slider
+          unit_of_measurement: "%"
+    transition_duration:
+      name: Transition Duration
+      description: "Time period in seconds to transition over"
+      example: 10
+      default: 10
+      required: true
+      selector:
+        number:
+          # transition_duration > 1
+          # the point of this script is to handle longer transitions
+          min: 5
+          max: 60
+          step: 1
+          mode: slider
+          unit_of_measurement: "s"
+  mode: parallel
+  sequence:
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: "{{ initial_profile is defined }}"
+          sequence:
+            - service: light.turn_on
+              target:
+                entity_id: "{{ light }}"
+              data:
+                profile: "{{ initial_profile }}"
+            - wait_template: "{{ is_state(light, 'on') }}"
+            # needed to get around built-in/default light transitions of a short duration when switched on for example (it takes a moment)
+            # this is to get the initial brightness correct
+            - delay:
+                seconds: 1
+    - variables:
+        # we use a fixed interval and calculate the step size, since the system needs time to apply and reflect the updated brightness
+        # it is possible for the step to be too small and the brightness won't change, leading to an infinite loop
+        # half steps, twice per second (500ms)
+        step_pct: "{{ (((target_brightness_pct - state_attr(light, 'brightness')/255*100))/(transition_duration - 1)/2) | round | abs }}"
+        sign: "{{ 1 if target_brightness_pct >= state_attr(light, 'brightness')/255*100 else -1 }}"
+    - repeat:
+        # if the step size is too small it has no effect on setting the new brightness leading to an infinite loop
+        while: "{{ sign*(state_attr(light, 'brightness')/255*100 + sign*step_pct - target_brightness_pct) <= 0 and step_pct >=1 }}"
+        sequence:
+          - delay:
+              milliseconds: 500
+          - service: light.turn_on
+            target:
+              entity_id: "{{ light }}"
+            data:
+              brightness_step_pct: "{{ sign*step_pct }}"
+    # after looping and getting to close to but not exactly the target brightness
+    # brightness == 0 turns the light off
+    # https://www.home-assistant.io/integrations/light/#service-lightturn_on
+    - service: light.turn_on
+      target:
+        entity_id: "{{ light }}"
+      data:
+        brightness_pct: "{{ target_brightness_pct }}"
+
 test_foyer_light:
   fields:
     profile:

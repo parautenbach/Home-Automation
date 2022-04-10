@@ -139,16 +139,18 @@
       target:
         entity_id: script.fade_light
       data:
-        light: light.pieter_bedside
-        target_brightness_pct: 20
-        transition_duration: 180
+        variables:
+          light: light.pieter_bedside
+          target_brightness_pct: 20
+          transition_duration: 180
     - service: script.turn_on
       target:
         entity_id: script.fade_light
       data:
-        light: light.rouve_bedside
-        target_brightness_pct: 40
-        transition_duration: 180
+        variables:
+          light: light.rouve_bedside
+          target_brightness_pct: 40
+          transition_duration: 180
 
 - alias: "Switch On Night Light If Motion Is Detected"
   initial_state: true

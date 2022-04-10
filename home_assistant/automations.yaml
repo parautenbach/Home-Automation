@@ -716,7 +716,7 @@
       entity_id: calendar.vacation
       to: "on"
     # add daily trigger too in case changes are made to the event
-    # this will override any manual changes by setting the input datetimes directly
+    # this will override any manual changes made by setting the input datetimes directly
     - platform: time
       at:
         - "01:00:00"
@@ -1866,7 +1866,8 @@
   trigger:
     platform: time
     at: "21:00:00"
-  condition: "{{ (states('input_datetime.vacation_end') | as_datetime - timedelta(days=1)).date() == now().date() }}"
+  # google calendar all-day events go up to midnight of the next day – but this is already catered for when we set the helpers
+  condition: "{{ (states('input_datetime.vacation_end') | as_datetime).date() == now().date() }}"
   action:
     - service: notify.mobile_app_ceres
       data:

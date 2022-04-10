@@ -114,8 +114,10 @@
     - service: scene.turn_on
       target:
         entity_id: scene.normal_lights
+    # it's a bit wild if alarms go off and lights turn on all at the same time – be gentle
     - delay:
         seconds: 10
+    # add a condition for only if we are home – but if it's a workday, why wouldn't we?
     - service: light.turn_on
       target:
         entity_id: light.pieter_bedside
@@ -129,19 +131,24 @@
         transition: 5  # seconds
         profile: low
     - delay:
-        minutes: 3
-    - service: light.turn_on
+        minutes: 2
+    # this call does not block/wait, so the two transitions will start at almost the same time
+    # and the script runs in parallel mode
+    # https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete
+    - service: script.turn_on
       target:
-        entity_id: light.pieter_bedside
+        entity_id: script.fade_light
       data:
-        transition: 5  # seconds
-        profile: pieter
-    - service: light.turn_on
+        light: light.pieter_bedside
+        target_brightness_pct: 20
+        transition_duration: 180
+    - service: script.turn_on
       target:
-        entity_id: light.rouve_bedside
+        entity_id: script.fade_light
       data:
-        transition: 5  # seconds
-        profile: rouve
+        light: light.rouve_bedside
+        target_brightness_pct: 40
+        transition_duration: 180
 
 - alias: "Switch On Night Light If Motion Is Detected"
   initial_state: true

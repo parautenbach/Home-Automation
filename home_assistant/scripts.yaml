@@ -786,7 +786,7 @@ fade_light:
           # transition_duration > 1
           # the point of this script is to handle longer transitions
           min: 5
-          max: 60
+          max: 300
           step: 1
           mode: slider
           unit_of_measurement: "s"
@@ -804,34 +804,76 @@ fade_light:
                 profile: "{{ initial_profile }}"
             - wait_template: "{{ is_state(light, 'on') }}"
             # needed to get around built-in/default light transitions of a short duration when switched on for example (it takes a moment)
-            # this is to get the initial brightness correct
+            # this is to retrieve the correct initial brightness
             - delay:
                 seconds: 1
     - variables:
         # we use a fixed interval and calculate the step size, since the system needs time to apply and reflect the updated brightness
         # it is possible for the step to be too small and the brightness won't change, leading to an infinite loop
-        # half steps, twice per second (500ms)
-        step_pct: "{{ (((target_brightness_pct - state_attr(light, 'brightness')/255*100))/(transition_duration - 1)/2) | round | abs }}"
-        sign: "{{ 1 if target_brightness_pct >= state_attr(light, 'brightness')/255*100 else -1 }}"
-    - repeat:
+        # rate: half steps, twice per second (500ms)
         # if the step size is too small it has no effect on setting the new brightness leading to an infinite loop
-        while: "{{ sign*(state_attr(light, 'brightness')/255*100 + sign*step_pct - target_brightness_pct) <= 0 and step_pct >=1 }}"
+        step_pct: "{{ (((target_brightness_pct - state_attr(light, 'brightness')/255*100))/(transition_duration - 0.5)/2) | round | abs }}"
+        # use step_pct above if step size is greater than one, otherwise, use a minimum step of one and adjust the delay
+        delay: "{{ (transition_duration/((target_brightness_pct - state_attr(light, 'brightness')/255*100) + 1)*1000) | round  }}"
+        sign: "{{ 1 if target_brightness_pct >= state_attr(light, 'brightness')/255*100 else -1 }}"
+    ########## debugging info ##########
+    - service: system_log.write
+      data:
+        message: "target_brightness_pct: {{ target_brightness_pct }}"
+        level: debug
+    - service: system_log.write
+      data:
+        message: "transition_duration: {{ transition_duration }}"
+        level: debug  # make debug
+    - service: system_log.write
+      data:
+        message: "step_pct: {{ step_pct }}"
+        level: debug
+    - service: system_log.write
+      data:
+        message: "milliseconds: {{ 500 if step_pct >= 1 else delay }}"
+        level: debug
+    - service: system_log.write
+      data:
+        message: "sign: {{ sign }}"
+        level: debug
+    - service: system_log.write
+      data:
+        message: "brightness: {{ (state_attr(light, 'brightness')/255*100) | round(1) }} (start)"
+        level: debug
+    ########## debugging info ##########
+    - repeat:
+        while: "{{ sign*(state_attr(light, 'brightness')/255*100 + sign*step_pct - target_brightness_pct) <= 0 }}"
         sequence:
-          - delay:
-              milliseconds: 500
           - service: light.turn_on
             target:
               entity_id: "{{ light }}"
             data:
-              brightness_step_pct: "{{ sign*step_pct }}"
+              brightness_step_pct: "{{ sign*step_pct if step_pct >= 1 else 1 }}"
+          - delay:
+              milliseconds: "{{ 500 if step_pct >= 1 else delay }}"
+          - service: system_log.write
+            data:
+              message: "brightness: {{ (state_attr(light, 'brightness')/255*100) | round(1) }} (index: {{ repeat.index }})"
+              level: debug
     # after looping and getting to close to but not exactly the target brightness
-    # brightness == 0 turns the light off
+    # note that brightness == 0 turns the light off
     # https://www.home-assistant.io/integrations/light/#service-lightturn_on
     - service: light.turn_on
       target:
         entity_id: "{{ light }}"
       data:
         brightness_pct: "{{ target_brightness_pct }}"
+    - delay:
+        seconds: 1
+    - service: system_log.write
+      data:
+        message: "final brightness: {{ (state_attr(light, 'brightness')/255*100) | round(1) }}"
+        level: debug
+    - service: system_log.write
+      data:
+        message: "terminated"
+        level: debug
 
 test_foyer_light:
   fields:

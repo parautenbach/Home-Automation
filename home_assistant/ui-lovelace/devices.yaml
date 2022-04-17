@@ -136,12 +136,15 @@ cards:
       entities:
         - automation.alert_if_garages_opened_or_closed_when_not_supposed_to
         - automation.alert_if_gate_opened_or_closed_when_not_supposed_to
+        - automation.alert_vacation_start
+        - automation.alert_vacation_end
         - automation.away_mode
         - automation.backup_home_assistant
         - automation.bedlamps_auto_on_upon_sunset_or_arrival
         - automation.bedlamps_on_upon_low_light
         - automation.blink_motion_indicator_while_recording
         - automation.check_disk_space_on_the_home_assistant_server
+        - automation.check_for_low_batteries
         - automation.close_cover_from_alert_action
         - automation.contractor_mode_disabled_alert
         - automation.contractor_mode_enabled_alert

@@ -1,6 +1,7 @@
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
+alert: !include alerts.yaml
 automation: !include automations.yaml
 binary_sensor: !include binary_sensors.yaml
 camera: !include cameras.yaml

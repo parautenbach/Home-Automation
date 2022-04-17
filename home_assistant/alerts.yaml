@@ -1,0 +1,12 @@
+test:
+  name: Test Alert
+  entity_id: input_boolean.test
+  state: "on"
+  repeat: 30  # min
+  title: Test Title
+  message: "Test message. {{ states('input_boolean.test') }}"
+  data:
+    group: "test-alerts"
+    url: homeassistant://navigate/lovelace/devices
+  notifiers:
+    - mobile_app_ceres

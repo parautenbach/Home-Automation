@@ -917,8 +917,8 @@ shutdown_remote_host:
         title: System
         message: >-
           {% set user_id = states.script.shutdown_remote_host.context.user_id %}
-          {% set triggered_by = (states.person | selectattr('attributes.user_id','==', user_id)) | list | first or "system" %}
-          {% set first_name = "System" if triggered_by == "system" else state_attr(triggered_by.entity_id, "friendly_name").split()[0] %}
+          {% set triggered_by = (states.person | selectattr('attributes.user_id','==', user_id)) | list %}
+          {% set first_name = "System" if not triggered_by else state_attr((triggered_by | first).entity_id, "friendly_name").split()[0] %}
           {{ first_name }} shut down {{ name }}.
 
 make_backup:

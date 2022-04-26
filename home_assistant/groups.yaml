@@ -1,54 +1,8 @@
-hk_3380:
-  name: Sound
-  entities:
-    - script.hk_3380_power_off
-    - script.hk_3380_power_on
-    - script.hk_3380_vid1
-    - script.hk_3380_vid2
-    - script.hk_3380_dimmer
-    - script.hk_3380_vol_up
-    - script.hk_3380_vol_down
-    - script.hk_3380_power_mute
-
-dstv:
-  name: Satellite
-  entities:
-    - script.dstv_power
-    - script.dstv_ch_plus
-    - script.dstv_ch_minus
-    - script.dstv_vol_up
-    - script.dstv_vol_down
-    - script.dstv_mute
-    - script.dstv_alt
-    - script.dstv_info
-    - script.dstv_back
-    - script.dstv_ok
-    - script.dstv_left
-    - script.dstv_right
-    - script.dstv_up
-    - script.dstv_down
-    - script.dstv_0
-    - script.dstv_1
-    - script.dstv_2
-    - script.dstv_3
-    - script.dstv_4
-    - script.dstv_5
-    - script.dstv_6
-    - script.dstv_7
-    - script.dstv_8
-    - script.dstv_9
-
 security_automations:
   name: Security Automations
   entities:
     - automation.take_motion_snapshots
     - automation.switch_on_lights_if_motion_is_detected
-
-family:
-  name: Family
-  entities:
-    - person.pieter_rautenbach
-    - person.rouve_rautenbach
 
 garage_doors:
   name: Garage Doors

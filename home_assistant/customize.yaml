@@ -40,8 +40,6 @@ switch.living_room_lamp:
   icon: mdi:floor-lamp
 automation.take_motion_snapshots:
   icon: mdi:camera
-group.all_devices:
-  friendly_name: All Devices
 script.dstv_power:
   friendly_name: DStv Power
   icon: mdi:power

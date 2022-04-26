@@ -1350,8 +1350,15 @@
 - alias: "Disable Guest Mode When Getting Home"
   initial_state: true
   trigger:
+    # todo: make family group
+    # don't trigger on binary_sensor.anybody_home, because, should we be away when turning this on,
+    # it will immediately be turned on, as guest mode will turn the binary sensor on
+    # ideally, guest mode should be turned on while home
     - platform: state
-      entity_id: binary_sensor.anybody_home
+      entity_id: binary_sensor.pieter_present
+      to: "on"
+    - platform: state
+      entity_id: binary_sensor.rouve_present
       to: "on"
   condition:
     - condition: state

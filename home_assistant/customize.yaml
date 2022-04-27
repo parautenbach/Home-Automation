@@ -350,7 +350,7 @@ sensor.last_backup:
   friendly_name: "Most recent backup"
 sensor.db_size:
   icon: mdi:database
-binary_sensor.updater:
+binary_sensor.python_package_index_pypi_update_available:
   friendly_name: HA Updater
 sensor.uva_irradiance:
   icon: mdi:weather-sunny-alert

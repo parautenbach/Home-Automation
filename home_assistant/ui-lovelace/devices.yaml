@@ -2,7 +2,7 @@ title: Devices
 path: devices
 icon: mdi:devices
 badges:
-  - entity: binary_sensor.updater
+  - entity: binary_sensor.python_package_index_pypi_update_available
     card_mod:
       style:
         ha-state-label-badge:

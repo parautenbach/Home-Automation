@@ -774,6 +774,9 @@
     entity_id: person.pieter_rautenbach
     zone: zone.pieter_work_cape_town
     event: leave
+  # this could potentially be improved by checking whether we are both together
+  # in which case sending a notification won't make sense
+  # seems unlikely though...
   condition:
     - condition: and
       conditions:

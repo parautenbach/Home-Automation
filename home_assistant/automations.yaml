@@ -1,4 +1,7 @@
+# use uuid4 to create random automation ids
+
 - alias: "Set Light Theme"
+  id: "b2139218-ae45-4fc5-a049-1a9692bc387e"
   trigger:
     - platform: homeassistant
       event: start
@@ -16,6 +19,7 @@
       name: custom-light-mode
 
 - alias: "Set Dark Theme"
+  id: "2a26deed-9071-4eb4-80b7-d014dfe98def"
   trigger:
     - platform: homeassistant
       event: start
@@ -33,6 +37,7 @@
       name: slate
 
 - alias: "Take Foyer Motion Snapshots"
+  id: "e160923e-daf9-417d-9561-174feb2cd350"
   initial_state: true
   trigger:
     platform: state
@@ -51,6 +56,7 @@
       entity_id: script.security_camera_create_snapshot
 
 - alias: "Foyer Motion Detected Last"
+  id: "ef364d58-2cb7-4d5b-8e96-8724c132365a"
   initial_state: true
   trigger:
     platform: state
@@ -63,6 +69,7 @@
         datetime: "{{ now() }}"
 
 - alias: "Switch On Lights If Motion Is Detected"
+  id: "a3e56532-e1e9-42a1-9371-bfe2ad04c2af"
   # only at night though
   initial_state: true
   trigger:
@@ -102,6 +109,7 @@
           light_group: light.inside_security_group
 
 - alias: "Switch On Lights At Wake Up Time"
+  id: "5486f6f9-da52-4cf0-8a23-e54f40a80721"
   initial_state: true
   trigger:
     - platform: time
@@ -153,6 +161,7 @@
           transition_duration: 180
 
 - alias: "Switch On Night Light If Motion Is Detected"
+  id: "096415fb-9e87-411a-aef9-b9ba5fb9696d"
   initial_state: true
   trigger:
     platform: state
@@ -191,6 +200,7 @@
           light_group: light.night_group
 
 - alias: "Switch Off Light When Timer Expires"
+  id: "23c86717-220f-4d56-b67c-d19e2f171836"
   initial_state: true
   trigger:
     # same entities as for "Stop Light Timer If Running When Light Turned Off"
@@ -217,6 +227,7 @@
         entity_id: "{{ trigger.event.data.entity_id | replace('_timer', '') | replace('timer', 'light') }}"
 
 - alias: "Motion Indicator On"
+  id: "3cd46514-8bea-4d73-9625-ae4487cca15d"
   initial_state: true
   trigger:
     platform: state
@@ -227,6 +238,7 @@
       entity_id: light.led
 
 - alias: "Motion Indicator Off"
+  id: "4e7d3f9b-e91a-46d9-afc3-83f40ee90636"
   initial_state: true
   trigger:
     platform: state
@@ -237,6 +249,7 @@
       entity_id: light.led
 
 - alias: "Blink Motion Indicator While Recording"
+  id: "8daef3c1-2edf-4fc0-b687-3df4f782c348"
   initial_state: true
   trigger:
     platform: state
@@ -267,6 +280,7 @@
       entity_id: automation.motion_indicator_on
 
 - alias: "Inside Lights Auto On Upon Sunset or Arrival"
+  id: "867f58cb-d941-4944-b919-6b446486a690"
   initial_state: true
   trigger:
     # https://www.home-assistant.io/cookbook/automation_sun/
@@ -298,6 +312,7 @@
         entity_id: scene.normal_lights
 
 - alias: "Bedlamps Auto On Upon Sunset or Arrival"
+  id: "21b972ef-1e21-42b5-a137-9b160f601310"
   initial_state: true
   trigger:
     - platform: sun
@@ -347,6 +362,7 @@
 # e.g. switch on from 6 am when arriving home and light is low
 # separate from the default on at 8 am (and maybe only on workdays)
 - alias: "Lights On Upon Low Light"
+  id: "36373097-6fba-45ae-9888-d88b668b997d"
   initial_state: true
   trigger:
     - platform: state
@@ -376,6 +392,7 @@
         entity_id: scene.normal_lights
 
 - alias: "Bedlamps On Upon Low Light"
+  id: "5cdd58f4-dcec-4f50-9451-8d40dd8c2215"
   initial_state: true
   trigger:
     - platform: state
@@ -410,6 +427,7 @@
           profile: rouve
 
 - alias: "Lights Off After Sunrise"
+  id: "7f64fa82-a158-4f78-b406-2f0653f8f764"
   initial_state: true
   trigger:
     - platform: sun
@@ -442,6 +460,7 @@
       entity_id: light.normal_light_group
 
 - alias: "Bedlamps Off After Sunrise"
+  id: "7d865580-b23b-47e1-8068-9bb202af535b"
   initial_state: true
   trigger:
     - platform: sun
@@ -452,6 +471,7 @@
       entity_id: light.main_bedroom_group
 
 - alias: "Away Mode"
+  id: "93bac20d-eeba-48f6-87ef-d6c7f754ddcc"
   initial_state: true
   trigger:
     platform: state
@@ -470,6 +490,7 @@
       entity_id: switch.tivoli_audio
 
 - alias: "Switch On The Front Door Light When Arriving Home"
+  id: "47e6883e-b9ab-4559-9603-765e80cdfa81"
   trigger:
     # when either of us arrive home, irrespective of whether anybody is home
     - platform: state
@@ -498,6 +519,7 @@
           duration: "00:03:00"
 
 - alias: "Open The Gate When Arriving Home"
+  id: "7dcb52a0-3ecc-4a6f-9b89-6d80a6720590"
   trigger:
     - platform: state
       entity_id: binary_sensor.pieter_present
@@ -520,6 +542,7 @@
       entity_id: cover.main_gate
 
 - alias: "Stop Light Timer If Running When Light Turned Off"
+  id: "5878e444-72bc-4633-85c9-de0ebf5a57dd"
   initial_state: true
   trigger:
     platform: state
@@ -550,6 +573,7 @@
 # https://www.home-assistant.io/docs/configuration/templating/ (distance function)
 # https://companion.home-assistant.io/docs/core/sensors/
 - alias: "Open Garage Door When Arriving By Car"
+  id: "0da9adc5-24df-4669-8160-bbc6782dc283"
   initial_state: true
   trigger:
     - platform: state
@@ -586,6 +610,7 @@
       entity_id: cover.rhs_garage_door
 
 - alias: "Check Disk Space on the Home Assistant server"
+  id: "e955e738-4162-486e-a915-d30b5952d238"
   trigger:
     - platform: time_pattern
       hours: "*"
@@ -605,6 +630,7 @@
           url: homeassistant://navigate/lovelace/devices
 
 - alias: "Contractor Mode Enabled Alert"
+  id: "86443a8d-cc5d-4017-a7f8-190e9eccc8cc"
   trigger:
     - platform: state
       entity_id: switch.contractor_mode
@@ -623,6 +649,7 @@
           url: homeassistant://navigate/lovelace/main
 
 - alias: "Contractor Mode Disabled Alert"
+  id: "123e8e79-6f0e-48f5-a400-951922bf9b80"
   trigger:
     - platform: state
       entity_id: switch.contractor_mode
@@ -640,6 +667,7 @@
           url: homeassistant://navigate/lovelace/main
 
 - alias: "Enable Contractor Mode"
+  id: "47fc96f9-bf33-4f9e-97ed-8aaea4da1a12"
   initial_state: true
   trigger:
     - platform: state
@@ -650,6 +678,7 @@
       entity_id: switch.contractor_mode
 
 - alias: "Disable Contractor Mode"
+  id: "f63a3c52-fac8-4fc7-a000-0f41b2ee5e8d"
   initial_state: true
   trigger:
     - platform: time
@@ -663,6 +692,7 @@
       entity_id: switch.contractor_mode
 
 - alias: "Contractor Mode Still Enabled Alert"
+  id: "f64b90bf-9234-42d1-a3b7-b34443fd3ea6"
   initial_state: true
   trigger:
     - platform: time_pattern
@@ -691,6 +721,7 @@
           url: homeassistant://navigate/lovelace/main
 
 - alias: "Disable Contractor Mode From Alert Action"
+  id: "496603d1-c6b1-46c0-9048-8601edd627d4"
   trigger:
     - platform: event
       event_type: mobile_app_notification_action
@@ -701,6 +732,7 @@
       entity_id: switch.contractor_mode
 
 - alias: "Enable Contractor Mode From Alert Action"
+  id: "84c0360f-3154-4705-904e-ca50ffedce47"
   trigger:
     - platform: event
       event_type: mobile_app_notification_action
@@ -711,6 +743,7 @@
       entity_id: switch.contractor_mode
 
 - alias: "Set Vacation"
+  id: "a5e5cc6f-f66b-458e-9b63-0a60ef5be6a9"
   trigger:
     - platform: state
       entity_id: calendar.vacation
@@ -735,6 +768,7 @@
 # https://community.home-assistant.io/t/snmp-bandwidth-monitor/7122
 # https://community.home-assistant.io/t/snmp-bandwidth-monitor-using-statistics-and-a-utility-meter/176971
 - alias: "Monitor Inbound Internet Traffic"
+  id: "244f20ae-8cc6-4442-b3aa-0336763508f8"
   trigger:
     platform: state
     entity_id: sensor.snmp_wan_in
@@ -752,6 +786,7 @@
           {{ (traffic_delta * 8) / time_delta }}
 
 - alias: "Monitor Outbound Internet Traffic"
+  id: "719b1fd6-bfc1-40b3-bf0e-5a07cff11aea"
   trigger:
     platform: state
     entity_id: sensor.snmp_wan_out
@@ -769,6 +804,7 @@
           {{ (traffic_delta * 8) / time_delta }}
 
 - alias: "Notify Pieter Going Home from Work in Cape Town"
+  id: "5515c06c-6c69-443d-9549-eb00999e8b95"
   trigger:
     platform: zone
     entity_id: person.pieter_rautenbach
@@ -796,6 +832,7 @@
       entity_id: script.send_pieter_work_cape_town_to_home_eta
 
 - alias: "Start Cover Timer When Opened"
+  id: "e2ec6802-6131-4264-8226-5df65c900699"
   initial_state: true
   trigger:
     platform: state
@@ -812,6 +849,7 @@
         duration: "00:03:00"
 
 - alias: "Cover Left Open Alert"
+  id: "26bf6fd5-1caf-4c21-ac29-8cd7985b2de7"
   initial_state: true
   trigger:
     - platform: event
@@ -888,6 +926,7 @@
         entity_id: "{{ trigger.event.data.entity_id }}"
 
 - alias: "Close Cover From Alert Action"
+  id: "4a65ac41-3dae-43dd-ae75-486adfc747b7"
   trigger:
     - platform: event
       event_type: mobile_app_notification_action
@@ -899,6 +938,7 @@
         entity_id: "{{ trigger.event.data.action_data.cover_id }}"
 
 - alias: "Extend Cover Timeout From Alert Action"
+  id: "1d1b940e-c70d-47e2-bb39-1e984e5514f1"
   trigger:
     - platform: event
       event_type: mobile_app_notification_action
@@ -932,6 +972,7 @@
         duration: "{{ trigger.event.data.action | regex_findall_index(find='\\d+', index=0, ignorecase=False) | int * 60 }}"
 
 - alias: "Stop Cover Timer When Closed"
+  id: "7ccfaf0f-ab16-4a3b-9b43-e884138971b2"
   initial_state: true
   trigger:
     platform: state
@@ -947,6 +988,7 @@
         entity_id: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
 
 - alias: "Notify If Cover Was Left Open"
+  id: "db54683c-0216-4985-9136-de81baee3e00"
   initial_state: true
   trigger:
     platform: state
@@ -985,6 +1027,7 @@
           url: homeassistant://navigate/lovelace/main
 
 - alias: "Notify If Server Load High"
+  id: "720ef41c-589a-4b16-9223-6e49d362e721"
   initial_state: true
   trigger:
     platform: numeric_state
@@ -1003,6 +1046,7 @@
           url: homeassistant://navigate/lovelace/devices
 
 - alias: "Set Pieter's Driving State"
+  id: "2cc8c07c-384d-4fce-ab9e-11e2c7a25b60"
   initial_state: true
   trigger:
     - platform: state
@@ -1016,6 +1060,7 @@
       entity_id: input_boolean.pieter_driving
 
 - alias: "Notify If Driving State Changed"
+  id: "e614d071-e6b5-4b20-bc33-5c946e6a1400"
   initial_state: false
   trigger:
     platform: state
@@ -1030,6 +1075,7 @@
           url: homeassistant://navigate/lovelace/devices
 
 - alias: "Notify If Internet Status Changed"
+  id: "ff386c09-1dd5-4381-b404-abad62bffb01"
   initial_state: true
   trigger:
     platform: state
@@ -1051,6 +1097,7 @@
           url: homeassistant://navigate/lovelace/internet
 
 - alias: "Notify If Electricity Feed Status Changed"
+  id: "c021b272-5076-45d4-9e40-e2db20ae66b6"
   initial_state: true
   trigger:
     platform: state
@@ -1081,6 +1128,7 @@
           url: homeassistant://navigate/lovelace/main
 
 - alias: "Switch On Front Door Light When Any Cover Opened"
+  id: "2f00ee50-2203-4ba6-a6f2-37052dfba07e"
   initial_state: true
   trigger:
     platform: state
@@ -1113,6 +1161,7 @@
           duration: "00:03:00"
 
 - alias: "Switch On Or Extend Front Door Light When Cover Closed"
+  id: "5ac8367e-9016-49ee-a3cf-64861c03aa17"
   initial_state: true
   trigger:
     - platform: event
@@ -1147,6 +1196,7 @@
           duration: "00:00:30"
 
 - alias: "Switch Garage Light According To Door Status And Light Conditions"
+  id: "33afb33f-1c65-4e9f-83ca-2796d4da5737"
   initial_state: true
   trigger:
     - platform: state
@@ -1194,6 +1244,7 @@
             {{ is_state('light.garage', light_state) }}
 
 - alias: "Update Security Camera Snapshot Gallery"
+  id: "41ab0956-cd7b-498d-bf4c-bce81da3c5a3"
   trigger:
     - platform: state
       entity_id: sensor.tmp
@@ -1204,6 +1255,7 @@
     - service: shell_command.trim_snapshots
 
 - alias: "Switch On Inside Lights When Unplugging Phone"
+  id: "ca60418c-1870-4c55-845d-4d5eba9aea52"
   trigger:
     platform: state
     entity_id: sensor.ceres_battery_state
@@ -1230,6 +1282,7 @@
 # set up automation on device to immediately update the sensors
 # todo: switch off all lights except rouvé's (if on), or at least notify of lights still on
 - alias: "Switch Off Bedlamp When Plugging In Phone"
+  id: "ffd14255-4539-43e3-b9a5-be8b82a6b5b6"
   trigger:
     platform: state
     entity_id: sensor.ceres_battery_state
@@ -1259,6 +1312,7 @@
       entity_id: light.pieter_bedside
 
 - alias: "Turn Off Entertainment System When Idle Or Leaving Room"
+  id: "7976aaad-a575-442d-ae00-538e5412e92f"
   trigger:
     # todo: we don't know the decoder's state so we could be turning off the tv just because the apple tv isn't playing...
     # - platform: state
@@ -1281,6 +1335,7 @@
       entity_id: light.normal_light_group
 
 - alias: "Backup Home Assistant"
+  id: "57461782-62af-4987-a6ce-46f602fcc417"
   trigger:
     platform: time
     at:
@@ -1296,6 +1351,7 @@
 
 # backup script: https://gist.github.com/riemers/041c6a386a2eab95c55ba3ccaa10e7b0
 - alias: "Notify If No Recent Backup"
+  id: "1069834c-2087-48a9-9015-e9a4a86262d9"
   trigger:
     - platform: state
       entity_id: binary_sensor.no_recent_backup
@@ -1318,6 +1374,7 @@
           url: homeassistant://navigate/lovelace/devices
 
 - alias: "Notify If New Backup Found"
+  id: "f5382369-7a98-4cc0-bd63-ecf1c6e6f288"
   trigger:
     - platform: state
       entity_id: sensor.last_backup
@@ -1331,12 +1388,13 @@
     - service: notify.mobile_app_ceres
       data:
         title: "System"
-        message: "A new Home Assistant backup was made."
+        message: "A new Home Assistant backup was made. ({{ range(1, 1000) | random }})"
         data:
           group: "system-backup"
           url: homeassistant://navigate/lovelace/devices
 
 - alias: "Low Server Battery"
+  id: "cc72f00c-96e6-49eb-84f3-c72b09f49f7f"
   initial_state: true
   trigger:
     - platform: template
@@ -1351,9 +1409,9 @@
           url: homeassistant://navigate/lovelace/devices
 
 - alias: "Disable Guest Mode When Getting Home"
+  id: "a113f957-602f-44ca-b1a4-559bafab4835"
   initial_state: true
   trigger:
-    # todo: make family group
     # don't trigger on binary_sensor.anybody_home, because, should we be away when turning this on,
     # it will immediately be turned on, as guest mode will turn the binary sensor on
     # ideally, guest mode should be turned on while home
@@ -1372,6 +1430,7 @@
       entity_id: switch.guest_mode
 
 - alias: "Guest Mode Enabled Alert"
+  id: "6f1be18f-6a43-4512-b537-0bd8aa1581d2"
   trigger:
     - platform: state
       entity_id: switch.guest_mode
@@ -1389,6 +1448,7 @@
           url: homeassistant://navigate/lovelace/main
 
 - alias: "Guest Mode Disabled Alert"
+  id: "f0aff94c-3b99-4917-b399-6f709cdbf80b"
   trigger:
     - platform: state
       entity_id: switch.guest_mode
@@ -1406,6 +1466,7 @@
           url: homeassistant://navigate/lovelace/main
 
 - alias: "Enable Guest Mode From Alert Action"
+  id: "cfeb5963-4854-439b-952e-f1ac37fd125d"
   initial_state: true
   trigger:
     - platform: event
@@ -1417,6 +1478,7 @@
       entity_id: switch.guest_mode
 
 - alias: "Disable Guest Mode From Alert Action"
+  id: "0ad8eed7-dbd3-412f-b1d8-99f3ee74368c"
   initial_state: true
   trigger:
     - platform: event
@@ -1428,6 +1490,7 @@
       entity_id: switch.guest_mode
 
 - alias: "Alert If Garages Opened Or Closed When Not Supposed To"
+  id: "ad4db54e-fbb3-4377-9711-4731d58da0f5"
   initial_state: true
   trigger:
     platform: state
@@ -1495,6 +1558,7 @@
               url: homeassistant://navigate/lovelace/main
 
 - alias: "Alert If Gate Opened Or Closed When Not Supposed To"
+  id: "62a52103-4d0d-429e-a59a-fc674d72f3ee"
   initial_state: true
   trigger:
     platform: state
@@ -1567,6 +1631,7 @@
               url: homeassistant://navigate/lovelace/main
 
 - alias: "Save Last Smart Bulb State"
+  id: "ba2755f4-d8a2-4f1c-a7f8-32642c780ee7"
   initial_state: true
   trigger:
     - platform: state
@@ -1591,6 +1656,7 @@
         entity_id: "{{ trigger.entity_id | replace('light.', 'input_boolean.') }}_state"
 
 - alias: "Restore Smart Bulb Statuses After Power Restored"
+  id: "1d1af600-8b45-49c9-9b10-4d7616080867"
   initial_state: true
   trigger:
     # tp-link smart bulbs always turn on when power is connected
@@ -1635,6 +1701,7 @@
 # udevadm control --log-priority=debug
 # journalctl -f
 - alias: "Update Server Power Status"
+  id: "3b2aed6b-5894-4339-acec-19e4e8ce97c7"
   initial_state: true
   trigger:
     - platform: webhook
@@ -1648,6 +1715,7 @@
         entity_id: input_boolean.server_power_connected
 
 - alias: "Proximity Updates"
+  id: "355d7452-0b56-468b-b434-d0f4b430078b"
   initial_state: false
   trigger:
     - platform: state
@@ -1660,11 +1728,13 @@
           Distance: {{ states('proximity.home') }}{{ state_attr('proximity.home', 'unit_of_measurement') }}; Direction of travel: {{ state_attr('proximity.home', 'dir_of_travel') }}.
 
 - alias: "Shut Down Devices Before Loadshedding"
+  id: "015daeee-a776-4220-b5cb-0f4949dde6a0"
   initial_state: true
   trigger:
     - platform: state
       entity_id: calendar.loadshedding
       to: "on"
+      # todo: improve by adding a 5 min offset
   action:
     - service: script.turn_on
       target:
@@ -1697,12 +1767,13 @@
     - service: notify.mobile_app_ceres
       data:
         title: "System"
-        message: "Systems shut down prior to loadshedding."
+        message: "Systems shut down prior to loadshedding. ({{ range(1, 1000) | random }})"
         data:
           group: "system-general"
           url: homeassistant://navigate/lovelace/devices
 
 - alias: "Update OpenUV every 20 minutes during the daytime"
+  id: "34f13272-f170-4ef2-92e2-7ad97ad14891"
   initial_state: false
   # server seems to 500 quite often:
   # https://github.com/bachya/pyopenuv/issues/48
@@ -1721,6 +1792,7 @@
     service: openuv.update_uv_index_data
 
 - alias: "Download Damlevels Data"
+  id: "0cb4d6ba-5a63-45f7-8adc-efb98724a44e"
   trigger:
     - platform: time
       at: "05:00:00"
@@ -1728,6 +1800,7 @@
     - service: shell_command.download_latest_dam_levels
 
 - alias: "Notify Doorbell Rang"
+  id: "46054fb3-4e60-40ad-9e0f-e22b8137b23c"
   initial_state: true
   trigger:
     - platform: state
@@ -1753,8 +1826,10 @@
         #     url: !secret doorbell_camera_last_snapshot_url
 
 # can the following number of automations be simplified?
+# blueprints?
 # https://www.home-assistant.io/docs/scripts/conditions/#trigger-condition
 - alias: "Toggle Pieter's Bedside Lamp"
+  id: "8f52a6f5-0ce5-4024-948d-bb641166bc00"
   initial_state: true
   trigger:
     - platform: event
@@ -1772,6 +1847,7 @@
           profile: pieter
 
 - alias: "Pieter's Bedside Lamp Full Brightness"
+  id: "624744b8-4e15-45e0-a357-97a1ad392402"
   initial_state: true
   trigger:
     - platform: event
@@ -1789,6 +1865,7 @@
           profile: security
 
 - alias: "Toggle Rouvé's Bedside Lamp"
+  id: "6bb6fa7a-3385-4d78-9a30-6f49c90adbf9"
   initial_state: true
   trigger:
     - platform: event
@@ -1806,6 +1883,7 @@
           profile: rouve
 
 - alias: "Rouvé's Bedside Lamp Full Brightness"
+  id: "e14458eb-fae0-4be2-8ba1-a7955bce3f54"
   initial_state: true
   trigger:
     - platform: event
@@ -1823,6 +1901,7 @@
           profile: security
 
 - alias: "Toggle Dining Room Light"
+  id: "3cd02beb-7a1a-440a-9507-fb555ff9bb98"
   initial_state: true
   trigger:
     - platform: event
@@ -1840,6 +1919,7 @@
           profile: dim
 
 - alias: "Dining Room Light Full Brightness"
+  id: "a311a437-6763-4464-a2d8-4ae8c36bb445"
   initial_state: true
   trigger:
     - platform: event
@@ -1857,6 +1937,7 @@
           profile: security
 
 - alias: "Alert Vacation Start"
+  id: "f1be4ad3-042c-4cbd-bb91-99da7bdc5dab"
   initial_state: true
   trigger:
     platform: time
@@ -1872,6 +1953,7 @@
           url: homeassistant://navigate/lovelace/main
 
 - alias: "Alert Vacation End"
+  id: "e1ce2573-356f-467d-93e4-c7bcb541db9a"
   initial_state: true
   trigger:
     platform: time
@@ -1888,6 +1970,7 @@
           url: homeassistant://navigate/lovelace/main
 
 - alias: "Check For Low Batteries"
+  id: "5ff59069-6f3c-4f9d-bc66-b50bea8e184e"
   initial_state: true
   variables:
     threshold: 15

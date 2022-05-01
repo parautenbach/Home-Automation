@@ -1413,13 +1413,10 @@
   initial_state: true
   trigger:
     # don't trigger on binary_sensor.anybody_home, because, should we be away when turning this on,
-    # it will immediately be turned on, as guest mode will turn the binary sensor on
-    # ideally, guest mode should be turned on while home
+    # it will immediately be turned off, as guest mode will turn the binary sensor on
+    # ideally, guest mode should be turned on while home, but reality doesn't always play out like that
     - platform: state
-      entity_id: binary_sensor.pieter_present
-      to: "on"
-    - platform: state
-      entity_id: binary_sensor.rouve_present
+      entity_id: binary_sensor.family_present
       to: "on"
   condition:
     - condition: state

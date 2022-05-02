@@ -121,7 +121,7 @@
         {{ is_state('binary_sensor.workday_sensor_tomorrow', 'on') and not on_vacation_tomorrow }}
 
 - platform: group
-  name: "Family Home"
+  name: "Family Present"
   device_class: presence
   entities:
     - binary_sensor.pieter_present

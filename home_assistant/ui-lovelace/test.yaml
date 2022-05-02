@@ -59,7 +59,7 @@ cards:
         name: Rouvé
       - entity: cover.rhs_garage_door
         name: Pieter
-      - entity: group.garage_doors
+      - entity: cover.garage_doors
         name: All Doors
       - entity: light.garage
   - type: statistics-graph

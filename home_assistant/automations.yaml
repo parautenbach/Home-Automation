@@ -1816,6 +1816,7 @@
         title: Security
         message: >-
           Someone rang the doorbell.
+        message: "Someone rang the doorbell."
         # todo: thumbnail
         # data:
         #   group: "security-camera-snapshots"

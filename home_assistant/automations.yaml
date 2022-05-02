@@ -1523,7 +1523,7 @@
       data:
         message: "request_location_update"
     - delay:
-        seconds: 30
+        seconds: 45
     - choose:
         - conditions:
             - condition: template
@@ -1595,7 +1595,7 @@
       target:
         entity_id: binary_sensor.tenant_mobile_phone
     - delay:
-        seconds: 30
+        seconds: 45
     - choose:
         - conditions:
             - condition: template

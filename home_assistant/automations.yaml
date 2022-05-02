@@ -1368,6 +1368,7 @@
     - service: notify.mobile_app_ceres
       data:
         title: "System"
+        # https://community.home-assistant.io/t/duplicate-ios-companion-app-notifications/406161
         message: "No recent backup found. ({{ range(1, 1000) | random }})"
         data:
           group: "system-backup"

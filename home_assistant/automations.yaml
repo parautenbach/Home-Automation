@@ -1814,8 +1814,6 @@
     - service: notify.mobile_app_ceres
       data:
         title: Security
-        message: >-
-          Someone rang the doorbell.
         message: "Someone rang the doorbell."
         # todo: thumbnail
         # data:

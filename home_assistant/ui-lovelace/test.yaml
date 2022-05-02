@@ -63,6 +63,7 @@ cards:
         name: All Doors
       - entity: light.garage
   - type: statistics-graph
+    title: Power Consumption
     entities:
       - sensor.total_electricity_consumption
     days_to_show: 7
@@ -72,4 +73,3 @@ cards:
       - max
       - mean
       - sum
-    title: Power Consumption

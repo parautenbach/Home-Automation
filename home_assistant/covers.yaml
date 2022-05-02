@@ -70,3 +70,8 @@
         {% else %}
           mdi:garage
         {% endif %}
+- platform: group
+  name: "Garage Doors"
+  entities:
+    - cover.lhs_garage_door
+    - cover.rhs_garage_door

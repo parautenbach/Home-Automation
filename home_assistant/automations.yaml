@@ -1201,7 +1201,7 @@
   trigger:
     - platform: state
       entity_id:
-        - group.garage_doors
+        - cover.garage_doors
       id: "garage_door_trigger"
     - platform: state
       entity_id: binary_sensor.low_light
@@ -1222,7 +1222,7 @@
             - condition: trigger
               id: "low_light_trigger"
             - condition: state
-              entity_id: group.garage_doors
+              entity_id: cover.garage_doors
               state: "open"
   action:
     # needed because of poor wifi connectivity
@@ -1233,14 +1233,14 @@
     # https://www.home-assistant.io/docs/scripts/#wait-for-trigger
     repeat:
       sequence:
-        - service: "light.turn_{{ 'on' if is_state('group.garage_doors', 'open') else 'off' }}"
+        - service: "light.turn_{{ 'on' if is_state('cover.garage_doors', 'open') else 'off' }}"
           entity_id: light.garage
         - delay:
             seconds: 30
       until:
         - condition: template
           value_template: >-
-            {% set light_state = 'on' if is_state('group.garage_doors', 'open') else 'off' %}
+            {% set light_state = 'on' if is_state('cover.garage_doors', 'open') else 'off' %}
             {{ is_state('light.garage', light_state) }}
 
 - alias: "Update Security Camera Snapshot Gallery"

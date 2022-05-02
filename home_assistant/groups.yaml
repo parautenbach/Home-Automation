@@ -3,9 +3,3 @@ security_automations:
   entities:
     - automation.take_motion_snapshots
     - automation.switch_on_lights_if_motion_is_detected
-
-garage_doors:
-  name: Garage Doors
-  entities:
-    - cover.lhs_garage_door
-    - cover.rhs_garage_door

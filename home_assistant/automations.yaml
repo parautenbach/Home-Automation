@@ -1368,7 +1368,7 @@
     - service: notify.mobile_app_ceres
       data:
         title: "System"
-        message: "No recent backup found."
+        message: "No recent backup found. ({{ range(1, 1000) | random }})"
         data:
           group: "system-backup"
           url: homeassistant://navigate/lovelace/devices

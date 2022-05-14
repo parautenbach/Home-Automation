@@ -167,11 +167,11 @@
     pieter_activity_confidence:
       value_template: "{{ state_attr('sensor.ceres_activity', 'Confidence') }}"
       icon_template: >-
-        {% if state_attr('sensor.ceres_activity', 'Confidence') == 'High' %}
+        {% if is_state_attr('sensor.ceres_activity', 'Confidence', 'High') %}
           mdi:speedometer
-        {% elif state_attr('sensor.ceres_activity', 'Confidence') == 'Medium' %}
+        {% elif is_state_attr('sensor.ceres_activity', 'Confidence', 'Medium') %}
           mdi:speedometer-medium
-        {% elif state_attr('sensor.ceres_activity', 'Confidence') == 'Low' %}
+        {% elif is_state_attr('sensor.ceres_activity', 'Confidence', 'Low') %}
           mdi:speedometer-slow
         {% else %}
           unknown

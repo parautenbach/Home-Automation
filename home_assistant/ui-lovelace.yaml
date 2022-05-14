@@ -334,12 +334,10 @@ button_card_templates:
             return states[`${variables.occupancy_entity}`].state == 'off'
           ]]]
         color: var(--paper-item-icon-color)
-      - operator: template
-        value: >
-          [[[
-            return states[`${variables.occupancy_entity}`].state == 'unavailable'
-          ]]]
-        color: var(--state-icon-unavailable-color)
+      - value: 'unavailable'
+        styles:
+          icon:
+            - color: var(--state-icon-unavailable-color)
     double_tap_action:
       action: call-service
       haptic: medium

@@ -48,9 +48,9 @@
       # https://www.home-assistant.io/integrations/binary_sensor/#device-class
       device_class: power
       value_template: >-
-        {{ state_attr('sensor.home_assistant_server_battery', 'status') != 'Discharging' }}
+        {{ not is_state_attr('sensor.home_assistant_server_battery', 'status', 'Discharging') }}
       icon_template: >-
-        {% if state_attr('sensor.home_assistant_server_battery', 'status') == 'Discharging' %}
+        {% if is_state_attr('sensor.home_assistant_server_battery', 'status', 'Discharging') %}
           mdi:power-plug-off
         {% else %}
           mdi:power-plug

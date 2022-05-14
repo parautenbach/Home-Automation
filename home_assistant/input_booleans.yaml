@@ -15,12 +15,6 @@ contractor_mode:
 pieter_driving:
   name: Pieter Driving
   icon: mdi:car
-pieter_bedside_state:
-  name: Pieter Bedside State
-  icon: mdi:lightbulb
-rouve_bedside_state:
-  name: Rouvé Bedside State
-  icon: mdi:lightbulb
 dining_room_state:
   name: Dining Room State
   icon: mdi:lightbulb

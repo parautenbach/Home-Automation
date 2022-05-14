@@ -1636,8 +1636,6 @@
   trigger:
     - platform: state
       entity_id:
-        - light.pieter_bedside
-        - light.rouve_bedside
         - light.dining_room
         - light.music_room
         - light.foyer
@@ -1663,8 +1661,6 @@
     # this will thus trigger the moment the smart bulb reconnects to the network and hass
     - platform: state
       entity_id:
-        - light.pieter_bedside
-        - light.rouve_bedside
         - light.dining_room
         - light.music_room
         - light.foyer

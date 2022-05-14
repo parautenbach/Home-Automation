@@ -529,6 +529,8 @@
     - condition: and
       conditions:
         # prevent a glitch in case the cover was recently closed
+        # since there is also an availability template for the cover defined, it will usually also prevent the gate from opening
+        # when the location gets updated after the power returns (after loadshedding)
         - condition: state
           entity_id: cover.main_gate
           state: "closed"

@@ -5,7 +5,7 @@ badges:
   # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/2425
   # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/1396
   # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/1310
-  - entity: binary_sensor.python_package_index_pypi_update_available
+  - entity: binary_sensor.ha_updater
     card_mod:
       style:
         ha-state-label-badge:

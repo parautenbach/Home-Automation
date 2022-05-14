@@ -97,6 +97,16 @@
       device_class: update
       value_template: >
         {{ states('sensor.potential_breaking_changes') | int > 0 }}
+    ha_updater:
+      friendly_name: HA Updater
+      device_class: update
+      value_template: >
+        {{ is_state('binary_sensor.python_package_index_pypi_update_available', 'on') }}
+      attribute_templates:
+        latest_version: >
+          {{ states('sensor.python_package_index_pypi') }}
+        current_version: >
+          {{ states('sensor.current_version') }}
     low_light:
       # alternative: (states('sensor.sun_illuminance') != 'unknown' and (states('sensor.sun_illuminance') | int < 15320))
       friendly_name: Low Light

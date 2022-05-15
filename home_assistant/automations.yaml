@@ -2008,3 +2008,16 @@
           # https://companion.home-assistant.io/docs/notifications/notifications-basic/#notification-icon
           # https://community.home-assistant.io/t/mobile-notification-icon-not-showing-up/408050
           # icon_url: "https://github.com/home-assistant/assets/blob/master/logo/logo-small.png?raw=true"
+
+# polling should be turned off
+# https://github.com/home-assistant/core/issues/71563
+- alias: "Update DB Size"
+  id: "7219415c-c1e4-40dd-a429-2f4eccc7da76"
+  initial_state: true
+  trigger:
+    platform: time_pattern
+    hours: "/3"
+  action:
+    - service: homeassistant.update_entity
+      target:
+        entity_id: sensor.db_size

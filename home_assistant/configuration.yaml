@@ -96,6 +96,7 @@ frontend:
     - /local/panel_redirect.js
     - /hacsfiles/lovelace-card-mod/card-mod.js
 
+# https://community.home-assistant.io/t/2022-5-streamlining-settings/418477/96
 panel_custom:
   - name: panel-redirect
     url_path: redirect-server-controls
@@ -103,14 +104,21 @@ panel_custom:
     sidebar_icon: mdi:server
     module_url: /local/panel-redirect.js
     config:
-      target: /config/server_control
+      target: /developer-tools/yaml
   - name: panel-redirect
     url_path: redirect-devices
-    sidebar_title: Devices & Services
+    sidebar_title: Devices
     sidebar_icon: mdi:devices
     module_url: /local/panel-redirect.js
     config:
       target: /config/integrations
+  - name: panel-redirect
+    url_path: redirect-logs
+    sidebar_title: Logs
+    sidebar_icon: mdi:math-log
+    module_url: /local/panel-redirect.js
+    config:
+      target: /config/logs
 
 recorder:
   db_url: postgresql://@/homeassistant

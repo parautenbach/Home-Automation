@@ -48,7 +48,7 @@
       # https://www.home-assistant.io/integrations/binary_sensor/#device-class
       device_class: power
       value_template: >-
-        {{ not (is_state('light.pieter_bedside', 'unavailable') or is_state('light.rouve_bedside', 'unavailable')) }}
+        {{ not (is_state('light.pieter_bedside', 'unavailable') and is_state('light.rouve_bedside', 'unavailable')) }}
       icon_template: >-
         {% if is_state('light.pieter_bedside', 'unavailable') and is_state('light.rouve_bedside', 'unavailable') %}
           mdi:power-plug-off

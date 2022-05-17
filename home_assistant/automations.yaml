@@ -524,6 +524,8 @@
     - platform: state
       entity_id: binary_sensor.pieter_present
       to: "on"
+      # prevent false positive due to flaky connectivity or after loadshedding and sensors being unavailable
+      not_from: "unavailable"
   mode: single
   condition:
     - condition: and
@@ -581,6 +583,8 @@
     - platform: state
       entity_id: binary_sensor.pieter_present
       to: "on"
+      # prevent false positive due to flaky connectivity or after loadshedding and sensors being unavailable
+      not_from: "unavailable"
   condition:
     - condition: and
       conditions:
@@ -999,6 +1003,8 @@
       - cover.lhs_garage_door
       - cover.rhs_garage_door
     to: "closed"
+    # prevent false positive due to flaky connectivity or after loadshedding and sensors being unavailable
+    not_from: "unavailable"
   condition:
     condition: template
     value_template: >-
@@ -1564,12 +1570,8 @@
     platform: state
     entity_id:
       - cover.main_gate
-    from:
-      - "open"
-      - "closed"
-    to:
-      - "open"
-      - "closed"
+    # prevent false positive due to flaky connectivity or after loadshedding and sensors being unavailable
+    not_from: "unavailable"
   condition:
     condition: and
     conditions:

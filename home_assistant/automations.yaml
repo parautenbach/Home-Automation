@@ -1234,6 +1234,7 @@
               state: "open"
   action:
     # needed because of poor wifi connectivity
+    # needed because of poor wifi connectivity in that location
     # todo: also needed for turning on
     # if the last door has been closed for a minute and the light is still on, turn it off
     # alternative:
@@ -1241,6 +1242,9 @@
     # https://www.home-assistant.io/docs/scripts/#wait-for-trigger
     repeat:
       sequence:
+        # bug: what if garage doors go unavailable
+        # https://rc.home-assistant.io/blog/2022/04/27/release-20225/#and-there-is-even-more (not_from/to)
+        # add a choose for if light not unavailable and covers not unknown
         - service: "light.turn_{{ 'on' if is_state('cover.garage_doors', 'open') else 'off' }}"
           entity_id: light.garage
         - delay:
@@ -1248,8 +1252,9 @@
       until:
         - condition: template
           value_template: >-
-            {% set light_state = 'on' if is_state('cover.garage_doors', 'open') else 'off' %}
-            {{ is_state('light.garage', light_state) }}
+            {% set covers_state = 'on' if is_state('cover.garage_doors', 'open') else 'off' %}
+            {# todo/add: or is_state('light.garage', 'unavailable') or is_state('cover.garage_doors', 'unavailable') #}
+            {{ is_state('light.garage', covers_state) }}
 
 - alias: "Update Security Camera Snapshot Gallery"
   id: "41ab0956-cd7b-498d-bf4c-bce81da3c5a3"

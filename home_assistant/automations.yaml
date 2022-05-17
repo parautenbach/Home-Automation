@@ -1233,7 +1233,6 @@
               entity_id: cover.garage_doors
               state: "open"
   action:
-    # needed because of poor wifi connectivity
     # needed because of poor wifi connectivity in that location
     # todo: also needed for turning on
     # if the last door has been closed for a minute and the light is still on, turn it off

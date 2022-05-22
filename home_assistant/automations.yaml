@@ -2004,7 +2004,7 @@
           %}
           The following devices have less than {{ threshold }}% charge:
           {%- for b in batteries %}
-            {%- if states(b) | int < threshold %}
+            {%- if states(b) | int < threshold and not is_state(b, 'unavailable') %}
            - {{ state_attr(b, 'friendly_name') | replace(' Battery', '') }}: {{ states(b) | int }}%
             {%- endif -%}
           {%- endfor %}

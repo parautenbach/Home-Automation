@@ -282,7 +282,14 @@
       icon_template: >-
         mdi:weather-sunny
     nighttime_number:
-      value_template: "{{ iif(is_state('binary_sensor.nighttime', 'on'), 1, 0) }}"
+      value_template: >-
+        {% if state_attr('sun.sun', 'elevation') < -6 %}
+          1.0
+        {% elif state_attr('sun.sun', 'elevation') > 0 %}
+          0.0
+        {% else %}
+          0.5
+        {% endif %}
     # consider https://www.home-assistant.io/integrations/history_stats/
     apple_tv_playing_hours_minutes:
       value_template: >

@@ -51,11 +51,18 @@ cards:
           state: false
           icon: true
           extrema: true
+          labels_secondary: false
         entities:
           - entity: sensor.internet_speed_in
             name: Download rate
           - entity: sensor.internet_speed_out
             name: Upload rate
+          - entity: sensor.nighttime_number
+            color: var(--custom-color-gray)
+            show_line: false
+            show_points: false
+            show_legend: false
+            y_axis: secondary
         hours_to_show: 24
         hour24: true
         smoothing: true
@@ -83,15 +90,22 @@ cards:
           name: Latency
           entities:
             - entity: sensor.internet_round_trip_time_avg
+            - entity: sensor.nighttime_number
+              color: var(--custom-color-gray)
+              show_line: false
+              show_points: false
+              show_legend: false
+              y_axis: secondary
           hours_to_show: 24
           hour24: true
           smoothing: true
           points_per_hour: 12  # every 5 min
           line_width: 2
+          lower_bound: 0
           show:
             extrema: true
             average: true
-          lower_bound: 0
+            labels_secondary: false
   - type: vertical-stack
     title: Home Network
     cards:
@@ -115,15 +129,22 @@ cards:
           name: Latency
           entities:
             - entity: sensor.front_extender_round_trip_time_avg
+            - entity: sensor.nighttime_number
+              color: var(--custom-color-gray)
+              show_line: false
+              show_points: false
+              show_legend: false
+              y_axis: secondary
           hours_to_show: 24
           hour24: true
           smoothing: true
           points_per_hour: 12  # every 5 min
           line_width: 2
+          lower_bound: 0
           show:
             extrema: true
             average: true
-          lower_bound: 0
+            labels_secondary: false
       - type: entities
         title: Back Extender
         show_header_toggle: false
@@ -139,15 +160,22 @@ cards:
           name: Latency
           entities:
             - entity: sensor.back_extender_round_trip_time_avg
+            - entity: sensor.nighttime_number
+              color: var(--custom-color-gray)
+              show_line: false
+              show_points: false
+              show_legend: false
+              y_axis: secondary
           hours_to_show: 24
           hour24: true
           smoothing: true
           points_per_hour: 12  # every 5 min
           line_width: 2
+          lower_bound: 0
           show:
             extrema: true
             average: true
-          lower_bound: 0
+            labels_secondary: false
   - type: vertical-stack
     title: Join Home Network
     cards:

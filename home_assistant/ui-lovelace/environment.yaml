@@ -62,14 +62,21 @@ cards:
               - entity: sensor.outside_feels_like
                 name: Feels Like
                 color: var(--custom-color-magenta)
+              - entity: sensor.nighttime_number
+                color: var(--custom-color-gray)
+                show_line: false
+                show_points: false
+                show_legend: false
+                y_axis: secondary
             hours_to_show: 24
             hour24: true
             smoothing: true
-            points_per_hour: 12  # every 5 min
+            points_per_hour: 1
             line_width: 2
             show:
               extrema: true
               average: true
+              labels_secondary: false
           - type: custom:mini-graph-card
             name: Humidity
             entities:
@@ -79,6 +86,12 @@ cards:
               - entity: sensor.main_bedroom_ht_humidity
                 name: Main Bedroom
                 color: var(--custom-color-magenta)
+              - entity: sensor.nighttime_number
+                color: var(--custom-color-gray)
+                show_line: false
+                show_points: false
+                show_legend: false
+                y_axis: secondary
             hours_to_show: 24
             hour24: true
             smoothing: true
@@ -88,6 +101,7 @@ cards:
             upper_bound: 100
             show:
               extrema: true
+              labels_secondary: false
   - type: vertical-stack
     cards:
       - type: custom:mini-graph-card
@@ -98,18 +112,22 @@ cards:
           #   color: var(--custom-color-yellow)
           - entity: sensor.illuminance
             color: var(--custom-color-yellow)
-          - entity: sensor.solar_angle
-            color: var(--custom-color-red)
+          - entity: sensor.nighttime_number
+            color: var(--custom-color-gray)
+            show_line: false
+            show_points: false
+            show_legend: false
             y_axis: secondary
         hours_to_show: 24
         hour24: true
         smoothing: true
-        points_per_hour: 12  # every 5 min
+        points_per_hour: 1
         line_width: 2
         lower_bound: 0
         upper_bound: 10000
         show:
           extrema: true
+          labels_secondary: false
         # color_thresholds:
         #   # https://community.home-assistant.io/t/outdoor-illuminance-template-sensor/228581
         #   - value: 10  # min
@@ -132,6 +150,12 @@ cards:
         entities:
           - entity: sensor.openweathermap_uv_index
             name: UV Index
+          - entity: sensor.nighttime_number
+            color: var(--custom-color-gray)
+            show_line: false
+            show_points: false
+            show_legend: false
+            y_axis: secondary
         lower_bound: 0
         hours_to_show: 24
         hour24: true
@@ -140,6 +164,7 @@ cards:
         line_width: 2
         show:
           extrema: true
+          labels_secondary: false
         color_thresholds:
           - value: 0
             color: var(--custom-color-green)
@@ -188,6 +213,12 @@ cards:
             entities:
               - entity: sensor.owm_pollution_overall_air_quality
                 name: AQI
+              - entity: sensor.nighttime_number
+                color: var(--custom-color-gray)
+                show_line: false
+                show_points: false
+                show_legend: false
+                y_axis: secondary
             lower_bound: 0
             hours_to_show: 24
             hour24: true
@@ -196,6 +227,7 @@ cards:
             line_width: 2
             show:
               extrema: true
+              labels_secondary: false
             color_thresholds:
               - value: 0
                 color: var(--custom-color-green)

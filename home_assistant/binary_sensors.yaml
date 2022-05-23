@@ -137,6 +137,9 @@
       value_template: >
         {% set on_vacation_tomorrow = as_timestamp(states('input_datetime.vacation_start')) <= as_timestamp((now() + timedelta(days=1)).date()) <= as_timestamp(states('input_datetime.vacation_end')) %}
         {{ is_state('binary_sensor.workday_sensor_tomorrow', 'on') and not on_vacation_tomorrow }}
+    nighttime:
+      friendly_name: Night-time
+      value_template: "{{ state_attr('sun.sun', 'elevation') < 0 }}"
 
 - platform: group
   name: "Family Present"

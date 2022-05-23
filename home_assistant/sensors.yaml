@@ -281,6 +281,8 @@
         {{ state_attr('sensor.daylight', 'today_hms')[:5] }}
       icon_template: >-
         mdi:weather-sunny
+    nighttime_number:
+      value_template: "{{ iif(is_state('binary_sensor.nighttime', 'on'), 1, 0) }}"
     # consider https://www.home-assistant.io/integrations/history_stats/
     apple_tv_playing_hours_minutes:
       value_template: >

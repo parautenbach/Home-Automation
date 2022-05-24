@@ -73,3 +73,9 @@ cards:
       - max
       - mean
       - sum
+  - type: picture-glance
+    title: Doorbell Camera
+    camera_image: camera.doorbell
+    entities:
+      - binary_sensor.doorbell_rang
+      - binary_sensor.doorbell_motion_detected

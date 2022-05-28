@@ -1381,7 +1381,7 @@
       data:
         title: "System"
         # https://community.home-assistant.io/t/duplicate-ios-companion-app-notifications/406161
-        message: "No recent backup found. ({{ range(1, 1000) | random }})"
+        message: "No recent backup found."
         data:
           group: "system-backup"
           url: homeassistant://navigate/lovelace/devices
@@ -1401,7 +1401,7 @@
     - service: notify.mobile_app_ceres
       data:
         title: "System"
-        message: "A new Home Assistant backup was made. ({{ range(1, 1000) | random }})"
+        message: "A new Home Assistant backup was made."
         data:
           group: "system-backup"
           url: homeassistant://navigate/lovelace/devices
@@ -1769,7 +1769,7 @@
     - service: notify.mobile_app_ceres
       data:
         title: "System"
-        message: "Systems shut down prior to loadshedding. ({{ range(1, 1000) | random }})"
+        message: "Systems shut down prior to loadshedding."
         data:
           group: "system-general"
           url: homeassistant://navigate/lovelace/devices

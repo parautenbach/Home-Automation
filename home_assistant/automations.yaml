@@ -1978,7 +1978,7 @@
   trigger:
     platform: time
     at: "09:00:00"
-  condition: >
+  condition: >-
     {{ states.sensor
          | selectattr('attributes.monitor','eq',True)
          | selectattr('attributes.device_class','eq','battery')

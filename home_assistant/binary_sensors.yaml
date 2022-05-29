@@ -100,11 +100,6 @@
       device_class: update
       value_template: >
        {{ states('sensor.hacs') | int(0) > 0 }}
-    ha_breaking_changes:
-      friendly_name: HA Breaking Changes
-      device_class: update
-      value_template: >
-        {{ states('sensor.potential_breaking_changes') | int > 0 }}
     ha_updater:
       friendly_name: HA Updater
       device_class: update

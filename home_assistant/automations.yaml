@@ -1769,7 +1769,7 @@
     - service: notify.mobile_app_ceres
       data:
         title: "System"
-        message: "Systems shut down prior to loadshedding."
+        message: "Systems shutting down prior to loadshedding."
         data:
           group: "system-general"
           url: homeassistant://navigate/lovelace/devices

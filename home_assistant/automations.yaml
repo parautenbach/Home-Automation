@@ -1826,116 +1826,41 @@
         #   attachment:
         #     url: !secret doorbell_camera_last_snapshot_url
 
-# can the following number of automations be simplified?
-# blueprints?
-# https://www.home-assistant.io/docs/scripts/conditions/#trigger-condition
 - alias: "Toggle Pieter's Bedside Lamp"
-  id: "8f52a6f5-0ce5-4024-948d-bb641166bc00"
+  id: "f0f1cc67-75f5-4d71-bc71-d62a56290422"
   initial_state: true
-  trigger:
-    - platform: event
-      event_type: shelly.click
-      event_data:
-        click_type: single
-        device_id: ed95f30c451de3426bc63770935ebc18
-  action:
-    - service: script.turn_on
-      target:
-        entity_id: script.toggle_light
-      data:
-        variables:
-          light: light.pieter_bedside
-          profile: pieter
-
-- alias: "Pieter's Bedside Lamp Full Brightness"
-  id: "624744b8-4e15-45e0-a357-97a1ad392402"
-  initial_state: true
-  trigger:
-    - platform: event
-      event_type: shelly.click
-      event_data:
-        click_type: double
-        device_id: ed95f30c451de3426bc63770935ebc18
-  action:
-    - service: script.turn_on
-      target:
-        entity_id: script.turn_on_light
-      data:
-        variables:
-          light: light.pieter_bedside
-          profile: security
+  # https://community.home-assistant.io/t/automation-created-using-a-blueprint-not-showing-up-in-ui-after-creating/256753
+  use_blueprint:
+    path: shelly_button.yaml
+    input:
+      button_device_id: ed95f30c451de3426bc63770935ebc18
+      light_entity_id: light.pieter_bedside
+      single_press_profile: pieter
+      double_press_profile: security
 
 - alias: "Toggle Rouvé's Bedside Lamp"
   id: "6bb6fa7a-3385-4d78-9a30-6f49c90adbf9"
   initial_state: true
-  trigger:
-    - platform: event
-      event_type: shelly.click
-      event_data:
-        click_type: single
-        device_id: b7cb6f66fe4f1eefbf0de8480962bd23
-  action:
-    - service: script.turn_on
-      target:
-        entity_id: script.toggle_light
-      data:
-        variables:
-          light: light.rouve_bedside
-          profile: rouve
-
-- alias: "Rouvé's Bedside Lamp Full Brightness"
-  id: "e14458eb-fae0-4be2-8ba1-a7955bce3f54"
-  initial_state: true
-  trigger:
-    - platform: event
-      event_type: shelly.click
-      event_data:
-        click_type: double
-        device_id: b7cb6f66fe4f1eefbf0de8480962bd23
-  action:
-    - service: script.turn_on
-      target:
-        entity_id: script.turn_on_light
-      data:
-        variables:
-          light: light.rouve_bedside
-          profile: security
+  # https://community.home-assistant.io/t/automation-created-using-a-blueprint-not-showing-up-in-ui-after-creating/256753
+  use_blueprint:
+    path: shelly_button.yaml
+    input:
+      button_device_id: b7cb6f66fe4f1eefbf0de8480962bd23
+      light_entity_id: light.rouve_bedside
+      single_press_profile: rouve
+      double_press_profile: security
 
 - alias: "Toggle Dining Room Light"
   id: "3cd02beb-7a1a-440a-9507-fb555ff9bb98"
   initial_state: true
-  trigger:
-    - platform: event
-      event_type: shelly.click
-      event_data:
-        click_type: single
-        device_id: f1a926dd450fbe85ed9bafece8b719b3
-  action:
-    - service: script.turn_on
-      target:
-        entity_id: script.toggle_light
-      data:
-        variables:
-          light: light.dining_room
-          profile: dim
-
-- alias: "Dining Room Light Full Brightness"
-  id: "a311a437-6763-4464-a2d8-4ae8c36bb445"
-  initial_state: true
-  trigger:
-    - platform: event
-      event_type: shelly.click
-      event_data:
-        click_type: double
-        device_id: f1a926dd450fbe85ed9bafece8b719b3
-  action:
-    - service: script.turn_on
-      target:
-        entity_id: script.turn_on_light
-      data:
-        variables:
-          light: light.dining_room
-          profile: security
+  # https://community.home-assistant.io/t/automation-created-using-a-blueprint-not-showing-up-in-ui-after-creating/256753
+  use_blueprint:
+    path: shelly_button.yaml
+    input:
+      button_device_id: f1a926dd450fbe85ed9bafece8b719b3
+      light_entity_id: light.dining_room
+      single_press_profile: dim
+      double_press_profile: security
 
 - alias: "Alert Vacation Start"
   id: "f1be4ad3-042c-4cbd-bb91-99da7bdc5dab"

@@ -2,6 +2,7 @@
 default_config:
 
 alert: !include alerts.yaml
+# https://community.home-assistant.io/t/how-do-i-mix-manual-automations-in-yaml-files-with-use-of-blueprints/295730
 automation: !include automations.yaml
 binary_sensor: !include binary_sensors.yaml
 camera: !include cameras.yaml

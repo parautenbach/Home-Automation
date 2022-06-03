@@ -1,0 +1,63 @@
+# https://www.home-assistant.io/docs/blueprint/tutorial/
+# https://www.home-assistant.io/docs/blueprint/
+# https://community.home-assistant.io/t/shelly-device-switch-template-for-each-click-type/296528
+# https://community.home-assistant.io/t/automation-created-using-a-blueprint-not-showing-up-in-ui-after-creating/256753
+blueprint:
+  name: Shelly Button Events
+  description: Perform actions using Shelly Buttons.
+  domain: automation
+  input:
+    button_device_id:
+      name: Button device
+      description: Button to trigger on
+      selector:
+        device:
+          integration: shelly
+          entity:
+            integration: shelly
+    light_entity_id:
+      name: Light entity
+      description: Light to act on
+      selector:
+        entity:
+          domain: light
+    single_press_profile:
+      name: Single press profile
+      description: A light profile
+      selector:
+        text:
+    double_press_profile:
+      name: Double click profile
+      description: A light profile
+      selector:
+        text:
+trigger:
+  - platform: event
+    event_type: shelly.click
+    event_data:
+      device_id: !input button_device_id
+mode: queued
+action:
+  - variables:
+      event: '{{ trigger.event.data.click_type }}'
+  - choose:
+    - conditions:
+        - '{{ event == "single" }}'
+      sequence:
+        - service: script.turn_on
+          target:
+            entity_id: script.toggle_light
+          data:
+            variables:
+              light: !input light_entity_id
+              profile: !input single_press_profile
+    - conditions:
+        - '{{ event == "double" }}'
+      sequence:
+        - service: script.turn_on
+          target:
+            entity_id: script.turn_on_light
+          data:
+            variables:
+              light: !input light_entity_id
+              profile: !input double_press_profile

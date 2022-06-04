@@ -1838,6 +1838,30 @@
       single_press_profile: pieter
       double_press_profile: security
 
+- alias: "Dim Pieter's Bedside Lamp"
+  # when rouvé's light is turned off, dim mine
+  id: "29c4493b-3254-4622-9456-e80ede2cfd99"
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: light.rouve_bedside
+      to: "off"
+  condition:
+    - condition: time
+      after: "21:30:00"
+      before: "01:00:00"
+    - condition: state
+      entity_id: light.pieter_bedside
+      state: "on"
+  action:
+    - service: script.turn_on
+      target:
+        entity_id: script.turn_on_light
+      data:
+        variables:
+          light: light.pieter_bedside
+          profile: dim
+
 - alias: "Toggle Rouvé's Bedside Lamp"
   id: "6bb6fa7a-3385-4d78-9a30-6f49c90adbf9"
   initial_state: true

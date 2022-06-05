@@ -1860,7 +1860,7 @@
       data:
         variables:
           light: light.pieter_bedside
-          profile: dim
+          profile: low
 
 - alias: "Toggle Rouvé's Bedside Lamp"
   id: "6bb6fa7a-3385-4d78-9a30-6f49c90adbf9"

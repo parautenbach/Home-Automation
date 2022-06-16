@@ -15,6 +15,7 @@ input_number: !include input_numbers.yaml
 input_select: !include input_selects.yaml
 light: !include lights.yaml
 media_player: !include media_players.yaml
+mqtt: !include mqtt.yaml
 rest: !include rest.yaml
 scene: !include scenes.yaml
 script: !include scripts.yaml

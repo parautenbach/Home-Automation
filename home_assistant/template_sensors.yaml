@@ -6,14 +6,14 @@
     # https://community.home-assistant.io/t/how-to-list-all-sensors-with-state-unavailable-none-or-unknown/154606
     - name: Unavailable Entities
       icon: mdi:help-circle-outline
-      state: "{{ states | selectattr('state', 'in',['unavailable', 'unknown', 'none']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list | length }}"
+      state: "{{ states | selectattr('state', 'in', ['unavailable', 'unknown', 'none']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list | length }}"
       unit_of_measurement: entities
       state_class: measurement
       attributes:
         # buttons don't have state – we don't care about buttons here
-        unavailable: "{{ states | selectattr('state', 'in',['unavailable']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
-        unknown: "{{ states | selectattr('state', 'in',['unknown']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
-        none: "{{ states | selectattr('state', 'in',['none']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
+        unavailable: "{{ states | selectattr('state', 'in', ['unavailable']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
+        unknown: "{{ states | selectattr('state', 'in', ['unknown']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
+        none: "{{ states | selectattr('state', 'in', ['none']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
 # example:
 # {
 #     "event_type": "amcrest",

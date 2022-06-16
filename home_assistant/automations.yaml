@@ -1733,10 +1733,12 @@
   id: "015daeee-a776-4220-b5cb-0f4949dde6a0"
   initial_state: true
   trigger:
-    - platform: state
+    # https://www.home-assistant.io/docs/automation/trigger/#calendar-trigger
+    # https://www.home-assistant.io/integrations/calendar/#automation
+    - platform: calendar
       entity_id: calendar.loadshedding
-      to: "on"
-      # todo: improve by adding a 5 min offset
+      event: start
+      offset: "-00:05:00"
   action:
     - service: script.turn_on
       target:

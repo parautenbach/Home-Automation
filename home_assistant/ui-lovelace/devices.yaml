@@ -141,7 +141,7 @@ cards:
         - automation.contractor_mode_enabled_alert
         - automation.contractor_mode_still_enabled_alert
         - automation.cover_left_open_alert
-        - automation.dim_pieters_bedside_lamp
+        - automation.dim_pieter_s_bedside_lamp
         - automation.disable_contractor_mode
         - automation.disable_contractor_mode_from_alert_action
         - automation.disable_guest_mode_from_alert_action
@@ -171,7 +171,7 @@ cards:
         - automation.restore_smart_bulb_statuses_after_power_restored
         - automation.set_dark_theme
         - automation.set_light_theme
-        - automation.set_pieters_driving_state
+        - automation.set_pieter_s_driving_state
         - automation.set_vacation
         - automation.shut_down_devices_before_loadshedding
         - automation.switch_garage_light_according_to_door_status_and_light_conditions
@@ -186,8 +186,8 @@ cards:
         - automation.switch_on_the_front_door_light_when_arriving_home
         - automation.take_foyer_motion_snapshots
         - automation.toggle_dining_room_light
-        - automation.toggle_pieter's_bedside_lamp
-        - automation.toggle_rouvé's_bedside_lamp
+        - automation.toggle_pieter_s_bedside_lamp
+        - automation.toggle_rouve_s_bedside_lamp
         - automation.turn_off_entertainment_system_when_idle_or_leaving_room
         - automation.update_db_size
         - automation.update_security_camera_snapshot_gallery

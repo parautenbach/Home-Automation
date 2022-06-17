@@ -102,6 +102,20 @@ cards:
             show:
               extrema: true
               labels_secondary: false
+      - type: statistics-graph
+        entities:
+          - entity: sensor.living_room_ht_temperature
+            name: Living Room
+          - entity: sensor.main_bedroom_ht_temperature
+            name: Main Bedroom
+          - entity: sensor.outside_temperature
+            name: Outside
+        days_to_show: 7
+        period: day
+        chart_type: line
+        stat_types:
+          - min
+          - max
   - type: vertical-stack
     cards:
       - type: custom:mini-graph-card

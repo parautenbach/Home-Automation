@@ -1,5 +1,6 @@
 sensor.conditions_temperature:
   friendly_name: Temperature
+  state_class: measurement
 sensor.conditions_humidity:
   friendly_name: Humidity
 camera.security_camera:
@@ -268,6 +269,7 @@ person.rouve_rautenbach:
   entity_picture: '/local/rouve.jpg'
 sensor.ambient_temperature_filtered:
   friendly_name: Temperature
+  state_class: measurement
 sensor.cape_town:
   friendly_name: Cape Town
 sensor.san_francisco:
@@ -417,3 +419,7 @@ light.kitchen_counter:
 cover.garage_doors:
   device_class: garage
   icon: mdi:garage-variant
+sensor.outside_temperature:
+  state_class: measurement
+sensor.outside_feels_like:
+  state_class: measurement

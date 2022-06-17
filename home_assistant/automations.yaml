@@ -1829,7 +1829,7 @@
         #     url: !secret doorbell_camera_last_snapshot_url
 
 - alias: "Toggle Pieter's Bedside Lamp"
-  id: "f0f1cc67-75f5-4d71-bc71-d62a56290422"
+  id: "8f52a6f5-0ce5-4024-948d-bb641166bc00"
   initial_state: true
   # https://community.home-assistant.io/t/automation-created-using-a-blueprint-not-showing-up-in-ui-after-creating/256753
   use_blueprint:

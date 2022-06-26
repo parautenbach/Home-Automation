@@ -338,6 +338,8 @@ binary_sensor.rhs_garage_occupied:
   icon: mdi:car-connected
 sensor.sun_illuminance:
   friendly_name: Sun Illuminance
+sensor.illuminance:
+  state_class: measurement
 remote.living_room:
   friendly_name: Apple TV Remote
 remote.living_room_remote:

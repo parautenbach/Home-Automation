@@ -74,7 +74,7 @@ cards:
       - mean
       - sum
   - type: history-graph
-    title: Office
+    title: Office Temps
     hours_to_show: 24
     entities:
       - entity: sensor.office_temperature
@@ -82,7 +82,7 @@ cards:
       - entity: sensor.living_room_ht_temperature
         name: Living Room
   - type: history-graph
-    title: Office
+    title: Office Illuminance
     hours_to_show: 24
     entities:
       - entity: sensor.office_illuminance

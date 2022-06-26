@@ -1,0 +1,122 @@
+esphome:
+  name: office
+  platform: ESP32
+  board: nodemcu-32s
+
+wifi:
+  power_save_mode: none
+  manual_ip:
+    static_ip: 192.168.0.14
+    gateway: 192.168.0.1
+    subnet: 255.255.255.0
+  networks:
+    - ssid: !secret wifi_ssid
+      password: !secret wifi_password
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Office Fallback Hotspot"
+    password: !secret fallback_ap_password
+
+captive_portal:
+
+# Enable logging
+logger:
+
+ota:
+  password: !secret ota_password
+
+globals:
+ - id: on_air
+   type: bool
+   restore_value: no
+   initial_value: "false"
+
+# https://randomnerdtutorials.com/esp32-pinout-reference-gpios/
+
+i2c:
+  - id: bus_a
+    sda: 21
+    scl: 22
+    scan: true
+
+sensor:
+  - platform: dht
+    model: AM2302
+    pin: 33
+    temperature:
+      name: "Office Temperature"
+      id: office_temperature
+      # https://community.home-assistant.io/t/debug-esphome-sensors/134688/18?u=parautenbach
+      filters:
+        - sliding_window_moving_average:
+            window_size: 15
+            send_every: 15
+            send_first_at: 1
+    humidity:
+      name: "Office Humidity"
+      id: office_humidity
+      filters:
+        - sliding_window_moving_average:
+            window_size: 15
+            send_every: 15
+            send_first_at: 1
+    update_interval: 60s
+  - platform: bh1750
+    name: "Office Illuminance"
+    id: office_illuminance
+    address: 0x23  # low (0x5C if addr pin is pulled high)
+    filters:
+      - sliding_window_moving_average:
+          window_size: 15
+          send_every: 15
+          send_first_at: 1
+
+# https://microcontrollerslab.com/led-dot-matrix-display-esp32-max7219/
+spi:
+  clk_pin: 18  # D0
+  mosi_pin: 23  # D1
+
+font:
+  - file: "fonts/pixelmix/pixelmix.ttf"
+    id: pixelmix
+    size: 8
+
+display:
+  - platform: max7219digit
+    cs_pin: 5  # D2
+    num_chips: 4
+    intensity: 1  # 0..15
+    lambda: |-
+      if (id(on_air)) {
+        it.print(0, 0, id(pixelmix), "ON AIR");
+      } else {
+        it.printf(it.get_width(), 0, id(pixelmix), TextAlign::TOP_RIGHT, "%.1f°C", id(office_temperature).state);
+      }
+
+# if on air, display on air, else temp
+# it.printf(0, 0, id(pixelmix), "%.1f°C", id(office_temperature).state);
+# it.print(0, 0, id(pixelmix), id(office_temperature).state.c_str());
+# it.print(0, 0, id(pixelmix), "ON AIR");
+
+switch:
+  - platform: restart
+    id: office_restart
+    name: "Office Restart"
+  # https://frenck.dev/diy-smart-doorbell-for-just-2-dollar/
+  # https://www.reddit.com/r/homeassistant/comments/kxtp41/comment/gl5w556/?utm_source=share&utm_medium=web2x&context=3
+  - platform: template
+    name: "On Air"
+    lambda: |-
+      return id(on_air);
+    turn_on_action:
+      - globals.set:
+          id: on_air
+          value: "true"
+    turn_off_action:
+      - globals.set:
+          id: on_air
+          value: "false"
+
+mqtt:
+  broker: !secret mqtt_broker
+  discovery: True

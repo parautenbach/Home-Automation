@@ -73,6 +73,16 @@ cards:
       - max
       - mean
       - sum
+  - type: statistics-graph
+    title: Illuminance
+    entities:
+      - sensor.illuminance
+    days_to_show: 7
+    period: day
+    chart_type: line
+    stat_types:
+      - max
+      - mean
   - type: history-graph
     title: Office Temps
     hours_to_show: 24

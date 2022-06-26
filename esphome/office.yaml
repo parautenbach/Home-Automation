@@ -93,11 +93,6 @@ display:
         it.printf(it.get_width(), 0, id(pixelmix), TextAlign::TOP_RIGHT, "%.1f°C", id(office_temperature).state);
       }
 
-# if on air, display on air, else temp
-# it.printf(0, 0, id(pixelmix), "%.1f°C", id(office_temperature).state);
-# it.print(0, 0, id(pixelmix), id(office_temperature).state.c_str());
-# it.print(0, 0, id(pixelmix), "ON AIR");
-
 switch:
   - platform: restart
     id: office_restart

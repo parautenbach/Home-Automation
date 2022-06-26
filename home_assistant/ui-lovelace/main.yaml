@@ -294,10 +294,37 @@ cards:
         entities:
           - entity: input_datetime.wake_up_time
             name: Wake-up Time
+            # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/3388
+            # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/3385
+            card_mod:
+              style:
+                ha-time-input $ ha-base-time-input $:
+                  ha-textfield:
+                    $: |
+                      .mdc-text-field {
+                        height: 3em !important;
+                      }
+                  ha-select:
+                    $: |
+                      .mdc-select__anchor {
+                        height: 3em !important;
+                      }
           - entity: input_datetime.vacation_start
             name: Vacation Start
+            card_mod:
+              style:
+                ha-date-input $ ha-textfield $: |
+                  .mdc-text-field {
+                    height: 3em !important;
+                  }
           - entity: input_datetime.vacation_end
             name: Vacation End
+            card_mod:
+              style:
+                ha-date-input $ ha-textfield $: |
+                  .mdc-text-field {
+                    height: 3em !important;
+                  }
           - entity: binary_sensor.workday
             name: Workday Today
           - entity: binary_sensor.workday_tomorrow

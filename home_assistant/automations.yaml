@@ -613,6 +613,10 @@
           state: "on"
           for:
             minutes: 5
+        # if guest mode is on, someone could be parked in or in front of the garage
+        - condition: state
+          entity_id: switch.guest_mode
+          state: "off"
   action:
     - service: cover.open_cover
       entity_id: cover.rhs_garage_door

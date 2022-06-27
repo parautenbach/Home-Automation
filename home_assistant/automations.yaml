@@ -398,6 +398,8 @@
     - platform: state
       entity_id: binary_sensor.low_light
       to: "on"
+    - platform: homeassistant
+      event: start
   condition:
     - condition: time
       after: "16:00:00"

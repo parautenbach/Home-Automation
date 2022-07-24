@@ -189,6 +189,7 @@ cards:
         - automation.toggle_dining_room_light
         - automation.toggle_pieter_s_bedside_lamp
         - automation.toggle_rouve_s_bedside_lamp
+        - automation.turn_audio_on_when_apple_tv_turned_on
         - automation.turn_off_entertainment_system_when_idle_or_leaving_room
         - automation.update_db_size
         - automation.update_security_camera_snapshot_gallery

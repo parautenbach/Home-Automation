@@ -2002,3 +2002,14 @@
     - service: homeassistant.update_entity
       target:
         entity_id: sensor.db_size
+
+- alias: "Turn Audio On When Apple TV Turned On"
+  id: "7c3646d2-8fe8-4378-a6f5-979e16cc40ff"
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id: media_player.living_room
+    from: standby
+  action:
+    - service: script.turn_on
+      entity_id: script.hk_3380_power_on

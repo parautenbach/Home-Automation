@@ -53,6 +53,9 @@ cards:
               - entity: sensor.living_room_ht_temperature
                 name: Living Room
                 color: var(--custom-color-yellow)
+              - entity: sensor.office_temperature
+                name: Office
+                color: var(--custom-color-blue)
               - entity: sensor.main_bedroom_ht_temperature
                 name: Main Bedroom
                 color: var(--custom-color-green)
@@ -83,6 +86,9 @@ cards:
               - entity: sensor.living_room_ht_humidity
                 name: Living Room
                 color: var(--custom-color-blue)
+              - entity: sensor.office_humidity
+                name: Office
+                color: var(--custom-color-green)
               - entity: sensor.main_bedroom_ht_humidity
                 name: Main Bedroom
                 color: var(--custom-color-magenta)

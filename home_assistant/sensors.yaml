@@ -268,14 +268,14 @@
       friendly_name: "Outside Temperature"
       device_class: temperature
       value_template: >-
-        {{ state_attr('weather.tomorrow_io_home_daily', 'temperature') | float }}
+        {{ state_attr('weather.openweathermap_hourly', 'temperature') | float }}
       unit_of_measurement: "°C"
       icon_template: >-
         mdi:thermometer
     outside_feels_like:
       friendly_name: "Outside Temperature Feels Like"
       value_template: >-
-        {{ states('sensor.tomorrow_io_home_feels_like') | round(1)  }}
+        {{ states('sensor.openweathermap_feels_like_temperature') | round(1)  }}
       unit_of_measurement: "°C"
       icon_template: >-
         mdi:thermometer

@@ -174,6 +174,7 @@ cards:
         - automation.set_pieter_s_driving_state
         - automation.set_vacation
         - automation.shut_down_devices_before_loadshedding
+        - automation.shut_down_server
         - automation.switch_garage_light_according_to_door_status_and_light_conditions
         - automation.switch_off_bedlamp_when_plugging_in_phone
         - automation.switch_off_light_when_timer_expires

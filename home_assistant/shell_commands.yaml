@@ -9,3 +9,4 @@ trim_snapshots: "ls /home/homeassistant/.homeassistant/www/gallery/ | sort -r | 
 shudown_remote_host: "/home/homeassistant/scripts/shutdown_remote_host.sh {{ host }}"
 make_backup: "/home/homeassistant/scripts/backup.sh"
 download_latest_dam_levels: "/home/homeassistant/scripts/download_latest_dam_levels.sh"
+shutdown_server: "sudo /usr/sbin/shutdown -P now"

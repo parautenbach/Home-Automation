@@ -1782,6 +1782,18 @@
           group: "system-general"
           url: homeassistant://navigate/lovelace/devices
 
+- alias: "Shut Down Server"
+  id: "3fd83ac9-dc07-40d7-a9d1-c50c123b32ff"
+  initial_state: true
+  trigger:
+    - platform: template
+      value_template: "{{ is_state('sensor.home_assistant_server_battery_status', 'Discharging') }}"
+      for:
+        minutes: 1
+  action:
+    service: shell_command.shutdown_server
+    # notify
+
 - alias: "Update OpenUV every 20 minutes during the daytime"
   id: "34f13272-f170-4ef2-92e2-7ad97ad14891"
   initial_state: false

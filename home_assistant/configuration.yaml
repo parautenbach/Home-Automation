@@ -85,6 +85,10 @@ lovelace:
       type: module
     - url: /hacsfiles/battery-state-card/battery-state-card.js
       type: module
+    - url: /hacsfiles/lovelace-hourly-weather/hourly-weather.js
+      type: module
+    - url: /hacsfiles/history-explorer-card/history-explorer-card.js
+      type: module
     # manual
     - url: /local/floorplan/floorplan-card.js
       type: module

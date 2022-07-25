@@ -23,6 +23,10 @@ cards:
     details: true
     forecast: true
     number_of_forecasts: 4
+  - type: custom:hourly-weather
+    entity: weather.openweathermap_hourly
+    num_segments: 12
+    name: Hourly Conditions
   - type: entities
     title: Test
     entities:

@@ -1783,6 +1783,9 @@
         data:
           group: "system-general"
           url: homeassistant://navigate/lovelace/devices
+    - delay: "00:05:00"
+    - service: script.turn_on
+      entity_id: script.entertainment_off
 
 - alias: "Shut Down Server"
   id: "3fd83ac9-dc07-40d7-a9d1-c50c123b32ff"

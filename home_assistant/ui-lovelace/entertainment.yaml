@@ -664,5 +664,6 @@ cards:
         # unit:
       - type: history-graph
         entities:
-          - media_player.living_room
+          - entity: media_player.living_room
+            name: Apple TV
         hours_to_show: 24

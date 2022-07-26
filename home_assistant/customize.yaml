@@ -254,9 +254,12 @@ sensor.internet_usage_out:
 sensor.daily_internet_usage_in:
   friendly_name: 'Daily Downloads'
   icon: mdi:download
+  # https://developers.home-assistant.io/docs/core/entity/sensor/
+  state_class: total_increasing
 sensor.daily_internet_usage_out:
   friendly_name: 'Daily Uploads'
   icon: mdi:upload
+  state_class: total_increasing
 sensor.monthly_internet_usage_in:
   friendly_name: 'Monthly Downloads'
   icon: mdi:download

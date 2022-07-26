@@ -101,6 +101,18 @@ cards:
     entities:
       - entity: sensor.office_illuminance
         name: Office
+  - type: statistics-graph
+    title: Internet
+    entities:
+      - sensor.daily_internet_usage_in
+      - sensor.daily_internet_usage_out
+    days_to_show: 7
+    chart_type: bar
+    stat_types:
+      - min
+      - max
+      - mean
+      - sum
   - type: picture-glance
     title: Doorbell Camera
     camera_image: camera.doorbell

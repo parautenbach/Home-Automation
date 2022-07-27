@@ -437,3 +437,10 @@ sensor.outside_temperature:
   state_class: measurement
 sensor.outside_feels_like:
   state_class: measurement
+sensor.daylight:
+  device_class: duration
+  state_class: measurement
+  unit_of_measurement: h
+sensor.apple_tv_playing:
+  device_class: duration
+  unit_of_measurement: h

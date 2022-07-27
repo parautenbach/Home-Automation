@@ -293,7 +293,7 @@
         {% set decimal_hours = states('sensor.apple_tv_playing') | float(0) %}
         {% set hours = (decimal_hours - (decimal_hours % 1)) | int(0) %}
         {% set minutes = ((decimal_hours % 1) * 60) | int(0) %}
-        {{ '%02i:%02i'%(hours, minutes) }}
+        {{ '%02i:%02i' % (hours, minutes) }}
 
 - platform: sun2
   monitored_conditions:

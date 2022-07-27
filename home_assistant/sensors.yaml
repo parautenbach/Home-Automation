@@ -519,7 +519,7 @@
   name: Duration Pieter Work Cape Town
   entity_id: person.pieter_rautenbach
   state: "Work (Takealot HQ)"
-  type: time
+  type: time  # duration
   start: "{{ now().replace(hour=0, minute=0, second=0) }}"
   end: "{{ now() }}"
 
@@ -527,6 +527,6 @@
   name: Duration Pieter Work Stellenbosch
   entity_id: person.pieter_rautenbach
   state: "Work (Takealot STB)"
-  type: time
+  type: time  # duration
   start: "{{ now().replace(hour=0, minute=0, second=0) }}"
   end: "{{ now() }}"

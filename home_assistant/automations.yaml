@@ -18,6 +18,20 @@
     data:
       name: custom-light-mode
 
+- alias: "See Mobile Devices"
+  id: "6a1a5829-c740-4965-972b-58ce80651de1"
+  trigger:
+    - platform: homeassistant
+      event: start
+  action:
+    # https://companion.home-assistant.io/docs/notifications/notification-commands#request-location-updates
+    - service: notify.mobile_app_ceres
+      data:
+        message: "request_location_update"
+    - service: notify.mobile_app_rouve
+      data:
+        message: "request_location_update"
+
 - alias: "Set Dark Theme"
   id: "2a26deed-9071-4eb4-80b7-d014dfe98def"
   trigger:

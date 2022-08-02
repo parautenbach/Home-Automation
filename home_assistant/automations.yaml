@@ -2031,3 +2031,13 @@
   action:
     - service: script.turn_on
       entity_id: script.hk_3380_power_on
+
+- alias: "Change On Air Status"
+  id: "0e9a98bc-dba8-4354-8bad-87b44b50703a"
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id: sensor.on_air
+  action:
+    - service: "switch.turn_{{ 'on' if is_state('sensor.on_air', 'on') else 'off' }}"
+      entity_id: switch.on_air

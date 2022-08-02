@@ -50,7 +50,6 @@ cards:
       - scene.normal_lights
       - sensor.daylight
       - sensor.daylight_hm
-      - sensor.test_duration
       - sensor.apple_tv_playing
       - sensor.apple_tv_playing_hours_minutes
     show_header_toggle: true

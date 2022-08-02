@@ -118,6 +118,15 @@ cards:
       - max
       - mean
       - sum
+  - type: statistics-graph
+    title: Daylight
+    entities:
+      - sensor.daylight
+    days_to_show: 7
+    period: day
+    chart_type: bar
+    stat_types:
+      - max
   - type: picture-glance
     title: Doorbell Camera
     camera_image: camera.doorbell

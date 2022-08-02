@@ -159,10 +159,19 @@ cards:
         entities:
           - entity: binary_sensor.low_light
             name: Low Light
-        # https://www.wikihow.com/Compute-the-UV-Index
-        # https://www.ehso.com/uvIndexCalc.htm
-        # https://www.who.int/news-room/q-a-detail/radiation-ultraviolet-(uv)
-        # https://en.wikipedia.org/wiki/Ultraviolet_index
+      - type: statistics-graph
+        title: Daylight
+        entities:
+          - sensor.daylight
+        days_to_show: 7
+        period: day
+        chart_type: bar
+        stat_types:
+          - max
+      # https://www.wikihow.com/Compute-the-UV-Index
+      # https://www.ehso.com/uvIndexCalc.htm
+      # https://www.who.int/news-room/q-a-detail/radiation-ultraviolet-(uv)
+      # https://en.wikipedia.org/wiki/Ultraviolet_index
       - type: custom:mini-graph-card
         name: UV
         icon: mdi:weather-sunny-alert

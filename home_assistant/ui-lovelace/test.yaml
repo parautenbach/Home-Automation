@@ -11,18 +11,6 @@ cards:
     forecast: true
     hourly_forecast: true
     number_of_forecasts: 5
-  - type: custom:weather-card
-    entity: weather.openweathermap_daily
-    current: false
-    details: false
-    forecast: true
-    hourly_forecast: false
-  - type: custom:weather-card
-    entity: weather.openweathermap_daily
-    current: true
-    details: true
-    forecast: true
-    number_of_forecasts: 4
   - type: custom:hourly-weather
     entity: weather.openweathermap_hourly
     num_segments: 12
@@ -59,17 +47,6 @@ cards:
     entities:
       - entity: proximity.home
         name: Home
-  - type: history-graph
-    title: Garage Doors
-    hours_to_show: 24
-    entities:
-      - entity: cover.lhs_garage_door
-        name: Rouvé
-      - entity: cover.rhs_garage_door
-        name: Pieter
-      - entity: cover.garage_doors
-        name: All Doors
-      - entity: light.garage
   - type: statistics-graph
     title: Power Consumption
     entities:
@@ -84,7 +61,8 @@ cards:
   - type: statistics-graph
     title: Illuminance
     entities:
-      - sensor.illuminance
+      - entity: sensor.illuminance
+        name: Illuminance
     days_to_show: 7
     period: day
     chart_type: line
@@ -117,15 +95,6 @@ cards:
       - max
       - mean
       - sum
-  - type: statistics-graph
-    title: Daylight
-    entities:
-      - sensor.daylight
-    days_to_show: 7
-    period: day
-    chart_type: bar
-    stat_types:
-      - max
   - type: picture-glance
     title: Doorbell Camera
     camera_image: camera.doorbell

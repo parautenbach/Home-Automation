@@ -444,3 +444,7 @@ sensor.daylight:
 sensor.apple_tv_playing:
   device_class: duration
   unit_of_measurement: h
+sensor.watchman_missing_entities:
+  friendly_name: Missing Entities
+sensor.watchman_missing_services:
+  friendly_name: Missing Services

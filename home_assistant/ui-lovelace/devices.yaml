@@ -22,6 +22,8 @@ badges:
                 .value {
                   color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
                 }
+  - entity: sensor.watchman_missing_entities
+  - entity: sensor.watchman_missing_services
 cards:
   - type: vertical-stack
     cards:

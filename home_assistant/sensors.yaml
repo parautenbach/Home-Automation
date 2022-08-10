@@ -296,7 +296,7 @@
         {{ '%02i:%02i' % (hours, minutes) }}
     on_air:
       value_template: >
-        {{ states('binary_sensor.gaia_microphone_in_use') }}
+        {{ states('binary_sensor.gaia_audio_input_in_use') }}
 
 - platform: sun2
   monitored_conditions:

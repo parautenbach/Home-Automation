@@ -111,7 +111,10 @@ cards:
             entity: light.music_room
             icon: mdi:dome-light
           - type: custom:button-card
-            color_type: blank-card
+            template: rgb_light
+            name: Open Area
+            entity: light.living_area_group
+            icon: mdi:lightbulb-group-outline
       - type: horizontal-stack
         title: Outside Lights
         cards:

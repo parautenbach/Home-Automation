@@ -112,6 +112,8 @@ cards:
         entities:
           - entity: sensor.living_room_ht_temperature
             name: Living Room
+          - entity: sensor.office_temperature
+            name: Office
           - entity: sensor.main_bedroom_ht_temperature
             name: Main Bedroom
           - entity: sensor.outside_temperature
@@ -120,8 +122,7 @@ cards:
         period: day
         chart_type: line
         stat_types:
-          - min
-          - max
+          - mean
   - type: vertical-stack
     cards:
       - type: custom:mini-graph-card

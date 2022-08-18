@@ -97,6 +97,13 @@ cards:
           variables:
             name: Power Meter
             switch_entity: switch.electricity_pulse_counter_restart
+        - type: custom:button-card
+          template: restart
+          entity: binary_sensor.office
+          icon: mdi:briefcase
+          variables:
+            name: Office
+            switch_entity: switch.office_restart
     - type: history-graph
       hours_to_show: 24
       entities:

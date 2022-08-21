@@ -405,6 +405,28 @@
       target:
         entity_id: scene.normal_lights
 
+- alias: "Lights Off When Loadshedding"
+  id: "e4867511-07e3-4873-bd78-ecaec953adb4"
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.electricity_feed
+      to: "off"
+      for:
+        seconds: 30
+  mode: single
+  condition:
+    - condition: and
+      conditions:
+        - condition: sun
+          after: sunrise
+        - condition: sun
+          before: sunset
+  action:
+    # currently the only light on battery
+    - service: light.turn_off
+      entity_id: light.living_room_lamp
+
 - alias: "Bedlamps On Upon Low Light"
   id: "5cdd58f4-dcec-4f50-9451-8d40dd8c2215"
   initial_state: true
@@ -2029,6 +2051,7 @@
     platform: state
     entity_id: media_player.living_room
     from: standby
+  mode: single
   action:
     - service: script.turn_on
       entity_id: script.hk_3380_power_on
@@ -2042,6 +2065,7 @@
   trigger:
     platform: state
     entity_id: sensor.on_air
+  mode: single
   action:
     - service: "switch.turn_{{ 'on' if is_state('sensor.on_air', 'on') else 'off' }}"
       entity_id: switch.on_air

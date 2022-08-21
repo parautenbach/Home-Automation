@@ -165,6 +165,7 @@ cards:
         - automation.inside_lights_auto_on_upon_sunset_or_arrival
         - automation.lights_off_after_sunrise
         - automation.lights_on_upon_low_light
+        - automation.lights_off_when_loadshedding
         - automation.low_server_battery
         - automation.notify_doorbell_rang
         - automation.notify_if_cover_was_left_open

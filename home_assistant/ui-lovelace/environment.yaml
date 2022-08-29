@@ -125,35 +125,51 @@ cards:
           - mean
   - type: vertical-stack
     cards:
-      - type: custom:mini-graph-card
-        entities:
-          # don't use this if you want to use thresholds: color overrides
-          # sensor.sun_illuminance can be very unreliable (operationally); need to use my own light meter
-          # - entity: sensor.sun_illuminance
-          #   color: var(--custom-color-yellow)
-          - entity: sensor.illuminance
-            color: var(--custom-color-yellow)
-          - entity: sensor.nighttime_number
-            color: var(--custom-color-gray)
-            show_line: false
-            show_points: false
-            show_legend: false
-            y_axis: secondary
-        hours_to_show: 24
-        hour24: true
-        smoothing: true
-        points_per_hour: 2
-        line_width: 2
-        lower_bound: 0
-        show:
-          extrema: true
-          labels_secondary: false
-        # color_thresholds:
-        #   # https://community.home-assistant.io/t/outdoor-illuminance-template-sensor/228581
-        #   - value: 10  # min
-        #     color: var(--custom-color-gray)
-        #   - value: 10000  # max
-        #     color: var(--custom-color-yellow)
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+          - type: custom:mini-graph-card
+            entities:
+              # don't use this if you want to use thresholds: color overrides
+              # sensor.sun_illuminance can be very unreliable (operationally); need to use my own light meter
+              # - entity: sensor.sun_illuminance
+              #   color: var(--custom-color-yellow)
+              - entity: sensor.illuminance
+                color: var(--custom-color-yellow)
+              - entity: sensor.nighttime_number
+                color: var(--custom-color-gray)
+                show_line: false
+                show_points: false
+                show_legend: false
+                y_axis: secondary
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 2
+            line_width: 2
+            lower_bound: 0
+            show:
+              extrema: true
+              labels_secondary: false
+          - type: custom:mini-graph-card
+            entities:
+              - entity: sensor.illuminance
+                color: var(--custom-color-yellow)
+              - entity: sensor.office_illuminance
+                color: var(--custom-color-blue)
+                y_axis: secondary
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 2
+            line_width: 2
+            lower_bound: 0
+            show:
+              extrema: true
+              labels_secondary: false
       - type: history-graph
         title: Low Light Sensor
         hours_to_show: 24

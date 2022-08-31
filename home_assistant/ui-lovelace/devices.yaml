@@ -56,6 +56,35 @@ cards:
     - type: markdown
       title: Devices
       content: "Double tap will restart; hold will shut down (where supported)."
+    - type: custom:button-card
+      entity: script.shutdown_all_remote_hosts
+      name: Shutdown All
+      icon: mdi:server
+      size: 12%
+      show_state: false
+      show_label: false
+      styles:
+        icon:
+          - padding-left: 80%
+          - padding-right: 10px
+        name:
+          - color: var(--paper-item-icon-color)
+          - justify-self: start
+        card:
+          - padding: 1%
+          - font-size: 12px
+        grid:
+          - grid-template-areas: '"i n"'
+          - grid-template-rows: min-content
+          - grid-template-columns: 1fr 1fr
+      tap_action:
+        action: none
+      hold_action:
+        action: call-service
+        haptic: heavy
+        service: script.shutdown_all_remote_hosts
+        confirmation:
+          text: "[[[ return `Are you sure you want to shut down all remote hosts?` ]]]"
     - type: horizontal-stack
       cards:
         - type: custom:button-card

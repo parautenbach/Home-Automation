@@ -916,6 +916,10 @@ shutdown_remote_host:
         - service: homeassistant.update_entity
           data:
             entity_id: "binary_sensor.{{ host }}"
+        - wait_template: "{{ is_state('binary_sensor.' ~ host, 'off') }}"
+          timeout:
+            minutes: 1
+          continue_on_timeout: true
         - service: persistent_notification.create
           data:
             title: System
@@ -924,6 +928,42 @@ shutdown_remote_host:
               {% set triggered_by = (states.person | selectattr('attributes.user_id','==', user_id)) | list %}
               {% set first_name = "System" if not triggered_by else state_attr((triggered_by | first).entity_id, "friendly_name").split()[0] %}
               {{ first_name }} shut down {{ name }}.
+
+shutdown_all_remote_hosts:
+  description: "Shut down all remote hosts"
+  mode: single
+  sequence:
+    - parallel:
+        - service: script.turn_on
+          target:
+            entity_id: script.shutdown_remote_host
+          data:
+            variables:
+              name: Thor
+              host: thor
+        - service: script.turn_on
+          target:
+            entity_id: script.shutdown_remote_host
+          data:
+            variables:
+              name: CCTV
+              host: cctv
+        - service: script.turn_on
+          target:
+            entity_id: script.shutdown_remote_host
+          data:
+            variables:
+              name: Rasplex
+              host: rasplex
+        - service: script.turn_on
+          target:
+            entity_id: script.shutdown_remote_host
+          data:
+            variables:
+              name: Rasplay
+              host: rasplay
+        - delay:
+            seconds: 3
 
 make_backup:
   description: "Backup Home Assistant"

@@ -65,6 +65,9 @@ cards:
       show_label: false
       styles:
         icon:
+          # https://community.home-assistant.io/t/lovelace-button-card/65981/791
+          # https://community.home-assistant.io/t/lovelace-button-card/65981/798
+          # https://community.home-assistant.io/t/fun-with-custom-button-card/238450
           - padding-left: 80%
           - padding-right: 10px
         name:

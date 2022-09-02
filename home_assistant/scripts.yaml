@@ -537,12 +537,14 @@ security_camera_record_clip:
   sequence:
     - service: camera.record
       # https://github.com/home-assistant/core/issues/40241
+      # https://github.com/home-assistant/core/issues/40241#issuecomment-1220046988
       # entity_id: camera.security_camera
       data:
         entity_id: camera.security_camera
         # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
         # filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
-        filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+        # filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+        filename: '/tmp/{{ "{{ entity_id.entity_id }}" }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
         duration: 10
     # would love to get rid of this. maybe watch for an updated timestamp on the file?
     - delay: "00:00:15"
@@ -581,7 +583,8 @@ security_camera_create_snapshot:
         entity_id: camera.security_camera
         # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
         # filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
-        filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+        # filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+        filename: '/tmp/{{ "{{ entity_id.entity_id }}" }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
     - service: input_datetime.set_datetime
       entity_id: input_datetime.security_camera_last_snapshot
       data:

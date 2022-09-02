@@ -66,8 +66,24 @@
         {# prevent the action of the light turning off after the last trigger to trigger the motion sensor again immediately #}
         {{ (utcnow() - states.light.foyer.last_changed).seconds >= 1 }}
   action:
-    - service: script.turn_on
-      entity_id: script.security_camera_create_snapshot
+    # blocking call
+    - service: script.security_camera_create_snapshot
+    - condition: state
+      entity_id: group.security_automations
+      state: "on"
+    - service: notify.family
+      data:
+        title: Security
+        message: "Motion detected!"
+        data:
+          group: "security-camera-snapshots"
+          url: homeassistant://navigate/lovelace/security
+          attachment:
+            # url: https://geoexpressinternational.com/wp-content/plugins/webp-express/test/test-pattern-tv.jpg
+            # url: http://securitypi.local/local/camera.security_camera_last.jpg
+            url: !secret security_camera_last_snapshot_url
+            # content-type: jpg
+            # hide-thumbnail: false
 
 - alias: "Foyer Motion Detected Last"
   id: "ef364d58-2cb7-4d5b-8e96-8724c132365a"

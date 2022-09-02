@@ -590,22 +590,6 @@ security_camera_create_snapshot:
       data:
         datetime: "{{ now() }}"
     - service: shell_command.copy_last_snapshot_image
-    - condition: state
-      entity_id: group.security_automations
-      state: "on"
-    - service: notify.family
-      data:
-        title: Security
-        message: "Motion detected!"
-        data:
-          group: "security-camera-snapshots"
-          url: homeassistant://navigate/lovelace/security
-          attachment:
-            # url: https://geoexpressinternational.com/wp-content/plugins/webp-express/test/test-pattern-tv.jpg
-            # url: http://securitypi.local/local/camera.security_camera_last.jpg
-            url: !secret security_camera_last_snapshot_url
-            # content-type: jpg
-            # hide-thumbnail: false
 
 send_pieter_work_cape_town_to_home_eta:
   mode: single

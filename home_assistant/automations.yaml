@@ -1962,7 +1962,18 @@
     platform: time
     at: "21:00:00"
   # google calendar all-day events go up to midnight of the next day – but this is already catered for when we set the helpers
-  condition: "{{ (states('input_datetime.vacation_end') | as_datetime).date() == now().date() }}"
+  # old: condition: "{{ (states('input_datetime.vacation_end') | as_datetime).date() == now().date() }}"
+  # new: if today is not a work day but tomorrow is (and today isn't weekend, unless it's part of the vacation)
+  # but do we want this every sunday night to trigger? what if sunday is the end of the vacation?
+  condition: >-
+    {{
+      is_state('binary_sensor.workday', 'off') and
+      is_state('binary_sensor.workday_tomorrow', 'on') and
+        (
+          now().strftime('%a') != 'Sun' or
+          (states('input_datetime.vacation_end') | as_datetime).date() == now().date()
+        )
+    }}
   action:
     - service: notify.mobile_app_ceres
       data:

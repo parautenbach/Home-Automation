@@ -113,6 +113,10 @@ button_card_templates:
                     else
                       return "var(--custom-color-red)";
                   ]]]
+          tap_action:
+            action: none
+          hold_action:
+            action: none
     state:
       - value: 'unavailable'
         styles:
@@ -244,6 +248,10 @@ button_card_templates:
                     else
                       return "var(--custom-color-red)";
                   ]]]
+          tap_action:
+            action: none
+          hold_action:
+            action: none
     state:
       - value: 'unavailable'
         styles:
@@ -295,6 +303,10 @@ button_card_templates:
                     else
                       return "var(--custom-color-red)";
                   ]]]
+          tap_action:
+            action: none
+          hold_action:
+            action: none
     styles:
       name:
         - color: var(--paper-item-icon-color)

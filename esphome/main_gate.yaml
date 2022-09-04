@@ -7,8 +7,8 @@ wifi:
   power_save_mode: none
   manual_ip:
     static_ip: 192.168.0.11
-    gateway: 192.168.0.1
-    subnet: 255.255.255.0
+    gateway: !secret gateway
+    subnet: !secret subnet
   networks:
     - ssid: !secret wifi_ssid
       password: !secret wifi_password
@@ -17,13 +17,7 @@ wifi:
     ssid: "Main Gate Fallback Hotspot"
     password: !secret fallback_ap_password
 
-captive_portal:
-
-# Enable logging
-logger:
-
-ota:
-  password: !secret ota_password
+<<: !include common.yaml
 
 # https://esphome.io/components/binary_sensor/gpio.html
 binary_sensor:
@@ -57,7 +51,3 @@ switch:
   - platform: restart
     id: gate_restart
     name: "Gate Restart"
-
-mqtt:
-  broker: !secret mqtt_broker
-  discovery: True

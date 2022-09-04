@@ -1,0 +1,10 @@
+captive_portal:
+
+logger:
+
+ota:
+  password: !secret ota_password
+
+mqtt:
+  broker: !secret mqtt_broker
+  discovery: True

@@ -7,8 +7,8 @@ wifi:
   power_save_mode: none
   manual_ip:
     static_ip: 192.168.0.14
-    gateway: 192.168.0.1
-    subnet: 255.255.255.0
+    gateway: !secret gateway
+    subnet: !secret subnet
   networks:
     - ssid: !secret wifi_ssid
       password: !secret wifi_password
@@ -17,13 +17,7 @@ wifi:
     ssid: "Office Fallback Hotspot"
     password: !secret fallback_ap_password
 
-captive_portal:
-
-# Enable logging
-logger:
-
-ota:
-  password: !secret ota_password
+<<: !include common.yaml
 
 globals:
  - id: on_air
@@ -111,7 +105,3 @@ switch:
       - globals.set:
           id: on_air
           value: "false"
-
-mqtt:
-  broker: !secret mqtt_broker
-  discovery: True

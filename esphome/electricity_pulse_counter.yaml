@@ -7,8 +7,8 @@ wifi:
   power_save_mode: none
   manual_ip:
     static_ip: 192.168.0.13
-    gateway: 192.168.0.1
-    subnet: 255.255.255.0
+    gateway: !secret gateway
+    subnet: !secret subnet
   networks:
     - ssid: !secret wifi_ssid
       password: !secret wifi_password
@@ -17,13 +17,7 @@ wifi:
     ssid: "Electricity PC Fallback Hotspot"
     password: !secret fallback_ap_password
 
-captive_portal:
-
-# Enable logging
-logger:
-
-ota:
-  password: !secret ota_password
+<<: !include common.yaml
 
 # https://esphome.io/components/sensor/pulse_counter.html
 sensor:
@@ -50,7 +44,3 @@ switch:
   - platform: restart
     id: electricity_pulse_counter_restart
     name: "Electricity Pulse Counter Restart"
-
-mqtt:
-  broker: !secret mqtt_broker
-  discovery: True

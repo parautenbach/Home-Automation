@@ -55,6 +55,8 @@ sensor:
             send_every: 15
             send_first_at: 1
     update_interval: 60s
+  # https://community.home-assistant.io/t/outdoor-lux-sensor/421926
+  # hint: use twisted pairs for long cables
   - platform: bh1750
     name: "Office Illuminance"
     id: office_illuminance

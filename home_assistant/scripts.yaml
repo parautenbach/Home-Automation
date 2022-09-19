@@ -948,7 +948,7 @@ shutdown_all_remote_hosts:
               name: Rasplay
               host: rasplay
         - delay:
-            seconds: 3
+            seconds: 1
 
 make_backup:
   description: "Backup Home Assistant"

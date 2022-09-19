@@ -363,6 +363,7 @@ cards:
           # https://en.wikipedia.org/wiki/Air_quality_index
           # https://www.environment.gov.za/sites/default/files/legislations/nemaqa_airquality_g32816gon1210_0.pdf
           # https://www.airveda.com/blog/AQI-calculation-update
+          # https://www.epa.gov/sites/default/files/2016-04/documents/2012_aqi_factsheet.pdf
           - type: gauge
             name: PM2.5
             entity: sensor.owm_pollution_fine_particles_pm2_5

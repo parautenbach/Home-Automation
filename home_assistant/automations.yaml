@@ -1821,11 +1821,24 @@
   trigger:
     - platform: template
       value_template: "{{ is_state('sensor.home_assistant_server_battery_status', 'Discharging') }}"
-      for:
-        minutes: 1
   action:
-    service: shell_command.shutdown_server
-    # notify
+    - service: notify.mobile_app_ceres
+      data:
+        title: "System"
+        message: "Server will shut down in 30 seconds."
+        data:
+          group: "system-general"
+          url: homeassistant://navigate/lovelace/devices
+    - delay:
+        seconds: 30
+    - service: shell_command.shutdown_server
+    - service: notify.mobile_app_ceres
+      data:
+        title: "System"
+        message: "Server shutting down."
+        data:
+          group: "system-general"
+          url: homeassistant://navigate/lovelace/devices
 
 - alias: "Update OpenUV every 20 minutes during the daytime"
   id: "34f13272-f170-4ef2-92e2-7ad97ad14891"

@@ -11,3 +11,9 @@ electricity_feed_indicators:
     - light.foyer
     - light.dining_room
     - light.music_room
+automations_to_save_energy:
+  name: Automations To Save Energy
+  entities:
+    - automation.lights_on_upon_low_light
+    - automation.open_the_gate_when_arriving_home
+    - automation.open_garage_door_when_arriving_by_car

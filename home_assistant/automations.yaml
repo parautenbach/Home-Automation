@@ -441,6 +441,30 @@
     - service: light.turn_off
       entity_id: light.living_room_lamp
 
+- alias: "Disable Automations When Power Is Cut"
+  id: "aae59d4b-d314-42d6-be4f-3b5c33c99303"
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.electricity_feed
+      to: "off"
+  mode: single
+  action:
+    - service: homeassistant.turn_off
+      entity_id: group.automations_to_save_energy
+
+- alias: "Enable Automations When Power Returns"
+  id: "b35a72d8-f856-469b-af8e-864ac9abe411"
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.electricity_feed
+      to: "off"
+  mode: single
+  action:
+    - service: homeassistant.turn_on
+      entity_id: group.automations_to_save_energy
+
 - alias: "Bedlamps On Upon Low Light"
   id: "5cdd58f4-dcec-4f50-9451-8d40dd8c2215"
   initial_state: true

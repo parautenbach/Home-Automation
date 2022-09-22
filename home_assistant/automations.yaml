@@ -998,6 +998,8 @@
               title: "Wait 10 min"
             - action: "EXTEND_COVER_TIMEOUT_30_MIN"
               title: "Wait 30 min"
+            - action: "DISABLE_COVER_TIMEOUT"
+              title: "Disable"
           action_data:
             # convert this to the cover entity to use in the automation that receives this
             cover_id: "{{ trigger.event.data.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
@@ -1057,6 +1059,18 @@
         entity_id: "{{ trigger.event.data.action_data.timer_id }}"
         # in seconds
         duration: "{{ trigger.event.data.action | regex_findall_index(find='\\d+', index=0, ignorecase=False) | int * 60 }}"
+
+- alias: "Disable Cover Timeout From Alert Action"
+  id: "a8f612ad-fade-45cb-b774-d65feb8831ae"
+  trigger:
+    - platform: event
+      event_type: mobile_app_notification_action
+      event_data:
+        action: DISABLE_COVER_TIMEOUT
+  action:
+    - service: timer.cancel
+      data:
+        entity_id: "{{ trigger.event.data.action_data.timer_id }}"
 
 - alias: "Stop Cover Timer When Closed"
   id: "7ccfaf0f-ab16-4a3b-9b43-e884138971b2"

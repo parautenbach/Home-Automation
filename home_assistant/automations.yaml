@@ -428,8 +428,6 @@
     - platform: state
       entity_id: binary_sensor.electricity_feed
       to: "off"
-      for:
-        seconds: 30
   mode: single
   condition:
     - condition: and
@@ -1169,8 +1167,6 @@
   trigger:
     platform: state
     entity_id: binary_sensor.electricity_feed
-    for:
-      seconds: 30
   action:
     - service: notify.mobile_app_ceres
       data:

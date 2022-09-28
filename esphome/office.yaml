@@ -73,10 +73,10 @@ sensor:
     id: office_illuminance
     address: 0x23  # low (0x5C if addr pin is pulled high)
     filters:
-      - sliding_window_moving_average:
-          window_size: 15
+      - exponential_moving_average:
+          alpha: 0.1
           send_every: 15
-          send_first_at: 1
+          send_first_at: 3
 
 # https://microcontrollerslab.com/led-dot-matrix-display-esp32-max7219/
 spi:

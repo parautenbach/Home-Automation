@@ -40,12 +40,23 @@ sensor:
     temperature:
       name: "Office Temperature"
       id: office_temperature
-      # https://community.home-assistant.io/t/debug-esphome-sensors/134688/18?u=parautenbach
+      # https://community.home-assistant.io/t/debug-esphome-sensors/134688/18
       filters:
         - sliding_window_moving_average:
             window_size: 15
             send_every: 15
-            send_first_at: 1
+            send_first_at: 3
+        # python snippet:
+        # og = pd.read_csv('sensor.officetemperature.csv')
+        # og.last_updated = pd.to_datetime(og.last_updated)
+        # og.sort_values('last_updated', inplace=True)
+        # lr = pd.read_csv('sensor.living_room_ht_temperature.csv')
+        # lr.last_updated = pd.to_datetime(lr.last_updated)
+        # lr.sort_values('last_updated', inplace=True)
+        # m = pd.merge_asof(og, lr, on='last_updated', tolerance=pd.Timedelta('10m'), direction='nearest'); m.to_csv('m.csv')
+        # analysis:
+        # https://docs.google.com/spreadsheets/d/1HlYbVSwn8k-v0HDMvln82tImMEC4XfoL9Mw6YFeTd-4/edit#gid=1691333222
+        - lambda: return 1.05*x - 3;
     humidity:
       name: "Office Humidity"
       id: office_humidity

@@ -64,7 +64,7 @@ sensor:
         - sliding_window_moving_average:
             window_size: 15
             send_every: 15
-            send_first_at: 1
+            send_first_at: 3
     update_interval: 60s
   # https://community.home-assistant.io/t/outdoor-lux-sensor/421926
   # hint: use twisted pairs for long cables

@@ -77,12 +77,6 @@ cards:
         name: Office
       - entity: sensor.living_room_ht_temperature
         name: Living Room
-  - type: history-graph
-    title: Office Illuminance
-    hours_to_show: 24
-    entities:
-      - entity: sensor.office_illuminance
-        name: Office
   - type: statistics-graph
     title: Internet
     entities:

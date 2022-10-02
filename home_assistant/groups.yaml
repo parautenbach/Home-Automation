@@ -3,14 +3,6 @@ security_automations:
   entities:
     - automation.take_motion_snapshots
     - automation.switch_on_lights_if_motion_is_detected
-electricity_feed_indicators:
-  name: Electricity Feed Group
-  entities:
-    - light.pieter_bedside
-    - light.rouve_bedside
-    - light.foyer
-    - light.dining_room
-    - light.music_room
 automations_to_save_energy:
   name: Automations To Save Energy
   entities:

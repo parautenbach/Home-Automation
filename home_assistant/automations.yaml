@@ -1858,6 +1858,9 @@
     - platform: template
       value_template: "{{ is_state('sensor.home_assistant_server_battery_status', 'Discharging') }}"
   action:
+    - service: homeassistant.update_entity
+      target:
+        entity_id: binary_sensor.electricity_feed
     - service: notify.mobile_app_ceres
       data:
         title: "System"
@@ -1880,6 +1883,9 @@
               group: "system-general"
               url: homeassistant://navigate/lovelace/devices
       else:
+        - service: homeassistant.update_entity
+          target:
+            entity_id: binary_sensor.electricity_feed
         - service: notify.mobile_app_ceres
           data:
             title: "System"

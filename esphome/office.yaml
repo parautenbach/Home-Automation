@@ -56,7 +56,8 @@ sensor:
         # m = pd.merge_asof(og, lr, on='last_updated', tolerance=pd.Timedelta('10m'), direction='nearest'); m.to_csv('m.csv')
         # analysis:
         # https://docs.google.com/spreadsheets/d/1HlYbVSwn8k-v0HDMvln82tImMEC4XfoL9Mw6YFeTd-4/edit#gid=1691333222
-        - lambda: return 1.05*x - 3;
+        # - lambda: return 1.05*x - 3;
+        - lambda: return x - 2;
     humidity:
       name: "Office Humidity"
       id: office_humidity

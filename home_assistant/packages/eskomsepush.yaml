@@ -1,0 +1,166 @@
+# credit: https://github.com/tinuva/home-assistant-config/blob/8b16e0fa53be37682e4add2f338d8777bfd9896e/packages/energy/eskomsepush.yaml
+---
+### EskomSePush API Docs: https://documenter.getpostman.com/view/1296288/UzQuNk3E
+### To sign up for a key, scroll down on their page for the API Request link: https://sepush.co.za/
+### Direct link to sign-up form: https://docs.google.com/forms/d/e/1FAIpQLSeZhAkhDaQX_mLT2xn41TkVjLkOH3Py3YWHi_UqQP4niOY01g/viewform
+
+rest:
+  - resource: "https://developer.sepush.co.za/business/2.0/area"
+    scan_interval: '01:00:00'  # rate limit
+    headers:
+      Token: !secret eskomsepush
+    params:
+      id: "westerncape-2-stellenboschmunicipality"
+    sensor:
+      - name: EskomSePush
+        force_update: true
+        value_template: "OK"
+        json_attributes:
+          - events
+          - info
+          - schedule
+
+sensor:
+  # Eskom se Push sensor
+  - platform: rest
+    name: EskomSePush Allowance
+    resource: "https://developer.sepush.co.za/business/2.0/api_allowance"
+    headers:
+      Token: !secret eskomsepush
+    json_attributes_path: "$.allowance"
+    json_attributes:
+      - count
+      - limit
+      - type
+    value_template: "OK"
+    scan_interval: 3600
+
+  # template sensors abased on ESP above
+  - platform: template
+    sensors:
+      next_loadshedding_start_time:
+        unique_id: next_loadshedding_start_time
+        friendly_name: Next Loadshedding Start Time
+        device_class: timestamp
+        value_template: "{{ state_attr('sensor.eskomsepush', 'events')[0].start }}"
+      next_loadshedding_end_time:
+        unique_id: next_loadshedding_end_time
+        friendly_name: Next Loadshedding End Time
+        device_class: timestamp
+        value_template: "{{ state_attr('sensor.eskomsepush', 'events')[0].end }}"
+      next_loadshedding_event:
+        unique_id: next_loadshedding_event
+        friendly_name: Next Loadshedding Event
+        value_template: "{{ state_attr('sensor.eskomsepush', 'events')[0].note }}"
+      # next_loadshedding_duration:
+      #   friendly_name: Next loadshedding duration
+      #   unique_id: next_loadshedding_duration
+      #   device_class: duration
+      #   unit_of_measurement: m
+      #   value_template: '{{ [( as_timestamp(states.sensor.next_loadshedding_time_end.state) | int - as_timestamp(states.sensor.next_loadshedding_time.state) | int ) / 60,-1] | max | round(0) }}'
+      # time_till_loadshedding:
+      #   friendly_name: Time until next loadshedding
+      #   unique_id: Time_Until_Next_Loadshedding
+      #   device_class: duration
+      #   unit_of_measurement: m
+      #   value_template: '{{ [( as_timestamp(states.sensor.next_loadshedding_time.state) | int - as_timestamp(now()) | int ) / 60,-1] | max | round(0) }}'
+      # time_till_loadshedding_ends:
+      #   friendly_name: Time until next loadshedding ends
+      #   unique_id: Time_Until_Next_Loadshedding_ends
+      #   device_class: duration
+      #   unit_of_measurement: m
+      #   value_template: '{{ [( as_timestamp(states.sensor.next_loadshedding_time_end.state) | int - as_timestamp(now()) | int ) / 60,-1] | max | round(0) }}'
+      eskomsepush_calls_remaining:
+        unique_id: eskomsepush_api_calls_remaining
+        friendly_name: EskomSePush API Calls Remaining
+        value_template: "{{ state_attr('sensor.eskomsepush_allowance', 'limit') | int(0) - state_attr('sensor.eskomsepush_allowance', 'count') | int(0) }}"
+      loadshedding_slot_forecast:
+        unique_id: loadshedding_slot_forecast
+        friendly_name: Loadshedding slot forecast
+        value_template: >
+          {%- for event in states['sensor.eskomsepush'].attributes.events -%} {{
+          as_timestamp(event['start']) | timestamp_custom('%a %d %b:') }} {{ event['note'] }} {{
+          as_timestamp(event['start']) | timestamp_custom('from %H:%M') }} to {{
+          as_timestamp(event['end']) | timestamp_custom('%H:%M') }}
+          {{- '\n' -}} {%- endfor -%}
+
+# REPLACE
+# binary_sensor:
+#   - platform: template
+#     sensors:
+#       loadshedding_active:
+#         friendly_name: "Loadshedding active"
+#         device_class: problem
+#         value_template: "{{ states('sensor.time_till_loadshedding') | int(0) <= 0 }}"
+
+# timer:
+#   loadshedding_slot:
+#     duration: '02:35:00'
+
+# automation:
+#   - alias: start_loadshedding_slot_timer
+#     trigger:
+#       - platform: state
+#         entity_id: binary_sensor.loadshedding_active
+#         to: 'on'
+#     condition:
+#       # make sure timer not already active
+#       - condition: state
+#         entity_id: timer.loadshedding_slot
+#         state: 'idle'
+#     action:
+#       - service: timer.start
+#         data:
+#           entity_id: timer.loadshedding_slot
+#           duration: "{{ (states('sensor.next_loadshedding_duration')|int + 35) * 60 }}"
+
+#   - alias: stop_loadshedding_slot_timer_grid_power_returned
+#     trigger:
+#       - platform: state
+#         entity_id: sensor.grid_mode
+#         to: '1'  # stable after checking power
+#         for:
+#           seconds: 30
+#     condition:
+#       - condition: template
+#         value_template: >
+#           {{ trigger.from_state is not none and
+#             trigger.from_state.state not in ['unknown','unavailable'] }}
+#       - condition: state
+#         entity_id: timer.loadshedding_slot
+#         state: 'active'
+#     action:
+#       - service: timer.finish
+#         data:
+#           entity_id: timer.loadshedding_slot
+
+#   - alias: Loadshedding forecast notification
+#     initial_state: 'on'
+#     trigger:
+#       - entity_id: sensor.loadshedding_slot_forecast
+#         platform: state
+#     action:
+#       - alias: "Alert change"
+#         service: script.alert
+#         data:
+#           icon: ':zap:'
+#           object: 'Loadshedding forecast'
+#           target: 'alerts-david'
+#           message: >
+#             {{ states.sensor.loadshedding_slot_forecast.state }}
+
+#   - alias: Upcoming slot notification
+#     initial_state: 'on'
+#     trigger:
+#       - entity_id: sensor.time_till_loadshedding
+#         platform: state
+#         to: '15'
+#     action:
+#       - alias: "Alert change"
+#         service: script.alert
+#         data:
+#           icon: ':zap:'
+#           object: 'Loadshedding slot'
+#           target: 'alerts-david'
+#           message: >
+#             Loadshedding slot in 15 minutes

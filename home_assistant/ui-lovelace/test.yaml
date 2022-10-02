@@ -41,6 +41,14 @@ cards:
       - sensor.apple_tv_playing
       - sensor.apple_tv_playing_hours_minutes
     show_header_toggle: true
+  - type: entities
+    title: Test
+    entities:
+      - sensor.next_loadshedding_event
+      - sensor.next_loadshedding_start_time
+      - sensor.next_loadshedding_end_time
+      - sensor.eskomsepush_calls_remaining
+    show_header_toggle: false
   - type: history-graph
     title: Proximity
     hours_to_show: 24

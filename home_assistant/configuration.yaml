@@ -41,6 +41,8 @@ homeassistant:
   media_dirs:
     gallery: /home/homeassistant/.homeassistant/www/gallery
   customize: !include customize.yaml
+  # https://www.home-assistant.io/docs/configuration/packages/
+  packages: !include_dir_named packages
 
 logger:
   default: warning

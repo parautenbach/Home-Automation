@@ -6,7 +6,7 @@
 
 rest:
   - resource: "https://developer.sepush.co.za/business/2.0/area"
-    scan_interval: '01:00:00'  # rate limit
+    scan_interval: 3600  # rate limit
     headers:
       Token: !secret eskomsepush
     params:
@@ -36,6 +36,7 @@ sensor:
     scan_interval: 3600
 
   # template sensors abased on ESP above
+  # todo: what if there's no loadshedding?
   - platform: template
     sensors:
       next_loadshedding_start_time:
@@ -51,6 +52,7 @@ sensor:
       next_loadshedding_event:
         unique_id: next_loadshedding_event
         friendly_name: Next Loadshedding Event
+        # icon: gauge
         value_template: "{{ state_attr('sensor.eskomsepush', 'events')[0].note }}"
       # next_loadshedding_duration:
       #   friendly_name: Next loadshedding duration
@@ -75,64 +77,52 @@ sensor:
         friendly_name: EskomSePush API Calls Remaining
         value_template: "{{ state_attr('sensor.eskomsepush_allowance', 'limit') | int(0) - state_attr('sensor.eskomsepush_allowance', 'count') | int(0) }}"
       loadshedding_slot_forecast:
-        unique_id: loadshedding_slot_forecast
-        friendly_name: Loadshedding slot forecast
+        unique_id: loadshedding_forecast
+        friendly_name: Loadshedding Forecast
         value_template: >
-          {%- for event in states['sensor.eskomsepush'].attributes.events -%} {{
-          as_timestamp(event['start']) | timestamp_custom('%a %d %b:') }} {{ event['note'] }} {{
-          as_timestamp(event['start']) | timestamp_custom('from %H:%M') }} to {{
-          as_timestamp(event['end']) | timestamp_custom('%H:%M') }}
-          {{- '\n' -}} {%- endfor -%}
+          {% for event in states['sensor.eskomsepush'].attributes.events -%}
+            {%- set date = as_timestamp(event['start']) | timestamp_custom('%a %d %b') -%}
+            {%- set stage = event['note'] -%}
+            {%- set start_time = as_timestamp(event['start']) | timestamp_custom('%H:%M') -%}
+            {%- set end_time = as_timestamp(event['end']) | timestamp_custom('%H:%M') -%}
+            {{ date ~ ': ' ~ stage ~ ' from ' ~ start_time ~ ' to ' ~ end_time ~ '\n'}}
+          {%- endfor -%}
 
-# REPLACE
-# binary_sensor:
-#   - platform: template
-#     sensors:
-#       loadshedding_active:
-#         friendly_name: "Loadshedding active"
-#         device_class: problem
-#         value_template: "{{ states('sensor.time_till_loadshedding') | int(0) <= 0 }}"
+binary_sensor:
+  - platform: template
+    sensors:
+      loadshedding_active:
+        friendly_name: Loadshedding Active
+        device_class: problem
+        value_template: >-
+          {% set start = state_attr('sensor.eskomsepush', 'events')[0].start | as_datetime %}
+          {% set end = state_attr('sensor.eskomsepush', 'events')[0].end | as_datetime %}
+          {{ start <= now() <= end }}
 
-# timer:
-#   loadshedding_slot:
-#     duration: '02:35:00'
+timer:
+  loadshedding_duration:
+    name: Loadshedding Duration Remaining
+    restore: true
 
-# automation:
-#   - alias: start_loadshedding_slot_timer
-#     trigger:
-#       - platform: state
-#         entity_id: binary_sensor.loadshedding_active
-#         to: 'on'
-#     condition:
-#       # make sure timer not already active
-#       - condition: state
-#         entity_id: timer.loadshedding_slot
-#         state: 'idle'
-#     action:
-#       - service: timer.start
-#         data:
-#           entity_id: timer.loadshedding_slot
-#           duration: "{{ (states('sensor.next_loadshedding_duration')|int + 35) * 60 }}"
-
-#   - alias: stop_loadshedding_slot_timer_grid_power_returned
-#     trigger:
-#       - platform: state
-#         entity_id: sensor.grid_mode
-#         to: '1'  # stable after checking power
-#         for:
-#           seconds: 30
-#     condition:
-#       - condition: template
-#         value_template: >
-#           {{ trigger.from_state is not none and
-#             trigger.from_state.state not in ['unknown','unavailable'] }}
-#       - condition: state
-#         entity_id: timer.loadshedding_slot
-#         state: 'active'
-#     action:
-#       - service: timer.finish
-#         data:
-#           entity_id: timer.loadshedding_slot
+automation:
+  - alias: Start Loadshedding Timer
+    id: "ed1036a6-3399-4e6b-a4ca-889e75da896f"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.loadshedding_active
+        to: 'on'
+    condition:
+      - condition: state
+        entity_id: timer.loadshedding_duration
+        state: 'idle'
+    action:
+      - service: timer.start
+        data:
+          entity_id: timer.loadshedding_duration
+          duration: >-
+            {% set start = state_attr('sensor.eskomsepush', 'events')[0].start | as_datetime %}
+            {% set end = state_attr('sensor.eskomsepush', 'events')[0].end | as_datetime %}
+            {{ end - start }}
 
 #   - alias: Loadshedding forecast notification
 #     initial_state: 'on'

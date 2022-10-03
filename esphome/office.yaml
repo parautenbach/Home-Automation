@@ -43,9 +43,9 @@ sensor:
       # https://community.home-assistant.io/t/debug-esphome-sensors/134688/18
       filters:
         - sliding_window_moving_average:
-            window_size: 15
-            send_every: 15
-            send_first_at: 3
+            window_size: 5
+            send_every: 5
+            send_first_at: 5
         # python snippet:
         # og = pd.read_csv('sensor.officetemperature.csv')
         # og.last_updated = pd.to_datetime(og.last_updated)
@@ -63,9 +63,9 @@ sensor:
       id: office_humidity
       filters:
         - sliding_window_moving_average:
-            window_size: 15
-            send_every: 15
-            send_first_at: 3
+            window_size: 5
+            send_every: 5
+            send_first_at: 5
     update_interval: 60s
   # https://community.home-assistant.io/t/outdoor-lux-sensor/421926
   # hint: use twisted pairs for long cables

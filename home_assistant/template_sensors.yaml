@@ -75,4 +75,4 @@
       state_class: measurement
       attributes:
         # https://community.home-assistant.io/t/recommended-ways-to-manage-devices-and-entities-names/243815/12
-        batteries: "{{ states.sensor | selectattr('attributes.monitor','eq',True) | map(attribute='entity_id') | list }}"
+        batteries: "{{ states.sensor | selectattr('attributes.monitor', 'eq', True) | map(attribute='entity_id') | list }}"

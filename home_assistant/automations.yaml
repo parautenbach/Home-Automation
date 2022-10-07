@@ -201,6 +201,9 @@
     - condition: and
       conditions:
         - condition: state
+          entity_id: binary_sensor.electricity_feed
+          state: "on"
+        - condition: state
           entity_id: binary_sensor.anybody_home
           state: "on"
         # proxy for everybody in bed
@@ -404,6 +407,9 @@
       entity_id: binary_sensor.anybody_home
       to: "on"
   condition:
+    - condition: state
+      entity_id: binary_sensor.electricity_feed
+      state: "on"
     - condition: state
       entity_id: binary_sensor.anybody_home
       state: "on"

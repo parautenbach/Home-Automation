@@ -43,17 +43,17 @@ sensor:
         unique_id: next_loadshedding_start_time
         friendly_name: Next Loadshedding Start Time
         device_class: timestamp
-        value_template: "{{ state_attr('sensor.eskomsepush', 'events')[0].start }}"
+        value_template: "{{ state_attr('sensor.eskomsepush', 'events')[0].start if state_attr('sensor.eskomsepush', 'events') != [] else None }}"
       next_loadshedding_end_time:
         unique_id: next_loadshedding_end_time
         friendly_name: Next Loadshedding End Time
         device_class: timestamp
-        value_template: "{{ state_attr('sensor.eskomsepush', 'events')[0].end }}"
+        value_template: "{{ state_attr('sensor.eskomsepush', 'events')[0].end if state_attr('sensor.eskomsepush', 'events') != [] else None }}"
       next_loadshedding_event:
         unique_id: next_loadshedding_event
         friendly_name: Next Loadshedding Event
-        # icon: gauge
-        value_template: "{{ state_attr('sensor.eskomsepush', 'events')[0].note }}"
+        icon_template: gauge
+        value_template: "{{ state_attr('sensor.eskomsepush', 'events')[0].note if state_attr('sensor.eskomsepush', 'events') != [] else None }}"
       # next_loadshedding_duration:
       #   friendly_name: Next loadshedding duration
       #   unique_id: next_loadshedding_duration
@@ -95,9 +95,13 @@ binary_sensor:
         friendly_name: Loadshedding Active
         device_class: problem
         value_template: >-
-          {% set start = state_attr('sensor.eskomsepush', 'events')[0].start | as_datetime %}
-          {% set end = state_attr('sensor.eskomsepush', 'events')[0].end | as_datetime %}
-          {{ start <= now() <= end }}
+          {%- if state_attr('sensor.eskomsepush', 'events') == [] -%}
+            False
+          {%- else -%}
+            {% set start = state_attr('sensor.eskomsepush', 'events')[0].start | as_datetime %}
+            {% set end = state_attr('sensor.eskomsepush', 'events')[0].end | as_datetime %}
+            {{ start <= now() <= end }}
+          {%- endif -%}
 
 timer:
   loadshedding_duration:

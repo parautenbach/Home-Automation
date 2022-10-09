@@ -1968,19 +1968,25 @@
       double_press_profile: security
 
 - alias: "Dim Pieter's Bedside Lamp"
-  # when rouvé's light is turned off, dim mine
+  # when the one bedlight is turned off, dim the other
   id: "29c4493b-3254-4622-9456-e80ede2cfd99"
   initial_state: true
   trigger:
     - platform: state
       entity_id: light.rouve_bedside
       to: "off"
+      id: "light.pieter_bedside"
+    - platform: state
+      entity_id: light.pieter_bedside
+      to: "off"
+      id: "light.rouve_bedside"
   condition:
     - condition: time
       after: "21:30:00"
       before: "01:00:00"
     - condition: state
-      entity_id: light.pieter_bedside
+      # on if either or both are on
+      entity_id: light.main_bedroom_group
       state: "on"
   action:
     - service: script.turn_on
@@ -1988,7 +1994,7 @@
         entity_id: script.turn_on_light
       data:
         variables:
-          light: light.pieter_bedside
+          light: "{{ trigger.id }}"
           profile: low
 
 - alias: "Toggle Rouvé's Bedside Lamp"

@@ -72,7 +72,7 @@
   sensor:
     - name: SAAQIS PM Coarse
       value_template: >-
-        {% if data in value_json %}
+        {% if value_json is defined and data in value_json %}
           {% set data = (value_json.data | last).channels | selectattr('name', '==', 'PM Coarse') | first %}
           {% if data.valid %}
             {% if data.value >= 0 %}
@@ -89,7 +89,7 @@
       unit_of_measurement: "µg/m³"
     - name: SAAQIS PM 10
       value_template: >-
-        {% if data in value_json %}
+        {% if value_json is defined and data in value_json %}
           {% set data = (value_json.data | last).channels | selectattr('name', '==', 'PM10') | first %}
           {% if data.valid %}
             {% if data.value >= 0 %}
@@ -106,7 +106,7 @@
       unit_of_measurement: "µg/m³"
     - name: SAAQIS PM 2.5
       value_template: >-
-        {% if data in value_json %}
+        {% if value_json is defined and data in value_json %}
           {% set data = (value_json.data | last).channels | selectattr('name', '==', 'PM2.5') | first %}
           {% if data.valid %}
             {% if data.value >= 0 %}
@@ -125,7 +125,7 @@
     # https://cfpub.epa.gov/ncer_abstracts/index.cfm/fuseaction/display.files/fileid/14285
     - name: SAAQIS O3
       value_template: >-
-        {% if data in value_json %}
+        {% if value_json is defined and data in value_json %}
           {% set data = (value_json.data | last).channels | selectattr('name', '==', 'O3') | first %}
           {% if data.valid %}
             {% if data.value >= 0 %}
@@ -145,7 +145,7 @@
       unit_of_measurement: "µg/m³"
     - name: SAAQIS NO2
       value_template: >-
-        {% if data in value_json %}
+        {% if value_json is defined and data in value_json %}
           {% set data = (value_json.data | last).channels | selectattr('name', '==', 'NO2') | first %}
           {% if data.valid %}
             {% if data.value >= 0 %}
@@ -165,7 +165,7 @@
       unit_of_measurement: "µg/m³"
     - name: SAAQIS SO2
       value_template: >-
-        {% if data in value_json %}
+        {% if value_json is defined and data in value_json %}
           {% set data = (value_json.data | last).channels | selectattr('name', '==', 'SO2') | first %}
           {% if data.valid %}
             {% if data.value >= 0 %}

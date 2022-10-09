@@ -1,6 +1,8 @@
 title: Devices
 path: devices
 icon: mdi:devices
+visible:
+  - user: 75cfafa25f36464abc9116845e53f2ca
 badges:
   - entity: binary_sensor.ha_updater
     card_mod:

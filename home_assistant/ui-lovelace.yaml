@@ -7,7 +7,7 @@ views:
   - !include ui-lovelace/internet.yaml
   - !include ui-lovelace/security.yaml
   - !include ui-lovelace/gallery.yaml
-  - !include ui-lovelace/floorplan.yaml
+  # - !include ui-lovelace/floorplan.yaml
   - !include ui-lovelace/devices.yaml
   - !include ui-lovelace/test.yaml
 button_card_templates:

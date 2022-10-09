@@ -1,6 +1,8 @@
 title: Test
 path: test
 icon: mdi:test-tube
+visible:
+  - user: 75cfafa25f36464abc9116845e53f2ca
 badges: []
 cards:
   - type: custom:weather-card

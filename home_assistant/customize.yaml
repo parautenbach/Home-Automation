@@ -1,6 +1,5 @@
 sensor.conditions_temperature:
   friendly_name: Temperature
-  state_class: measurement
 sensor.conditions_humidity:
   friendly_name: Humidity
 camera.security_camera:
@@ -254,12 +253,9 @@ sensor.internet_usage_out:
 sensor.daily_internet_usage_in:
   friendly_name: 'Daily Downloads'
   icon: mdi:download
-  # https://developers.home-assistant.io/docs/core/entity/sensor/
-  state_class: total_increasing
 sensor.daily_internet_usage_out:
   friendly_name: 'Daily Uploads'
   icon: mdi:upload
-  state_class: total_increasing
 sensor.monthly_internet_usage_in:
   friendly_name: 'Monthly Downloads'
   icon: mdi:download
@@ -272,7 +268,6 @@ person.rouve_rautenbach:
   entity_picture: '/local/rouve.jpg'
 sensor.ambient_temperature_filtered:
   friendly_name: Temperature
-  state_class: measurement
 sensor.cape_town:
   friendly_name: Cape Town
 sensor.san_francisco:
@@ -341,8 +336,6 @@ binary_sensor.rhs_garage_occupied:
   icon: mdi:car-connected
 sensor.sun_illuminance:
   friendly_name: Sun Illuminance
-sensor.illuminance:
-  state_class: measurement
 remote.living_room:
   friendly_name: Apple TV Remote
 remote.living_room_remote:
@@ -396,36 +389,27 @@ sensor.owm_pollution_overall_air_quality:
   unit_of_measurement: aqi
 sensor.pieter_bedside_light_button_battery:
   friendly_name: Pieter's Bedside Light Button Battery
-  state_class: measurement
   # https://community.home-assistant.io/t/recommended-ways-to-manage-devices-and-entities-names/243815/12
   monitor: True
 sensor.rouve_bedside_light_button_battery:
   friendly_name: Rouvé's Bedside Light Button Battery
-  state_class: measurement
   monitor: True
 sensor.dining_room_light_button_battery:
   friendly_name: Dining Room Light Button Battery
-  state_class: measurement
   monitor: True
 sensor.living_room_ht_temperature:
   friendly_name: Living Room Temperature
-  state_class: measurement
 sensor.living_room_ht_humidity:
   friendly_name: Living Room Humidity
-  state_class: measurement
 sensor.living_room_ht_battery:
   friendly_name: Living Room H&T Battery
-  state_class: measurement
   monitor: True
 sensor.main_bedroom_ht_temperature:
   friendly_name: Main Bedroom Temperature
-  state_class: measurement
 sensor.main_bedroom_ht_humidity:
   friendly_name: Main Bedroom Humidity
-  state_class: measurement
 sensor.main_bedroom_ht_battery:
   friendly_name: Main Bedroom H&T Battery
-  state_class: measurement
   monitor: True
 light.kitchen_counter:
   friendly_name: Kitchen Counter Lights
@@ -433,13 +417,8 @@ light.kitchen_counter:
 cover.garage_doors:
   device_class: garage
   icon: mdi:garage-variant
-sensor.outside_temperature:
-  state_class: measurement
-sensor.outside_feels_like:
-  state_class: measurement
 sensor.daylight:
   device_class: duration
-  state_class: measurement
   unit_of_measurement: h
 sensor.apple_tv_playing:
   device_class: duration

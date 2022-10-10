@@ -5,14 +5,6 @@ visible:
   - user: 75cfafa25f36464abc9116845e53f2ca
 badges: []
 cards:
-  - type: custom:weather-card
-    name: Stellies
-    entity: weather.openweathermap_hourly
-    current: true
-    details: true
-    forecast: true
-    hourly_forecast: true
-    number_of_forecasts: 5
   - type: custom:hourly-weather
     entity: weather.openweathermap_hourly
     num_segments: 12
@@ -56,7 +48,7 @@ cards:
           - sensor.eskomsepush_calls_remaining
         show_header_toggle: false
       - type: markdown
-        title: Forecast
+        title: Loadshedding Forecast
         content: "{{ states('sensor.loadshedding_forecast') }}"
   - type: history-graph
     title: Proximity
@@ -64,48 +56,14 @@ cards:
     entities:
       - entity: proximity.home
         name: Home
-  - type: statistics-graph
-    title: Power Consumption
-    entities:
-      - sensor.total_electricity_consumption
-    days_to_show: 7
-    chart_type: bar
-    stat_types:
-      - min
-      - max
-      - mean
-      - sum
-  - type: statistics-graph
-    title: Illuminance
-    entities:
-      - entity: sensor.illuminance
-        name: Illuminance
-    days_to_show: 7
-    period: day
-    chart_type: line
-    stat_types:
-      - max
-      - mean
   - type: history-graph
     title: Office Temps
-    hours_to_show: 24
+    hours_to_show: 72
     entities:
       - entity: sensor.office_temperature
         name: Office
       - entity: sensor.living_room_ht_temperature
         name: Living Room
-  - type: statistics-graph
-    title: Internet
-    entities:
-      - sensor.daily_internet_usage_in
-      - sensor.daily_internet_usage_out
-    days_to_show: 7
-    chart_type: bar
-    stat_types:
-      - min
-      - max
-      - mean
-      - sum
   - type: picture-glance
     title: Doorbell Camera
     camera_image: camera.doorbell

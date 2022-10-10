@@ -52,7 +52,7 @@ sensor:
       next_loadshedding_event:
         unique_id: next_loadshedding_event
         friendly_name: Next Loadshedding Event
-        icon_template: gauge
+        icon_template: mdi:gauge
         value_template: "{{ state_attr('sensor.eskomsepush', 'events')[0].note if state_attr('sensor.eskomsepush', 'events') != [] else None }}"
       # next_loadshedding_duration:
       #   friendly_name: Next loadshedding duration

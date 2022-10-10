@@ -42,9 +42,9 @@ cards:
         title: Loadshedding
         entities:
           - binary_sensor.loadshedding_active
-          - sensor.next_loadshedding_event
-          - sensor.next_loadshedding_start_time
-          - sensor.next_loadshedding_end_time
+          - sensor.loadshedding_event
+          - sensor.loadshedding_start_time
+          - sensor.loadshedding_end_time
           - timer.loadshedding_duration
           - sensor.eskomsepush_calls_remaining
         show_header_toggle: false

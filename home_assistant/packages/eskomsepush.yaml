@@ -54,18 +54,6 @@ sensor:
         friendly_name: Loadshedding Event
         icon_template: mdi:gauge
         value_template: "{{ state_attr('sensor.eskomsepush', 'events')[0].note if state_attr('sensor.eskomsepush', 'events') != [] else None }}"
-      # time_till_loadshedding:
-      #   friendly_name: Time until next loadshedding
-      #   unique_id: Time_Until_Next_Loadshedding
-      #   device_class: duration
-      #   unit_of_measurement: m
-      #   value_template: '{{ [( as_timestamp(states.sensor.next_loadshedding_time.state) | int - as_timestamp(now()) | int ) / 60,-1] | max | round(0) }}'
-      # time_till_loadshedding_ends:
-      #   friendly_name: Time until next loadshedding ends
-      #   unique_id: Time_Until_Next_Loadshedding_ends
-      #   device_class: duration
-      #   unit_of_measurement: m
-      #   value_template: '{{ [( as_timestamp(states.sensor.next_loadshedding_time_end.state) | int - as_timestamp(now()) | int ) / 60,-1] | max | round(0) }}'
       loadshedding_duration:
         friendly_name: Loadshedding Duration
         unique_id: loadshedding_duration

@@ -10,8 +10,6 @@ filter:
     - binary_sensor.electricity_feed
     - binary_sensor.internet_connection
     - binary_sensor.foyer_motion_detected
-    - sensor.conditions_temperature  # from homebridge
-    - sensor.conditions_humidity  # from homebridge
     - sensor.living_room_ht_temperature
     - sensor.living_room_ht_humidity
     - sensor.main_bedroom_ht_temperature
@@ -25,7 +23,6 @@ filter:
     - light.front_door
     - light.backyard
     - light.garage
-    - light.led  # from homebridge
     - light.kitchen_counter
     - switch.tivoli_audio
     - cover.main_gate

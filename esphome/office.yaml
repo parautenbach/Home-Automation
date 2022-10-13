@@ -46,7 +46,12 @@ sensor:
             window_size: 10
             send_every: 10
             send_first_at: 10
+        # psql -U homeassistant -d homeassistant
+        # \copy (select state, last_updated from states where entity_id='sensor.office_temperature'         and last_updated >= '2022-10-05 00:00:00' and state not in ('unavailable', 'unknown')) to '/tmp/sensor.officetemperature.csv'          with csv delimiter ',' header;
+        # \copy (select state, last_updated from states where entity_id='sensor.living_room_ht_temperature' and last_updated >= '2022-10-05 00:00:00' and state not in ('unavailable', 'unknown')) to '/tmp/sensor.living_room_ht_temperature.csv' with csv delimiter ',' header;
+        # scp homeassistant:/tmp/*.csv ~/Downloads/
         # python snippet:
+        # import pandas as pd
         # og = pd.read_csv('sensor.officetemperature.csv')
         # og.last_updated = pd.to_datetime(og.last_updated)
         # og.sort_values('last_updated', inplace=True)
@@ -57,7 +62,7 @@ sensor:
         # analysis:
         # https://docs.google.com/spreadsheets/d/1HlYbVSwn8k-v0HDMvln82tImMEC4XfoL9Mw6YFeTd-4/edit#gid=1691333222
         # - lambda: return 1.05*x - 3;
-        - lambda: return x - 1.5;
+        - lambda: return x - 2;
     humidity:
       name: "Office Humidity"
       id: office_humidity

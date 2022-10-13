@@ -435,9 +435,6 @@
   system: linux
   scan_interval: 60
 
-- platform: uptime
-  name: Home Assistant Uptime
-
 # - platform: bitcoin
 #   currency: USD
 #   display_options:
@@ -516,8 +513,6 @@
   name: Dam Levels Last Update
   value_template: "{{ strptime(value.split(',')[0], '%d-%b-%y').date() }}"
   scan_interval: 86400
-
-- platform: moon
 
 # https://community.home-assistant.io/t/prevent-zone-automation-from-triggering-when-briefly-entering-zone/360107/4
 - platform: history_stats

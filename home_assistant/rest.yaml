@@ -1,3 +1,5 @@
+# https://jsoncrack.com/editor
+
 # - resource_template: 'http://weather.sun.ac.za/api/getSonbesie.php?start={{ utcnow() | as_timestamp | int - 300 }}&end={{ utcnow() | as_timestamp | int }}'
 #   method: GET
 #   scan_interval: 300
@@ -104,6 +106,7 @@
           unknown
         {% endif %}
       unit_of_measurement: "µg/m³"
+      device_class: pm10
     - name: SAAQIS PM 2.5
       value_template: >-
         {% if value_json is defined and data in value_json %}
@@ -121,6 +124,7 @@
           unknown
         {% endif %}
       unit_of_measurement: "µg/m³"
+      device_class: pm25
     # https://www2.dmu.dk/atmosphericenvironment/expost/database/docs/ppm_conversion.pdf
     # https://cfpub.epa.gov/ncer_abstracts/index.cfm/fuseaction/display.files/fileid/14285
     - name: SAAQIS O3
@@ -143,6 +147,7 @@
           unknown
         {% endif %}
       unit_of_measurement: "µg/m³"
+      device_class: ozone
     - name: SAAQIS NO2
       value_template: >-
         {% if value_json is defined and data in value_json %}
@@ -163,6 +168,7 @@
           unknown
         {% endif %}
       unit_of_measurement: "µg/m³"
+      device_class: nitrogen_dioxide
     - name: SAAQIS SO2
       value_template: >-
         {% if value_json is defined and data in value_json %}
@@ -183,3 +189,4 @@
           unknown
         {% endif %}
       unit_of_measurement: "µg/m³"
+      device_class: sulphur_dioxide

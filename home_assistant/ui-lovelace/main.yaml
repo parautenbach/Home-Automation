@@ -16,7 +16,7 @@ badges:
                     color: {{ "var(--state-icon-active-color)" if is_state(config.entity, 'on') }} !important;
                   }
   - entity: binary_sensor.foyer_motion_detected
-    name: Foyer Motion
+    name: Foyer
     card_mod:
       style:
         ha-state-label-badge:

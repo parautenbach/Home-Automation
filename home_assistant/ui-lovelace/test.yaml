@@ -5,6 +5,7 @@ visible:
   - user: 75cfafa25f36464abc9116845e53f2ca
 badges:
   - entity: binary_sensor.loadshedding_active
+    name: Loadshedding
 cards:
   - type: custom:hourly-weather
     entity: weather.openweathermap_hourly

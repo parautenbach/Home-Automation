@@ -76,3 +76,36 @@
       attributes:
         # https://community.home-assistant.io/t/recommended-ways-to-manage-devices-and-entities-names/243815/12
         batteries: "{{ states.sensor | selectattr('attributes.monitor', 'eq', True) | map(attribute='entity_id') | list }}"
+
+- sensor:
+    - name: Overall Pollen Risk for Badge
+      state: >-
+        {{ states('sensor.overall_pollen_risk') }}
+      attributes:
+        label: >-
+          {% set mapping = {
+                              1: "Very Low",
+                              2: "Low",
+                              3: "Moderate",
+                              4: "High",
+                              5: "Very High" } %}
+          {% set key = states('sensor.overall_pollen_risk') | int %}
+          {{ mapping[key] if key in mapping else "Unknown" }}
+        color: >-
+          {% set mapping = {
+                              1: "#40b100",
+                              2: "#ffe500",
+                              3: "#ffa800",
+                              4: "#ff5800",
+                              5: "#aa0000" } %}
+          {% set key = states('sensor.overall_pollen_risk') | int %}
+          {{ mapping[key] if key in mapping else "#ffffff" }}
+      icon: >-
+        {% set mapping = {
+                            1: "mdi:gauge-empty",
+                            2: "mdi:gauge-low",
+                            3: "mdi:gauge",
+                            4: "mdi:gauge-full",
+                            5: "mdi:gauge-full" } %}
+        {% set key = states('sensor.overall_pollen_risk') | int %}
+        {{ mapping[key] if key in mapping else "mdi:alert" }}

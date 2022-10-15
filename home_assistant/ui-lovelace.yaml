@@ -420,3 +420,36 @@ button_card_templates:
       service_data:
         entity_id: input_select.selected_remote
         option: "[[[ return variables.selection; ]]]"
+  pollen:
+    size: 20%
+    show_entity_picture: true
+    color_type: card
+    show_label: true
+    label: >
+      [[[
+        var mapping = {
+            1: "Very Low",
+            2: "Low",
+            3: "Moderate",
+            4: "High",
+            5: "Very High"
+        }
+        return mapping[entity.state];
+      ]]]
+
+    styles:
+      grid:
+        - grid-template-areas: '"n" "i" "l"'
+      card:
+        - font-size: 12px
+    state:
+      - value: 1
+        color: "#40b100"
+      - value: 2
+        color: "#ffe500"
+      - value: 3
+        color: "#ffa800"
+      - value: 4
+        color: "#ff5800"
+      - value: 5
+        color: "#aa0000"

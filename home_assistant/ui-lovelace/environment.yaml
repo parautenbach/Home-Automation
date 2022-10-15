@@ -4,12 +4,27 @@ icon: mdi:weather-partly-snowy-rainy
 badges:
   - entity: sensor.living_room_ht_temperature
     name: Living Room
-  - entity: sensor.main_bedroom_ht_temperature
-    name: Main Bedroom
-  - entity: sensor.outside_temperature
-    name: Outside
   - entity: sensor.outside_feels_like
-    name: Feels Like
+    name: Outside
+  - entity: sensor.overall_pollen_risk
+    name: Pollen
+    icon: mdi:flower-pollen-outline
+    card_mod:
+      style:
+        ha-state-label-badge:
+          $:
+            ha-label-badge:
+              $: |
+                .value {
+                    color: {%- set mapping = {
+                                                1: "#40b100",
+                                                2: "#ffe500",
+                                                3: "#ffa800",
+                                                4: "#ff5800",
+                                                5: "#aa0000" } -%}
+                           {%- set key = states('sensor.overall_pollen_risk') | int -%}
+                           {{ mapping[key] if key in mapping else "" }} !important;
+                  }
   # https://community.home-assistant.io/t/hours-of-daylight/59422/
   # https://community.home-assistant.io/t/enhanced-sun-component/63553
   - entity: sensor.daylight_hm
@@ -238,7 +253,87 @@ cards:
           - entity: sensor.dam_levels_last_update
             name: Last Update
   - type: vertical-stack
+    title: Pollen
     cards:
+      - type: gauge
+        name: Overall Pollen Risk
+        entity: sensor.overall_pollen_risk
+        min: 0.5
+        max: 5.5
+        needle: true
+        segments:
+          - from: 0.5
+            color: "#40b100"
+            label: Very Low
+          - from: 1.5
+            color: "#ffe500"
+            label: Low
+          - from: 2.5
+            color: "#ffa800"
+            label: Medium
+          - from: 3.5
+            color: "#ff5800"
+            label: High
+          - from: 4.5
+            color: "#aa0000"
+            label: Very High
+      # todo: maybe another time
+      # - type: custom:button-card
+      #   template: pollen
+      #   entity: sensor.overall_pollen_risk
+      #   # entity_picture: /local/pollen-overall.png
+      #   size: 15%
+      #   card_size: 1
+      #   show_name: false
+      #   label: >
+      #     [[[
+      #       var mapping = {
+      #           1: "Very Low",
+      #           2: "Low",
+      #           3: "Moderate",
+      #           4: "High",
+      #           5: "Very High"
+      #       }
+      #       return entity.attributes.friendly_name + ": " + mapping[entity.state];
+      #     ]]]
+      #   styles:
+      #     grid:
+      #       - grid-template-areas: '"i l"'
+      #       - grid-template-rows: min-content
+      #       - grid-template-columns: 1fr 1fr
+      #     icon:
+      #       # - text-align: right
+      #       # - align-self: right
+      #       - padding-right: 10px
+      #       - padding-left: 80%
+      #     # card:
+      #     #   - font-size: 16px
+      #     card:
+      #       - padding: 1%
+      #     #   - font-size: 12px
+      #     label:
+      #       - align-self: left  # middle
+      #       - justify-self: left  # center
+      #     img_cell:
+      #       - margin: none
+      - type: horizontal-stack
+        cards:
+          - type: custom:button-card
+            template: pollen
+            entity: sensor.tree_pollen
+            # entity_picture: /local/pollen-tree.png
+          - type: custom:button-card
+            template: pollen
+            entity: sensor.grass_pollen
+            # entity_picture: /local/pollen-grass.png
+          - type: custom:button-card
+            template: pollen
+            entity: sensor.weed_pollen
+            # entity_picture: /local/pollen-weed.png
+          - type: custom:button-card
+            template: pollen
+            entity: sensor.mould_spores
+            # entity_picture: /local/pollen-mould.png=
       - type: custom:swipe-card
         parameters:
           autoHeight: true

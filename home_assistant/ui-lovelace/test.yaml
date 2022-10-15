@@ -71,3 +71,14 @@ cards:
     entities:
       - binary_sensor.doorbell_rang
       - binary_sensor.doorbell_motion_detected
+  - type: vertical-stack
+    name: Pollen
+    cards:
+      - type: entities
+        entities:
+          - sensor.overall_pollen_risk
+          - sensor.overall_pollen_risk_for_badge
+          - sensor.tree_pollen
+          - sensor.grass_pollen
+          - sensor.weed_pollen
+          - sensor.mould_spores

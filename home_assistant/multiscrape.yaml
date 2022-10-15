@@ -1,0 +1,84 @@
+- resource: https://pollencount.co.za/
+  scan_interval: 21600  # 60*60*6 or 4 updates per day
+  timeout: 30
+  sensor:
+    - name: Overall Pollen Risk
+      icon: mdi:flower-pollen-outline
+      select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(2) > div"
+      attribute: "class"
+      value_template: >-
+        {# set value = ["pollen-darkorange"] #}
+        {% set mapping = {
+                            "pollen-green": 1,
+                            "pollen-yellow": 2,
+                            "pollen-lightorange": 3,
+                            "pollen-darkorange": 4,
+                            "pollen-red": 5 } %}
+        {% set key = value[0] %}
+        {{ mapping[key] if key in mapping else "unavailable" }}
+      on_error:
+        value: last
+    - name: Tree Pollen
+      icon: mdi:pine-tree
+      select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(3) > div"
+      attribute: "class"
+      value_template: >-
+        {# set value = ["pollen-darkorange"] #}
+        {% set mapping = {
+                            "pollen-green": 1,
+                            "pollen-yellow": 2,
+                            "pollen-lightorange": 3,
+                            "pollen-darkorange": 4,
+                            "pollen-red": 5 } %}
+        {% set key = value[0] %}
+        {{ mapping[key] if key in mapping else "unavailable" }}
+      on_error:
+        value: last
+    - name: Grass Pollen
+      icon: mdi:grass
+      select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(4) > div"
+      attribute: "class"
+      value_template: >-
+        {# set value = ["pollen-darkorange"] #}
+        {% set mapping = {
+                            "pollen-green": 1,
+                            "pollen-yellow": 2,
+                            "pollen-lightorange": 3,
+                            "pollen-darkorange": 4,
+                            "pollen-red": 5 } %}
+        {% set key = value[0] %}
+        {{ mapping[key] if key in mapping else "unavailable" }}
+      on_error:
+        value: last
+    - name: Weed Pollen
+      icon: mdi:sprout
+      select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(5) > div"
+      attribute: "class"
+      value_template: >-
+        {# set value = ["pollen-darkorange"] #}
+        {% set mapping = {
+                            "pollen-green": 1,
+                            "pollen-yellow": 2,
+                            "pollen-lightorange": 3,
+                            "pollen-darkorange": 4,
+                            "pollen-red": 5 } %}
+        {% set key = value[0] %}
+        {{ mapping[key] if key in mapping else "unavailable" }}
+      on_error:
+        value: last
+    - name: Mould Spores
+      icon: mdi:grain
+      select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(6) > div"
+      attribute: "class"
+      value_template: >-
+        {# set value = ["pollen-darkorange"] #}
+        {% set mapping = {
+                            "pollen-green": 1,
+                            "pollen-yellow": 2,
+                            "pollen-lightorange": 3,
+                            "pollen-darkorange": 4,
+                            "pollen-red": 5 } %}
+        {% set key = value[0] %}
+        {{ mapping[key] if key in mapping else "unavailable" }}
+      on_error:
+        value: last

@@ -108,7 +108,7 @@ button_card_templates:
               - margin-bottom: -1ex
               - color: >
                   [[[
-                    if (states[`${entity.entity_id}`.replace('light.', 'timer.') + '_timer'].state == 'idle')
+                    if (states[`${entity.entity_id}`.replace("light.", "timer.") + "_timer"].state == "idle")
                       return "var(--paper-item-icon-color)";
                     else
                       return "var(--custom-color-red)";
@@ -140,7 +140,7 @@ button_card_templates:
       above_threshold: |
         [[[
           let threshold = 255;
-          if (entity.state === 'on' && entity.attributes.rgb_color) {
+          if (entity.state === "on" && entity.attributes.rgb_color) {
             let rgb_sum = entity.attributes.rgb_color.reduce((a, b) => a + b, 0);
             return rgb_sum >= 3 * threshold;
           }
@@ -152,7 +152,7 @@ button_card_templates:
     label: >
       [[[
         var b = entity.attributes.brightness;
-        return parseInt(b ? (b/255)*100 : '0') + '%';
+        return parseInt(b ? (b/255)*100 : "0") + "%";
       ]]]
     styles:
       name:
@@ -165,17 +165,17 @@ button_card_templates:
       icon:
         - color: |
             [[[
-              if (variables.above_threshold) { // above threshold == white here
-                return 'var(--paper-item-icon-active-color)';
-              } else if (entity.state === 'on') {
-                return 'var(--button-card-light-color)'; // already includes brightness/color support
-              } else if (entity.state === 'off') { // off
-                return 'var(--paper-item-icon-color)';
+              if (variables.above_threshold) {  // above threshold == white here
+                return "var(--paper-item-icon-active-color)";
+              } else if (entity.state === "on") {
+                return "var(--button-card-light-color)";  // already includes brightness/color support
+              } else if (entity.state === "off") {  // off
+                return "var(--paper-item-icon-color)";
               } else { // unavailable
-                return 'var(--primary-text-color)';
+                return "var(--primary-text-color)";
               }
             ]]]
-        - filter: '[[[ return variables.above_threshold ? `brightness(${(entity.attributes.brightness/255 + 1)/2})` : null; ]]]'
+        - filter: "[[[ return variables.above_threshold ? `brightness(${(entity.attributes.brightness/255 + 1)/2})` : null; ]]]"
       card:
         - font-size: 12px
       grid:
@@ -243,7 +243,7 @@ button_card_templates:
             state:
               - color: >
                   [[[
-                    if (states[`${entity.entity_id}`.replace('light.', 'timer.') + '_timer'].state == 'idle')
+                    if (states[`${entity.entity_id}`.replace("light.", "timer.") + "_timer"].state == "idle")
                       return "var(--paper-item-icon-color)";
                     else
                       return "var(--custom-color-red)";
@@ -298,7 +298,7 @@ button_card_templates:
               - margin-bottom: -1ex
               - color: >
                   [[[
-                    if (states[`${entity.entity_id}`.replace('cover.', 'timer.') + '_timer'].state == 'idle')
+                    if (states[`${entity.entity_id}`.replace("cover.", "timer.") + "_timer"].state == "idle")
                       return "var(--paper-item-icon-color)";
                     else
                       return "var(--custom-color-red)";
@@ -337,13 +337,13 @@ button_card_templates:
       - operator: template
         value: >
           [[[
-            return states[`${variables.occupancy_entity}`].state == 'on'
+            return states[`${variables.occupancy_entity}`].state == "on"
           ]]]
         color: var(--paper-item-icon-active-color)
       - operator: template
         value: >
           [[[
-            return states[`${variables.occupancy_entity}`].state == 'off'
+            return states[`${variables.occupancy_entity}`].state == "off"
           ]]]
         color: var(--paper-item-icon-color)
       - value: 'unavailable'
@@ -408,9 +408,9 @@ button_card_templates:
         - color: |
             [[[
               if (entity.state == variables.selection) {
-                return 'var(--paper-item-icon-active-color)';
+                return "var(--paper-item-icon-active-color)";
               } else  {
-                return 'var(--paper-item-icon-color)';
+                return "var(--paper-item-icon-color)";
               }
             ]]]
     tap_action:

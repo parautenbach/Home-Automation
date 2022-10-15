@@ -908,6 +908,7 @@ shutdown_remote_host:
     - service: persistent_notification.create
       data:
         title: System
+        # https://community.home-assistant.io/t/work-with-triggered-by-in-automations/400352/8
         message: >-
           {% set user_id = states.script.shutdown_remote_host.context.user_id %}
           {% set triggered_by = (states.person | selectattr('attributes.user_id','==', user_id)) | list %}

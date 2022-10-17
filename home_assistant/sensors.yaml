@@ -26,6 +26,7 @@
 - platform: command_line
   name: server_cpu_temp
   command: "cat /sys/class/thermal/thermal_zone0/temp"
+  device_class: temperature
   unit_of_measurement: "°C"
   value_template: '{{ value | multiply(0.001) | round(2)  }}'
   scan_interval: 60
@@ -268,9 +269,9 @@
         {% endif %}
     outside_temperature:
       friendly_name: "Outside Temperature"
-      device_class: temperature
       value_template: >-
         {{ state_attr('weather.openweathermap_hourly', 'temperature') | float }}
+      device_class: temperature
       unit_of_measurement: "°C"
       icon_template: >-
         mdi:thermometer
@@ -278,6 +279,7 @@
       friendly_name: "Outside Temperature Feels Like"
       value_template: >-
         {{ states('sensor.openweathermap_feels_like_temperature') | round(1)  }}
+      device_class: temperature
       unit_of_measurement: "°C"
       icon_template: >-
         mdi:thermometer

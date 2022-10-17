@@ -109,9 +109,8 @@ automation:
   - alias: Start Loadshedding Timer
     id: "ed1036a6-3399-4e6b-a4ca-889e75da896f"
     trigger:
-      - platform: state
-        entity_id: binary_sensor.loadshedding_active
-        to: 'on'
+      - platform: time
+        at: sensor.loadshedding_start_time
     condition:
       - condition: state
         entity_id: timer.loadshedding_duration

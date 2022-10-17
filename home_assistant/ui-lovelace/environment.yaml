@@ -9,6 +9,7 @@ badges:
   - entity: sensor.overall_pollen_risk
     name: Pollen
     icon: mdi:flower-pollen-outline
+    # maybe: https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/1310
     card_mod:
       style:
         ha-state-label-badge:

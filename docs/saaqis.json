@@ -1,0 +1,5801 @@
+{
+  "data": [
+    {
+      "datetime": "2022-10-16T18:43:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.1,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.4,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 41.6,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.8,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 291.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.87,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 49,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.47,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T18:44:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.133,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.217,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 39.933,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.77,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 221.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.8,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 49,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.43,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T18:45:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.217,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 38.1,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.7,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 211,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.8,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 49,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.4,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T18:46:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.3,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 37.6,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.43,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 197.67,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.8,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 49,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.43,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T18:47:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.3,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 36.167,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.6,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 207.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.8,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 49,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.4,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T18:48:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.3,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 34.133,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.8,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 304,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.9,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 49,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.4,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T18:49:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.3,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 36.167,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.53,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 306,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.83,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 49,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.4,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T18:50:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.267,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 37.8,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.8,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 131.67,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.8,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 49.67,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.4,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T18:51:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.2,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 37.617,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.9,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 22.67,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.8,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 49.33,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.4,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T18:52:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.2,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 38.2,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.5,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 30.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.77,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 49,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.4,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T18:53:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.2,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 37.55,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.5,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 40,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.7,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 49.33,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.4,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T18:54:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.15,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 37.567,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.43,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 26,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.7,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 50,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.4,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T18:55:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.1,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 39.25,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.5,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 23.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.7,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 50,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.4,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T18:56:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.1,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 38.667,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.43,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 23.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.7,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 50,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.47,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T18:57:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.1,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 37.933,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.7,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 228.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.7,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 49.67,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.5,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T18:58:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.1,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 38.767,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.6,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 317.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.7,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 50,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.6,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T18:59:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.1,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 37.367,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.9,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 315,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.67,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 50,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.67,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:00:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.167,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 34.5,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.9,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 295.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.57,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 50,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.7,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:01:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.2,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 35.483,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.8,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 273.67,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.5,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 50.33,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.77,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:02:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.283,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 36.1,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 1,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 289,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.6,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.77,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:03:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.3,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.033,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 36.15,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.87,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 303,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.53,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.77,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:04:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.267,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.2,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 36.3,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.7,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 241.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.5,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.77,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:05:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.2,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.433,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 33.867,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.37,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 225.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.5,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.73,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:06:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.183,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.633,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 35.55,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.37,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 187,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.5,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.77,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:07:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.2,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.683,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 37.067,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.37,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 118,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.5,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.73,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:08:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.2,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.5,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 37.633,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.43,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 21.67,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.47,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.73,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:09:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.2,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.367,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 39.1,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.5,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 137.67,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.4,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.77,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:10:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.25,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.2,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 38.417,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.5,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 270.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.4,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.77,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:11:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.267,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.117,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 38.817,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.5,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 272.67,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.3,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.7,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:12:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.3,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 38.867,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.3,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 273,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.3,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.73,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:13:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.383,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 38.067,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.43,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 175.67,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.3,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.8,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:14:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.4,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 37.933,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.37,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 120.67,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.3,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.8,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:15:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.4,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 36.283,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 1,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 205.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.3,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.8,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:16:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.417,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.15,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 31.55,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.5,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 185,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.3,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.8,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:17:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.4,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 1.083,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 27.917,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 1,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 228.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.3,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 50.33,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.77,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:18:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.4,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 1.517,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 30.833,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.63,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 216.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.23,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 50.67,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.73,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:19:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.4,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 1.533,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 33.217,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.8,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 154,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.2,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.73,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:20:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.317,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 1.533,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 35.617,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.8,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 129,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.2,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.77,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:21:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.3,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 1.533,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 37.117,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.6,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 195.67,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.2,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.8,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:22:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.3,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 1.46,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 37.483,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.5,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 181.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.17,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.8,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:23:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.3,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 1.517,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 33.717,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 1,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 222.67,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.1,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.8,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:24:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.3,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.867,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 32.583,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.7,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 174,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.1,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.8,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:25:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.3,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.233,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 34.3,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.5,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 171,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23.03,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.8,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:26:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.3,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.15,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 32.4,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.6,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 209.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.8,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:27:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.3,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.267,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 32.05,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.6,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 190.67,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.8,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:28:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.3,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.533,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 33.583,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.7,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 198,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 23,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.73,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:29:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.35,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.8,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 33.733,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.53,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 206.67,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 22.97,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51.33,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.8,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:30:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.433,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 5.617,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 22.767,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 1,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 220,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 22.9,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 51.67,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.8,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:31:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.567,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 23.917,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 15.067,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 1,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 237.67,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 22.87,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 52,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.8,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:32:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.667,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 9.483,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 19.183,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.8,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 255.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 22.8,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 52,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.8,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:33:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.717,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 5.783,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 26.033,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 1.13,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 248.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 22.8,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 52,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.8,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:34:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.717,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 6.1,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 29,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 1.17,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 211.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 22.73,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 52,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.83,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:35:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.767,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 5.5,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 31.117,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.9,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 231,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 22.6,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 52,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.9,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:36:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.7,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 5,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 28.983,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 1.23,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 191.33,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 22.6,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 52,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.9,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:37:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.7,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 4.38,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 29.4,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.8,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 272,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 22.5,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 52.67,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.9,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:38:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.7,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 3.75,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 29.883,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 1.17,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 245,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 22.47,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 53,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 996.97,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:39:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.633,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 2.917,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 31.483,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.7,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 161.67,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 22.33,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 53,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 997,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:40:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.5,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 2.033,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 34.067,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.97,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 219,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 22.3,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 53.67,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 997,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:41:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.35,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 1.183,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 35.017,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 1.7,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 237.67,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 22.13,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 54.33,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 997,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:42:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.25,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.983,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 35.3,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.97,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 177,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 22.03,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 55,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 997,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    },
+    {
+      "datetime": "2022-10-16T19:43:00+02:00",
+      "channels": [
+        {
+          "status": 1,
+          "value": 2.133,
+          "valid": true,
+          "value_date": null,
+          "id": 1,
+          "units": "ppb",
+          "name": "SO2"
+        },
+        {
+          "status": 1,
+          "value": 0.717,
+          "valid": true,
+          "value_date": null,
+          "id": 2,
+          "units": "ppb",
+          "name": "NO2"
+        },
+        {
+          "status": 1,
+          "value": 2,
+          "valid": true,
+          "value_date": null,
+          "id": 3,
+          "units": "ppb",
+          "name": "NO"
+        },
+        {
+          "status": 0,
+          "value": -9999,
+          "valid": false,
+          "value_date": null,
+          "id": 4,
+          "units": "ppb",
+          "name": "NOX"
+        },
+        {
+          "status": 1,
+          "value": 33.483,
+          "valid": true,
+          "value_date": null,
+          "id": 5,
+          "units": "ppb",
+          "name": "O3"
+        },
+        {
+          "status": 1,
+          "value": 0.87,
+          "valid": true,
+          "value_date": null,
+          "id": 23,
+          "units": "m/s",
+          "name": "Amb Wspeed"
+        },
+        {
+          "status": 1,
+          "value": 172,
+          "valid": true,
+          "value_date": null,
+          "id": 25,
+          "units": "Deg",
+          "name": "Amb WDirection"
+        },
+        {
+          "status": 1,
+          "value": 21.9,
+          "valid": true,
+          "value_date": null,
+          "id": 27,
+          "units": "C°",
+          "name": "Amb Temp"
+        },
+        {
+          "status": 1,
+          "value": 55.67,
+          "valid": true,
+          "value_date": null,
+          "id": 28,
+          "units": "%",
+          "name": "Amb RelHum"
+        },
+        {
+          "status": 1,
+          "value": 997,
+          "valid": true,
+          "value_date": null,
+          "id": 30,
+          "units": "mBar",
+          "name": "Amb Pressure"
+        }
+      ]
+    }
+  ],
+  "summary": [],
+  "count": 61
+}

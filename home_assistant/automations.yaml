@@ -2097,7 +2097,7 @@
   id: "5ff59069-6f3c-4f9d-bc66-b50bea8e184e"
   initial_state: true
   variables:
-    threshold: 15
+    threshold: 5
     # https://community.home-assistant.io/t/variable-in-automation-not-working-as-expected/431591/2
     monitored_batteries: >-
       {{ states.sensor

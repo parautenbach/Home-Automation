@@ -427,6 +427,9 @@
     - platform: state
       entity_id: binary_sensor.anybody_home
       to: "on"
+    # kind of redundant, since there's a check every minute (above)
+    - platform: homeassistant
+      event: start
   condition:
     - condition: state
       entity_id: binary_sensor.electricity_feed

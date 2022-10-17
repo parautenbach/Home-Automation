@@ -667,3 +667,11 @@ cards:
           - entity: media_player.living_room
             name: Apple TV
         hours_to_show: 24
+      - type: statistics-graph
+        entities:
+          - sensor.apple_tv_playing
+        days_to_show: 7
+        period: day
+        chart_type: bar
+        stat_types:
+          - max

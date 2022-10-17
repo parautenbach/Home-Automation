@@ -23,7 +23,7 @@ badges:
                                                 3: "#ffa800",
                                                 4: "#ff5800",
                                                 5: "#aa0000" } -%}
-                           {%- set key = states('sensor.overall_pollen_risk') | int -%}
+                           {%- set key = states('sensor.overall_pollen_risk') | int(0) -%}
                            {{ mapping[key] if key in mapping else "" }} !important;
                   }
   - entity: sensor.owm_pollution_overall_air_quality

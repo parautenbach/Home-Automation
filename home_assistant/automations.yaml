@@ -1910,6 +1910,8 @@
               group: "system-general"
               url: homeassistant://navigate/lovelace/devices
       else:
+        - service: input_boolean.turn_on
+          entity_id: input_boolean.server_shut_down_automatically
         - service: homeassistant.update_entity
           target:
             entity_id: binary_sensor.electricity_feed

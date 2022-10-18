@@ -89,7 +89,7 @@
                               3: "Moderate",
                               4: "High",
                               5: "Very High" } %}
-          {% set key = states('sensor.overall_pollen_risk') | int %}
+          {% set key = states('sensor.overall_pollen_risk') | int(0) %}
           {{ mapping[key] if key in mapping else "Unknown" }}
         color: >-
           {% set mapping = {
@@ -98,7 +98,7 @@
                               3: "#ffa800",
                               4: "#ff5800",
                               5: "#aa0000" } %}
-          {% set key = states('sensor.overall_pollen_risk') | int %}
+          {% set key = states('sensor.overall_pollen_risk') | int(0) %}
           {{ mapping[key] if key in mapping else "#ffffff" }}
       icon: >-
         {% set mapping = {
@@ -107,5 +107,5 @@
                             3: "mdi:gauge",
                             4: "mdi:gauge-full",
                             5: "mdi:gauge-full" } %}
-        {% set key = states('sensor.overall_pollen_risk') | int %}
+        {% set key = states('sensor.overall_pollen_risk') | int(0) %}
         {{ mapping[key] if key in mapping else "mdi:alert" }}

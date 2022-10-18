@@ -150,7 +150,10 @@
             {% set data = data_list | first %}
             {% if data.valid %}
               {% if data.value >= 0 %}
-                {{ data.value }}
+                {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
+                {% set const = 12.187 %}
+                {% set molecular_weight = 48 %}
+                {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
               {% else %}
                 unknown
               {% endif %}
@@ -173,7 +176,10 @@
             {% set data = data_list | first %}
             {% if data.valid %}
               {% if data.value >= 0 %}
-                {{ data.value }}
+                {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
+                {% set const = 12.187 %}
+                {% set molecular_weight = 46.0055 %}
+                {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
               {% else %}
                 unknown
               {% endif %}
@@ -219,7 +225,10 @@
             {% set data = data_list | first %}
             {% if data.valid %}
               {% if data.value >= 0 %}
-                {{ data.value }}
+                {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
+                {% set const = 12.187 %}
+                {% set molecular_weight = 64.066 %}
+                {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
               {% else %}
                 unknown
               {% endif %}

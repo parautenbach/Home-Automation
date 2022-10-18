@@ -72,74 +72,74 @@
   scan_interval: 600  # 10 min
   timeout: 15
   sensor:
-    - name: SAAQIS PM Coarse
-      value_template: >-
-        {% if value_json is defined and "data" in value_json %}
-          {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'PM Coarse') | list %}
-          {% if data_list != [] %}
-            {% set data = data_list | first %}
-            {% if data.valid %}
-              {% if data.value >= 0 %}
-                {{ data.value }}
-              {% else %}
-                unknown
-              {% endif %}
-            {% else %}
-              unknown
-            {% endif %}
-          {% else %}
-            unknown
-          {% endif %}
-        {% else %}
-          unknown
-        {% endif %}
-      unit_of_measurement: "µg/m³"
-    - name: SAAQIS PM 10
-      value_template: >-
-        {% if value_json is defined and "data" in value_json %}
-          {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'PM10') | list %}
-          {% if data_list != [] %}
-            {% set data = data_list | first %}
-            {% if data.valid %}
-              {% if data.value >= 0 %}
-                {{ data.value }}
-              {% else %}
-                unknown
-              {% endif %}
-            {% else %}
-              unknown
-            {% endif %}
-          {% else %}
-            unknown
-          {% endif %}
-        {% else %}
-          unknown
-        {% endif %}
-      device_class: pm10
-      unit_of_measurement: "µg/m³"
-    - name: SAAQIS PM 2.5
-      value_template: >-
-        {% if value_json is defined and "data" in value_json %}
-          {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'PM2.5') | list %}
-          {% if data_list != [] %}
-            {% set data = data_list | first %}
-            {% if data.valid %}
-              {% if data.value >= 0 %}
-                {{ data.value }}
-              {% else %}
-                unknown
-              {% endif %}
-            {% else %}
-              unknown
-            {% endif %}
-          {% else %}
-            unknown
-          {% endif %}
-        {% else %}
-          unknown
-        {% endif %}
-      device_class: pm25
-      unit_of_measurement: "µg/m³"
+    # - name: SAAQIS PM Coarse
+    #   value_template: >-
+    #     {% if value_json is defined and "data" in value_json %}
+    #       {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'PM Coarse') | list %}
+    #       {% if data_list != [] %}
+    #         {% set data = data_list | first %}
+    #         {% if data.valid %}
+    #           {% if data.value >= 0 %}
+    #             {{ data.value }}
+    #           {% else %}
+    #             unknown
+    #           {% endif %}
+    #         {% else %}
+    #           unknown
+    #         {% endif %}
+    #       {% else %}
+    #         unknown
+    #       {% endif %}
+    #     {% else %}
+    #       unknown
+    #     {% endif %}
+    #   unit_of_measurement: "µg/m³"
+    # - name: SAAQIS PM 10
+    #   value_template: >-
+    #     {% if value_json is defined and "data" in value_json %}
+    #       {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'PM10') | list %}
+    #       {% if data_list != [] %}
+    #         {% set data = data_list | first %}
+    #         {% if data.valid %}
+    #           {% if data.value >= 0 %}
+    #             {{ data.value }}
+    #           {% else %}
+    #             unknown
+    #           {% endif %}
+    #         {% else %}
+    #           unknown
+    #         {% endif %}
+    #       {% else %}
+    #         unknown
+    #       {% endif %}
+    #     {% else %}
+    #       unknown
+    #     {% endif %}
+    #   device_class: pm10
+    #   unit_of_measurement: "µg/m³"
+    # - name: SAAQIS PM 2.5
+    #   value_template: >-
+    #     {% if value_json is defined and "data" in value_json %}
+    #       {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'PM2.5') | list %}
+    #       {% if data_list != [] %}
+    #         {% set data = data_list | first %}
+    #         {% if data.valid %}
+    #           {% if data.value >= 0 %}
+    #             {{ data.value }}
+    #           {% else %}
+    #             unknown
+    #           {% endif %}
+    #         {% else %}
+    #           unknown
+    #         {% endif %}
+    #       {% else %}
+    #         unknown
+    #       {% endif %}
+    #     {% else %}
+    #       unknown
+    #     {% endif %}
+    #   device_class: pm25
+    #   unit_of_measurement: "µg/m³"
     # https://www2.dmu.dk/atmosphericenvironment/expost/database/docs/ppm_conversion.pdf
     # https://cfpub.epa.gov/ncer_abstracts/index.cfm/fuseaction/display.files/fileid/14285
     - name: SAAQIS O3

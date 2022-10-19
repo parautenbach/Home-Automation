@@ -368,7 +368,7 @@ cards:
         show_header_toggle: false
         footer:
           type: custom:mini-graph-card
-          name: Server Load
+          name: Load
           entities:
             - entity: sensor.load_1m
               name: 1 min

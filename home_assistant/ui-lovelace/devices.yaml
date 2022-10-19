@@ -72,8 +72,8 @@ cards:
           # https://community.home-assistant.io/t/lovelace-button-card/65981/791
           # https://community.home-assistant.io/t/lovelace-button-card/65981/798
           # https://community.home-assistant.io/t/fun-with-custom-button-card/238450
-          - padding-right: 10px
-          - padding-left: 80%
+          - padding-right: 5px
+          - padding-left: 85%
         name:
           - color: var(--paper-item-icon-color)
           - justify-self: start
@@ -83,7 +83,7 @@ cards:
         grid:
           - grid-template-areas: '"i n"'
           - grid-template-rows: min-content
-          - grid-template-columns: 1fr 1fr
+          - grid-template-columns: 4fr 5fr
       tap_action:
         action: none
       hold_action:

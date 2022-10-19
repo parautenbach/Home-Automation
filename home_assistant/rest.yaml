@@ -72,6 +72,7 @@
   scan_interval: 600  # 10 min
   timeout: 15
   sensor:
+    # these don't seem to be available anymore
     # - name: SAAQIS PM Coarse
     #   value_template: >-
     #     {% if value_json is defined and "data" in value_json %}
@@ -142,6 +143,7 @@
     #   unit_of_measurement: "µg/m³"
     # https://www2.dmu.dk/atmosphericenvironment/expost/database/docs/ppm_conversion.pdf
     # https://cfpub.epa.gov/ncer_abstracts/index.cfm/fuseaction/display.files/fileid/14285
+    # https://www.breeze-technologies.de/blog/air-pollution-how-to-convert-between-mgm3-%C2%B5gm3-ppm-ppb/
     - name: SAAQIS O3
       value_template: >-
         {% if value_json is defined and "data" in value_json %}
@@ -202,7 +204,10 @@
             {% set data = data_list | first %}
             {% if data.valid %}
               {% if data.value >= 0 %}
-                {{ data.value }}
+                {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
+                {% set const = 12.187 %}
+                {% set molecular_weight = 64.066 %}
+                {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
               {% else %}
                 unknown
               {% endif %}
@@ -225,10 +230,7 @@
             {% set data = data_list | first %}
             {% if data.valid %}
               {% if data.value >= 0 %}
-                {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
-                {% set const = 12.187 %}
-                {% set molecular_weight = 64.066 %}
-                {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
+                {{ data.value }}
               {% else %}
                 unknown
               {% endif %}

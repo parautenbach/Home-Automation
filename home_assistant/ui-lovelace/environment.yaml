@@ -377,9 +377,9 @@ cards:
             entities:
               - entity: sensor.owm_pollution_fine_particles_pm2_5
                 name: OWM
-              - entity: sensor.saaqis_pm_2_5
-                name: SAAQIS
-                y_axis: secondary
+              # - entity: sensor.saaqis_pm_2_5
+              #   name: SAAQIS
+              #   y_axis: secondary
             lower_bound: 0
             hours_to_show: 24
             hour24: true
@@ -394,9 +394,9 @@ cards:
             entities:
               - entity: sensor.owm_pollution_coarse_particles_pm10
                 name: OWM
-              - entity: sensor.saaqis_pm_10
-                name: SAAQIS
-                y_axis: secondary
+              # - entity: sensor.saaqis_pm_10
+              #   name: SAAQIS
+              #   y_axis: secondary
             lower_bound: 0
             hours_to_show: 24
             hour24: true
@@ -547,16 +547,16 @@ cards:
             type: custom:multiple-entity-row
             name: PM2.5
             state_header: OWM
-            entities:
-              - entity: sensor.saaqis_pm_2_5
-                name: SAAQIS
+            # entities:
+            #   - entity: sensor.saaqis_pm_2_5
+            #     name: SAAQIS
           - entity: sensor.owm_pollution_coarse_particles_pm10
             type: custom:multiple-entity-row
             name: PM10
             state_header: OWM
-            entities:
-              - entity: sensor.saaqis_pm_10
-                name: SAAQIS
+            # entities:
+            #   - entity: sensor.saaqis_pm_10
+            #     name: SAAQIS
           - entity: sensor.owm_pollution_nitrogen_dioxide_no2
             type: custom:multiple-entity-row
             name: NO₂

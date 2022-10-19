@@ -811,7 +811,7 @@ fade_light:
     - service: system_log.write
       data:
         message: "transition_duration: {{ transition_duration }}"
-        level: debug  # make debug
+        level: debug
     - service: system_log.write
       data:
         message: "step_pct: {{ step_pct }}"

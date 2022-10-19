@@ -66,6 +66,19 @@ cards:
         name: Office
       - entity: sensor.living_room_ht_temperature
         name: Living Room
+  - type: history-graph
+    title: Outside Temps
+    hours_to_show: 72
+    entities:
+      - entity: sensor.outside_feels_like
+      - entity: sensor.outside_temperature
+      - entity: sensor.saaqis_ambient_temperature
+  - type: history-graph
+    title: Inside vs Outside
+    hours_to_show: 72
+    entities:
+      - entity: sensor.saaqis_ambient_temperature
+      - entity: sensor.office_temperature
   - type: picture-glance
     title: Doorbell Camera
     camera_image: camera.doorbell

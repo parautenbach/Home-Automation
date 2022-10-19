@@ -14,7 +14,7 @@
                             "pollen-lightorange": 3,
                             "pollen-darkorange": 4,
                             "pollen-red": 5 } %}
-        {% set key = value[0] %}
+        {% set key = value | first %}
         {{ mapping[key] if key in mapping else "unavailable" }}
       on_error:
         value: last
@@ -30,7 +30,7 @@
                             "pollen-lightorange": 3,
                             "pollen-darkorange": 4,
                             "pollen-red": 5 } %}
-        {% set key = value[0] %}
+        {% set key = value | first %}
         {{ mapping[key] if key in mapping else "unavailable" }}
       on_error:
         value: last
@@ -46,7 +46,7 @@
                             "pollen-lightorange": 3,
                             "pollen-darkorange": 4,
                             "pollen-red": 5 } %}
-        {% set key = value[0] %}
+        {% set key = value | first %}
         {{ mapping[key] if key in mapping else "unavailable" }}
       on_error:
         value: last
@@ -62,7 +62,7 @@
                             "pollen-lightorange": 3,
                             "pollen-darkorange": 4,
                             "pollen-red": 5 } %}
-        {% set key = value[0] %}
+        {% set key = value | first %}
         {{ mapping[key] if key in mapping else "unavailable" }}
       on_error:
         value: last
@@ -78,7 +78,7 @@
                             "pollen-lightorange": 3,
                             "pollen-darkorange": 4,
                             "pollen-red": 5 } %}
-        {% set key = value[0] %}
+        {% set key = value | first %}
         {{ mapping[key] if key in mapping else "unavailable" }}
       on_error:
         value: last

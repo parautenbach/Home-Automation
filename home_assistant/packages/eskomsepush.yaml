@@ -95,8 +95,8 @@ binary_sensor:
           {%- if state_attr('sensor.eskomsepush', 'events') == [] -%}
             False
           {%- else -%}
-            {% set start = state_attr('sensor.eskomsepush', 'events')[0].start | as_datetime %}
-            {% set end = state_attr('sensor.eskomsepush', 'events')[0].end | as_datetime %}
+            {% set start = (state_attr('sensor.eskomsepush', 'events') | first).start | as_datetime %}
+            {% set end = (state_attr('sensor.eskomsepush', 'events') | first).end | as_datetime %}
             {{ start <= now() <= end }}
           {%- endif -%}
 
@@ -120,8 +120,8 @@ automation:
         data:
           entity_id: timer.loadshedding_duration
           duration: >-
-            {% set start = state_attr('sensor.eskomsepush', 'events')[0].start | as_datetime %}
-            {% set end = state_attr('sensor.eskomsepush', 'events')[0].end | as_datetime %}
+            {% set start = (state_attr('sensor.eskomsepush', 'events') | first).start | as_datetime %}
+            {% set end = (state_attr('sensor.eskomsepush', 'events') | first).end | as_datetime %}
             {{ end - start }}
 
 #   - alias: Loadshedding forecast notification

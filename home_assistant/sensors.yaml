@@ -251,19 +251,19 @@
     weather_forecast_conditions_tomorrow:
       friendly_name: "Weather Conditions Tomorrow"
       value_template: >-
-        {{ state_attr('weather.openweathermap_daily', 'forecast')[0]['condition'] }}
+        {{ (state_attr('weather.openweathermap_daily', 'forecast') | first)['condition'] }}
       icon_template: >-
-        {% if state_attr('weather.openweathermap_daily', 'forecast')[0]['condition'] == 'partlycloudy' %}
+        {% if (state_attr('weather.openweathermap_daily', 'forecast') | first)['condition'] == 'partlycloudy' %}
           mdi:weather-partly-cloudy
         {% else %}
-          mdi:weather-{{ state_attr('weather.openweathermap_daily', 'forecast')[0]['condition'] }}
+          mdi:weather-{{ (state_attr('weather.openweathermap_daily', 'forecast') | first)['condition'] }}
         {% endif %}
     weather_forecast_precipitation_tomorrow:
       friendly_name: "Weather Precipitation Tomorrow"
       value_template: >-
-        {{ state_attr('weather.openweathermap_daily', 'forecast')[0]['precipitation'] }}
+        {{ (state_attr('weather.openweathermap_daily', 'forecast') | first)['precipitation'] }}
       icon_template: >-
-        {% if state_attr('weather.openweathermap_daily', 'forecast')[0]['precipitation'] > 0 %}
+        {% if (state_attr('weather.openweathermap_daily', 'forecast') | first)['precipitation'] > 0 %}
           mdi:water
         {% else %}
           mdi:water-off

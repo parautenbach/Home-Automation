@@ -4,6 +4,9 @@
 ### To sign up for a key, scroll down on their page for the API Request link: https://sepush.co.za/
 ### Direct link to sign-up form: https://docs.google.com/forms/d/e/1FAIpQLSeZhAkhDaQX_mLT2xn41TkVjLkOH3Py3YWHi_UqQP4niOY01g/viewform
 
+# other interesting links:
+# https://www.eskom.co.za/eskom-divisions/tx/system-adequacy-reports/
+
 rest:
   - resource: "https://developer.sepush.co.za/business/2.0/area"
     scan_interval: 3600  # rate limit

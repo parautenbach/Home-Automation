@@ -82,7 +82,7 @@ sensor:
           {%- if states('sensor.eskomsepush') and state_attr('sensor.eskomsepush', 'events') != [] -%}
             {{ states('sensor.loadshedding_end_time') | as_datetime - states('sensor.loadshedding_start_time') | as_datetime }}
           {%- else -%}
-            None
+            {{ "00:00"  | as_timedelta }}
           {%- endif -%}
       eskomsepush_calls_remaining:
         unique_id: eskomsepush_api_calls_remaining

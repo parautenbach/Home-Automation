@@ -29,14 +29,15 @@ badges:
             ha-label-badge:
               $: |
                 .value {
-                    color: {%- set mapping = {
-                                                1: "#40b100",
-                                                2: "#ffe500",
-                                                3: "#ffa800",
-                                                4: "#ff5800",
-                                                5: "#aa0000" } -%}
-                           {%- set key = states('sensor.overall_pollen_risk') | int(0) -%}
-                           {{ mapping[key] if key in mapping else "" }} !important;
+                    color:
+                      {%- set mapping = {
+                                           1: "#40b100",
+                                           2: "#ffe500",
+                                           3: "#ffa800",
+                                           4: "#ff5800",
+                                           5: "#aa0000" } -%}
+                      {%- set key = states('sensor.overall_pollen_risk') | int(0) -%}
+                      {{ mapping[key] if key in mapping else "" }} !important;
                   }
   - entity: sensor.owm_pollution_overall_air_quality
     name: Air

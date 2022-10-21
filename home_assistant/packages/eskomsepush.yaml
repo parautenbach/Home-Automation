@@ -51,12 +51,28 @@ sensor:
         unique_id: loadshedding_end_time
         friendly_name: Loadshedding End Time
         device_class: timestamp
-        value_template: "{{ state_attr('sensor.eskomsepush', 'events')[0].end if state_attr('sensor.eskomsepush', 'events') != [] else None }}"
-      loadshedding_event:
-        unique_id: loadshedding_event
-        friendly_name: Loadshedding Event
-        icon_template: mdi:gauge
-        value_template: "{{ state_attr('sensor.eskomsepush', 'events')[0].note if state_attr('sensor.eskomsepush', 'events') != [] else None }}"
+        value_template: "{{ (state_attr('sensor.eskomsepush', 'events') | first).end }}"
+      loadshedding_stage:
+        unique_id: loadshedding_stage
+        friendly_name: Loadshedding Stage
+        icon_template: >-
+          {% if states('sensor.eskomsepush')
+                and state_attr('sensor.eskomsepush', 'events') != []
+                and 'note' in (state_attr('sensor.eskomsepush', 'events') | first) %}
+            {% set stage = (state_attr('sensor.eskomsepush', 'events') | first).note %}
+            {% if stage == 'Stage 1' %}
+              mdi:gauge-empty
+            {% elif stage == 'Stage 2' %}
+              mdi:gauge-low
+            {% elif stage == 'Stage 3' %}
+              mdi:gauge
+            {% else %}
+              mdi:gauge-full
+            {% endif %}
+          {% else %}
+            mdi:checkbox-marked-circle
+          {% endif %}
+        value_template: "{{ (state_attr('sensor.eskomsepush', 'events') | first).note }}"
       loadshedding_duration:
         friendly_name: Loadshedding Duration
         unique_id: loadshedding_duration

@@ -68,6 +68,7 @@ sensor:
       eskomsepush_calls_remaining:
         unique_id: eskomsepush_api_calls_remaining
         friendly_name: EskomSePush API Calls Remaining
+        icon_template: mdi:api
         value_template: "{{ state_attr('sensor.eskomsepush_allowance', 'limit') | int(0) - state_attr('sensor.eskomsepush_allowance', 'count') | int(0) }}"
       loadshedding_slot_forecast:
         unique_id: loadshedding_forecast

@@ -11,6 +11,18 @@ badges:
     icon: mdi:flower-pollen-outline
     # maybe: https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/1310
     card_mod:
+      # style: |
+      #   :host {
+      #     --label-badge-background-color:
+      #         {%- set mapping = {
+      #                             1: "#40b100",
+      #                             2: "#ffe500",
+      #                             3: "#ffa800",
+      #                             4: "#ff5800",
+      #                             5: "#aa0000" } -%}
+      #         {%- set key = states('sensor.overall_pollen_risk') | int(0) -%}
+      #         {{ mapping[key] if key in mapping else "" }};
+      #   }
       style:
         ha-state-label-badge:
           $:

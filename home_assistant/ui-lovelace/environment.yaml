@@ -48,13 +48,13 @@ badges:
               {% set aqi = states('sensor.owm_pollution_overall_air_quality') | int(0) %}
               {% if aqi == 0 %}
                 {# then the default color will be used #}
-              {% elif aqi <= 50 %}
+              {% elif aqi == 1 %}
                 #40b100;
-              {% elif aqi <= 100 %}
+              {% elif aqi == 2 %}
                 #ffe500;
-              {% elif aqi <= 150 %}
+              {% elif aqi == 3 %}
                 #ffa800;
-              {% elif aqi <= 200 %}
+              {% elif aqi == 4 %}
                 #ff5800;
               {% else %}
                 #aa0000;
@@ -399,9 +399,9 @@ cards:
             color_thresholds:
               - value: 0
                 color: var(--custom-color-green)
-              - value: 50
+              - value: 2
                 color: var(--custom-color-yellow)
-              - value: 100
+              - value: 4
                 color: var(--custom-color-red)
           - type: custom:mini-graph-card
             name: PM 2.5

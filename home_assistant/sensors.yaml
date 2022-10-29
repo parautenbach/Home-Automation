@@ -298,9 +298,6 @@
         {% set hours = (decimal_hours - (decimal_hours % 1)) | int(0) %}
         {% set minutes = ((decimal_hours % 1) * 60) | int(0) %}
         {{ '%02i:%02i' % (hours, minutes) }}
-    on_air:
-      value_template: >
-        {{ states('binary_sensor.gaia_audio_input_in_use') }}
 
 - platform: sun2
   monitored_conditions:

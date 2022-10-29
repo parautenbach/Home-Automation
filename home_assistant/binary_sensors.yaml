@@ -135,6 +135,10 @@
     nighttime:
       friendly_name: Night-time
       value_template: "{{ state_attr('sun.sun', 'elevation') < 0 }}"
+    on_air:
+      # https://github.com/home-assistant/iOS/issues/1903
+      value_template: >
+        {{ states('binary_sensor.gaia_audio_input_in_use') }}
 
 - platform: group
   name: "Family Present"

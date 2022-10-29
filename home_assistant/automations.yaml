@@ -2175,8 +2175,8 @@
   initial_state: true
   trigger:
     platform: state
-    entity_id: sensor.on_air
+    entity_id: binary_sensor.on_air
   mode: single
   action:
-    - service: "switch.turn_{{ 'on' if is_state('sensor.on_air', 'on') else 'off' }}"
+    - service: "switch.turn_{{ 'on' if is_state('binary_sensor.on_air', 'on') else 'off' }}"
       entity_id: switch.on_air

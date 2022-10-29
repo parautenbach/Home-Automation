@@ -46,12 +46,26 @@ sensor:
         unique_id: loadshedding_start_time
         friendly_name: Loadshedding Start Time
         device_class: timestamp
-        value_template: "{{ (state_attr('sensor.eskomsepush', 'events') | first).start }}"
+        value_template: >-
+          {% if states('sensor.eskomsepush')
+                and state_attr('sensor.eskomsepush', 'events') != []
+                and 'start' in (state_attr('sensor.eskomsepush', 'events') | first) %}
+            {{ (state_attr('sensor.eskomsepush', 'events') | first).start }}
+          {% else %}
+            {{ 0 | as_datetime }}
+          {% endif %}
       loadshedding_end_time:
         unique_id: loadshedding_end_time
         friendly_name: Loadshedding End Time
         device_class: timestamp
-        value_template: "{{ (state_attr('sensor.eskomsepush', 'events') | first).end }}"
+        value_template: >-
+          {% if states('sensor.eskomsepush')
+                and state_attr('sensor.eskomsepush', 'events') != []
+                and 'end' in (state_attr('sensor.eskomsepush', 'events') | first) %}
+            {{ (state_attr('sensor.eskomsepush', 'events') | first).end }}
+          {% else %}
+            {{ 0 | as_datetime }}
+          {% endif %}
       loadshedding_stage:
         unique_id: loadshedding_stage
         friendly_name: Loadshedding Stage
@@ -72,7 +86,14 @@ sensor:
           {% else %}
             mdi:checkbox-marked-circle
           {% endif %}
-        value_template: "{{ (state_attr('sensor.eskomsepush', 'events') | first).note }}"
+        value_template: >-
+          {% if states('sensor.eskomsepush')
+                and state_attr('sensor.eskomsepush', 'events') != []
+                and 'note' in (state_attr('sensor.eskomsepush', 'events') | first) %}
+            {{ (state_attr('sensor.eskomsepush', 'events') | first).note }}
+          {% else %}
+            No loadshedding
+          {% endif %}
       loadshedding_duration:
         friendly_name: Loadshedding Duration
         unique_id: loadshedding_duration

@@ -790,6 +790,15 @@
     - platform: state
       entity_id: calendar.housekeeping
       to: "on"
+    - platform: homeassistant
+      event: start
+  condition:
+    - condition: state
+      entity_id: calendar.housekeeping
+      state: "on"
+    - condition: state
+      entity_id: switch.housekeeping
+      state: "off"
   action:
     - service: switch.turn_on
       entity_id: switch.contractor_mode
@@ -800,10 +809,14 @@
   trigger:
     - platform: time
       at: "16:00:00"
+    - platform: homeassistant
+      event: start
   condition:
     - condition: state
       entity_id: switch.contractor_mode
       state: "on"
+    - condition: time
+      after: "16:00:00"
   action:
     - service: switch.turn_off
       entity_id: switch.contractor_mode

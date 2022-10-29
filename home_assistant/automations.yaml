@@ -2129,7 +2129,7 @@
       expand(monitored_batteries)
         | map(attribute='state')
         | map('int')
-        | select('le', threshold)
+        | select('lt', threshold)
         | list
         | count
         > 0

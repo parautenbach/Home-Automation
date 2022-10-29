@@ -952,12 +952,12 @@
   id: "e2ec6802-6131-4264-8226-5df65c900699"
   initial_state: true
   trigger:
-    platform: state
-    entity_id:
-      - cover.main_gate
-      - cover.lhs_garage_door
-      - cover.rhs_garage_door
-    to: "open"
+    - platform: state
+      entity_id:
+        - cover.main_gate
+        - cover.lhs_garage_door
+        - cover.rhs_garage_door
+      to: "open"
   mode: queued
   action:
     - service: timer.start
@@ -1106,12 +1106,12 @@
   id: "7ccfaf0f-ab16-4a3b-9b43-e884138971b2"
   initial_state: true
   trigger:
-    platform: state
-    entity_id:
-      - cover.main_gate
-      - cover.lhs_garage_door
-      - cover.rhs_garage_door
-    to: "closed"
+    - platform: state
+      entity_id:
+        - cover.main_gate
+        - cover.lhs_garage_door
+        - cover.rhs_garage_door
+      to: "closed"
   mode: queued
   action:
     - service: timer.cancel

@@ -1,5 +1,6 @@
 test:
   name: Test
+  icon: mdi:test-tube
 pieter_present:
   name: Pieter Presence
   icon: mdi:account

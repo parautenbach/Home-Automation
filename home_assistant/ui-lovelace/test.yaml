@@ -43,7 +43,7 @@ cards:
         title: Loadshedding
         entities:
           - binary_sensor.loadshedding_active
-          - sensor.loadshedding_event
+          - sensor.loadshedding_stage
           - sensor.loadshedding_start_time
           - sensor.loadshedding_end_time
           - timer.loadshedding_duration

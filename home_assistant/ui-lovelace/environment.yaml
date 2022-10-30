@@ -4,7 +4,7 @@ icon: mdi:weather-partly-snowy-rainy
 badges:
   - entity: sensor.living_room_ht_temperature
     name: Living Room
-  - entity: sensor.outside_feels_like
+  - entity: sensor.outside_temperature
     name: Outside
   - entity: sensor.overall_pollen_risk
     name: Pollen
@@ -112,9 +112,9 @@ cards:
               - entity: sensor.outside_temperature
                 name: Outside
                 color: var(--custom-color-red)
-              - entity: sensor.outside_feels_like
-                name: Feels Like
-                color: var(--custom-color-magenta)
+              # - entity: sensor.outside_feels_like
+              #   name: Feels Like
+              #   color: var(--custom-color-magenta)
               - entity: sensor.nighttime_number
                 color: var(--custom-color-gray)
                 show_line: false

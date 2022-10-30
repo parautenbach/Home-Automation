@@ -271,7 +271,8 @@
     outside_temperature:
       friendly_name: "Outside Temperature"
       value_template: >-
-        {{ state_attr('weather.openweathermap_hourly', 'temperature') | float }}
+        {# state_attr('weather.openweathermap_hourly', 'temperature') | float #}
+        {{ state_attr('weather.saaqis_ambient_temperature', 'temperature') | float }}
       device_class: temperature
       unit_of_measurement: "°C"
       icon_template: >-

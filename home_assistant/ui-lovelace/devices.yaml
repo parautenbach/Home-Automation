@@ -240,6 +240,7 @@ cards:
         - automation.turn_audio_on_when_apple_tv_turned_on
         - automation.turn_off_entertainment_system_when_idle_or_leaving_room
         - automation.update_db_size
+        - automation.update_gaia_bluetooth_audio_connection_status
         - automation.update_security_camera_snapshot_gallery
         - automation.update_server_power_status
   - type: vertical-stack

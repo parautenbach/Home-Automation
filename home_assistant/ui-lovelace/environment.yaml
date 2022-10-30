@@ -45,20 +45,20 @@ badges:
       style: |
         :host {
           --label-badge-text-color:
-              {% set aqi = states('sensor.owm_pollution_overall_air_quality') | int(0) %}
-              {% if aqi == 0 %}
+              {%- set aqi = states('sensor.owm_pollution_overall_air_quality') | int(0) -%}
+              {%- if aqi == 0 -%}
                 {# then the default color will be used #}
-              {% elif aqi == 1 %}
+              {%- elif aqi == 1 -%}
                 #40b100;
-              {% elif aqi == 2 %}
+              {%- elif aqi == 2 -%}
                 #ffe500;
-              {% elif aqi == 3 %}
+              {%- elif aqi == 3 -%}
                 #ffa800;
-              {% elif aqi == 4 %}
+              {%- elif aqi == 4 -%}
                 #ff5800;
-              {% else %}
+              {%- else -%}
                 #aa0000;
-              {% endif %}
+              {%- endif -%}
         }
   # https://community.home-assistant.io/t/hours-of-daylight/59422/
   # https://community.home-assistant.io/t/enhanced-sun-component/63553

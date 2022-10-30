@@ -119,24 +119,35 @@ badges:
   - entity: sensor.owm_pollution_overall_air_quality
     name: Air
     card_mod:
-      style: |
-        :host {
-          --label-badge-text-color:
-              {%- set aqi = states('sensor.owm_pollution_overall_air_quality') | int(0) -%}
-              {%- if aqi == 0 -%}
-                {# then the default color will be used #}
-              {%- elif aqi == 1 -%}
-                #40b100;
-              {%- elif aqi == 2 -%}
-                #ffe500;
-              {%- elif aqi == 3 -%}
-                #ffa800;
-              {%- elif aqi == 4 -%}
-                #ff5800;
-              {%- else -%}
-                #aa0000;
-              {%- endif -%}
-        }
+      style:
+        .: |
+          :host {
+            --label-badge-text-color:
+                {%- set aqi = states(config.entity) | int(0) -%}
+                {%- if aqi == 0 -%}
+                  {# then the default color will be used #}
+                {%- elif aqi == 1 -%}
+                  #40b100;
+                {%- elif aqi == 2 -%}
+                  #ffe500;
+                {%- elif aqi == 3 -%}
+                  #ffa800;
+                {%- elif aqi == 4 -%}
+                  #ff5800;
+                {%- else -%}
+                  #aa0000;
+                {%- endif -%}
+          }
+        # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/3319
+        # var(--ha-label-badge-font-size);
+        ha-state-label-badge $ ha-label-badge $: |
+          .badge-container .label-badge .value::after {
+            content: "{{ states(config.entity) | float(0) | round(0) }}";
+            font-size: var(--paper-font-body1_-_font-size);
+          }
+          .badge-container .label-badge .value {
+            font-size: 0px;
+          }
   # https://community.home-assistant.io/t/hours-of-daylight/59422/
   # https://community.home-assistant.io/t/enhanced-sun-component/63553
   - entity: sensor.daylight_hm

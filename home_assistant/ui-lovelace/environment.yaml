@@ -4,8 +4,85 @@ icon: mdi:weather-partly-snowy-rainy
 badges:
   - entity: sensor.living_room_ht_temperature
     name: Living Room
+    card_mod:
+      # https://www.w3schools.com/cssref/tryit.php?filename=trycss3_gradient-linear_ltr
+      # <!DOCTYPE html>
+      # <html>
+      # <head>
+      # <style>
+      # #grad1 {
+      #   height: 200px;
+      #   background-image: linear-gradient(to right, #3498db, #70a03c, #ff9800, #e74c3c);
+      # }
+      # </style>
+      # </head>
+      # <body>
+      # <h3>Linear Gradient - Left to Right</h3>
+      # <p>This linear gradient starts at the left. It starts red, transitioning to blue:</p>
+      # <div id="grad1"></div>
+      # </body>
+      # </html>
+      style: |
+        :host {
+          --label-badge-text-color:
+              {%- macro interpolate(temp, start, stop) -%}
+                {%- set start_r = int(start[0:2], base=16) -%}
+                {%- set start_g = int(start[2:4], base=16) -%}
+                {%- set start_b = int(start[4:6], base=16) -%}
+                {%- set stop_r = int(stop[0:2], base=16) -%}
+                {%- set stop_g = int(stop[2:4], base=16) -%}
+                {%- set stop_b = int(stop[4:6], base=16) -%}
+                {%- set r = int(start_r + ((temp - 10)/10)*(stop_r - start_r)) -%}
+                {%- set g = int(start_g + ((temp - 10)/10)*(stop_g - start_g)) -%}
+                {%- set b = int(start_b + ((temp - 10)/10)*(stop_b - start_b)) -%}
+                rgb({{ r }}, {{ g }}, {{ b }});
+              {%- endmacro -%}
+              {%- set temp = min(max(states(config.entity) | float(0), 0), 35) -%}
+              {%- if temp == 0 -%}
+                {# then the default color will be used #}
+              {%- elif temp <= 15 -%}
+                {# blue to green #}
+                {{ interpolate(temp, "3498db", "70a03c") }}
+              {%- elif temp <= 25 -%}
+                {# green to yellow #}
+                {{ interpolate(temp, "70a03c", "ff9800") }}
+              {%- else -%}
+                {# yellow to red #}
+                {{ interpolate(temp, "ff9800", "e74c3c") }}
+              {%- endif -%}
+        }
   - entity: sensor.outside_temperature
     name: Outside
+    card_mod:
+      style: |
+        :host {
+          --label-badge-text-color:
+              {%- macro interpolate(temp, start, stop) -%}
+                {%- set start_r = int(start[0:2], base=16) -%}
+                {%- set start_g = int(start[2:4], base=16) -%}
+                {%- set start_b = int(start[4:6], base=16) -%}
+                {%- set stop_r = int(stop[0:2], base=16) -%}
+                {%- set stop_g = int(stop[2:4], base=16) -%}
+                {%- set stop_b = int(stop[4:6], base=16) -%}
+                {%- set r = int(start_r + ((temp - 10)/10)*(stop_r - start_r)) -%}
+                {%- set g = int(start_g + ((temp - 10)/10)*(stop_g - start_g)) -%}
+                {%- set b = int(start_b + ((temp - 10)/10)*(stop_b - start_b)) -%}
+                rgb({{ r }}, {{ g }}, {{ b }});
+              {%- endmacro -%}
+              {%- set temp = min(max(states(config.entity) | float(0), 0), 35) -%}
+              {%- if temp == 0 -%}
+                {# then the default color will be used #}
+              {%- elif temp <= 15 -%}
+                {# blue to green #}
+                {{ interpolate(temp, "3498db", "70a03c") }}
+              {%- elif temp <= 25 -%}
+                {# green to yellow #}
+                {{ interpolate(temp, "70a03c", "ff9800") }}
+              {%- else -%}
+                {# yellow to red #}
+                {{ interpolate(temp, "ff9800", "e74c3c") }}
+              {%- endif -%}
+        }
   - entity: sensor.overall_pollen_risk
     name: Pollen
     icon: mdi:flower-pollen-outline

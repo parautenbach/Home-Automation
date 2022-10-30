@@ -188,7 +188,7 @@
       data:
         profile: low
     - delay:
-        minutes: 2
+        minutes: 1
     # this call does not block/wait, so the two transitions will start at almost the same time
     # and the script runs in parallel mode
     # https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete
@@ -199,7 +199,7 @@
         variables:
           light: light.pieter_bedside
           target_brightness_pct: 20
-          transition_duration: 180
+          transition_duration: 120
     - service: script.turn_on
       target:
         entity_id: script.fade_light
@@ -207,7 +207,7 @@
         variables:
           light: light.rouve_bedside
           target_brightness_pct: 40
-          transition_duration: 180
+          transition_duration: 120
 
 - alias: "Switch On Night Light If Motion Is Detected"
   id: "096415fb-9e87-411a-aef9-b9ba5fb9696d"

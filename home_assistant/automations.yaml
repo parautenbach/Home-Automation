@@ -1817,14 +1817,14 @@
         # only if the light state and saved state disagrees: trigger says on; state says off
         - condition: template
           value_template: "{{ is_state(trigger.entity_id | replace('light.', 'input_boolean.') ~ '_state', 'off') }}"
-        # power was recently restored (2 min)
+        # power was recently restored (5 min)
         # what if the sensor didn't pick up the outage if it was too short for it to update?
         # this solution won't currently work for that scenario
         - condition: template
-          value_template: "{{ ((as_timestamp(utcnow()) - as_timestamp(states.binary_sensor.electricity_feed.last_changed)) / 60) <= 2 }}"
-        # but the electricity feed sensor didn't update due to a hass restart (2 min)
+          value_template: "{{ ((as_timestamp(utcnow()) - as_timestamp(states.binary_sensor.electricity_feed.last_changed)) / 60) <= 5 }}"
+        # but the electricity feed sensor didn't update due to a hass restart (5 min)
         - condition: template
-          value_template: "{{ (utcnow() - states('sensor.home_assistant_uptime') | as_datetime).seconds / 60 > 2 }}"
+          value_template: "{{ (utcnow() - states('sensor.home_assistant_uptime') | as_datetime).seconds / 60 > 5 }}"
   action:
     - service: light.turn_off
       data:

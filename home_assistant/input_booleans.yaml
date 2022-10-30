@@ -28,3 +28,6 @@ foyer_state:
 server_shut_down_automatically:
   name: Server Shut Down Automatically
   icon: mdi:server
+gaia_bluetooth_audio_connected:
+  name: Gaia Bluetooth Audio Connected
+  icon: mdi:bluetooth-audio

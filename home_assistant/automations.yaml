@@ -1849,9 +1849,18 @@
     # sensor definition: platform: linux_battery
     - service: homeassistant.update_entity
       entity_id: sensor.home_assistant_server_battery
+
+- alias: "Update Gaia Bluetooth Audio Connection Status"
+  id: "84c4f680-4f0c-4ded-a42f-c931edaee154"
+  initial_state: true
+  trigger:
+    - platform: webhook
+      webhook_id: gaia_bluetooth_audio_connected
+  mode: queued
+  action:
     - service: "input_boolean.turn_{{ 'on' if (trigger.data['status'] | int) else 'off' }}"
       data:
-        entity_id: input_boolean.server_power_connected
+        entity_id: input_boolean.gaia_bluetooth_audio_connected
 
 - alias: "Proximity Updates"
   id: "355d7452-0b56-468b-b434-d0f4b430078b"

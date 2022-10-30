@@ -837,6 +837,9 @@ fade_light:
               entity_id: "{{ light }}"
             data:
               brightness_step_pct: "{{ sign*step_pct if step_pct >= 1 else 1 }}"
+              # if a bulb does support short transitions, use that to fill the gap until the next update
+              # match the delay to follow
+              transition: "{{ (500 if step_pct >= 1 else delay)/1000 }}"  # seconds
           - delay:
               milliseconds: "{{ 500 if step_pct >= 1 else delay }}"
           - service: system_log.write

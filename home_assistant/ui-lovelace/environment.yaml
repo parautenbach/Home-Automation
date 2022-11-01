@@ -26,29 +26,33 @@ badges:
         :host {
           --label-badge-text-color:
               {%- macro interpolate(temp, start, stop) -%}
-                {%- set start_r = int(start[0:2], base=16) -%}
-                {%- set start_g = int(start[2:4], base=16) -%}
-                {%- set start_b = int(start[4:6], base=16) -%}
-                {%- set stop_r = int(stop[0:2], base=16) -%}
-                {%- set stop_g = int(stop[2:4], base=16) -%}
-                {%- set stop_b = int(stop[4:6], base=16) -%}
-                {%- set r = int(start_r + ((temp - 10)/10)*(stop_r - start_r)) -%}
-                {%- set g = int(start_g + ((temp - 10)/10)*(stop_g - start_g)) -%}
-                {%- set b = int(start_b + ((temp - 10)/10)*(stop_b - start_b)) -%}
+                {%- set (start_temp, start_color) = start -%}
+                {%- set (stop_temp, stop_color) = stop -%}
+                {%- set (start_r, start_g, start_b) = (int(start_color[0:2], base=16), int(start_color[2:4], base=16), int(start_color[4:6], base=16)) -%}
+                {%- set (stop_r, stop_g, stop_b) = (int(stop_color[0:2], base=16), int(stop_color[2:4], base=16), int(stop_color[4:6], base=16)) -%}
+                {%- set s = ((temp - start_temp)/(stop_temp - start_temp)) -%}
+                {%- set r = max(int(start_r + s*(stop_r - start_r)), 0) -%}
+                {%- set g = max(int(start_g + s*(stop_g - start_g)), 0) -%}
+                {%- set b = max(int(start_b + s*(stop_b - start_b)), 0) -%}
                 rgb({{ r }}, {{ g }}, {{ b }});
               {%- endmacro -%}
-              {%- set temp = min(max(states(config.entity) | float(0), 0), 35) -%}
-              {%- if temp == 0 -%}
-                {# then the default color will be used #}
-              {%- elif temp <= 15 -%}
-                {# blue to green #}
-                {{ interpolate(temp, "3498db", "70a03c") }}
-              {%- elif temp <= 25 -%}
-                {# green to yellow #}
-                {{ interpolate(temp, "70a03c", "ff9800") }}
+              {%- set temp = states(config.entity) | float(0) -%}
+              {%- set temp_map = {
+                                   5: "3498db",
+                                   15: "70a03c",
+                                   22: "ff9800",
+                                   30: "e74c3c"
+                                 }  -%}
+              {%- set keys = temp_map | sort -%}
+              {%- set index = keys | select("lt", temp) | list | length -%}
+              {%- if index == 0 -%}
+                #{{ temp_map[keys | first] }}
+              {%- elif index == keys | length -%}
+                #{{ temp_map[keys | last] }}
               {%- else -%}
-                {# yellow to red #}
-                {{ interpolate(temp, "ff9800", "e74c3c") }}
+                {%- set start = (keys[index - 2], temp_map[keys[index - 2]]) -%}
+                {%- set stop = (keys[index - 1], temp_map[keys[index - 1]]) -%}
+                {{ interpolate(temp, start, stop) }}
               {%- endif -%}
         }
   - entity: sensor.outside_temperature
@@ -58,29 +62,33 @@ badges:
         :host {
           --label-badge-text-color:
               {%- macro interpolate(temp, start, stop) -%}
-                {%- set start_r = int(start[0:2], base=16) -%}
-                {%- set start_g = int(start[2:4], base=16) -%}
-                {%- set start_b = int(start[4:6], base=16) -%}
-                {%- set stop_r = int(stop[0:2], base=16) -%}
-                {%- set stop_g = int(stop[2:4], base=16) -%}
-                {%- set stop_b = int(stop[4:6], base=16) -%}
-                {%- set r = int(start_r + ((temp - 10)/10)*(stop_r - start_r)) -%}
-                {%- set g = int(start_g + ((temp - 10)/10)*(stop_g - start_g)) -%}
-                {%- set b = int(start_b + ((temp - 10)/10)*(stop_b - start_b)) -%}
+                {%- set (start_temp, start_color) = start -%}
+                {%- set (stop_temp, stop_color) = stop -%}
+                {%- set (start_r, start_g, start_b) = (int(start_color[0:2], base=16), int(start_color[2:4], base=16), int(start_color[4:6], base=16)) -%}
+                {%- set (stop_r, stop_g, stop_b) = (int(stop_color[0:2], base=16), int(stop_color[2:4], base=16), int(stop_color[4:6], base=16)) -%}
+                {%- set s = ((temp - start_temp)/(stop_temp - start_temp)) -%}
+                {%- set r = max(int(start_r + s*(stop_r - start_r)), 0) -%}
+                {%- set g = max(int(start_g + s*(stop_g - start_g)), 0) -%}
+                {%- set b = max(int(start_b + s*(stop_b - start_b)), 0) -%}
                 rgb({{ r }}, {{ g }}, {{ b }});
               {%- endmacro -%}
-              {%- set temp = min(max(states(config.entity) | float(0), 0), 35) -%}
-              {%- if temp == 0 -%}
-                {# then the default color will be used #}
-              {%- elif temp <= 15 -%}
-                {# blue to green #}
-                {{ interpolate(temp, "3498db", "70a03c") }}
-              {%- elif temp <= 25 -%}
-                {# green to yellow #}
-                {{ interpolate(temp, "70a03c", "ff9800") }}
+              {%- set temp = states(config.entity) | float(0) -%}
+              {%- set temp_map = {
+                                   5: "3498db",
+                                   15: "70a03c",
+                                   22: "ff9800",
+                                   30: "e74c3c"
+                                 }  -%}
+              {%- set keys = temp_map | sort -%}
+              {%- set index = keys | select("lt", temp) | list | length -%}
+              {%- if index == 0 -%}
+                #{{ temp_map[keys | first] }}
+              {%- elif index == keys | length -%}
+                #{{ temp_map[keys | last] }}
               {%- else -%}
-                {# yellow to red #}
-                {{ interpolate(temp, "ff9800", "e74c3c") }}
+                {%- set start = (keys[index - 2], temp_map[keys[index - 2]]) -%}
+                {%- set stop = (keys[index - 1], temp_map[keys[index - 1]]) -%}
+                {{ interpolate(temp, start, stop) }}
               {%- endif -%}
         }
   - entity: sensor.overall_pollen_risk

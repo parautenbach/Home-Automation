@@ -6,22 +6,6 @@ badges:
     name: Living Room
     card_mod:
       # https://www.w3schools.com/cssref/tryit.php?filename=trycss3_gradient-linear_ltr
-      # <!DOCTYPE html>
-      # <html>
-      # <head>
-      # <style>
-      # #grad1 {
-      #   height: 200px;
-      #   background-image: linear-gradient(to right, #3498db, #70a03c, #ff9800, #e74c3c);
-      # }
-      # </style>
-      # </head>
-      # <body>
-      # <h3>Linear Gradient - Left to Right</h3>
-      # <p>This linear gradient starts at the left. It starts red, transitioning to blue:</p>
-      # <div id="grad1"></div>
-      # </body>
-      # </html>
       style: |
         :host {
           --label-badge-text-color:

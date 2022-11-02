@@ -2203,6 +2203,7 @@
     platform: state
     entity_id: media_player.living_room
     from: standby
+    to: idle
   mode: single
   action:
     - service: script.turn_on

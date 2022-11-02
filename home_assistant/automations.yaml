@@ -376,6 +376,8 @@
     - platform: state
       entity_id: binary_sensor.rouve_present
       to: "on"
+    - platform: homeassistant
+      event: start
   mode: single
   condition:
     - condition: or
@@ -394,6 +396,12 @@
           after_offset: "-00:30:00"
         - condition: sun
           before: sunrise
+        - condition: template
+          value_template: >-
+            {# this helper contains only a time #}
+            {% set after = states('input_datetime.wake_up_time') | today_at %}
+            {% set before = states('input_datetime.wake_up_time') | today_at + timedelta(minutes=30) %}
+            {{ after <= now() <= before }}
   action:
     - service: script.turn_on
       target:
@@ -438,9 +446,19 @@
     - condition: state
       entity_id: binary_sensor.low_light
       state: "on"
-    - condition: time
-      after: "08:00:00"
-      before: "21:00:00"
+    - condition: or
+      conditions:
+        - condition: and
+          conditions:
+            - condition: state
+              entity_id: binary_sensor.workday
+              state: "on"
+            - condition: time
+              after: "06:00:00"
+              before: "08:00:00"
+        - condition: time
+          after: "08:00:00"
+          before: "21:00:00"
     - condition: state
       entity_id: light.living_room_lamp
       state: "off"

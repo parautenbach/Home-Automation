@@ -1868,6 +1868,8 @@
     - service: homeassistant.update_entity
       entity_id: sensor.home_assistant_server_battery
 
+# https://apple.stackexchange.com/questions/363416/how-to-check-if-any-audio-is-currently-playing-via-terminal
+# $ if [[ "$(pmset -g | grep ' sleep')" == *"coreaudiod"* ]]; then echo audio is playing; else echo no audio playing; fi
 - alias: "Update Gaia Bluetooth Audio Connection Status"
   id: "84c4f680-4f0c-4ded-a42f-c931edaee154"
   initial_state: true

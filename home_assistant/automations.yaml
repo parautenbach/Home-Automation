@@ -1855,7 +1855,7 @@
 # udevadm control --reload-rules && udevadm trigger
 # sudo /etc/init.d/udev restart
 # udevadm control --log-priority=debug
-# journalctl -f
+# (sudo) journalctl -f
 - alias: "Update Server Power Status"
   id: "3b2aed6b-5894-4339-acec-19e4e8ce97c7"
   initial_state: true

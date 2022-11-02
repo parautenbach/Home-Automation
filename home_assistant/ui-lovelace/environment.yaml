@@ -117,20 +117,15 @@ badges:
         .: |
           :host {
             --label-badge-text-color:
-                {%- set aqi = states(config.entity) | int(0) -%}
-                {%- if aqi == 0 -%}
-                  {# then the default color will be used #}
-                {%- elif aqi == 1 -%}
-                  #40b100;
-                {%- elif aqi == 2 -%}
-                  #ffe500;
-                {%- elif aqi == 3 -%}
-                  #ffa800;
-                {%- elif aqi == 4 -%}
-                  #ff5800;
-                {%- else -%}
-                  #aa0000;
-                {%- endif -%}
+                {%- set mapping = {
+                                     0: "",
+                                     1: "#40b100",
+                                     2: "#ffe500",
+                                     3: "#ffa800",
+                                     4: "#ff5800",
+                                     5: "#aa0000" } -%}
+                {%- set key = states(config.entity) | int(0) -%}
+                {{ mapping[key] if key in mapping else "" }} !important;
           }
         # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/3319
         # var(--ha-label-badge-font-size);

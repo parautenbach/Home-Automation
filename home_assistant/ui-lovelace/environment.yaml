@@ -35,8 +35,8 @@ badges:
               {%- elif index == keys | length -%}
                 #{{ temp_map[keys | last] }}
               {%- else -%}
-                {%- set start = (keys[index - 2], temp_map[keys[index - 2]]) -%}
-                {%- set stop = (keys[index - 1], temp_map[keys[index - 1]]) -%}
+                {%- set start = (keys[index - 1], temp_map[keys[index - 1]]) -%}
+                {%- set stop = (keys[index], temp_map[keys[index]]) -%}
                 {{ interpolate(temp, start, stop) }}
               {%- endif -%}
         }

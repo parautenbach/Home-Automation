@@ -813,7 +813,7 @@
       entity_id: calendar.housekeeping
       state: "on"
     - condition: state
-      entity_id: switch.housekeeping
+      entity_id: switch.contractor_mode
       state: "off"
   action:
     - service: switch.turn_on

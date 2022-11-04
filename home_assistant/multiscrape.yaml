@@ -15,7 +15,6 @@
                             "pollen-darkorange": 4,
                             "pollen-red": 5 } %}
         {% set key = value | first %}
-        {{ mapping[key] if key in mapping else "unavailable" }}
         {{ mapping[key] if key in mapping else "unknown" }}
       on_error:
         value: last

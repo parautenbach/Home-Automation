@@ -427,16 +427,8 @@ button_card_templates:
     show_label: true
     label: >
       [[[
-        var mapping = {
-            1: "Very Low",
-            2: "Low",
-            3: "Moderate",
-            4: "High",
-            5: "Very High"
-        }
-        return mapping[entity.state];
+        return entity.attributes.label;
       ]]]
-
     styles:
       grid:
         - grid-template-areas: '"n" "i" "l"'

@@ -16,6 +16,7 @@
                             "pollen-red": 5 } %}
         {% set key = value | first %}
         {{ mapping[key] if key in mapping else "unavailable" }}
+        {{ mapping[key] if key in mapping else "unknown" }}
       on_error:
         value: last
     - name: Tree Pollen
@@ -31,7 +32,7 @@
                             "pollen-darkorange": 4,
                             "pollen-red": 5 } %}
         {% set key = value | first %}
-        {{ mapping[key] if key in mapping else "unavailable" }}
+        {{ mapping[key] if key in mapping else "unknown" }}
       on_error:
         value: last
     - name: Grass Pollen
@@ -47,7 +48,7 @@
                             "pollen-darkorange": 4,
                             "pollen-red": 5 } %}
         {% set key = value | first %}
-        {{ mapping[key] if key in mapping else "unavailable" }}
+        {{ mapping[key] if key in mapping else "unknown" }}
       on_error:
         value: last
     - name: Weed Pollen
@@ -63,7 +64,7 @@
                             "pollen-darkorange": 4,
                             "pollen-red": 5 } %}
         {% set key = value | first %}
-        {{ mapping[key] if key in mapping else "unavailable" }}
+        {{ mapping[key] if key in mapping else "unknown" }}
       on_error:
         value: last
     - name: Mould Spores
@@ -79,6 +80,6 @@
                             "pollen-darkorange": 4,
                             "pollen-red": 5 } %}
         {% set key = value | first %}
-        {{ mapping[key] if key in mapping else "unavailable" }}
+        {{ mapping[key] if key in mapping else "unknown" }}
       on_error:
         value: last

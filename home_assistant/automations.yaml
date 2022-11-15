@@ -376,8 +376,6 @@
     - platform: state
       entity_id: binary_sensor.rouve_present
       to: "on"
-    - platform: homeassistant
-      event: start
   mode: single
   condition:
     - condition: or
@@ -396,12 +394,44 @@
           after_offset: "-00:30:00"
         - condition: sun
           before: sunrise
-        - condition: template
-          value_template: >-
-            {# this helper contains only a time #}
-            {% set after = states('input_datetime.wake_up_time') | today_at %}
-            {% set before = states('input_datetime.wake_up_time') | today_at + timedelta(minutes=30) %}
-            {{ after <= now() <= before }}
+  action:
+    - service: script.turn_on
+      target:
+        entity_id: script.turn_on_light
+      data:
+        variables:
+          light: light.pieter_bedside
+          profile: pieter
+    - service: script.turn_on
+      target:
+        entity_id: script.turn_on_light
+      data:
+        variables:
+          light: light.rouve_bedside
+          profile: rouve
+
+- alias: "Bedlamps On Upon Server Start"
+  id: "1e8cf815-a52a-4fe6-a536-e25e234381bc"
+  initial_state: true
+  trigger:
+    - platform: homeassistant
+      event: start
+  mode: single
+  condition:
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.pieter_present
+          state: "on"
+        - condition: state
+          entity_id: binary_sensor.rouve_present
+          state: "on"
+    - condition: template
+      value_template: >-
+        {# this helper contains only a time #}
+        {% set after = states('input_datetime.wake_up_time') | today_at %}
+        {% set before = states('input_datetime.wake_up_time') | today_at + timedelta(minutes=30) %}
+        {{ after <= now() <= before }}
   action:
     - service: script.turn_on
       target:

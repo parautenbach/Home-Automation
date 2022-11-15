@@ -674,4 +674,4 @@ cards:
         period: day
         chart_type: bar
         stat_types:
-          - max
+          - state

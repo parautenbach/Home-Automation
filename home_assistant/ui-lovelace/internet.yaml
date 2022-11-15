@@ -190,3 +190,13 @@ cards:
               border-style: solid;
               border-color: white;
             }
+  - type: statistics-graph
+    title: Daily Consumption
+    entities:
+      - sensor.daily_internet_usage_in
+      - sensor.daily_internet_usage_out
+    days_to_show: 7
+    period: day
+    chart_type: bar
+    stat_types:
+      - state

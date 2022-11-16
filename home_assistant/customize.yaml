@@ -253,9 +253,11 @@ sensor.internet_usage_out:
 sensor.daily_internet_usage_in:
   friendly_name: 'Daily Downloads'
   icon: mdi:download
+  state_class: total_increasing
 sensor.daily_internet_usage_out:
   friendly_name: 'Daily Uploads'
   icon: mdi:upload
+  state_class: total_increasing
 sensor.monthly_internet_usage_in:
   friendly_name: 'Monthly Downloads'
   icon: mdi:download
@@ -420,10 +422,17 @@ cover.garage_doors:
 sensor.daylight:
   device_class: duration
   unit_of_measurement: h
+  state_class: measurement
 sensor.apple_tv_playing:
   device_class: duration
   unit_of_measurement: h
+  state_class: total_increasing
 sensor.watchman_missing_entities:
   friendly_name: Missing Entities
 sensor.watchman_missing_services:
   friendly_name: Missing Services
+
+# state classes
+# https://developers.home-assistant.io/docs/core/entity/sensor/
+# https://developers.home-assistant.io/blog/2021/08/16/state_class_total/
+# https://developers.home-assistant.io/blog/2021/09/20/state_class_total/

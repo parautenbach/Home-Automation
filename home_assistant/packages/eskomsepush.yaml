@@ -11,7 +11,7 @@ rest:
   - resource: "https://developer.sepush.co.za/business/2.0/area"
     scan_interval: 3600  # rate limit
     headers:
-      Token: !secret eskomsepush
+      token: !secret eskomsepush
     params:
       id: "westerncape-2-stellenboschmunicipality"
     sensor:

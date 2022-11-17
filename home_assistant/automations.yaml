@@ -433,6 +433,14 @@
         {% set before = states('input_datetime.wake_up_time') | today_at + timedelta(minutes=30) %}
         {{ after <= now() <= before }}
   action:
+    - wait_template: "{{ is_state('light.pieter_bedside', 'off') }}"
+      timeout:
+        minutes: 1
+      continue_on_timeout: false
+    - wait_template: "{{ is_state('light.rouve_bedside', 'off') }}"
+      timeout:
+        minutes: 1
+      continue_on_timeout: false
     - service: script.turn_on
       target:
         entity_id: script.turn_on_light

@@ -560,7 +560,6 @@
           entity_id: binary_sensor.rouve_present
           state: "on"
   action:
-    # todo: wait for lights
     - service: script.turn_on
       target:
         entity_id: script.turn_on_light

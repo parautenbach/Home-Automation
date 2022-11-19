@@ -432,6 +432,9 @@
         {% set after = states('input_datetime.wake_up_time') | today_at %}
         {% set before = states('input_datetime.wake_up_time') | today_at + timedelta(minutes=30) %}
         {{ after <= now() <= before }}
+    - condition: state
+      entity_id: binary_sensor.workday
+      state: "on"
   action:
     - wait_template: "{{ is_state('light.pieter_bedside', 'off') }}"
       timeout:

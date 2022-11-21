@@ -534,8 +534,9 @@
   trigger:
     - platform: state
       entity_id: binary_sensor.electricity_feed
-      not_from: "unavailable"
-      not_to: "unavailable"
+      to:
+        - "on"
+        - "off"
   mode: single
   action:
     - service: "homeassistant.turn_{{ 'on' if is_state(' binary_sensor.electricity_feed', 'on') else 'off' }}"

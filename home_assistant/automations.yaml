@@ -2168,16 +2168,17 @@
   id: "5ff59069-6f3c-4f9d-bc66-b50bea8e184e"
   initial_state: true
   variables:
-    threshold: 5
+    level: 5
     # https://community.home-assistant.io/t/variable-in-automation-not-working-as-expected/431591/2
     monitored_batteries: >-
-      {{ states.sensor
-           | selectattr('attributes.monitor', 'defined')
-           | rejectattr('state', 'in', ['unavailable', 'unknown', 'none'])
-           | selectattr('attributes.monitor', 'eq', True)
-           | selectattr('attributes.device_class', 'eq', 'battery')
-           | map(attribute='entity_id')
-           | list
+      {{
+        states.sensor
+          | selectattr('attributes.monitor', 'defined')
+          | rejectattr('state', 'in', ['unavailable', 'unknown', 'none'])
+          | selectattr('attributes.monitor', 'eq', True)
+          | selectattr('attributes.device_class', 'eq', 'battery')
+          | map(attribute='entity_id')
+          | list
       }}
   trigger:
     platform: time
@@ -2187,7 +2188,7 @@
       expand(monitored_batteries)
         | map(attribute='state')
         | map('int')
-        | select('lt', threshold)
+        | select('lt', level)
         | list
         | count
         > 0
@@ -2200,9 +2201,9 @@
         title: "Batteries"
         # https://community.home-assistant.io/t/recommended-ways-to-manage-devices-and-entities-names/243815/12
         message: >
-          The following devices have less than {{ threshold }}% charge:
+          The following devices have less than {{ level }}% charge:
           {%- for b in monitored_batteries %}
-            {%- if states(b) | int < threshold and not is_state(b, 'unavailable') %}
+            {%- if states(b) | int < level and not is_state(b, 'unavailable') %}
             - {{ state_attr(b, 'friendly_name') | replace(' Battery', '') }}: {{ states(b) | int }}%
             {%- endif -%}
           {%- endfor %}

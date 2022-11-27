@@ -2255,3 +2255,24 @@
   action:
     - service: "switch.turn_{{ 'on' if is_state('binary_sensor.on_air', 'on') else 'off' }}"
       entity_id: switch.on_air
+
+- alias: "Pollen Levels Update"
+  id: "eeb7f4a7-367d-4aee-b4d5-cf84da3b1323"
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id: sensor.overall_pollen_risk
+  mode: single
+  action:
+    - service: notify.family
+      data:
+        title: "Health"
+        message: >
+          Pollen levels changed from {{ trigger.from_state.state | lower }} to {{ trigger.to_state.state | lower }}.
+            - {{ state_attr('sensor.tree_pollen', 'friendly_name') }}: {{ state_attr('sensor.tree_pollen', 'label') }}
+            - {{ state_attr('sensor.grass_pollen', 'friendly_name') }}: {{ state_attr('sensor.grass_pollen', 'label') }}
+            - {{ state_attr('sensor.weed_pollen', 'friendly_name') }}: {{ state_attr('sensor.weed_pollen', 'label') }}
+            - {{ state_attr('sensor.mould_spores', 'friendly_name') }}: {{ state_attr('sensor.mould_spores', 'label') }}
+        data:
+          group: "environment"
+          url: homeassistant://navigate/lovelace/environment

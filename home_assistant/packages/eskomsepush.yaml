@@ -110,17 +110,18 @@ sensor:
         friendly_name: EskomSePush API Calls Remaining
         icon_template: mdi:api
         value_template: "{{ state_attr('sensor.eskomsepush_allowance', 'limit') | int(0) - state_attr('sensor.eskomsepush_allowance', 'count') | int(0) }}"
-      loadshedding_slot_forecast:
+      loadshedding_forecast:
         unique_id: loadshedding_forecast
         friendly_name: Loadshedding Forecast
         value_template: >
-          {%- if state_attr('sensor.eskomsepush', 'events') != [] -%}
-            {% for event in states['sensor.eskomsepush'].attributes.events -%}
+          {% set events = state_attr('sensor.eskomsepush', 'events') %}
+          {%- if events != [] -%}
+            {%- for event in events %}
               {%- set date = as_timestamp(event['start']) | timestamp_custom('%a %d %b') -%}
               {%- set stage = event['note'] -%}
               {%- set start_time = as_timestamp(event['start']) | timestamp_custom('%H:%M') -%}
-              {%- set end_time = as_timestamp(event['end']) | timestamp_custom('%H:%M') -%}
-              {{ date ~ ': ' ~ stage ~ ' from ' ~ start_time ~ ' to ' ~ end_time ~ '\n'}}
+              {%- set end_time = as_timestamp(event['end']) | timestamp_custom('%H:%M') %}
+            - {{ date ~ ': ' ~ start_time ~ '-' ~ end_time ~ ' (' ~ stage ~ ')'}}
             {%- endfor -%}
           {%- else -%}
             No forecast available.
@@ -165,20 +166,21 @@ automation:
             {% set end = (state_attr('sensor.eskomsepush', 'events') | first).end | as_datetime %}
             {{ end - start }}
 
-#   - alias: Loadshedding forecast notification
-#     initial_state: 'on'
-#     trigger:
-#       - entity_id: sensor.loadshedding_slot_forecast
-#         platform: state
-#     action:
-#       - alias: "Alert change"
-#         service: script.alert
-#         data:
-#           icon: ':zap:'
-#           object: 'Loadshedding forecast'
-#           target: 'alerts-david'
-#           message: >
-#             {{ states.sensor.loadshedding_slot_forecast.state }}
+  - alias: "Loadshedding Forecast Notification"
+    id: "89d2c61c-24b6-463a-8b2a-bfe07581e60e"
+    trigger:
+      - platform: state
+        entity_id: sensor.loadshedding_forecast
+    action:
+      - service: notify.family
+        data:
+          title: "Loadshedding"
+          message: >
+            Your latest forecast:
+              {{ states('sensor.loadshedding_forecast') }}
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/main
 
 #   - alias: Upcoming slot notification
 #     initial_state: 'on'

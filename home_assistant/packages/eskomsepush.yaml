@@ -124,7 +124,7 @@ sensor:
             - {{ date ~ ': ' ~ start_time ~ '-' ~ end_time ~ ' (' ~ stage ~ ')'}}
             {%- endfor -%}
           {%- else -%}
-            No forecast available.
+            No loadshedding.
           {%- endif -%}
 
 binary_sensor:

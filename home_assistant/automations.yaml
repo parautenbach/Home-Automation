@@ -539,8 +539,10 @@
         - "off"
   mode: single
   action:
-    - service: "homeassistant.turn_{{ 'on' if is_state(' binary_sensor.electricity_feed', 'on') else 'off' }}"
-      entity_id: group.automations_to_save_energy
+    # https://community.home-assistant.io/t/using-the-new-for-each/419829
+    - service: "automation.turn_{{ 'on' if is_state('binary_sensor.electricity_feed', 'on') else 'off' }}"
+      target:
+        entity_id: "{{ expand('group.automations_to_save_energy') | map(attribute='entity_id') | list }}"
 
 - alias: "Bedlamps On Upon Low Light"
   id: "5cdd58f4-dcec-4f50-9451-8d40dd8c2215"

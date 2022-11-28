@@ -3,9 +3,7 @@ path: test
 icon: mdi:test-tube
 visible:
   - user: 75cfafa25f36464abc9116845e53f2ca
-badges:
-  - entity: binary_sensor.loadshedding_active
-    name: Loadshedding
+badges: []
 cards:
   - type: custom:hourly-weather
     entity: weather.openweathermap_hourly
@@ -37,21 +35,6 @@ cards:
       - sensor.apple_tv_playing
       - sensor.apple_tv_playing_hours_minutes
     show_header_toggle: true
-  - type: vertical-stack
-    cards:
-      - type: entities
-        title: Loadshedding
-        entities:
-          - binary_sensor.loadshedding_active
-          - sensor.loadshedding_stage
-          - sensor.loadshedding_start_time
-          - sensor.loadshedding_end_time
-          - timer.loadshedding_duration
-          - sensor.eskomsepush_calls_remaining
-        show_header_toggle: false
-      - type: markdown
-        title: Loadshedding Forecast
-        content: "{{ states('sensor.loadshedding_forecast') }}"
   - type: history-graph
     title: Proximity
     hours_to_show: 24

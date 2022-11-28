@@ -333,6 +333,7 @@ cards:
           - entity: binary_sensor.workday_tomorrow
             name: Workday Tomorrow
       - type: custom:atomic-calendar-revive
+        name: Upcoming Events
         showLocation: false
         showMonth: true
         showProgressBar: false
@@ -343,6 +344,9 @@ cards:
             icon: mdi:account-hard-hat
           - entity: calendar.loadshedding
             icon: mdi:flash-alert
+      - type: markdown
+        title: Loadshedding Forecast
+        content: "{{ states('sensor.loadshedding_forecast') }}"
       - type: entities
         title: Electricity Consumption
         show_header_toggle: false

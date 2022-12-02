@@ -345,7 +345,7 @@ cards:
           - entity: calendar.loadshedding
             icon: mdi:flash-alert
       - type: markdown
-        title: Loadshedding Forecast
+        title: Loadshedding
         content: "{{ states('sensor.loadshedding_forecast') }}"
       - type: entities
         title: Electricity Consumption

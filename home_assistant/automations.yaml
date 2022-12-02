@@ -675,6 +675,7 @@
 
 - alias: "Open The Gate When Arriving Home"
   id: "7dcb52a0-3ecc-4a6f-9b89-6d80a6720590"
+  initial_state: true
   trigger:
     - platform: state
       entity_id: binary_sensor.pieter_present

@@ -2267,8 +2267,10 @@
     - service: notify.family
       data:
         title: "Health"
+        # https://community.home-assistant.io/t/trigger-to-from-attribute/325345
+        # https://community.home-assistant.io/t/access-attribute-of-from-state/380497
         message: >
-          Pollen levels changed from {{ trigger.from_state.state | lower }} to {{ trigger.to_state.state | lower }}.
+          Pollen levels changed from {{ trigger.from_state.attributes.label | lower }} to {{ trigger.to_state.attributes.label | lower }}.
             - {{ state_attr('sensor.tree_pollen', 'friendly_name') }}: {{ state_attr('sensor.tree_pollen', 'label') }}
             - {{ state_attr('sensor.grass_pollen', 'friendly_name') }}: {{ state_attr('sensor.grass_pollen', 'label') }}
             - {{ state_attr('sensor.weed_pollen', 'friendly_name') }}: {{ state_attr('sensor.weed_pollen', 'label') }}

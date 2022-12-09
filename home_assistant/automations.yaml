@@ -719,7 +719,7 @@
     value_template: "{{ is_state(trigger.entity_id | replace('light.', 'timer.') ~ '_timer', 'active') }}"
   action:
     - service: timer.cancel
-      data:
+      target:
         entity_id: "{{ trigger.entity_id | replace('light.', 'timer.') }}_timer"
 
 # open garage door when arriving home:
@@ -1161,7 +1161,7 @@
         action: DISABLE_COVER_TIMEOUT
   action:
     - service: timer.cancel
-      data:
+      target:
         entity_id: "{{ trigger.event.data.action_data.timer_id }}"
 
 - alias: "Stop Cover Timer When Closed"
@@ -1177,7 +1177,7 @@
   mode: queued
   action:
     - service: timer.cancel
-      data:
+      target:
         entity_id: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
 
 - alias: "Notify If Cover Was Left Open"

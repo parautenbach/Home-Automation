@@ -109,3 +109,20 @@
                             5: "mdi:gauge-full" } %}
         {% set key = states('sensor.overall_pollen_risk') | int(0) %}
         {{ mapping[key] if key in mapping else "mdi:alert" }}
+
+- sensor:
+    # https://community.home-assistant.io/t/trigger-an-automation-based-on-a-groups-individual-entity-state-change/383560/2
+    # https://community.home-assistant.io/t/single-automation-for-all-lights/375028/7
+    - name: Latest Battery Update
+      device_class: timestamp
+      state: >
+        {% set monitored_batteries =
+          states.sensor
+            | selectattr('attributes.monitor', 'defined')
+            | selectattr('attributes.monitor', 'eq', True)
+            | rejectattr('state', 'in', ['unavailable', 'unknown', 'none'])
+            | selectattr('attributes.device_class', 'eq', 'battery')
+            | sort(attribute='last_changed', reverse=true)
+            | list
+        %}
+        {{ monitored_batteries[0].last_changed }}

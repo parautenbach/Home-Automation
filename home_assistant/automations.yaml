@@ -1027,6 +1027,76 @@
         entity_id: "timer.{{ trigger.entity_id | replace('cover.', '') }}_timer"
         duration: "00:03:00"
 
+- alias: "Update Timers For Covers On Startup"
+  id: "29fc90a8-8fd1-4aad-a803-81db261509f2"
+  initial_state: true
+  trigger:
+    - platform: homeassistant
+      event: start
+  mode: single
+  action:
+    - repeat:
+        for_each: "{{ expand('group.covers_with_timers') | map(attribute='entity_id') | list }}"
+        sequence:
+          - if:
+              - condition: template
+                value_template: "{{ is_state(repeat.item, 'open') }}"
+            then:
+              - service: notify.mobile_app_ceres
+                data:
+                  title: "Security"
+                  message: >-
+                    {% set name = None %}
+                    {% if repeat.item | regex_search("lhs", ignorecase=True) %}
+                      {% set name = "Rouvé's garage door" %}
+                    {% elif repeat.item | regex_search("rhs", ignorecase=True) %}
+                      {% set name = "Pieter's garage door" %}
+                    {% else %}
+                      {% set name = "The main gate" %}
+                    {% endif %}
+                    {{ name }} is open.
+                  data:
+                    # group notifications by the timer entity
+                    group: "timer.{{ repeat.item | replace('cover.', '') }}_timer"
+                    url: homeassistant://navigate/lovelace/main
+                    actions:
+                      - action: "CLOSE_COVER"
+                        title: "Close now"
+                      - action: "EXTEND_COVER_TIMEOUT_10_MIN"
+                        title: "Wait 10 min"
+                      - action: "EXTEND_COVER_TIMEOUT_30_MIN"
+                        title: "Wait 30 min"
+                      - action: "DISABLE_COVER_TIMEOUT"
+                        title: "Disable"
+                    action_data:
+                      # convert this to the cover entity to use in the automation that receives this
+                      cover_id: "{{ repeat.item }}"
+                      timer_id: "timer.{{ repeat.item | replace('cover.', '') }}_timer"
+                    push:
+                      # perhaps one day it will be possible to use a template to only make it critical under certain conditions
+                      sound:
+                        name: default
+                        critical: 1
+                        volume: 1.0
+              # saving for later:
+              # if e.g. the gate is open, but the timer was disabled, don't start it now, since it was intentional
+              # if the timer wasn't disabled, it will be restored, so the normal mechanism will notify
+              # in other words, maintain the status quo
+              # - if:
+              #     - condition: template
+              #       value_template: "{{ is_state('timer.' ~ repeat.item | replace('cover.', 'timer.') ~ '_timer', 'idle') }}"
+              #   then:
+              #     - service: timer.start
+              #       target:
+              #         entity_id: "timer.{{ repeat.item | replace('cover.', '') }}_timer"
+              #       data:
+              #         duration: "00:03:00"
+            else:
+              # if the cover got opened while the server was running, but closed while down
+              - service: timer.cancel
+                target:
+                  entity_id: "timer.{{ repeat.item | replace('cover.', '') }}_timer"
+
 - alias: "Cover Left Open Alert"
   id: "26bf6fd5-1caf-4c21-ac29-8cd7985b2de7"
   initial_state: true

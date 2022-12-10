@@ -2380,6 +2380,11 @@
   id: "eeb7f4a7-367d-4aee-b4d5-cf84da3b1323"
   initial_state: true
   trigger:
+    # if the overall risk didn't change but an individual risk did, this won't fire
+    # but how does one fix this? you'd need access to each sensor's previous value
+    # one way is to concatenate the individual states (as strings) to create a new state,
+    # but then this whole automation need to change (will need A LOT of extra parsing and is maybe not worth the effort and benefit)
+    # the reason is that the previous values will need to be extracted from the concatenated string
     platform: state
     entity_id: sensor.overall_pollen_risk
   mode: single

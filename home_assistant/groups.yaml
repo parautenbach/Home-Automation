@@ -18,3 +18,9 @@ automations_to_save_energy:
     - automation.lights_on_upon_low_light
     - automation.open_the_gate_when_arriving_home
     - automation.open_garage_door_when_arriving_by_car
+covers_with_timers:
+  name: Covers With Timers
+  entities:
+    - cover.main_gate
+    - cover.lhs_garage_door
+    - cover.rhs_garage_door

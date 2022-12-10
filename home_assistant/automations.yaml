@@ -537,6 +537,9 @@
       to:
         - "on"
         - "off"
+      # we don't want erratic behaviour in case the pulse counter goes offline for a moment
+      for:
+        seconds: 30
   mode: single
   action:
     # https://community.home-assistant.io/t/using-the-new-for-each/419829

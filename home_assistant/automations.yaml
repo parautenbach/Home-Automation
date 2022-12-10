@@ -2217,6 +2217,55 @@
           # https://community.home-assistant.io/t/mobile-notification-icon-not-showing-up/408050
           # icon_url: "https://github.com/home-assistant/assets/blob/master/logo/logo-small.png?raw=true"
 
+# https://community.home-assistant.io/t/why-isnt-there-a-groups-entities-state-trigger/467179
+# https://community.home-assistant.io/t/unleash-the-power-of-expand-for-template-sensors/136941/22
+# https://community.home-assistant.io/t/trigger-an-automation-based-on-a-groups-individual-entity-state-change/383560
+# https://community.home-assistant.io/t/single-automation-for-all-lights/375028/8
+# todo: alert when battery at 1%
+- alias: "Check For Flat Batteries"
+  id: "ef76e5b9-fa6d-4940-b89a-ba24cef91463"
+  initial_state: true
+  variables:
+    # fix test value
+    level: 0
+    monitored_batteries: >-
+      {{
+        states.sensor
+          | selectattr('attributes.monitor', 'defined')
+          | selectattr('attributes.monitor', 'eq', True)
+          | rejectattr('state', 'in', ['unavailable', 'unknown', 'none'])
+          | selectattr('attributes.device_class', 'eq', 'battery')
+          | map(attribute='entity_id')
+          | list
+      }}
+  trigger:
+    - platform: state
+      entity_id: sensor.number_of_flat_batteries
+  condition: >-
+    {{
+      expand(monitored_batteries)
+        | map(attribute='state')
+        | map('int')
+        | select('eq', level)
+        | list
+        | count
+        > 0
+    }}
+  action:
+    - service: notify.mobile_app_ceres
+      data:
+        title: "Batteries"
+        message: >
+          The following devices have no charge:
+          {%- for b in monitored_batteries %}
+            {%- if states(b) | int == level and not is_state(b, 'unavailable') %}
+            - {{ state_attr(b, 'friendly_name') | replace(' Battery', '') }}
+            {%- endif -%}
+          {%- endfor %}
+        data:
+          group: "batteries"
+          url: homeassistant://navigate/lovelace/devices
+
 # polling should be turned off
 # https://github.com/home-assistant/core/issues/71563
 - alias: "Update DB Size"

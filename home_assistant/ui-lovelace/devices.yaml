@@ -180,8 +180,10 @@ cards:
         - automation.backup_home_assistant
         - automation.bedlamps_auto_on_upon_sunset_or_arrival
         - automation.bedlamps_on_upon_low_light
+        - automation.bedlamps_on_upon_server_start
         - automation.blink_motion_indicator_while_recording
         - automation.check_disk_space_on_the_home_assistant_server
+        - automation.check_for_flat_batteries
         - automation.check_for_low_batteries
         - automation.close_cover_from_alert_action
         - automation.contractor_mode_disabled_alert
@@ -189,13 +191,11 @@ cards:
         - automation.contractor_mode_still_enabled_alert
         - automation.cover_left_open_alert
         - automation.dim_pieter_s_bedside_lamp
-        - automation.disable_automations_when_power_is_cut
         - automation.disable_contractor_mode
         - automation.disable_contractor_mode_from_alert_action
         - automation.disable_guest_mode_from_alert_action
         - automation.disable_guest_mode_when_getting_home
         - automation.download_damlevels_data
-        - automation.enable_automations_when_power_returns
         - automation.enable_contractor_mode
         - automation.enable_contractor_mode_from_alert_action
         - automation.enable_guest_mode_from_alert_action
@@ -217,6 +217,7 @@ cards:
         - automation.notify_if_no_recent_backup
         - automation.notify_if_server_load_high
         - automation.notify_pieter_going_home_from_work_in_cape_town
+        # todo
         - automation.open_garage_door_when_arriving_by_car
         - automation.open_the_gate_when_arriving_home
         - automation.restore_smart_bulb_statuses_after_power_restored
@@ -242,6 +243,7 @@ cards:
         - automation.toggle_rouve_s_bedside_lamp
         - automation.turn_audio_on_when_apple_tv_turned_on
         - automation.turn_off_entertainment_system_when_idle_or_leaving_room
+        - automation.update_automations_when_power_status_changed
         - automation.update_db_size
         - automation.update_gaia_bluetooth_audio_connection_status
         - automation.update_security_camera_snapshot_gallery

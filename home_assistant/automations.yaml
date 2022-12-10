@@ -545,6 +545,7 @@
     # https://community.home-assistant.io/t/using-the-new-for-each/419829
     - service: "automation.turn_{{ 'on' if is_state('binary_sensor.electricity_feed', 'on') else 'off' }}"
       target:
+        # remember that these automations have an initial value of true, so this practically (on start-up) has no real effect
         entity_id: "{{ expand('group.automations_to_save_energy') | map(attribute='entity_id') | list }}"
 
 - alias: "Bedlamps On Upon Low Light"

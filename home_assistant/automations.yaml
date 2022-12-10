@@ -2247,8 +2247,8 @@
       {{
         states.sensor
           | selectattr('attributes.monitor', 'defined')
-          | rejectattr('state', 'in', ['unavailable', 'unknown', 'none'])
           | selectattr('attributes.monitor', 'eq', True)
+          | rejectattr('state', 'in', ['unavailable', 'unknown', 'none'])
           | selectattr('attributes.device_class', 'eq', 'battery')
           | map(attribute='entity_id')
           | list

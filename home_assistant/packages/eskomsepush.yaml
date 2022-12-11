@@ -181,18 +181,20 @@ automation:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/main
 
-#   - alias: Upcoming slot notification
-#     initial_state: 'on'
-#     trigger:
-#       - entity_id: sensor.time_till_loadshedding
-#         platform: state
-#         to: '15'
-#     action:
-#       - alias: "Alert change"
-#         service: script.alert
-#         data:
-#           icon: ':zap:'
-#           object: 'Loadshedding slot'
-#           target: 'alerts-david'
-#           message: >
-#             Loadshedding slot in 15 minutes
+  - alias: Upcoming Loadshedding Notification
+    id: "a7c1b125-56a1-48d3-bf54-4d5430c81508"
+    initial_state: true
+    trigger:
+      - platform: template
+        value_template: >-
+          {% set t = (states('sensor.loadshedding_start_time') | as_datetime | as_local - timedelta(minutes=30)).strftime('%H:%M') %}
+          {% set n = now().strftime('%H:%M') %}
+          {{ n == t }}
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Loadshedding"
+          message: "Loadshedding at {{ (states('sensor.loadshedding_start_time') | as_datetime | as_local).strftime('%H:%M') }}."
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/main

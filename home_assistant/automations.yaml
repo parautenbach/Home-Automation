@@ -2012,6 +2012,15 @@
       entity_id: calendar.loadshedding
       event: start
       offset: "-00:05:00"
+    # automatic
+    # really need an offset option here
+    # - platform: time
+    #   at: sensor.loadshedding_start_time
+    - platform: template
+      value_template: >-
+        {% set t = (states('sensor.loadshedding_start_time') | as_datetime | as_local - timedelta(minutes=5)).strftime('%H:%M') %}
+        {% set n = now().strftime('%H:%M') %}
+        {{ n == t }}
   mode: single
   action:
     - service: notify.mobile_app_ceres

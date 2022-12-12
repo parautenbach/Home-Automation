@@ -191,10 +191,10 @@ automation:
           {% set n = now().strftime('%H:%M') %}
           {{ n == t }}
     action:
-      - service: notify.mobile_app_ceres
+      - service: notify.family
         data:
           title: "Loadshedding"
-          message: "Loadshedding at {{ (states('sensor.loadshedding_start_time') | as_datetime | as_local).strftime('%H:%M') }}."
+          message: "Starting at {{ (states('sensor.loadshedding_start_time') | as_datetime | as_local).strftime('%H:%M') }}."
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/main

@@ -193,7 +193,13 @@ automation:
       - service: notify.family
         data:
           title: "Loadshedding"
-          message: "Starting at {{ (states('sensor.loadshedding_start_time') | as_datetime | as_local).strftime('%H:%M') }}."
+          message: >-
+            {% set start = (states('sensor.loadshedding_start_time') | as_datetime | as_local).strftime('%H:%M') %}
+            {% set end = (states('sensor.loadshedding_end_time') | as_datetime | as_local).strftime('%H:%M') %}
+            {% set duration = states('sensor.loadshedding_duration') | as_timedelta %}
+            {% set hours = duration.seconds // 3600 %}
+            {% set minutes = (duration.seconds % 3600) // 60 %}
+            {{ states('sensor.loadshedding_stage') }} from {{ start }} until {{ end }} (~{{ hours }} hours).
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/main

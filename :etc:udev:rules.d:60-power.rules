@@ -1,0 +1,1 @@
+SUBSYSTEM=="power_supply",ENV{POWER_SUPPLY_NAME}=="AC0",RUN+="/usr/bin/curl -s -X POST http://localhost:8123/api/webhook/server_power_connected -d 'status=$env{POWER_SUPPLY_ONLINE}'"

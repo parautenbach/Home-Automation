@@ -1042,6 +1042,9 @@
     - repeat:
         for_each: "{{ expand('group.covers_with_timers') | map(attribute='entity_id') | list }}"
         sequence:
+          # this will fire regardless of whether there's a timer running or it was disabled
+          # the implication is: a disabled timer typically means we know a cover is open and that it's on purpose,
+          # but we'll remind ourselves anyway, just in case
           - if:
               - condition: template
                 value_template: "{{ is_state(repeat.item, 'open') }}"
@@ -2267,6 +2270,7 @@
           | list
       }}
   trigger:
+    # what if the server is down at this time? for now, we don't care: batteries might last till the next day and there's a flat battery check
     platform: time
     at: "09:00:00"
   condition: >-

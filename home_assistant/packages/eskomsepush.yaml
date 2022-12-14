@@ -98,7 +98,6 @@ sensor:
         friendly_name: Loadshedding Duration
         unique_id: loadshedding_duration
         device_class: duration
-        unit_of_measurement: m
         value_template: >-
           {%- if states('sensor.eskomsepush') and state_attr('sensor.eskomsepush', 'events') != [] -%}
             {{ states('sensor.loadshedding_end_time') | as_datetime - states('sensor.loadshedding_start_time') | as_datetime }}

@@ -1,3 +1,4 @@
+# https://company235.com/tools/colour/cie.html
 - name: Normal Lights
   # keep in sync with light.normal_group
   icon: mdi:brightness-5
@@ -9,6 +10,11 @@
       brightness: 255
       color_mode: "xy"
       xy_color: [0.544, 0.394]
+    light.corner_lights:
+      state: "on"
+      brightness: 255
+      color_mode: "xy"
+      xy_color: [0.571, 0.388]
 - name: Night Lights
   # keep in sync with light.night_group
   icon: mdi:brightness-4

@@ -21,6 +21,7 @@
   entities:
     - light.living_room_lamp
     - light.kitchen_counter
+    - light.corner_lights
 - platform: group
   name: Night Group
   entities:
@@ -41,3 +42,8 @@
   entities:
     - light.pieter_bedside
     - light.rouve_bedside
+- platform: group
+  name: Corner Lights
+  entities:
+    - light.dining_room_corner_light
+    - light.music_room_corner_light

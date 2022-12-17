@@ -431,6 +431,15 @@ sensor.watchman_missing_entities:
   friendly_name: Missing Entities
 sensor.watchman_missing_services:
   friendly_name: Missing Services
+sensor.foyer_motion_detections:
+  # unit_of_measurement: count
+  state_class: total_increasing
+light.dining_room_corner_light:
+  icon: mdi:axis
+light.music_room_corner_light:
+  icon: mdi:axis
+light.corner_lights:
+  icon: mdi:axis
 
 # state classes
 # https://developers.home-assistant.io/docs/core/entity/sensor/

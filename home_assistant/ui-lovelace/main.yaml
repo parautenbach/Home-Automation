@@ -91,13 +91,6 @@ cards:
             name: Living Room
             entity: light.living_room_lamp
           - type: custom:button-card
-            template: rgb_light
-            name: Dining Room
-            entity: light.dining_room
-            icon: mdi:dome-light
-      - type: horizontal-stack
-        cards:
-          - type: custom:button-card
             template:
               - rgb_light
               - rgb_light_with_timer
@@ -105,6 +98,13 @@ cards:
               profile: kitchen
             name: Kitchen Counter
             entity: light.kitchen_counter
+      - type: horizontal-stack
+        cards:
+          - type: custom:button-card
+            template: rgb_light
+            name: Dining Room
+            entity: light.dining_room
+            icon: mdi:dome-light
           - type: custom:button-card
             template: rgb_light
             name: Music Room
@@ -115,6 +115,26 @@ cards:
             name: Open Area
             entity: light.living_area_group
             icon: mdi:lightbulb-group-outline
+      - type: horizontal-stack
+        cards:
+          - type: custom:button-card
+            template: rgb_light
+            variables:
+              profile: corner_white
+            name: Dining Room
+            entity: light.dining_room_corner_light
+          - type: custom:button-card
+            template: rgb_light
+            variables:
+              profile: corner_white
+            name: Music Room
+            entity: light.music_room_corner_light
+          - type: custom:button-card
+            template: rgb_light
+            variables:
+              profile: corner_white
+            name: Corner Lights
+            entity: light.corner_lights
       - type: horizontal-stack
         title: Outside Lights
         cards:

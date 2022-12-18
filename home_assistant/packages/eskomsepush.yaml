@@ -148,7 +148,7 @@ timer:
     restore: true
 
 automation:
-  - alias: Start Loadshedding Timer
+  - alias: "Start Loadshedding Timer"
     id: "ed1036a6-3399-4e6b-a4ca-889e75da896f"
     trigger:
       - platform: time
@@ -180,7 +180,7 @@ automation:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/main
 
-  - alias: Upcoming Loadshedding Notification
+  - alias: "Upcoming Loadshedding Notification"
     id: "a7c1b125-56a1-48d3-bf54-4d5430c81508"
     initial_state: true
     trigger:

@@ -134,7 +134,7 @@ cards:
           - entity: group.security_automations
             name: Snapshots and Lights
       - type: history-graph
-        title: Motion
+        title: Movement
         hours_to_show: 24
         entities:
           - entity: binary_sensor.foyer_occupancy_homebridge
@@ -143,3 +143,12 @@ cards:
             name: Foyer
           - entity: light.living_room_lamp
             name: Living Room
+      - type: statistics-graph
+        entities:
+          - entity: sensor.foyer_motion_detections
+            name: Foyer
+        days_to_show: 7
+        period: day
+        chart_type: bar
+        stat_types:
+          - state

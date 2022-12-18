@@ -14,7 +14,7 @@
       state: "on"
       brightness: 255
       color_mode: "xy"
-      xy_color: [0.571, 0.388]
+      xy_color: [0.669, 0.323]
 - name: Night Lights
   # keep in sync with light.night_group
   icon: mdi:brightness-4

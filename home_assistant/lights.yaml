@@ -16,6 +16,7 @@
     - light.foyer
     - light.dining_room
     - light.music_room
+    - light.corner_lights
 - platform: group
   name: Normal Light Group
   entities:

@@ -23,17 +23,6 @@ cards:
       - proximity.home
       - input_boolean.pieter_present
       - input_boolean.rouve_present
-      - light.living_area_group
-      - light.normal_light_group
-      - light.night_group
-      - light.yard_group
-      - light.inside_security_group
-      - scene.night_lights
-      - scene.normal_lights
-      - sensor.daylight
-      - sensor.daylight_hm
-      - sensor.apple_tv_playing
-      - sensor.apple_tv_playing_hours_minutes
     show_header_toggle: true
   - type: history-graph
     title: Proximity

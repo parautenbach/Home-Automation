@@ -13,3 +13,12 @@ vacation_start:
   has_date: true
 vacation_end:
   has_date: true
+main_gate_opened:
+  has_date: true
+  has_time: true
+lhs_garage_door_opened:
+  has_date: true
+  has_time: true
+rhs_garage_door_opened:
+  has_date: true
+  has_time: true

@@ -1300,6 +1300,7 @@
             {% set name = "The main gate" %}
           {% endif %}
           {% set last_opened_entity = trigger.entity_id | replace('cover', 'input_datetime') ~ "_opened" %}
+          {% set last_opened = as_timestamp(states(last_opened_entity)) %}
           {{ name }} has been closed after {{ ((as_timestamp(utcnow()) - last_opened) // 60) | int }} min.
         data:
           # the timer entity

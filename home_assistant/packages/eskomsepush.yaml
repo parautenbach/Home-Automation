@@ -1,8 +1,8 @@
 # credit: https://github.com/tinuva/home-assistant-config/blob/8b16e0fa53be37682e4add2f338d8777bfd9896e/packages/energy/eskomsepush.yaml
----
-### EskomSePush API Docs: https://documenter.getpostman.com/view/1296288/UzQuNk3E
-### To sign up for a key, scroll down on their page for the API Request link: https://sepush.co.za/
-### Direct link to sign-up form: https://docs.google.com/forms/d/e/1FAIpQLSeZhAkhDaQX_mLT2xn41TkVjLkOH3Py3YWHi_UqQP4niOY01g/viewform
+# https://zatech.slack.com/archives/CG4HBE0NB/p1664122287331179?thread_ts=1664122287.331179&cid=CG4HBE0NB
+# EskomSePush API Docs: https://documenter.getpostman.com/view/1296288/UzQuNk3E
+# To sign up for a key, scroll down on their page for the API Request link: https://sepush.co.za/
+# Direct link to sign-up form: https://docs.google.com/forms/d/e/1FAIpQLSeZhAkhDaQX_mLT2xn41TkVjLkOH3Py3YWHi_UqQP4niOY01g/viewform
 
 # other interesting links:
 # https://www.eskom.co.za/eskom-divisions/tx/system-adequacy-reports/

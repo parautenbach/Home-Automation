@@ -2021,6 +2021,7 @@
   trigger:
     # https://www.home-assistant.io/docs/automation/trigger/#calendar-trigger
     # https://www.home-assistant.io/integrations/calendar/#automation
+    # manual (fallback option)
     - platform: calendar
       entity_id: calendar.loadshedding
       event: start

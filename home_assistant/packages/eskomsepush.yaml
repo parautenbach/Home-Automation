@@ -156,7 +156,7 @@ automation:
     condition:
       - condition: state
         entity_id: timer.loadshedding_duration
-        state: 'idle'
+        state: "idle"
     action:
       - service: timer.start
         data:

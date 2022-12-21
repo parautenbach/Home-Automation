@@ -217,7 +217,6 @@ cards:
         - automation.notify_if_no_recent_backup
         - automation.notify_if_server_load_high
         - automation.notify_pieter_going_home_from_work_in_cape_town
-        # todo
         - automation.open_garage_door_when_arriving_by_car
         - automation.open_the_gate_when_arriving_home
         - automation.restore_smart_bulb_statuses_after_power_restored
@@ -226,6 +225,7 @@ cards:
         - automation.set_pieter_s_driving_state
         - automation.set_vacation
         - automation.shut_down_devices_before_loadshedding
+        - automation.shut_down_gaia_notification
         - automation.shut_down_server
         - automation.switch_garage_light_according_to_door_status_and_light_conditions
         - automation.switch_off_bedlamp_when_plugging_in_phone

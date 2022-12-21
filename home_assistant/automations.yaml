@@ -2431,3 +2431,28 @@
         data:
           group: "environment"
           url: homeassistant://navigate/lovelace/environment
+
+- alias: "Shut Down Gaia Notification"
+  id: "ef1a7da7-d878-4456-a44c-9615b9712c2a"
+  initial_state: true
+  trigger:
+    - platform: time
+      at: sensor.loadshedding_start_time
+  condition:
+    - condition: state
+      entity_id: binary_sensor.gaia_active
+      state: "on"
+  condition:
+  action:
+    - service: notify.mobile_app_ceres
+      data:
+        title: "Loadshedding"
+        message: "Shut Gaia down now!"
+        data:
+          group: "home-electricity"
+          url: homeassistant://navigate/lovelace/main
+          push:
+            sound:
+              name: default
+              critical: 1
+              volume: 1.0

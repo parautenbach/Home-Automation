@@ -153,6 +153,7 @@ automation:
     trigger:
       - platform: time
         at: sensor.loadshedding_start_time
+    mode: single
     condition:
       - condition: state
         entity_id: timer.loadshedding_duration
@@ -171,6 +172,7 @@ automation:
     trigger:
       - platform: state
         entity_id: sensor.loadshedding_forecast
+    mode: single
     action:
       - service: notify.family
         data:
@@ -189,6 +191,7 @@ automation:
           {% set t = (states('sensor.loadshedding_start_time') | as_datetime | as_local - timedelta(minutes=30)).strftime('%H:%M') %}
           {% set n = now().strftime('%H:%M') %}
           {{ n == t }}
+    mode: single
     action:
       - service: notify.family
         data:

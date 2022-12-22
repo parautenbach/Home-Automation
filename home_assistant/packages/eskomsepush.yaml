@@ -120,10 +120,10 @@ sensor:
               {%- set date = as_timestamp(event['start']) | timestamp_custom('%a %d') -%}
               {%- set stage = event['note'] -%}
               {%- set start_time = as_timestamp(event['start']) | timestamp_custom('%H:%M') -%}
-              {%- set end_time = as_timestamp(event['end']) | timestamp_custom('%H:%M') %}
+              {%- set end_time = as_timestamp(event['end']) | timestamp_custom('%H:%M') -%}
               {%- set duration = states('sensor.loadshedding_end_time') | as_datetime - states('sensor.loadshedding_start_time') | as_datetime -%}
               {%- set hours = duration.seconds // 3600 -%}
-              {%- set minutes = (duration.seconds % 3600) // 60 -%}
+              {%- set minutes = (duration.seconds % 3600) // 60 %}
             - {{ date ~ ': ' ~ start_time ~ '-' ~ end_time ~ ' (' ~ '~' ~ hours ~ ' hours; ' ~ stage ~ ')'}}
             {%- endfor -%}
           {%- else -%}

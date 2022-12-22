@@ -24,6 +24,8 @@ filter:
     - light.backyard
     - light.garage
     - light.kitchen_counter
+    - light.dining_room_corner_light
+    - light.music_room_corner_light
     - switch.tivoli_audio
     - cover.main_gate
     - cover.lhs_garage_door

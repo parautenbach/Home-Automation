@@ -124,7 +124,7 @@ sensor:
               {%- set duration = states('sensor.loadshedding_end_time') | as_datetime - states('sensor.loadshedding_start_time') | as_datetime -%}
               {%- set hours = duration.seconds // 3600 -%}
               {%- set minutes = (duration.seconds % 3600) // 60 %}
-            - {{ date ~ ': ' ~ start_time ~ '-' ~ end_time ~ ' (' ~ '~' ~ hours ~ ' hours; ' ~ stage ~ ')'}}
+            - {{ date ~ ': ' ~ start_time ~ '-' ~ end_time ~ ' (' ~ '~' ~ hours ~ 'h; ' ~ stage ~ ')'}}
             {%- endfor -%}
           {%- else -%}
             No loadshedding.
@@ -218,7 +218,7 @@ automation:
             {% set duration = states('sensor.loadshedding_duration') | as_timedelta %}
             {% set hours = duration.seconds // 3600 %}
             {% set minutes = (duration.seconds % 3600) // 60 %}
-            Starting in {{ trigger.id }} min: {{ start }}-{{ end }} (~{{ hours }} hours; {{ states('sensor.loadshedding_stage') }}).
+            Starting in {{ trigger.id }} min: {{ start }}-{{ end }} (~{{ hours }}h; {{ states('sensor.loadshedding_stage') }}).
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/main

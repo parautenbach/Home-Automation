@@ -1360,8 +1360,8 @@
   id: "ff386c09-1dd5-4381-b404-abad62bffb01"
   initial_state: true
   trigger:
-    platform: state
-    entity_id: binary_sensor.internet_connection
+    - platform: state
+      entity_id: binary_sensor.internet_connection
   condition:
     - condition: state
       entity_id: binary_sensor.pieter_present

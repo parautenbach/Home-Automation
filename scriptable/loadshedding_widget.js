@@ -6,7 +6,7 @@ if (!config.runsInWidget) {
 Script.setWidget(widget);
 Script.complete();
 
-async function createWidget(items) {
+async function createWidget() {
 
     const serverUrl = "https://example.com/";
     const sensorUrl = serverUrl + "api/states/sensor.loadshedding_forecast";
@@ -47,7 +47,7 @@ async function createWidget(items) {
     forecast.borderWidth = 0;
 
     const forecastText = forecast.addText(forecastData);
-    forecastText.font = Font.regularSystemFont(15);
+    forecastText.font = Font.regularSystemFont(10);
     forecastText.textColor = Color.black();
 
     widget.addSpacer(15)

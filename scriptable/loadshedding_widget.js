@@ -7,8 +7,7 @@ Script.setWidget(widget);
 Script.complete();
 
 async function createWidget() {
-
-    const serverUrl = "https://example.com/";
+    // https://talk.automators.fm/t/how-to-store-credentials-securely-drafts-5-credential-equivalent/1619
     const sensorUrl = serverUrl + "api/states/sensor.loadshedding_forecast";
     const iconUrl = serverUrl + "static/icons/favicon-192x192.png";
     const token = "notatoken";
@@ -29,7 +28,6 @@ async function createWidget() {
     icon.cornerRadius = 1
     const iconWidget = icon.addImage(iconImage)
     iconWidget.imageSize = new Size(40, 40)
-    iconWidget.leftAlignImage()
 
     header.addSpacer(2);
 
@@ -37,8 +35,6 @@ async function createWidget() {
     title.setPadding(2, 0, 0, 0);
     const titleText = title.addText("Loadshedding");
     titleText.font = Font.regularSystemFont(30);
-    titleText.textColor = Color.black();
-    titleText.leftAlignText()
 
     widget.addSpacer(5)
 
@@ -48,7 +44,6 @@ async function createWidget() {
 
     const forecastText = forecast.addText(forecastData);
     forecastText.font = Font.regularSystemFont(10);
-    forecastText.textColor = Color.black();
 
     widget.addSpacer(15)
 
@@ -57,11 +52,6 @@ async function createWidget() {
     const lastUpdatedText = lastUpdated.addText("Last update: " + time);
     lastUpdatedText.font = Font.regularSystemFont(10);
     lastUpdatedText.rightAlignText()
-    //let date = new Date();
-    //const d = updatedStack.addDate(date);
-    //let f = new DateFormatter();
-    //d.applyRelativeStyle();
-    //updatedStack.addText(" ago");
 
     return widget;
 }
@@ -72,13 +62,13 @@ https://gist.github.com/marco79cgn/23ce08fd8711ee893a3be12d4543f2d2
 Retrieves the image from the local file store or downloads it once
 */
 async function getIcon(file, imageUrl) {
-    let fm = FileManager.local()
-    let dir = fm.documentsDirectory()
-    let path = fm.joinPath(dir, file)
+    const fm = FileManager.local()
+    const dir = fm.documentsDirectory()
+    const path = fm.joinPath(dir, file)
     if (fm.fileExists(path)) {
         return fm.readImage(path)
     } else {
-        let iconImage = await loadImage(imageUrl)
+        const iconImage = await loadImage(imageUrl)
         fm.writeImage(path, iconImage)
         return iconImage
     }

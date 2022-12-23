@@ -35,14 +35,13 @@ async function setupCredentials() {
 }
 
 async function createWidget() {
-    //return null;
     // https://talk.automators.fm/t/how-to-store-credentials-securely-drafts-5-credential-equivalent/1619
     const serverUrl = "https://" + Keychain.get(serverHostPortKey) + "/";
-    console.log(serverUrl);
+    //console.log(serverUrl);
     const sensorUrl = serverUrl + "api/states/sensor.loadshedding_forecast";
     const iconUrl = serverUrl + "static/icons/favicon-192x192.png";
     const token = Keychain.get(serverApiTokenKey);
-    console.log(token);
+    //console.log(token);
     const colorCode = "#03a9f4";
 
     const iconImage = await getIcon("hass-favicon.png", iconUrl);

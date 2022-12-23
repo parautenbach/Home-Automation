@@ -1,4 +1,15 @@
-let widget = await createWidget();
+// set this true and run from the app the first time and then make it false
+const setup = false;
+
+const serverHostPortKey = "HA Host";
+const serverApiTokenKey = "HA API Token";
+
+if (setup) {
+    await setupCredentials();
+}
+
+const widget = await createWidget();
+
 if (!config.runsInWidget) {
     await widget.presentLarge();
 }
@@ -6,11 +17,32 @@ if (!config.runsInWidget) {
 Script.setWidget(widget);
 Script.complete();
 
+async function captureCredential(key, exampleValue) {
+    if (Keychain.contains(key)) {
+        Keychain.remove(key);
+    }
+    const alert = new Alert();
+    alert.title = key;
+    alert.addSecureTextField(exampleValue, "");
+    await alert.presentAlert();
+    const value = alert.textFieldValue(0);
+    Keychain.set(key, value);
+}
+
+async function setupCredentials() {
+    await captureCredential(serverHostPortKey, "example.com:8123");
+    await captureCredential(serverApiTokenKey, "token");
+}
+
 async function createWidget() {
+    //return null;
     // https://talk.automators.fm/t/how-to-store-credentials-securely-drafts-5-credential-equivalent/1619
+    const serverUrl = "https://" + Keychain.get(serverHostPortKey) + "/";
+    console.log(serverUrl);
     const sensorUrl = serverUrl + "api/states/sensor.loadshedding_forecast";
     const iconUrl = serverUrl + "static/icons/favicon-192x192.png";
-    const token = "notatoken";
+    const token = Keychain.get(serverApiTokenKey);
+    console.log(token);
     const colorCode = "#03a9f4";
 
     const iconImage = await getIcon("hass-favicon.png", iconUrl);

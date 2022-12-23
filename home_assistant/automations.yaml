@@ -2442,7 +2442,6 @@
     - condition: state
       entity_id: binary_sensor.gaia_active
       state: "on"
-  condition:
   action:
     - service: notify.mobile_app_ceres
       data:

@@ -74,14 +74,14 @@ async function createWidget() {
     forecast.borderWidth = 0;
 
     const forecastText = forecast.addText(forecastData);
-    forecastText.font = Font.regularSystemFont(10);
+    forecastText.font = Font.regularSystemFont(14);
 
     widget.addSpacer(15)
 
     const lastUpdated = widget.addStack();
     const time = (new Date()).toLocaleTimeString().slice(0, 5);
     const lastUpdatedText = lastUpdated.addText("Last update: " + time);
-    lastUpdatedText.font = Font.regularSystemFont(10);
+    lastUpdatedText.font = Font.regularSystemFont(8);
     lastUpdatedText.rightAlignText()
 
     return widget;

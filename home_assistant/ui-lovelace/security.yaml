@@ -40,7 +40,8 @@ cards:
     cards:
       - type: picture-glance
         title: Security Camera
-        camera_image: camera.security_camera
+        camera_image: camera.security_camera_proxy
+        camera_view: live
         entities:
           - binary_sensor.foyer_motion_detected
           - entity: script.security_camera_create_snapshot

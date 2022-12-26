@@ -4,8 +4,15 @@
   # https://stackoverflow.com/questions/37427498/how-to-escape-double-and-single-quotes-in-yaml-within-the-same-string
   # https://stackoverflow.com/questions/6195872/applying-multiple-filters-at-once-with-ffmpeg
   # https://einar.slaskete.net/2011/09/05/adding-time-stamp-overlay-to-video-stream-using-ffmpeg/
+  # also check /home/pi/v4l2rtspserver/v4l2rtspserver.service (on the pi)
+  # https://github.com/umlaeute/v4l2loopback
+  # the ha docs state the -pred 1 is the default, but that option is nowhere to be found in the ffmpeg docs
   extra_arguments: >-
     -vf "hue=s=0, drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='%{localtime\:%Y-%m-%d %T}':fontcolor=white@0.8:x=10:y=10"
+# https://github.com/home-assistant/core/issues/84576
+- platform: proxy
+  name: security_camera_proxy
+  entity_id: camera.security_camera
 - platform: local_file
   name: security_camera_last_snapshot
   file_path: /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg

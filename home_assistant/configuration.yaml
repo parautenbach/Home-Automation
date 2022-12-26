@@ -34,6 +34,7 @@ homeassistant:
   elevation: !secret home_elevation
   unit_system: metric
   time_zone: "Africa/Johannesburg"
+  currency: ZAR
   allowlist_external_dirs:
     - /tmp
     - /mnt/nas/Backups/home_assistant/

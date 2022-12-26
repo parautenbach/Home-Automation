@@ -175,6 +175,8 @@ automation:
     trigger:
       - platform: state
         entity_id: sensor.loadshedding_forecast
+        # this is a stopgap; don't know why sensor.loadshedding_forecast goes unavailable
+        not_to: "unavailable"
     mode: single
     action:
       - service: notify.family
@@ -193,15 +195,15 @@ automation:
         id: "60"
         value_template: >-
           {% set offset = 60 %}
-          {% set t = (states('sensor.loadshedding_start_time') | as_datetime | as_local - timedelta(minutes=offset)).strftime('%H:%M') %}
-          {% set n = now().strftime('%H:%M') %}
+          {% set t = (states('sensor.loadshedding_start_time') | as_datetime | as_local - timedelta(minutes=offset)).strftime('%Y-%d-%m %H:%M') %}
+          {% set n = now().strftime('%Y-%d-%m %H:%M') %}
           {{ n == t }}
       - platform: template
         id: "15"
         value_template: >-
           {% set offset = 15 %}
-          {% set t = (states('sensor.loadshedding_start_time') | as_datetime | as_local - timedelta(minutes=offset)).strftime('%H:%M') %}
-          {% set n = now().strftime('%H:%M') %}
+          {% set t = (states('sensor.loadshedding_start_time') | as_datetime | as_local - timedelta(minutes=offset)).strftime('%Y-%d-%m %H:%M') %}
+          {% set n = now().strftime('%Y-%d-%m %H:%M') %}
           {{ n == t }}
     mode: single
     condition:

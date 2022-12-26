@@ -138,11 +138,11 @@ cards:
         hours_to_show: 24
         entities:
           - entity: binary_sensor.foyer_occupancy_homebridge
-            name: Security Camera
+            name: Sec. Camera
           - entity: light.foyer
-            name: Foyer
+            name: Foyer Light
           - entity: light.living_room_lamp
-            name: Living Room
+            name: Living R. Lamp
       - type: statistics-graph
         entities:
           - entity: sensor.foyer_motion_detections

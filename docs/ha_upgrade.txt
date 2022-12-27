@@ -40,3 +40,8 @@ py upgrade:
 19. pip install wheel homeassistant
 20a. ** Note I chose to run hass first time to see all the installation messages.**
 20b. sudo systemctl start home-assistant@homeassistant.service
+
+I was also able to upgrade the venv using those steps with the following additions:
+Step 1: I had to also add libffi-dev
+Steps 12/13/17: added sudo (als already mentioned above)
+Step 19: had to add pip3 install mysqlclient because my Home Assistant installation uses a MySQL database for the recorder component.

@@ -2,11 +2,6 @@ ha upgrade:
 - https://www.home-assistant.io/docs/installation/virtualenv/
 - https://www.home-assistant.io/docs/installation/raspberry-pi
 
-py upgrade:
-- https://blog.kalavala.net/raspberrypi/python/2018/01/12/upgrade-python.html
-- https://community.home-assistant.io/t/python-3-6-upgrade-of-a-virtualenv/21722/162?u=parautenbach
-- http://blog.ceard.tech/2017/12/upgrading-python-virtual-environment.html
-
 quick steps:
 - sudo systemctl stop home-assistant@homeassistant
 - cd /srv/homeassistant/
@@ -16,3 +11,32 @@ quick steps:
 
 clean-up:
 - https://scribles.net/free-up-sd-card-space-on-raspberry-pi/
+
+py upgrade:
+- https://blog.kalavala.net/raspberrypi/python/2018/01/12/upgrade-python.html
+- https://community.home-assistant.io/t/python-3-6-upgrade-of-a-virtualenv/21722/162
+- http://blog.ceard.tech/2017/12/upgrading-python-virtual-environment.html
+
+==========
+
+1, sudo apt-get install build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev
+2. wget -O /tmp/Python-3.7.3.tar.xz https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tar.xz
+3. cd /tmp
+4. tar xf Python-3.7.3.tar.xz
+5. cd Python-3.7.3
+6. ./configure
+7. sudo make altinstall
+8. sudo apt -y autoremove
+9. cd
+10. rm -r /tmp/Python-3.7.3
+11. rm /tmp/Python-3.7.3.tar.xz
+12. sudo systemctl stop home-assistant@homeassistant.service
+13. sudo mv /srv/homeassistant /srv/homeassistant_old
+14. sudo mkdir /srv/homeassistant
+15. sudo chown homeassistant:homeassistant -R /srv/homeassistant
+16. cd /srv/homeassistant
+17. /usr/local/bin/python3.7 -m venv .
+18. source bin/activate
+19. pip install wheel homeassistant
+20a. ** Note I chose to run hass first time to see all the installation messages.**
+20b. sudo systemctl start home-assistant@homeassistant.service

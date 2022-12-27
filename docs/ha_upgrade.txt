@@ -45,3 +45,9 @@ I was also able to upgrade the venv using those steps with the following additio
 Step 1: I had to also add libffi-dev
 Steps 12/13/17: added sudo (als already mentioned above)
 Step 19: had to add pip3 install mysqlclient because my Home Assistant installation uses a MySQL database for the recorder component.
+
+=====
+
+virtualenv --python="/usr/bin/python2.6" "/path/to/new/virtualenv/"
+
+rather: python3.11 -m venv venv

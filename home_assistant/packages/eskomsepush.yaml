@@ -9,6 +9,8 @@
 
 rest:
   - resource: "https://developer.sepush.co.za/business/2.0/area"
+    # maybe give this and the sensor below a scheduled update interval in future
+    # https://community.home-assistant.io/t/rest-sensor-can-i-schedule-when-the-update-happens/408500
     scan_interval: 3600  # rate limit
     headers:
       token: !secret eskomsepush

@@ -12,13 +12,14 @@
     -vf "hue=s=0, drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='%{localtime\:%Y-%m-%d %T}':fontcolor=white@0.8:x=10:y=10"
 # the proxy camera will contain the overlaid timestamp on the video stream (but you cannot record this stream):
 # https://community.home-assistant.io/t/camera-using-ffmpeg-platform-and-drawtext-overlay-showing-on-snapshot-but-not-recording/372129
-# the quality options seem broken:
-# https://github.com/home-assistant/core/issues/84576
 # can one configure an overlay in v4l2? yes, but it's hacky (for a dynamic piece of text)
 # https://www.linux-projects.org/uv4l/tutorials/text-overlay/
 - platform: proxy
   name: security_camera_proxy
   entity_id: camera.security_camera
+  # why on earth doesn't this work?
+  # https://github.com/home-assistant/core/issues/84576
+  # stream_quality: 90
 - platform: local_file
   name: security_camera_last_snapshot
   file_path: /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg

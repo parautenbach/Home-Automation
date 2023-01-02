@@ -8,7 +8,7 @@ frontend:
 
 And put the following into <config-dir>/www/ThemeOverride.js
 
-https://community.home-assistant.io/t/rounded-corners-in-every-theme/103833/6?u=parautenbach
+https://community.home-assistant.io/t/rounded-corners-in-every-theme/103833/6
 */
 
 /*

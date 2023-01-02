@@ -174,14 +174,16 @@ cards:
       entities:
         - automation.alert_if_garages_opened_or_closed_when_not_supposed_to
         - automation.alert_if_gate_opened_or_closed_when_not_supposed_to
-        - automation.alert_vacation_start
         - automation.alert_vacation_end
+        - automation.alert_vacation_start
         - automation.away_mode
         - automation.backup_home_assistant
         - automation.bedlamps_auto_on_upon_sunset_or_arrival
+        - automation.bedlamps_off_after_sunrise
         - automation.bedlamps_on_upon_low_light
         - automation.bedlamps_on_upon_server_start
         - automation.blink_motion_indicator_while_recording
+        - automation.change_on_air_status
         - automation.check_disk_space_on_the_home_assistant_server
         - automation.check_for_flat_batteries
         - automation.check_for_low_batteries
@@ -193,6 +195,7 @@ cards:
         - automation.dim_pieter_s_bedside_lamp
         - automation.disable_contractor_mode
         - automation.disable_contractor_mode_from_alert_action
+        - automation.disable_cover_timeout_from_alert_action
         - automation.disable_guest_mode_from_alert_action
         - automation.disable_guest_mode_when_getting_home
         - automation.download_damlevels_data
@@ -200,14 +203,18 @@ cards:
         - automation.enable_contractor_mode_from_alert_action
         - automation.enable_guest_mode_from_alert_action
         - automation.extend_cover_timeout_from_alert_action
+        # - automation.foyer_motion_detected_last
         - automation.guest_mode_disabled_alert
         - automation.guest_mode_enabled_alert
         - automation.inside_lights_auto_on_upon_sunset_or_arrival
         - automation.lights_off_after_sunrise
-        - automation.lights_on_upon_low_light
         - automation.lights_off_when_loadshedding
-        - automation.loadshedding_forecast_notification
+        - automation.lights_on_upon_low_light
         - automation.low_server_battery
+        # - automation.monitor_inbound_internet_traffic
+        # - automation.monitor_outbound_internet_traffic
+        # - automation.motion_indicator_off
+        # - automation.motion_indicator_on
         - automation.notify_doorbell_rang
         - automation.notify_if_cover_was_left_open
         - automation.notify_if_driving_state_changed
@@ -220,7 +227,11 @@ cards:
         - automation.notify_when_server_started_after_being_shut_down_automatically
         - automation.open_garage_door_when_arriving_by_car
         - automation.open_the_gate_when_arriving_home
+        - automation.pollen_levels_update
+        # - automation.proximity_updates
         - automation.restore_smart_bulb_statuses_after_power_restored
+        - automation.save_last_smart_bulb_state
+        - automation.see_mobile_devices
         - automation.set_dark_theme
         - automation.set_light_theme
         - automation.set_pieter_s_driving_state
@@ -228,6 +239,9 @@ cards:
         - automation.shut_down_devices_before_loadshedding
         - automation.shut_down_gaia_notification
         - automation.shut_down_server
+        - automation.start_cover_timer_when_opened
+        - automation.stop_cover_timer_when_closed
+        - automation.stop_light_timer_if_running_when_light_turned_off
         - automation.switch_garage_light_according_to_door_status_and_light_conditions
         - automation.switch_off_bedlamp_when_plugging_in_phone
         - automation.switch_off_light_when_timer_expires
@@ -244,12 +258,13 @@ cards:
         - automation.toggle_rouve_s_bedside_lamp
         - automation.turn_audio_on_when_apple_tv_turned_on
         - automation.turn_off_entertainment_system_when_idle_or_leaving_room
-        - automation.upcoming_loadshedding_notification
         - automation.update_automations_when_power_status_changed
         - automation.update_db_size
         - automation.update_gaia_bluetooth_audio_connection_status
+        # - automation.update_openuv_every_20_minutes_during_the_daytime
         - automation.update_security_camera_snapshot_gallery
         - automation.update_server_power_status
+        - automation.update_timers_for_covers_on_startup
   - type: vertical-stack
     cards:
       - type: map

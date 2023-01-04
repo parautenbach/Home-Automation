@@ -35,8 +35,6 @@
       - script.entertainment_satellite_on
       - script.entertainment_off
       - script.open_pedestrian_gap
-      # - camera.security_camera
-      - camera.doorbell
   entity_config:
     sensor.living_room_ht_temperature:
       linked_battery_sensor: sensor.living_room_ht_battery
@@ -97,4 +95,12 @@
     camera.security_camera:
       # https://www.home-assistant.io/integrations/homekit/#linked_motion_sensor
       linked_motion_sensor: binary_sensor.foyer_motion_detected
-# todo: camera.doorbell
+- name: Doorbell Camera
+  port: 21065
+  mode: accessory
+  filter:
+    include_entities:
+      - camera.doorbell
+  entity_config:
+    camera.doorbell:
+      linked_motion_sensor: binary_sensor.doorbell_motion_detected

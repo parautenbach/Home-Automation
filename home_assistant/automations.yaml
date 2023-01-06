@@ -1641,7 +1641,8 @@
         - sun
   action:
     # https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete
-    - service: script.make_backup
+    - service: script.turn_on
+      entity_id: script.make_backup
 
 # backup script: https://gist.github.com/riemers/041c6a386a2eab95c55ba3ccaa10e7b0
 - alias: "Notify If No Recent Backup"

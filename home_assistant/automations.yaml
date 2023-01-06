@@ -702,8 +702,16 @@
           after: "07:00:00"
           before: "23:00:00"
   action:
-    - service: cover.open_cover
-      entity_id: cover.main_gate
+    - if:
+        - condition: state
+          entity_id: binary_sensor.pieter_driving
+          state: "on"
+      then:
+        - service: cover.open_cover
+          entity_id: cover.main_gate
+      else:
+        - service: script.turn_on
+          entity_id: script.open_pedestrian_gap
 
 - alias: "Stop Light Timer If Running When Light Turned Off"
   id: "5878e444-72bc-4633-85c9-de0ebf5a57dd"

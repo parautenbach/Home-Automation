@@ -736,7 +736,7 @@
 # https://www.home-assistant.io/integrations/proximity/
 # https://www.home-assistant.io/docs/configuration/templating/ (distance function)
 # https://companion.home-assistant.io/docs/core/sensors/
-- alias: "Open Garage Door When Arriving By Car"
+- alias: "Open Garage Door When Arriving"
   id: "0da9adc5-24df-4669-8160-bbc6782dc283"
   initial_state: true
   trigger:

@@ -225,7 +225,7 @@ cards:
         - automation.notify_if_server_load_high
         - automation.notify_pieter_going_home_from_work_in_cape_town
         - automation.notify_when_server_started_after_being_shut_down_automatically
-        - automation.open_garage_door_when_arriving_by_car
+        - automation.open_garage_door_when_arriving
         - automation.open_the_gate_when_arriving_home
         - automation.pollen_levels_update
         # - automation.proximity_updates

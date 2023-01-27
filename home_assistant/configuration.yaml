@@ -56,6 +56,7 @@ logger:
   #   homeassistant.components.automation: info
   #   homeassistant.components.python_script: debug
   #   custom_components.shairport_sync: debug
+  #   custom_components.multiscrape: debug
 
 lovelace:
   mode: yaml

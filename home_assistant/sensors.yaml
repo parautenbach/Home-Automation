@@ -324,6 +324,10 @@
   name: 'Internet Traffic In'
   entity_id: sensor.internet_speed_in
   state_characteristic: mean
+  # it's a little unclear how to set this, but let's say if this updates every second,
+  # 100 samples should cover 1 minute even with some misses
+  # https://www.home-assistant.io/integrations/statistics/#an-important-note-on-max_age-and-sampling_size
+  sampling_size: 100
   max_age:
     minutes: 1
 
@@ -331,6 +335,7 @@
   name: 'Internet Traffic Out'
   entity_id: sensor.internet_speed_out
   state_characteristic: mean
+  sampling_size: 100
   max_age:
     minutes: 1
 

@@ -32,6 +32,7 @@ homeassistant:
   latitude: !secret home_latitude
   longitude: !secret home_longitude
   elevation: !secret home_elevation
+  country: ZA
   unit_system: metric
   time_zone: "Africa/Johannesburg"
   currency: ZAR

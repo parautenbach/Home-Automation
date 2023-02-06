@@ -103,6 +103,7 @@ button_card_templates:
             card:
               - font-size: 12px
               - box-shadow: none
+              - border: none
             state:
               - margin-top: -1ex
               - margin-bottom: -1ex
@@ -240,6 +241,7 @@ button_card_templates:
               - margin-bottom: -1px
               - font-size: 12px
               - box-shadow: none
+              - border: none
             state:
               - color: >
                   [[[
@@ -293,6 +295,7 @@ button_card_templates:
             card:
               - font-size: 12px
               - box-shadow: none
+              - border: none
             state:
               - margin-top: -1ex
               - margin-bottom: -1ex

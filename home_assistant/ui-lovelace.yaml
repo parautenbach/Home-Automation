@@ -50,6 +50,7 @@ button_card_templates:
     styles:
       card:
         - '--state-icon-active-color': var(--state-active-color)
+        # --paper-item-icon-color still works for off (but not the icon-active one below)
         - '--paper-item-icon-active-color': var(--state-icon-active-color)
   basic:
     template:

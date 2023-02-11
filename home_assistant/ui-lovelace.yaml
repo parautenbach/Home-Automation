@@ -44,10 +44,18 @@ button_card_templates:
         - color: var(--secondary-text-color)
         - font-size: 0.8rem
     tap_action: none
+  # https://github.com/custom-cards/button-card/issues/635#issuecomment-1347826414
+  # https://github.com/home-assistant/frontend/blob/dev/src/resources/ha-style.ts
+  old_colors:
+    styles:
+      card:
+        - '--state-icon-active-color': var(--state-active-color)
+        - '--paper-item-icon-active-color': var(--state-icon-active-color)
   basic:
+    template:
+      - old_colors
     size: 20%
     show_label: true
-    color: var(--button-card-light-color)
     # this is just to create a phantom space to have it align better with other buttons on the same row
     label: >
       [[[
@@ -76,9 +84,10 @@ button_card_templates:
       action: more-info
       haptic: selection
   light_with_timer:
+    template:
+      - old_colors
     triggers_update: all
     size: 20%
-    color: var(--button-card-light-color)
     styles:
       name:
         - color: var(--paper-item-icon-color)
@@ -137,6 +146,8 @@ button_card_templates:
       action: more-info
       haptic: selection
   rgb_light:
+    template:
+      - old_colors
     variables:
       above_threshold: |
         [[[
@@ -148,7 +159,6 @@ button_card_templates:
           return false;
         ]]]
     size: 20%
-    color: var(--button-card-light-color)
     show_label: true
     label: >
       [[[
@@ -205,6 +215,8 @@ button_card_templates:
       action: more-info
       haptic: selection
   rgb_light_with_timer:
+    template:
+      - old_colors
     triggers_update: all
     styles:
       grid:
@@ -277,6 +289,8 @@ button_card_templates:
       haptic: selection
       action: more-info
   cover_with_timer:
+    template:
+      - old_colors
     triggers_update: all
     size: 20%
     show_name: true
@@ -335,6 +349,8 @@ button_card_templates:
         entity_id: "[[[ return entity.entity_id.replace('cover.', 'timer.') + '_timer'; ]]]"
         duration: "00:10:00"
   cover_with_occupancy:
+    template:
+      - old_colors
     triggers_update: all
     state:
       - operator: template
@@ -393,6 +409,8 @@ button_card_templates:
       confirmation:
         text: "[[[ return `Are you sure you want to restart the ${variables.name.toLowerCase()} device?`; ]]]"
   remote:
+    template:
+      - old_colors
     variables:
       selection: "Remote State"
     entity: input_select.selected_remote

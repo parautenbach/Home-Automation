@@ -46,6 +46,8 @@ button_card_templates:
     tap_action: none
   # https://github.com/custom-cards/button-card/issues/635#issuecomment-1347826414
   # https://github.com/home-assistant/frontend/blob/dev/src/resources/ha-style.ts
+  # https://www.home-assistant.io/integrations/frontend/
+  # https://community.home-assistant.io/t/2022-12-it-does-matter/499441/94
   old_colors:
     styles:
       card:

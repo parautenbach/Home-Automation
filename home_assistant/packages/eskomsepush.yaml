@@ -100,11 +100,12 @@ sensor:
         friendly_name: Loadshedding Duration
         unique_id: loadshedding_duration
         device_class: duration
+        unit_of_measurement: h
         value_template: >-
           {%- if states('sensor.eskomsepush') and state_attr('sensor.eskomsepush', 'events') != [] -%}
-            {{ states('sensor.loadshedding_end_time') | as_datetime - states('sensor.loadshedding_start_time') | as_datetime }}
+            {{ (states('sensor.loadshedding_end_time') | as_datetime - states('sensor.loadshedding_start_time') | as_datetime).seconds/60/60 }}
           {%- else -%}
-            {{ "00:00"  | as_timedelta }}
+            {{ 0 }}
           {%- endif -%}
       eskomsepush_calls_remaining:
         unique_id: eskomsepush_api_calls_remaining
@@ -219,9 +220,9 @@ automation:
           message: >-
             {% set start = (states('sensor.loadshedding_start_time') | as_datetime | as_local).strftime('%H:%M') %}
             {% set end = (states('sensor.loadshedding_end_time') | as_datetime | as_local).strftime('%H:%M') %}
-            {% set duration = states('sensor.loadshedding_duration') | as_timedelta %}
-            {% set hours = duration.seconds // 3600 %}
-            {% set minutes = (duration.seconds % 3600) // 60 %}
+            {% set duration = states('sensor.loadshedding_duration') | float(0) %}
+            {% set hours = duration | int %}
+            {% set minutes = duration - hours %}
             Starting in {{ trigger.id }} min: {{ start }}-{{ end }} (~{{ hours }}h; {{ states('sensor.loadshedding_stage') }}).
           data:
             group: "home-electricity"

@@ -16,6 +16,8 @@ Also see: https://github.com/home-assistant/frontend/blob/master/src/resources/h
 */
 
 document.documentElement.style.setProperty('--ha-card-border-radius', '5px');
+//document.documentElement.style.setProperty('--ha-card-border-color', 'rgba(0,0,0,0)');  // transparent
+
 document.documentElement.style.setProperty('--custom-color-blue',     '#3498db');  // slate: #2980b9 - 2b84d2
 document.documentElement.style.setProperty('--custom-color-yellow',   '#ff9800');  // slate: #b58e31 - fd8509
 document.documentElement.style.setProperty('--custom-color-red',      '#e74c3c');  // slate: #b83829 - df342e

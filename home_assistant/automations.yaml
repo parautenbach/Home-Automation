@@ -2421,8 +2421,8 @@
     # one way is to concatenate the individual states (as strings) to create a new state,
     # but then this whole automation need to change (will need A LOT of extra parsing and is maybe not worth the effort and benefit)
     # the reason is that the previous values will need to be extracted from the concatenated string
-    platform: state
-    entity_id: sensor.overall_pollen_risk
+    - platform: state
+      entity_id: sensor.overall_pollen_risk
   mode: single
   action:
     - service: notify.family

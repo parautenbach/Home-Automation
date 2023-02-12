@@ -27,6 +27,7 @@ template: !include template_sensors.yaml
 timer: !include timers.yaml
 utility_meter: !include utility_meters.yaml
 
+# https://www.home-assistant.io/docs/configuration/basic/
 homeassistant:
   name: Home
   latitude: !secret home_latitude

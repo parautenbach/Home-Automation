@@ -230,7 +230,6 @@
         {% endif %}
     home_assistant_server_battery_status:
       friendly_name: "Home Assistant Server Battery Status"
-      device_class: battery
       value_template: >-
         {{ state_attr('sensor.home_assistant_server_battery', 'status') }}
       icon_template: >-

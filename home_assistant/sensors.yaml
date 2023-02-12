@@ -342,6 +342,7 @@
   max_age:
     minutes: 1
 
+# https://github.com/home-assistant/core/issues/87941
 - platform: filter
   name: google_travel_time_filtered
   entity_id: sensor.google_travel_time

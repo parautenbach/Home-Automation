@@ -119,12 +119,12 @@ panel_custom:
     config:
       target: /developer-tools/yaml
   - name: panel-redirect
-    url_path: redirect-devices
-    sidebar_title: Devices
-    sidebar_icon: mdi:devices
+    url_path: redirect-entities
+    sidebar_title: Entities
+    sidebar_icon: mdi:format-list-bulleted
     module_url: /local/panel-redirect.js
     config:
-      target: /config/integrations
+      target: /config/entities
   - name: panel-redirect
     url_path: redirect-logs
     sidebar_title: Logs

@@ -242,7 +242,7 @@ button_card_templates:
           - padding-right: 1ex
     custom_fields:
       s: >
-        [[[ return '/' ]]]
+        [[[ return '/'; ]]]
       t:
         card:
           type: custom:button-card
@@ -359,15 +359,15 @@ button_card_templates:
       - operator: template
         value: >
           [[[
-            return states[`${variables.occupancy_entity}`].state == "on"
+            return states[`${variables.occupancy_entity}`].state == "on";
           ]]]
         color: var(--state-binary_sensor-active-color)
       - operator: template
         value: >
           [[[
-            return states[`${variables.occupancy_entity}`].state == "off"
+            return states[`${variables.occupancy_entity}`].state == "off";
           ]]]
-        color: var(--state-binary_sensor-inactive-color)
+        color: var(--paper-item-icon-color)
       - value: 'unavailable'
         styles:
           icon:
@@ -378,7 +378,27 @@ button_card_templates:
       service: script.close_garage_door_and_main_gate
       service_data:
         garage_door: "[[[ return entity.entity_id; ]]]"
+  devices_common:
+    state:
+      - operator: template
+        value: >
+          [[[
+            return entity.state == "on";
+          ]]]
+        color: var(--state-binary_sensor-active-color)
+      - operator: template
+        value: >
+          [[[
+            return entity.state == "off";
+          ]]]
+        color: var(--paper-item-icon-color)
+      - value: 'unavailable'
+        styles:
+          icon:
+            - color: var(--state-unavailable-color)
   shutdown:
+    template:
+      - devices_common
     name: "[[[ return entity.attributes.friendly_name; ]]]"
     size: 30%
     styles:
@@ -396,6 +416,8 @@ button_card_templates:
       confirmation:
         text: "[[[ return `Are you sure you want to shut down ${entity.attributes.friendly_name}?` ]]]"
   restart:
+    template:
+      - devices_common
     name: "[[[ return variables.name; ]]]"
     size: 20%
     styles:
@@ -417,7 +439,7 @@ button_card_templates:
     variables:
       selection: "Remote State"
     entity: input_select.selected_remote
-    name: "[[[ return variables.selection ]]]"
+    name: "[[[ return variables.selection; ]]]"
     size: 50%
     color_type: icon
     styles:

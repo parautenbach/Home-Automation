@@ -2111,25 +2111,6 @@
             seconds: 5
         - service: shell_command.shutdown_server
 
-- alias: "Update OpenUV every 20 minutes during the daytime"
-  id: "34f13272-f170-4ef2-92e2-7ad97ad14891"
-  initial_state: false
-  # server seems to 500 quite often:
-  # https://github.com/bachya/pyopenuv/issues/48
-  # https://github.com/home-assistant/core/pull/54436
-  trigger:
-    platform: time_pattern
-    minutes: "/20"
-  condition:
-    condition: and
-    conditions:
-      - condition: sun
-        after: sunrise
-      - condition: sun
-        before: sunset
-  action:
-    service: openuv.update_uv_index_data
-
 - alias: "Download Damlevels Data"
   id: "0cb4d6ba-5a63-45f7-8adc-efb98724a44e"
   trigger:

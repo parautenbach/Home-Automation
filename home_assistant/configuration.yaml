@@ -132,6 +132,20 @@ panel_custom:
     module_url: /local/panel-redirect.js
     config:
       target: /config/logs
+  - name: panel-redirect
+    url_path: redirect-integrations
+    sidebar_title: Integrations
+    sidebar_icon: mdi:apps-box
+    module_url: /local/panel-redirect.js
+    config:
+      target: /config/integrations
+  - name: panel-redirect
+    url_path: redirect-automations
+    sidebar_title: Automations
+    sidebar_icon: mdi:autorenew
+    module_url: /local/panel-redirect.js
+    config:
+      target: /config/automation/dashboard
 
 recorder:
   db_url: postgresql://@/homeassistant

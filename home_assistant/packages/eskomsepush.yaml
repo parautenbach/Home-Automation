@@ -7,6 +7,9 @@
 # other interesting links:
 # https://www.eskom.co.za/eskom-divisions/tx/system-adequacy-reports/
 
+# test stuff
+# curl -s -X GET -H "Token: XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX" --url "https://developer.sepush.co.za/business/2.0/api_allowance"
+
 rest:
   - resource: "https://developer.sepush.co.za/business/2.0/area"
     # maybe give this and the sensor below a scheduled update interval in future
@@ -117,7 +120,8 @@ sensor:
         friendly_name: Loadshedding Forecast
         value_template: >
           Your latest forecast:
-          {% set events = state_attr('sensor.eskomsepush', 'events') %}
+          {# to not exceed the 255 character limit of the sensor, limit this to the next 3 events #}
+          {% set events = state_attr('sensor.eskomsepush', 'events')[0:3] %}
           {%- if events != [] -%}
             {%- for event in events %}
               {%- set date = as_timestamp(event['start']) | timestamp_custom('%a %d') -%}

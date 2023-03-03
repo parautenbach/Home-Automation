@@ -2026,7 +2026,7 @@
 
 - alias: "Shut Down Devices Before Loadshedding"
   id: "015daeee-a776-4220-b5cb-0f4949dde6a0"
-  initial_state: true
+  initial_state: false
   trigger:
     # https://www.home-assistant.io/docs/automation/trigger/#calendar-trigger
     # https://www.home-assistant.io/integrations/calendar/#automation
@@ -2423,7 +2423,7 @@
 
 - alias: "Shut Down Gaia Notification"
   id: "ef1a7da7-d878-4456-a44c-9615b9712c2a"
-  initial_state: true
+  initial_state: false
   trigger:
     - platform: time
       at: sensor.loadshedding_start_time

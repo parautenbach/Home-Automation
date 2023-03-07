@@ -216,7 +216,7 @@
           {{ 0 | as_datetime }}
         {% endif %}
       icon_template: >-
-        {% set file_list = state_attr('sensor.home_assistant', 'file_list') %}
+        {% set file_list = state_attr('sensor.home_assistant', 'file_list') | sort %}
         {% if file_list != [] %}
           {% set last_backup_file = file_list | last %}
           {% set last_backup_dt = strptime(last_backup_file[-19:-4] ~ '+0000', '%Y%m%d_%H%M%S%z', 0 | as_datetime) %}

@@ -208,7 +208,7 @@
       device_class: timestamp
       # https://community.home-assistant.io/t/what-to-return-in-timestamp-template-sensor-when-state-is-unknown/377152/
       value_template: >-
-        {% set file_list = state_attr('sensor.home_assistant', 'file_list') %}
+        {% set file_list = state_attr('sensor.home_assistant', 'file_list') | sort %}
         {% if file_list != [] %}
           {% set last_backup_file = file_list | last %}
           {{ strptime(last_backup_file[-19:-4] ~ '+0000', '%Y%m%d_%H%M%S%z', None).isoformat() }}

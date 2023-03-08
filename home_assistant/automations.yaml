@@ -944,6 +944,8 @@
     - platform: time
       at:
         - "01:00:00"
+    - platform: homeassistant
+      event: start
   action:
     - service: input_datetime.set_datetime
       entity_id: input_datetime.vacation_start

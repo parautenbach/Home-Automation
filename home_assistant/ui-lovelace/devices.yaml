@@ -29,6 +29,15 @@ badges:
   - entity: sensor.watchman_missing_services
   - entity: binary_sensor.loadshedding_active
     name: Loadshedding
+    card_mod:
+      style:
+        ha-state-label-badge:
+          $:
+            ha-label-badge:
+              $: |
+                .value {
+                  color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
+                }
 cards:
   - type: vertical-stack
     cards:

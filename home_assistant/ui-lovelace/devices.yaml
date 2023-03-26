@@ -372,6 +372,7 @@ cards:
             - font-size: 14px
         card_mod:
           # https://github.com/home-assistant/frontend/blob/dev/src/resources/ha-style.ts
+          # https://stackoverflow.com/questions/25006951/how-do-i-know-why-a-css-style-is-ignored
           style: |
             div {
               width: 100%;

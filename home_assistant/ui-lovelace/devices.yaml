@@ -302,62 +302,181 @@ cards:
             name: Backyard
           - entity: light.garage
             name: Garage
-      - type: markdown
-        # https://community.home-assistant.io/t/sensor-count-the-installation-mine-is-bigger-than-yours-sensor/225959/27
-        # title: Components
-        content: >
-          Domain | Count
-             :---|---:
-          {% for domain in states | groupby('domain') -%}
-            {%- set name = domain[0].replace('_', ' ') | title -%}
-            **{{ name }}** | {{ states[domain[0]] | count }}
-          {% endfor %}
-          **Total** | {{ states | count }}
+
+      - type: custom:button-card
+        show_label: true
+        label: >
+          [[[
+            // https://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript
+            function toTitleCase(str) {
+              return str.replace('_', ' ').replace(
+                /\w*/g,
+                function(txt) {
+                  return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                }
+              );
+            }
+
+            function createRow(key, value, rowId) {
+              return `<tr>
+                        <td class='left'>`
+                          + toTitleCase(key) +
+                     `  </td>
+                        <td class='right'>`
+                          + value +
+                     `  </td>
+                      </tr>`;
+            }
+
+            var domainCounts = {};
+            var domain;
+            var entityId;
+            for (var entity in states) {
+              [domain, entityId] = entity.split('.');
+              if (domain in domainCounts) {
+                domainCounts[domain] += 1;
+              } else {
+                domainCounts[domain] = 1;
+              }
+            }
+            var rows = '';
+            var rowCount = 0;
+            var total = 0;
+            var sortedKeys = Object.keys(domainCounts).sort();
+            for (var key of sortedKeys) {
+              var row = createRow(key, domainCounts[key], rowCount);
+              total += domainCounts[key]
+              rows += row;
+              rowCount += 1;
+            }
+            rows += createRow('Total', total, rowCount);
+            var table = `<table>
+                           <thead>
+                             <tr>
+                               <th>Domain</th>
+                               <th>Count</th>
+                             </tr>
+                           </thead>
+                           <tbody>`
+                             + rows +
+                        `  </tbody>
+                         </table>`;
+            return table;
+          ]]]
+        styles:
+          grid:
+            - grid-template-areas: '"l"'
+            - grid-template-rows: 1fr
+            - grid-template-columns: 1fr
+          card:
+            - font-size: 14px
         card_mod:
-          style:
-            ha-markdown:
-              $:
-                ha-markdown-element: |
-                  table {
-                    border-spacing: 0;
-                    width: 100%;
-                    padding: 8px;
-                    border-radius: var(--ha-card-border-radius);
-                  }
-                  th {
-                    background-color: var(--state-icon-color);
-                    color: white;
-                    padding: 4px;
-                  }
-                  th:first-child {
-                    border-top-left-radius: min(var(--ha-card-border-radius)/2, 5px);
-                  }
-                  th:last-child {
-                    border-top-right-radius: min(var(--ha-card-border-radius)/2, 5px);
-                  }
-                  td {
-                    padding: 4px;
-                  }
-                  tr:nth-child(even) {
-                    background-color: var(--table-row-background-color);
-                  }
-      - type: custom:mini-graph-card
-        entities:
-          - entity: sensor.unavailable_entities
-        hours_to_show: 24
-        hour24: true
-        smoothing: false
-        points_per_hour: 60
-        aggregate_func: max
-        lower_bound: 0
-        line_width: 2
-        line_color: var(--custom-color-red)
-        show:
-          extrema: true
-          name: true
-          icon: true
-          average: false
-          state: true
+          # https://github.com/home-assistant/frontend/blob/dev/src/resources/ha-style.ts
+          style: |
+            div {
+              width: 100%;
+              padding: 1em;
+            }
+            table {
+              width: 100%;
+              border-spacing: 0;
+            }
+            thead {
+              background-color: var(--state-icon-color);
+              color: var(--text-primary-color);
+            }
+            th:first-child, td:first-child {
+              text-align: left;
+            }
+            th:last-child, td:last-child {
+              text-align: right;
+            }
+            th, td {
+              padding: 0.5ex 1ex 0.5ex 1ex;
+            }
+            th:first-child {
+              border-top-left-radius: min(var(--ha-card-border-radius), 5px);
+            }
+            th:last-child {
+              border-top-right-radius: min(var(--ha-card-border-radius), 5px);
+            }
+            tr:nth-child(even) {
+              background-color: var(--secondary-background-color);
+            }
+            tr:last-child td:first-child {
+              border-bottom-left-radius: min(var(--ha-card-border-radius), 5px);
+            }
+            tr:last-child td:last-child {
+              border-bottom-right-radius: min(var(--ha-card-border-radius), 5px);
+            }
+            tr:last-child {
+              font-weight: bold;
+            }
+        tap_action:
+          action: none
+        double_tap_action:
+          action: none
+        hold_action:
+          action: none
+      # https://github.com/thomasloven/lovelace-card-mod/issues/259
+      # replacement above (:sadpanda:)
+      # - type: markdown
+      #   # https://community.home-assistant.io/t/sensor-count-the-installation-mine-is-bigger-than-yours-sensor/225959/27
+      #   # title: Components
+      #   # https://community.home-assistant.io/t/lovelace-card-with-an-icon-and-data-in-a-table/197783/6
+      #   content: >
+      #     Domain | Count
+      #        :---|---:
+      #     {% for domain in states | groupby('domain') -%}
+      #       {%- set name = domain[0].replace('_', ' ') | title -%}
+      #       **{{ name }}** | {{ states[domain[0]] | count }}
+      #     {% endfor %}
+      #     **Total** | {{ states | count }}
+      #   card_mod:
+      #     style:
+      #       ha-markdown:
+      #         $:
+      #           ha-markdown-element: |
+      #             table {
+      #               border-spacing: 0;
+      #               width: 100%;
+      #               padding: 8px;
+      #               border-radius: var(--ha-card-border-radius);
+      #             }
+      #             th {
+      #               background-color: var(--state-icon-color);
+      #               color: white;
+      #               padding: 4px;
+      #             }
+      #             th:first-child {
+      #               border-top-left-radius: min(var(--ha-card-border-radius)/2, 5px);
+      #             }
+      #             th:last-child {
+      #               border-top-right-radius: min(var(--ha-card-border-radius)/2, 5px);
+      #             }
+      #             td {
+      #               padding: 4px;
+      #             }
+      #             tr:nth-child(even) {
+      #               background-color: var(--table-row-background-color);
+      #             }
+      # - type: custom:mini-graph-card
+      #   entities:
+      #     - entity: sensor.unavailable_entities
+      #   hours_to_show: 24
+      #   hour24: true
+      #   smoothing: false
+      #   points_per_hour: 60
+      #   aggregate_func: max
+      #   lower_bound: 0
+      #   line_width: 2
+      #   line_color: var(--custom-color-red)
+      #   show:
+      #     extrema: true
+      #     name: true
+      #     icon: true
+      #     average: false
+      #     state: true
   - type: vertical-stack
     cards:
       - type: entities

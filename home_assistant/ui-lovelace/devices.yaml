@@ -482,6 +482,7 @@ cards:
     cards:
       - type: entities
         entities:
+          - binary_sensor.remote_ui
           - sensor.disk_use_percent
           - sensor.memory_use_percent
           - sensor.processor_use

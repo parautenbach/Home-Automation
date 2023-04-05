@@ -106,6 +106,12 @@ cards:
             extrema: true
             average: true
             labels_secondary: false
+          card_mod:
+            style:
+              .: |
+                ha-card {
+                  border: 0px;
+                }
   - type: vertical-stack
     title: Home Network
     cards:
@@ -145,6 +151,12 @@ cards:
             extrema: true
             average: true
             labels_secondary: false
+          card_mod:
+            style:
+              .: |
+                ha-card {
+                  border: 0px;
+                }
       - type: entities
         title: Back Extender
         show_header_toggle: false
@@ -176,6 +188,12 @@ cards:
             extrema: true
             average: true
             labels_secondary: false
+          card_mod:
+            style:
+              .: |
+                ha-card {
+                  border: 0px;
+                }
   - type: vertical-stack
     title: Join Home Network
     cards:

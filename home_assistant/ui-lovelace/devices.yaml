@@ -537,6 +537,12 @@ cards:
           show:
             extrema: true
             average: true
+          card_mod:
+            style:
+              .: |
+                ha-card {
+                  border: 0px;
+                }
       - type: custom:mini-graph-card
         name: MQTT Broker Load
         icon: mdi:email-multiple-outline

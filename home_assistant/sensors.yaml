@@ -29,7 +29,7 @@
   # not a valid option for this platform
   # device_class: temperature
   unit_of_measurement: "°C"
-  value_template: '{{ value | multiply(0.001) | round(2)  }}'
+  value_template: '{{ value | multiply(0.001) | round(2) }}'
   scan_interval: 60
 
 - platform: template

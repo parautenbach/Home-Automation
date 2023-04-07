@@ -32,7 +32,7 @@ template:
         unit_of_measurement: kW
         device_class: power
         state: >-
-          {{ ((states('sensor.solar_reserve_w') | int(0)) / 1000) | round(1) }}
+          {{ ((states('sensor.solar_reserve') | int(0)) / 1000) | round(1) }}
       - name: "Solar Consumption Percentage"
         unit_of_measurement: "%"
         state: >

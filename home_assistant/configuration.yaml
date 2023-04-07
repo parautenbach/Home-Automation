@@ -96,6 +96,8 @@ lovelace:
       type: module
     - url: /hacsfiles/history-explorer-card/history-explorer-card.js
       type: module
+    - url: /hacsfiles/power-flow-card/power-flow-card.js
+      type: module
     # manual
     - url: /local/floorplan/floorplan-card.js
       type: module

@@ -1,0 +1,87 @@
+template:
+  - binary_sensor:
+      - name: "Grid Feed"
+        device_class: power
+        state: "{{ states('sensor.grid_frequency') | int(0) > 0 }}"
+        icon: >-
+          {% if states('sensor.grid_frequency') | int(0) > 0 %}
+            mdi:transmission-tower
+          {% else %}
+            mdi:transmission-tower-off
+          {% endif %}
+  - sensor:
+      - name: "Load Power kW"
+        unit_of_measurement: kW
+        device_class: power
+        state: "{{ ((states('sensor.load_power') | int(0)) / 1000) | round(1) }}"
+        # icon: # icons for all
+      - name: "Solar Reserve"
+        unit_of_measurement: W
+        device_class: power
+        state: >-
+          {% set pv_potential = states('sensor.power_production_now') | int(0) %}
+          {% set pv_power = states('sensor.pv_power') | int(0) %}
+          {% if pv_power > pv_potential %}
+            0
+          {% elif pv_potential > 0 %}
+            {{ pv_potential - pv_power }}
+          {% else %}
+            0
+          {% endif %}
+      - name: "Solar Reserve kW"
+        unit_of_measurement: kW
+        device_class: power
+        state: >-
+          {{ ((states('sensor.solar_reserve_w') | int(0)) / 1000) | round(1) }}
+      - name: "Solar Consumption Percentage"
+        unit_of_measurement: "%"
+        state: >
+          {% set pv_potential = states('sensor.power_production_now') | int(0) %}
+          {% set pv_power = states('sensor.pv_power') | int(0) %}
+          {% if pv_power > pv_potential %}
+            100
+          {% elif pv_potential > 0 %}
+            {{ (pv_power / pv_potential * 100) | round(0) }}
+          {% else %}
+            0
+          {% endif %}
+      - name: "Solar Reserve Percentage"
+        unit_of_measurement: "%"
+        state: >
+          {% if states('sensor.power_production_now') | int(0) > 0 %}
+            {{ 100 - states('sensor.solar_consumption_percentage') | int(0) }}
+          {% else %}
+            0
+          {% endif %}
+
+automation:
+  - alias: "Notify If Grid Feed Status Changed"
+    id: "b233b973-cf9b-44b5-94e4-5f0813e6eefa"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.grid_feed
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Home"
+          message: >-
+            {% set after = "" %}
+            {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
+            {% if seconds < 60 %}
+              {% set after = seconds ~ " sec" %}
+            {% elif seconds < 60*60 %}
+              {% set after = seconds // 60 ~ " min" %}
+            {% else %}
+              {% set h = seconds // (60*60) %}
+              {% set m = ((seconds / (60*60) - seconds // (60*60)) * 60) | round %}
+              {% if m < 10 %}
+                {% set after = h ~ "h0" ~ m %}
+              {% else %}
+                {% set after = h ~ "h" ~ m %}
+              {% endif %}
+            {% endif %}
+            The grid feed has been {{ 'restored after ' ~  after ~ '.' if is_state('binary_sensor.grid_feed', 'on') else 'cut.' }}
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/resources

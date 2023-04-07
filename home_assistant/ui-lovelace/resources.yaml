@@ -1,0 +1,234 @@
+title: Resources
+path: resources
+icon: mdi:earth
+badges:
+  - entity: binary_sensor.electricity_feed
+    card_mod:
+      style:
+        ha-state-label-badge:
+          $:
+            ha-label-badge:
+              $: |
+                .value {
+                  color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
+                }
+  - entity: binary_sensor.grid_feed
+    name: Grid
+    card_mod:
+      style:
+        ha-state-label-badge:
+          $:
+            ha-label-badge:
+              $: |
+                .value {
+                  color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
+                }
+  - entity: sensor.load_power_kw
+    name: Load
+  - entity: sensor.solar_reserve_kw
+    name: Solar Reserve
+    card_mod:
+        style:
+          ha-state-label-badge:
+            $:
+              ha-label-badge:
+                $: |
+                  .value {
+                    color:
+                      {%- set threshold = states('sensor.solar_reserve_percentage') | int(0) -%}
+                      {%- if threshold > 20 -%}
+                        var(--custom-color-green)
+                      {%- elif threshold > 0-%}
+                        var(--custom-color-yellow)
+                      {%- else -%}
+                        var(--custom-color-red)
+                      {%- endif -%}
+                      !important;
+                  }
+  - entity: sensor.solar_reserve_percentage
+    name: Solar Reserve
+    card_mod:
+        style:
+          ha-state-label-badge:
+            $:
+              ha-label-badge:
+                $: |
+                  .value {
+                    color:
+                      {%- set threshold = states('sensor.solar_reserve_percentage') | int(0) -%}
+                      {%- if threshold > 20 -%}
+                        var(--custom-color-green)
+                      {%- elif threshold > 0-%}
+                        var(--custom-color-yellow)
+                      {%- else -%}
+                        var(--custom-color-red)
+                      {%- endif -%}
+                      !important;
+                  }
+  - entity: sensor.battery_state_of_charge
+    name: Battery
+cards:
+  - type: vertical-stack
+    cards:
+    # https://github.com/ulic75/power-flow-card#inverted-entities-example
+      - type: custom:power-flow-card
+        entities:
+          grid:
+            consumption: sensor.grid_power
+          battery: sensor.battery_power
+          battery_charge: sensor.battery_state_of_charge
+          solar: sensor.pv_power
+        inverted_entities: battery
+        watt_threshold: 1000
+        dashboard_link: /energy
+      - type: energy-solar-graph
+      - type: custom:mini-graph-card
+        name: Solar
+        icon: mdi:solar-power-variant-outline
+        entities:
+          - entity: sensor.power_production_now
+            name: Forecast
+            color: var(--custom-color-gray)
+          - entity: sensor.pv_power
+            name: Consumption
+            color: var(--custom-color-yellow)
+          - entity: sensor.solar_reserve
+            name: Reserve
+            color: var(--custom-color-green)
+          - entity: sensor.nighttime_number
+            color: var(--custom-color-gray)
+            show_line: false
+            show_points: false
+            show_legend: false
+            y_axis: secondary
+        hours_to_show: 24
+        hour24: true
+        lower_bound: 0
+        smoothing: true
+        points_per_hour: 1
+        line_width: 2
+        show:
+          extrema: true
+          name: true
+          icon: true
+          average: true
+          state: true
+          labels_secondary: false
+  - type: vertical-stack
+    cards:
+      - type: energy-distribution
+        link_dashboard: true
+      - type: energy-usage-graph
+      - type: custom:mini-graph-card
+        name: Battery Charge
+        icon: mdi:home-battery-outline
+        entities:
+          - entity: sensor.battery_state_of_charge
+            color: var(--custom-color-blue)
+          - entity: sensor.nighttime_number
+            color: var(--custom-color-gray)
+            show_line: false
+            show_points: false
+            show_legend: false
+            y_axis: secondary
+        hours_to_show: 24
+        hour24: true
+        lower_bound: 0
+        upped_bound: 100
+        smoothing: true
+        points_per_hour: 12
+        line_width: 2
+        show:
+          extrema: true
+          name: true
+          icon: true
+          average: true
+          state: true
+          labels_secondary: false
+      - type: custom:mini-graph-card
+        name: System Temperatures
+        icon: mdi:thermometer
+        entities:
+          - entity: sensor.inverter_temperature
+            name: Inverter
+            color: var(--custom-color-red)
+          - entity: sensor.battery_temperature
+            name: Battery
+            color: var(--custom-color-yellow)
+          - entity: sensor.nighttime_number
+            color: var(--custom-color-gray)
+            show_line: false
+            show_points: false
+            show_legend: false
+            y_axis: secondary
+        hours_to_show: 24
+        hour24: true
+        lower_bound: 0
+        smoothing: true
+        points_per_hour: 12
+        line_width: 2
+        show:
+          extrema: true
+          name: true
+          icon: true
+          average: true
+          state: true
+          labels_secondary: false
+  - type: vertical-stack
+    cards:
+      - type: entities
+        title: Electricity Consumption
+        show_header_toggle: false
+        # todo: fix
+        entities:
+          - entity: sensor.daily_power_consumption
+            name: Today
+            icon: mdi:power-plug
+          - entity: sensor.monthly_power_consumption
+            name: This Month
+            icon: mdi:power-plug
+          - entity: sensor.monthly_power_consumption_forecast
+            name: This Month's Forecast
+            icon: mdi:trending-up
+        footer:
+          type: custom:mini-graph-card
+          entities:
+            - entity: sensor.load_power
+              color: var(--custom-color-red)
+            - entity: sensor.nighttime_number
+              color: var(--custom-color-gray)
+              show_line: false
+              show_points: false
+              show_legend: false
+              y_axis: secondary
+          hours_to_show: 24
+          hour24: true
+          lower_bound: 0
+          smoothing: true
+          points_per_hour: 12  # every 5 min
+          line_width: 2
+          show:
+            extrema: true
+            name: false
+            icon: false
+            average: true
+            state: true
+            labels_secondary: false
+          card_mod:
+            style:
+              .: |
+                ha-card {
+                  border: 0px;
+                }
+      - type: markdown
+        title: Loadshedding
+        content: "{{ states('sensor.loadshedding_forecast') }}"
+      - type: entities
+        entities:
+          - binary_sensor.loadshedding_active
+          - sensor.loadshedding_stage
+          - sensor.loadshedding_start_time
+          - sensor.loadshedding_end_time
+          - timer.loadshedding_duration
+          - sensor.eskomsepush_calls_remaining
+        show_header_toggle: false

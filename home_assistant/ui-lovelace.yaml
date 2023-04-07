@@ -2,6 +2,7 @@ title: Home
 background: var(--background-image)
 views:
   - !include ui-lovelace/main.yaml
+  - !include ui-lovelace/resources.yaml
   - !include ui-lovelace/environment.yaml
   - !include ui-lovelace/entertainment.yaml
   - !include ui-lovelace/internet.yaml

@@ -43,6 +43,7 @@
       friendly_name: "Pieter Driving"
       value_template: >-
         {{ is_state("input_boolean.pieter_driving", "on") }}
+    # note: this refers to the national grid (aka eskom)
     electricity_feed:
       friendly_name: "Electricity"
       # https://www.home-assistant.io/integrations/binary_sensor/#device-class

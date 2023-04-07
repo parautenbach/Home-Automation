@@ -129,38 +129,75 @@ cards:
         watt_threshold: 1000
         dashboard_link: /energy
       - type: energy-solar-graph
-      - type: custom:mini-graph-card
-        name: Solar
-        icon: mdi:solar-power-variant-outline
-        entities:
-          - entity: sensor.power_production_now
-            name: Forecast
-            color: var(--custom-color-gray)
-          - entity: sensor.pv_power
-            name: Consumption
-            color: var(--custom-color-yellow)
-          - entity: sensor.solar_reserve
-            name: Reserve
-            color: var(--custom-color-green)
-          - entity: sensor.nighttime_number
-            color: var(--custom-color-gray)
-            show_line: false
-            show_points: false
-            show_legend: false
-            y_axis: secondary
-        hours_to_show: 24
-        hour24: true
-        lower_bound: 0
-        smoothing: true
-        points_per_hour: 1
-        line_width: 2
-        show:
-          extrema: true
-          name: true
-          icon: true
-          average: true
-          state: true
-          labels_secondary: false
+
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+          - type: custom:mini-graph-card
+            name: Solar
+            icon: mdi:solar-power-variant-outline
+            entities:
+              - entity: sensor.power_production_now
+                name: Forecast
+                color: var(--custom-color-gray)
+              - entity: sensor.pv_power
+                name: Consumption
+                color: var(--custom-color-yellow)
+              - entity: sensor.solar_reserve
+                name: Reserve
+                color: var(--custom-color-green)
+              - entity: sensor.nighttime_number
+                color: var(--custom-color-gray)
+                show_line: false
+                show_points: false
+                show_legend: false
+                y_axis: secondary
+            hours_to_show: 24
+            hour24: true
+            lower_bound: 0
+            smoothing: true
+            points_per_hour: 1
+            line_width: 2
+            show:
+              extrema: true
+              name: true
+              icon: true
+              average: true
+              state: true
+              labels_secondary: false
+          - type: custom:mini-graph-card
+            name: Solar
+            icon: mdi:solar-power-variant-outline
+            entities:
+              - entity: sensor.power_production_now
+                name: Forecast
+                color: var(--custom-color-gray)
+              - entity: sensor.pv_power
+                name: Consumption
+                color: var(--custom-color-yellow)
+              - entity: sensor.solar_reserve
+                name: Reserve
+                color: var(--custom-color-green)
+              - entity: sensor.illuminance
+                name: Illuminance
+                color: var(--custom-color-magenta)
+                y_axis: secondary
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 2
+            line_width: 2
+            lower_bound: 0
+            show:
+              extrema: true
+              name: true
+              icon: true
+              average: true
+              state: true
+              labels_secondary: false
   - type: vertical-stack
     cards:
       - type: energy-distribution

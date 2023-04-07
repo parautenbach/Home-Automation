@@ -442,6 +442,8 @@ light.music_room_corner_light:
   icon: mdi:axis
 light.corner_lights:
   icon: mdi:axis
+sensor.outside_temperature:
+  state_class: measurement
 
 # state classes
 # https://developers.home-assistant.io/docs/core/entity/sensor/

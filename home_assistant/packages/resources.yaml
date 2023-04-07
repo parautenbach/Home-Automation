@@ -54,6 +54,15 @@ template:
             0
           {% endif %}
 
+sensor:
+  - platform: derivative
+    source: sensor.battery_state_of_charge
+    name: "Battery Change of Charge"
+    round: 1
+    unit_time: min
+    unit: "%/min"
+    time_window: "00:01:00"
+
 automation:
   - alias: "Notify If Grid Feed Status Changed"
     id: "b233b973-cf9b-44b5-94e4-5f0813e6eefa"

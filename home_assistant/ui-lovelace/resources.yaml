@@ -204,21 +204,28 @@ cards:
         link_dashboard: true
       - type: energy-usage-graph
       - type: custom:mini-graph-card
-        name: Battery Charge
+        name: Battery
         icon: mdi:home-battery-outline
         entities:
           - entity: sensor.battery_state_of_charge
+            name: Charge
             color: var(--custom-color-blue)
-          - entity: sensor.nighttime_number
+          - entity: sensor.battery_change_of_charge
+            name: Charge Rate
             color: var(--custom-color-gray)
-            show_line: false
-            show_points: false
-            show_legend: false
             y_axis: secondary
+          # - entity: sensor.nighttime_number
+          #   color: var(--custom-color-gray)
+          #   show_line: false
+          #   show_points: false
+          #   show_legend: false
+          #   y_axis: secondary
         hours_to_show: 24
         hour24: true
         lower_bound: 0
         upped_bound: 100
+        lower_bound_secondary: -2
+        upper_bound_secondary: 2
         smoothing: true
         points_per_hour: 12
         line_width: 2
@@ -228,7 +235,8 @@ cards:
           icon: true
           average: true
           state: true
-          labels_secondary: false
+          labels: hover
+          labels_secondary: hover
       - type: custom:mini-graph-card
         name: System Temperatures
         icon: mdi:thermometer

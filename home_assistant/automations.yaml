@@ -1413,10 +1413,10 @@
               {% set after = h ~ "h" ~ m %}
             {% endif %}
           {% endif %}
-          The electricity feed has been {{ 'restored after ' ~  after ~ '.' if is_state('binary_sensor.electricity_feed', 'on') else 'cut.' }}
+          The home electricity feed has been {{ 'restored after ' ~  after ~ '.' if is_state('binary_sensor.electricity_feed', 'on') else 'cut.' }}
         data:
           group: "home-electricity"
-          url: homeassistant://navigate/lovelace/main
+          url: homeassistant://navigate/lovelace/resources
 
 - alias: "Switch On Front Door Light When Any Cover Opened"
   id: "2f00ee50-2203-4ba6-a6f2-37052dfba07e"

@@ -1,4 +1,6 @@
 # use uuid4 to create random automation ids
+# python -c 'import uuid; print(uuid.uuid4())'
+# uuidgen | tr '[:upper:]' '[:lower:]'
 
 - alias: "Set Light Theme"
   id: "b2139218-ae45-4fc5-a049-1a9692bc387e"

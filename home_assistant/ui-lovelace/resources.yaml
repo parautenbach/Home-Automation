@@ -72,15 +72,15 @@ cards:
     cards:
       - type: horizontal-stack
         cards:
-          - type: gauge
-            name: Inverter
-            entity: sensor.load_power
-            min: 0
-            max: 10000
-            severity:
-              green: 0
-              yellow: 5000
-              red: 7000
+          # - type: gauge
+          #   name: Inverter
+          #   entity: sensor.load_power
+          #   min: 0
+          #   max: 10000
+          #   severity:
+          #     green: 0
+          #     yellow: 5000
+          #     red: 7000
           - type: gauge
             name: Grid
             entity: sensor.grid_power

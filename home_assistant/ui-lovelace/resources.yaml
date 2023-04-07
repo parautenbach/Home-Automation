@@ -105,7 +105,7 @@ cards:
             min: 0
             max: 100
             severity:
-              green: 75
+              green: 0
               yellow: 85
               red: 95
           - type: gauge
@@ -114,9 +114,9 @@ cards:
             min: 0
             max: 100
             severity:
-              green: 70
-              yellow: 50
-              red: 30
+              green: 50
+              yellow: 30
+              red: 0
       # https://github.com/ulic75/power-flow-card#inverted-entities-example
       - type: custom:power-flow-card
         entities:

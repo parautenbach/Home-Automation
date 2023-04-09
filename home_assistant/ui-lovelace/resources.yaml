@@ -210,8 +210,8 @@ cards:
           - entity: sensor.battery_state_of_charge
             name: Charge
             color: var(--custom-color-blue)
-          - entity: sensor.battery_change_of_charge
-            name: Charge Rate
+          - entity: sensor.battery_power
+            name: Power
             color: var(--custom-color-gray)
             y_axis: secondary
           # - entity: sensor.nighttime_number
@@ -224,8 +224,6 @@ cards:
         hour24: true
         lower_bound: 0
         upped_bound: 100
-        lower_bound_secondary: -2
-        upper_bound_secondary: 2
         smoothing: true
         points_per_hour: 12
         line_width: 2

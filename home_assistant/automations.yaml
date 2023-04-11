@@ -1970,9 +1970,10 @@
         # this solution won't currently work for that scenario
         - condition: template
           value_template: "{{ ((as_timestamp(utcnow()) - as_timestamp(states.binary_sensor.electricity_feed.last_changed)) / 60) <= 5 }}"
-        # but the electricity feed sensor didn't update due to a hass restart (5 min)
+        # but the electricity feed sensor didn't update due to a hass restart (2 min)
+        # in other words, give 2 min for HA to restart and then, due to that, don't change the smart bulb statuses
         - condition: template
-          value_template: "{{ (utcnow() - states('sensor.home_assistant_uptime') | as_datetime).seconds / 60 > 5 }}"
+          value_template: "{{ (utcnow() - states('sensor.home_assistant_uptime') | as_datetime).seconds / 60 > 2 }}"
   action:
     - service: light.turn_off
       data:

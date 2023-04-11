@@ -270,15 +270,30 @@ cards:
         title: Energy Consumption
         show_header_toggle: false
         entities:
-          - entity: sensor.daily_grid_energy_consumption
-            name: Grid Today
+          - entity: sensor.daily_home_energy_consumption
             icon: mdi:power-plug
-          - entity: sensor.monthly_grid_energy_consumption
-            name: Grid This Month
+            type: custom:multiple-entity-row
+            name: Today
+            state_header: Home
+            entities:
+              - entity: sensor.daily_grid_energy_consumption
+                name: Grid
+          - entity: sensor.monthly_home_energy_consumption
             icon: mdi:power-plug
-          - entity: sensor.monthly_grid_energy_consumption_forecast
-            name: This Month's Grid Forecast
+            type: custom:multiple-entity-row
+            name: This Month
+            state_header: Home
+            entities:
+              - entity: sensor.monthly_grid_energy_consumption
+                name: Grid
+          - entity: sensor.monthly_home_energy_consumption_forecast
             icon: mdi:trending-up
+            type: custom:multiple-entity-row
+            name: This Month's Forecast
+            state_header: Home
+            entities:
+              - entity: sensor.monthly_grid_energy_consumption_forecast
+                name: Grid
         footer:
           type: custom:mini-graph-card
           entities:

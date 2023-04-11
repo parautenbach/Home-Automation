@@ -66,9 +66,9 @@ sensor:
     source: sensor.battery_state_of_charge
     name: "Battery Change of Charge"
     round: 1
-    unit_time: min
-    unit: "%/min"
-    time_window: "00:01:00"
+    unit_time: h
+    unit: "%/h"
+    time_window: "00:05:00"
 
 automation:
   - alias: "Notify If Grid Feed Status Changed"

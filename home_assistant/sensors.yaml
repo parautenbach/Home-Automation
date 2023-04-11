@@ -182,8 +182,11 @@
         {% else %}
           unknown
         {% endif %}
-    monthly_power_consumption_forecast:
+    monthly_grid_energy_consumption_forecast:
       unit_of_measurement: "kWh"
+      # alternative:
+      # {{ ((now().replace(day=1) + timedelta(days=31)).replace(day=1) - timedelta(days=1)).day }}
+      # from: https://community.home-assistant.io/t/calculate-estimated-monthly-kwh-value/558816/4
       value_template: >
         {% set now = now() %}
         {% set month = now.month %}
@@ -202,7 +205,7 @@
         {% else %}
           {% set days = 28 %}
         {% endif %}
-        {{ ((states('sensor.monthly_power_consumption') | int) / now.day * days) | round(3) }}
+        {{ ((states('sensor.monthly_grid_energy_consumption') | int) / now.day * days) | round(3) }}
     last_backup:
       # relies on cronjob running on a sunday and a wednedsay
       device_class: timestamp
@@ -403,6 +406,7 @@
   value_template: '{{ value | int(0) }}'
   scan_interval: 3600
 
+# digital power meter in db
 - platform: integration
   name: "Total Electricity Consumption"
   source: sensor.current_power

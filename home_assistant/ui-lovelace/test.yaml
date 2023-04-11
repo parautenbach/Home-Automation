@@ -85,3 +85,25 @@ cards:
       state: true
       labels: hover
       labels_secondary: hover
+  - type: custom:mini-graph-card
+    name: Power
+    icon: mdi:home-battery-outline
+    entities:
+      - entity: sensor.grid_power
+        name: Inverter
+        color: var(--custom-color-blue)
+      - entity: sensor.current_power
+        name: Pulse Meter
+        color: var(--custom-color-red)
+    hours_to_show: 24
+    hour24: true
+    smoothing: true
+    points_per_hour: 12
+    line_width: 2
+    show:
+      extrema: true
+      name: true
+      icon: true
+      average: true
+      state: true
+      labels: hover

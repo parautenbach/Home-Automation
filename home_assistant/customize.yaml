@@ -317,14 +317,17 @@ binary_sensor.pieter_driving:
 switch.tivoli_audio:
   friendly_name: Tivoli Audio
   icon: mdi:radio
-sensor.daily_power_consumption:
-  friendly_name: Daily Power Consumption
+sensor.daily_grid_energy_consumption:
+  friendly_name: Daily Grid Energy Consumption
   icon: mdi:power-plug
-sensor.monthly_power_consumption:
-  friendly_name: Daily Power Consumption  # keywords: power plug guage light alert flash
+sensor.monthly_grid_energy_consumption:
+  friendly_name: Daily Grid Energy Consumption  # keywords: power plug guage light alert flash
   icon: mdi:power-plug
-sensor.monthly_power_consumption_forecast:
-  friendly_name: Monthly Power Consumption Forecast
+# digital power meter in db
+sensor.total_electricity_consumption:
+  device_class: energy
+sensor.monthly_grid_energy_consumption_forecast:
+  friendly_name: Monthly Grid Energy Consumption Forecast
   icon: mdi:trending-up
 input_datetime.security_camera_last_snapshot:
   friendly_name: Security Camera Last Snapshot

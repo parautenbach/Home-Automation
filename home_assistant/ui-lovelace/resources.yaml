@@ -267,23 +267,24 @@ cards:
   - type: vertical-stack
     cards:
       - type: entities
-        title: Electricity Consumption
+        title: Energy Consumption
         show_header_toggle: false
-        # todo: fix
         entities:
-          - entity: sensor.daily_power_consumption
-            name: Today
+          - entity: sensor.daily_grid_energy_consumption
+            name: Grid Today
             icon: mdi:power-plug
-          - entity: sensor.monthly_power_consumption
-            name: This Month
+          - entity: sensor.monthly_grid_energy_consumption
+            name: Grid This Month
             icon: mdi:power-plug
-          - entity: sensor.monthly_power_consumption_forecast
-            name: This Month's Forecast
+          - entity: sensor.monthly_grid_energy_consumption_forecast
+            name: This Month's Grid Forecast
             icon: mdi:trending-up
         footer:
           type: custom:mini-graph-card
           entities:
-            - entity: sensor.load_power
+            - entity: sensor.grid_power
+              color: var(--custom-color-blue)
+            - entity: sensor.home_power
               color: var(--custom-color-red)
             - entity: sensor.nighttime_number
               color: var(--custom-color-gray)

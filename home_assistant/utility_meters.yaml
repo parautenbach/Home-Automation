@@ -10,9 +10,15 @@ daily_internet_usage_out:
 monthly_internet_usage_out:
   source: sensor.internet_usage_out
   cycle: monthly
-daily_power_consumption:
-  source: sensor.total_electricity_consumption
+daily_grid_energy_consumption:
+  source: sensor.grid_power
   cycle: daily
-monthly_power_consumption:
-  source: sensor.total_electricity_consumption
+monthly_grid_energy_consumption:
+  source: sensor.grid_power
+  cycle: monthly
+daily_home_energy_consumption:
+  source: sensor.home_power
+  cycle: daily
+monthly_home_energy_consumption:
+  source: sensor.home_power
   cycle: monthly

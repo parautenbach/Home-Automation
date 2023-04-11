@@ -1293,7 +1293,7 @@
       {% set threshold =  minutes*60 + seconds %}
       {% set last_opened_entity = trigger.entity_id | replace('cover', 'input_datetime') ~ "_opened" %}
       {% set last_opened = as_timestamp(states(last_opened_entity)) %}
-      {{ (as_timestamp(utcnow()) - last_opened) | int >= threshold }}
+      {{ ((as_timestamp(utcnow()) - last_opened) | int >= threshold) and (states(last_opened_entity) | as_datetime >= utcnow()) }}
   action:
     - service: notify.mobile_app_ceres
       data:

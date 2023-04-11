@@ -364,6 +364,16 @@ cards:
             name: Overall
           - entity: sensor.dam_levels_last_update
             name: Last Update
+      - type: statistics-graph
+        entities:
+          - sensor.total_dam_level
+        title: Overall Dam Levels
+        days_to_show: 90
+        period: week
+        chart_type: bar
+        stat_types:
+          - max
+        hide_legend: true
   - type: vertical-stack
     title: Pollen
     cards:

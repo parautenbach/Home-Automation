@@ -211,13 +211,14 @@ automation:
           {% set t = (states('sensor.loadshedding_start_time') | as_datetime | as_local - timedelta(minutes=offset)).strftime('%Y-%d-%m %H:%M') %}
           {% set n = now().strftime('%Y-%d-%m %H:%M') %}
           {{ n == t }}
-      - platform: template
-        id: "15"
-        value_template: >-
-          {% set offset = 15 %}
-          {% set t = (states('sensor.loadshedding_start_time') | as_datetime | as_local - timedelta(minutes=offset)).strftime('%Y-%d-%m %H:%M') %}
-          {% set n = now().strftime('%Y-%d-%m %H:%M') %}
-          {{ n == t }}
+      # seems redundant now with a solar system
+      # - platform: template
+      #   id: "15"
+      #   value_template: >-
+      #     {% set offset = 15 %}
+      #     {% set t = (states('sensor.loadshedding_start_time') | as_datetime | as_local - timedelta(minutes=offset)).strftime('%Y-%d-%m %H:%M') %}
+      #     {% set n = now().strftime('%Y-%d-%m %H:%M') %}
+      #     {{ n == t }}
     mode: single
     condition:
       - condition: time

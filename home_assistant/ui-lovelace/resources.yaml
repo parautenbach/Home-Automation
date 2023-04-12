@@ -222,7 +222,7 @@ cards:
           #   y_axis: secondary
         hours_to_show: 24
         hour24: true
-        lower_bound: 0
+        lower_bound: 20
         upped_bound: 100
         smoothing: true
         points_per_hour: 12

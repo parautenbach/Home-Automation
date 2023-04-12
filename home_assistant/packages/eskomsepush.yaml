@@ -48,7 +48,7 @@ sensor:
   - platform: template
     sensors:
       loadshedding_start_time:
-        unique_id: loadshedding_start_time
+        unique_id: "7c572fed-f4e0-4889-83ea-8995932c1464"
         friendly_name: Loadshedding Start Time
         device_class: timestamp
         value_template: >-
@@ -60,7 +60,7 @@ sensor:
             {{ 0 | as_datetime }}
           {% endif %}
       loadshedding_end_time:
-        unique_id: loadshedding_end_time
+        unique_id: "c6e3c440-e930-434f-95fc-a9d68dd42fe4"
         friendly_name: Loadshedding End Time
         device_class: timestamp
         value_template: >-
@@ -72,7 +72,7 @@ sensor:
             {{ 0 | as_datetime }}
           {% endif %}
       loadshedding_stage:
-        unique_id: loadshedding_stage
+        unique_id: "a7314ceb-7afa-4a71-ae9e-deb6b9d956d9"
         friendly_name: Loadshedding Stage
         icon_template: >-
           {% if states('sensor.eskomsepush')
@@ -101,7 +101,7 @@ sensor:
           {% endif %}
       loadshedding_duration:
         friendly_name: Loadshedding Duration
-        unique_id: loadshedding_duration
+        unique_id: "03a725e4-77ce-4fbe-9a3e-5b15b064d14f"
         device_class: duration
         unit_of_measurement: h
         value_template: >-
@@ -111,12 +111,12 @@ sensor:
             {{ 0 }}
           {%- endif -%}
       eskomsepush_calls_remaining:
-        unique_id: eskomsepush_api_calls_remaining
+        unique_id: "c0a18142-5518-4274-b34d-4f7ab017a43d"
         friendly_name: EskomSePush API Calls Remaining
         icon_template: mdi:api
         value_template: "{{ state_attr('sensor.eskomsepush_allowance', 'limit') | int(0) - state_attr('sensor.eskomsepush_allowance', 'count') | int(0) }}"
       loadshedding_forecast:
-        unique_id: loadshedding_forecast
+        unique_id: "4ac805d7-5b15-400d-b3c7-402df2324ca5"
         friendly_name: Loadshedding Forecast
         value_template: >
           Your latest forecast:

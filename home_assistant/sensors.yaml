@@ -183,6 +183,7 @@
           unknown
         {% endif %}
     monthly_grid_energy_consumption_forecast:
+      unique_id: "5a0d7a1b-0bbd-42b0-9b21-5daf97eeade0"
       unit_of_measurement: "kWh"
       # alternative:
       # {{ ((now().replace(day=1) + timedelta(days=31)).replace(day=1) - timedelta(days=1)).day }}
@@ -207,6 +208,7 @@
         {% endif %}
         {{ ((states('sensor.monthly_grid_energy_consumption') | int) / now.day * days) | round(3) }}
     monthly_home_energy_consumption_forecast:
+      unique_id: "9a1c2a4e-76cd-416d-8680-fe1ea588f254"
       unit_of_measurement: "kWh"
       value_template: >
         {% set n = now() %}

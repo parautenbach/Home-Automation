@@ -1,24 +1,32 @@
 daily_internet_usage_in:
+  unique_id: "f6f3293b-81e9-4427-95ad-ed467f642ee3"
   source: sensor.internet_usage_in
   cycle: daily
 monthly_internet_usage_in:
+  unique_id: "692217cc-cb53-4ade-aaf2-a7810c1dd287"
   source: sensor.internet_usage_in
   cycle: monthly
 daily_internet_usage_out:
+  unique_id: "f967f73e-cd3e-428d-873e-0f11ce703c7e"
   source: sensor.internet_usage_out
   cycle: daily
 monthly_internet_usage_out:
+  unique_id: "00f46f8f-f570-4e3f-a883-7b747d36d47f"
   source: sensor.internet_usage_out
   cycle: monthly
 daily_grid_energy_consumption:
+  unique_id: "cb11e11e-259d-43dc-bc65-a9752b0bd31a"
   source: sensor.grid_energy_in
   cycle: daily
 monthly_grid_energy_consumption:
+  unique_id: "be9b3cac-80e0-4d59-8557-403d17100b22"
   source: sensor.grid_energy_in
   cycle: monthly
 daily_home_energy_consumption:
+  unique_id: "765e119e-60ef-4e0b-87f0-e7d64adad81a"
   source: sensor.home_energy
   cycle: daily
 monthly_home_energy_consumption:
+  unique_id: "ffcf90f5-5f22-47be-a389-8e74876ecead"
   source: sensor.home_energy
   cycle: monthly

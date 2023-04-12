@@ -1104,6 +1104,7 @@
               # if e.g. the gate is open, but the timer was disabled, don't start it now, since it was intentional
               # if the timer wasn't disabled, it will be restored, so the normal mechanism will notify
               # in other words, maintain the status quo
+              # can also just create a guard condition to not continue (simpler)
               # - if:
               #     - condition: template
               #       value_template: "{{ is_state('timer.' ~ repeat.item | replace('cover.', 'timer.') ~ '_timer', 'idle') }}"

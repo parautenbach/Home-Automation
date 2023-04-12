@@ -185,6 +185,12 @@ automation:
         # this is a stopgap; don't know why sensor.loadshedding_forecast goes unavailable
         not_to: "unavailable"
     mode: single
+    # we truncate the forecast due to the length limit in home assistant, which then sometimes look like
+    # nothing has changed, because the change is actually within the truncated part
+    # we check here that the notification's text is actually different from the previous value
+    condition:
+      - condition: template
+        value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
     action:
       - service: notify.family
         data:

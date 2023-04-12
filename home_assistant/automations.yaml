@@ -25,6 +25,8 @@
   trigger:
     - platform: homeassistant
       event: start
+    - platform: time_pattern
+      minutes: "/15"
   action:
     # https://companion.home-assistant.io/docs/notifications/notification-commands#request-location-updates
     - service: notify.mobile_app_ceres

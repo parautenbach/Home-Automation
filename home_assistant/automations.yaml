@@ -773,11 +773,16 @@
           entity_id: binary_sensor.rhs_garage_occupied
           state: "off"
         # proxy for the alarm being off
-        - condition: state
-          entity_id: binary_sensor.rouve_present
-          state: "on"
-          for:
-            minutes: 5
+        - condition: or
+          conditions:
+            - condition: state
+              entity_id: binary_sensor.rouve_present
+              state: "on"
+              for:
+                minutes: 5
+            - condition: state
+              entity_id: binary_sensor.contractor_mode
+              state: "on"
         # if guest mode is on, someone could be parked in or in front of the garage
         - condition: state
           entity_id: switch.guest_mode

@@ -11,16 +11,13 @@ template:
           {% endif %}
   - sensor:
       - name: "Home Power"
+        unique_id: "ec13fb72-1d08-427a-918b-e7549539a1be"
         unit_of_measurement: W
         device_class: power
         # battery power goes positive and negative (postive power means the battery is charging)
         state: "{{ states('sensor.grid_power') | int(0) + states('sensor.pv_power') | int(0) - states('sensor.battery_power') | int(0) }}"
-      - name: "Load Power kW"
-        unit_of_measurement: kW
-        device_class: power
-        state: "{{ ((states('sensor.load_power') | int(0)) / 1000) | round(1) }}"
-        # icon: # icons for all
       - name: "Solar Reserve"
+        unique_id: "cdff01dd-8401-4c0e-a661-1a72d74dbb01"
         unit_of_measurement: W
         device_class: power
         state: >-
@@ -34,11 +31,6 @@ template:
           {% else %}
             0
           {% endif %}
-      - name: "Solar Reserve kW"
-        unit_of_measurement: kW
-        device_class: power
-        state: >-
-          {{ ((states('sensor.solar_reserve') | int(0)) / 1000) | round(1) }}
       - name: "Solar Consumption Percentage"
         unit_of_measurement: "%"
         state: >
@@ -69,6 +61,39 @@ sensor:
     unit_time: h
     unit: "%/h"
     time_window: "00:05:00"
+  # digital power meter in db
+  - platform: integration
+    name: "Total Electricity Consumption"
+    source: sensor.current_power
+    unit_prefix: k
+    unit_time: h
+    method: left
+    round: 3
+  - platform: integration
+    name: "Home Energy"
+    source: sensor.home_power
+    unit_prefix: k
+    unit_time: h
+    method: left
+    round: 3
+
+utility_meter:
+  daily_grid_energy_consumption:
+    unique_id: "cb11e11e-259d-43dc-bc65-a9752b0bd31a"
+    source: sensor.grid_energy_in
+    cycle: daily
+  monthly_grid_energy_consumption:
+    unique_id: "be9b3cac-80e0-4d59-8557-403d17100b22"
+    source: sensor.grid_energy_in
+    cycle: monthly
+  daily_home_energy_consumption:
+    unique_id: "765e119e-60ef-4e0b-87f0-e7d64adad81a"
+    source: sensor.home_energy
+    cycle: daily
+  monthly_home_energy_consumption:
+    unique_id: "ffcf90f5-5f22-47be-a389-8e74876ecead"
+    source: sensor.home_energy
+    cycle: monthly
 
 automation:
   - alias: "Notify If Grid Feed Status Changed"

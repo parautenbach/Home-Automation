@@ -415,23 +415,6 @@
   value_template: '{{ value | int(0) }}'
   scan_interval: 3600
 
-# digital power meter in db
-- platform: integration
-  name: "Total Electricity Consumption"
-  source: sensor.current_power
-  unit_prefix: k
-  unit_time: h
-  method: left
-  round: 3
-
-- platform: integration
-  name: "Home Energy"
-  source: sensor.home_power
-  unit_prefix: k
-  unit_time: h
-  method: left
-  round: 3
-
 # https://community.home-assistant.io/t/outdoor-illuminance-template-sensor/228581
 # https://community.home-assistant.io/t/automations-to-turn-on-lights-based-on-actual-season/252830/19
 # https://www.engineeringtoolbox.com/light-level-rooms-d_708.html

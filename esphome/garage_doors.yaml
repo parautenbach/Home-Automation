@@ -104,6 +104,9 @@ sensor:
     trigger_pin: 26
     echo_pin: 27
     update_interval: 60s
+    # https://github.com/esphome/issues/issues/3378
+    filters:
+      - lambda: if (isnan(x)) { return 99; } return x;
   - platform: ultrasonic
     id: rhs_garage_ultrasonic_sensor
     name: "RHS Garage Ultrasonic Sensor"
@@ -111,3 +114,5 @@ sensor:
     trigger_pin: 33
     echo_pin: 25
     update_interval: 60s
+    filters:
+      - lambda: if (isnan(x)) { return 99; } return x;

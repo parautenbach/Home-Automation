@@ -183,7 +183,9 @@ automation:
       - platform: state
         entity_id: sensor.loadshedding_forecast
         # this is a stopgap; don't know why sensor.loadshedding_forecast goes unavailable
-        not_to: "unavailable"
+        not_to:
+          - "unavailable"
+          - "unknown"
     mode: single
     # we truncate the forecast due to the length limit in home assistant, which then sometimes look like
     # nothing has changed, because the change is actually within the truncated part

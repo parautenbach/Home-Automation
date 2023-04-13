@@ -183,38 +183,6 @@
         {% else %}
           unknown
         {% endif %}
-    monthly_grid_energy_consumption_forecast:
-      unique_id: "5a0d7a1b-0bbd-42b0-9b21-5daf97eeade0"
-      unit_of_measurement: "kWh"
-      # alternative:
-      # {{ ((now().replace(day=1) + timedelta(days=31)).replace(day=1) - timedelta(days=1)).day }}
-      # from: https://community.home-assistant.io/t/calculate-estimated-monthly-kwh-value/558816/4
-      value_template: >
-        {% set now = now() %}
-        {% set month = now.month %}
-        {% set year = now.year %}
-        {% set days = None %}
-        {# feb: leap years #}
-        {% if month == 2 and year is divisibleby 4 and not year is divisibleby 400 %}
-          {% set days = 29 %}
-        {# jan, mar, may, jul, aug, oct, dec #}
-        {% elif month in [1,3,5,7,8,10,12] %}
-          {% set days = 31 %}
-        {# apr, jun, sep, nov #}
-        {% elif month in [4,6,9,11] %}
-          {% set days = 30 %}
-        {# feb #}
-        {% else %}
-          {% set days = 28 %}
-        {% endif %}
-        {{ ((states('sensor.monthly_grid_energy_consumption') | int) / now.day * days) | round(3) }}
-    monthly_home_energy_consumption_forecast:
-      unique_id: "9a1c2a4e-76cd-416d-8680-fe1ea588f254"
-      unit_of_measurement: "kWh"
-      value_template: >
-        {% set n = now() %}
-        {% set days = ((n.replace(day=1) + timedelta(days=-31)).replace(day=1) - timedelta(days=1)).day %}
-        {{ ((states('sensor.monthly_home_energy_consumption') | int) / n.day * days) | round(3) }}
     last_backup:
       # relies on cronjob running on a sunday and a wednedsay
       device_class: timestamp

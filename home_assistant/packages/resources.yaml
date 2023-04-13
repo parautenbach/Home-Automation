@@ -32,6 +32,7 @@ template:
             0
           {% endif %}
       - name: "Solar Consumption Percentage"
+        icon: mdi:solar-power
         unit_of_measurement: "%"
         state: >
           {% set pv_potential = states('sensor.power_production_now') | int(0) %}
@@ -45,6 +46,7 @@ template:
             0
           {% endif %}
       - name: "Solar Reserve Percentage"
+        icon: mdi:solar-power
         unit_of_measurement: "%"
         state: >
           {% if states('sensor.power_production_now') | int(0) > 0 %}

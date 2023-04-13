@@ -39,6 +39,8 @@ switch:
     name: "Gate Control"
     pin: 14
     restore_mode: ALWAYS_OFF
+  # since v2022.2 this can be made a button, but we're not going to change something that works
+  # https://esphome.io/components/button/output.html
   - platform: template
     id: gate_remote
     name: "Gate Remote"

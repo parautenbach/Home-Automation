@@ -470,7 +470,9 @@ cards:
   - type: vertical-stack
     cards:
       - type: entities
+        show_header_toggle: false
         entities:
+          - type: divider
           - binary_sensor.remote_ui
           - sensor.disk_use_percent
           - sensor.memory_use_percent
@@ -506,18 +508,16 @@ cards:
             name: Battery status
           # todo: - binary_sensor.rpi_power_status
           - sensor.last_boot
-        title: Server
-        show_header_toggle: false
-        footer:
+        header:
           type: custom:mini-graph-card
-          name: Load
+          name: Server
           entities:
             - entity: sensor.load_1m
-              name: 1 min
+              name: 1 min load
             - entity: sensor.load_5m
-              name: 5 min
+              name: 5 min load
             - entity: sensor.load_15m
-              name: 15 min
+              name: 15 min load
           hours_to_show: 24
           hour24: true
           smoothing: true

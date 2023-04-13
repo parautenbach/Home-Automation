@@ -79,13 +79,14 @@ cards:
       - type: entities
         show_header_toggle: false
         entities:
+          - type: divider
           - entity: sensor.internet_round_trip_time_avg
             name: Mean Ping Time
           - entity: sensor.internet_round_trip_time_mdev
             name: Mean Ping Deviation
           - entity: sensor.internet_packet_loss
             name: Packet Loss
-        footer:
+        header:
           type: custom:mini-graph-card
           name: Latency
           entities:
@@ -121,18 +122,18 @@ cards:
           - entity: binary_sensor.front_extender
           - entity: binary_sensor.back_extender
       - type: entities
-        title: Front Extender
         show_header_toggle: false
         entities:
+          - type: divider
           - entity: sensor.front_extender_round_trip_time_avg
             name: Mean Ping Time
           - entity: sensor.front_extender_round_trip_time_mdev
             name: Mean Ping Deviation
           - entity: sensor.front_extender_packet_loss
             name: Packet Loss
-        footer:
+        header:
           type: custom:mini-graph-card
-          name: Latency
+          name: Front Extender
           entities:
             - entity: sensor.front_extender_round_trip_time_avg
             - entity: sensor.nighttime_number
@@ -158,18 +159,18 @@ cards:
                   border: 0px;
                 }
       - type: entities
-        title: Back Extender
         show_header_toggle: false
         entities:
+          - type: divider
           - entity: sensor.back_extender_round_trip_time_avg
             name: Mean Ping Time
           - entity: sensor.back_extender_round_trip_time_mdev
             name: Mean Ping Deviation
           - entity: sensor.back_extender_packet_loss
             name: Packet Loss
-        footer:
+        header:
           type: custom:mini-graph-card
-          name: Latency
+          name: Back Extender
           entities:
             - entity: sensor.back_extender_round_trip_time_avg
             - entity: sensor.nighttime_number

@@ -239,9 +239,9 @@ cards:
   - type: vertical-stack
     cards:
       - type: entities
-        title: Energy Consumption
         show_header_toggle: false
         entities:
+          - type: divider
           - type: custom:multiple-entity-row
             entity: sensor.daily_home_energy_consumption
             name: Today
@@ -272,8 +272,9 @@ cards:
               - entity: sensor.monthly_grid_energy_consumption_forecast
                 name: Grid
                 format: precision1
-        footer:
+        header:
           type: custom:mini-graph-card
+          name: Energy Consumption
           entities:
             - entity: sensor.grid_power
               color: var(--custom-color-blue)
@@ -293,7 +294,7 @@ cards:
           line_width: 2
           show:
             extrema: true
-            name: false
+            name: true
             icon: false
             average: true
             state: true

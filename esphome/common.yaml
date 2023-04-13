@@ -1,6 +1,12 @@
+logger:
+
 captive_portal:
 
-logger:
+# probably best to have a dedicated esp for ble in future, instead of giving multiple purposes to existing devices
+# https://github.com/esphome/issues/issues/2141
+# bluetooth_proxy:
+# https://esphome.io/components/binary_sensor/ble_presence.html#esp32-ble-tracker-setting-up-devices
+# esp32_ble_tracker:
 
 ota:
   password: !secret ota_password

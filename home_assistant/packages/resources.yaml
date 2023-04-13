@@ -59,6 +59,59 @@ template:
           {% else %}
             0
           {% endif %}
+      - name: "Battery Status"
+        icon: >-
+          {% set state = states('sensor.battery_state_of_charge') | int(0) %}
+          {% set charging = "-charging" if states('sensor.battery_status') == "Charging" else "" %}
+          {% set suffix = ((state + 5) // 10) * 10 %}
+          {# empty #}
+          {% if suffix <= 0 %}
+            mdi:battery-alert-variant-outline
+          {# full #}
+          {% elif suffix == 100 %}
+            {# choose the right full battery #}
+            {% if charging != "" %}
+              mdi:battery-charging-100
+            {% else %}
+              mdi:battery
+            {% endif %}
+          {# everything in between #}
+          {% else %}
+            mdi:battery{{ charging }}-{{ suffix }}
+          {% endif %}
+        state: >
+          {%- set threshold = 100 -%}
+          {%- if states('sensor.battery_power') | int(0) > threshold -%}
+            Charging
+          {%- elif states('sensor.battery_power') | int(0) < -threshold -%}
+            Discharging
+          {%- else -%}
+            Trickling
+          {%- endif %}
+      - name: "Battery Time To Full"
+        device_class: duration
+        unit_of_measurement: s
+        state: >
+          {% set battery_status = states('sensor.battery_status') %}
+          {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
+          {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
+          {% if battery_status == 'Charging' %}
+            {{ (100 - current_charge) * 60 * 60 / rate }}
+          {% else %}
+            0
+          {% endif %}
+      - name: "Battery Time To Empty"
+        device_class: duration
+        unit_of_measurement: s
+        state: >
+          {% set battery_status = states('sensor.battery_status') %}
+          {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
+          {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
+          {% if battery_status == 'Discharging' -%}
+            {{ (current_charge - 20) * 60 * 60 / rate }}
+          {% else %}
+            0
+          {% endif %}
 
 sensor:
   - platform: derivative

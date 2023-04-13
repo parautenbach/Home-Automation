@@ -38,6 +38,7 @@
       friendly_name: "Sun Angle"
       unit_of_measurement: '°'
       value_template: "{{ '%+.1f' | format(state_attr('sun.sun', 'elevation')) }}"
+      icon_template: mdi:sun-angle-outline
     security_camera_last_clip:
       device_class: timestamp
       value_template: "{{ states('input_datetime.security_camera_last_clip') | as_datetime | as_local }}"
@@ -289,22 +290,19 @@
         {# states('sensor.saaqis_ambient_temperature') | float(None) #}
       device_class: temperature
       unit_of_measurement: "°C"
-      icon_template: >-
-        mdi:thermometer
+      icon_template: mdi:thermometer
     outside_feels_like:
       friendly_name: "Outside Temperature Feels Like"
       value_template: >-
         {{ states('sensor.openweathermap_feels_like_temperature') | round(1)  }}
       device_class: temperature
       unit_of_measurement: "°C"
-      icon_template: >-
-        mdi:thermometer
+      icon_template: mdi:thermometer
     daylight_hm:
       friendly_name: "Daylight Length"
       value_template: >-
         {{ state_attr('sensor.daylight', 'today_hms')[:5] }}
-      icon_template: >-
-        mdi:weather-sunny
+      icon_template: mdi:weather-sunny
     nighttime_number:
       value_template: "{{ iif(is_state('binary_sensor.nighttime', 'on'), 1, 0) }}"
     apple_tv_playing_hours_minutes:

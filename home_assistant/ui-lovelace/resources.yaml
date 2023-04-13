@@ -243,32 +243,35 @@ cards:
         show_header_toggle: false
         entities:
           - type: custom:multiple-entity-row
-            format: precision1
             entity: sensor.daily_home_energy_consumption
             name: Today
             icon: mdi:power-plug
+            format: precision1
             state_header: Home
             entities:
               - entity: sensor.daily_grid_energy_consumption
                 name: Grid
+                format: precision1
           - type: custom:multiple-entity-row
-            format: precision1
             entity: sensor.monthly_home_energy_consumption
-            icon: mdi:power-plug
             name: This Month
+            icon: mdi:power-plug
+            format: precision1
             state_header: Home
             entities:
               - entity: sensor.monthly_grid_energy_consumption
                 name: Grid
+                format: precision1
           - type: custom:multiple-entity-row
-            format: precision1
             entity: sensor.monthly_home_energy_consumption_forecast
-            icon: mdi:trending-up
             name: This Month's Forecast
+            icon: mdi:trending-up
+            format: precision1
             state_header: Home
             entities:
               - entity: sensor.monthly_grid_energy_consumption_forecast
                 name: Grid
+                format: precision1
         footer:
           type: custom:mini-graph-card
           entities:

@@ -23,7 +23,7 @@ badges:
                 .value {
                   color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
                 }
-  - entity: sensor.home_power
+  - entity: sensor.home_power_kw
     name: Home
   - entity: sensor.solar_reserve
     name: Solar Reserve

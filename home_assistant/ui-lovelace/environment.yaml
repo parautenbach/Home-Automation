@@ -5,40 +5,12 @@ badges:
   - entity: sensor.living_room_ht_temperature
     name: Living Room
     card_mod:
-      # https://www.w3schools.com/cssref/tryit.php?filename=trycss3_gradient-linear_ltr
       style: |
         :host {
           --label-badge-text-color:
-              {%- macro interpolate(temp, start, stop) -%}
-                {%- set (start_temp, start_color) = start -%}
-                {%- set (stop_temp, stop_color) = stop -%}
-                {%- set (start_r, start_g, start_b) = (int(start_color[0:2], base=16), int(start_color[2:4], base=16), int(start_color[4:6], base=16)) -%}
-                {%- set (stop_r, stop_g, stop_b) = (int(stop_color[0:2], base=16), int(stop_color[2:4], base=16), int(stop_color[4:6], base=16)) -%}
-                {%- set s = ((temp - start_temp)/(stop_temp - start_temp)) -%}
-                {# some channels might be negative; most browsers are probably tolerant, but in case not #}
-                {%- set r = max(int(start_r + s*(stop_r - start_r)), 0) -%}
-                {%- set g = max(int(start_g + s*(stop_g - start_g)), 0) -%}
-                {%- set b = max(int(start_b + s*(stop_b - start_b)), 0) -%}
-                rgb({{ r }}, {{ g }}, {{ b }});
-              {%- endmacro -%}
-              {%- set temp = states(config.entity) | float(0) -%}
-              {%- set temp_map = {
-                                   5: "3498db",
-                                   15: "70a03c",
-                                   22: "ff9800",
-                                   30: "e74c3c"
-                                 }  -%}
-              {%- set keys = temp_map | sort -%}
-              {%- set index = keys | select("lt", temp) | list | length -%}
-              {%- if index == 0 -%}
-                #{{ temp_map[keys | first] }}
-              {%- elif index == keys | length -%}
-                #{{ temp_map[keys | last] }}
-              {%- else -%}
-                {%- set start = (keys[index - 1], temp_map[keys[index - 1]]) -%}
-                {%- set stop = (keys[index], temp_map[keys[index]]) -%}
-                {{ interpolate(temp, start, stop) }}
-              {%- endif -%}
+              {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+              {%- set state = states(config.entity) | float(0) -%}
+              {{ gradient_color(state, temp_degrees_c_human_map) }}
         }
   - entity: sensor.outside_temperature
     name: Outside
@@ -46,36 +18,9 @@ badges:
       style: |
         :host {
           --label-badge-text-color:
-              {%- macro interpolate(temp, start, stop) -%}
-                {%- set (start_temp, start_color) = start -%}
-                {%- set (stop_temp, stop_color) = stop -%}
-                {%- set (start_r, start_g, start_b) = (int(start_color[0:2], base=16), int(start_color[2:4], base=16), int(start_color[4:6], base=16)) -%}
-                {%- set (stop_r, stop_g, stop_b) = (int(stop_color[0:2], base=16), int(stop_color[2:4], base=16), int(stop_color[4:6], base=16)) -%}
-                {%- set s = ((temp - start_temp)/(stop_temp - start_temp)) -%}
-                {# some channels might be negative; most browsers are probably tolerant, but in case not #}
-                {%- set r = max(int(start_r + s*(stop_r - start_r)), 0) -%}
-                {%- set g = max(int(start_g + s*(stop_g - start_g)), 0) -%}
-                {%- set b = max(int(start_b + s*(stop_b - start_b)), 0) -%}
-                rgb({{ r }}, {{ g }}, {{ b }});
-              {%- endmacro -%}
-              {%- set temp = states(config.entity) | float(0) -%}
-              {%- set temp_map = {
-                                   5: "3498db",
-                                   15: "70a03c",
-                                   22: "ff9800",
-                                   30: "e74c3c"
-                                 }  -%}
-              {%- set keys = temp_map | sort -%}
-              {%- set index = keys | select("lt", temp) | list | length -%}
-              {%- if index == 0 -%}
-                #{{ temp_map[keys | first] }}
-              {%- elif index == keys | length -%}
-                #{{ temp_map[keys | last] }}
-              {%- else -%}
-                {%- set start = (keys[index - 1], temp_map[keys[index - 1]]) -%}
-                {%- set stop = (keys[index], temp_map[keys[index]]) -%}
-                {{ interpolate(temp, start, stop) }}
-              {%- endif -%}
+              {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+              {%- set state = states(config.entity) | float(0) -%}
+              {{ gradient_color(state, temp_degrees_c_human_map) }}
         }
   - entity: sensor.overall_pollen_risk
     name: Pollen
@@ -101,14 +46,9 @@ badges:
               $: |
                 .value {
                     color:
-                      {%- set mapping = {
-                                           1: "#40b100",
-                                           2: "#ffe500",
-                                           3: "#ffa800",
-                                           4: "#ff5800",
-                                           5: "#aa0000" } -%}
-                      {%- set key = states(config.entity) | int(0) -%}
-                      {{ mapping[key] if key in mapping else "" }} !important;
+                      {%- from 'dynamic_colors.jinja' import discrete_5_point_map, mapped_color -%}
+                      {%- set state = states(config.entity) | int(0) -%}
+                      {{ mapped_color(state, discrete_5_point_map) }} !important;
                   }
   - entity: sensor.owm_pollution_overall_air_quality
     name: Air
@@ -117,15 +57,9 @@ badges:
         .: |
           :host {
             --label-badge-text-color:
-                {%- set mapping = {
-                                     0: "",
-                                     1: "#40b100",
-                                     2: "#ffe500",
-                                     3: "#ffa800",
-                                     4: "#ff5800",
-                                     5: "#aa0000" } -%}
-                {%- set key = states(config.entity) | int(0) -%}
-                {{ mapping[key] if key in mapping else "" }} !important;
+                      {%- from 'dynamic_colors.jinja' import discrete_5_point_map, mapped_color -%}
+                      {%- set state = states(config.entity) | int(0) -%}
+                      {{ mapped_color(state, discrete_5_point_map) }} !important;
           }
         # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/3319
         # var(--ha-label-badge-font-size);

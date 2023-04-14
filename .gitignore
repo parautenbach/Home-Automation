@@ -6,3 +6,4 @@ esphome/garage_doors/partitions.csv
 home_assistant/floorplan/floorplan.bak.svg
 scripts/sync_to_server.sh
 home_assistant/google_calendars.yaml
+*.log

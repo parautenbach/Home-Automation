@@ -25,6 +25,26 @@ badges:
                 }
   - entity: sensor.home_power_kw
     name: Home
+    card_mod:
+        style:
+          ha-state-label-badge:
+            $:
+              ha-label-badge:
+                $: |
+                  .value {
+                    color:
+                      {%- from 'dynamic_colors.jinja' import gradient_color -%}
+                      {%- set state = states('sensor.home_power_kw') | float(0) -%}
+                      {%- set consumption_kw_map =
+                                {
+                                  1.0: "#40b100",
+                                  2.0: "#ffa800",
+                                  8.0: "#aa0000"
+                                }
+                        -%}
+                      {{ gradient_color(state, reserve_kw_map) }}
+                      !important;
+                  }
   - entity: sensor.solar_reserve
     name: Solar Reserve
     card_mod:

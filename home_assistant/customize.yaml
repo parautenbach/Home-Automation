@@ -452,6 +452,10 @@ sensor.network_throughput_in_enp3s0:
   icon: mdi:download-network-outline
 sensor.network_throughput_out_enp3s0:
   icon: mdi:upload-network-outline
+sensor.google_travel_time:
+  device_class: duration
+sensor.google_travel_time_filtered:
+  device_class: duration
 
 # state classes
 # https://developers.home-assistant.io/docs/core/entity/sensor/

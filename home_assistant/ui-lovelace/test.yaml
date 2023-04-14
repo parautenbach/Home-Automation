@@ -89,12 +89,24 @@ cards:
     name: Power
     icon: mdi:home-battery-outline
     entities:
-      - entity: sensor.grid_power
-        name: Inverter
-        color: var(--custom-color-blue)
       - entity: sensor.current_power
         name: Pulse Meter
         color: var(--custom-color-red)
+      - entity: sensor.pv_power
+        name: Solar
+        color: var(--custom-color-yellow)
+      - entity: sensor.load_power
+        name: Inverter
+        color: var(--custom-color-magenta)
+      - entity: sensor.grid_power
+        name: Grid
+        color: var(--custom-color-blue)
+      - entity: sensor.battery_power
+        name: Battery
+        color: var(--custom-color-green)
+      - entity: sensor.load_power_non_essential
+        name: Non-essential
+        color: var(--custom-color-gray)
     hours_to_show: 24
     hour24: true
     smoothing: true
@@ -107,3 +119,20 @@ cards:
       average: true
       state: true
       labels: hover
+  - type: history-graph
+    title: Power
+    entities:
+      - entity: sensor.current_power
+        name: Pulse Meter
+      - entity: sensor.pv_power
+        name: Solar
+      - entity: sensor.load_power
+        name: Inverter
+      - entity: sensor.grid_power
+        name: Grid
+      - entity: sensor.battery_power
+        name: Battery
+      - entity: sensor.load_power_non_essential
+        name: Non-essential
+    hours_to_show: 24
+    show_names: true

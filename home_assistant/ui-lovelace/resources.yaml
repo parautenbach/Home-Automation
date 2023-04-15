@@ -42,7 +42,7 @@ badges:
                                   8.0: "#aa0000"
                                 }
                         -%}
-                      {{ gradient_color(state, reserve_kw_map) }}
+                      {{ gradient_color(state, consumption_kw_map) }}
                       !important;
                   }
   - entity: sensor.solar_reserve

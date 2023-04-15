@@ -31,3 +31,6 @@ server_shut_down_automatically:
 gaia_bluetooth_audio_connected:
   name: Gaia Bluetooth Audio Connected
   icon: mdi:bluetooth-audio
+skip_next_wake_up_time:
+  name: Skip Next Wake Up Time
+  icon: mdi:alarm-off

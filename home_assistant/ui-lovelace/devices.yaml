@@ -227,6 +227,7 @@ cards:
         - automation.open_the_gate_when_arriving_home
         - automation.pollen_levels_update
         # - automation.proximity_updates
+        - automation.reset_wake_up_time
         - automation.restore_smart_bulb_statuses_after_power_restored
         - automation.save_last_smart_bulb_state
         - automation.see_mobile_devices

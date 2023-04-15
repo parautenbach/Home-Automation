@@ -15,7 +15,7 @@ template:
         unit_of_measurement: W
         device_class: power
         # battery power goes positive and negative (postive power means the battery is charging)
-        state: "{{ states('sensor.grid_power') | int(0) + states('sensor.pv_power') | int(0) - states('sensor.battery_power') | int(0) }}"
+        state: "{{ states('sensor.grid_power') | int(0) + states('sensor.pv_power_filtered') | int(0) - states('sensor.battery_power_filtered') | int(0) }}"
       - name: "Home Power kW"
         unique_id: "0d70dd0f-a7e4-416b-a293-cb1d518bdfcf"
         unit_of_measurement: kW
@@ -27,8 +27,8 @@ template:
         device_class: power
         state: >-
           {% set pv_potential = states('sensor.power_production_now') | int(0) %}
-          {% set pv_power = states('sensor.pv_power') | int(0) %}
-          {% set battery_power = states('sensor.battery_power') | int(0) %}
+          {% set pv_power = states('sensor.pv_power_filtered') | int(0) %}
+          {% set battery_power = states('sensor.battery_power_filtered') | int(0) %}
           {%- if (pv_power > pv_potential and pv_power > 10) or (pv_power > 10 and battery_power < 0) %}
             0
           {% elif pv_potential > 0 %}
@@ -41,8 +41,8 @@ template:
         unit_of_measurement: "%"
         state: >
           {% set pv_potential = states('sensor.power_production_now') | int(0) %}
-          {% set pv_power = states('sensor.pv_power') | int(0) %}
-          {% set battery_power = states('sensor.battery_power') | int(0) %}
+          {% set pv_power = states('sensor.pv_power_filtered') | int(0) %}
+          {% set battery_power = states('sensor.battery_power_filtered') | int(0) %}
           {%- if (pv_power > pv_potential and pv_power > 10) or (pv_power > 10 and battery_power < 0) %}
             100
           {% elif pv_potential > 0 %}
@@ -81,9 +81,10 @@ template:
           {% endif %}
         state: >
           {%- set threshold = 100 -%}
-          {%- if states('sensor.battery_power') | int(0) > threshold -%}
+          {%- set battery_power = states('sensor.battery_power_filtered') | int(0) -%}
+          {%- if battery_power > threshold -%}
             Charging
-          {%- elif states('sensor.battery_power') | int(0) < -threshold -%}
+          {%- elif battery_power < -threshold -%}
             Discharging
           {%- else -%}
             Trickling
@@ -170,6 +171,20 @@ sensor:
           {% set n = now() %}
           {% set days = ((n.replace(day=1) + timedelta(days=-31)).replace(day=1) - timedelta(days=1)).day %}
           {{ ((states('sensor.monthly_home_energy_consumption') | int) / n.day * days) | round(3) }}
+  - platform: filter
+    name: "PV Power Filtered"
+    entity_id: sensor.pv_power
+    filters:
+      filter: lowpass
+      time_constant: 10
+      precision: 0
+  - platform: filter
+    name: "Battery Power Filtered"
+    entity_id: sensor.battery_power
+    filters:
+      filter: lowpass
+      time_constant: 10
+      precision: 0
 
 utility_meter:
   daily_grid_energy_consumption:

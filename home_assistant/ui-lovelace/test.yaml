@@ -124,13 +124,13 @@ cards:
     entities:
       - entity: sensor.current_power
         name: Pulse Meter
-      - entity: sensor.pv_power
+      - entity: sensor.pv_power_filtered
         name: Solar
       - entity: sensor.load_power
         name: Inverter
       - entity: sensor.grid_power
         name: Grid
-      - entity: sensor.battery_power
+      - entity: sensor.battery_power_filtered
         name: Battery
       - entity: sensor.load_power_non_essential
         name: Non-essential

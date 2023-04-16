@@ -15,7 +15,7 @@ template:
         unit_of_measurement: W
         device_class: power
         # battery power goes positive and negative (postive power means the battery is charging)
-        state: "{{ states('sensor.grid_power') | int(0) + states('sensor.pv_power_filtered') | int(0) - states('sensor.battery_power_filtered') | int(0) }}"
+        state: "{{ states('sensor.grid_power') | int(0) + states('sensor.pv_power') | int(0) - states('sensor.battery_power') | int(0) }}"
       - name: "Home Power kW"
         unique_id: "0d70dd0f-a7e4-416b-a293-cb1d518bdfcf"
         unit_of_measurement: kW

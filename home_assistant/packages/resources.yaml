@@ -36,6 +36,11 @@ template:
           {% else %}
             0
           {% endif %}
+      - name: "Solar Reserve kW"
+        unique_id: "72bffd22-61c2-41f8-93d5-9dd79e60afc9"
+        unit_of_measurement: kW
+        device_class: power
+        state: "{{ ((states('sensor.solar_reserve') | int(0)) / 1000) | round(3) }}"
       - name: "Solar Consumption Percentage"
         icon: mdi:solar-power
         unit_of_measurement: "%"

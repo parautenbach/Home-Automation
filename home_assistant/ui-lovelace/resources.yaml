@@ -45,7 +45,7 @@ badges:
                       {{ gradient_color(state, consumption_kw_map) }}
                       !important;
                   }
-  - entity: sensor.solar_reserve
+  - entity: sensor.solar_reserve_kw
     name: Solar Reserve
     card_mod:
         style:

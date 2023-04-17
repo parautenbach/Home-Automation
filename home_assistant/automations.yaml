@@ -818,7 +818,7 @@
     - service: cover.open_cover
       entity_id: cover.rhs_garage_door
 
-- alias: "Check Disk Space on the Home Assistant server"
+- alias: "Check Disk Space on the Home Assistant Server"
   id: "e955e738-4162-486e-a915-d30b5952d238"
   trigger:
     - platform: time_pattern

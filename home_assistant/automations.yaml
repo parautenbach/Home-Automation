@@ -2173,7 +2173,7 @@
       data:
         title: Security
         message: "Someone rang the doorbell."
-        # todo: thumbnail
+        # todo: thumbnail, url
         # data:
         #   group: "security-camera-snapshots"
         #   attachment:

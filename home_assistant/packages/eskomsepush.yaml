@@ -200,7 +200,7 @@ automation:
           message: "{{ states('sensor.loadshedding_forecast') }}"
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace/resources
 
   - alias: "Upcoming Loadshedding Notification"
     id: "a7c1b125-56a1-48d3-bf54-4d5430c81508"
@@ -239,4 +239,4 @@ automation:
             Starting in {{ trigger.id }} min: {{ start }}-{{ end }} (~{{ hours }}h; {{ states('sensor.loadshedding_stage') }}).
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace/resources

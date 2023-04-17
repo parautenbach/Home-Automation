@@ -179,7 +179,7 @@ cards:
             name: Main Bedroom
           - entity: sensor.outside_temperature
             name: Outside
-        days_to_show: 7
+        days_to_show: 30
         period: day
         chart_type: line
         stat_types:

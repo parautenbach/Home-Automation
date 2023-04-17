@@ -1865,7 +1865,7 @@
                 message: "{{ message }}"
                 data:
                   group: "{{ trigger.entity_id }}"
-                  url: homeassistant://navigate/lovelace/main
+                  url: homeassistant://navigate/lovelace/security
                   actions:
                     - action: "CLOSE_COVER"
                       title: "Close now"
@@ -1882,7 +1882,7 @@
             message: "{{ message }}"
             data:
               group: "{{ trigger.entity_id }}"
-              url: homeassistant://navigate/lovelace/main
+              url: homeassistant://navigate/lovelace/security
 
 - alias: "Alert If Gate Opened Or Closed When Not Supposed To"
   id: "62a52103-4d0d-429e-a59a-fc674d72f3ee"
@@ -1933,7 +1933,7 @@
                 message: "{{ message }}"
                 data:
                   group: "{{ trigger.entity_id }}"
-                  url: homeassistant://navigate/lovelace/main
+                  url: homeassistant://navigate/lovelace/security
                   # https://companion.home-assistant.io/docs/notifications/actionable-notifications#building-notification-action-scripts
                   actions:
                     - action: "CLOSE_COVER"
@@ -2473,7 +2473,7 @@
         message: "Shut Gaia down now!"
         data:
           group: "home-electricity"
-          url: homeassistant://navigate/lovelace/main
+          url: homeassistant://navigate/lovelace/devices
           push:
             sound:
               name: default

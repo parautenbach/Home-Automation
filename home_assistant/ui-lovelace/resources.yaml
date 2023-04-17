@@ -202,15 +202,15 @@ cards:
             name: Solar
             icon: mdi:solar-power-variant-outline
             entities:
-              - entity: sensor.power_production_now
-                name: Forecast
-                color: var(--custom-color-gray)
               - entity: sensor.pv_power
                 name: Consumption
                 color: var(--custom-color-yellow)
               - entity: sensor.solar_reserve
                 name: Reserve
                 color: var(--custom-color-green)
+              - entity: sensor.power_production_now
+                name: Forecast
+                color: var(--custom-color-gray)
               - entity: sensor.illuminance
                 name: Illuminance
                 color: var(--custom-color-magenta)
@@ -218,7 +218,7 @@ cards:
             hours_to_show: 24
             hour24: true
             smoothing: true
-            points_per_hour: 2
+            points_per_hour: 1
             line_width: 2
             lower_bound: 0
             show:

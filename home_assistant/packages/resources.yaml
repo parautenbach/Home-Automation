@@ -26,10 +26,12 @@ template:
         unit_of_measurement: W
         device_class: power
         state: >-
+          {% set battery_threshold = 100 %}
+          {% set pv_threshold = 10 %}
           {% set pv_potential = states('sensor.power_production_now') | int(0) %}
           {% set pv_power = states('sensor.pv_power_filtered') | int(0) %}
           {% set battery_power = states('sensor.battery_power_filtered') | int(0) %}
-          {%- if (pv_power > pv_potential and pv_power > 10) or (pv_power > 10 and battery_power < 0) %}
+          {% if (pv_power > pv_potential and pv_power > pv_threshold) or (pv_power > pv_threshold and battery_power < -battery_threshold) %}
             0
           {% elif pv_potential > 0 %}
             {{ pv_potential - pv_power }}
@@ -45,10 +47,12 @@ template:
         icon: mdi:solar-power
         unit_of_measurement: "%"
         state: >
+          {% set battery_threshold = 100 %}
+          {% set pv_threshold = 10 %}
           {% set pv_potential = states('sensor.power_production_now') | int(0) %}
           {% set pv_power = states('sensor.pv_power_filtered') | int(0) %}
           {% set battery_power = states('sensor.battery_power_filtered') | int(0) %}
-          {%- if (pv_power > pv_potential and pv_power > 10) or (pv_power > 10 and battery_power < 0) %}
+          {% if (pv_power > pv_potential and pv_power > pv_threshold) or (pv_power > pv_threshold and battery_power < -battery_threshold) %}
             100
           {% elif pv_potential > 0 %}
             {{ (pv_power / pv_potential * 100) | round(0) }}

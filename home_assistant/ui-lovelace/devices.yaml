@@ -284,6 +284,8 @@ cards:
             name: Living Room
           - entity: light.dining_room
             name: Dining Room
+          - entity: light.hallway
+            name: Hallway
           - entity: light.foyer
             name: Foyer
           - entity: light.front_door

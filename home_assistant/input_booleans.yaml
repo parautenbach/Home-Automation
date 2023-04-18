@@ -25,6 +25,9 @@ music_room_state:
 foyer_state:
   name: Foyer State
   icon: mdi:lightbulb
+hallway_state:
+  name: Hallway State
+  icon: mdi:lightbulb
 server_shut_down_automatically:
   name: Server Shut Down Automatically
   icon: mdi:server

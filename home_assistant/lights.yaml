@@ -28,6 +28,7 @@
   entities:
     - light.foyer
     - light.kitchen_counter
+    - light.hallway
 - platform: group
   name: Yard Group
   entities:

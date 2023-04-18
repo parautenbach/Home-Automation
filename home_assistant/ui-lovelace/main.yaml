@@ -111,10 +111,13 @@ cards:
             entity: light.music_room
             icon: mdi:dome-light
           - type: custom:button-card
-            template: rgb_light
-            name: Open Area
-            entity: light.living_area_group
-            icon: mdi:lightbulb-group-outline
+            template:
+              - rgb_light
+              - rgb_light_with_timer
+            variables:
+              profile: normal
+            name: Hallway
+            entity: light.hallway
       - type: horizontal-stack
         cards:
           - type: custom:button-card
@@ -131,10 +134,15 @@ cards:
             entity: light.music_room_corner_light
           - type: custom:button-card
             template: rgb_light
-            variables:
-              profile: corner_white
-            name: Corner Lights
-            entity: light.corner_lights
+            name: Open Area
+            entity: light.living_area_group
+            icon: mdi:lightbulb-group-outline
+          # - type: custom:button-card
+          #   template: rgb_light
+          #   variables:
+          #     profile: corner_white
+          #   name: Corner Lights
+          #   entity: light.corner_lights
       - type: horizontal-stack
         title: Outside Lights
         cards:

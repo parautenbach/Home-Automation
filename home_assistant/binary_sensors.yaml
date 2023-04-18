@@ -48,16 +48,6 @@
       friendly_name: "Electricity"
       # https://www.home-assistant.io/integrations/binary_sensor/#device-class
       device_class: power
-      # value_template: >-
-      #   {{ expand('group.electricity_feed_indicators') | rejectattr('state', 'in', ['unavailable', 'unknown']) | list != [] }}
-      #   {# states('switch.shelly1_b961d2') not in ['unknown', 'unavailable'] #}
-      # icon_template: >-
-      #   {# if states('switch.shelly1_b961d2') not in ['unknown', 'unavailable'] #}
-      #   {% if expand('group.electricity_feed_indicators') | rejectattr('state', 'in', ['unavailable', 'unknown']) | list != [] %}
-      #     mdi:power-plug
-      #   {% else %}
-      #     mdi:power-plug-off
-      #   {% endif %}
       value_template: >-
         {{ not is_state_attr('sensor.home_assistant_server_battery', 'status', 'Discharging') }}
       icon_template: >-

@@ -231,16 +231,6 @@
         {% else %}
           mdi:battery{{ charging }}-{{ suffix }}
         {% endif %}
-    weather_forecast_conditions_tomorrow:
-      friendly_name: "Weather Conditions Tomorrow"
-      value_template: >-
-        {{ (state_attr('weather.openweathermap_daily', 'forecast') | first)['condition'] }}
-      icon_template: >-
-        {% if (state_attr('weather.openweathermap_daily', 'forecast') | first)['condition'] == 'partlycloudy' %}
-          mdi:weather-partly-cloudy
-        {% else %}
-          mdi:weather-{{ (state_attr('weather.openweathermap_daily', 'forecast') | first)['condition'] }}
-        {% endif %}
     weather_forecast_precipitation_tomorrow:
       friendly_name: "Weather Precipitation Tomorrow"
       value_template: >-

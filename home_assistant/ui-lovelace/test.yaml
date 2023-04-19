@@ -26,6 +26,7 @@ cards:
       - input_datetime.main_gate_opened
       - input_datetime.lhs_garage_door_opened
       - input_datetime.rhs_garage_door_opened
+      - weather.forecast_tomorrow
     show_header_toggle: true
   - type: history-graph
     title: Proximity

@@ -100,7 +100,7 @@ cards:
         entities:
           - entity: weather.openweathermap_daily
             name: Today
-          - entity: sensor.weather_forecast_conditions_tomorrow
+          - entity: weather.forecast_tomorrow
             name: Tomorrow
       - type: custom:swipe-card
         parameters:

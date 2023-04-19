@@ -51,6 +51,7 @@ homeassistant:
 logger:
   default: warning
   # logs:
+  #   homeassistant.components.template.weather: debug
   #   homeassistant.components.openuv: debug
   #   homeassistant.components.tplink: debug
   #   homeassistant.components.shell_command: debug
@@ -217,3 +218,21 @@ amcrest:
 #   - folder: /tmp/
 #     patterns:
 #       - 'camera.security_camera_*.jpg'
+
+weather:
+  # https://community.home-assistant.io/t/mapping-weather-conditions-in-the-ui/289207
+  - platform: template
+    name: "Forecast Tomorrow"
+    condition_template: "{{ state_attr('weather.openweathermap_daily', 'forecast')[1]['condition'] }}"
+    temperature_template: "{{ state_attr('weather.openweathermap_daily', 'forecast')[1]['temperature'] }}"
+    temperature_unit: "°C"
+    # workaround: https://github.com/home-assistant/core/issues/91620
+    humidity_template: "{{ 0.0 | float(0) }}"
+    pressure_template: "{{ state_attr('weather.openweathermap_daily', 'forecast')[1]['pressure'] }}"
+    pressure_unit: "hPa"
+    wind_speed_template: "{{ state_attr('weather.openweathermap_daily', 'forecast')[1]['wind_speed'] }}"
+    wind_speed_unit: "km/h"
+    wind_bearing_template: "{{ state_attr('weather.openweathermap_daily', 'forecast')[1]['wind_bearing'] }}"
+    precipitation_unit: "mm"
+    # forecast_template: "{{ state_attr('weather.openweathermap_daily', 'forecast')[1:] }}"
+    attribution_template: "{{ state_attr('weather.openweathermap_daily', 'attribution') }}"

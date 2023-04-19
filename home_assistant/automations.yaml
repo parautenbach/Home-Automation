@@ -2247,6 +2247,17 @@
       single_press_profile: dim
       double_press_profile: security
 
+- alias: "Toggle Hallway Light"
+  id: "58a877b7-eed8-4fd7-897c-51eeed892ad7"
+  initial_state: true
+  use_blueprint:
+    path: shelly_button.yaml
+    input:
+      button_device_id: 16bb98a28aa167819bff6fc45f178899
+      light_entity_id: light.hallway
+      single_press_profile: normal
+      double_press_profile: security
+
 - alias: "Alert Vacation Start"
   id: "f1be4ad3-042c-4cbd-bb91-99da7bdc5dab"
   initial_state: true

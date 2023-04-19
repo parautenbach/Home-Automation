@@ -162,6 +162,8 @@ cards:
           tap_action: more-info
         - entity: sensor.dining_room_light_button_battery
           tap_action: more-info
+        - entity: sensor.hallway_light_button_battery
+          tap_action: more-info
         - entity: sensor.living_room_ht_battery
           tap_action: more-info
         - entity: sensor.main_bedroom_ht_battery

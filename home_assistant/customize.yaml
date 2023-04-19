@@ -222,19 +222,19 @@ light.hallway:
   icon: mdi:dome-light
 switch.shelly1_b961d2:
   friendly_name: Shelly1 Test
-switch.shelly1_b95a0e:
+switch.garage:
   friendly_name: Garage Light
   icon: mdi:wall-sconce-flat
 light.garage:
   friendly_name: Garage Light
   icon: mdi:wall-sconce-flat
-switch.shelly1_77128c:
+switch.front_door:
   friendly_name: Front Door Light
   icon: mdi:coach-lamp
 light.front_door:
   friendly_name: Front Door Light
   icon: mdi:coach-lamp
-switch.shelly1_b91f6f:
+switch.backyard:
   friendly_name: Backyard Light
   icon: mdi:track-light
 light.backyard:

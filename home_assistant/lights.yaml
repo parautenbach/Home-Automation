@@ -3,13 +3,13 @@
   entity_id: switch.living_room_lamp
 - platform: switch
   name: front_door
-  entity_id: switch.shelly1_77128c
+  entity_id: switch.front_door
 - platform: switch
   name: backyard
-  entity_id: switch.shelly1_b91f6f
+  entity_id: switch.backyard
 - platform: switch
   name: garage
-  entity_id: switch.shelly1_b95a0e
+  entity_id: switch.garage
 - platform: group
   name: Living Area Group
   entities:

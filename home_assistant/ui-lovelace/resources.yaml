@@ -206,7 +206,7 @@ cards:
                 color: var(--custom-color-yellow)
               - entity: sensor.solar_consumption_percentage
                 name: Consumption %
-                color: var(--custom-color-magenta)
+                color: var(--custom-color-red)
                 y_axis: secondary
             hours_to_show: 24
             hour24: true

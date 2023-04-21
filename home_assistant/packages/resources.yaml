@@ -218,8 +218,8 @@ automation:
     id: "b233b973-cf9b-44b5-94e4-5f0813e6eefa"
     initial_state: true
     trigger:
-      platform: state
-      entity_id: binary_sensor.grid_feed
+      - platform: state
+        entity_id: binary_sensor.grid_feed
     action:
       - service: notify.mobile_app_ceres
         data:

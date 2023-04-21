@@ -210,6 +210,7 @@ cards:
         - automation.lights_off_after_sunrise
         - automation.lights_off_when_loadshedding
         - automation.lights_on_upon_low_light
+        - automation.loadshedding_forecast_notification
         - automation.low_server_battery
         # - automation.monitor_inbound_internet_traffic
         # - automation.monitor_outbound_internet_traffic
@@ -219,6 +220,7 @@ cards:
         - automation.notify_if_cover_was_left_open
         - automation.notify_if_driving_state_changed
         - automation.notify_if_electricity_feed_status_changed
+        - automation.notify_if_grid_feed_status_changed
         - automation.notify_if_internet_status_changed
         - automation.notify_if_new_backup_found
         - automation.notify_if_no_recent_backup
@@ -241,6 +243,7 @@ cards:
         - automation.shut_down_gaia_notification
         - automation.shut_down_server
         - automation.start_cover_timer_when_opened
+        - automation.start_loadshedding_timer
         - automation.stop_cover_timer_when_closed
         - automation.stop_light_timer_if_running_when_light_turned_off
         - automation.switch_garage_light_according_to_door_status_and_light_conditions
@@ -255,14 +258,15 @@ cards:
         - automation.switch_on_the_front_door_light_when_arriving_home
         - automation.take_foyer_motion_snapshots
         - automation.toggle_dining_room_light
+        - automation.toggle_hallway_light
         - automation.toggle_pieter_s_bedside_lamp
         - automation.toggle_rouve_s_bedside_lamp
         - automation.turn_audio_on_when_apple_tv_turned_on
         - automation.turn_off_entertainment_system_when_idle_or_leaving_room
+        - automation.upcoming_loadshedding_notification
         - automation.update_automations_when_power_status_changed
         - automation.update_db_size
         - automation.update_gaia_bluetooth_audio_connection_status
-        # - automation.update_openuv_every_20_minutes_during_the_daytime
         - automation.update_security_camera_snapshot_gallery
         - automation.update_server_power_status
         - automation.update_timers_for_covers_on_startup

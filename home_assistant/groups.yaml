@@ -1,7 +1,7 @@
 security_automations:
   name: Security Automations
   entities:
-    - automation.take_motion_snapshots
+    - automation.take_foyer_motion_snapshots
     - automation.switch_on_lights_if_motion_is_detected
 automations_to_save_energy:
   name: Automations To Save Energy

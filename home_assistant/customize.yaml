@@ -220,7 +220,7 @@ light.foyer:
 light.hallway:
   friendly_name: Hallway Light
   icon: mdi:dome-light
-switch.shelly1_b961d2:
+switch.test_shelly1_relay:
   friendly_name: Shelly1 Test
 switch.garage:
   friendly_name: Garage Light

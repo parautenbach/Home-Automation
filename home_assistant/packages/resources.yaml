@@ -248,3 +248,58 @@ automation:
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
+  - alias: "Update Backup Power Warning Light If Grid Feed Status Changed"
+    id: "e6ddb31c-3723-429d-a6c4-38268b831ba9"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.grid_feed
+    condition:
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "on"
+    action:
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: binary_sensor.grid_feed
+                state: "off"
+              - condition: time
+                after: "05:00:00"
+                before: "23:00:00"
+            sequence:
+              - service: light.turn_on
+                target:
+                  entity_id: light.foyer
+                data:
+                  profile: night
+        default:
+          - service: light.turn_off
+            target:
+              entity_id: light.foyer
+  - alias: "Set Backup Power Warning Light Brightness"
+    id: "09697150-0bf0-4dc7-9d6d-fbc5ac6cbdc7"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: sensor.battery_state_of_charge
+    condition:
+      - condition: state
+        entity_id: binary_sensor.grid_feed
+        state: "off"
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "on"
+    action:
+      - service: light.turn_on
+        target:
+          entity_id: light.foyer
+        data:
+          profile: night
+          # the function maps the state of charge range [100,30] of the battery to the brightness range [2,100] of the light
+          # it's a linear function with a negative gradient
+          brightness_pct: >-
+            {% set state = states('sensor.battery_state_of_charge') | int(0) %}
+            {# set state_bracketed = (state | int(0) + 5) // 10 * 10 #}
+            {% set brightness = (-98/70*state + 142) | round(0) %}
+            {{ min(brightness, 100) }}

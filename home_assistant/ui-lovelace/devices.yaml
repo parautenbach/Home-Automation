@@ -235,6 +235,7 @@ cards:
         - automation.restore_smart_bulb_statuses_after_power_restored
         - automation.save_last_smart_bulb_state
         - automation.see_mobile_devices
+        - automation.set_backup_power_warning_light_brightness
         - automation.set_dark_theme
         - automation.set_light_theme
         - automation.set_pieter_s_driving_state
@@ -265,6 +266,7 @@ cards:
         - automation.turn_off_entertainment_system_when_idle_or_leaving_room
         - automation.upcoming_loadshedding_notification
         - automation.update_automations_when_power_status_changed
+        - automation.update_backup_power_warning_light_if_grid_feed_status_changed
         - automation.update_db_size
         - automation.update_gaia_bluetooth_audio_connection_status
         - automation.update_security_camera_snapshot_gallery

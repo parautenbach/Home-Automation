@@ -123,8 +123,10 @@ template:
             0
           {% endif %}
       - name: "Solar Production Peak Today"
+        icon: mdi:clock-outline
         state: "{{ (states('sensor.power_highest_peak_time_today') | as_datetime | as_local).strftime('%H:%m') }}"
       - name: "Solar Production Peak Tomorrow"
+        icon: mdi:clock-outline
         state: "{{ (states('sensor.power_highest_peak_time_tomorrow') | as_datetime | as_local).strftime('%H:%m') }}"
       - name: "Solar Energy Utilisation Today"
         icon: mdi:solar-power-variant-outline

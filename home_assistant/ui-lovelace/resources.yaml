@@ -111,17 +111,26 @@ cards:
           #     green: 0
           #     yellow: 5000
           #     red: 7000
+          # - type: gauge
+          #   name: Current Grid
+          #   entity: sensor.grid_power
+          #   min: 0
+          #   max: 10000
+          #   severity:
+          #     green: 0
+          #     yellow: 5000
+          #     red: 7000
           - type: gauge
-            name: Grid
-            entity: sensor.grid_power
+            name: Today's Solar
+            entity: sensor.solar_energy_utilisation_today
             min: 0
-            max: 10000
+            max: 100
             severity:
               green: 0
-              yellow: 5000
-              red: 7000
+              yellow: 85
+              red: 95
           - type: gauge
-            name: Solar
+            name: Current Solar
             entity: sensor.pv_power
             min: 0
             max: 4140
@@ -130,7 +139,7 @@ cards:
               yellow: 3000
               red: 3800
           - type: gauge
-            name: Solar
+            name: Current Solar
             entity: sensor.solar_consumption_percentage
             min: 0
             max: 100
@@ -139,7 +148,7 @@ cards:
               yellow: 85
               red: 95
           - type: gauge
-            name: Battery
+            name: Battery Charge
             entity: sensor.battery_state_of_charge
             min: 0
             max: 100
@@ -161,6 +170,8 @@ cards:
       - type: energy-solar-graph
       - type: entities
         entities:
+          - entity: sensor.solar_energy_utilisation_today
+            name: Utilisation Today
           - entity: sensor.energy_production_today
             name: Production Today
           - entity: sensor.solar_production_peak_today

@@ -126,6 +126,13 @@ template:
         state: "{{ (states('sensor.power_highest_peak_time_today') | as_datetime | as_local).strftime('%H:%m') }}"
       - name: "Solar Production Peak Tomorrow"
         state: "{{ (states('sensor.power_highest_peak_time_tomorrow') | as_datetime | as_local).strftime('%H:%m') }}"
+      - name: "Solar Energy Utilisation Today"
+        icon: mdi:solar-power-variant-outline
+        unit_of_measurement: "%"
+        state: >
+          {% set consumption = states('sensor.daily_solar_energy_consumption') | float(0) %}
+          {% set production = states('sensor.energy_production_today') | float(0) %}
+          {{ min((consumption / production * 100) | int(0), 100) }}
 
 sensor:
   - platform: derivative
@@ -216,6 +223,10 @@ utility_meter:
     unique_id: "ffcf90f5-5f22-47be-a389-8e74876ecead"
     source: sensor.home_energy
     cycle: monthly
+  daily_solar_energy_consumption:
+    unique_id: "c63e814c-4d6c-455c-bb2c-7f557a3af075"
+    source: sensor.pv_energy
+    cycle: daily
 
 automation:
   - alias: "Notify If Grid Feed Status Changed"

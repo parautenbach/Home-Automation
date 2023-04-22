@@ -159,6 +159,16 @@ cards:
         watt_threshold: 1000
         dashboard_link: /energy
       - type: energy-solar-graph
+      - type: entities
+        entities:
+          - entity: sensor.energy_production_today
+            name: Production Today
+          - entity: sensor.solar_production_peak_today
+            name: Peak Time Today
+          - entity: sensor.energy_production_tomorrow
+            name: Production Tomorrow
+          - entity: sensor.solar_production_peak_tomorrow
+            name: Peak Time Tomorrow
       - type: custom:swipe-card
         parameters:
           autoHeight: true

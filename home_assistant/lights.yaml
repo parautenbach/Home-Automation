@@ -18,11 +18,13 @@
     - light.music_room
     - light.corner_lights
 - platform: group
+  # keep in sync with scene.normal_lights in scenes.yaml
   name: Normal Light Group
   entities:
     - light.living_room_lamp
     - light.kitchen_counter
     - light.corner_lights
+    - light.hallway
 - platform: group
   name: Night Group
   entities:

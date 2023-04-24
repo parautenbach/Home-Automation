@@ -250,7 +250,7 @@ automation:
               {% set after = seconds // 60 ~ " min" %}
             {% else %}
               {% set h = seconds // (60*60) %}
-              {% set m = ((seconds / (60*60) - seconds // (60*60)) * 60) | round %}
+              {% set m = min(((seconds / (60*60) - seconds // (60*60)) * 60) | round(0), 59) %}
               {% if m < 10 %}
                 {% set after = h ~ "h0" ~ m %}
               {% else %}

@@ -1441,14 +1441,14 @@
             {% set after = seconds // 60 ~ " min" %}
           {% else %}
             {% set h = seconds // (60*60) %}
-            {% set m = ((seconds / (60*60) - seconds // (60*60)) * 60) | round %}
+            {% set m = min(((seconds / (60*60) - seconds // (60*60)) * 60) | round(0), 59) %}
             {% if m < 10 %}
               {% set after = h ~ "h0" ~ m %}
             {% else %}
               {% set after = h ~ "h" ~ m %}
             {% endif %}
           {% endif %}
-          The home electricity feed has been {{ 'restored after ' ~  after ~ '.' if is_state('binary_sensor.electricity_feed', 'on') else 'cut.' }}
+          The electricity feed has been {{ 'restored after ' ~  after ~ '.' if is_state('binary_sensor.electricity_feed', 'on') else 'cut.' }}
         data:
           group: "home-electricity"
           url: homeassistant://navigate/lovelace/resources

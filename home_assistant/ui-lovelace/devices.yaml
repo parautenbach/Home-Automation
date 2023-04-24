@@ -178,6 +178,7 @@ cards:
         - automation.alert_vacation_start
         - automation.away_mode
         - automation.backup_home_assistant
+        - automation.backup_power_battery_critical_alert
         - automation.bedlamps_auto_on_upon_sunset_or_arrival
         - automation.bedlamps_off_after_sunrise
         - automation.bedlamps_on_upon_low_light
@@ -206,6 +207,7 @@ cards:
         # - automation.foyer_motion_detected_last
         - automation.guest_mode_disabled_alert
         - automation.guest_mode_enabled_alert
+        - automation.high_inverter_load_alert
         - automation.inside_lights_auto_on_upon_sunset_or_arrival
         - automation.lights_off_after_sunrise
         - automation.lights_off_when_loadshedding
@@ -235,6 +237,7 @@ cards:
         - automation.restore_smart_bulb_statuses_after_power_restored
         - automation.save_last_smart_bulb_state
         - automation.see_mobile_devices
+        - automation.send_backup_power_battery_update
         - automation.set_backup_power_warning_light_brightness
         - automation.set_dark_theme
         - automation.set_light_theme

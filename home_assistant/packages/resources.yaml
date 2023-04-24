@@ -316,3 +316,74 @@ automation:
             {# set state_bracketed = (state | int(0) + 5) // 10 * 10 #}
             {% set brightness = (-98/70*state + 142) | round(0) %}
             {{ min(brightness, 100) }}
+  - alias: "Send Backup Power Battery Update"
+    id: "0c451149-cda2-4b52-b714-f866034568d4"
+    initial_state: true
+    trigger:
+      - platform: template
+        # a multiple of 10
+        value_template: >-
+          {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
+          {{ battery_soc == battery_soc // 10 * 10 }}
+    # condition:
+    #   - condition: template
+    #     value_template: "{{ battery_soc != 100 }}"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Home"
+          message: >-
+            {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
+            {% set battery_status = states('sensor.battery_status') | lower %}
+            The backup power battery is at {{ battery_soc }}% and {{ battery_status }}.
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/resources
+  - alias: "Backup Power Battery Critical Alert"
+    id: "e40cf655-f2fd-4c12-91ca-1a4775c8ae7a"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.battery_state_of_charge
+        below: 36
+    condition:
+      - condition: template
+        value_template: "{{ states('sensor.battery_status') | lower == 'discharging' }}"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Home"
+          message: >-
+            {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
+            {% set battery_status = states('sensor.battery_status') | lower %}
+            The backup power battery is critical at {{ battery_soc }}% and {{ battery_status }}.
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/resources
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 1.0
+  - alias: "High Inverter Load Alert"
+    id: "fb0e42ad-c503-4e94-92d6-e70c359c79bc"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.load_percentage
+        above: 79
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Home"
+          message: >-
+            {% set load_percentage = states('sensor.load_percentage') | int(0) %}
+            The backup power inverter load is critical at {{ load_percentage }}%. Reduce consumption now!
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/resources
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 1.0

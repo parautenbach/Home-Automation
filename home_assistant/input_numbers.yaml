@@ -6,3 +6,7 @@ wan_traffic_delta_out:
   # snmp counter is 32-bit unsigned int
   min: 0
   max: 4294967295
+test_percentage:
+  min: 0
+  max: 100
+  unit_of_measurement: "%"

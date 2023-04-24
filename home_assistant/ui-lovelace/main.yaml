@@ -102,11 +102,15 @@ cards:
         cards:
           - type: custom:button-card
             template: rgb_light
+            variables:
+              profile: dim
             name: Dining Room
             entity: light.dining_room
             icon: mdi:dome-light
           - type: custom:button-card
             template: rgb_light
+            variables:
+              profile: normal
             name: Music Room
             entity: light.music_room
             icon: mdi:dome-light

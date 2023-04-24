@@ -208,9 +208,10 @@
     # add a condition for only if we are home – but if it's a workday, why wouldn't we?
     - service: light.turn_on
       target:
-        - entity_id: light.pieter_bedside
-        - entity_id: light.rouve_bedside
-        - entity_id: light.hallway
+        entity_id:
+          - light.pieter_bedside
+          - light.rouve_bedside
+          - light.hallway
       data:
         profile: low
     - delay:
@@ -657,8 +658,9 @@
   action:
     - service: light.turn_off
       target:
-        - entity_id: light.normal_light_group
-        - entity_id: light.hallway
+        entity_id:
+          - light.normal_light_group
+          - light.hallway
 
 - alias: "Bedlamps Off After Sunrise"
   id: "7d865580-b23b-47e1-8068-9bb202af535b"
@@ -1680,10 +1682,11 @@
       entity_id: script.entertainment_off
     - service: light.turn_off
       target:
-        - entity_id: light.normal_light_group
-        # could be on as warning light when there's no grid power/loadshedding/on backup power
-        - entity_id: light.foyer
-        - entity_id: light.hallway
+        entity_id:
+          - light.normal_light_group
+          # could be on as warning light when there's no grid power/loadshedding/on backup power
+          - light.foyer
+          - light.hallway
     # todo: make a group for all lights except bedlamps?
 
 - alias: "Backup Home Assistant"

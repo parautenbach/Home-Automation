@@ -1216,7 +1216,8 @@
           {% endif %}
           {% set last_opened_entity = trigger.event.data.entity_id | replace('_timer', '_opened') | replace('timer.', 'input_datetime.') %}
           {% set last_opened = as_timestamp(states(last_opened_entity)) %}
-          {{ name }} has been left open for {{ ((as_timestamp(utcnow()) - last_opened) // 60) | int }} min.
+          {% set utc_now_ts = as_timestamp(utcnow()) %}
+          {{ name }} has been left open for {{ ((utc_now_ts - last_opened) // 60) | int }} min.
         data:
           # todo: clear notifications when closed
           # https://github.com/home-assistant/iOS/issues/579
@@ -1346,7 +1347,7 @@
       {% set last_opened_entity = trigger.entity_id | replace('cover', 'input_datetime') ~ "_opened" %}
       {% set last_opened = as_timestamp(states(last_opened_entity)) %}
       {% set utc_now_ts = as_timestamp(utcnow()) %}
-      {{ ((utc_now_ts - last_opened) | int >= threshold) and (last_opened >= utc_now_ts) }}
+      {{ (utc_now_ts - last_opened) | int >= threshold }}
   action:
     - service: notify.mobile_app_ceres
       data:

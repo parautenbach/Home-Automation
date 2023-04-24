@@ -16,11 +16,6 @@
       brightness: 255
       color_mode: "xy"
       xy_color: [0.657, 0.333]
-    light.hallway:
-      state: "on"
-      brightness: 153
-      color_mode: "xy"
-      xy_color: [0.323, 0.329]
 - name: Corner Lights
   icon: mdi:brightness-6
   entities:
@@ -39,6 +34,11 @@
       color_mode: "xy"
       xy_color: [0.701, 0.299]
     light.kitchen_counter:
+      state: "on"
+      brightness: 5
+      color_mode: "xy"
+      xy_color: [0.701, 0.299]
+    light.hallway:
       state: "on"
       brightness: 5
       color_mode: "xy"

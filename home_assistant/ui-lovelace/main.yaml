@@ -115,7 +115,7 @@ cards:
               - rgb_light
               - rgb_light_with_timer
             variables:
-              profile: normal
+              profile: dim
             name: Hallway
             entity: light.hallway
       - type: horizontal-stack

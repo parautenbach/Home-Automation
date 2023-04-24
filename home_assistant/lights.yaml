@@ -24,7 +24,6 @@
     - light.living_room_lamp
     - light.kitchen_counter
     - light.corner_lights
-    - light.hallway
 - platform: group
   name: Night Group
   entities:

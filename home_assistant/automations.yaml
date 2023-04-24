@@ -208,12 +208,9 @@
     # add a condition for only if we are home – but if it's a workday, why wouldn't we?
     - service: light.turn_on
       target:
-        entity_id: light.pieter_bedside
-      data:
-        profile: low
-    - service: light.turn_on
-      target:
-        entity_id: light.rouve_bedside
+        - entity_id: light.pieter_bedside
+        - entity_id: light.rouve_bedside
+        - entity_id: light.hallway
       data:
         profile: low
     - delay:
@@ -236,6 +233,14 @@
         variables:
           light: light.rouve_bedside
           target_brightness_pct: 40
+          transition_duration: 120
+    - service: script.turn_on
+      target:
+        entity_id: script.fade_light
+      data:
+        variables:
+          light: light.hallway
+          target_brightness_pct: 28
           transition_duration: 120
 
 - alias: "Switch On Night Light If Motion Is Detected"
@@ -391,6 +396,11 @@
     - service: scene.turn_on
       target:
         entity_id: scene.normal_lights
+    - service: light.turn_on
+      target:
+        entity_id: light.hallway
+      data:
+        profile: dim
 
 - alias: "Bedlamps Auto On Upon Sunset or Arrival"
   id: "21b972ef-1e21-42b5-a137-9b160f601310"
@@ -533,6 +543,11 @@
     - service: scene.turn_on
       target:
         entity_id: scene.normal_lights
+    - service: light.turn_on
+      target:
+        entity_id: light.hallway
+      data:
+        profile: dim
 
 - alias: "Lights Off When Loadshedding"
   id: "e4867511-07e3-4873-bd78-ecaec953adb4"
@@ -641,8 +656,9 @@
         state: "off"
   action:
     - service: light.turn_off
-      # todo: all? (all would cover bedlights too, which has its own automation)
-      entity_id: light.normal_light_group
+      target:
+        - entity_id: light.normal_light_group
+        - entity_id: light.hallway
 
 - alias: "Bedlamps Off After Sunrise"
   id: "7d865580-b23b-47e1-8068-9bb202af535b"
@@ -1663,12 +1679,12 @@
     - service: script.turn_on
       entity_id: script.entertainment_off
     - service: light.turn_off
-      entity_id: light.normal_light_group
-    # could be on as warning light when there's no grid power/loadshedding/on backup power
-    - service: light.turn_off
-      entity_id: light.foyer
-    - service: light.turn_off
-      entity_id: light.hallway
+      target:
+        - entity_id: light.normal_light_group
+        # could be on as warning light when there's no grid power/loadshedding/on backup power
+        - entity_id: light.foyer
+        - entity_id: light.hallway
+    # todo: make a group for all lights except bedlamps?
 
 - alias: "Backup Home Assistant"
   id: "57461782-62af-4987-a6ce-46f602fcc417"
@@ -2260,7 +2276,7 @@
     input:
       button_device_id: 16bb98a28aa167819bff6fc45f178899
       light_entity_id: light.hallway
-      single_press_profile: normal
+      single_press_profile: dim
       double_press_profile: security
 
 - alias: "Alert Vacation Start"

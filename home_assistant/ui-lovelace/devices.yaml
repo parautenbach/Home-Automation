@@ -176,6 +176,7 @@ cards:
         - automation.alert_if_gate_opened_or_closed_when_not_supposed_to
         - automation.alert_vacation_end
         - automation.alert_vacation_start
+        # - automation.automatically_start_a_full_irrigation_cycle
         - automation.away_mode
         - automation.backup_home_assistant
         - automation.backup_power_battery_critical_alert
@@ -214,6 +215,7 @@ cards:
         - automation.lights_on_upon_low_light
         - automation.loadshedding_forecast_notification
         - automation.low_server_battery
+        # - automation.manually_start_a_full_irrigation_cycle
         # - automation.monitor_inbound_internet_traffic
         # - automation.monitor_outbound_internet_traffic
         # - automation.motion_indicator_off
@@ -227,6 +229,7 @@ cards:
         - automation.notify_if_new_backup_found
         - automation.notify_if_no_recent_backup
         - automation.notify_if_server_load_high
+        - automation.notify_if_solarassistant_mqtt_bridge_status_changed
         - automation.notify_pieter_going_home_from_work_in_cape_town
         - automation.notify_when_server_started_after_being_shut_down_automatically
         - automation.open_garage_door_when_arriving
@@ -249,6 +252,7 @@ cards:
         - automation.start_cover_timer_when_opened
         - automation.start_loadshedding_timer
         - automation.stop_cover_timer_when_closed
+        # - automation.stop_irrigating
         - automation.stop_light_timer_if_running_when_light_turned_off
         - automation.switch_garage_light_according_to_door_status_and_light_conditions
         - automation.switch_off_bedlamp_when_plugging_in_phone
@@ -495,8 +499,6 @@ cards:
           - sensor.server_cpu_temp
           - sensor.network_throughput_in_enp3s0
           - sensor.network_throughput_out_enp3s0
-          - sensor.mqtt_broker_sent_messages_1min_load
-          - sensor.mqtt_broker_received_messages_1min_load
           - entity: sensor.last_backup
             card_mod:
               style:
@@ -549,18 +551,42 @@ cards:
       - type: history-graph
         hours_to_show: 24
         entities:
-          - entity: sensor.mqtt_broker_sent_messages_1min_load
-            name: Sent
-          - entity: sensor.mqtt_broker_received_messages_1min_load
-            name: Received
+          - entity: binary_sensor.remote_ui
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - type: divider
+          - sensor.mqtt_broker_sent_messages_1min_load
+          - sensor.mqtt_broker_received_messages_1min_load
+          - binary_sensor.solarassistant_bridge
+        header:
+          type: custom:mini-graph-card
+          name: MQTT Broker Load
+          icon: mdi:email-multiple-outline
+          entities:
+            - entity: sensor.mqtt_broker_sent_messages_1min_load
+              name: Sent
+            - entity: sensor.mqtt_broker_received_messages_1min_load
+              name: Received
+          hours_to_show: 24
+          hour24: true
+          smoothing: true
+          points_per_hour: 12  # every 5 min
+          line_width: 2
+          show:
+            extrema: true
+            average: true
+          card_mod:
+            style:
+              .: |
+                ha-card {
+                  border: 0px;
+                }
+      - type: history-graph
         hours_to_show: 24
-        hour24: true
-        smoothing: true
-        points_per_hour: 12  # every 5 min
-        line_width: 2
-        show:
-          extrema: true
-          average: true
+        entities:
+          - entity: binary_sensor.solarassistant_bridge
+            name: SA Bridge
       - type: custom:mini-graph-card
         name: Foyer Security Camera
         entities:

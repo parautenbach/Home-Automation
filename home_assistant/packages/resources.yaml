@@ -335,9 +335,6 @@ automation:
         value_template: >-
           {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
           {{ battery_soc == battery_soc // 10 * 10 }}
-    # condition:
-    #   - condition: template
-    #     value_template: "{{ battery_soc != 100 }}"
     action:
       - service: notify.mobile_app_ceres
         data:
@@ -345,7 +342,8 @@ automation:
           message: >-
             {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
             {% set battery_status = states('sensor.battery_status') | lower %}
-            The backup power battery is at {{ battery_soc }}% and {{ battery_status }}.
+            {# we're assuming we never get to 0% SOC – not coding for that edge case; it will work, but the working will be awkward #}
+            The backup power battery is {{ 'at ' ~ battery_soc ~ '% and ' ~ battery_status if battery_soc < 100 else 'fully charged.' }}
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources

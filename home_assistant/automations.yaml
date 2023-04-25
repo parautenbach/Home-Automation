@@ -307,6 +307,10 @@
       event_type: timer.finished
       event_data:
         entity_id: timer.kitchen_counter_timer
+    - platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.hallway_timer
   mode: parallel
   action:
     - service: light.turn_off

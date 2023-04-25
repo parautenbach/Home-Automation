@@ -561,7 +561,7 @@ cards:
           - binary_sensor.solarassistant_bridge
         header:
           type: custom:mini-graph-card
-          name: MQTT Broker Load
+          name: MQTT
           icon: mdi:email-multiple-outline
           entities:
             - entity: sensor.mqtt_broker_sent_messages_1min_load

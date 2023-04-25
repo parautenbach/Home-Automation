@@ -340,6 +340,8 @@ cards:
             - type: divider
             - entity: sensor.battery_status
               name: Status
+            - entity: sensor.battery_change_of_charge
+              name: Charge Rate
             - entity: sensor.battery_time_to_full
               name: Time to full
           header: *battery_graph
@@ -355,6 +357,8 @@ cards:
             - type: divider
             - entity: sensor.battery_status
               name: Status
+            - entity: sensor.battery_change_of_charge
+              name: Discharge Rate
             - entity: sensor.battery_time_to_empty
               name: Time to empty
           header: *battery_graph

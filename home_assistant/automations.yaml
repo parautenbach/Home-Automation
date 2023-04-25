@@ -548,11 +548,6 @@
     - service: scene.turn_on
       target:
         entity_id: scene.normal_lights
-    - service: light.turn_on
-      target:
-        entity_id: light.hallway
-      data:
-        profile: dim
 
 - alias: "Lights Off When Loadshedding"
   id: "e4867511-07e3-4873-bd78-ecaec953adb4"

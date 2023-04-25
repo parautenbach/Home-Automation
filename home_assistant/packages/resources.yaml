@@ -241,6 +241,13 @@ utility_meter:
     source: sensor.pv_energy
     cycle: daily
 
+input_boolean:
+  # avoid jitter when we're at 100% and the battery is trickling
+  # let the batter drop to 90% or less before we'll notify again at 100%
+  full_battery_notification_governor:
+    name: Full Battery Notification Governor
+    icon: mdi:speedometer
+
 automation:
   - alias: "Notify If Grid Feed Status Changed"
     id: "b233b973-cf9b-44b5-94e4-5f0813e6eefa"
@@ -335,19 +342,46 @@ automation:
         # a multiple of 10
         value_template: >-
           {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
-          {{ battery_soc == battery_soc // 10 * 10 }}
+          {# we have a critical alert for when we reach 35% #}
+          {{ battery_soc == battery_soc // 10 * 10 and battery_soc > 35 }}
+    condition:
+      - condition: state
+        entity_id: input_boolean.full_battery_notification_governor
+        state: "off"
     action:
+      - variables:
+          battery_soc: "{{ states('sensor.battery_state_of_charge') | int(0) }}"
+          battery_status: "{{ states('sensor.battery_status') | lower }}"
       - service: notify.mobile_app_ceres
         data:
           title: "Home"
           message: >-
-            {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
-            {% set battery_status = states('sensor.battery_status') | lower %}
             {# we're assuming we never get to 0% SOC – not coding for that edge case; it will work, but the working will be awkward #}
             The backup power battery is {{ 'at ' ~ battery_soc ~ '% and ' ~ battery_status if battery_soc < 100 else 'fully charged.' }}
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
+      # on when full, off when 90
+      # this is basically hysteresis
+      # https://www.home-assistant.io/integrations/threshold/
+      - if:
+          - condition: template
+            value_template: "{{ battery_soc == 100 }}"
+        then:
+          - service: input_boolean.turn_on
+            target:
+              entity_id: input_boolean.full_battery_notification_governor
+  - alias: "Reset Full Battery Notification Governor"
+    id: "0ec6fde8-8919-4784-99f4-e7a0ffc7c71f"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.battery_state_of_charge
+        below: 91
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.full_battery_notification_governor
   - alias: "Backup Power Battery Critical Alert"
     id: "e40cf655-f2fd-4c12-91ca-1a4775c8ae7a"
     initial_state: true

@@ -1686,7 +1686,14 @@
           - light.normal_light_group
           # could be on as warning light when there's no grid power/loadshedding/on backup power
           - light.foyer
-          - light.hallway
+    - service: script.turn_on
+      target:
+        entity_id: script.fade_light
+      data:
+        variables:
+          light: light.hallway
+          target_brightness_pct: 0
+          transition_duration: 60
     # todo: make a group for all lights except bedlamps?
 
 - alias: "Backup Home Assistant"

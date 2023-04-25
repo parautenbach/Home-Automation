@@ -235,6 +235,7 @@ utility_meter:
     unique_id: "ffcf90f5-5f22-47be-a389-8e74876ecead"
     source: sensor.home_energy
     cycle: monthly
+  # why not just use sensor.pv_energy directly? because it's not cumulative per day, but resets it seemingly random times
   daily_solar_energy_consumption:
     unique_id: "c63e814c-4d6c-455c-bb2c-7f557a3af075"
     source: sensor.pv_energy

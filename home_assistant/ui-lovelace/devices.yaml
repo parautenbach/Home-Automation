@@ -546,9 +546,8 @@ cards:
                 ha-card {
                   border: 0px;
                 }
-      - type: custom:mini-graph-card
-        name: MQTT Broker Load
-        icon: mdi:email-multiple-outline
+      - type: history-graph
+        hours_to_show: 24
         entities:
           - entity: sensor.mqtt_broker_sent_messages_1min_load
             name: Sent

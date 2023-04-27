@@ -241,7 +241,7 @@
       data:
         variables:
           light: light.hallway
-          target_brightness_pct: 28
+          target_brightness_pct: 27
           transition_duration: 120
 
 - alias: "Switch On Night Light If Motion Is Detected"

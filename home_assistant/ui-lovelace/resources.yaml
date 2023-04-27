@@ -272,6 +272,32 @@ cards:
               average: true
               state: true
               labels_secondary: false
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+          - type: statistics-graph
+            title: Daily Solar Consumption
+            entities:
+              - sensor.daily_solar_energy_consumption
+            hide_legend: true
+            days_to_show: 7
+            period: day
+            chart_type: bar
+            stat_types:
+              - state
+          - type: statistics-graph
+            title: Daily Solar Utilisation
+            entities:
+              - sensor.solar_energy_utilisation_today
+            hide_legend: true
+            days_to_show: 7
+            period: day
+            chart_type: bar
+            stat_types:
+              - state
   - type: vertical-stack
     cards:
       - type: energy-distribution

@@ -988,11 +988,11 @@
     - platform: state
       entity_id: calendar.vacation
       to: "on"
-    # add daily trigger too in case changes are made to the event
+    # add hourly trigger too in case changes are made to the event
+    # (e.g. i forgot to add an event to the calendar on the night before)
     # this will override any manual changes made by setting the input datetimes directly
-    - platform: time
-      at:
-        - "01:00:00"
+    - platform: time_pattern
+      hours: "/1"
     - platform: homeassistant
       event: start
   action:

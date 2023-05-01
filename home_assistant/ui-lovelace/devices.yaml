@@ -309,7 +309,6 @@ cards:
             name: Backyard
           - entity: light.garage
             name: Garage
-
       - type: custom:button-card
         show_label: true
         label: >

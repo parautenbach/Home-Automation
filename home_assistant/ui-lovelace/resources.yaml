@@ -428,10 +428,10 @@ cards:
           type: custom:mini-graph-card
           name: Energy Consumption
           entities:
-            - entity: sensor.grid_power
-              color: var(--custom-color-blue)
             - entity: sensor.home_power
               color: var(--custom-color-red)
+            - entity: sensor.grid_power
+              color: var(--custom-color-blue)
             - entity: sensor.nighttime_number
               color: var(--custom-color-gray)
               show_line: false

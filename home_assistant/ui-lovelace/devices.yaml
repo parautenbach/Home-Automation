@@ -305,10 +305,10 @@ cards:
             name: Foyer
           - entity: light.front_door
             name: Front Door
-          - entity: light.backyard
-            name: Backyard
           - entity: light.garage
             name: Garage
+          - entity: light.backyard
+            name: Backyard
       - type: custom:button-card
         show_label: true
         label: >

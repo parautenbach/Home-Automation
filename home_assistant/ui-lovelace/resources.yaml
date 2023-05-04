@@ -486,3 +486,8 @@ cards:
           - timer.loadshedding_duration
           - sensor.eskomsepush_calls_remaining
         show_header_toggle: false
+      - type: history-graph
+        hours_to_show: 24
+        entities:
+          - entity: binary_sensor.grid_feed
+            name: Grid

@@ -1,7 +1,7 @@
 # https://company235.com/tools/colour/cie.html
 # https://hslpicker.com/#ff4d00
 - name: Normal Lights
-  # keep in sync with light.normal_light_group in lights.yaml
+  # keep in sync with light.normal_light_group in lights.yaml and light_profiles.csv
   icon: mdi:brightness-5
   entities:
     light.living_room_lamp:
@@ -25,7 +25,7 @@
       color_mode: "xy"
       xy_color: [0.657, 0.333]
 - name: Night Lights
-  # keep in sync with light.night_group
+  # keep in sync with light.night_group and light_profiles.csv
   icon: mdi:brightness-4
   entities:
     light.foyer:
@@ -44,7 +44,7 @@
       color_mode: "xy"
       xy_color: [0.701, 0.299]
 - name: Inside Security Lights
-  # keep in sync with light.inside_security_group
+  # keep in sync with light.inside_security_group and light_profiles.csv
   icon: mdi:brightness-7
   entities:
     light.foyer:

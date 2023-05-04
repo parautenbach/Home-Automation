@@ -321,6 +321,9 @@ automation:
       - condition: state
         entity_id: binary_sensor.anybody_home
         state: "on"
+      - condition: time
+        after: "05:00:00"
+        before: "23:00:00"
     action:
       - service: light.turn_on
         target:

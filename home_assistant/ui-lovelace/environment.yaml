@@ -306,7 +306,7 @@ cards:
         period: week
         chart_type: bar
         stat_types:
-          - max
+          - mean
         hide_legend: true
   - type: vertical-stack
     title: Pollen

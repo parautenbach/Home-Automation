@@ -636,9 +636,10 @@
     - platform: state
       entity_id: binary_sensor.low_light
       to: "off"
+      # let's see if we can remove this condition permanently, since we're using a real illuminance sensor in the house now
       # to avoid the light turning off when there briefly is bright sunshine
-      for:
-        minutes: 15
+      # for:
+      #   minutes: 15
   # todo: if anybody home?
   condition:
     condition: and

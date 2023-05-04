@@ -1676,10 +1676,12 @@
     - condition: time
       after: "18:00:00"
       before: "01:00:00"
-  # condition: if only we could know whether it's on
   action:
+    # future condition: if only we could know whether it's on
     - service: script.turn_on
       entity_id: script.entertainment_off
+    - delay:
+        seconds: 30
     - service: light.turn_off
       target:
         entity_id:

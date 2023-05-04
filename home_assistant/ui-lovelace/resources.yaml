@@ -303,7 +303,6 @@ cards:
       - type: energy-distribution
         link_dashboard: true
       - type: energy-usage-graph
-
       - type: conditional
         conditions:
           - entity: sensor.battery_status
@@ -313,6 +312,8 @@ cards:
           show_header_toggle: false
           entities:
             - type: divider
+            - entity: sensor.battery_state_of_charge
+              name: State of Charge
             - entity: sensor.battery_status
               name: Status
           header: &battery_graph
@@ -360,16 +361,24 @@ cards:
             state: "Charging"
         card:
           type: entities
-          title: Battery
           show_header_toggle: false
           entities:
             - type: divider
+            - entity: sensor.battery_state_of_charge
+              name: State of Charge
             - entity: sensor.battery_status
               name: Status
+            - entity: sensor.battery_power
+              name: Power
             - entity: sensor.battery_change_of_charge
               name: Charge Rate
             - entity: sensor.battery_time_to_full
-              name: Time to full
+              name: Time to Full
+            - type: attribute
+              entity: sensor.battery_time_to_full
+              attribute: time_when_full
+              # format: datetime
+              name: Time when Full
           header: *battery_graph
       - type: conditional
         conditions:
@@ -377,16 +386,24 @@ cards:
             state: "Discharging"
         card:
           type: entities
-          title: Battery
           show_header_toggle: false
           entities:
             - type: divider
+            - entity: sensor.battery_state_of_charge
+              name: State of Charge
             - entity: sensor.battery_status
               name: Status
+            - entity: sensor.battery_power
+              name: Power
             - entity: sensor.battery_change_of_charge
               name: Discharge Rate
             - entity: sensor.battery_time_to_empty
-              name: Time to empty
+              name: Time to Empty
+            - type: attribute
+              entity: sensor.battery_time_to_empty
+              attribute: time_when_empty
+              format: datetime
+              name: Time when Empty
           header: *battery_graph
   - type: vertical-stack
     cards:

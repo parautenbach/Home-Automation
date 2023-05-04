@@ -410,6 +410,7 @@ sensor.dining_room_light_button_battery:
   monitor: True
 sensor.living_room_ht_temperature:
   friendly_name: Living Room Temperature
+  state_class: measurement
 sensor.living_room_ht_humidity:
   friendly_name: Living Room Humidity
 sensor.living_room_ht_battery:
@@ -417,6 +418,7 @@ sensor.living_room_ht_battery:
   monitor: True
 sensor.main_bedroom_ht_temperature:
   friendly_name: Main Bedroom Temperature
+  state_class: measurement
 sensor.main_bedroom_ht_humidity:
   friendly_name: Main Bedroom Humidity
 sensor.main_bedroom_ht_battery:

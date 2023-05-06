@@ -425,13 +425,18 @@ automation:
       - platform: numeric_state
         entity_id: sensor.load_percentage
         above: 79
+    condition:
+      # we think high load is only an issue of there isn't a grid feed to fall back to
+      - condition: state
+        entity_id: binary_sensor.grid_feed
+        state: "off"
     action:
       - service: notify.mobile_app_ceres
         data:
           title: "Home"
           message: >-
             {% set load_percentage = states('sensor.load_percentage') | int(0) %}
-            The backup power inverter load is critical at {{ load_percentage }}%. Reduce consumption now!
+            The backup power inverter load is critical at {{ load_percentage }}%. Consider reducing consumption now!
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources

@@ -491,3 +491,13 @@ cards:
         entities:
           - entity: binary_sensor.grid_feed
             name: Grid
+      - type: statistics-graph
+        title: Grid Feed Outage Time
+        entities:
+          - sensor.daily_grid_feed_outage_time
+        hide_legend: true
+        days_to_show: 7
+        period: day
+        chart_type: bar
+        stat_types:
+          - state

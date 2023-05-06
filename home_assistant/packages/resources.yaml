@@ -207,6 +207,13 @@ sensor:
       filter: lowpass
       time_constant: 10
       precision: 0
+  - platform: history_stats
+    name: Daily Grid Feed Outage Time
+    entity_id: binary_sensor.grid_feed
+    state: "off"
+    type: time  # duration
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"
 
 mqtt:
   binary_sensor:

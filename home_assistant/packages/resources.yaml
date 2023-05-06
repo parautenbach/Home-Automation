@@ -98,6 +98,7 @@ template:
           {%- else -%}
             Trickling
           {%- endif %}
+      # https://community.home-assistant.io/t/template-sensor-using-this-variable/420200/30
       - name: "Battery Time To Full"
         device_class: duration
         unit_of_measurement: s
@@ -110,6 +111,17 @@ template:
           {% else %}
             0
           {% endif %}
+        attributes:
+          time_when_full: >-
+            {% set battery_status = states('sensor.battery_status') %}
+            {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
+            {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
+            {% if battery_status == 'Discharging' -%}
+              {% set seconds_to_full = (current_charge - 20) * 60 * 60 / rate %}
+              {{ now() + timedelta(seconds=seconds_to_full) }}
+            {% else %}
+              {{ 0 | as_datetime }}
+            {% endif %}
       - name: "Battery Time To Empty"
         device_class: duration
         unit_of_measurement: s
@@ -122,6 +134,17 @@ template:
           {% else %}
             0
           {% endif %}
+        attributes:
+          time_when_empty: >-
+            {% set battery_status = states('sensor.battery_status') %}
+            {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
+            {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
+            {% if battery_status == 'Discharging' -%}
+              {% set seconds_to_empty = (current_charge - 20) * 60 * 60 / rate %}
+              {{ now() + timedelta(seconds=seconds_to_empty) }}
+            {% else %}
+              {{ 0 | as_datetime }}
+            {% endif %}
       - name: "Solar Production Peak Today"
         icon: mdi:clock-outline
         state: "{{ (states('sensor.power_highest_peak_time_today') | as_datetime | as_local).strftime('%H:%m') }}"

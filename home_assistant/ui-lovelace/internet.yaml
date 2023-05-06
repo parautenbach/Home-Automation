@@ -75,7 +75,7 @@ cards:
         hours_to_show: 24
         entities:
           - entity: binary_sensor.internet_connection
-            name: Connection
+            name: Internet
       - type: entities
         show_header_toggle: false
         entities:
@@ -120,7 +120,9 @@ cards:
         hours_to_show: 24
         entities:
           - entity: binary_sensor.front_extender
+            name: Front Ext.
           - entity: binary_sensor.back_extender
+            name: Back Ext.
       - type: entities
         show_header_toggle: false
         entities:

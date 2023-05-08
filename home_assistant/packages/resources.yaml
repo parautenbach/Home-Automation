@@ -44,6 +44,7 @@ template:
         device_class: power
         state: "{{ ((states('sensor.solar_reserve') | int(0)) / 1000) | round(3) }}"
       - name: "Solar Consumption Percentage"
+        unique_id: "8b6d53fb-7111-4311-9f1c-e1eab4520499"
         icon: mdi:solar-power
         unit_of_measurement: "%"
         state: >
@@ -60,6 +61,7 @@ template:
             0
           {% endif %}
       - name: "Solar Reserve Percentage"
+        unique_id: "e60c25f9-22d2-435b-8b78-81502cc4a059"
         icon: mdi:solar-power
         unit_of_measurement: "%"
         state: >
@@ -69,6 +71,7 @@ template:
             0
           {% endif %}
       - name: "Battery Status"
+        unique_id: "74d66740-f331-4ff8-81ac-42c5b25d8ba9"
         icon: >-
           {% set state = states('sensor.battery_state_of_charge') | int(0) %}
           {% set charging = "-charging" if states('sensor.battery_status') == "Charging" else "" %}
@@ -100,6 +103,7 @@ template:
           {%- endif %}
       # https://community.home-assistant.io/t/template-sensor-using-this-variable/420200/30
       - name: "Battery Time To Full"
+        unique_id: "af3949fd-fb4b-4b9c-b92a-e2f744c180a0"
         device_class: duration
         unit_of_measurement: s
         state: >
@@ -123,6 +127,7 @@ template:
               {{ 0 | as_datetime }}
             {% endif %}
       - name: "Battery Time To Empty"
+        unique_id: "ecc75099-6fbf-4733-96a3-90b743a66dde"
         device_class: duration
         unit_of_measurement: s
         state: >
@@ -146,12 +151,15 @@ template:
               {{ 0 | as_datetime }}
             {% endif %}
       - name: "Solar Production Peak Today"
+        unique_id: "8eb2701b-522d-436d-af68-7f86e27c20ad"
         icon: mdi:clock-outline
         state: "{{ (states('sensor.power_highest_peak_time_today') | as_datetime | as_local).strftime('%H:%m') }}"
       - name: "Solar Production Peak Tomorrow"
+        unique_id: "f3797db7-8377-49f0-96ce-ddd40dd519bd"
         icon: mdi:clock-outline
         state: "{{ (states('sensor.power_highest_peak_time_tomorrow') | as_datetime | as_local).strftime('%H:%m') }}"
       - name: "Solar Energy Utilisation Today"
+        unique_id: "33e98696-bb21-4e07-9487-98956c39ef00"
         icon: mdi:solar-power-variant-outline
         unit_of_measurement: "%"
         state: >
@@ -169,6 +177,7 @@ sensor:
     time_window: "00:05:00"
   # digital power meter in db
   - platform: integration
+    unique_id: "0e503fd7-9ae9-446b-8c73-28d8068b69eb"
     name: "Total Electricity Consumption"
     source: sensor.current_power
     unit_prefix: k
@@ -176,6 +185,7 @@ sensor:
     method: left
     round: 3
   - platform: integration
+    unique_id: "a2cc64a7-6d41-44cf-8f0f-ca6f89edba22"
     name: "Home Energy"
     source: sensor.home_power
     unit_prefix: k
@@ -217,6 +227,7 @@ sensor:
           {% set days = ((n.replace(day=1) + timedelta(days=-31)).replace(day=1) - timedelta(days=1)).day %}
           {{ ((states('sensor.monthly_home_energy_consumption') | int) / n.day * days) | round(3) }}
   - platform: filter
+    unique_id: "a6c6e405-2939-43ae-a8fc-e63f5390eda6"
     name: "PV Power Filtered"
     entity_id: sensor.pv_power
     filters:
@@ -224,6 +235,7 @@ sensor:
       time_constant: 10
       precision: 0
   - platform: filter
+    unique_id: "963000a0-5cbb-4b11-91f9-753bedb4f576"
     name: "Battery Power Filtered"
     entity_id: sensor.battery_power
     filters:
@@ -242,6 +254,7 @@ mqtt:
   binary_sensor:
     # https://mosquitto.org/man/mosquitto-conf-5.html#idm45770162182128
     - name: SolarAssistant Bridge
+      unique_id: "58287276-4eef-4d63-8ec1-8a5638731a0d"
       state_topic: $SYS/broker/connection/homeassistant.SolarAssistant/state
       payload_on: "1"
       payload_off: "0"

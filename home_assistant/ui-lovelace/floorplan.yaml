@@ -12,6 +12,8 @@ cards:
       image: /local/floorplan/floorplan.svg
       stylesheet: /local/floorplan/floorplan.css
       log_level: error
+      # log_level: debug
+      # console_log_level: debug
       rules:
         - entities:
             - binary_sensor.gate_status

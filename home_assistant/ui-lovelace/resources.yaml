@@ -407,42 +407,13 @@ cards:
           header: *battery_graph
   - type: vertical-stack
     cards:
-      - type: entities
-        show_header_toggle: false
-        entities:
-          - type: divider
-          - type: custom:multiple-entity-row
-            entity: sensor.daily_home_energy_consumption
-            name: Today
-            icon: mdi:power-plug
-            format: precision1
-            state_header: Home
-            entities:
-              - entity: sensor.daily_grid_energy_consumption
-                name: Grid
-                format: precision1
-          - type: custom:multiple-entity-row
-            entity: sensor.monthly_home_energy_consumption
-            name: This Month
-            icon: mdi:power-plug
-            format: precision1
-            state_header: Home
-            entities:
-              - entity: sensor.monthly_grid_energy_consumption
-                name: Grid
-                format: precision1
-          - type: custom:multiple-entity-row
-            entity: sensor.monthly_home_energy_consumption_forecast
-            name: This Month's Forecast
-            icon: mdi:trending-up
-            format: precision1
-            state_header: Home
-            entities:
-              - entity: sensor.monthly_grid_energy_consumption_forecast
-                name: Grid
-                format: precision1
-        header:
-          type: custom:mini-graph-card
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+        - type: custom:mini-graph-card
           name: Energy Consumption
           entities:
             - entity: sensor.home_power
@@ -474,6 +445,76 @@ cards:
                 ha-card {
                   border: 0px;
                 }
+        - type: custom:mini-graph-card
+          name: Energy Consumption
+          entities:
+            - entity: sensor.home_power
+              color: var(--custom-color-red)
+            - entity: sensor.grid_power
+              color: var(--custom-color-blue)
+            - entity: binary_sensor.grid_feed
+              color: var(--custom-color-gray)
+              show_line: false
+              show_points: false
+              show_legend: false
+              y_axis: secondary
+          hours_to_show: 24
+          hour24: true
+          lower_bound: 0
+          smoothing: true
+          points_per_hour: 12  # every 5 min
+          line_width: 2
+          show:
+            extrema: true
+            name: true
+            icon: false
+            average: true
+            state: true
+            labels_secondary: false
+          state_map:
+            - value: "on"
+              label: On
+            - value: "off"
+              label: Detected
+          card_mod:
+            style:
+              .: |
+                ha-card {
+                  border: 0px;
+                }
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - type: custom:multiple-entity-row
+            entity: sensor.daily_home_energy_consumption
+            name: Today
+            icon: mdi:power-plug
+            format: precision1
+            state_header: Home
+            entities:
+              - entity: sensor.daily_grid_energy_consumption
+                name: Grid
+                format: precision1
+          - type: custom:multiple-entity-row
+            entity: sensor.monthly_home_energy_consumption
+            name: This Month
+            icon: mdi:power-plug
+            format: precision1
+            state_header: Home
+            entities:
+              - entity: sensor.monthly_grid_energy_consumption
+                name: Grid
+                format: precision1
+          - type: custom:multiple-entity-row
+            entity: sensor.monthly_home_energy_consumption_forecast
+            name: This Month's Forecast
+            icon: mdi:trending-up
+            format: precision1
+            state_header: Home
+            entities:
+              - entity: sensor.monthly_grid_energy_consumption_forecast
+                name: Grid
+                format: precision1
       - type: markdown
         title: Loadshedding
         content: "{{ states('sensor.loadshedding_forecast') }}"

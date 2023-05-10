@@ -464,6 +464,7 @@ automation:
         above: 79
     condition:
       # we think high load is only an issue of there isn't a grid feed for non-essentials to fall back to
+      # we don't use a condition for whether someone's home – we always want to know if this happens
       - condition: state
         entity_id: binary_sensor.grid_feed
         state: "off"

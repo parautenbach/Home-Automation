@@ -2,7 +2,7 @@ path: environment
 title: Environment
 icon: mdi:weather-partly-snowy-rainy
 badges:
-  - entity: sensor.living_room_ht_temperature
+  - entity: sensor.office_temperature
     name: Living Room
     card_mod:
       style: |
@@ -111,15 +111,15 @@ cards:
           - type: custom:mini-graph-card
             name: Temperature
             entities:
-              - entity: sensor.living_room_ht_temperature
+              - entity: sensor.office_temperature
                 name: Living Room
                 color: var(--custom-color-yellow)
-              - entity: sensor.office_temperature
-                name: Office
-                color: var(--custom-color-blue)
               - entity: sensor.main_bedroom_ht_temperature
                 name: Main Bedroom
                 color: var(--custom-color-green)
+              - entity: sensor.bedroom_ht_temperature
+                name: Bedroom
+                color: var(--custom-color-magenta)
               - entity: sensor.outside_temperature
                 name: Outside
                 color: var(--custom-color-red)
@@ -144,15 +144,18 @@ cards:
           - type: custom:mini-graph-card
             name: Humidity
             entities:
-              - entity: sensor.living_room_ht_humidity
-                name: Living Room
-                color: var(--custom-color-blue)
               - entity: sensor.office_humidity
-                name: Office
-                color: var(--custom-color-green)
+                name: Living Room
+                color: var(--custom-color-yellow)
               - entity: sensor.main_bedroom_ht_humidity
                 name: Main Bedroom
+                color: var(--custom-color-green)
+              - entity: sensor.bedroom_ht_humidity
+                name: Bedroom
                 color: var(--custom-color-magenta)
+              - entity: sensor.openweathermap_humidity
+                name: Outside
+                color: var(--custom-color-red)
               - entity: sensor.nighttime_number
                 color: var(--custom-color-gray)
                 show_line: false
@@ -171,12 +174,12 @@ cards:
               labels_secondary: false
       - type: statistics-graph
         entities:
-          - entity: sensor.living_room_ht_temperature
-            name: Living Room
           - entity: sensor.office_temperature
-            name: Office
+            name: Living Room
           - entity: sensor.main_bedroom_ht_temperature
             name: Main Bedroom
+          - entity: sensor.bedroom_ht_temperature
+            name: Bedroom
           - entity: sensor.outside_temperature
             name: Outside
         days_to_show: 30

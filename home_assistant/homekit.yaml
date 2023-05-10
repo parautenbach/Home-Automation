@@ -11,10 +11,12 @@
       - binary_sensor.electricity_feed
       - binary_sensor.internet_connection
       - binary_sensor.foyer_motion_detected
-      - sensor.living_room_ht_temperature
-      - sensor.living_room_ht_humidity
       - sensor.main_bedroom_ht_temperature
       - sensor.main_bedroom_ht_humidity
+      - sensor.bedroom_ht_temperature
+      - sensor.bedroom_ht_humidity
+      - sensor.office_temperature
+      - sensor.office_humidity
       - light.living_room_lamp
       - light.pieter_bedside
       - light.rouve_bedside
@@ -37,10 +39,10 @@
       - script.entertainment_off
       - script.open_pedestrian_gap
   entity_config:
-    sensor.living_room_ht_temperature:
-      linked_battery_sensor: sensor.living_room_ht_battery
-    sensor.living_room_ht_humidity:
-      linked_battery_sensor: sensor.living_room_ht_battery
+    sensor.bedroom_ht_temperature:
+      linked_battery_sensor: sensor.bedroom_ht_battery
+    sensor.bedroom_ht_humidity:
+      linked_battery_sensor: sensor.bedroom_ht_battery
     sensor.main_bedroom_ht_temperature:
       linked_battery_sensor: sensor.main_bedroom_ht_battery
     sensor.main_bedroom_ht_humidity:

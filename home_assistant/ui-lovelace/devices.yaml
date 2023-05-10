@@ -164,7 +164,7 @@ cards:
           tap_action: more-info
         - entity: sensor.hallway_light_button_battery
           tap_action: more-info
-        - entity: sensor.living_room_ht_battery
+        - entity: sensor.bedroom_ht_battery
           tap_action: more-info
         - entity: sensor.main_bedroom_ht_battery
           tap_action: more-info
@@ -279,6 +279,7 @@ cards:
         - automation.update_security_camera_snapshot_gallery
         - automation.update_server_power_status
         - automation.update_timers_for_covers_on_startup
+        # add
   - type: vertical-stack
     cards:
       - type: map

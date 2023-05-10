@@ -408,13 +408,13 @@ sensor.rouve_bedside_light_button_battery:
 sensor.dining_room_light_button_battery:
   friendly_name: Dining Room Light Button Battery
   monitor: True
-sensor.living_room_ht_temperature:
-  friendly_name: Living Room Temperature
+sensor.bedroom_ht_temperature:
+  friendly_name: Bedoom Temperature
   state_class: measurement
-sensor.living_room_ht_humidity:
-  friendly_name: Living Room Humidity
-sensor.living_room_ht_battery:
-  friendly_name: Living Room H&T Battery
+sensor.bedroom_ht_humidity:
+  friendly_name: Bedroom Humidity
+sensor.bedroom_ht_battery:
+  friendly_name: Bedroom H&T Battery
   monitor: True
 sensor.main_bedroom_ht_temperature:
   friendly_name: Main Bedroom Temperature

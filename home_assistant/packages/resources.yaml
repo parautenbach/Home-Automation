@@ -426,8 +426,9 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id: sensor.battery_state_of_charge
-        below: 36
+        below: 31
     condition:
+      # we don't use a condition for whether someone's home – we always want to know if this happens
       - condition: template
         value_template: "{{ states('sensor.battery_status') | lower == 'discharging' }}"
     action:

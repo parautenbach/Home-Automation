@@ -35,14 +35,6 @@ cards:
       - entity: proximity.home
         name: Home
   - type: history-graph
-    title: Office Temps
-    hours_to_show: 72
-    entities:
-      - entity: sensor.office_temperature
-        name: Office
-      - entity: sensor.living_room_ht_temperature
-        name: Living Room
-  - type: history-graph
     title: Outside Temps
     hours_to_show: 72
     entities:

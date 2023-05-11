@@ -241,7 +241,7 @@ cards:
               icon: true
               average: true
               state: true
-              labels_secondary: false
+              labels_secondary: hover
           - type: custom:mini-graph-card
             name: Solar
             icon: mdi:solar-power-variant-outline
@@ -271,7 +271,7 @@ cards:
               icon: true
               average: true
               state: true
-              labels_secondary: false
+              labels_secondary: hover
       - type: custom:swipe-card
         parameters:
           autoHeight: true

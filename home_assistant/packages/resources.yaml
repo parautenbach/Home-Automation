@@ -10,6 +10,9 @@ template:
             mdi:transmission-tower-off
           {% endif %}
   - sensor:
+      # for charting purposes
+      - name: "Grid Feed Outage Number"
+        state: "{{ 0 if is_state('binary_sensor.grid_feed', 'on') else 1 }}"
       - name: "Home Power"
         unique_id: "ec13fb72-1d08-427a-918b-e7549539a1be"
         unit_of_measurement: W

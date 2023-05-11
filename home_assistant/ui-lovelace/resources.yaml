@@ -439,6 +439,7 @@ cards:
             icon: false
             average: true
             state: true
+            labels: hover
             labels_secondary: false
           card_mod:
             style:
@@ -453,11 +454,12 @@ cards:
               color: var(--custom-color-red)
             - entity: sensor.grid_power
               color: var(--custom-color-blue)
-            - entity: binary_sensor.grid_feed
+            - entity: sensor.grid_feed_outage_number
+              name: Grid Outage
               color: var(--custom-color-gray)
               show_line: false
               show_points: false
-              show_legend: false
+              show_legend: true
               y_axis: secondary
           hours_to_show: 24
           hour24: true
@@ -471,12 +473,8 @@ cards:
             icon: false
             average: true
             state: true
+            labels: hover
             labels_secondary: false
-          state_map:
-            - value: "on"
-              label: On
-            - value: "off"
-              label: Detected
           card_mod:
             style:
               .: |

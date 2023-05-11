@@ -534,6 +534,12 @@ cards:
               name: 5 min load
             - entity: sensor.load_15m
               name: 15 min load
+            - entity: sensor.nighttime_number
+              color: var(--custom-color-gray)
+              show_line: false
+              show_points: false
+              show_legend: false
+              y_axis: secondary
           hours_to_show: 24
           hour24: true
           smoothing: true
@@ -568,6 +574,12 @@ cards:
               name: Sent
             - entity: sensor.mqtt_broker_received_messages_1min_load
               name: Received
+            - entity: sensor.nighttime_number
+              color: var(--custom-color-gray)
+              show_line: false
+              show_points: false
+              show_legend: false
+              y_axis: secondary
           hours_to_show: 24
           hour24: true
           smoothing: true
@@ -596,6 +608,12 @@ cards:
           - entity: sensor.conditions_temperature
             name: External
             color: var(--custom-color-yellow)
+          - entity: sensor.nighttime_number
+            color: var(--custom-color-gray)
+            show_line: false
+            show_points: false
+            show_legend: false
+            y_axis: secondary
         hours_to_show: 24
         hour24: true
         smoothing: true

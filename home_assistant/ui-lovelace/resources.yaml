@@ -421,10 +421,11 @@ cards:
             - entity: sensor.grid_power
               color: var(--custom-color-blue)
             - entity: sensor.nighttime_number
+              name: Day/Night
               color: var(--custom-color-gray)
               show_line: false
               show_points: false
-              show_legend: false
+              show_legend: true
               y_axis: secondary
           hours_to_show: 24
           hour24: true

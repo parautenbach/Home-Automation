@@ -50,17 +50,20 @@ homeassistant:
 
 logger:
   default: warning
-  # logs:
-  #   homeassistant.components.script: debug
-  #   homeassistant.components.template.weather: debug
-  #   homeassistant.components.openuv: debug
-  #   homeassistant.components.tplink: debug
-  #   homeassistant.components.shell_command: debug
-  #   homeassistant.components.linux_battery: debug
-  #   homeassistant.components.automation: info
-  #   homeassistant.components.python_script: debug
-  #   custom_components.shairport_sync: debug
-  #   custom_components.multiscrape: debug
+  logs:
+    # the warnings from this component is too verbose
+    amcrest.http: error
+    homeassistant.components.amcrest: error
+    # homeassistant.components.script: debug
+    # homeassistant.components.template.weather: debug
+    # homeassistant.components.openuv: debug
+    # homeassistant.components.tplink: debug
+    # homeassistant.components.shell_command: debug
+    # homeassistant.components.linux_battery: debug
+    # homeassistant.components.automation: info
+    # homeassistant.components.python_script: debug
+    # custom_components.shairport_sync: debug
+    # custom_components.multiscrape: debug
 
 lovelace:
   mode: yaml

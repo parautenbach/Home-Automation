@@ -10,6 +10,15 @@ cards:
       - sensor.security_camera_snapshots
     menu_alignment: Responsive
     maximum_files: 5
-    file_name_format: 'camera.security_camera_%YYY%m%d-%H%M%S.jpg'
-    caption_format: '%YYY-%m-%d %H:%M:%S'
+    # FFS, because, using AN EXISTING STANDARD for parsing and formatting is too hard
+    # file_name_format isn't a file name format, but should be something like file_name_datetime_format,
+    #   because it doesn't encapsulate the full name, only a part of it
+    # localisation doesn't work for the caption
+    # caption format should just use the same setting as HA (as default)
+    # the fromNow/AGO functionality doesn't work:
+    #   past dates rendered as dates in the future if a time is part of the datetime
+    # this stinks shit balls
+    # don't use it
+    file_name_format: 'YYYYMMDD-HHmmss'
+    caption_format: 'YYYY-MM-DD HH:mm:ss'
 # todo: clips

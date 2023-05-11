@@ -169,6 +169,32 @@ template:
           {% set consumption = states('sensor.daily_solar_energy_consumption') | float(0) %}
           {% set production = states('sensor.energy_production_today') | float(0) %}
           {{ min((consumption / production * 100) | int(0), 100) }}
+  - trigger:
+      # these times must much the work mode timer on the inverter
+      - platform: time
+        at: "01:00:00"
+        id: "1"
+      - platform: time
+        at: "05:00:00"
+        id: "2"
+      - platform: time
+        at: "08:00:00"
+        id: "3"
+      - platform: time
+        at: "13:00:00"
+        id: "4"
+      - platform: time
+        at: "17:00:00"
+        id: "5"
+      - platform: time
+        at: "21:00:00"
+        id: "6"
+    sensor:
+      - name: "Capacity Charge Point"
+        state: "{{ states('number.capacity_point_' ~ trigger.id) }}"
+        # not really, but we get dynamic icons this way
+        device_class: battery
+        unit_of_measurement: "%"
 
 sensor:
   - platform: derivative

@@ -303,21 +303,13 @@ cards:
       - type: energy-distribution
         link_dashboard: true
       - type: energy-usage-graph
-      - type: conditional
-        conditions:
-          - entity: sensor.battery_status
-            state: "Trickling"
-        card:
-          type: entities
-          show_header_toggle: false
-          entities:
-            - type: divider
-            - entity: sensor.battery_state_of_charge
-              name: State of Charge
-            - entity: sensor.battery_status
-              name: Status
-          header: &battery_graph
-            type: custom:mini-graph-card
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+          - type: custom:mini-graph-card
             name: Battery
             icon: mdi:home-battery-outline
             entities:
@@ -326,17 +318,11 @@ cards:
                 color: var(--custom-color-blue)
               - entity: sensor.battery_power
                 name: Power
-                color: var(--custom-color-gray)
+                color: var(--custom-color-yellow)
                 y_axis: secondary
-              # - entity: sensor.nighttime_number
-              #   color: var(--custom-color-gray)
-              #   show_line: false
-              #   show_points: false
-              #   show_legend: false
-              #   y_axis: secondary
             hours_to_show: 24
             hour24: true
-            lower_bound: 20
+            lower_bound: 0
             upped_bound: 100
             smoothing: true
             points_per_hour: 12
@@ -349,12 +335,45 @@ cards:
               state: true
               labels: hover
               labels_secondary: hover
-            card_mod:
-              style:
-                .: |
-                  ha-card {
-                    border: 0px;
-                  }
+          - type: custom:mini-graph-card
+            name: Battery
+            icon: mdi:home-battery-outline
+            entities:
+              - entity: sensor.battery_state_of_charge
+                name: Charge
+                color: var(--custom-color-blue)
+              - entity: sensor.capacity_charge_point
+                name: Charge Point
+                color: var(--custom-color-gray)
+                show_line: false
+                show_points: false
+                show_legend: true
+            hours_to_show: 24
+            hour24: true
+            lower_bound: 0
+            upped_bound: 100
+            smoothing: true
+            points_per_hour: 12
+            line_width: 2
+            show:
+              extrema: true
+              name: true
+              icon: true
+              average: true
+              state: true
+              labels: hover
+      - type: conditional
+        conditions:
+          - entity: sensor.battery_status
+            state: "Trickling"
+        card:
+          type: entities
+          show_header_toggle: false
+          entities:
+            - entity: sensor.battery_state_of_charge
+              name: State of Charge
+            - entity: sensor.battery_status
+              name: Status
       - type: conditional
         conditions:
           - entity: sensor.battery_status
@@ -363,7 +382,6 @@ cards:
           type: entities
           show_header_toggle: false
           entities:
-            - type: divider
             - entity: sensor.battery_state_of_charge
               name: State of Charge
             - entity: sensor.battery_status
@@ -379,7 +397,6 @@ cards:
               attribute: time_when_full
               # format: datetime
               name: Time when Full
-          header: *battery_graph
       - type: conditional
         conditions:
           - entity: sensor.battery_status
@@ -388,7 +405,6 @@ cards:
           type: entities
           show_header_toggle: false
           entities:
-            - type: divider
             - entity: sensor.battery_state_of_charge
               name: State of Charge
             - entity: sensor.battery_status
@@ -404,7 +420,6 @@ cards:
               attribute: time_when_empty
               format: datetime
               name: Time when Empty
-          header: *battery_graph
   - type: vertical-stack
     cards:
       - type: custom:swipe-card
@@ -413,74 +428,68 @@ cards:
           pagination:
             type: 'bullets'
         cards:
-        - type: custom:mini-graph-card
-          name: Energy Consumption
-          entities:
-            - entity: sensor.home_power
-              color: var(--custom-color-red)
-            - entity: sensor.grid_power
-              color: var(--custom-color-blue)
-            - entity: sensor.nighttime_number
-              name: Day/Night
-              color: var(--custom-color-gray)
-              show_line: false
-              show_points: false
-              show_legend: true
-              y_axis: secondary
-          hours_to_show: 24
-          hour24: true
-          lower_bound: 0
-          smoothing: true
-          points_per_hour: 12  # every 5 min
-          line_width: 2
-          show:
-            extrema: true
-            name: true
-            icon: false
-            average: true
-            state: true
-            labels: hover
-            labels_secondary: false
-          card_mod:
-            style:
-              .: |
-                ha-card {
-                  border: 0px;
-                }
-        - type: custom:mini-graph-card
-          name: Energy Consumption
-          entities:
-            - entity: sensor.home_power
-              color: var(--custom-color-red)
-            - entity: sensor.grid_power
-              color: var(--custom-color-blue)
-            - entity: sensor.grid_feed_outage_number
-              name: Grid Outage
-              color: var(--custom-color-gray)
-              show_line: false
-              show_points: false
-              show_legend: true
-              y_axis: secondary
-          hours_to_show: 24
-          hour24: true
-          lower_bound: 0
-          smoothing: true
-          points_per_hour: 12  # every 5 min
-          line_width: 2
-          show:
-            extrema: true
-            name: true
-            icon: false
-            average: true
-            state: true
-            labels: hover
-            labels_secondary: false
-          card_mod:
-            style:
-              .: |
-                ha-card {
-                  border: 0px;
-                }
+          - type: custom:mini-graph-card
+            name: Energy Consumption
+            entities:
+              - entity: sensor.home_power
+                color: var(--custom-color-red)
+              - entity: sensor.grid_power
+                color: var(--custom-color-blue)
+              - entity: sensor.nighttime_number
+                name: Day/Night
+                color: var(--custom-color-gray)
+                show_line: false
+                show_points: false
+                show_legend: true
+                y_axis: secondary
+            hours_to_show: 24
+            hour24: true
+            lower_bound: 0
+            smoothing: true
+            points_per_hour: 12  # every 5 min
+            line_width: 2
+            show:
+              extrema: true
+              name: true
+              icon: false
+              average: true
+              state: true
+              labels: hover
+              labels_secondary: false
+          - type: custom:mini-graph-card
+            name: Energy Consumption
+            entities:
+              - entity: sensor.home_power
+                color: var(--custom-color-red)
+              - entity: sensor.grid_power
+                color: var(--custom-color-blue)
+              - entity: sensor.grid_feed_outage_number
+                name: Grid Outage
+                color: var(--custom-color-gray)
+                show_line: false
+                show_points: false
+                show_legend: true
+                y_axis: secondary
+            hours_to_show: 24
+            hour24: true
+            lower_bound: 0
+            smoothing: true
+            points_per_hour: 12  # every 5 min
+            line_width: 2
+            show:
+              extrema: true
+              name: true
+              icon: false
+              average: true
+              state: true
+              labels: hover
+              labels_secondary: false
+            card_mod:
+              style:
+                .: |
+                  ha-card {
+                    border: 0px;
+                  }
       - type: entities
         show_header_toggle: false
         entities:

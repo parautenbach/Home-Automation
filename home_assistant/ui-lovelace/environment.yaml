@@ -233,7 +233,7 @@ cards:
             lower_bound: 0
             show:
               extrema: true
-              labels_secondary: false
+              labels_secondary: hover
       - type: history-graph
         title: Low Light Sensor
         hours_to_show: 24

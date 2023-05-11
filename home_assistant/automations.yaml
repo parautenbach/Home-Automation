@@ -1999,6 +1999,7 @@
         - light.dining_room
         - light.music_room
         - light.foyer
+        - light.hallway
   mode: parallel
   condition:
     # power was NOT recently restored (2 min), causing the light to turn on and connect to hass, and trigger this automation
@@ -2024,6 +2025,7 @@
         - light.dining_room
         - light.music_room
         - light.foyer
+        - light.hallway
       to: "on"
   mode: parallel
   # some other ideas:

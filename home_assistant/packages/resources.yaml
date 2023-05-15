@@ -427,7 +427,9 @@ automation:
             The backup power battery is {{ 'at ' ~ battery_soc ~ '% and ' ~ battery_status if battery_soc < 100 else 'fully charged.' }}
           data:
             group: "home-electricity"
+            # https://companion.home-assistant.io/docs/notifications/notifications-basic#replacing
             url: homeassistant://navigate/lovelace/resources
+            tag: "backup-power-battery-update"
       # on when full, off when 90
       # this is basically hysteresis
       # https://www.home-assistant.io/integrations/threshold/

@@ -1689,6 +1689,7 @@
         entity_id:
           # this group includes the foyer light, which could be on as warning light when there's no grid power/loadshedding/on backup power
           - light.living_area_group
+          - light.kitchen_counter
     - service: script.turn_on
       target:
         entity_id: script.fade_light

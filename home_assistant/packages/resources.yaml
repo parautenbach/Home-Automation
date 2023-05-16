@@ -466,8 +466,7 @@ automation:
           title: "Home"
           message: >-
             {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
-            {% set battery_status = states('sensor.battery_status') | lower %}
-            The backup power battery is critical at {{ battery_soc }}% and {{ battery_status }}.
+            The backup power battery is critical at {{ battery_soc }}%.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources

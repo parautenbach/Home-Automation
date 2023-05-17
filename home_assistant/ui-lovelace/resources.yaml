@@ -394,7 +394,7 @@ cards:
               name: Time to Full
             - type: attribute
               entity: sensor.battery_time_to_full
-              attribute: time_when_full
+              attribute: time_when_full_relative
               # format: datetime
               name: Time when Full
       - type: conditional
@@ -417,7 +417,7 @@ cards:
               name: Time to Empty
             - type: attribute
               entity: sensor.battery_time_to_empty
-              attribute: time_when_empty
+              attribute: time_when_empty_relative
               format: datetime
               name: Time when Empty
   - type: vertical-stack

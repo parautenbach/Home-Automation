@@ -129,6 +129,22 @@ template:
             {% else %}
               {{ 0 | as_datetime }}
             {% endif %}
+          time_when_full_relative: >-
+            {% set battery_status = states('sensor.battery_status') %}
+            {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
+            {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
+            {% set time_when_full = 0 | as_datetime %}
+            {% if battery_status == 'Charging' -%}
+              {% set seconds_to_full = (100 - current_charge) * 60 * 60 / rate %}
+              {% set time_when_full = now() + timedelta(seconds=seconds_to_full) %}
+            {% endif %}
+            {% if time_when_full > today_at() + timedelta(days=2) %}
+              {{ time_when_full.strftime('%A at %H:%M') }}
+            {% elif time_when_full > today_at() + timedelta(days=1) %}
+              {{ time_when_full.strftime('Tomorrow at %H:%M') }}
+            {% else %}
+              {{ time_when_full.strftime('Today at %H:%M') }}
+            {% endif %}
       - name: "Battery Time To Empty"
         unique_id: "ecc75099-6fbf-4733-96a3-90b743a66dde"
         device_class: duration
@@ -152,6 +168,22 @@ template:
               {{ now() + timedelta(seconds=seconds_to_empty) }}
             {% else %}
               {{ 0 | as_datetime }}
+            {% endif %}
+          time_when_empty_relative: >-
+            {% set battery_status = states('sensor.battery_status') %}
+            {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
+            {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
+            {% set time_when_empty = 0 | as_datetime %}
+            {% if battery_status == 'Discharging' -%}
+              {% set seconds_to_empty = (current_charge - 20) * 60 * 60 / rate %}
+              {% set time_when_empty = now() + timedelta(seconds=seconds_to_empty) %}
+            {% endif %}
+            {% if time_when_empty > today_at() + timedelta(days=2) %}
+              {{ time_when_empty.strftime('%A at %H:%M') }}
+            {% elif time_when_empty > today_at() + timedelta(days=1) %}
+              {{ time_when_empty.strftime('Tomorrow at %H:%M') }}
+            {% else %}
+              {{ time_when_empty.strftime('Today at %H:%M') }}
             {% endif %}
       - name: "Solar Production Peak Today"
         unique_id: "8eb2701b-522d-436d-af68-7f86e27c20ad"

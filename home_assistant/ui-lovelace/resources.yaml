@@ -372,6 +372,8 @@ cards:
           entities:
             - entity: sensor.battery_state_of_charge
               name: State of Charge
+            - entity: sensor.capacity_charge_point
+              name: Current Charge Point Target
             - entity: sensor.battery_status
               name: Status
       - type: conditional
@@ -384,6 +386,8 @@ cards:
           entities:
             - entity: sensor.battery_state_of_charge
               name: State of Charge
+            - entity: sensor.capacity_charge_point
+              name: Current Charge Point Target
             - entity: sensor.battery_status
               name: Status
             - entity: sensor.battery_power
@@ -407,6 +411,8 @@ cards:
           entities:
             - entity: sensor.battery_state_of_charge
               name: State of Charge
+            - entity: sensor.capacity_charge_point
+              name: Current Charge Point Target
             - entity: sensor.battery_status
               name: Status
             - entity: sensor.battery_power

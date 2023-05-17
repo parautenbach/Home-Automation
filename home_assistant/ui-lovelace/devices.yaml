@@ -172,6 +172,7 @@ cards:
       title: Major Automations
       hours_to_show: 24
       entities:
+        # run ../scripts/list_all_automations.sh
         - automation.alert_if_garages_opened_or_closed_when_not_supposed_to
         - automation.alert_if_gate_opened_or_closed_when_not_supposed_to
         - automation.alert_vacation_end
@@ -237,6 +238,7 @@ cards:
         - automation.open_the_gate_when_arriving_home
         - automation.pollen_levels_update
         # - automation.proximity_updates
+        - automation.reset_full_battery_notification_governor
         - automation.reset_wake_up_time
         - automation.restore_smart_bulb_statuses_after_power_restored
         - automation.save_last_smart_bulb_state
@@ -280,7 +282,6 @@ cards:
         - automation.update_security_camera_snapshot_gallery
         - automation.update_server_power_status
         - automation.update_timers_for_covers_on_startup
-        # add
   - type: vertical-stack
     cards:
       - type: map

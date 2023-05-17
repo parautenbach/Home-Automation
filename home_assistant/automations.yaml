@@ -265,9 +265,10 @@
           entity_id: light.living_room_lamp
           state: "off"
         # in case light was turned on manually, leave it
-        - condition: state
-          entity_id: light.foyer
-          state: "off"
+        # commented out for reason: but why would we? we'd probably turn on other lights instead
+        # - condition: state
+        #   entity_id: light.foyer
+        #   state: "off"
         - condition: or
           conditions:
             - condition: time

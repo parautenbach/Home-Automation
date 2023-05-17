@@ -352,6 +352,17 @@ input_boolean:
     name: Full Battery Notification Governor
     icon: mdi:speedometer
 
+input_number:
+  battery_shutdown_threshold:
+    name: "Backup Battery Shutdown Threshold"
+    icon: mdi:battery-alert-variant-outline
+    min: 0
+    max: 100
+    initial: 20
+    step: 1
+    mode: box
+    unit_of_measurement: "%"
+
 automation:
   - alias: "Notify If Grid Feed Status Changed"
     id: "b233b973-cf9b-44b5-94e4-5f0813e6eefa"

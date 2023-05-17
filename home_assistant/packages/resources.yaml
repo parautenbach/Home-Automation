@@ -418,13 +418,21 @@ automation:
     action:
       - variables:
           battery_soc: "{{ states('sensor.battery_state_of_charge') | int(0) }}"
-          battery_status: "{{ states('sensor.battery_status') | lower }}"
       - service: notify.mobile_app_ceres
         data:
           title: "Home"
           message: >-
-            {# we're assuming we never get to 0% SOC – not coding for that edge case; it will work, but the working will be awkward #}
-            The backup power battery is {{ 'at ' ~ battery_soc ~ '% and ' ~ battery_status if battery_soc < 100 else 'fully charged.' }}
+            {# we're assuming we will never get to 0% SOC – not coding for that edge case; it will work, but the working will be awkward #}
+            {# The backup power battery is {{ 'at ' ~ battery_soc ~ '% and ' ~ battery_status if battery_soc < 100 else 'fully charged.' }} #}
+            {% if is_state('sensor.battery_status', 'Charging') and battery_soc < 100 %}
+              The backup power battery has charged to {{ battery_soc }}%.
+            {% elif is_state('sensor.battery_status', 'Discharging') and battery_soc < 100 %}
+              The backup power battery has discharged to {{ battery_soc }}%.
+            {% elif is_state('sensor.battery_status', 'Trickling') and battery_soc < 100 %}
+              The backup power battery is trickling at {{ battery_soc }}%.
+            {% else %}
+              The backup power battery is fully charged.
+            {% endif %}
           data:
             group: "home-electricity"
             # https://companion.home-assistant.io/docs/notifications/notifications-basic#replacing

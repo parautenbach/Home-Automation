@@ -172,6 +172,9 @@ cards:
         entities:
           - entity: sensor.solar_energy_utilisation_today
             name: Utilisation Today
+          - entity: sensor.daily_solar_energy_consumption
+            name: Consumption Today
+            icon: mdi:solar-power-variant-outline
           - entity: sensor.energy_production_today
             name: Production Today
           - entity: sensor.solar_production_peak_today

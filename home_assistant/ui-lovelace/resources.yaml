@@ -321,10 +321,10 @@ cards:
                 color: var(--custom-color-blue)
               - entity: input_number.battery_shutdown_threshold
                 name: Charge Threshold
-                color: var(--custom-color-red)
+                color: var(--custom-color-gray)
               - entity: sensor.battery_power
                 name: Power
-                color: var(--custom-color-yellow)
+                color: var(--custom-color-red)
                 y_axis: secondary
             hours_to_show: 24
             hour24: true
@@ -350,7 +350,7 @@ cards:
                 color: var(--custom-color-blue)
               - entity: input_number.battery_shutdown_threshold
                 name: Charge Threshold
-                color: var(--custom-color-red)
+                color: var(--custom-color-gray)
               - entity: sensor.capacity_charge_point
                 name: Charge Point
                 color: var(--custom-color-gray)

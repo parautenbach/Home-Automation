@@ -235,7 +235,7 @@ sensor:
     round: 1
     unit_time: h
     unit: "%/h"
-    time_window: "00:05:00"
+    time_window: "00:01:00"
   # digital power meter in db
   - platform: integration
     unique_id: "0e503fd7-9ae9-446b-8c73-28d8068b69eb"

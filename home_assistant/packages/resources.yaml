@@ -441,8 +441,11 @@ automation:
           # it's a linear function with a negative gradient
           brightness_pct: >-
             {% set state = states('sensor.battery_state_of_charge') | int(0) %}
-            {# set state_bracketed = (state | int(0) + 5) // 10 * 10 #}
-            {% set brightness = (-98/70*state + 142) | round(0) %}
+            {# make the light changes more pronounced #}
+            {% set state_bracketed = (state | int(0) + 5) // 10 * 10 %}
+            {# this formula sets 30% charge to 100% brightness and 100% charge to 1% brightness #}
+            {# https://docs.google.com/spreadsheets/d/1ndnxCt_XyBRBwG9zdRIUBITEb4C2H2VHPHGBMj3uGic/edit#gid=0 #}
+            {% set brightness = (-98/70*state_bracketed + 142) | round(0) %}
             {{ min(brightness, 100) }}
   - alias: "Send Backup Power Battery Update"
     id: "0c451149-cda2-4b52-b714-f866034568d4"

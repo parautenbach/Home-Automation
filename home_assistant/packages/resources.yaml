@@ -202,28 +202,38 @@ template:
           {% set production = states('sensor.energy_production_today') | float(0) %}
           {{ min((consumption / production * 100) | int(0), 100) }}
   - trigger:
-      # these times must much the work mode timer on the inverter
-      - platform: time
-        at: "01:00:00"
-        id: "1"
-      - platform: time
-        at: "05:00:00"
-        id: "2"
-      - platform: time
-        at: "08:00:00"
-        id: "3"
-      - platform: time
-        at: "13:00:00"
-        id: "4"
-      - platform: time
-        at: "17:00:00"
-        id: "5"
-      - platform: time
-        at: "21:00:00"
-        id: "6"
+      - platform: time_pattern
+        hours: "*"
+        minutes: 0
+        seconds: 0
+      - platform: state
+        entity_id:
+          - number.capacity_point_1
+          - number.capacity_point_2
+          - number.capacity_point_3
+          - number.capacity_point_4
+          - number.capacity_point_5
+          - number.capacity_point_6
     sensor:
       - name: "Capacity Charge Point"
-        state: "{{ states('number.capacity_point_' ~ trigger.id) }}"
+        state: >-
+          {# these times must match the work mode timers on the inverter #}
+          {% set time = now().strftime('%H:%M') %}
+          {# could use a map too; whatever #}
+          {% if '01:00' <= time < '05:00' %}
+            {{ states('number.capacity_point_1') }}
+          {% elif '05:00' <= time < '08:00' %}
+            {{ states('number.capacity_point_2') }}
+          {% elif '08:00' <= time < '13:00' %}
+            {{ states('number.capacity_point_3') }}
+          {% elif '13:00' <= time < '17:00' %}
+            {{ states('number.capacity_point_4') }}
+          {% elif '17:00' <= time < '21:00' %}
+            {{ states('number.capacity_point_5') }}
+          {% else %}
+            {# 21:00-01:00 #}
+            {{ states('number.capacity_point_6') }}
+          {% endif %}
         # not really, but we get dynamic icons this way
         device_class: battery
         unit_of_measurement: "%"

@@ -381,10 +381,38 @@ cards:
           entities:
             - entity: sensor.battery_state_of_charge
               name: State of Charge
+              style: &battery_state_of_charge_mods
+                hui-generic-entity-row:
+                  $:
+                    .: |
+                      .state {
+                        color:
+                          {%- if states('sensor.battery_state_of_charge') | int(0) >= states('sensor.capacity_charge_point') | int(0) -%}
+                            var(--custom-color-green);
+                          {%- elif states('sensor.capacity_charge_point') | int(0) - states('sensor.battery_state_of_charge') | int(0) <= 10 -%}
+                            var(--custom-color-red);
+                          {%- else -%}
+                            var(--custom-color-yellow);
+                          {%- endif -%}
+                      }
             - entity: sensor.capacity_charge_point
               name: Charge Point Target
             - entity: sensor.battery_status
               name: Status
+              style: &battery_status_mods
+                hui-generic-entity-row:
+                  $:
+                    .: |
+                      .state {
+                        color:
+                          {%- if is_state('sensor.battery_status', 'Charging') -%}
+                            var(--custom-color-green);
+                          {%- elif is_state('sensor.battery_status', 'Discharging') -%}
+                            var(--custom-color-red);
+                          {%- else -%}
+                            var(--custom-color-yellow);
+                          {%- endif -%}
+                      }
       - type: conditional
         conditions:
           - entity: sensor.battery_status
@@ -395,10 +423,12 @@ cards:
           entities:
             - entity: sensor.battery_state_of_charge
               name: State of Charge
+              style: *battery_state_of_charge_mods
             - entity: sensor.capacity_charge_point
               name: Charge Point Target
             - entity: sensor.battery_status
               name: Status
+              style: *battery_status_mods
             - entity: sensor.battery_power
               name: Power
             - entity: sensor.battery_change_of_charge
@@ -420,10 +450,12 @@ cards:
           entities:
             - entity: sensor.battery_state_of_charge
               name: State of Charge
+              style: *battery_state_of_charge_mods
             - entity: sensor.capacity_charge_point
               name: Charge Point Target
             - entity: sensor.battery_status
               name: Status
+              style: *battery_status_mods
             - entity: sensor.battery_power
               name: Power
             - entity: sensor.battery_change_of_charge

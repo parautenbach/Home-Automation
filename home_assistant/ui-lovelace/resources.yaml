@@ -573,21 +573,24 @@ cards:
       - type: markdown
         title: Loadshedding
         content: "{{ states('sensor.loadshedding_forecast') }}"
-      - type: entities
-        entities:
+      - type: conditional
+        conditions:
           - entity: binary_sensor.loadshedding_active
-            name: Active
-          - entity: sensor.loadshedding_stage
-            name: Stage
-          - entity: sensor.loadshedding_start_time
-            name: Start Time
-          - entity: sensor.loadshedding_end_time
-            name: End Time
-          - entity: timer.loadshedding_duration
-            name: Duration Remainder
-          - entity: sensor.eskomsepush_calls_remaining
-            name: API Calls Remaining
-        show_header_toggle: false
+            state: "on"
+        card:
+          type: entities
+          entities:
+            - entity: sensor.loadshedding_stage
+              name: Stage
+            - entity: sensor.loadshedding_start_time
+              name: Start Time
+            - entity: sensor.loadshedding_end_time
+              name: End Time
+            - entity: timer.loadshedding_duration
+              name: Duration Remainder
+            - entity: sensor.eskomsepush_calls_remaining
+              name: API Calls Remaining
+          show_header_toggle: false
       - type: history-graph
         hours_to_show: 24
         entities:

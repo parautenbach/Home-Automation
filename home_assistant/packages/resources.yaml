@@ -354,6 +354,14 @@ utility_meter:
     unique_id: "c63e814c-4d6c-455c-bb2c-7f557a3af075"
     source: sensor.pv_energy
     cycle: daily
+  daily_battery_energy_in:
+    unique_id: "917b2099-8dcf-48f1-a689-178ee2bd0346"
+    source: sensor.battery_energy_in
+    cycle: daily
+  daily_battery_energy_out:
+    unique_id: "cafc2bee-06cd-4b60-90eb-66d412a5ec88"
+    source: sensor.battery_energy_out
+    cycle: daily
 
 input_boolean:
   # avoid jitter when we're at 100% and the battery is trickling

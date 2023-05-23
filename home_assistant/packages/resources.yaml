@@ -201,6 +201,23 @@ template:
           {% set consumption = states('sensor.daily_solar_energy_consumption') | float(0) %}
           {% set production = states('sensor.energy_production_today') | float(0) %}
           {{ min((consumption / production * 100) | int(0), 100) }}
+      - name: "Solar Consumption Portion"
+        unique_id: "590c6a35-b311-4d8f-83df-1b49ee57de5f"
+        icon: mdi:solar-power
+        unit_of_measurement: "%"
+        state: >-
+          {% set solar = states('sensor.daily_solar_energy_consumption') | float(0) -%}
+          {% set grid = states('sensor.daily_grid_energy_consumption') | float(0) -%}
+          {{ (solar / (solar + grid)) | multiply(100) | round(0) }}
+      - name: "Solar Production Portion"
+        unique_id: "7dabd873-d811-4201-84a5-3f507d5b619b"
+        icon: mdi:solar-power
+        unit_of_measurement: "%"
+        state: >-
+          {% set solar = states('sensor.daily_solar_energy_consumption') | float(0) -%}
+          {% set grid = states('sensor.daily_grid_energy_consumption') | float(0) -%}
+          {% set battery_out = states('sensor.daily_battery_energy_out') | float(0) -%}
+          {{ (solar / (solar + grid + battery_out)) | multiply(100) | round(0) }}
   - trigger:
       - platform: time_pattern
         hours: "*"

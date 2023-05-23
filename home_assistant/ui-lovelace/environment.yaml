@@ -413,6 +413,7 @@ cards:
                 show_legend: false
                 y_axis: secondary
             lower_bound: 0
+            upper_bound: 5
             hours_to_show: 24
             hour24: true
             smoothing: true

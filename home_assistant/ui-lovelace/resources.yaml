@@ -389,7 +389,7 @@ cards:
                         color:
                           {%- if states('sensor.battery_state_of_charge') | int(0) >= states('sensor.capacity_charge_point') | int(0) -%}
                             var(--custom-color-green);
-                          {%- elif states('sensor.capacity_charge_point') | int(0) - states('sensor.battery_state_of_charge') | int(0) <= 10 -%}
+                          {%- elif states('sensor.capacity_charge_point') | int(0) - states('sensor.battery_state_of_charge') | int(0) >= 10 -%}
                             var(--custom-color-red);
                           {%- else -%}
                             var(--custom-color-yellow);

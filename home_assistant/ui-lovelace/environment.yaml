@@ -266,7 +266,7 @@ cards:
             show_legend: false
             y_axis: secondary
         lower_bound: 0
-        upper_bound: 10
+        upper_bound: 12
         hours_to_show: 24
         hour24: true
         smoothing: true
@@ -275,6 +275,7 @@ cards:
         show:
           extrema: true
           labels_secondary: false
+        # https://en.wikipedia.org/wiki/Ultraviolet_index
         color_thresholds:
           - value: 0
             color: var(--custom-color-green)
@@ -282,6 +283,8 @@ cards:
             color: var(--custom-color-yellow)
           - value: 8
             color: var(--custom-color-red)
+          - value: 11
+            color: var(--custom-color-magenta)
       - type: entities
         title: Dam Levels
         show_header_toggle: false

@@ -124,7 +124,7 @@ template:
             {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
             {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
             {% if battery_status == 'Charging' -%}
-              {% set seconds_to_full = (current_charge - 20) * 60 * 60 / rate %}
+              {% set seconds_to_full = (100 - current_charge) * 60 * 60 / rate %}
               {{ now() + timedelta(seconds=seconds_to_full) }}
             {% else %}
               {{ 0 | as_datetime }}

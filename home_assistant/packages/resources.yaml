@@ -79,7 +79,7 @@ template:
           {% set state = states('sensor.battery_state_of_charge') | int(0) %}
           {% set charging = "-charging" if states('sensor.battery_status') == "Charging" else "" %}
           {% set suffix = ((state + 5) // 10) * 10 %}
-          {# empty #}
+          {# battery empty #}
           {% if suffix <= 0 %}
             mdi:battery-alert-variant-outline
           {# full #}

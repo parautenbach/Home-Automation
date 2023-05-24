@@ -375,6 +375,30 @@ cards:
               average: true
               state: true
               labels: hover
+          - type: custom:mini-graph-card
+            name: Battery
+            icon: mdi:home-battery-outline
+            entities:
+              - entity: sensor.battery_power
+                name: Power
+                color: var(--custom-color-red)
+              - entity: sensor.battery_change_of_charge
+                name: Rate of Charge
+                color: var(--custom-color-yellow)
+                y_axis: secondary
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 12
+            line_width: 2
+            show:
+              extrema: true
+              name: true
+              icon: true
+              average: true
+              state: true
+              labels: hover
+              labels_secondary: hover
       - type: conditional
         conditions:
           - entity: sensor.battery_status

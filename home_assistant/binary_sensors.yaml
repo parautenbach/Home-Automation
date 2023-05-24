@@ -240,15 +240,3 @@
   host: www.google.com
   count: 5
   scan_interval: 180
-
-- platform: workday
-  country: ZA
-  workdays: [mon, tue, wed, thu, fri]
-  excludes: [sat, sun, holiday]
-
-- platform: workday
-  name: Workday Sensor Tomorrow
-  country: ZA
-  workdays: [mon, tue, wed, thu, fri]
-  excludes: [sat, sun, holiday]
-  days_offset: 1  # tomorrow

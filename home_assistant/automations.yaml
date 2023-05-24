@@ -2092,6 +2092,7 @@
   trigger:
     - platform: webhook
       webhook_id: server_power_connected
+      local_only: true
   mode: queued
   action:
     # sensor definition: platform: linux_battery
@@ -2106,6 +2107,7 @@
   trigger:
     - platform: webhook
       webhook_id: gaia_bluetooth_audio_connected
+      local_only: true
   mode: queued
   action:
     - service: "input_boolean.turn_{{ 'on' if (trigger.data['status'] | int) else 'off' }}"

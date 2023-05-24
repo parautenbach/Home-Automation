@@ -171,22 +171,22 @@ cards:
       - type: entities
         entities:
           - entity: sensor.energy_production_today
-            name: Production Today
+            name: Production Forecast Today
           - entity: sensor.solar_production_peak_today
-            name: Peak Time Today
+            name: Peak Time Forecast Today
           - entity: sensor.daily_solar_energy_consumption
             name: Consumption Today
             icon: mdi:solar-power-variant-outline
           - entity: sensor.solar_energy_utilisation_today
             name: Utilisation Today
-          - entity: sensor.solar_production_portion
-            name: Production Portion
-          - entity: sensor.solar_consumption_portion
-            name: Consumption Portion
+          - entity: sensor.solar_production_share
+            name: Solar Production Share
+          - entity: sensor.solar_consumption_share
+            name: Solar Consumption Share
           - entity: sensor.energy_production_tomorrow
-            name: Production Tomorrow
+            name: Production Forecast Tomorrow
           - entity: sensor.solar_production_peak_tomorrow
-            name: Peak Time Tomorrow
+            name: Peak Time Forecast Tomorrow
       - type: custom:swipe-card
         parameters:
           autoHeight: true
@@ -464,13 +464,13 @@ cards:
               name: Power
             - entity: sensor.battery_change_of_charge
               name: Discharge Rate
-            - entity: sensor.battery_time_to_empty
-              name: Time to Empty
+            - entity: sensor.battery_time_to_shutdown_threshold
+              name: Time to Shutdown
             - type: attribute
-              entity: sensor.battery_time_to_empty
-              attribute: time_when_empty_relative
+              entity: sensor.battery_time_to_shutdown_threshold
+              attribute: time_when_at_shutdown_threshold_relative
               format: datetime
-              name: Time when Empty
+              name: Shutdown Time
   - type: vertical-stack
     cards:
       - type: custom:swipe-card

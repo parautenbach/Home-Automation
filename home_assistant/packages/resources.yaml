@@ -145,45 +145,48 @@ template:
             {% else %}
               {{ time_when_full.strftime('Today at %H:%M') }}
             {% endif %}
-      - name: "Battery Time To Empty"
+      - name: "Battery Time To Shutdown Threshold"
         unique_id: "ecc75099-6fbf-4733-96a3-90b743a66dde"
         device_class: duration
         unit_of_measurement: s
         state: >
+          {% set threshold = states('input_number.battery_shutdown_threshold') | int(0) %}
           {% set battery_status = states('sensor.battery_status') %}
           {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
           {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
           {% if battery_status == 'Discharging' -%}
-            {{ (current_charge - 20) * 60 * 60 / rate }}
+            {{ (current_charge - threshold) * 60 * 60 / rate }}
           {% else %}
             0
           {% endif %}
         attributes:
-          time_when_empty: >-
+          time_when_at_shutdown_threshold: >-
+            {% set threshold = states('input_number.battery_shutdown_threshold') | int(0) %}
             {% set battery_status = states('sensor.battery_status') %}
             {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
             {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
             {% if battery_status == 'Discharging' -%}
-              {% set seconds_to_empty = (current_charge - 20) * 60 * 60 / rate %}
-              {{ now() + timedelta(seconds=seconds_to_empty) }}
+              {% set seconds_to_threshold = (current_charge - threshold) * 60 * 60 / rate %}
+              {{ now() + timedelta(seconds=seconds_to_threshold) }}
             {% else %}
               {{ 0 | as_datetime }}
             {% endif %}
-          time_when_empty_relative: >-
+          time_when_at_shutdown_threshold_relative: >-
+            {% set threshold = states('input_number.battery_shutdown_threshold') | int(0) %}
             {% set battery_status = states('sensor.battery_status') %}
             {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
             {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
-            {% set time_when_empty = 0 | as_datetime %}
+            {% set time_when_at_threshold = 0 | as_datetime %}
             {% if battery_status == 'Discharging' -%}
-              {% set seconds_to_empty = (current_charge - 20) * 60 * 60 / rate %}
-              {% set time_when_empty = now() + timedelta(seconds=seconds_to_empty) %}
+              {% set seconds_to_threshold = (current_charge - threshold) * 60 * 60 / rate %}
+              {% set time_when_at_threshold = now() + timedelta(seconds=seconds_to_threshold) %}
             {% endif %}
-            {% if time_when_empty > today_at() + timedelta(days=2) %}
-              {{ time_when_empty.strftime('%A at %H:%M') }}
-            {% elif time_when_empty > today_at() + timedelta(days=1) %}
-              {{ time_when_empty.strftime('Tomorrow at %H:%M') }}
+            {% if time_when_at_threshold > today_at() + timedelta(days=2) %}
+              {{ time_when_at_threshold.strftime('%A at %H:%M') }}
+            {% elif time_when_at_threshold > today_at() + timedelta(days=1) %}
+              {{ time_when_at_threshold.strftime('Tomorrow at %H:%M') }}
             {% else %}
-              {{ time_when_empty.strftime('Today at %H:%M') }}
+              {{ time_when_at_threshold.strftime('Today at %H:%M') }}
             {% endif %}
       - name: "Solar Production Peak Today"
         unique_id: "8eb2701b-522d-436d-af68-7f86e27c20ad"
@@ -201,7 +204,7 @@ template:
           {% set consumption = states('sensor.daily_solar_energy_consumption') | float(0) %}
           {% set production = states('sensor.energy_production_today') | float(0) %}
           {{ min((consumption / production * 100) | int(0), 100) }}
-      - name: "Solar Consumption Portion"
+      - name: "Solar Consumption Share"
         unique_id: "590c6a35-b311-4d8f-83df-1b49ee57de5f"
         icon: mdi:solar-power
         unit_of_measurement: "%"
@@ -209,7 +212,7 @@ template:
           {% set solar = states('sensor.daily_solar_energy_consumption') | float(0) -%}
           {% set grid = states('sensor.daily_grid_energy_consumption') | float(0) -%}
           {{ (solar / (solar + grid)) | multiply(100) | round(0) }}
-      - name: "Solar Production Portion"
+      - name: "Solar Production Share"
         unique_id: "7dabd873-d811-4201-84a5-3f507d5b619b"
         icon: mdi:solar-power
         unit_of_measurement: "%"

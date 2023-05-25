@@ -1,8 +1,8 @@
 template:
   - binary_sensor:
       - name: "Grid Feed"
-        device_class: power
         state: "{{ states('sensor.grid_frequency') | int(0) > 0 }}"
+        device_class: power
         icon: >-
           {% if states('sensor.grid_frequency') | int(0) > 0 %}
             mdi:transmission-tower
@@ -206,7 +206,6 @@ template:
           {{ min((consumption / production * 100) | int(0), 100) }}
       - name: "Solar Production Share"
         unique_id: "7dabd873-d811-4201-84a5-3f507d5b619b"
-        icon: mdi:solar-power
         unit_of_measurement: "%"
         state: >-
           {% set solar = states('sensor.daily_solar_energy_consumption') | float(0) -%}

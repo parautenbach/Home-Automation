@@ -602,6 +602,8 @@ cards:
         entities:
           - entity: binary_sensor.solarassistant_bridge
             name: SA Bridge
+          - entity: binary_sensor.solarassistant_activity
+            name: SA Activity
       - type: custom:mini-graph-card
         name: Foyer Security Camera
         entities:

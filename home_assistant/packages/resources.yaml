@@ -212,14 +212,35 @@ template:
           {% set grid = states('sensor.daily_grid_energy_consumption') | float(0) -%}
           {% set battery_out = states('sensor.daily_battery_energy_out') | float(0) -%}
           {{ (solar / (solar + grid + battery_out)) | multiply(100) | round(0) }}
+        icon: >-
+          {% set solar = states('sensor.daily_solar_energy_consumption') | float(0) -%}
+          {% set grid = states('sensor.daily_grid_energy_consumption') | float(0) -%}
+          {% set battery_out = states('sensor.daily_battery_energy_out') | float(0) -%}
+          {% set share = (solar / (solar + grid + battery_out)) | multiply(100) | round(0) %}
+          {% set index = (share/12.5) | int(0) %}
+          {% if 0 < index <= 8 %}
+            mdi:circle-slice-{{ index }}
+          {% else %}
+            mdi:circle-outline
+          {% endif %}
       - name: "Solar Consumption Share"
         unique_id: "590c6a35-b311-4d8f-83df-1b49ee57de5f"
-        icon: mdi:solar-power
         unit_of_measurement: "%"
         state: >-
           {% set solar = states('sensor.daily_solar_energy_consumption') | float(0) -%}
           {% set grid = states('sensor.daily_grid_energy_consumption') | float(0) -%}
           {{ (solar / (solar + grid)) | multiply(100) | round(0) }}
+        icon: >-
+          {% set solar = states('sensor.daily_solar_energy_consumption') | float(0) -%}
+          {% set grid = states('sensor.daily_grid_energy_consumption') | float(0) -%}
+          {% set share = (solar / (solar + grid)) | multiply(100) | round(0) %}
+          {% set index = (share/12.5) | int(0) %}
+          {% if 0 < index <= 8 %}
+            mdi:circle-slice-{{ index }}
+          {% else %}
+            mdi:circle-outline
+          {% endif %}
+
   - trigger:
       - platform: time_pattern
         hours: "*"

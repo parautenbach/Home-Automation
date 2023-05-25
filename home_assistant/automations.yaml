@@ -1260,6 +1260,10 @@
       event_type: mobile_app_notification_action
       event_data:
         action: CLOSE_COVER
+  condition:
+    # check this for that case where the notification gets sent just as the gate closes
+    - condition: template
+      value_template: "{{ is_state(trigger.event.data.action_data.cover_id, 'open') }}"
   action:
     - service: cover.close_cover
       data:

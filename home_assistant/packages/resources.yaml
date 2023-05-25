@@ -256,6 +256,16 @@ template:
         # not really, but we get dynamic icons this way
         device_class: battery
         unit_of_measurement: "%"
+  - trigger:
+      - platform: time_pattern
+        hours: "*"
+        minutes: "*"
+        seconds: 10
+    binary_sensor:
+      - name: "SolarAssistant Activity"
+        state: >-
+          {{ states.sensor.solarassistant_activity_counter.last_updated >= now() - timedelta(seconds=10) }}
+        device_class: running
 
 sensor:
   - platform: derivative
@@ -350,6 +360,14 @@ mqtt:
       payload_off: "0"
       device_class: connectivity
       icon: mdi:lan-connect
+  sensor:
+    # https://community.home-assistant.io/t/mqtt-stats-measuring-number-of-mqtt-messages-per-time-for-a-topic/224109/3
+    - name: SolarAssistant Activity Counter
+      unique_id: "c63b23e4-2b85-405a-8d64-b9866875bf0c"
+      state_topic: solar_assistant/inverter_1/load_power_essential/state
+      value_template: "{{ states('sensor.solarassistant_activity_counter') | int(0) + 1 }}"
+      unit_of_measurement: "messages"
+      icon: mdi:counter
 
 utility_meter:
   daily_grid_energy_consumption:
@@ -601,7 +619,8 @@ automation:
     initial_state: true
     trigger:
       - platform: state
-        entity_id: binary_sensor.solarassistant_bridge
+        entity_id:
+          - binary_sensor.solarassistant_activity
     action:
       - service: notify.mobile_app_ceres
         data:
@@ -622,7 +641,7 @@ automation:
                 {% set after = h ~ "h" ~ m %}
               {% endif %}
             {% endif %}
-            The SolarAssistant bridge has been {{ 'reconnected after ' ~  after ~ '.' if is_state('binary_sensor.solarassistant_bridge', 'on') else 'disconnected.' }}
+            The SolarAssistant bridge's activity has {{ 'been resumed after ' ~  after ~ '.' if is_state('binary_sensor.solarassistant_activity', 'on') else 'ceased.' }}
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/devices

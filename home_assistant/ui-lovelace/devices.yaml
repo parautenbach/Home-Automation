@@ -567,6 +567,7 @@ cards:
           - sensor.mqtt_broker_sent_messages_1min_load
           - sensor.mqtt_broker_received_messages_1min_load
           - binary_sensor.solarassistant_bridge
+          - binary_sensor.solarassistant_activity
         header:
           type: custom:mini-graph-card
           name: MQTT

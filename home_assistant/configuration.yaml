@@ -214,8 +214,8 @@ amcrest:
     username: !secret doorbell_username
     password: !secret doorbell_password
     binary_sensors:
-      - motion_detected
       - online
+      - motion_detected
 
 # https://community.home-assistant.io/t/control-recursion-in-the-folder-watcher-integration/200110
 # folder_watcher:

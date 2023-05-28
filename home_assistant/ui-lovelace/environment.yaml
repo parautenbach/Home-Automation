@@ -80,6 +80,95 @@ badges:
 cards:
   - type: vertical-stack
     cards:
+      - type: glance
+        entities:
+          - entity: sensor.office_temperature
+            name: Living Room
+            card_mod:
+              style:
+                .: |
+                  div:nth-child(3) {
+                    color:
+                      {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+                      {%- set state = states(config.entity) | float(0) -%}
+                      {{ gradient_color(state, temp_degrees_c_human_map) }}
+                  }
+                state-badge:
+                  $:
+                    ha-state-icon:
+                      $: |
+                        ha-svg-icon {
+                          color:
+                            {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+                            {%- set state = states(config.entity) | float(0) -%}
+                            {{ gradient_color(state, temp_degrees_c_human_map) }}
+                        }
+          - entity: sensor.main_bedroom_ht_temperature
+            name: Main Bedroom
+            card_mod:
+              style:
+                .: |
+                  div:nth-child(3) {
+                    color:
+                      {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+                      {%- set state = states(config.entity) | float(0) -%}
+                      {{ gradient_color(state, temp_degrees_c_human_map) }}
+                  }
+                state-badge:
+                  $:
+                    ha-state-icon:
+                      $: |
+                        ha-svg-icon {
+                          color:
+                            {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+                            {%- set state = states(config.entity) | float(0) -%}
+                            {{ gradient_color(state, temp_degrees_c_human_map) }}
+                        }
+          - entity: sensor.bedroom_ht_temperature
+            name: Bedroom
+            card_mod:
+              style:
+                .: |
+                  div:nth-child(3) {
+                    color:
+                      {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+                      {%- set state = states(config.entity) | float(0) -%}
+                      {{ gradient_color(state, temp_degrees_c_human_map) }}
+                  }
+                state-badge:
+                  $:
+                    ha-state-icon:
+                      $: |
+                        ha-svg-icon {
+                          color:
+                            {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+                            {%- set state = states(config.entity) | float(0) -%}
+                            {{ gradient_color(state, temp_degrees_c_human_map) }}
+                        }
+          - entity: sensor.outside_temperature
+            name: Outside
+            card_mod:
+              style:
+                .: |
+                  div:nth-child(3) {
+                    color:
+                      {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+                      {%- set state = states(config.entity) | float(0) -%}
+                      {{ gradient_color(state, temp_degrees_c_human_map) }}
+                  }
+                # weird! for the last entity in the glance card, the path to the icon is different
+                state-badge:
+                  $:
+                    ha-state-icon:
+                      $:
+                        ha-icon:
+                          $: |
+                            ha-svg-icon {
+                              color:
+                                {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+                                {%- set state = states(config.entity) | float(0) -%}
+                                {{ gradient_color(state, temp_degrees_c_human_map) }}
+                            }
       - type: custom:weather-card
         name: Stellies
         entity: weather.openweathermap_hourly

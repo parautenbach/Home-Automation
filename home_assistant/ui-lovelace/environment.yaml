@@ -304,6 +304,8 @@ cards:
             points_per_hour: 2
             line_width: 2
             lower_bound: 0
+            # https://www.grc.nasa.gov/WWW/k-12/Numbers/Math/Mathematical_Thinking/sun12.htm
+            upper_bound: 120000
             show:
               extrema: true
               labels_secondary: false
@@ -320,6 +322,7 @@ cards:
             points_per_hour: 2
             line_width: 2
             lower_bound: 0
+            upper_bound: 120000
             show:
               extrema: true
               labels_secondary: hover

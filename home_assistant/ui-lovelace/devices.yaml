@@ -190,6 +190,7 @@ cards:
         - automation.check_disk_space_on_the_home_assistant_server
         - automation.check_for_flat_batteries
         - automation.check_for_low_batteries
+        - automation.clear_upcoming_loadshedding_notification
         - automation.close_cover_from_alert_action
         - automation.contractor_mode_disabled_alert
         - automation.contractor_mode_enabled_alert

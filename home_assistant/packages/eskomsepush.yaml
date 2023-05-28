@@ -240,3 +240,17 @@ automation:
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
+            tag: "upcoming-loadshedding-notification"
+
+  - alias: "Clear Upcoming Loadshedding Notification"
+    id: "a10bf510-d521-4b38-a771-c09b4325d4ff"
+    trigger:
+      - platform: time
+        at: sensor.loadshedding_start_time
+    mode: single
+    action:
+      - service: notify.family
+        data:
+          message: "clear_notification"
+          data:
+            tag: "upcoming-loadshedding-notification"

@@ -201,6 +201,7 @@ automation:
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
+            tag: "loadshedding-forecast-notification"
 
   - alias: "Upcoming Loadshedding Notification"
     id: "a7c1b125-56a1-48d3-bf54-4d5430c81508"

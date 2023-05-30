@@ -514,8 +514,10 @@ cards:
             icon: mdi:home-lightning-bolt-outline
             entities:
               - entity: sensor.home_power
+                name: Home
                 color: var(--custom-color-red)
               - entity: sensor.grid_power
+                name: Grid
                 color: var(--custom-color-blue)
               - entity: sensor.nighttime_number
                 name: Day/Night
@@ -543,8 +545,10 @@ cards:
             icon: mdi:home-lightning-bolt-outline
             entities:
               - entity: sensor.home_power
+                name: Home
                 color: var(--custom-color-red)
               - entity: sensor.grid_power
+                name: Grid
                 color: var(--custom-color-blue)
               - entity: sensor.grid_feed_outage_number
                 name: Grid Outage

@@ -504,7 +504,8 @@ cards:
             type: 'bullets'
         cards:
           - type: custom:mini-graph-card
-            name: Energy Consumption
+            name: Power Consumption
+            icon: mdi:home-lightning-bolt-outline
             entities:
               - entity: sensor.home_power
                 color: var(--custom-color-red)
@@ -526,13 +527,14 @@ cards:
             show:
               extrema: true
               name: true
-              icon: false
+              icon: true
               average: true
               state: true
               labels: hover
               labels_secondary: false
           - type: custom:mini-graph-card
-            name: Energy Consumption
+            name: Power Consumption
+            icon: mdi:home-lightning-bolt-outline
             entities:
               - entity: sensor.home_power
                 color: var(--custom-color-red)
@@ -554,7 +556,7 @@ cards:
             show:
               extrema: true
               name: true
-              icon: false
+              icon: true
               average: true
               state: true
               labels: hover
@@ -565,6 +567,51 @@ cards:
                   ha-card {
                     border: 0px;
                   }
+          - type: custom:mini-graph-card
+            name: Power Consumption
+            icon: mdi:home-lightning-bolt-outline
+            entities:
+              - entity: sensor.home_power
+                name: Home
+                color: var(--custom-color-red)
+              - entity: sensor.grid_power
+                name: Grid
+                color: var(--custom-color-blue)
+              - entity: sensor.current_power
+                name: Eskom
+                color: var(--custom-color-turquoise)
+              - entity: sensor.pv_power
+                name: Solar
+                color: var(--custom-color-yellow)
+              - entity: sensor.load_power
+                name: Essentials
+                color: var(--custom-color-magenta)
+              - entity: sensor.load_power_non_essential
+                name: Non-essentials
+                color: var(--custom-color-gray)
+              - entity: sensor.battery_power
+                name: Battery
+                color: var(--custom-color-green)
+              - entity: sensor.grid_feed_outage_number
+                name: Grid Outage
+                color: var(--custom-color-gray)
+                show_line: false
+                show_points: false
+                show_legend: true
+                y_axis: secondary
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 12
+            line_width: 2
+            show:
+              extrema: true
+              name: true
+              icon: true
+              average: true
+              state: true
+              labels: hover
+              labels_secondary: false
       - type: entities
         show_header_toggle: false
         entities:

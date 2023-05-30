@@ -222,6 +222,28 @@ cards:
             show:
               extrema: true
               labels_secondary: false
+          - type: custom:mini-graph-card
+            name: Temperature Difference
+            entities:
+              - entity: sensor.temperature_difference
+                color: var(--custom-color-yellow)
+              - entity: sensor.nighttime_number
+                color: var(--custom-color-gray)
+                show_line: false
+                show_points: false
+                y_axis: secondary
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 1
+            line_width: 2
+            lower_bound: -10
+            upper_bound: +10
+            show:
+              legend: false
+              extrema: true
+              average: true
+              labels_secondary: false
       - type: statistics-graph
         entities:
           - entity: sensor.office_temperature

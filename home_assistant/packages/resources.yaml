@@ -240,11 +240,10 @@ template:
           {% else %}
             mdi:circle-outline
           {% endif %}
-
   - trigger:
       - platform: time_pattern
         hours: "*"
-        minutes: 0
+        minutes: "*"
         seconds: 0
       - platform: state
         entity_id:

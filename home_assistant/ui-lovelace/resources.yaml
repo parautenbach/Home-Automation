@@ -37,9 +37,9 @@ badges:
                       {%- set state = states('sensor.home_power_kw') | float(0) -%}
                       {%- set consumption_kw_map =
                                 {
-                                  1.0: "#40b100",
-                                  2.0: "#ffa800",
-                                  8.0: "#aa0000"
+                                  0.0: "#40b100",
+                                  3.5: "#ffa800",
+                                  7.0: "#aa0000"
                                 }
                         -%}
                       {{ gradient_color(state, consumption_kw_map) }}
@@ -153,9 +153,9 @@ cards:
             min: 0
             max: 100
             severity:
-              green: 50
-              yellow: 30
-              red: 0
+              green: 80
+              yellow: 50
+              red: 30
       # https://github.com/ulic75/power-flow-card#inverted-entities-example
       - type: custom:power-flow-card
         entities:

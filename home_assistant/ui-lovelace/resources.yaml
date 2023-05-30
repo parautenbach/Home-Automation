@@ -425,6 +425,8 @@ cards:
                       }
             - entity: sensor.capacity_charge_point
               name: Charge Point Target
+            - entity: binary_sensor.grid_charge_point_status
+              name: Grid Charge Point Status
             - entity: sensor.battery_status
               name: Status
               style: &battery_status_mods
@@ -454,6 +456,8 @@ cards:
               style: *battery_state_of_charge_mods
             - entity: sensor.capacity_charge_point
               name: Charge Point Target
+            - entity: binary_sensor.grid_charge_point_status
+              name: Grid Charge Point Status
             - entity: sensor.battery_status
               name: Status
               style: *battery_status_mods
@@ -481,6 +485,8 @@ cards:
               style: *battery_state_of_charge_mods
             - entity: sensor.capacity_charge_point
               name: Charge Point Target
+            - entity: binary_sensor.grid_charge_point_status
+              name: Grid Charge Point Status
             - entity: sensor.battery_status
               name: Status
               style: *battery_status_mods

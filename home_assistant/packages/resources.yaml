@@ -281,6 +281,39 @@ template:
       - platform: time_pattern
         hours: "*"
         minutes: "*"
+        seconds: 0
+      - platform: state
+        entity_id:
+          - switch.grid_charge_point_1
+          - switch.grid_charge_point_2
+          - switch.grid_charge_point_3
+          - switch.grid_charge_point_4
+          - switch.grid_charge_point_5
+          - switch.grid_charge_point_6
+    binary_sensor:
+      - name: "Grid Charge Point Status"
+        state: >-
+          {# these times must match the work mode timers on the inverter #}
+          {% set time = now().strftime('%H:%M') %}
+          {% if '01:00' <= time < '05:00' %}
+            {{ states('switch.grid_charge_point_1') | bool }}
+          {% elif '05:00' <= time < '08:00' %}
+            {{ states('switch.grid_charge_point_2') | bool }}
+          {% elif '08:00' <= time < '13:00' %}
+            {{ states('switch.grid_charge_point_3') | bool }}
+          {% elif '13:00' <= time < '17:00' %}
+            {{ states('switch.grid_charge_point_4') | bool }}
+          {% elif '17:00' <= time < '21:00' %}
+            {{ states('switch.grid_charge_point_5') | bool }}
+          {% else %}
+            {# 21:00-01:00 #}
+            {{ states('switch.grid_charge_point_6') | bool }}
+          {% endif %}
+  # todo: switch grid on for charge point if still below by certain time
+  - trigger:
+      - platform: time_pattern
+        hours: "*"
+        minutes: "*"
         seconds: 10
     binary_sensor:
       - name: "SolarAssistant Activity"

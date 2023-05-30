@@ -503,9 +503,22 @@ automation:
       - condition: state
         entity_id: binary_sensor.anybody_home
         state: "on"
-      - condition: time
-        after: "05:00:00"
-        before: "23:00:00"
+      - condition: or
+        conditions:
+          - condition: and
+            conditions:
+              - condition: time
+                after: "21:00:00"
+                before: "06:00:00"
+              # this means we're not in bed and there's someone around to see the warning light
+              - condition: state
+                entity_id: light.living_room_lamp
+                state: "on"
+          # this could be made smarter to account for workdays and using the wake-up time
+          # remember this light is also part of the night light group
+          - condition: time
+            after: "06:00:00"
+            before: "21:00:00"
     action:
       - service: light.turn_on
         target:

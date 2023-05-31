@@ -415,10 +415,12 @@ cards:
                     .: |
                       .state {
                         color:
-                          {%- if states('sensor.battery_state_of_charge') | int(0) >= states('sensor.capacity_charge_point') | int(0) -%}
-                            var(--custom-color-green);
+                          {%- if states('sensor.battery_state_of_charge') | int(0) <= 30 -%}
+                            var(--custom-color-red);
                           {%- elif states('sensor.capacity_charge_point') | int(0) - states('sensor.battery_state_of_charge') | int(0) >= 10 -%}
                             var(--custom-color-red);
+                          {%- elif states('sensor.battery_state_of_charge') | int(0) >= states('sensor.capacity_charge_point') | int(0) -%}
+                            var(--custom-color-green);
                           {%- else -%}
                             var(--custom-color-yellow);
                           {%- endif -%}

@@ -2528,12 +2528,21 @@
         title: "Health"
         # https://community.home-assistant.io/t/trigger-to-from-attribute/325345
         # https://community.home-assistant.io/t/access-attribute-of-from-state/380497
+
+- alias: "High UV Notification"
+  id: "101c7f2d-6839-4a8c-be1a-0de46ed70477"
+  initial_state: true
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.openweathermap_uv_index
+      above: 5
+  mode: single
+  action:
+    - service: notify.family
+      data:
+        title: "Health"
         message: >
-          Pollen levels changed from {{ trigger.from_state.attributes.label | lower }} to {{ trigger.to_state.attributes.label | lower }}.
-            - {{ state_attr('sensor.tree_pollen', 'friendly_name') }}: {{ state_attr('sensor.tree_pollen', 'label') | lower }}
-            - {{ state_attr('sensor.grass_pollen', 'friendly_name') }}: {{ state_attr('sensor.grass_pollen', 'label') | lower }}
-            - {{ state_attr('sensor.weed_pollen', 'friendly_name') }}: {{ state_attr('sensor.weed_pollen', 'label') | lower }}
-            - {{ state_attr('sensor.mould_spores', 'friendly_name') }}: {{ state_attr('sensor.mould_spores', 'label') | lower }}
+          UV radiation is high. Remember to apply sunscreen.
         data:
           group: "environment"
           url: homeassistant://navigate/lovelace/environment

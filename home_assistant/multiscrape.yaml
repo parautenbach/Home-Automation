@@ -8,14 +8,9 @@
       attribute: "class"
       value_template: >-
         {# set value = ["pollen-darkorange"] #}
-        {% set mapping = {
-                            "pollen-green": 1,
-                            "pollen-yellow": 2,
-                            "pollen-lightorange": 3,
-                            "pollen-darkorange": 4,
-                            "pollen-red": 5 } %}
-        {% set key = value | first %}
-        {{ mapping[key] if key in mapping else "unknown" }}
+        {%- from 'pollen.jinja' import color_level_map -%}
+        {%- set key = value | first -%}
+        {{ color_level_map[key] if key in color_level_map else "unknown" }}
       on_error:
         value: last
       attributes:
@@ -23,14 +18,49 @@
           select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(2) > div"
           attribute: "class"
           value_template: >-
-            {% set mapping = {
-                                "pollen-green": "Very Low",
-                                "pollen-yellow": "Low",
-                                "pollen-lightorange": "Moderate",
-                                "pollen-darkorange": "High",
-                                "pollen-red": "Very High" } %}
-            {% set key = value | first %}
-            {{ mapping[key] if key in mapping else "Unavailable" }}
+            {%- from 'pollen.jinja' import color_label_map -%}
+            {%- set key = value | first -%}
+            {{ color_label_map[key] if key in color_label_map else "Unavailable" }}
+          on_error:
+            value: last
+        # this looks like massive duplication, but we want attributes here so that we can trigger on state
+        # changes of this sensor if an individual pollen level has changed. we need the individual sensors
+        # so that we can set a name and an icon for use on dashboards. granted, we can make these normal
+        # template sensors that extracts the attributes from here.
+        - name: Tree Pollen
+          select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(3) > div"
+          attribute: "class"
+          value_template: >-
+            {%- from 'pollen.jinja' import color_level_map -%}
+            {%- set key = value | first -%}
+            {{ color_level_map[key] if key in color_level_map else "unknown" }}
+          on_error:
+            value: last
+        - name: Grass Pollen
+          select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(4) > div"
+          attribute: "class"
+          value_template: >-
+            {%- from 'pollen.jinja' import color_level_map -%}
+            {%- set key = value | first -%}
+            {{ color_level_map[key] if key in color_level_map else "unknown" }}
+          on_error:
+            value: last
+        - name: Weed Pollen
+          select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(5) > div"
+          attribute: "class"
+          value_template: >-
+            {%- from 'pollen.jinja' import color_level_map -%}
+            {%- set key = value | first -%}
+            {{ color_level_map[key] if key in color_level_map else "unknown" }}
+          on_error:
+            value: last
+        - name: Mould Spores
+          select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(6) > div"
+          attribute: "class"
+          value_template: >-
+            {%- from 'pollen.jinja' import color_level_map -%}
+            {%- set key = value | first -%}
+            {{ color_level_map[key] if key in color_level_map else "unknown" }}
           on_error:
             value: last
     - name: Tree Pollen
@@ -38,14 +68,9 @@
       select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(3) > div"
       attribute: "class"
       value_template: >-
-        {% set mapping = {
-                            "pollen-green": 1,
-                            "pollen-yellow": 2,
-                            "pollen-lightorange": 3,
-                            "pollen-darkorange": 4,
-                            "pollen-red": 5 } %}
-        {% set key = value | first %}
-        {{ mapping[key] if key in mapping else "unknown" }}
+        {%- from 'pollen.jinja' import color_level_map -%}
+        {%- set key = value | first -%}
+        {{ color_level_map[key] if key in color_level_map else "unknown" }}
       on_error:
         value: last
       attributes:
@@ -53,14 +78,9 @@
           select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(3) > div"
           attribute: "class"
           value_template: >-
-            {% set mapping = {
-                                "pollen-green": "Very Low",
-                                "pollen-yellow": "Low",
-                                "pollen-lightorange": "Moderate",
-                                "pollen-darkorange": "High",
-                                "pollen-red": "Very High" } %}
-            {% set key = value | first %}
-            {{ mapping[key] if key in mapping else "Unavailable" }}
+            {%- from 'pollen.jinja' import color_label_map -%}
+            {%- set key = value | first -%}
+            {{ color_label_map[key] if key in color_label_map else "Unavailable" }}
           on_error:
             value: last
     - name: Grass Pollen
@@ -68,14 +88,9 @@
       select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(4) > div"
       attribute: "class"
       value_template: >-
-        {% set mapping = {
-                            "pollen-green": 1,
-                            "pollen-yellow": 2,
-                            "pollen-lightorange": 3,
-                            "pollen-darkorange": 4,
-                            "pollen-red": 5 } %}
-        {% set key = value | first %}
-        {{ mapping[key] if key in mapping else "unknown" }}
+        {%- from 'pollen.jinja' import color_level_map -%}
+        {%- set key = value | first -%}
+        {{ color_level_map[key] if key in color_level_map else "unknown" }}
       on_error:
         value: last
       attributes:
@@ -83,14 +98,9 @@
           select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(4) > div"
           attribute: "class"
           value_template: >-
-            {% set mapping = {
-                                "pollen-green": "Very Low",
-                                "pollen-yellow": "Low",
-                                "pollen-lightorange": "Moderate",
-                                "pollen-darkorange": "High",
-                                "pollen-red": "Very High" } %}
-            {% set key = value | first %}
-            {{ mapping[key] if key in mapping else "Unavailable" }}
+            {%- from 'pollen.jinja' import color_label_map -%}
+            {%- set key = value | first -%}
+            {{ color_label_map[key] if key in color_label_map else "Unavailable" }}
           on_error:
             value: last
     - name: Weed Pollen
@@ -98,14 +108,9 @@
       select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(5) > div"
       attribute: "class"
       value_template: >-
-        {% set mapping = {
-                            "pollen-green": 1,
-                            "pollen-yellow": 2,
-                            "pollen-lightorange": 3,
-                            "pollen-darkorange": 4,
-                            "pollen-red": 5 } %}
-        {% set key = value | first %}
-        {{ mapping[key] if key in mapping else "unknown" }}
+        {%- from 'pollen.jinja' import color_level_map -%}
+        {%- set key = value | first -%}
+        {{ color_level_map[key] if key in color_level_map else "unknown" }}
       on_error:
         value: last
       attributes:
@@ -113,14 +118,9 @@
           select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(5) > div"
           attribute: "class"
           value_template: >-
-            {% set mapping = {
-                                "pollen-green": "Very Low",
-                                "pollen-yellow": "Low",
-                                "pollen-lightorange": "Moderate",
-                                "pollen-darkorange": "High",
-                                "pollen-red": "Very High" } %}
-            {% set key = value | first %}
-            {{ mapping[key] if key in mapping else "Unavailable" }}
+            {%- from 'pollen.jinja' import color_label_map -%}
+            {%- set key = value | first -%}
+            {{ color_label_map[key] if key in color_label_map else "Unavailable" }}
           on_error:
             value: last
     - name: Mould Spores
@@ -128,14 +128,9 @@
       select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(6) > div"
       attribute: "class"
       value_template: >-
-        {% set mapping = {
-                            "pollen-green": 1,
-                            "pollen-yellow": 2,
-                            "pollen-lightorange": 3,
-                            "pollen-darkorange": 4,
-                            "pollen-red": 5 } %}
-        {% set key = value | first %}
-        {{ mapping[key] if key in mapping else "unknown" }}
+        {%- from 'pollen.jinja' import color_level_map -%}
+        {%- set key = value | first -%}
+        {{ color_level_map[key] if key in color_level_map else "unknown" }}
       on_error:
         value: last
       attributes:
@@ -143,13 +138,8 @@
           select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(6) > div"
           attribute: "class"
           value_template: >-
-            {% set mapping = {
-                                "pollen-green": "Very Low",
-                                "pollen-yellow": "Low",
-                                "pollen-lightorange": "Moderate",
-                                "pollen-darkorange": "High",
-                                "pollen-red": "Very High" } %}
-            {% set key = value | first %}
-            {{ mapping[key] if key in mapping else "Unavailable" }}
+            {%- from 'pollen.jinja' import color_label_map -%}
+            {%- set key = value | first -%}
+            {{ color_label_map[key] if key in color_label_map else "Unavailable" }}
           on_error:
             value: last

@@ -1,0 +1,19 @@
+{# https://www.home-assistant.io/docs/configuration/templating/#reusing-templates #}
+
+{# Mapping pollen colours to levels (for the scraper sensors). #}
+{% set color_level_map = {
+                           "pollen-green": 1,
+                           "pollen-yellow": 2,
+                           "pollen-lightorange": 3,
+                           "pollen-darkorange": 4,
+                           "pollen-red": 5
+                          } %}
+
+{# Mapping pollen colours to labels (for the scraper sensors). #}
+{% set color_label_map = {
+                            "pollen-green": "Very Low",
+                            "pollen-yellow": "Low",
+                            "pollen-lightorange": "Moderate",
+                            "pollen-darkorange": "High",
+                            "pollen-red": "Very High"
+                          } %}

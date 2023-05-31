@@ -2514,11 +2514,8 @@
   id: "eeb7f4a7-367d-4aee-b4d5-cf84da3b1323"
   initial_state: true
   trigger:
-    # if the overall risk didn't change but an individual risk did, this won't fire
-    # but how does one fix this? you'd need access to each sensor's previous value
-    # one way is to concatenate the individual states (as strings) to create a new state,
-    # but then this whole automation need to change (will need A LOT of extra parsing and is maybe not worth the effort and benefit)
-    # the reason is that the previous values will need to be extracted from the concatenated string
+    # If only entity_id is given, the trigger will fire for all state changes, even if only state attributes change.
+    # https://www.home-assistant.io/docs/automation/trigger/#state-trigger
     - platform: state
       entity_id: sensor.overall_pollen_risk
   mode: single
@@ -2528,6 +2525,29 @@
         title: "Health"
         # https://community.home-assistant.io/t/trigger-to-from-attribute/325345
         # https://community.home-assistant.io/t/access-attribute-of-from-state/380497
+        message: >-
+          {%- macro build_item(name, from, to) -%}
+            {%- if from != to -%}
+              {{ name }}: {{ from | lower }} to {{ to | lower }}
+            {%- else -%}
+              {{ name }}: {{ to | lower }}
+            {%- endif -%}
+          {%- endmacro -%}
+          {%- set summary = '' -%}
+          {%- if trigger.from_state.attributes.label != trigger.to_state.attributes.label -%}
+            {%- set summary = 'Pollen levels changed from ' ~ trigger.from_state.attributes.label | lower ~ ' to ' ~ trigger.to_state.attributes.label | lower ~ '.' -%}
+          {%- else -%}
+            {%- set summary = 'Pollen levels are ' ~ trigger.to_state.attributes.label | lower ~ '.' -%}
+          {%- endif -%}
+          {{ summary }}
+            {# There doesn't seem to be a way to dynamically build at the trigger variable name. -#}
+            - {{ build_item(state_attr('sensor.tree_pollen', 'friendly_name'), trigger.from_state.attributes.tree_pollen, trigger.to_state.attributes.tree_pollen) }}
+            - {{ build_item(state_attr('sensor.grass_pollen', 'friendly_name'), trigger.from_state.attributes.grass_pollen, trigger.to_state.attributes.grass_pollen) }}
+            - {{ build_item(state_attr('sensor.weed_pollen', 'friendly_name'), trigger.from_state.attributes.weed_pollen, trigger.to_state.attributes.weed_pollen) }}
+            - {{ build_item(state_attr('sensor.mould_spores', 'friendly_name'), trigger.from_state.attributes.mould_spores, trigger.to_state.attributes.mould_spores) }}
+        data:
+          group: "environment"
+          url: homeassistant://navigate/lovelace/environment
 
 - alias: "High UV Notification"
   id: "101c7f2d-6839-4a8c-be1a-0de46ed70477"

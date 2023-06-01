@@ -243,6 +243,7 @@ cards:
         - automation.reset_full_battery_notification_governor
         - automation.reset_wake_up_time
         - automation.restore_smart_bulb_statuses_after_power_restored
+        - automation.revert_cleaning_day_lights
         - automation.save_last_smart_bulb_state
         - automation.see_mobile_devices
         - automation.send_backup_power_battery_update

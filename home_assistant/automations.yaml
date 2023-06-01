@@ -915,6 +915,44 @@
   action:
     - service: switch.turn_on
       entity_id: switch.contractor_mode
+    # cleaning day lights
+    - service: light.turn_on
+      entity_id:
+        - light.hallway
+        - light.music_room
+        - light.dining_room
+      data:
+        profile: security
+    # only turn it on if it's not already on; it could be on already as the warning light due to load shedding
+    - condition: state
+      entity_id: light.foyer
+      state: "off"
+    - service: light.turn_on
+      entity_id: light.foyer
+      data:
+        profile: security
+
+- alias: "Revert Cleaning Day Lights"
+  id: "9b73e13c-449e-4b9c-82c3-2652156cd7e5"
+  trigger:
+    - platform: state
+      entity_id: calendar.housekeeping
+      to: "off"
+  action:
+    - service: light.turn_off
+      entity_id:
+        - light.music_room
+        - light.dining_room
+    - service: light.turn_on
+      entity_id: light.hallway
+      data:
+        profile: dim
+    # don't turn it off while being load shed, because this is the warning light and will be red
+    - condition: state
+      entity_id: binary_sensor.grid_feed
+      state: "on"
+    - service: light.turn_off
+      entity_id: light.foyer
 
 - alias: "Disable Contractor Mode"
   id: "f63a3c52-fac8-4fc7-a000-0f41b2ee5e8d"

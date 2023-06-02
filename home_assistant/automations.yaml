@@ -2564,25 +2564,30 @@
         # https://community.home-assistant.io/t/trigger-to-from-attribute/325345
         # https://community.home-assistant.io/t/access-attribute-of-from-state/380497
         message: >-
-          {%- macro build_item(name, from, to) -%}
+          {%- macro build_item(sensor) -%}
+            {%- set attribute = sensor.split('.')[1] -%}
+            {%- set name = state_attr(sensor, 'friendly_name') -%}
+            {%- set from = trigger.from_state.attributes[attribute] | lower -%}
+            {%- set to = trigger.to_state.attributes[attribute] | lower -%}
             {%- if from != to -%}
-              {{ name }}: {{ from | lower }} to {{ to | lower }}
+              {{ name }}: {{ from }} to {{ to }}
             {%- else -%}
-              {{ name }}: {{ to | lower }}
+              {{ name }}: {{ to }}
             {%- endif -%}
           {%- endmacro -%}
+          {%- set sensors = ['sensor.tree_pollen', 'sensor.grass_pollen', 'sensor.weed_pollen', 'sensor.mould_spores'] -%}
           {%- set summary = '' -%}
-          {%- if trigger.from_state.attributes.label != trigger.to_state.attributes.label -%}
-            {%- set summary = 'Pollen levels changed from ' ~ trigger.from_state.attributes.label | lower ~ ' to ' ~ trigger.to_state.attributes.label | lower ~ '.' -%}
+          {%- set from_state_label = trigger.from_state.attributes.label | lower -%}
+          {%- set to_state_label = trigger.to_state.attributes.label | lower -%}
+          {%- if from_state_label != trigger.to_state.attributes.label -%}
+            {%- set summary = 'Pollen levels changed from ' ~ from_state_label ~ ' to ' ~ to_state_label ~ '.' -%}
           {%- else -%}
-            {%- set summary = 'Pollen levels are ' ~ trigger.to_state.attributes.label | lower ~ '.' -%}
+            {%- set summary = 'Pollen levels are ' ~ to_state_label ~ '.' -%}
           {%- endif -%}
           {{ summary }}
-            {# There doesn't seem to be a way to dynamically build at the trigger variable name. -#}
-            - {{ build_item(state_attr('sensor.tree_pollen', 'friendly_name'), trigger.from_state.attributes.tree_pollen, trigger.to_state.attributes.tree_pollen) }}
-            - {{ build_item(state_attr('sensor.grass_pollen', 'friendly_name'), trigger.from_state.attributes.grass_pollen, trigger.to_state.attributes.grass_pollen) }}
-            - {{ build_item(state_attr('sensor.weed_pollen', 'friendly_name'), trigger.from_state.attributes.weed_pollen, trigger.to_state.attributes.weed_pollen) }}
-            - {{ build_item(state_attr('sensor.mould_spores', 'friendly_name'), trigger.from_state.attributes.mould_spores, trigger.to_state.attributes.mould_spores) }}
+          {%- for sensor in sensors %}
+            - {{ build_item(sensor) }}
+          {%- endfor %}
         data:
           group: "environment"
           url: homeassistant://navigate/lovelace/environment

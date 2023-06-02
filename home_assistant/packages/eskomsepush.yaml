@@ -7,6 +7,11 @@
 # other interesting links:
 # https://www.eskom.co.za/eskom-divisions/tx/system-adequacy-reports/
 
+# calendars
+# https://github.com/beyarkay/eskom-calendar/releases/download/latest/western-cape-stellenbosch.ics
+# https://eskomcalendar.co.za/ec?calendar=eskom-direct-2-even.ics (also has an API)
+#   - https://eskom-calendar-api.shuttleapp.rs/
+
 # test stuff
 # curl -s -X GET -H "Token: XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX" --url "https://developer.sepush.co.za/business/2.0/api_allowance"
 

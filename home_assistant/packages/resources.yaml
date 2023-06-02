@@ -198,12 +198,21 @@ template:
         state: "{{ (states('sensor.power_highest_peak_time_tomorrow') | as_datetime | as_local).strftime('%H:%m') }}"
       - name: "Solar Energy Utilisation Today"
         unique_id: "33e98696-bb21-4e07-9487-98956c39ef00"
-        icon: mdi:solar-power-variant-outline
         unit_of_measurement: "%"
         state: >
           {% set consumption = states('sensor.daily_solar_energy_consumption') | float(0) %}
           {% set production = states('sensor.energy_production_today') | float(0) %}
           {{ min((consumption / production * 100) | int(0), 100) }}
+        icon: >-
+          {% set consumption = states('sensor.daily_solar_energy_consumption') | float(0) %}
+          {% set production = states('sensor.energy_production_today') | float(0) %}
+          {% set yield = min((consumption / production * 100) | int(0), 100) %}
+          {% set index = (yield/12.5) | int(0) %}
+          {% if 0 < index <= 8 %}
+            mdi:circle-slice-{{ index }}
+          {% else %}
+            mdi:circle-outline
+          {% endif %}
       - name: "Solar Production Share"
         unique_id: "7dabd873-d811-4201-84a5-3f507d5b619b"
         unit_of_measurement: "%"

@@ -236,6 +236,7 @@ cards:
             smoothing: true
             points_per_hour: 1
             line_width: 2
+            # https://github.com/kalkih/mini-graph-card/issues/764
             lower_bound: -10
             upper_bound: 10
             show:

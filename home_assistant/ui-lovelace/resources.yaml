@@ -317,6 +317,31 @@ cards:
             chart_type: bar
             stat_types:
               - state
+          # https://apexcharts.com/docs/options/xaxis/
+          # https://github.com/apexcharts/apexcharts.js/issues/1688
+          # https://smarthomescene.com/guides/apexcharts-card-advanced-graphs-for-your-home-assistant-ui/
+          - type: custom:apexcharts-card
+            graph_span: 7d
+            span:
+              end: day
+            show:
+              last_updated: true
+            series:
+              - entity: sensor.daily_solar_energy_consumption
+                name: "Daily Solar Consumption"
+                type: column
+                show:
+                  extremas: true
+                group_by:
+                  func: max
+                  duration: 1d
+            yaxis:
+              - min: 0
+            header:
+              show: true
+              title: Solar
+              show_states: true
+              standard_format: true
   - type: vertical-stack
     cards:
       - type: energy-distribution

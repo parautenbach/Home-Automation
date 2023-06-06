@@ -385,6 +385,8 @@ cards:
             name: Wemmershoek
           - entity: sensor.total_dam_level
             name: Overall
+          - entity: sensor.total_dam_level_previous_year
+            name: Previous Year
           - entity: sensor.dam_levels_last_update
             name: Last Update
       - type: statistics-graph

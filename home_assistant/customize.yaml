@@ -393,6 +393,8 @@ sensor.bergrivier_dam_level:
 sensor.total_dam_level:
   icon: mdi:waves
   state_class: measurement
+sensor.total_dam_level_previous_year:
+  icon: mdi:waves
 sensor.dam_levels_last_update:
   icon: mdi:update
   device_class: "timestamp"

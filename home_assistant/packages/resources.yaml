@@ -330,12 +330,6 @@ template:
         device_class: running
 
 sensor:
-  - platform: derivative
-    source: sensor.battery_state_of_charge
-    name: "Battery Change of Charge"
-    round: 1
-    unit_time: h
-    unit: "%/h"
   # digital power meter in db
   - platform: integration
     unique_id: "0e503fd7-9ae9-446b-8c73-28d8068b69eb"
@@ -387,6 +381,14 @@ sensor:
           {% set n = now() %}
           {% set days = ((n.replace(day=1) + timedelta(days=-31)).replace(day=1) - timedelta(days=1)).day %}
           {{ ((states('sensor.monthly_home_energy_consumption') | int) / n.day * days) | round(3) }}
+      battery_change_of_charge:
+        unique_id: "0bf9861c-a0e4-4100-b6c6-b8b3a80f9274"
+        unit_of_measurement: "%/h"
+        value_template: >-
+          {# battery is 2 x 5.12kWh #}
+          {% set capacity = 10240 %}
+          {% set power = states('sensor.battery_power_filtered') | int(0) %}
+          {{ (power/capacity*100) | round(2) }}
   - platform: filter
     unique_id: "a6c6e405-2939-43ae-a8fc-e63f5390eda6"
     name: "PV Power Filtered"

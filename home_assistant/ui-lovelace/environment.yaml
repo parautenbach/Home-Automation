@@ -519,7 +519,7 @@ cards:
             type: 'bullets'
         cards:
           - type: custom:mini-graph-card
-            name: Air Quality
+            name: Air Quality (OWM)
             icon: mdi:lungs
             entities:
               - entity: sensor.owm_pollution_overall_air_quality
@@ -547,6 +547,38 @@ cards:
                 color: var(--custom-color-yellow)
               - value: 4
                 color: var(--custom-color-red)
+          - type: custom:mini-graph-card
+            name: Air Quality (WAQI)
+            icon: mdi:lungs
+            entities:
+              - entity: sensor.waqi_stellenboch_cape_winelands_south_africa
+                name: WAQI
+              - entity: sensor.nighttime_number
+                color: var(--custom-color-gray)
+                show_line: false
+                show_points: false
+                show_legend: false
+                y_axis: secondary
+            lower_bound: 0
+            upper_bound: 300
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 1
+            line_width: 2
+            show:
+              extrema: true
+              labels_secondary: false
+            # https://aqicn.org/api/
+            color_thresholds:
+              - value: 0
+                color: var(--custom-color-green)
+              - value: 51
+                color: var(--custom-color-yellow)
+              - value: 151
+                color: var(--custom-color-red)
+              - value: 201
+                color: var(--custom-color-magenta)
           - type: custom:mini-graph-card
             name: PM 2.5
             icon: mdi:grain
@@ -720,6 +752,7 @@ cards:
         show_header_toggle: true
         entities:
           - entity: sensor.owm_pollution_fine_particles_pm2_5
+            format: precision1
             type: custom:multiple-entity-row
             name: PM2.5
             state_header: OWM
@@ -727,6 +760,7 @@ cards:
             #   - entity: sensor.saaqis_pm_2_5
             #     name: SAAQIS
           - entity: sensor.owm_pollution_coarse_particles_pm10
+            format: precision1
             type: custom:multiple-entity-row
             name: PM10
             state_header: OWM
@@ -734,23 +768,44 @@ cards:
             #   - entity: sensor.saaqis_pm_10
             #     name: SAAQIS
           - entity: sensor.owm_pollution_nitrogen_dioxide_no2
+            format: precision1
             type: custom:multiple-entity-row
             name: NO₂
             state_header: OWM
             entities:
+              - entity: sensor.waqi_stellenboch_cape_winelands_south_africa
+                attribute: nitrogen_dioxide
+                format: precision1
+                unit: ppb
+                name: WAQI
               - entity: sensor.saaqis_no2
+                format: precision1
                 name: SAAQIS
           - entity: sensor.owm_pollution_sulphur_dioxide_so2
+            format: precision1
             type: custom:multiple-entity-row
             name: SO₂
             state_header: OWM
             entities:
+              - entity: sensor.waqi_stellenboch_cape_winelands_south_africa
+                attribute: sulfur_dioxide
+                format: precision1
+                unit: ppb
+                name: WAQI
               - entity: sensor.saaqis_so2
+                format: precision1
                 name: SAAQIS
           - entity: sensor.owm_pollution_ozone_o3
+            format: precision1
             type: custom:multiple-entity-row
             name: O₃
             state_header: OWM
             entities:
+              - entity: sensor.waqi_stellenboch_cape_winelands_south_africa
+                attribute: ozone
+                format: precision1
+                unit: ppb
+                name: WAQI
               - entity: sensor.saaqis_o3
+                format: precision1
                 name: SAAQIS

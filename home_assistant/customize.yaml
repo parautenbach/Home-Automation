@@ -400,6 +400,8 @@ sensor.dam_levels_last_update:
   device_class: "timestamp"
 sensor.owm_pollution_overall_air_quality:
   unit_of_measurement: aqi
+sensor.waqi_stellenboch_cape_winelands_south_africa:
+  unit_of_measurement: aqi
 sensor.pieter_bedside_light_button_battery:
   friendly_name: Pieter's Bedside Light Button Battery
   # https://community.home-assistant.io/t/recommended-ways-to-manage-devices-and-entities-names/243815/12

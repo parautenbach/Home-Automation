@@ -520,3 +520,11 @@
   type: time  # duration
   start: "{{ now().replace(hour=0, minute=0, second=0) }}"
   end: "{{ now() }}"
+
+# https://aqicn.org/api/
+# https://api.waqi.info/feed/stellenbosch/?token=<token>
+# https://aqicn.org/city/south-africa/cape-winelands/stellenboch/
+- platform: waqi
+  token: !secret waqi_api_token
+  locations:
+    - stellenbosch

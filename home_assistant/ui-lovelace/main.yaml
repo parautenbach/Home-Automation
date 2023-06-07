@@ -205,6 +205,7 @@ cards:
             entity: media_player.main_bedroom_universal
             artwork: cover
             volume_stateless: true
+            # https://github.com/kalkih/mini-media-player/issues/552
             toggle_power: false  # make it use turn_on/turn_off
             hide:
               power: false

@@ -2610,6 +2610,24 @@
           group: "environment"
           url: homeassistant://navigate/lovelace/environment
 
+- alias: "High Fire Risk Notification"
+  id: "657e1700-f69f-416e-9b62-269d702e8a38"
+  initial_state: true
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.winelands_fdi
+      above: 45
+  mode: single
+  action:
+    - service: notify.mobile_app_ceres
+      data:
+        title: "Environment"
+        message: >-
+          The risk of fires is dangerously high. FDI: {{ states('sensor.winelands_fdi') }}.
+        data:
+          group: "environment"
+          url: homeassistant://navigate/lovelace/environment
+
 - alias: "Shut Down Gaia Notification"
   id: "ef1a7da7-d878-4456-a44c-9615b9712c2a"
   initial_state: false

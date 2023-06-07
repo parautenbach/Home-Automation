@@ -210,6 +210,7 @@ cards:
         # - automation.foyer_motion_detected_last
         - automation.guest_mode_disabled_alert
         - automation.guest_mode_enabled_alert
+        - automation.high_fire_risk_notification
         - automation.high_inverter_load_alert
         - automation.high_uv_notification
         - automation.inside_lights_auto_on_upon_sunset_or_arrival

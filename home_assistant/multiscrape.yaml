@@ -143,3 +143,26 @@
             {{ color_label_map[key] if key in color_label_map else "Unavailable" }}
           on_error:
             value: last
+- resource: https://forestry.co.za/fire-danger-index/
+  scan_interval: 21600  # 60*60*6 or 4 updates per day
+  timeout: 30
+  log_response: true
+  sensor:
+    # http://envirowildfire.co.za/the-fire-danger-index/
+    # Blue   :  0 –  20 : SAFE           : Cold and wet.
+    # Green  : 21 –  45 : MODERATE       : Low fire risk. Care to be taken for burning operations.
+    # Yellow : 46 –  60 : DANGEROUS      : Caution advised.
+    # Orange : 61 –  75 : VERY DANGEROUS : Teams kept on stand by. No open flames.
+    # Red    : 81 – 100 : EXTREME        : Warnings presented on radio and TV forecasts.
+    - name: Winelands FDI
+      icon: >-
+        {% if value | int(0) > 45 %}
+          mdi:fire-alert
+        {% else %}
+          mdi:fire
+        {% endif %}
+      select: "main > div.page-content > div.elementor-8676 > div.elementor-inner > div.elementor-section-wrap > section > div.elementor-container > div.elementor-row > div.elementor-element-72d9bb2 > div.elementor-column-wrap > div.elementor-widget-wrap > div.elementor-element-b529cf5 > div.elementor-widget-container > div.elementor-shortcode > div.postie-post > table:nth-of-type(12) > tr:nth-child(10) > td:nth-child(3) > font"
+      value_template: >-
+        {{ value }}
+      on_error:
+        value: last

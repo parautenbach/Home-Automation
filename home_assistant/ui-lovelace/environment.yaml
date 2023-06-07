@@ -400,6 +400,37 @@ cards:
           - mean
         hide_legend: true
   - type: vertical-stack
+    title: Fire
+    cards:
+      # http://envirowildfire.co.za/the-fire-danger-index/
+      # Blue   :  0 –  20 : SAFE           : Cold and wet.
+      # Green  : 21 –  45 : MODERATE       : Low fire risk. Care to be taken for burning operations.
+      # Yellow : 46 –  60 : DANGEROUS      : Caution advised.
+      # Orange : 61 –  75 : VERY DANGEROUS : Teams kept on stand by. No open flames.
+      # Red    : 81 – 100 : EXTREME        : Warnings presented on radio and TV forecasts.
+      - type: gauge
+        name: Fire Risk (FDI)
+        entity: sensor.winelands_fdi
+        min: 0
+        max: 100
+        needle: true
+        segments:
+          - from: 0
+            color: "#3498db"
+            label: Safe
+          - from: 21
+            color: "#40b100"
+            label: Moderate
+          - from: 46
+            color: "#ffe500"
+            label: Dangerous
+          - from: 61
+            color: "#ff5800"
+            label: Very Dangerous
+          - from: 81
+            color: "#aa0000"
+            label: Extreme
+  - type: vertical-stack
     title: Pollen
     cards:
       - type: gauge

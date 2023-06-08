@@ -416,13 +416,13 @@ cards:
         needle: true
         segments:
           - from: 0
-            color: "#3498db"
+            color: "#40b100"
             label: Safe
           - from: 21
-            color: "#40b100"
+            color: "#ffe500"
             label: Moderate
           - from: 46
-            color: "#ffe500"
+            color: "#ffa800"
             label: Dangerous
           - from: 61
             color: "#ff5800"

@@ -76,6 +76,8 @@ cards:
         entities:
           - entity: binary_sensor.internet_connection
             name: Internet
+      - type: markdown
+        content: "[Management Interface](http://192.168.0.1/)"
       - type: entities
         show_header_toggle: false
         entities:
@@ -160,6 +162,8 @@ cards:
                 ha-card {
                   border: 0px;
                 }
+      - type: markdown
+        content: "[Management interface](http://192.168.0.5/)"
       - type: entities
         show_header_toggle: false
         entities:
@@ -197,6 +201,8 @@ cards:
                 ha-card {
                   border: 0px;
                 }
+      - type: markdown
+        content: "[Management interface](http://192.168.0.6/)"
   - type: vertical-stack
     title: Join Home Network
     cards:

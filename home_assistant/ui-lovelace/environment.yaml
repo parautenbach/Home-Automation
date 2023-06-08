@@ -152,6 +152,10 @@ cards:
             name: Today
           - entity: weather.forecast_tomorrow
             name: Tomorrow
+      - type: markdown
+        content: >
+          [La Colline Observatory, Stellenbosch](http://www.weather.lcao.co.za/index.php/Special_WeatherStatsRainfall)</br>
+          [Historical Daily Recorded Rainfall Figures](https://afriwx.co.za/rainfall-reenval/daily-recorded-rainfall-south-africa-historical/)
       - type: custom:swipe-card
         parameters:
           autoHeight: true

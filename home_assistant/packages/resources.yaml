@@ -1,3 +1,5 @@
+# https://andrewmarsh.com/software/sunpath3d-web/
+
 template:
   - binary_sensor:
       - name: "Grid Feed"

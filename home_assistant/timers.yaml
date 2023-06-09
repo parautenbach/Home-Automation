@@ -23,3 +23,6 @@ kitchen_counter_timer:
 hallway_timer:
   duration: "00:03:00"
   restore: true
+bedroom_bedlamp_timer:
+  duration: "00:3:00"
+  restore: true

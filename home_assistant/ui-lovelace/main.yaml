@@ -148,6 +148,70 @@ cards:
           #   name: Corner Lights
           #   entity: light.corner_lights
       - type: horizontal-stack
+        title: Bedroom Lights
+        cards:
+          - type: custom:button-card
+            template:
+              - rgb_light
+              - rgb_light_with_timer
+            variables:
+              profile: bedroom_lilac
+            name: Bedlamp
+            entity: light.bedroom_bedlamp
+            icon: mdi:alarm-light-outline
+          - type: vertical-stack
+            cards:
+              - type: custom:button-card
+                template:
+                  - basic_small
+                  - light_preset
+                variables:
+                  profile: normal
+                entity: light.bedroom_bedlamp
+                name: Normal
+                icon: mdi:brightness-5
+              - type: custom:button-card
+                template:
+                  - basic_small
+                  - light_preset
+                variables:
+                  profile: low
+                entity: light.bedroom_bedlamp
+                name: Low
+                icon: mdi:brightness-4
+          - type: vertical-stack
+            cards:
+              - type: custom:button-card
+                template:
+                  - basic_small
+                  - light_preset
+                variables:
+                  profile: night
+                entity: light.bedroom_bedlamp
+                name: Night
+                icon: mdi:weather-night
+              - type: custom:button-card
+                template:
+                  - basic_small
+                entity: timer.bedroom_bedlamp_timer
+                name: Timer
+                icon: mdi:camera-timer
+                tap_action:
+                  action: call-service
+                  haptic: light
+                  service: >
+                    [[[
+                      if (entity.state == "idle")
+                        return "timer.start";
+                      else
+                        return "timer.cancel";
+                    ]]]
+                  service_data:
+                    entity_id: entity
+                hold_action:
+                  action: more-info
+                  haptic: heavy
+      - type: horizontal-stack
         title: Outside Lights
         cards:
           - type: custom:button-card

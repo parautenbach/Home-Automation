@@ -292,6 +292,32 @@ button_card_templates:
     hold_action:
       haptic: selection
       action: more-info
+  basic_small:
+    color: "off"
+    size: 25%
+    styles:
+      card:
+        - font-size: 12px
+      icon:
+        # https://community.home-assistant.io/t/lovelace-button-card/65981/791
+        # https://community.home-assistant.io/t/lovelace-button-card/65981/798
+        # https://community.home-assistant.io/t/fun-with-custom-button-card/238450
+        - padding-right: 5px
+        - padding-left: 70%
+      name:
+        - justify-self: start
+      grid:
+        - grid-template-areas: '"i n"'
+        - grid-template-rows: 1fr
+        - grid-template-columns: 1fr 1fr  # 4fr 5fr
+  light_preset:
+    tap_action:
+      action: call-service
+      haptic: light
+      service: light.turn_on
+      service_data:
+        entity_id: entity
+        profile: "[[[ return variables.profile; ]]]"
   cover_with_timer:
     template:
       - old_colors

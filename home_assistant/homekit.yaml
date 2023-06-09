@@ -30,6 +30,7 @@
       - light.dining_room_corner_light
       - light.music_room_corner_light
       - light.hallway
+      - light.bedroom_bedlamp
       - switch.tivoli_audio
       - cover.main_gate
       - cover.lhs_garage_door

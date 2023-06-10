@@ -299,12 +299,14 @@ button_card_templates:
       card:
         - font-size: 12px
       icon:
+        - color: var(--paper-item-icon-color)
         # https://community.home-assistant.io/t/lovelace-button-card/65981/791
         # https://community.home-assistant.io/t/lovelace-button-card/65981/798
         # https://community.home-assistant.io/t/fun-with-custom-button-card/238450
         - padding-right: 5px
         - padding-left: 70%
       name:
+        - color: var(--paper-item-icon-color)
         - justify-self: start
       grid:
         - grid-template-areas: '"i n"'

@@ -178,7 +178,7 @@ cards:
                   profile: low
                 entity: light.bedroom_bedlamp
                 name: Low
-                icon: mdi:brightness-4
+                icon: mdi:brightness-6
           - type: vertical-stack
             cards:
               - type: custom:button-card
@@ -199,15 +199,27 @@ cards:
                 tap_action:
                   action: call-service
                   haptic: light
-                  service: >
-                    [[[
-                      if (entity.state == "idle")
-                        return "timer.start";
-                      else
-                        return "timer.cancel";
-                    ]]]
+                  service: timer.start
+                    # damn, we can't do pass the duration if we are cancelling the time
+                    # we are providing the duration, because we have to provide it here
+                    # and in the double tap action, otherwise the service call just uses
+                    # whatever the last value was
+                    # [[[
+                    #   if (entity.state == "idle")
+                    #     return "timer.start";
+                    #   else
+                    #     return "timer.cancel";
+                    # ]]]
                   service_data:
                     entity_id: entity
+                    duration: "00:03:00"
+                double_tap_action:
+                  action: call-service
+                  haptic: light
+                  service: timer.start
+                  service_data:
+                    entity_id: entity
+                    duration: "00:15:00"
                 hold_action:
                   action: more-info
                   haptic: heavy

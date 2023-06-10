@@ -312,6 +312,10 @@
       event_type: timer.finished
       event_data:
         entity_id: timer.hallway_timer
+    - platform: event
+      event_type: timer.finished
+      event_data:
+        entity_id: timer.bedroom_bedlamp_timer
   mode: parallel
   action:
     - service: light.turn_off

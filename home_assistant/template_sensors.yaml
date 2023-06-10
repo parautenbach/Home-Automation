@@ -15,6 +15,18 @@
         unknown: "{{ states | selectattr('state', 'in', ['unknown']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
         none: "{{ states | selectattr('state', 'in', ['none']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
 
+- trigger:
+    - platform: time_pattern
+      minutes: "*"
+  sensor:
+    - name: Disabled Automations
+      icon: mdi:refresh-auto
+      state: "{{ states.automation | selectattr('state', 'eq', 'off') | list | length }}"
+      unit_of_measurement: entities
+      state_class: measurement
+      attributes:
+        automations: "{{ states.automation | selectattr('state', 'eq', 'off') | map(attribute='attributes.friendly_name') | sort | list }}"
+
 # example:
 # {
 #     "event_type": "amcrest",

@@ -14,6 +14,7 @@
         unavailable: "{{ states | selectattr('state', 'in', ['unavailable']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
         unknown: "{{ states | selectattr('state', 'in', ['unknown']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
         none: "{{ states | selectattr('state', 'in', ['none']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
+
 # example:
 # {
 #     "event_type": "amcrest",
@@ -129,3 +130,8 @@
                | list
         %}
         {{ flat_batteries | count }}
+
+- binary_sensor:
+    # https://www.home-assistant.io/integrations/weather/#condition-mapping
+    - name: Is Fair Weather
+      state: "{{ (is_state('weather.openweathermap_hourly', 'sunny') or is_state('weather.openweathermap_hourly', 'partlycloudy')) and state_attr('sun.sun', 'elevation') >= 0 }}"

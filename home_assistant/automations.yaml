@@ -775,6 +775,7 @@
       - light.foyer
       - light.kitchen_counter
       - light.hallway
+      - light.bedroom_bedlamp
     to: "off"
   mode: parallel
   condition:

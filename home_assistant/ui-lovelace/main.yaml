@@ -199,24 +199,32 @@ cards:
                 tap_action:
                   action: call-service
                   haptic: light
-                  service: timer.start
-                    # damn, we can't do pass the duration if we are cancelling the time
-                    # we are providing the duration, because we have to provide it here
-                    # and in the double tap action, otherwise the service call just uses
-                    # whatever the last value was
-                    # [[[
-                    #   if (entity.state == "idle")
-                    #     return "timer.start";
-                    #   else
-                    #     return "timer.cancel";
-                    # ]]]
+                  # damn, we can't do pass the duration if we are cancelling the time
+                  # we are providing the duration, because we have to provide it here
+                  # and in the double tap action, otherwise the service call just uses
+                  # whatever the last value was
+                  # [[[
+                  #   if (entity.state == "idle")
+                  #     return "timer.start";
+                  #   else
+                  #     return "timer.cancel";
+                  # ]]]
+                  service: >
+                    [[[
+                      if (states['light.bedroom_bedlamp'].state == "on")
+                        return "timer.start";
+                    ]]]
                   service_data:
                     entity_id: entity
                     duration: "00:03:00"
                 double_tap_action:
                   action: call-service
                   haptic: light
-                  service: timer.start
+                  service: >
+                    [[[
+                      if (states['light.bedroom_bedlamp'].state == "on")
+                        return "timer.start";
+                    ]]]
                   service_data:
                     entity_id: entity
                     duration: "00:15:00"

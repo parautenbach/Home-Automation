@@ -221,6 +221,7 @@ cards:
                     entity_id: entity
                     duration: "00:15:00"
                 hold_action:
+                  # timer can be cancelled here
                   action: more-info
                   haptic: heavy
       - type: horizontal-stack

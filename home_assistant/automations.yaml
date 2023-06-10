@@ -2555,7 +2555,12 @@
     # If only entity_id is given, the trigger will fire for all state changes, even if only state attributes change.
     # https://www.home-assistant.io/docs/automation/trigger/#state-trigger
     - platform: state
-      entity_id: sensor.overall_pollen_risk
+      entity_id:
+        - sensor.overall_pollen_risk
+        - sensor.tree_pollen
+        - sensor.grass_pollen
+        - sensor.weed_pollen
+        - sensor.mould_spores
   mode: single
   action:
     - service: notify.family

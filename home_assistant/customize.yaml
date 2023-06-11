@@ -38,7 +38,7 @@ script.hk_3380_dimmer:
   icon: mdi:white-balance-sunny
 switch.living_room_lamp:
   icon: mdi:floor-lamp
-automation.take_motion_snapshots:
+automation.take_foyer_motion_snapshots:
   icon: mdi:camera
 script.dstv_power:
   friendly_name: DStv Power
@@ -342,14 +342,10 @@ binary_sensor.lhs_garage_occupied:
   icon: mdi:car-connected
 binary_sensor.rhs_garage_occupied:
   icon: mdi:car-connected
-sensor.sun_illuminance:
-  friendly_name: Sun Illuminance
 remote.living_room:
   friendly_name: Apple TV Remote
 remote.living_room_remote:
   friendly_name: Broadlink Universal Remote
-binary_sensor.rpi_power_status:
-  friendly_name: Power supply
 sensor.mqtt_broker_sent_messages_1min_load:
   friendly_name: MQTT broker messages out
 sensor.mqtt_broker_received_messages_1min_load:
@@ -360,18 +356,18 @@ sensor.db_size:
   icon: mdi:database
 binary_sensor.python_package_index_pypi_update_available:
   friendly_name: HA Updater
-sensor.uva_irradiance:
-  icon: mdi:weather-sunny-alert
-sensor.uvb_irradiance:
-  icon: mdi:weather-sunny-alert
-sensor.saaqis_pm_coarse:
-  icon: mdi:grain
-sensor.saaqis_pm_10:
-  icon: mdi:grain
-  device_class: pm10
-sensor.saaqis_pm_2_5:
-  icon: mdi:grain
-  device_class: pm25
+# sensor.uva_irradiance:
+#   icon: mdi:weather-sunny-alert
+# sensor.uvb_irradiance:
+#   icon: mdi:weather-sunny-alert
+# sensor.saaqis_pm_coarse:
+#   icon: mdi:grain
+# sensor.saaqis_pm_10:
+#   icon: mdi:grain
+#   device_class: pm10
+# sensor.saaqis_pm_2_5:
+#   icon: mdi:grain
+#   device_class: pm25
 sensor.saaqis_o3:
   icon: mdi:skull-outline
 sensor.saaqis_no2:

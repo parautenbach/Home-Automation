@@ -1,4 +1,5 @@
 .DS_Store
+ignore
 venv
 home_assistant/secrets.yaml
 esphome/electricity_pulse_counter/partitions.csv

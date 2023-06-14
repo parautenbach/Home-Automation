@@ -1,2 +1,0 @@
-$ ss -i -t -o state established '( dport = 1883 )' dst 192.168.0.147
-$ ifstat

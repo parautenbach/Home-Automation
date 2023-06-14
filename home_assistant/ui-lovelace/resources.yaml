@@ -730,3 +730,7 @@ cards:
         chart_type: bar
         stat_types:
           - state
+      - type: markdown
+        content: >
+          [SolarAssistant](https://solar-assistant.io/sites)</br>
+          [Sunsynk](https://www.sunsynk.net/login)

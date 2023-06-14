@@ -181,6 +181,7 @@ cards:
         # - automation.automatically_start_a_full_irrigation_cycle
         - automation.away_mode
         - automation.backup_home_assistant
+        - automation.backup_home_assistant_db
         - automation.backup_power_battery_critical_alert
         - automation.bedlamps_auto_on_upon_sunset_or_arrival
         - automation.bedlamps_off_after_sunrise

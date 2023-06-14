@@ -1789,6 +1789,21 @@
     - service: script.turn_on
       entity_id: script.make_backup
 
+- alias: "Backup Home Assistant DB"
+  id: "23ad9089-b7de-495e-b525-0730fd007c6d"
+  trigger:
+    platform: time
+    at:
+      - "03:05:00"
+  condition:
+    - condition: time
+      weekday:
+        - sun
+  action:
+    # https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete
+    - service: script.turn_on
+      entity_id: script.make_db_backup
+
 # backup script: https://gist.github.com/riemers/041c6a386a2eab95c55ba3ccaa10e7b0
 - alias: "Notify If No Recent Backup"
   id: "1069834c-2087-48a9-9015-e9a4a86262d9"

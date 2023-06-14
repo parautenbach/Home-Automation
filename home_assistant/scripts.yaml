@@ -972,6 +972,12 @@ make_backup:
       data:
         entity_id: sensor.home_assistant
 
+make_db_backup:
+  description: "Backup Home Assistant DB"
+  mode: single
+  sequence:
+    - service: shell_command.make_db_backup
+
 test_nav:
   sequence:
     - service: notify.mobile_app_ceres

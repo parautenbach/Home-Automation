@@ -45,6 +45,12 @@ cards:
         - sensor.ceres_battery_level
         - sensor.ceres_battery_state
       title: Ceres
+      icon: mdi:cellphone
+      card_mod:
+        style: |
+          .icon {
+            color: var(--paper-item-icon-color);
+          }
       show_header_toggle: false
     - type: entities
       entities:
@@ -52,9 +58,21 @@ cards:
         - sensor.rouve_battery_level
         - sensor.rouve_battery_state
       title: Rouvé
+      icon: mdi:cellphone
+      card_mod:
+        style: |
+          .icon {
+            color: var(--paper-item-icon-color);
+          }
       show_header_toggle: false
     - type: entities
       title: Thor (WD Cloud Drive)
+      icon: mdi:nas
+      card_mod:
+        style: |
+          .icon {
+            color: var(--paper-item-icon-color);
+          }
       entities:
         - sensor.thor_disk_usage
     - type: markdown

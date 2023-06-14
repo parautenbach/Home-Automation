@@ -241,7 +241,7 @@
       data:
         variables:
           light: light.hallway
-          target_brightness_pct: 27
+          target_brightness_pct: 60
           transition_duration: 120
 
 - alias: "Switch On Night Light If Motion Is Detected"
@@ -410,7 +410,7 @@
       target:
         entity_id: light.hallway
       data:
-        profile: dim
+        profile: normal
 
 - alias: "Bedlamps Auto On Upon Sunset or Arrival"
   id: "21b972ef-1e21-42b5-a137-9b160f601310"
@@ -951,7 +951,7 @@
     - service: light.turn_on
       entity_id: light.hallway
       data:
-        profile: dim
+        profile: normal
     # don't turn it off while being load shed, because this is the warning light and will be red
     - condition: state
       entity_id: binary_sensor.grid_feed
@@ -2367,7 +2367,7 @@
     input:
       button_device_id: 16bb98a28aa167819bff6fc45f178899
       light_entity_id: light.hallway
-      single_press_profile: dim
+      single_press_profile: normal
       double_press_profile: security
 
 - alias: "Alert Vacation Start"

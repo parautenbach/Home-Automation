@@ -33,7 +33,7 @@
           value_template: >-
             {%- from 'pollen.jinja' import color_level_map -%}
             {%- set key = value | first -%}
-            {{ color_level_map[key] if key in color_level_map else "unknown" }}
+            {{ color_label_map[key] if key in color_level_map else "unknown" }}
           on_error:
             value: last
         - name: Grass Pollen
@@ -42,7 +42,7 @@
           value_template: >-
             {%- from 'pollen.jinja' import color_level_map -%}
             {%- set key = value | first -%}
-            {{ color_level_map[key] if key in color_level_map else "unknown" }}
+            {{ color_label_map[key] if key in color_level_map else "unknown" }}
           on_error:
             value: last
         - name: Weed Pollen
@@ -51,7 +51,7 @@
           value_template: >-
             {%- from 'pollen.jinja' import color_level_map -%}
             {%- set key = value | first -%}
-            {{ color_level_map[key] if key in color_level_map else "unknown" }}
+            {{ color_label_map[key] if key in color_level_map else "unknown" }}
           on_error:
             value: last
         - name: Mould Spores
@@ -60,7 +60,7 @@
           value_template: >-
             {%- from 'pollen.jinja' import color_level_map -%}
             {%- set key = value | first -%}
-            {{ color_level_map[key] if key in color_level_map else "unknown" }}
+            {{ color_label_map[key] if key in color_level_map else "unknown" }}
           on_error:
             value: last
     - name: Tree Pollen

@@ -31,36 +31,36 @@
           select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(3) > div"
           attribute: "class"
           value_template: >-
-            {%- from 'pollen.jinja' import color_level_map -%}
+            {%- from 'pollen.jinja' import color_label_map -%}
             {%- set key = value | first -%}
-            {{ color_label_map[key] if key in color_level_map else "unknown" }}
+            {{ color_label_map[key] if key in color_label_map else "unknown" }}
           on_error:
             value: last
         - name: Grass Pollen
           select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(4) > div"
           attribute: "class"
           value_template: >-
-            {%- from 'pollen.jinja' import color_level_map -%}
+            {%- from 'pollen.jinja' import color_label_map -%}
             {%- set key = value | first -%}
-            {{ color_label_map[key] if key in color_level_map else "unknown" }}
+            {{ color_label_map[key] if key in color_label_map else "unknown" }}
           on_error:
             value: last
         - name: Weed Pollen
           select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(5) > div"
           attribute: "class"
           value_template: >-
-            {%- from 'pollen.jinja' import color_level_map -%}
+            {%- from 'pollen.jinja' import color_label_map -%}
             {%- set key = value | first -%}
-            {{ color_label_map[key] if key in color_level_map else "unknown" }}
+            {{ color_label_map[key] if key in color_label_map else "unknown" }}
           on_error:
             value: last
         - name: Mould Spores
           select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(6) > div"
           attribute: "class"
           value_template: >-
-            {%- from 'pollen.jinja' import color_level_map -%}
+            {%- from 'pollen.jinja' import color_label_map -%}
             {%- set key = value | first -%}
-            {{ color_label_map[key] if key in color_level_map else "unknown" }}
+            {{ color_label_map[key] if key in color_label_map else "unknown" }}
           on_error:
             value: last
     - name: Tree Pollen

@@ -152,7 +152,7 @@ template:
         device_class: duration
         unit_of_measurement: s
         state: >
-          {% set threshold = states('input_number.battery_shutdown_threshold') | int(0) %}
+          {% set threshold = states('number.output_shutdown_capacity') | int(0) %}
           {% set battery_status = states('sensor.battery_status') %}
           {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
           {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
@@ -163,7 +163,7 @@ template:
           {% endif %}
         attributes:
           time_when_at_shutdown_threshold: >-
-            {% set threshold = states('input_number.battery_shutdown_threshold') | int(0) %}
+            {% set threshold = states('number.output_shutdown_capacity') | int(0) %}
             {% set battery_status = states('sensor.battery_status') %}
             {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
             {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
@@ -174,7 +174,7 @@ template:
               {{ 0 | as_datetime }}
             {% endif %}
           time_when_at_shutdown_threshold_relative: >-
-            {% set threshold = states('input_number.battery_shutdown_threshold') | int(0) %}
+            {% set threshold = states('number.output_shutdown_capacity') | int(0) %}
             {% set battery_status = states('sensor.battery_status') %}
             {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
             {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
@@ -471,17 +471,6 @@ input_boolean:
   full_battery_notification_governor:
     name: Full Battery Notification Governor
     icon: mdi:speedometer
-
-input_number:
-  battery_shutdown_threshold:
-    name: "Backup Battery Shutdown Threshold"
-    icon: mdi:battery-alert-variant-outline
-    min: 0
-    max: 100
-    initial: 20
-    step: 1
-    mode: box
-    unit_of_measurement: "%"
 
 automation:
   - alias: "Notify If Grid Feed Status Changed"

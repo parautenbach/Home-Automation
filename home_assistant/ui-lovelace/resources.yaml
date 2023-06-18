@@ -360,7 +360,7 @@ cards:
               - entity: sensor.battery_state_of_charge
                 name: Charge
                 color: var(--custom-color-blue)
-              - entity: input_number.battery_shutdown_threshold
+              - entity: number.output_shutdown_capacity
                 name: Charge Threshold
                 color: var(--custom-color-gray)
               - entity: sensor.battery_power
@@ -389,7 +389,7 @@ cards:
               - entity: sensor.battery_state_of_charge
                 name: Charge
                 color: var(--custom-color-blue)
-              - entity: input_number.battery_shutdown_threshold
+              - entity: number.output_shutdown_capacity
                 name: Charge Threshold
                 color: var(--custom-color-gray)
               - entity: sensor.capacity_charge_point

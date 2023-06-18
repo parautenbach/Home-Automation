@@ -466,10 +466,11 @@ utility_meter:
     cycle: daily
 
 input_boolean:
-  # avoid jitter when we're at 100% and the battery is trickling
-  # let the batter drop to 90% or less before we'll notify again at 100%
-  full_battery_notification_governor:
-    name: Full Battery Notification Governor
+  # avoid jitter when we're around a charge point and the battery is trickling
+  # let the batter drop a certain amount or less before we'll notify again at
+  # the charge point value, a multiple of 10% or when full
+  battery_notification_governor:
+    name: Battery Notification Governor
     icon: mdi:speedometer
 
 automation:
@@ -582,7 +583,7 @@ automation:
           {{ (battery_soc == battery_soc // 10 * 10 or battery_soc == charge_point) and battery_soc > 35 }}
     condition:
       - condition: state
-        entity_id: input_boolean.full_battery_notification_governor
+        entity_id: input_boolean.battery_notification_governor
         state: "off"
     action:
       - variables:
@@ -607,27 +608,36 @@ automation:
             # https://companion.home-assistant.io/docs/notifications/notifications-basic#replacing
             url: homeassistant://navigate/lovelace/resources
             tag: "backup-power-battery-update"
-      # on when full, off when 90
       # this is basically hysteresis
       # https://www.home-assistant.io/integrations/threshold/
       - if:
           - condition: template
-            value_template: "{{ battery_soc == 100 }}"
+            value_template: >-
+              {% set current_charge_point = states('sensor.capacity_charge_point') | int(0) %}
+              {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
+              {{ battery_soc == current_charge_point or battery_soc == battery_soc // 10 * 10 }}
         then:
           - service: input_boolean.turn_on
             target:
-              entity_id: input_boolean.full_battery_notification_governor
+              entity_id: input_boolean.battery_notification_governor
   - alias: "Reset Full Battery Notification Governor"
     id: "0ec6fde8-8919-4784-99f4-e7a0ffc7c71f"
     initial_state: true
     trigger:
-      - platform: numeric_state
+      - platform: state
         entity_id: sensor.battery_state_of_charge
-        below: 91
+    condition:
+      - condition: template
+        value_template: >-
+          {% set current_charge_point = states('sensor.capacity_charge_point') | int(0) %}
+          {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
+          {{ battery_soc <= current_charge_point - 5 }}
+          {# doesn't seem like we need to do the below; first trialling what we have above #}
+          {# battery_soc <= current_charge_point - 5 or battery_soc == battery_soc // 10 * 10 #}
     action:
       - service: input_boolean.turn_off
         target:
-          entity_id: input_boolean.full_battery_notification_governor
+          entity_id: input_boolean.battery_notification_governor
   - alias: "Backup Power Battery Critical Alert"
     id: "e40cf655-f2fd-4c12-91ca-1a4775c8ae7a"
     initial_state: true

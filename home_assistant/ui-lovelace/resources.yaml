@@ -540,6 +540,111 @@ cards:
               attribute: time_when_at_shutdown_threshold_relative
               format: datetime
               name: Shutdown Time
+      - type: entities
+        title: Settings
+        icon: mdi:cog
+        card_mod:
+          style: |
+            .icon {
+              color: var(--paper-item-icon-color);
+            }
+        show_header_toggle: false
+        entities:
+          - type: custom:fold-entity-row
+            head:
+              type: section
+              label: Charge Points
+            entities:
+              - type: custom:multiple-entity-row
+                entity: switch.grid_charge_point_1
+                name: 01:00-05:00
+                icon: mdi:clock-time-four-outline
+                state_header: Grid
+                style:
+                  text-align: right
+                tap_action:
+                  action: toggle
+                  confirmation: true
+                entities:
+                  - entity: number.capacity_point_1
+                    name: Target
+                    style:
+                      text-align: right
+              - type: custom:multiple-entity-row
+                entity: switch.grid_charge_point_2
+                name: 05:00-08:00
+                icon: mdi:clock-time-four-outline
+                state_header: Grid
+                style:
+                  text-align: right
+                tap_action:
+                  action: toggle
+                  confirmation: true
+                entities:
+                  - entity: number.capacity_point_2
+                    name: Target
+                    style:
+                      text-align: right
+              - type: custom:multiple-entity-row
+                entity: switch.grid_charge_point_3
+                name: 08:00-13:00
+                icon: mdi:clock-time-four-outline
+                state_header: Grid
+                style:
+                  text-align: right
+                tap_action:
+                  action: toggle
+                  confirmation: true
+                entities:
+                  - entity: number.capacity_point_3
+                    name: Target
+                    style:
+                      text-align: right
+              - type: custom:multiple-entity-row
+                entity: switch.grid_charge_point_4
+                name: 13:00-17:00
+                icon: mdi:clock-time-four-outline
+                state_header: Grid
+                style:
+                  text-align: right
+                tap_action:
+                  action: toggle
+                  confirmation: true
+                entities:
+                  - entity: number.capacity_point_4
+                    name: Target
+                    style:
+                      text-align: right
+              - type: custom:multiple-entity-row
+                entity: switch.grid_charge_point_5
+                name: 17:00-21:00
+                icon: mdi:clock-time-four-outline
+                state_header: Grid
+                style:
+                  text-align: right
+                tap_action:
+                  action: toggle
+                  confirmation: true
+                entities:
+                  - entity: number.capacity_point_5
+                    name: Target
+                    style:
+                      text-align: right
+              - type: custom:multiple-entity-row
+                entity: switch.grid_charge_point_6
+                name: 21:00-01:00
+                icon: mdi:clock-time-four-outline
+                state_header: Grid
+                style:
+                  text-align: right
+                tap_action:
+                  action: toggle
+                  confirmation: true
+                entities:
+                  - entity: number.capacity_point_6
+                    name: Target
+                    style:
+                      text-align: right
   - type: vertical-stack
     cards:
       - type: custom:swipe-card

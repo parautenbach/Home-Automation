@@ -467,6 +467,8 @@ sensor.solar_energy_utilisation_today:
   state_class: total_increasing
 sensor.daily_grid_feed_outage_time:
   state_class: total_increasing
+sensor.temperature_difference:
+  state_class: measurement
 
 # state classes
 # https://developers.home-assistant.io/docs/core/entity/sensor/

@@ -255,21 +255,36 @@ cards:
                 color: var(--custom-color-yellow)
               - value: 5
                 color: var(--custom-color-red)
-      - type: statistics-graph
-        entities:
-          - entity: sensor.office_temperature
-            name: Living Room
-          - entity: sensor.main_bedroom_ht_temperature
-            name: Main Bedroom
-          - entity: sensor.bedroom_ht_temperature
-            name: Bedroom
-          - entity: sensor.outside_temperature
-            name: Outside
-        days_to_show: 30
-        period: day
-        chart_type: line
-        stat_types:
-          - mean
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+          - type: statistics-graph
+            entities:
+              - entity: sensor.office_temperature
+                name: Living Room
+              - entity: sensor.main_bedroom_ht_temperature
+                name: Main Bedroom
+              - entity: sensor.bedroom_ht_temperature
+                name: Bedroom
+              - entity: sensor.outside_temperature
+                name: Outside
+            days_to_show: 30
+            period: day
+            chart_type: line
+            stat_types:
+              - mean
+          - type: statistics-graph
+            entities:
+              - entity: sensor.temperature_difference
+                name: Temperature Difference
+            days_to_show: 30
+            period: day
+            chart_type: line
+            stat_types:
+              - mean
   - type: vertical-stack
     cards:
       - type: custom:swipe-card

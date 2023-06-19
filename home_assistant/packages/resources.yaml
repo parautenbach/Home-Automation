@@ -3,6 +3,7 @@
 template:
   - binary_sensor:
       - name: "Grid Feed"
+        unique_id: "66590cb5-102a-4399-8d05-24ff17b96aba"
         state: "{{ states('sensor.grid_frequency') | int(0) > 0 }}"
         device_class: power
         icon: >-
@@ -266,6 +267,7 @@ template:
           - number.capacity_point_6
     sensor:
       - name: "Capacity Charge Point"
+        unique_id: "12b69471-fdbc-4f9a-9a75-960545211e3e"
         state: >-
           {# these times must match the work mode timers on the inverter #}
           {% set time = now().strftime('%H:%M') %}

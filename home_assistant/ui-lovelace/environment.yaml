@@ -418,6 +418,10 @@ cards:
         stat_types:
           - mean
         hide_legend: true
+      - type: markdown
+        content: >
+          [Cape Town Dam Levels](https://www.capetown.gov.za/Family%20and%20home/residential-utility-services/residential-water-and-sanitation-services/this-weeks-dam-levels)</br>
+          [Western Cape Dam Levels](https://www.dws.gov.za/Hydrology/Weekly/ProvinceWeek.aspx?region=WC)
   - type: vertical-stack
     title: Fire
     cards:

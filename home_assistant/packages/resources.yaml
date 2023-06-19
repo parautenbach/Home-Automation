@@ -326,7 +326,7 @@ template:
       - platform: time_pattern
         hours: "*"
         minutes: "*"
-        seconds: 10
+        seconds: "/10"
     binary_sensor:
       - name: "SolarAssistant Activity"
         state: >-

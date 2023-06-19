@@ -728,8 +728,9 @@ turn_on_light_group_timers:
           - service: timer.start
             target:
               entity_id: "{{ state_attr(light_group, 'entity_id')[repeat.index - 1] | replace('light.', 'timer.') ~ '_timer' }}"
-            data:
-              duration: "00:03:00"
+            # use the default timer value since different lights could have different durations
+            # data:
+            #   duration: "00:03:00"
 
 # https://community.home-assistant.io/t/yaml-light-fader-for-light-entities-that-dont-support-transition/215508
 # https://community.home-assistant.io/t/how-can-i-make-automations-with-transition-while-the-device-doesnt-support-it/357035/8

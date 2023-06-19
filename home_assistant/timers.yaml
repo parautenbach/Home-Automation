@@ -20,8 +20,9 @@ foyer_timer:
 kitchen_counter_timer:
   duration: "00:03:00"
   restore: true
+# this is not a typo: 30s, because we don't want the hallway light to wake up people even though it's dim and red
 hallway_timer:
-  duration: "00:03:00"
+  duration: "00:00:30"
   restore: true
 bedroom_bedlamp_timer:
   duration: "00:3:00"

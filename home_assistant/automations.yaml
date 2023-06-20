@@ -1484,7 +1484,7 @@
   action:
     - service: notify.mobile_app_ceres
       data:
-        title: "Home"
+        title: "Internet"
         message: "The Internet is {{ 'available' if is_state('binary_sensor.internet_connection', 'on') else 'unavailable' }}."
         data:
           group: "home-internet"
@@ -1511,7 +1511,7 @@
   action:
     - service: notify.mobile_app_ceres
       data:
-        title: "Home"
+        title: "Internet"
         message: "The {{ state_attr(trigger.entity_id, 'friendly_name') | lower }} is unavailable."
         data:
           group: "home-internet"
@@ -1526,7 +1526,7 @@
   action:
     - service: notify.mobile_app_ceres
       data:
-        title: "Home"
+        title: "Power"
         message: >-
           {% set after = "" %}
           {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}

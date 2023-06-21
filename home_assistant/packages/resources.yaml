@@ -699,7 +699,7 @@ automation:
           - service: input_boolean.turn_on
             target:
               entity_id: input_boolean.battery_notification_governor
-  - alias: "Reset Full Battery Notification Governor"
+  - alias: "Reset Battery Notification Governor"
     id: "0ec6fde8-8919-4784-99f4-e7a0ffc7c71f"
     initial_state: true
     trigger:
@@ -710,7 +710,8 @@ automation:
         value_template: >-
           {% set current_charge_point = states('sensor.capacity_charge_point') | int(0) %}
           {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
-          {{ battery_soc <= current_charge_point - 5 }}
+          {# don't make this a multiple of 5 or 10, otherwise we'll have a race condition with the automation that notifies #}
+          {{ (battery_soc - current_charge_point) | abs >= 3 }}
           {# doesn't seem like we need to do the below; first trialling what we have above #}
           {# battery_soc <= current_charge_point - 5 or battery_soc == battery_soc // 10 * 10 #}
     action:

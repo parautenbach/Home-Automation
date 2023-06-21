@@ -262,7 +262,7 @@ cards:
         - automation.open_the_gate_when_arriving_home
         - automation.pollen_levels_update
         # - automation.proximity_updates
-        - automation.reset_full_battery_notification_governor
+        - automation.reset_battery_notification_governor
         - automation.reset_wake_up_time
         - automation.restore_smart_bulb_statuses_after_power_restored
         - automation.revert_cleaning_day_lights

@@ -332,6 +332,17 @@ template:
         state: >-
           {{ states.sensor.solarassistant_activity_counter.last_updated >= now() - timedelta(seconds=10) }}
         device_class: running
+  # solarassistant should actually provide this as a sensor, but they only provide a control
+  # don't want to use this in the frontend, in case someone changes it accidentally
+  # can still change it if you go to the device though...
+  - trigger:
+      - platform: state
+        entity_id: number.output_shutdown_capacity
+    sensor:
+      name: "Output Shutdown Capacity"
+      icon: mdi:ray-vertex
+      unit_of_measurement: "%"
+      state: "{{ states('number.output_shutdown_capacity') }}"
 
 sensor:
   # digital power meter in db

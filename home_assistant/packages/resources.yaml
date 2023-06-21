@@ -830,3 +830,28 @@ automation:
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
+  - alias: "Notify If Charge Shutdown Threshold Changed"
+    id: "cc6edc71-cbb9-44e7-972b-a1e6e7589aef"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: number.output_shutdown_capacity
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Backup Power System"
+          message: >-
+            {% set from = trigger.from_state.state | int(0) %}
+            {% set to = trigger.to_state.state | int(0) %}
+            {% set user_id = states.context.user_id %}
+            {% set triggered_by = (states.person | selectattr('attributes.user_id','==', user_id)) | list %}
+            {% set name = "the system" if not triggered_by else state_attr((triggered_by | first).entity_id, "friendly_name").split()[0] %}
+            The backup power battery shutdown threshold has been changed from {{ from }}% to {{ to }}% by {{ name }}.
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/resources
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 1.0

@@ -321,7 +321,6 @@ template:
             {# 21:00-01:00 #}
             {{ states('switch.grid_charge_point_6') }}
           {% endif %}
-  # todo: switch grid on for charge point if still below by certain time
   - trigger:
       - platform: time_pattern
         hours: "*"
@@ -332,6 +331,65 @@ template:
         state: >-
           {{ states.sensor.solarassistant_activity_counter.last_updated >= now() - timedelta(seconds=10) }}
         device_class: running
+  - trigger:
+      - platform: state
+        entity_id: sensor.average_solar_energy_forecast_today
+        not_to:
+          - "unavailable"
+          - "unknown"
+    sensor:
+      name: "Charge Mode"
+      icon: mdi:tune
+      device_class: enum
+      state: >-
+        {% set forecast = states('sensor.average_solar_energy_forecast_today') | int(0) %}
+        {# hysteresis #}
+        {% if forecast >= 8 %}
+          optimistic
+        {% elif forecast <= 7 %}
+          pessimistic
+        {% else %}
+          {{ this.state }}
+        {% endif %}
+      attributes:
+        settings: >-
+          {# 1: 01:00-05:00 #}
+          {# 2: 05:00-08:00 #}
+          {# 3: 08:00-13:00 #}
+          {# 4: 13:00-17:00 #}
+          {# 5: 17:00-21:00 #}
+          {# 6: 21:00-01:00 #}
+          {# (int, bool): (battery soc, grid charge allowed) #}
+          {% set mappings =
+            {
+              'optimistic': {
+                  1: (50, True),
+                  2: (45, False),
+                  3: (60, False),
+                  4: (75, False),
+                  5: (85, True),
+                  6: (85, True)
+                },
+              'pessimistic': {
+                  1: (50, True),
+                  2: (60, True),
+                  3: (60, True),
+                  4: (75, True),
+                  5: (80, True),
+                  6: (80, True)
+              }
+            }
+          %}
+          {% set forecast = states('sensor.average_solar_energy_forecast_today') | int(0) %}
+          {# hysteresis #}
+          {% if forecast >= 8 %}
+            {% set mode = 'optimistic' %}
+          {% elif forecast <= 7 %}
+            {% set mode = 'pessimistic' %}
+          {% else %}
+            {% set mode = this.state %}
+          {% endif %}
+          {{ mappings[mode] }}
   # solarassistant should actually provide this as a sensor, but they only provide a control
   # don't want to use this in the frontend, in case someone changes it accidentally
   # can still change it if you go to the device though...
@@ -743,3 +801,32 @@ automation:
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/devices
+
+  - alias: "Set Charge Points"
+    id: "5bdbcbfd-243a-4428-a6f3-ed2f98aec603"
+    initial_state: true
+    trigger:
+      - platform: time
+        at: "04:00:00"
+    action:
+      - repeat:
+          count: "{{ state_attr('sensor.charge_mode', 'settings').keys() | length }}"
+          sequence:
+            - service: number.set_value
+              target:
+                entity_id: "number.capacity_point_{{ repeat.index }}"
+              data:
+                value: "{{ state_attr('sensor.charge_mode', 'settings')[repeat.index][0] }}"
+            - service: "switch.turn_{{ 'on' if state_attr('sensor.charge_mode', 'settings')[repeat.index][1] else 'off' }}"
+              target:
+                entity_id: "switch.grid_charge_point_{{ repeat.index }}"
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Backup Power System"
+          message: >-
+            {% set mode = states('sensor.charge_mode') %}
+            {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) | round(1) %}
+            The backup power system's charging map has been set to {{ mode }}. The solar energy production forecast for today is {{ forecast }}kWh.
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/resources

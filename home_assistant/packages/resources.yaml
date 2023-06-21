@@ -830,6 +830,31 @@ automation:
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
+
+  - alias: "Send Daily Solar Summary"
+    id: "dd8cd984-90f1-4a9d-b6bb-5411085448b5"
+    initial_state: true
+    trigger:
+      - platform: sun
+        event: sunset
+        offset: "00:30:00"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Solar"
+          message: >-
+            {% set consumption = states('sensor.daily_solar_energy_consumption') | float(0) %}
+            {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) | round(1) %}
+            {% set utilisation = states('sensor.solar_energy_utilisation_today') | int(0) %}
+            {% if utilisation == 100 %}
+              You have utilised all of the forecasted solar energy today ({{ consumption }}kWh).
+            {% else %}
+              You have utilised {{ utilisation }}% ({{ consumption }}kWh) of the forecasted solar energy today ({{ forecast }}kWh).
+            {% endif %}
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/resources
+
   - alias: "Notify If Charge Shutdown Threshold Changed"
     id: "cc6edc71-cbb9-44e7-972b-a1e6e7589aef"
     initial_state: true

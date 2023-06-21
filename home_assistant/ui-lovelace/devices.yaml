@@ -269,7 +269,9 @@ cards:
         - automation.save_last_smart_bulb_state
         - automation.see_mobile_devices
         - automation.send_backup_power_battery_update
+        - automation.send_daily_solar_summary
         - automation.set_backup_power_warning_light_brightness
+        - automation.set_charge_points
         - automation.set_dark_theme
         - automation.set_light_theme
         - automation.set_pieter_s_driving_state

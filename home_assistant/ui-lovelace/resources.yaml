@@ -170,7 +170,7 @@ cards:
       - type: energy-solar-graph
       - type: entities
         entities:
-          - entity: sensor.energy_production_today
+          - entity: sensor.average_solar_energy_forecast_today
             name: Production Forecast Today
           - entity: sensor.solar_production_peak_today
             name: Peak Time Forecast Today

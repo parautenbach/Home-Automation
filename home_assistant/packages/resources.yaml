@@ -204,11 +204,11 @@ template:
         unit_of_measurement: "%"
         state: >
           {% set consumption = states('sensor.daily_solar_energy_consumption') | float(0) %}
-          {% set production = states('sensor.energy_production_today') | float(0) %}
+          {% set production = states('sensor.average_solar_energy_forecast_today') | float(0) %}
           {{ min((consumption / production * 100) | int(0), 100) }}
         icon: >-
           {% set consumption = states('sensor.daily_solar_energy_consumption') | float(0) %}
-          {% set production = states('sensor.energy_production_today') | float(0) %}
+          {% set production = states('sensor.average_solar_energy_forecast_today') | float(0) %}
           {% set yield = min((consumption / production * 100) | int(0), 100) %}
           {% set index = (yield/12.5) | int(0) %}
           {% if 0 < index <= 8 %}
@@ -416,6 +416,14 @@ sensor:
     type: time  # duration
     start: "{{ now().replace(hour=0, minute=0, second=0) }}"
     end: "{{ now() }}"
+  # https://github.com/Limych/ha-average
+  # device class
+  - platform: average
+    name: Average Solar Energy Forecast Today
+    start: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    end: '{{ now() }}'
+    entities:
+      - sensor.energy_production_today
 
 mqtt:
   binary_sensor:

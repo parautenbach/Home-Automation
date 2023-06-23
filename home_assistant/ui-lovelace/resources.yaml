@@ -444,6 +444,20 @@ cards:
           type: entities
           show_header_toggle: false
           entities:
+            - entity: sensor.charge_mode
+              name: Charge Mode
+              style: &battery_charge_mode_mods
+                hui-generic-entity-row:
+                  $:
+                    .: |
+                      .state {
+                        color:
+                          {%- if states('sensor.charge_mode') == 'Optimistic' -%}
+                            var(--custom-color-green);
+                          {%- else -%}
+                            var(--custom-color-red);
+                          {%- endif -%}
+                      }
             - entity: sensor.battery_state_of_charge
               name: State of Charge
               style: &battery_state_of_charge_mods
@@ -490,6 +504,8 @@ cards:
           type: entities
           show_header_toggle: false
           entities:
+            - entity: sensor.charge_mode
+              name: Charge Mode
             - entity: sensor.battery_state_of_charge
               name: State of Charge
               style: *battery_state_of_charge_mods
@@ -519,6 +535,8 @@ cards:
           type: entities
           show_header_toggle: false
           entities:
+            - entity: sensor.charge_mode
+              name: Charge Mode
             - entity: sensor.battery_state_of_charge
               name: State of Charge
               style: *battery_state_of_charge_mods

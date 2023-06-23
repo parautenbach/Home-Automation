@@ -345,9 +345,9 @@ template:
         {% set forecast = states('sensor.average_solar_energy_forecast_today') | int(0) %}
         {# hysteresis #}
         {% if forecast >= 8 %}
-          optimistic
+          Optimistic
         {% elif forecast <= 7 %}
-          pessimistic
+          Pessimistic
         {% else %}
           {{ this.state }}
         {% endif %}
@@ -825,7 +825,7 @@ automation:
         data:
           title: "Backup Power System"
           message: >-
-            {% set mode = states('sensor.charge_mode') %}
+            {% set mode = states('sensor.charge_mode') | lower %}
             {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) | round(1) %}
             The backup power system's charging map has been set to {{ mode }}. The solar energy production forecast for today is {{ forecast }}kWh.
           data:

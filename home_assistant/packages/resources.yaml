@@ -809,6 +809,8 @@ automation:
     trigger:
       - platform: time
         at: "04:00:00"
+      - platform: time
+        at: "10:00:00"
     action:
       - repeat:
           count: "{{ state_attr('sensor.charge_mode', 'settings').keys() | length }}"

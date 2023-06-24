@@ -803,6 +803,10 @@ automation:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/devices
 
+  # todo:
+  # 1. condition for low soc or low utilisation
+  # 2. if optimistic and soc by 1pm is still less than x% (or y% delta from target), enable grid mode
+  # 3. if loadshedding
   - alias: "Set Charge Points"
     id: "5bdbcbfd-243a-4428-a6f3-ed2f98aec603"
     initial_state: true

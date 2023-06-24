@@ -363,20 +363,20 @@ template:
           {% set mappings =
             {
               'optimistic': {
-                  1: (50, True),
-                  2: (45, False),
-                  3: (60, False),
-                  4: (75, False),
-                  5: (85, True),
-                  6: (85, True)
+                  1: (50, 'on'),
+                  2: (45, 'off'),
+                  3: (60, 'off'),
+                  4: (75, 'off'),
+                  5: (85, 'on'),
+                  6: (85, 'on')
                 },
               'pessimistic': {
-                  1: (50, True),
-                  2: (60, True),
-                  3: (60, True),
-                  4: (75, True),
-                  5: (80, True),
-                  6: (80, True)
+                  1: (50, 'on'),
+                  2: (60, 'on'),
+                  3: (60, 'on'),
+                  4: (75, 'on'),
+                  5: (80, 'on'),
+                  6: (80, 'on')
               }
             }
           %}
@@ -818,7 +818,7 @@ automation:
                 entity_id: "number.capacity_point_{{ repeat.index }}"
               data:
                 value: "{{ state_attr('sensor.charge_mode', 'settings')[repeat.index][0] }}"
-            - service: "switch.turn_{{ 'on' if state_attr('sensor.charge_mode', 'settings')[repeat.index][1] else 'off' }}"
+            - service: "switch.turn_{{ state_attr('sensor.charge_mode', 'settings')[repeat.index][1] }}"
               target:
                 entity_id: "switch.grid_charge_point_{{ repeat.index }}"
       - service: notify.mobile_app_ceres

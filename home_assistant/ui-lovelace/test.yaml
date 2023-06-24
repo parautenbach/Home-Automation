@@ -54,5 +54,13 @@ cards:
     entities:
       - binary_sensor.doorbell_rang
       - binary_sensor.doorbell_motion_detected
+  # - type: picture-glance
+  #   title: Baby Monitor
+  #   camera_image: camera.baby_monitor
+  #   camera_view: live
+  #   entities:
+  #     - binary_sensor.baby_monitor_motion_detected
+  #     - binary_sensor.baby_monitor_audio_detected
+  #     - switch.baby_monitor_privacy_mode
 
 

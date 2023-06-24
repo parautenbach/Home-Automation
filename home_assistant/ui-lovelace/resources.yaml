@@ -480,6 +480,18 @@ cards:
               name: Charge Point Target
             - entity: binary_sensor.grid_charge_point_status
               name: Grid Charge Point Status
+              style: &grid_charge_point_status_mods
+                hui-generic-entity-row:
+                  $:
+                    .: |
+                      .state {
+                        color:
+                          {%- if is_state(config.entity, 'on') -%}
+                            var(--custom-color-green);
+                          {%- else -%}
+                            var(--custom-color-red);
+                          {%- endif -%}
+                      }
             - entity: sensor.battery_status
               name: Status
               style: &battery_status_mods
@@ -513,6 +525,7 @@ cards:
               name: Charge Point Target
             - entity: binary_sensor.grid_charge_point_status
               name: Grid Charge Point Status
+              style: *grid_charge_point_status_mods
             - entity: sensor.battery_status
               name: Status
               style: *battery_status_mods
@@ -544,6 +557,7 @@ cards:
               name: Charge Point Target
             - entity: binary_sensor.grid_charge_point_status
               name: Grid Charge Point Status
+              style: *grid_charge_point_status_mods
             - entity: sensor.battery_status
               name: Status
               style: *battery_status_mods

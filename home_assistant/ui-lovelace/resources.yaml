@@ -580,8 +580,23 @@ cards:
                 state_header: Grid
                 style:
                   text-align: right
-                tap_action:
+                card_mod: &grid_charge_mod
+                  style: |
+                    .state {
+                      color: {{ 'green' if is_state(config.entity, 'on') else 'red' }};
+                      }
+                    }
+                tap_action: &tap_action
+                  action: more-info
+                  haptic: light
+                # but, but, but!
+                # Note that hold_action and double_tap_action are currently not supported on additional entities.
+                # (this is the main entity!?)
+                # https://github.com/benct/lovelace-multiple-entity-row/issues/251
+                # https://github.com/benct/lovelace-multiple-entity-row/issues/188
+                double_tap_action: &double_tap_action
                   action: toggle
+                  haptic: medium
                   confirmation: true
                 entities:
                   - entity: number.capacity_point_1
@@ -595,9 +610,9 @@ cards:
                 state_header: Grid
                 style:
                   text-align: right
-                tap_action:
-                  action: toggle
-                  confirmation: true
+                card_mod: *grid_charge_mod
+                tap_action: *tap_action
+                double_tap_action: *double_tap_action
                 entities:
                   - entity: number.capacity_point_2
                     name: Target
@@ -610,9 +625,9 @@ cards:
                 state_header: Grid
                 style:
                   text-align: right
-                tap_action:
-                  action: toggle
-                  confirmation: true
+                card_mod: *grid_charge_mod
+                tap_action: *tap_action
+                double_tap_action: *double_tap_action
                 entities:
                   - entity: number.capacity_point_3
                     name: Target
@@ -625,9 +640,9 @@ cards:
                 state_header: Grid
                 style:
                   text-align: right
-                tap_action:
-                  action: toggle
-                  confirmation: true
+                card_mod: *grid_charge_mod
+                tap_action: *tap_action
+                double_tap_action: *double_tap_action
                 entities:
                   - entity: number.capacity_point_4
                     name: Target
@@ -640,9 +655,9 @@ cards:
                 state_header: Grid
                 style:
                   text-align: right
-                tap_action:
-                  action: toggle
-                  confirmation: true
+                card_mod: *grid_charge_mod
+                tap_action: *tap_action
+                double_tap_action: *double_tap_action
                 entities:
                   - entity: number.capacity_point_5
                     name: Target
@@ -655,9 +670,9 @@ cards:
                 state_header: Grid
                 style:
                   text-align: right
-                tap_action:
-                  action: toggle
-                  confirmation: true
+                card_mod: *grid_charge_mod
+                tap_action: *tap_action
+                double_tap_action: *double_tap_action
                 entities:
                   - entity: number.capacity_point_6
                     name: Target

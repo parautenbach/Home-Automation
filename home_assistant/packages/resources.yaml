@@ -344,9 +344,9 @@ template:
       state: >-
         {% set forecast = states('sensor.average_solar_energy_forecast_today') | int(0) %}
         {# hysteresis #}
-        {% if forecast >= 8 %}
+        {% if forecast >= 9 %}
           Optimistic
-        {% elif forecast <= 7 %}
+        {% elif forecast <= 8 %}
           Pessimistic
         {% else %}
           {{ this.state }}
@@ -382,9 +382,9 @@ template:
           %}
           {% set forecast = states('sensor.average_solar_energy_forecast_today') | int(0) %}
           {# hysteresis #}
-          {% if forecast >= 8 %}
+          {% if forecast >= 9 %}
             {% set mode = 'optimistic' %}
-          {% elif forecast <= 7 %}
+          {% elif forecast <= 8 %}
             {% set mode = 'pessimistic' %}
           {% else %}
             {% set mode = this.state %}

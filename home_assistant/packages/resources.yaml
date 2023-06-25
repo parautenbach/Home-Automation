@@ -552,6 +552,11 @@ input_boolean:
     name: Battery Notification Governor
     icon: mdi:speedometer
 
+# input_text:
+#   last_charge_mode:
+#     name: "Last Charge Mode"
+#     icon: mdi:tune
+
 automation:
   - alias: "Notify If Grid Feed Status Changed"
     id: "b233b973-cf9b-44b5-94e4-5f0813e6eefa"
@@ -815,6 +820,11 @@ automation:
         at: "04:00:00"
       - platform: time
         at: "10:00:00"
+    # this would ensure we only get a notification if the mode has changed
+    # but do we really want to do this? perhaps it's good to know every time, so that a human can do a sanity check
+    # condition:
+    #   - condition: template
+    #     value_template: "{{ states('input_text.last_charge_mode') != states('sensor.charge_mode') }}"
     action:
       - repeat:
           count: "{{ state_attr('sensor.charge_mode', 'settings').keys() | length }}"
@@ -837,6 +847,11 @@ automation:
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
+      # - service: input_text.set_value
+      #   target:
+      #     entity_id: input_text.last_charge_mode
+      #   data:
+      #     value: "{{ states('sensor.charge_mode') }}"
 
   - alias: "Send Daily Solar Summary"
     id: "dd8cd984-90f1-4a9d-b6bb-5411085448b5"

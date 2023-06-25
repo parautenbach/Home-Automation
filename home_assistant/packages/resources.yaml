@@ -843,7 +843,7 @@ automation:
           message: >-
             {% set mode = states('sensor.charge_mode') | lower %}
             {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) | round(1) %}
-            The backup power system's charging map has been set to {{ mode }}. The solar energy production forecast for today is {{ forecast }}kWh.
+            The backup power system's charging mode has been set to {{ mode }}. The solar energy production forecast for today is {{ forecast }}kWh.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources

@@ -716,7 +716,7 @@ automation:
           {% set current_charge_point = states('sensor.capacity_charge_point') | int(0) %}
           {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
           {# don't make this a multiple of 5 or 10, otherwise we'll have a race condition with the automation that notifies #}
-          {{ (battery_soc - current_charge_point) | abs >= 3 }}
+          {{ (battery_soc != 100 and battery_soc - current_charge_point) | abs > 5 }}
           {# doesn't seem like we need to do the below; first trialling what we have above #}
           {# battery_soc <= current_charge_point - 5 or battery_soc == battery_soc // 10 * 10 #}
     action:

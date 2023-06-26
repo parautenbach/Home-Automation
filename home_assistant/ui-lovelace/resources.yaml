@@ -172,6 +172,10 @@ cards:
         entities:
           - entity: sensor.average_solar_energy_forecast_today
             name: Production Forecast Today
+          - entity: sensor.energy_current_hour
+            name: Production Forecast Now
+          - entity: sensor.energy_next_hour
+            name: Production Forecast Next Hour
           - entity: sensor.solar_production_peak_today
             name: Peak Time Forecast Today
           - entity: sensor.daily_solar_energy_consumption

@@ -54,13 +54,91 @@ cards:
     entities:
       - binary_sensor.doorbell_rang
       - binary_sensor.doorbell_motion_detected
-  # - type: picture-glance
-  #   title: Baby Monitor
-  #   camera_image: camera.baby_monitor
-  #   camera_view: live
-  #   entities:
-  #     - binary_sensor.baby_monitor_motion_detected
-  #     - binary_sensor.baby_monitor_audio_detected
-  #     - switch.baby_monitor_privacy_mode
-
-
+  # https://www.home-assistant.io/integrations/amcrest/
+  - type: picture-elements
+    entity: camera.baby_monitor_profile000
+    camera_image: camera.baby_monitor_profile000
+    camera_view: live
+    elements:
+      - type: icon
+        icon: "mdi:arrow-up"
+        style:
+          background: "rgba(255, 255, 255, 0.25)"
+          right: 25px
+          bottom: 50px
+        tap_action:
+          action: call-service
+          service: onvif.ptz
+          service_data:
+            tilt: UP
+            speed: 1
+            distance: 0.2
+            move_mode: ContinuousMove
+          target:
+            entity_id: camera.baby_monitor_profile000
+      - type: icon
+        icon: "mdi:arrow-down"
+        style:
+          background: "rgba(255, 255, 255, 0.25)"
+          right: 25px
+          bottom: 0px
+        tap_action:
+          action: call-service
+          service: onvif.ptz
+          service_data:
+            tilt: DOWN
+            speed: 1
+            distance: 0.2
+            move_mode: ContinuousMove
+          target:
+            entity_id: camera.baby_monitor_profile000
+      - type: icon
+        icon: "mdi:arrow-left"
+        style:
+          background: "rgba(255, 255, 255, 0.25)"
+          right: 50px
+          bottom: 25px
+        tap_action:
+          action: call-service
+          service: onvif.ptz
+          service_data:
+            pan: LEFT
+            speed: 1
+            distance: 0.3
+            move_mode: ContinuousMove
+          target:
+            entity_id: camera.baby_monitor_profile000
+      - type: icon
+        icon: "mdi:arrow-right"
+        style:
+          background: "rgba(255, 255, 255, 0.25)"
+          right: 0px
+          bottom: 25px
+        tap_action:
+          action: call-service
+          service: onvif.ptz
+          service_data:
+            pan: RIGHT
+            speed: 1
+            distance: 0.3
+            move_mode: ContinuousMove
+          target:
+            entity_id: camera.baby_monitor_profile000
+      - type: icon
+        icon: "mdi:magnify"
+        style:
+          background: "rgba(255, 255, 255, 0.25)"
+          bottom: 25px
+          right: 25px
+        tap_action:
+          action: call-service
+          service: amcrest.ptz_control
+          service_data:
+            entity_id: camera.lakehouse
+            movement: zoom_in
+        hold_action:
+          action: call-service
+          service: amcrest.ptz_control
+          data:
+            entity_id: camera.lakehouse
+            movement: zoom_out

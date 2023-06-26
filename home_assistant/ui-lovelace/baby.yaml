@@ -1,0 +1,257 @@
+title: Test
+path: test
+icon: mdi:teddy-bear
+badges:
+  - entity: sensor.bedroom_ht_temperature
+    name: Inside
+    card_mod:
+      style: |
+        :host {
+          --label-badge-text-color:
+              {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+              {%- set state = states(config.entity) | float(0) -%}
+              {{ gradient_color(state, temp_degrees_c_human_map) }}
+        }
+  - entity: sensor.outside_temperature
+    name: Outside
+    card_mod:
+      style: |
+        :host {
+          --label-badge-text-color:
+              {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+              {%- set state = states(config.entity) | float(0) -%}
+              {{ gradient_color(state, temp_degrees_c_human_map) }}
+        }
+  - entity: binary_sensor.baby_monitor_motion_alarm
+    name: Motion
+    card_mod:
+      style:
+        ha-state-label-badge:
+          $:
+            ha-label-badge:
+              $: |
+                .value {
+                  color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
+                }
+  - entity: binary_sensor.baby_monitor_sound_alarm
+    name: Sound
+    card_mod:
+      style:
+        ha-state-label-badge:
+          $:
+            ha-label-badge:
+              $: |
+                .value {
+                  color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
+                }
+cards:
+  - type: vertical-stack
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: custom:button-card
+            template:
+              - rgb_light
+              - rgb_light_with_timer
+            variables:
+              profile: bedroom_lilac
+            name: Bedlamp
+            entity: light.bedroom_bedlamp
+            icon: mdi:alarm-light-outline
+          - type: vertical-stack
+            cards:
+              - type: custom:button-card
+                template:
+                  - basic_small
+                  - light_preset
+                variables:
+                  profile: normal
+                entity: light.bedroom_bedlamp
+                name: Normal
+                icon: mdi:brightness-5
+              - type: custom:button-card
+                template:
+                  - basic_small
+                  - light_preset
+                variables:
+                  profile: low
+                entity: light.bedroom_bedlamp
+                name: Low
+                icon: mdi:brightness-6
+          - type: vertical-stack
+            cards:
+              - type: custom:button-card
+                template:
+                  - basic_small
+                  - light_preset
+                variables:
+                  profile: night
+                entity: light.bedroom_bedlamp
+                name: Night
+                icon: mdi:weather-night
+              - type: custom:button-card
+                template:
+                  - basic_small
+                entity: timer.bedroom_bedlamp_timer
+                name: Timer
+                icon: mdi:camera-timer
+                tap_action:
+                  action: call-service
+                  haptic: light
+                  # damn, we can't do pass the duration if we are cancelling the time
+                  # we are providing the duration, because we have to provide it here
+                  # and in the double tap action, otherwise the service call just uses
+                  # whatever the last value was
+                  # [[[
+                  #   if (entity.state == "idle")
+                  #     return "timer.start";
+                  #   else
+                  #     return "timer.cancel";
+                  # ]]]
+                  service: >
+                    [[[
+                      if (states['light.bedroom_bedlamp'].state == "on")
+                        return "timer.start";
+                    ]]]
+                  service_data:
+                    entity_id: entity
+                    duration: "00:03:00"
+                double_tap_action:
+                  action: call-service
+                  haptic: light
+                  service: >
+                    [[[
+                      if (states['light.bedroom_bedlamp'].state == "on")
+                        return "timer.start";
+                    ]]]
+                  service_data:
+                    entity_id: entity
+                    duration: "00:15:00"
+                hold_action:
+                  # timer can be cancelled here
+                  action: more-info
+                  haptic: heavy
+      # https://community.home-assistant.io/t/imou-ranger-2-wifi-cam-with-ptz-and-move-control-button/362833
+      # https://www.home-assistant.io/integrations/amcrest/
+      - type: picture-glance
+        title: Baby Monitor
+        entities:
+          - entity: binary_sensor.baby_monitor_motion_alarm
+          - entity: binary_sensor.baby_monitor_sound_alarm
+          - entity: camera.baby_monitor_profile000
+            tap_action:
+              action: call-service
+              service: onvif.ptz
+              service_data:
+                pan: LEFT
+                speed: 1
+                distance: 0.3
+                move_mode: ContinuousMove
+              target:
+                entity_id: camera.baby_monitor_profile000
+            name: Pan Left
+            show_state: false
+            icon: mdi:arrow-left
+            show_icon: true
+          - entity: camera.baby_monitor_profile000
+            tap_action:
+              action: call-service
+              service: onvif.ptz
+              service_data:
+                tilt: UP
+                speed: 1
+                distance: 0.2
+                move_mode: ContinuousMove
+              target:
+                entity_id: camera.baby_monitor_profile000
+            name: Pan Up
+            show_state: false
+            icon: mdi:arrow-up
+            show_icon: true
+          - entity: camera.baby_monitor_profile000
+            tap_action:
+              action: call-service
+              service: onvif.ptz
+              service_data:
+                pan: RIGHT
+                speed: 1
+                distance: 0.3
+                move_mode: ContinuousMove
+              target:
+                entity_id: camera.baby_monitor_profile000
+            name: Pan right
+            show_state: false
+            icon: mdi:arrow-right
+            show_icon: true
+          - entity: camera.baby_monitor_profile000
+            tap_action:
+              action: call-service
+              service: onvif.ptz
+              service_data:
+                tilt: DOWN
+                speed: 1
+                distance: 0.2
+                move_mode: ContinuousMove
+              target:
+                entity_id: camera.baby_monitor_profile000
+            name: Pan down
+            show_state: false
+            icon: mdi:arrow-down
+            show_icon: true
+        camera_image: camera.baby_monitor_profile000
+        camera_view: live
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+          - type: custom:mini-graph-card
+            name: Temperature
+            entities:
+              - entity: sensor.bedroom_ht_temperature
+                name: Bedroom
+                color: var(--custom-color-magenta)
+              - entity: sensor.outside_temperature
+                name: Outside
+                color: var(--custom-color-red)
+              - entity: sensor.nighttime_number
+                color: var(--custom-color-gray)
+                show_line: false
+                show_points: false
+                show_legend: false
+                y_axis: secondary
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 1
+            line_width: 2
+            show:
+              extrema: true
+              average: true
+              labels_secondary: false
+          - type: custom:mini-graph-card
+            name: Humidity
+            entities:
+              - entity: sensor.bedroom_ht_humidity
+                name: Bedroom
+                color: var(--custom-color-magenta)
+              - entity: sensor.openweathermap_humidity
+                name: Outside
+                color: var(--custom-color-red)
+              - entity: sensor.nighttime_number
+                color: var(--custom-color-gray)
+                show_line: false
+                show_points: false
+                show_legend: false
+                y_axis: secondary
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 2  # every 30 min
+            line_width: 2
+            lower_bound: 0
+            upper_bound: 100
+            show:
+              extrema: true
+              labels_secondary: false

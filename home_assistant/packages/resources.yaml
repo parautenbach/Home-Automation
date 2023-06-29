@@ -764,7 +764,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Backup Power"
+          title: "Energy"
           message: >-
             {% set load_percentage = states('sensor.load_percentage') | int(0) %}
             The backup power inverter load is critical at {{ load_percentage }}%. Consider reducing consumption!

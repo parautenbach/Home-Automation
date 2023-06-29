@@ -162,8 +162,6 @@ cards:
                 ha-card {
                   border: 0px;
                 }
-      - type: markdown
-        content: "[Management interface](http://192.168.0.5/)"
       - type: entities
         show_header_toggle: false
         entities:
@@ -202,7 +200,9 @@ cards:
                   border: 0px;
                 }
       - type: markdown
-        content: "[Management interface](http://192.168.0.6/)"
+        content: >
+          [Front extender](http://192.168.0.5/)</br>
+          [Back extender](http://192.168.0.6/)
   - type: vertical-stack
     title: Join Home Network
     cards:

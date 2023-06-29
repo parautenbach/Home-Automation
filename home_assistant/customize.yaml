@@ -483,6 +483,9 @@ sensor.mould_spores:
   unit_of_measurement: None
 sensor.winelands_fdi:
   unit_of_measurement: None
+# https://github.com/Limych/ha-average/issues/193
+sensor.average_solar_energy_forecast_today:
+  state_class: total_increasing
 
 # state classes
 # https://developers.home-assistant.io/docs/core/entity/sensor/

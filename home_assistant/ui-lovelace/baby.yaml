@@ -200,6 +200,13 @@ cards:
             show_icon: true
         camera_image: camera.baby_monitor_profile000
         camera_view: live
+      - type: history-graph
+        hours_to_show: 24
+        entities:
+          - entity: binary_sensor.baby_monitor_motion_alarm
+            name: Motion
+          - entity: binary_sensor.baby_monitor_sound_alarm
+            name: Sound
       - type: custom:swipe-card
         parameters:
           autoHeight: true

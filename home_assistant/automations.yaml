@@ -1786,6 +1786,24 @@
           transition_duration: 60
     # todo: make a group for all lights except bedlamps?
 
+- alias: "Hallway Light Off When Bedroom Lights Off"
+  id: "d6a989ae-c951-4b0e-baab-cdd49b44269e"
+  initial_state: true
+  trigger:
+    - platform: state
+      entity_id: light.main_bedroom_group
+      to: "off"
+  condition:
+    - condition: time
+      after: "20:00:00"
+      before: "01:00:00"
+    - condition: state
+      entity_id: light.hallway
+      state: "on"
+  action:
+    - service: light.turn_off
+      entity_id: light.hallway
+
 - alias: "Backup Home Assistant"
   id: "57461782-62af-4987-a6ce-46f602fcc417"
   trigger:
@@ -2363,6 +2381,11 @@
         variables:
           light: "{{ trigger.id }}"
           profile: low
+    - service: light.turn_on
+      target:
+        entity_id: light.hallway
+      data:
+        profile: low
 
 - alias: "Toggle Rouvé's Bedside Lamp"
   id: "6bb6fa7a-3385-4d78-9a30-6f49c90adbf9"

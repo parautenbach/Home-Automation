@@ -567,7 +567,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Power"
+          title: "Energy"
           message: >-
             {% set after = "" %}
             {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
@@ -674,7 +674,7 @@ automation:
           battery_soc: "{{ states('sensor.battery_state_of_charge') | int(0) }}"
       - service: notify.mobile_app_ceres
         data:
-          title: "Backup Power"
+          title: "Energy"
           message: >-
             {# we're assuming we will never get to 0% SOC – not coding for that edge case; it will work, but the working will be awkward #}
             {# The backup power battery is {{ 'at ' ~ battery_soc ~ '% and ' ~ battery_status if battery_soc < 100 else 'fully charged.' }} #}
@@ -735,7 +735,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Backup Power"
+          title: "Energy"
           message: >-
             {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
             The backup power battery is critical at {{ battery_soc }}%.
@@ -786,7 +786,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Backup Power System"
+          title: "System"
           message: >-
             {% set after = "" %}
             {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
@@ -839,7 +839,7 @@ automation:
                 entity_id: "switch.grid_charge_point_{{ repeat.index }}"
       - service: notify.mobile_app_ceres
         data:
-          title: "Backup Power System"
+          title: "Energy"
           message: >-
             {% set mode = states('sensor.charge_mode') | lower %}
             {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) | round(1) %}
@@ -863,7 +863,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Solar"
+          title: "Energy"
           message: >-
             {% set consumption = states('sensor.daily_solar_energy_consumption') | float(0) %}
             {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) | round(1) %}
@@ -886,7 +886,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Backup Power System"
+          title: "Energy"
           message: >-
             {% set from = trigger.from_state.state | int(0) %}
             {% set to = trigger.to_state.state | int(0) %}

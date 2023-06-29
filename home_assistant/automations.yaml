@@ -1539,7 +1539,7 @@
   action:
     - service: notify.mobile_app_ceres
       data:
-        title: "Power"
+        title: "Energy"
         message: >-
           {% set after = "" %}
           {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}

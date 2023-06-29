@@ -216,14 +216,14 @@ cards:
         - automation.contractor_mode_enabled_alert
         - automation.contractor_mode_still_enabled_alert
         - automation.cover_left_open_alert
-        - automation.dim_pieter_s_bedside_lamp
+        - automation.dim_bedside_lamp
         - automation.disable_contractor_mode
         - automation.disable_contractor_mode_from_alert_action
         - automation.disable_cover_timeout_from_alert_action
         - automation.disable_guest_mode_from_alert_action
         - automation.disable_guest_mode_when_getting_home
         - automation.disabled_automations
-        - automation.download_damlevels_data
+        - automation.download_dam_levels_data
         - automation.enable_contractor_mode
         - automation.enable_contractor_mode_from_alert_action
         - automation.enable_guest_mode_from_alert_action

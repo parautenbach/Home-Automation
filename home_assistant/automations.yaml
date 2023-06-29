@@ -2289,7 +2289,7 @@
             seconds: 5
         - service: shell_command.shutdown_server
 
-- alias: "Download Damlevels Data"
+- alias: "Download Dam Levels Data"
   id: "0cb4d6ba-5a63-45f7-8adc-efb98724a44e"
   trigger:
     - platform: time
@@ -2334,7 +2334,7 @@
       single_press_profile: pieter
       double_press_profile: security
 
-- alias: "Dim Pieter's Bedside Lamp"
+- alias: "Dim Bedside Lamp"
   # when the one bedlight is turned off, dim the other
   id: "29c4493b-3254-4622-9456-e80ede2cfd99"
   initial_state: true

@@ -1,5 +1,5 @@
-title: Test
-path: test
+title: Baby
+path: baby
 icon: mdi:teddy-bear
 badges:
   - entity: sensor.bedroom_ht_temperature

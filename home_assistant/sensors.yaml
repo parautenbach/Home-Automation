@@ -442,7 +442,7 @@
   name: Wemmershoek Dam Level
   unit_of_measurement: "%"
   value_template: "{{ '%0.2f'| format(value.split(',')[3] | round(2)) }}"
-  scan_interval: 86400
+  scan_interval: 86400  # every 24 hours
 
 # scraping example if i even want to get data from http://www.dwa.gov.za/Hydrology/Weekly/ProvinceWeek.aspx?region=WC instead
 # https://community.home-assistant.io/t/hours-of-daylight/59422/152

@@ -185,7 +185,8 @@
 
 - alias: "Switch On Lights At Wake Up Time"
   id: "5486f6f9-da52-4cf0-8a23-e54f40a80721"
-  initial_state: true
+  # don't reset this after a reload/restart, since we might've disabled this deliberately via the ui
+  # initial_state: true
   trigger:
     - platform: time
       at: input_datetime.wake_up_time
@@ -210,7 +211,7 @@
       target:
         entity_id:
           - light.pieter_bedside
-          - light.rouve_bedside
+          # - light.rouve_bedside
           - light.hallway
       data:
         profile: low
@@ -219,30 +220,31 @@
     # this call does not block/wait, so the two transitions will start at almost the same time
     # and the script runs in parallel mode
     # https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete
-    - service: script.turn_on
-      target:
-        entity_id: script.fade_light
-      data:
-        variables:
-          light: light.pieter_bedside
-          target_brightness_pct: 20
-          transition_duration: 120
-    - service: script.turn_on
-      target:
-        entity_id: script.fade_light
-      data:
-        variables:
-          light: light.rouve_bedside
-          target_brightness_pct: 40
-          transition_duration: 120
-    - service: script.turn_on
-      target:
-        entity_id: script.fade_light
-      data:
-        variables:
-          light: light.hallway
-          target_brightness_pct: 60
-          transition_duration: 120
+    # temporarily removed
+    # - service: script.turn_on
+    #   target:
+    #     entity_id: script.fade_light
+    #   data:
+    #     variables:
+    #       light: light.pieter_bedside
+    #       target_brightness_pct: 20
+    #       transition_duration: 120
+    # - service: script.turn_on
+    #   target:
+    #     entity_id: script.fade_light
+    #   data:
+    #     variables:
+    #       light: light.rouve_bedside
+    #       target_brightness_pct: 40
+    #       transition_duration: 120
+    # - service: script.turn_on
+    #   target:
+    #     entity_id: script.fade_light
+    #   data:
+    #     variables:
+    #       light: light.hallway
+    #       target_brightness_pct: 60
+    #       transition_duration: 120
 
 - alias: "Switch On Night Light If Motion Is Detected"
   id: "096415fb-9e87-411a-aef9-b9ba5fb9696d"
@@ -546,6 +548,10 @@
             - condition: state
               entity_id: input_boolean.skip_next_wake_up_time
               state: "off"
+            # because we might've turned it off alltogether (via the ui)
+            - condition: state
+              entity_id: automation.switch_on_lights_at_wake_up_time
+              state: "on"
         - condition: time
           after: "08:00:00"
           before: "21:00:00"
@@ -556,6 +562,10 @@
     - service: scene.turn_on
       target:
         entity_id: scene.normal_lights
+    - service: light.turn_on
+      entity_id: light.hallway
+      data:
+        profile: normal
 
 - alias: "Lights Off When Loadshedding"
   id: "e4867511-07e3-4873-bd78-ecaec953adb4"

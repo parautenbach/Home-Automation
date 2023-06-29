@@ -205,11 +205,18 @@ template:
         state: >
           {% set consumption = states('sensor.daily_solar_energy_consumption') | float(0) %}
           {% set production = states('sensor.average_solar_energy_forecast_today') | float(0) %}
-          {{ min((consumption / production * 100) | int(0), 100) }}
+          {% if production == 0 %}
+            0
+          {% else %}
+            {{ min((consumption / production * 100) | int(0), 100) }}
+          {% endif %}
         icon: >-
           {% set consumption = states('sensor.daily_solar_energy_consumption') | float(0) %}
           {% set production = states('sensor.average_solar_energy_forecast_today') | float(0) %}
-          {% set yield = min((consumption / production * 100) | int(0), 100) %}
+          {% set yield = 0 %}
+          {% if production == 0 %}
+            {% set yield = min((consumption / production * 100) | int(0), 100) %}
+          {% endif %}
           {% set index = (yield/12.5) | int(0) %}
           {% if 0 < index <= 8 %}
             mdi:circle-slice-{{ index }}

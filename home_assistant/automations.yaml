@@ -2627,7 +2627,7 @@
         message: >-
           {%- macro build_item(sensor) -%}
             {%- set attribute = sensor.split('.')[1] -%}
-            {%- set name = state_attr(sensor, 'friendly_name') -%}
+            {%- set name = state_attr(sensor, 'friendly_name') | capitalize -%}
             {%- set from = trigger.from_state.attributes[attribute] | lower -%}
             {%- set to = trigger.to_state.attributes[attribute] | lower -%}
             {%- if from != to -%}

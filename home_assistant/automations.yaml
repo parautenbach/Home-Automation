@@ -2374,13 +2374,14 @@
       entity_id: light.main_bedroom_group
       state: "on"
   action:
-    - service: script.turn_on
+    - service: light.turn_on
       target:
-        entity_id: script.turn_on_light
+        entity_id: "{{ trigger.id }}"
       data:
-        variables:
-          light: "{{ trigger.id }}"
-          profile: low
+        profile: low
+    - condition: state
+      entity_id: light.hallway
+      state: "on"
     - service: light.turn_on
       target:
         entity_id: light.hallway

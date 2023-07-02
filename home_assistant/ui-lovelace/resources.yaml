@@ -448,6 +448,36 @@ cards:
               state: true
               labels: hover
               labels_secondary: hover
+          - type: custom:mini-graph-card
+            name: Battery
+            icon: mdi:home-battery-outline
+            entities:
+              - entity: sensor.battery_charge_variance
+                name: Charge Variance
+                color: var(--custom-color-blue)
+              - entity: sensor.capacity_charge_point
+                name: Charge Point
+                color: var(--custom-color-gray)
+                y_axis: secondary
+                show_line: false
+                show_points: false
+                show_legend: true
+            hours_to_show: 24
+            hour24: true
+            lower_bound: -80
+            upper_bound: 80
+            lower_bound_secondary: 0
+            upper_bound_secondary: 100
+            smoothing: true
+            points_per_hour: 12
+            line_width: 2
+            show:
+              extrema: true
+              name: true
+              icon: true
+              average: true
+              state: true
+              labels: hover
       - type: conditional
         conditions:
           - entity: sensor.battery_status

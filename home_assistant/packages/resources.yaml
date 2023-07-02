@@ -282,24 +282,13 @@ template:
       - name: "Capacity Charge Point"
         unique_id: "12b69471-fdbc-4f9a-9a75-960545211e3e"
         state: >-
-          {# these times must match the work mode timers on the inverter #}
-          {% set time = now().strftime('%H:%M') %}
-          {# could use a map too; whatever #}
-          {% if '01:00' <= time < '05:00' %}
-            {{ states('number.capacity_point_1') }}
-          {% elif '05:00' <= time < '08:00' %}
-            {{ states('number.capacity_point_2') }}
-          {% elif '08:00' <= time < '13:00' %}
-            {{ states('number.capacity_point_3') }}
-          {% elif '13:00' <= time < '17:00' %}
-            {{ states('number.capacity_point_4') }}
-          {% elif '17:00' <= time < '21:00' %}
-            {{ states('number.capacity_point_5') }}
-          {% else %}
-            {# 21:00-01:00 #}
-            {{ states('number.capacity_point_6') }}
-          {% endif %}
+          {%- from 'resources.jinja' import get_current_entity_id -%}
+          {{ states(get_current_entity_id('number.capacity_point_')) }}
         # not really, but we get dynamic icons this way
+        attributes:
+          current_entity_id: >-
+            {%- from 'resources.jinja' import get_current_entity_id -%}
+            {{ get_current_entity_id('number.capacity_point_') }}
         device_class: battery
         unit_of_measurement: "%"
   - trigger:
@@ -318,22 +307,12 @@ template:
     binary_sensor:
       - name: "Grid Charge Point Status"
         state: >-
-          {# these times must match the work mode timers on the inverter #}
-          {% set time = now().strftime('%H:%M') %}
-          {% if '01:00' <= time < '05:00' %}
-            {{ states('switch.grid_charge_point_1') }}
-          {% elif '05:00' <= time < '08:00' %}
-            {{ states('switch.grid_charge_point_2') }}
-          {% elif '08:00' <= time < '13:00' %}
-            {{ states('switch.grid_charge_point_3') }}
-          {% elif '13:00' <= time < '17:00' %}
-            {{ states('switch.grid_charge_point_4') }}
-          {% elif '17:00' <= time < '21:00' %}
-            {{ states('switch.grid_charge_point_5') }}
-          {% else %}
-            {# 21:00-01:00 #}
-            {{ states('switch.grid_charge_point_6') }}
-          {% endif %}
+          {%- from 'resources.jinja' import get_current_entity_id -%}
+          {{ states(get_current_entity_id('switch.grid_charge_point_')) }}
+        attributes:
+          current_entity_id: >-
+            {%- from 'resources.jinja' import get_current_entity_id -%}
+            {{ get_current_entity_id('switch.grid_charge_point_') }}
   - trigger:
       - platform: time_pattern
         hours: "*"
@@ -726,18 +705,9 @@ automation:
             # https://companion.home-assistant.io/docs/notifications/notifications-basic#replacing
             url: homeassistant://navigate/lovelace/resources
             tag: "backup-power-battery-update"
-      # this is basically hysteresis
-      # https://www.home-assistant.io/integrations/threshold/
-      - if:
-          - condition: template
-            value_template: >-
-              {% set current_charge_point = states('sensor.capacity_charge_point') | int(0) %}
-              {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
-              {{ battery_soc == current_charge_point or battery_soc == battery_soc // 10 * 10 }}
-        then:
-          - service: input_boolean.turn_on
-            target:
-              entity_id: input_boolean.battery_notification_governor
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.battery_notification_governor
   - alias: "Reset Battery Notification Governor"
     id: "0ec6fde8-8919-4784-99f4-e7a0ffc7c71f"
     initial_state: true

@@ -1,0 +1,28 @@
+{# https://www.home-assistant.io/docs/configuration/templating/#reusing-templates #}
+
+{#
+Get the index for the current work mode slot and add it to an entity ID prefix.
+
+:param entity_id_prefix: An entity ID prefix (i.e. including the domain).
+
+:returns: An entity ID after adding an integer to the prefix.
+#}
+{%- macro get_current_entity_id(entity_id_prefix) -%}
+    {%- set time = now().strftime('%H:%M') -%}
+    {#- these times must match the work mode timers on the inverter -#}
+    {#- could use a map too; whatever -#}
+    {%- if '01:00' <= time < '05:00' -%}
+        {{ entity_id_prefix }}1
+    {%- elif '05:00' <= time < '08:00' -%}
+        {{ entity_id_prefix }}2
+    {%- elif '08:00' <= time < '13:00' -%}
+        {{ entity_id_prefix }}3
+    {%- elif '13:00' <= time < '17:00' -%}
+        {{ entity_id_prefix }}4
+    {%- elif '17:00' <= time < '21:00' -%}
+        {{ entity_id_prefix }}5
+    {%- else -%}
+        {#- 21:00-01:00 -#}
+        {{ entity_id_prefix }}6
+    {%- endif -%}
+{%- endmacro -%}

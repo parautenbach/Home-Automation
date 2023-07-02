@@ -486,6 +486,10 @@ sensor.winelands_fdi:
 # https://github.com/Limych/ha-average/issues/193
 sensor.average_solar_energy_forecast_today:
   state_class: total_increasing
+sensor.battery_change_of_charge:
+  icon: mdi:delta
+binary_sensor.grid_charge_point_status:
+  icon: mdi:transmission-tower
 
 # state classes
 # https://developers.home-assistant.io/docs/core/entity/sensor/

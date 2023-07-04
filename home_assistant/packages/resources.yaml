@@ -565,6 +565,12 @@ input_boolean:
     name: Battery Notification Governor
     icon: mdi:speedometer
 
+input_number:
+  last_battery_soc_notification:
+    min: 0
+    max: 100
+    unit_of_measurement: "%"
+
 # input_text:
 #   last_charge_mode:
 #     name: "Last Charge Mode"
@@ -708,6 +714,11 @@ automation:
       - service: input_boolean.turn_on
         target:
           entity_id: input_boolean.battery_notification_governor
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.last_battery_soc_notification
+        data:
+          value: "{{ states('sensor.battery_state_of_charge') }}"
   - alias: "Reset Battery Notification Governor"
     id: "0ec6fde8-8919-4784-99f4-e7a0ffc7c71f"
     initial_state: true
@@ -719,10 +730,10 @@ automation:
         value_template: >-
           {# doesn't seem like we need to do the below; first trialling what we have above #}
           {# battery_soc <= current_charge_point - 5 or battery_soc == battery_soc // 10 * 10 #}
-          {% set current_charge_point = states('sensor.capacity_charge_point') | int(0) %}
+          {% set last_battery_soc_notification = states('input_number.last_battery_soc_notification') | int(0) %}
           {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
           {# don't make the delta a multiple of 5 or 10, otherwise we'll have a race condition with the automation that notifies #}
-          {{ battery_soc < 95 and (battery_soc - current_charge_point) | abs >= 3 }}
+          {{ battery_soc < 95 and (battery_soc - last_battery_soc_notification) | abs > 3 }}
     action:
       - service: input_boolean.turn_off
         target:

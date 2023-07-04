@@ -201,7 +201,7 @@ cards:
                 }
       - type: markdown
         content: >
-          [Front extender](http://192.168.0.5/)</br>
+          [Front extender](http://192.168.0.5/)<br>
           [Back extender](http://192.168.0.6/)
   - type: vertical-stack
     title: Join Home Network

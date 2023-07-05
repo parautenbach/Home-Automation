@@ -521,19 +521,28 @@
       entity_id: binary_sensor.low_light
       to: "on"
     - platform: time_pattern
-      minutes: "*"
+      minutes: "/15"
     - platform: state
       entity_id: binary_sensor.anybody_home
       to: "on"
   condition:
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: light.living_room_lamp
+          state: "off"
+        - condition: numeric_state
+          entity_id: light.hallway
+          attribute: brightness
+          below: 26  # 26/255 ~= 10%
     - condition: state
       entity_id: binary_sensor.electricity_feed
       state: "on"
     - condition: state
-      entity_id: binary_sensor.anybody_home
+      entity_id: binary_sensor.low_light
       state: "on"
     - condition: state
-      entity_id: binary_sensor.low_light
+      entity_id: binary_sensor.anybody_home
       state: "on"
     - condition: or
       conditions:
@@ -542,9 +551,13 @@
             - condition: state
               entity_id: binary_sensor.workday
               state: "on"
-            - condition: time
-              after: "06:00:00"
-              before: "08:00:00"
+            - condition: template
+              # use sunrise
+              value_template: >-
+                {% set n = now() %}
+                {% set start = states('input_datetime.wake_up_time') | today_at + timedelta(minutes=15) %}
+                {% set end = '08:00' | today_at %}
+                {{ start < end and start < n < end }}
             - condition: state
               entity_id: input_boolean.skip_next_wake_up_time
               state: "off"
@@ -555,9 +568,6 @@
         - condition: time
           after: "08:00:00"
           before: "21:00:00"
-    - condition: state
-      entity_id: light.living_room_lamp
-      state: "off"
   action:
     - service: scene.turn_on
       target:

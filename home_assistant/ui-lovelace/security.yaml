@@ -139,7 +139,7 @@ cards:
         hours_to_show: 24
         entities:
           - entity: binary_sensor.foyer_occupancy_homebridge
-            name: Sec. Camera
+            name: Foyer Motion
           - entity: light.foyer
             name: Foyer Light
           - entity: light.living_room_lamp

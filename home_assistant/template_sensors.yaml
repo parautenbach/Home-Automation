@@ -146,4 +146,7 @@
 - binary_sensor:
     # https://www.home-assistant.io/integrations/weather/#condition-mapping
     - name: Is Fair Weather
-      state: "{{ (is_state('weather.openweathermap_hourly', 'sunny') or is_state('weather.openweathermap_hourly', 'partlycloudy')) and state_attr('sun.sun', 'elevation') >= 0 }}"
+      state: >-
+        {{ (is_state('weather.openweathermap_hourly', 'sunny') or
+            is_state('weather.openweathermap_hourly', 'partlycloudy')) and
+           state_attr('sun.sun', 'elevation') >= 0 }}

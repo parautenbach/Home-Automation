@@ -858,12 +858,12 @@ automation:
               data:
                 value: "{{ state_attr('sensor.charge_mode', 'settings')[repeat.index][0] }}"
             - delay:
-                seconds: 1
+                seconds: 5
             - service: "switch.turn_{{ state_attr('sensor.charge_mode', 'settings')[repeat.index][1] }}"
               target:
                 entity_id: "switch.grid_charge_point_{{ repeat.index }}"
             - delay:
-                seconds: 1
+                seconds: 5
       - service: notify.mobile_app_ceres
         data:
           title: "Energy"

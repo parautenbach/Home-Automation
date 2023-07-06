@@ -893,13 +893,16 @@ automation:
           title: "Energy"
           message: >-
             {% set consumption = states('sensor.daily_solar_energy_consumption') | float(0) %}
-            {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) | round(1) %}
+            {% set forecast_today = states('sensor.average_solar_energy_forecast_today') | float(0) | round(1) %}
+            {% set forecast_tomorrow = states('sensor.energy_production_tomorrow') | float(0) | round(1) %}
             {% set utilisation = states('sensor.solar_energy_utilisation_today') | int(0) %}
+            {% set utilisation_message = "" %}
             {% if utilisation == 100 %}
-              You have utilised all of the forecasted solar energy today ({{ consumption }}kWh).
-            {% else %}
-              You have utilised {{ utilisation }}% ({{ consumption }}kWh) of the forecasted solar energy today ({{ forecast }}kWh).
-            {% endif %}
+              {% set utilisation_message = "You have utilised all of the solar energy forecasted for today (" ~ consumption ~ "kWh)." %}
+            {%- else %}
+              {% set utilisation_message = "You have utilised " ~ utilisation ~ "% (" ~ consumption ~ "kWh) of the solar energy forecasted for today (" ~ forecast_today ~ "kWh)." %}
+            {%- endif %}
+            {{ utilisation_message }} The forecast for tomorrow is {{ forecast_tomorrow }}kWh.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources

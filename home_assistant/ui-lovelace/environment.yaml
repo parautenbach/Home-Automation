@@ -347,6 +347,55 @@ cards:
           pagination:
             type: 'bullets'
         cards:
+          - type: horizontal-stack
+            cards:
+              - type: custom:apexcharts-card
+                series:
+                  - entity: sensor.daylight
+                    color: var(--custom-color-yellow)
+                    min: 0
+                    max: 24
+                header:
+                  show: true
+                  title: Daylight
+                  standard_format: true
+                chart_type: radialBar
+                apex_config: &radial_bar_apex_config
+                  legend:
+                    show: false
+                  plotOptions:
+                    radialBar:
+                      startAngle: -170
+                      endAngle: 170
+                      dataLabels:
+                        name:
+                          show: false
+                        value:
+                          show: true
+                          fontSize: 10px
+                          offsetY: -4
+                          # https://stackoverflow.com/questions/63884925/how-to-display-label-value-on-pie-slice-apex-charts
+                          # https://apexcharts.com/docs/multiline-text-and-line-breaks-in-axes-labels/
+                          # the trick to insert a "newline" is to return the strings as an array
+                          formatter: |
+                            EVAL:function (percentage) {
+                              const value =  percentage * 24 / 100;
+                              const hour = Math.floor(value);
+                              const minute = Math.round((value - hour) * 60);
+                              return [`${hour}h${minute.toString().padStart(2, '0')}m`, `(${percentage.toFixed(0)}%)`];
+                            }
+              - type: custom:apexcharts-card
+                series:
+                  - entity: sensor.fair_weather_time
+                    color: var(--custom-color-yellow)
+                    min: 0
+                    max: 24
+                header:
+                  show: true
+                  title: Fair Weather
+                  standard_format: true
+                chart_type: radialBar
+                apex_config: *radial_bar_apex_config
           - type: statistics-graph
             title: Daylight
             entities:

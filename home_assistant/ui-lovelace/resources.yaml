@@ -168,6 +168,57 @@ cards:
         watt_threshold: 1000
         dashboard_link: /energy
       - type: energy-solar-graph
+      - type: horizontal-stack
+        cards:
+          - type: custom:apexcharts-card
+            header:
+              show: true
+              title: Utilisation
+              standard_format: true
+            chart_type: radialBar
+            apex_config: &radial_bar_apex_config
+              legend:
+                show: false
+              plotOptions:
+                radialBar:
+                  startAngle: -173
+                  endAngle: 173
+                  dataLabels:
+                    name:
+                      show: false
+                    value:
+                      show: true
+                      fontSize: 10px
+                      offsetY: 2
+            series:
+              - entity: sensor.solar_energy_utilisation_today
+                color: var(--custom-color-yellow)
+                min: 0
+                max: 100
+          - type: custom:apexcharts-card
+            header:
+              show: true
+              title: Production
+              standard_format: true
+            chart_type: radialBar
+            apex_config: *radial_bar_apex_config
+            series:
+              - entity: sensor.solar_production_share
+                color: var(--custom-color-yellow)
+                min: 0
+                max: 100
+          - type: custom:apexcharts-card
+            header:
+              show: true
+              title: Consumption
+              standard_format: true
+            chart_type: radialBar
+            apex_config: *radial_bar_apex_config
+            series:
+              - entity: sensor.solar_consumption_share
+                color: var(--custom-color-yellow)
+                min: 0
+                max: 100
       - type: entities
         entities:
           - entity: sensor.average_solar_energy_forecast_today

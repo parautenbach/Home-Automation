@@ -556,6 +556,14 @@ utility_meter:
     unique_id: "cafc2bee-06cd-4b60-90eb-66d412a5ec88"
     source: sensor.battery_energy_out
     cycle: daily
+  daily_geyser_energy_consumption:
+    unique_id: "974cdcbf-61ea-462f-870a-f19e8a36c831"
+    source: sensor.geyser_energy
+    cycle: daily
+  monthly_geyser_energy_consumption:
+    unique_id: "9eafc3cb-bdf3-4c37-bdf3-7e84a286319a"
+    source: sensor.geyser_energy
+    cycle: monthly
 
 input_boolean:
   # avoid jitter when we're around a charge point and the battery is trickling

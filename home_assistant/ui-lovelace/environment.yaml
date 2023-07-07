@@ -355,15 +355,13 @@ cards:
                     color: var(--custom-color-yellow)
                     min: 0
                     max: 24
-                header:
-                  show: true
-                  title: Daylight
-                  standard_format: true
                 chart_type: radialBar
-                apex_config: &radial_bar_apex_config
+                apex_config:
+                  title:
+                    text: Daylight
                   legend:
                     show: false
-                  plotOptions:
+                  plotOptions: &radial_bar_apex_config_plot_options
                     radialBar:
                       startAngle: -170
                       endAngle: 170
@@ -390,12 +388,13 @@ cards:
                     color: var(--custom-color-yellow)
                     min: 0
                     max: 24
-                header:
-                  show: true
-                  title: Fair Weather
-                  standard_format: true
                 chart_type: radialBar
-                apex_config: *radial_bar_apex_config
+                apex_config:
+                  title:
+                    text: Fair Weather
+                  legend:
+                    show: false
+                  plotOptions: *radial_bar_apex_config_plot_options
           - type: statistics-graph
             title: Daylight
             entities:

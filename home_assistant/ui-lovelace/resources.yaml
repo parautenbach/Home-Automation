@@ -171,15 +171,13 @@ cards:
       - type: horizontal-stack
         cards:
           - type: custom:apexcharts-card
-            header:
-              show: true
-              title: Utilisation
-              standard_format: true
             chart_type: radialBar
-            apex_config: &radial_bar_apex_config
+            apex_config:
+              title:
+                text: Utilisation
               legend:
                 show: false
-              plotOptions:
+              plotOptions: &radial_bar_apex_config_plot_options
                 radialBar:
                   startAngle: -173
                   endAngle: 173
@@ -196,24 +194,26 @@ cards:
                 min: 0
                 max: 100
           - type: custom:apexcharts-card
-            header:
-              show: true
-              title: Production
-              standard_format: true
             chart_type: radialBar
-            apex_config: *radial_bar_apex_config
+            apex_config:
+              title:
+                text: Production
+              legend:
+                show: false
+              plotOptions: *radial_bar_apex_config_plot_options
             series:
               - entity: sensor.solar_production_share
                 color: var(--custom-color-yellow)
                 min: 0
                 max: 100
           - type: custom:apexcharts-card
-            header:
-              show: true
-              title: Consumption
-              standard_format: true
             chart_type: radialBar
-            apex_config: *radial_bar_apex_config
+            apex_config:
+              title:
+                text: Consumption
+              legend:
+                show: false
+              plotOptions: *radial_bar_apex_config_plot_options
             series:
               - entity: sensor.solar_consumption_share
                 color: var(--custom-color-yellow)

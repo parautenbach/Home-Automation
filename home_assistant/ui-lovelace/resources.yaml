@@ -611,6 +611,7 @@ cards:
           entities:
             - entity: sensor.charge_mode
               name: Charge Mode
+              style: *battery_charge_mode_mods
             - entity: sensor.battery_state_of_charge
               name: State of Charge
               style: *battery_state_of_charge_mods
@@ -643,6 +644,7 @@ cards:
           entities:
             - entity: sensor.charge_mode
               name: Charge Mode
+              style: *battery_charge_mode_mods
             - entity: sensor.battery_state_of_charge
               name: State of Charge
               style: *battery_state_of_charge_mods

@@ -1,4 +1,7 @@
-ha upgrade:
+====================
+HA UPGRADE
+====================
+
 - https://www.home-assistant.io/docs/installation/virtualenv/
 - https://www.home-assistant.io/docs/installation/raspberry-pi
 
@@ -17,7 +20,9 @@ py upgrade:
 - https://community.home-assistant.io/t/python-3-6-upgrade-of-a-virtualenv/21722/162
 - http://blog.ceard.tech/2017/12/upgrading-python-virtual-environment.html
 
-==========
+====================
+PYTHON UPGRADE
+====================
 
 2023-02-05:
 https://devguide.python.org/getting-started/setup-building/
@@ -25,7 +30,7 @@ https://devguide.python.org/getting-started/setup-building/
 download: https://www.python.org/downloads/
 deps: https://devguide.python.org/getting-started/setup-building/#build-dependencies
 ./configure --enable-optimizations
-altinstall: https://docs.python.org/2/using/unix.html
+altinstall: https://docs.python.org/3/using/unix.html
 pip install psycopg2
 
 ==========

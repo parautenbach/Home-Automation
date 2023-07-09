@@ -1,0 +1,26 @@
+{# https://www.home-assistant.io/docs/configuration/templating/#reusing-templates #}
+
+{#
+Convert seconds to a convenient hours and minutes format.
+
+:seconds entity_id_prefix: An entity ID prefix (i.e. including the domain).
+
+:returns: The hours and minutes string, as appropriate for the input.
+#}
+{%- macro sec_to_hour_and_min(seconds) -%}
+  {%- set sec_to_hour_and_min = "" -%}
+  {%- if seconds < 60 -%}
+    {%- set sec_to_hour_and_min = seconds ~ " sec" -%}
+  {%- elif seconds < 60*60 -%}
+    {%- set sec_to_hour_and_min = seconds // 60 ~ " min" -%}
+  {%- else -%}
+    {%- set h = seconds // (60*60) -%}
+    {%- set m = min(((seconds / (60*60) - seconds // (60*60)) * 60) | round(0), 59) -%}
+    {%- if m < 10 -%}
+      {%- set sec_to_hour_and_min = h ~ "h0" ~ m -%}
+    {%- else -%}
+      {%- set sec_to_hour_and_min = h ~ "h" ~ m -%}
+    {%- endif -%}
+  {%- endif -%}
+  {{ sec_to_hour_and_min }}
+{%- endmacro -%}

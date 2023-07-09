@@ -1517,7 +1517,11 @@
     - service: notify.mobile_app_ceres
       data:
         title: "Internet"
-        message: "The Internet is {{ 'available' if is_state('binary_sensor.internet_connection', 'on') else 'unavailable' }}."
+        message: >-
+          {% from 'datetime.jinja' import sec_to_hour_and_min %}
+          {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
+          {% set duration = sec_to_hour_and_min(seconds) %}
+          The Internet {{ 'is unavailable' if trigger.to_state.state == 'off' else 'was unavailable for ' ~  duration }}.
         data:
           group: "home-internet"
           url: homeassistant://navigate/lovelace/internet
@@ -1560,22 +1564,10 @@
       data:
         title: "Energy"
         message: >-
-          {% set after = "" %}
+          {% from 'datetime.jinja' import sec_to_hour_and_min %}
           {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
-          {% if seconds < 60 %}
-            {% set after = seconds ~ " sec" %}
-          {% elif seconds < 60*60 %}
-            {% set after = seconds // 60 ~ " min" %}
-          {% else %}
-            {% set h = seconds // (60*60) %}
-            {% set m = min(((seconds / (60*60) - seconds // (60*60)) * 60) | round(0), 59) %}
-            {% if m < 10 %}
-              {% set after = h ~ "h0" ~ m %}
-            {% else %}
-              {% set after = h ~ "h" ~ m %}
-            {% endif %}
-          {% endif %}
-          The electricity feed has been {{ 'restored after ' ~  after ~ '.' if is_state('binary_sensor.electricity_feed', 'on') else 'cut.' }}
+          {% set after = sec_to_hour_and_min(seconds) %}
+          The electricity feed has been {{ 'restored after ' ~ after ~ '.' if is_state('binary_sensor.electricity_feed', 'on') else 'cut.' }}
         data:
           group: "home-electricity"
           url: homeassistant://navigate/lovelace/resources

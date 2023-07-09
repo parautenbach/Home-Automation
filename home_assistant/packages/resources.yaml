@@ -603,6 +603,7 @@ automation:
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
+            tag: "grid-feed-status"
   - alias: "Update Backup Power Warning Light If Grid Feed Status Changed"
     id: "e6ddb31c-3723-429d-a6c4-38268b831ba9"
     initial_state: true
@@ -806,6 +807,7 @@ automation:
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/devices
+            tag: "solarassistant-bridge-activity"
 
   # todo:
   # 1. condition for low soc or low utilisation

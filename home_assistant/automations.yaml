@@ -1525,6 +1525,7 @@
         data:
           group: "home-internet"
           url: homeassistant://navigate/lovelace/internet
+          tag: "internet-status"
 
 - alias: "Notify If Extender Status Changed"
   id: "3f6dc923-78cf-4615-b9b9-da84d1a48b39"
@@ -1571,6 +1572,7 @@
         data:
           group: "home-electricity"
           url: homeassistant://navigate/lovelace/resources
+          tag: "electricity-feed-status"
 
 - alias: "Switch On Front Door Light When Any Cover Opened"
   id: "2f00ee50-2203-4ba6-a6f2-37052dfba07e"

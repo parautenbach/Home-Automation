@@ -525,6 +525,9 @@
     - platform: state
       entity_id: binary_sensor.anybody_home
       to: "on"
+    - platform: state
+      entity_id: sensor.ceres_battery_state
+      to: 'Not Charging'
   condition:
     - condition: or
       conditions:
@@ -555,9 +558,15 @@
               # use sunrise
               value_template: >-
                 {% set n = now() %}
-                {% set start = states('input_datetime.wake_up_time') | today_at + timedelta(minutes=15) %}
+                {% set wake_up_plus_delta = states('input_datetime.wake_up_time') | today_at + timedelta(minutes=60) %}
+                {% set sunrise = states('sensor.sun_next_rising') | as_datetime %}
+                {% set start = min(wake_up_plus_delta, sunrise) %}
                 {% set end = '08:00' | today_at %}
                 {{ start < end and start < n < end }}
+            # basically, keep the hallway light dim (if switched on earlier) until phone unplugged
+            - condition: state
+              entity_id: sensor.ceres_battery_state
+              state: 'Not Charging'
             - condition: state
               entity_id: input_boolean.skip_next_wake_up_time
               state: "off"

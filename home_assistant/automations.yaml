@@ -82,6 +82,7 @@
     platform: state
     entity_id: binary_sensor.foyer_motion_homebridge
     to: "on"
+  mode: queued
   condition:
     - condition: state
       entity_id: binary_sensor.anybody_home
@@ -902,6 +903,7 @@
     - platform: state
       entity_id: switch.contractor_mode
       to: "on"
+  mode: queued
   action:
     - service: notify.mobile_app_ceres
       data:
@@ -921,6 +923,7 @@
     - platform: state
       entity_id: switch.contractor_mode
       to: "off"
+  mode: queued
   action:
     - service: notify.mobile_app_ceres
       data:
@@ -1264,6 +1267,7 @@
       event_type: timer.finished
       event_data:
         entity_id: timer.rhs_garage_door_timer
+  mode: queued
   condition:
     - condition: or
       conditions:
@@ -1418,6 +1422,7 @@
     to: "closed"
     # prevent false positive due to flaky connectivity or after loadshedding and sensors being unavailable
     not_from: "unavailable"
+  mode: queued
   condition:
     condition: template
     value_template: >-
@@ -1506,6 +1511,7 @@
   trigger:
     - platform: state
       entity_id: binary_sensor.internet_connection
+  mode: queued
   condition:
     - condition: state
       entity_id: binary_sensor.pieter_present
@@ -1560,6 +1566,7 @@
   trigger:
     platform: state
     entity_id: binary_sensor.electricity_feed
+  mode: queued
   action:
     - service: notify.mobile_app_ceres
       data:
@@ -1932,6 +1939,7 @@
     - platform: state
       entity_id: switch.guest_mode
       to: "on"
+  mode: queued
   action:
     - service: notify.mobile_app_ceres
       data:
@@ -1950,6 +1958,7 @@
     - platform: state
       entity_id: switch.guest_mode
       to: "off"
+  mode: queued
   action:
     - service: notify.mobile_app_ceres
       data:
@@ -2709,6 +2718,7 @@
   trigger:
     - platform: time
       at: sensor.loadshedding_start_time
+  mode: single
   condition:
     - condition: state
       entity_id: binary_sensor.gaia_active

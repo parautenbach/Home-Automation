@@ -591,6 +591,7 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.grid_feed
+    mode: queued
     action:
       - service: notify.mobile_app_ceres
         data:

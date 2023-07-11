@@ -23,15 +23,6 @@
       arg: enp3s0
     - type: last_boot
 
-- platform: command_line
-  name: server_cpu_temp
-  command: "cat /sys/class/thermal/thermal_zone0/temp"
-  # not a valid option for this platform
-  # device_class: temperature
-  unit_of_measurement: "°C"
-  value_template: '{{ value | multiply(0.001) | round(2) }}'
-  scan_interval: 60
-
 - platform: template
   sensors:
     solar_angle:
@@ -348,34 +339,6 @@
 - platform: worldclock
   name: sydney
   time_zone: Australia/Sydney
-
-- platform: command_line
-  name: internet_packet_loss
-  command: 'ping -c 5 www.google.com 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
-  unit_of_measurement: "%"
-  value_template: '{{ value | int(0) }}'
-  scan_interval: 180
-
-- platform: command_line
-  name: front_extender_packet_loss
-  command: 'ping -c 5 front_extender 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
-  unit_of_measurement: "%"
-  value_template: '{{ value | int(0) }}'
-  scan_interval: 30
-
-- platform: command_line
-  name: back_extender_packet_loss
-  command: 'ping -c 5 back_extender 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
-  unit_of_measurement: "%"
-  value_template: '{{ value | int(0) }}'
-  scan_interval: 30
-
-- platform: command_line
-  name: thor_disk_usage
-  command: !secret thor_disk_usage_command
-  unit_of_measurement: "%"
-  value_template: '{{ value | int(0) }}'
-  scan_interval: 3600
 
 # https://community.home-assistant.io/t/outdoor-illuminance-template-sensor/228581
 # https://community.home-assistant.io/t/automations-to-turn-on-lights-based-on-actual-season/252830/19

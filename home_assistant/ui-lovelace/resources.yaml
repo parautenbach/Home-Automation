@@ -159,8 +159,7 @@ cards:
       # https://github.com/ulic75/power-flow-card#inverted-entities-example
       - type: custom:power-flow-card
         entities:
-          grid:
-            consumption: sensor.grid_power
+          grid: sensor.grid_power
           battery: sensor.battery_power
           battery_charge: sensor.battery_state_of_charge
           solar: sensor.pv_power

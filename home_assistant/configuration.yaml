@@ -6,6 +6,7 @@ alert: !include alerts.yaml
 automation: !include automations.yaml
 binary_sensor: !include binary_sensors.yaml
 camera: !include cameras.yaml
+command_line: !include command_lines.yaml
 cover: !include covers.yaml
 group: !include groups.yaml
 homekit: !include homekit.yaml

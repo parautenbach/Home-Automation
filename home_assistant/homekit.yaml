@@ -108,3 +108,14 @@
   entity_config:
     camera.doorbell:
       linked_motion_sensor: binary_sensor.doorbell_motion_detected
+      linked_doorbell_sensor: binary_sensor.doorbell_rang
+- name: Baby Monitor
+  port: 21066
+  mode: accessory
+  filter:
+    include_entities:
+      - camera.baby_monitor_profile000
+  entity_config:
+    camera.baby_monitor:
+      linked_motion_sensor: binary_sensor.baby_monitor_motion_alarm
+      linked_doorbell_sensor: binary_sensor.baby_monitor_sound_alarm

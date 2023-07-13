@@ -2363,6 +2363,11 @@
       single_press_profile: pieter
       double_press_profile: security
 
+# i thought it might be good to have the reverse of this too:
+# restore the other lamp to normal mode when the one is turned on, but it's not that simple.
+# firstly, does one really want that? there's no easy way to check what profile was used
+# when it was turned on. for example, say lamp 1 is turned on with the night profile, we don't
+# want lamp 2 to be turned on normally – we'd (probably) want the night profile too.
 - alias: "Dim Bedside Lamp"
   # when the one bedlight is turned off, dim the other
   id: "29c4493b-3254-4622-9456-e80ede2cfd99"

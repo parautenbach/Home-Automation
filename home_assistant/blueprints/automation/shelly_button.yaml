@@ -31,6 +31,14 @@ blueprint:
       description: A light profile
       selector:
         text:
+    # if we want to make this optional:
+    # https://community.home-assistant.io/t/blueprint-optional-input/278810/8
+    triple_press_profile:
+      name: Triple click profile
+      description: A light profile
+      selector:
+        text:
+
 trigger:
   - platform: event
     event_type: shelly.click
@@ -61,3 +69,13 @@ action:
             variables:
               light: !input light_entity_id
               profile: !input double_press_profile
+    - conditions:
+        - '{{ event == "triple" }}'
+      sequence:
+        - service: script.turn_on
+          target:
+            entity_id: script.turn_on_light
+          data:
+            variables:
+              light: !input light_entity_id
+              profile: !input triple_press_profile

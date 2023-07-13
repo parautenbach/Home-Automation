@@ -2362,6 +2362,7 @@
       light_entity_id: light.pieter_bedside
       single_press_profile: pieter
       double_press_profile: security
+      triple_press_profile: bedlamp_night
 
 # i thought it might be good to have the reverse of this too:
 # restore the other lamp to normal mode when the one is turned on, but it's not that simple.
@@ -2415,6 +2416,7 @@
       light_entity_id: light.rouve_bedside
       single_press_profile: rouve
       double_press_profile: security
+      triple_press_profile: bedlamp_night
 
 - alias: "Toggle Dining Room Light"
   id: "3cd02beb-7a1a-440a-9507-fb555ff9bb98"
@@ -2426,6 +2428,7 @@
       light_entity_id: light.dining_room
       single_press_profile: dim
       double_press_profile: security
+      triple_press_profile: night
 
 - alias: "Toggle Hallway Light"
   id: "58a877b7-eed8-4fd7-897c-51eeed892ad7"
@@ -2437,6 +2440,7 @@
       light_entity_id: light.hallway
       single_press_profile: normal
       double_press_profile: security
+      triple_press_profile: night
 
 - alias: "Alert Vacation Start"
   id: "f1be4ad3-042c-4cbd-bb91-99da7bdc5dab"

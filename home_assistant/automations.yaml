@@ -1533,32 +1533,21 @@
           url: homeassistant://navigate/lovelace/internet
           tag: "internet-status"
 
-- alias: "Notify If Extender Status Changed"
-  id: "3f6dc923-78cf-4615-b9b9-da84d1a48b39"
+- alias: "Notify If Front Extender Status Changed"
+  id: "cbe2fc30-6dfd-4008-b1fd-9d18fdeefaf7"
   initial_state: true
-  trigger:
-    - platform: state
-      entity_id:
-        - binary_sensor.front_extender
-        - binary_sensor.back_extender
-      to: "off"
-      for:
-        minutes: 5
-  condition:
-    - condition: state
-      entity_id: binary_sensor.pieter_present
-      state: "on"
-    - condition: time
-      after: "06:00:00"
-      before: "23:00:00"
-  action:
-    - service: notify.mobile_app_ceres
-      data:
-        title: "Internet"
-        message: "The {{ state_attr(trigger.entity_id, 'friendly_name') | lower }} is unavailable."
-        data:
-          group: "home-internet"
-          url: homeassistant://navigate/lovelace/internet
+  use_blueprint:
+    path: internet_extender_availability.yaml
+    input:
+      extender_entity_id: binary_sensor.front_extender
+
+- alias: "Notify If Back Extender Status Changed"
+  id: "55927daa-c6e2-47d9-9d5d-2fcbe3cd9201"
+  initial_state: true
+  use_blueprint:
+    path: internet_extender_availability.yaml
+    input:
+      extender_entity_id: binary_sensor.back_extender
 
 - alias: "Notify If Electricity Feed Status Changed"
   id: "c021b272-5076-45d4-9e40-e2db20ae66b6"

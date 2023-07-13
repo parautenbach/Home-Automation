@@ -169,7 +169,7 @@
   initial_state: true
   trigger:
     - platform: time
-      at: input_datetime.wake_up_time
+      at: "08:00"
   condition:
     - condition: state
       entity_id: binary_sensor.workday

@@ -813,6 +813,11 @@ automation:
       - platform: state
         entity_id:
           - binary_sensor.solarassistant_activity
+        to:
+          - "on"
+          - "off"
+        for:
+          minutes: 1
     action:
       - service: notify.mobile_app_ceres
         data:

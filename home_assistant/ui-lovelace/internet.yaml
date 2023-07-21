@@ -206,6 +206,7 @@ cards:
   - type: vertical-stack
     title: Join Home Network
     cards:
+      # alternative (since 2023.7): https://www.home-assistant.io/integrations/image/
       - type: picture
         # generated with https://qifi.org/
         image: /local/join_home_internet.png

@@ -548,6 +548,9 @@
     - condition: state
       entity_id: binary_sensor.anybody_home
       state: "on"
+    - condition: state
+      entity_id: calendar.housekeeping
+      state: "off"
     - condition: or
       conditions:
         - condition: and

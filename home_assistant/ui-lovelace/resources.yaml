@@ -940,16 +940,32 @@ cards:
               - entity: sensor.monthly_grid_energy_consumption_forecast
                 name: Grid
                 format: precision1
-      - type: statistics-graph
-        title: Daily Geyser Energy
-        entities:
-          - sensor.daily_geyser_energy_consumption
-        hide_legend: true
-        days_to_show: 7
-        period: day
-        chart_type: bar
-        stat_types:
-          - state
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+          - type: statistics-graph
+            title: Daily Geyser Energy Share
+            entities:
+              - sensor.geyser_consumption_share
+            hide_legend: true
+            days_to_show: 7
+            period: day
+            chart_type: bar
+            stat_types:
+              - state
+          - type: statistics-graph
+            title: Daily Geyser Energy
+            entities:
+              - sensor.daily_geyser_energy_consumption
+            hide_legend: true
+            days_to_show: 7
+            period: day
+            chart_type: bar
+            stat_types:
+              - state
       - type: markdown
         title: Loadshedding
         content: "{{ states('sensor.loadshedding_forecast') }}"

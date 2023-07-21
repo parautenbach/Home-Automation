@@ -465,6 +465,8 @@ sensor.daily_solar_energy_consumption:
   state_class: total_increasing
 sensor.solar_energy_utilisation_today:
   state_class: total_increasing
+sensor.geyser_consumption_share:
+  state_class: total_increasing
 sensor.daily_grid_feed_outage_time:
   state_class: total_increasing
 sensor.temperature_difference:

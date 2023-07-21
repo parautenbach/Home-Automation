@@ -259,6 +259,23 @@ template:
           {% else %}
             mdi:circle-outline
           {% endif %}
+      - name: "Geyser Consumption Share"
+        unique_id: "502d81a1-70d7-4b1a-92a8-cf07bc03ac6e"
+        unit_of_measurement: "%"
+        state: >-
+          {% set geyser = states('sensor.daily_geyser_energy_consumption') | float(0) -%}
+          {% set home = states('sensor.daily_home_energy_consumption') | float(0) -%}
+          {{ (geyser/home) | multiply(100) | round(0) }}
+        icon: >-
+          {% set geyser = states('sensor.daily_geyser_energy_consumption') | float(0) -%}
+          {% set home = states('sensor.daily_home_energy_consumption') | float(0) -%}
+          {% set share = (geyser/home) | multiply(100) | round(0) %}
+          {% set index = (share/12.5) | int(0) %}
+          {% if 0 < index <= 8 %}
+            mdi:circle-slice-{{ index }}
+          {% else %}
+            mdi:circle-outline
+          {% endif %}
       - name: "Battery Charge Variance"
         unique_id: "1ec45caf-70f4-4e15-b424-a16e86407b49"
         unit_of_measurement: "%"

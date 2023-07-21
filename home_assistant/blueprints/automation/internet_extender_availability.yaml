@@ -18,14 +18,11 @@ trigger:
   - platform: state
     entity_id: !input extender_entity_id
     # we need to this to prevent triggering on attribute changes
-    from:
-      - "on"
-      - "off"
     to:
       - "on"
       - "off"
     for:
-      seconds: 60
+      minutes: 2
 mode: queued
 condition:
   - condition: state

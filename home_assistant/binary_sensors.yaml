@@ -115,7 +115,7 @@
       #      'rain' in states('weather.openweathermap_hourly') or
       #      'pouring' in states('weather.openweathermap_hourly') }}
       # todo: make input_number helper?
-      value_template: "{{ states('sensor.office_illuminance') | int(0) <= 20 }}"
+      value_template: "{{ states('sensor.office_illuminance') | int(0) <= 25 }}"
     workday:
       friendly_name: Workday Today
       value_template: >

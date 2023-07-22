@@ -818,6 +818,7 @@ automation:
           - "off"
         for:
           minutes: 1
+    mode: queued
     action:
       - service: notify.mobile_app_ceres
         data:

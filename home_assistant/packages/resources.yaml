@@ -934,3 +934,33 @@ automation:
                 name: default
                 critical: 1
                 volume: 1.0
+
+  # todo: devices.yaml
+  - alias: "Notify If Too Far Below Charge Point Target"
+    id: "77692f4f-04fb-4bf3-9c67-69cffb0a4c27"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.battery_charge_variance
+        below: -15
+    condition:
+      - condition: state
+        entity_id: sensor.battery_status
+        state: "Discharging"
+      # perhaps also a condition for only certain times of the day?
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Energy"
+          message: >-
+            {% set charge = states('sensor.battery_state_of_charge') | int(0) %}
+            {% set target = states('sensor.capacity_charge_point') | int(0) %}
+            The backup power battery's charge ({{ charge }}%) is more than 15% below the charge point target ({{ target }}%).
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/resources
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 1.0

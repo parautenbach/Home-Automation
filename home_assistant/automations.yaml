@@ -535,6 +535,9 @@
         - condition: state
           entity_id: light.living_room_lamp
           state: "off"
+        - condition: state
+          entity_id: light.hallway
+          state: "off"
         - condition: numeric_state
           entity_id: light.hallway
           attribute: brightness

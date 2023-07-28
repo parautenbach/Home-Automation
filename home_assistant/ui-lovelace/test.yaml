@@ -134,11 +134,11 @@ cards:
           action: call-service
           service: amcrest.ptz_control
           service_data:
-            entity_id: camera.lakehouse
+            entity_id: camera.baby_monitor_profile000
             movement: zoom_in
         hold_action:
           action: call-service
           service: amcrest.ptz_control
           data:
-            entity_id: camera.lakehouse
+            entity_id: camera.baby_monitor_profile000
             movement: zoom_out

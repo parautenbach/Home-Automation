@@ -222,7 +222,6 @@ cards:
         - automation.disable_cover_timeout_from_alert_action
         - automation.disable_guest_mode_from_alert_action
         - automation.disable_guest_mode_when_getting_home
-        - automation.disabled_automations
         - automation.download_dam_levels_data
         - automation.enable_contractor_mode
         - automation.enable_contractor_mode_from_alert_action

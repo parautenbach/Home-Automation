@@ -2661,7 +2661,7 @@
             {%- set from = trigger.from_state.attributes[attribute] | lower -%}
             {%- set to = trigger.to_state.attributes[attribute] | lower -%}
             {%- if from != to -%}
-              {{ name }}: {{ from }} to {{ to }}
+              {{ name }}: changed {{ from }} to {{ to }}
             {%- else -%}
               {{ name }}: {{ to }}
             {%- endif -%}
@@ -2670,7 +2670,7 @@
           {%- set summary = '' -%}
           {%- set from_state_label = trigger.from_state.attributes.label | lower -%}
           {%- set to_state_label = trigger.to_state.attributes.label | lower -%}
-          {%- if from_state_label != trigger.to_state.attributes.label -%}
+          {%- if from_state_label != to_state_label -%}
             {%- set summary = 'Pollen levels changed from ' ~ from_state_label ~ ' to ' ~ to_state_label ~ '.' -%}
           {%- else -%}
             {%- set summary = 'Pollen levels are ' ~ to_state_label ~ '.' -%}

@@ -93,8 +93,8 @@ cards:
           image_template: '/local/floorplan/mdi-dome-light-${entity.state}.svg'
         - action:
             service: light.toggle
-          element: light.smart_bulb_4
-          entity: light.smart_bulb_4  # music room light
+          element: light.music_room
+          entity: light.music_room  # music room light
           states:
             - state: 'on'
               class: 'light-on'

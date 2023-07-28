@@ -116,6 +116,6 @@
     include_entities:
       - camera.baby_monitor_profile000
   entity_config:
-    camera.baby_monitor:
+    camera.baby_monitor_profile000:
       linked_motion_sensor: binary_sensor.baby_monitor_motion_alarm
-      linked_doorbell_sensor: binary_sensor.baby_monitor_sound_alarm
+      # linked_doorbell_sensor: binary_sensor.baby_monitor_sound_alarm

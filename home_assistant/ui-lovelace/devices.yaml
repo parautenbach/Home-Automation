@@ -657,7 +657,7 @@ cards:
           extrema: true
           average: true
       - type: custom:mini-graph-card
-        name: Solar System
+        name: Backup Power System
         icon: mdi:thermometer
         entities:
           - entity: sensor.inverter_temperature

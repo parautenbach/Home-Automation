@@ -591,6 +591,9 @@ input_boolean:
   battery_notification_governor:
     name: Battery Notification Governor
     icon: mdi:speedometer
+  set_charge_point_error:
+    name: Set Charge Point Error
+    icon: mdi:alert-outline
 
 input_number:
   last_battery_soc_notification:
@@ -598,10 +601,10 @@ input_number:
     max: 100
     unit_of_measurement: "%"
 
-# input_text:
-#   last_charge_mode:
-#     name: "Last Charge Mode"
-#     icon: mdi:tune
+input_text:
+  last_charge_mode:
+    name: "Last Charge Mode"
+    icon: mdi:tune
 
 automation:
   - alias: "Notify If Grid Feed Status Changed"
@@ -845,17 +848,29 @@ automation:
   - alias: "Set Charge Points"
     id: "5bdbcbfd-243a-4428-a6f3-ed2f98aec603"
     initial_state: true
+    # don't want this to coincide with loadshedding start slots
+    # this gives us a bit of time to charge the battery if needed before the potential start of a loadshedding slot
     trigger:
       - platform: time
-        at: "04:00:00"
+        at:
+          - "03:30:00"
+        id: "first"
       - platform: time
-        at: "10:00:00"
+        at:
+          - "05:30:00"
+          - "07:30:00"
+          - "09:30:00"
+          - "11:30:00"
+        id: "rest"
+    mode: single
     # this would ensure we only get a notification if the mode has changed
     # but do we really want to do this? perhaps it's good to know every time, so that a human can do a sanity check
-    # condition:
-    #   - condition: template
-    #     value_template: "{{ states('input_text.last_charge_mode') != states('sensor.charge_mode') }}"
+    condition:
+      - condition: template
+        value_template: "{{ not is_state('sensor.charge_mode', states('input_text.last_charge_mode')) or trigger.id == 'first' }}"
     action:
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.set_charge_point_error
       - repeat:
           count: "{{ state_attr('sensor.charge_mode', 'settings').keys() | length }}"
           sequence:
@@ -864,28 +879,93 @@ automation:
                 entity_id: "number.capacity_point_{{ repeat.index }}"
               data:
                 value: "{{ state_attr('sensor.charge_mode', 'settings')[repeat.index][0] }}"
-            - delay:
-                seconds: 5
+            # basically an assertion
+            # this would be useful, but not available (yet) for these service calls:
+            # https://www.home-assistant.io/blog/2023/07/05/release-20237/#services-can-now-respond
+            # there's also this:
+            # https://github.com/amitfin/retry
+            - wait_template: >-
+                {% set entity_id = 'number.capacity_point_' ~ repeat.index %}
+                {% set expected_value =  state_attr('sensor.charge_mode', 'settings')[repeat.index][0] | string %}
+                {{ is_state(entity_id, expected_value) }}
+              timeout:
+                seconds: 35
+              continue_on_timeout: true
+            - if:
+                - "{{ not wait.completed }}"
+              then:
+                - service: input_boolean.turn_on
+                  entity_id: input_boolean.set_charge_point_error
             - service: "switch.turn_{{ state_attr('sensor.charge_mode', 'settings')[repeat.index][1] }}"
               target:
                 entity_id: "switch.grid_charge_point_{{ repeat.index }}"
-            - delay:
-                seconds: 5
+            # another assertion
+            - wait_template: >-
+                {% set entity_id = 'switch.grid_charge_point_' ~ repeat.index %}
+                {% set expected_value =  state_attr('sensor.charge_mode', 'settings')[repeat.index][1] %}
+                {{ is_state(entity_id, expected_value) }}
+              timeout:
+                seconds: 35
+              continue_on_timeout: true
+            - if:
+                - "{{ not wait.completed }}"
+              then:
+                - service: input_boolean.turn_on
+                  entity_id: input_boolean.set_charge_point_error
+      # - service: notify.mobile_app_ceres
+      #   data:
+      #     title: "Energy"
+      #     message: >-
+      #       {# do a full recon on all the settings #}
+      #       {% set charge_mode = states('sensor.charge_mode') | lower %}
+      #       {% set charge_map = state_attr('sensor.charge_mode', 'settings') %}
+      #       {# the prefixes for the setting we want to check #}
+      #       {% set prefixes = ('number.capacity_point_', 'switch.grid_charge_point_') %}
+      #       {# if any one setting doesn't match this must be false #}
+      #       {% set ns = namespace(success=True) %}
+      #       {% for i in range(1, 7) %}
+      #         {% for j in range(0, 2) %}
+      #           {% set setting_entity_id = prefixes[j] ~ i %}
+      #           {% set setting_assumed_value = charge_map[i][j] | string %}
+      #           {#{{ (setting_entity_id, setting_assumed_value, states(setting_entity_id), is_state(setting_entity_id, setting_assumed_value)) }}#}
+      #           {% set ns.success = is_state(setting_entity_id, setting_assumed_value) %}
+      #           {% if not ns.success %}{% break %}{% endif %}
+      #         {% endfor %}
+      #         {% if not ns.success %}{% break %}{% endif %}
+      #       {% endfor %}
+      #       {% if ns.success %}
+      #         {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) | round(1) %}
+      #         The backup power system's charge mode has been set to {{ charge_mode }}. The solar energy production forecast for today is {{ forecast }}kWh.
+      #       {% else %}
+      #         The backup power system's charge mode couldn't be set.
+      #       {% endif %}
+      #     data:
+      #       group: "home-electricity"
+      #       url: homeassistant://navigate/lovelace/resources
       - service: notify.mobile_app_ceres
         data:
           title: "Energy"
           message: >-
-            {% set mode = states('sensor.charge_mode') | lower %}
-            {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) | round(1) %}
-            The backup power system's charge mode has been set to {{ mode }}. The solar energy production forecast for today is {{ forecast }}kWh.
+            {% if is_state('input_boolean.set_charge_point_error', 'off') %}
+              {% set charge_mode = states('sensor.charge_mode') | lower %}
+              {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) | round(1) %}
+              The backup power system's charge mode has been set to {{ charge_mode }}. The solar energy production forecast for today is {{ forecast }}kWh.
+            {% else %}
+              The backup power system's charge mode couldn't be set.
+            {% endif %}
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
-      # - service: input_text.set_value
-      #   target:
-      #     entity_id: input_text.last_charge_mode
-      #   data:
-      #     value: "{{ states('sensor.charge_mode') }}"
+      - if:
+          - condition: state
+            entity_id: input_boolean.set_charge_point_error
+            state: "off"
+        then:
+          - service: input_text.set_value
+            target:
+              entity_id: input_text.last_charge_mode
+            data:
+              value: "{{ states('sensor.charge_mode') }}"
 
   - alias: "Send Daily Solar Summary"
     id: "dd8cd984-90f1-4a9d-b6bb-5411085448b5"

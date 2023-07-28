@@ -353,9 +353,10 @@ template:
       state: >-
         {% set forecast = states('sensor.average_solar_energy_forecast_today') | int(0) %}
         {# hysteresis #}
-        {% if forecast >= 10 %}
+        {# don't include an equals in here if the band is only 1, because we're working with integers #}
+        {% if forecast > 10 %}
           Optimistic
-        {% elif forecast <= 9 %}
+        {% elif forecast < 9 %}
           Pessimistic
         {% else %}
           {{ this.state }}
@@ -371,7 +372,7 @@ template:
           {# (int, bool): (battery soc, grid charge allowed) #}
           {% set mappings =
             {
-              'optimistic': {
+              'Optimistic': {
                   1: (50, 'on'),
                   2: (40, 'off'),
                   3: (45, 'off'),
@@ -379,7 +380,7 @@ template:
                   5: (85, 'on'),
                   6: (85, 'on')
                 },
-              'pessimistic': {
+              'Pessimistic': {
                   1: (50, 'on'),
                   2: (60, 'on'),
                   3: (60, 'on'),
@@ -391,10 +392,11 @@ template:
           %}
           {% set forecast = states('sensor.average_solar_energy_forecast_today') | int(0) %}
           {# hysteresis #}
-          {% if forecast >= 10 %}
-            {% set mode = 'optimistic' %}
-          {% elif forecast <= 9 %}
-            {% set mode = 'pessimistic' %}
+          {# don't include an equals in here if the band is only 1, because we're working with integers #}
+          {% if forecast > 10 %}
+            {% set mode = 'Optimistic' %}
+          {% elif forecast < 9 %}
+            {% set mode = 'Pessimistic' %}
           {% else %}
             {% set mode = this.state %}
           {% endif %}

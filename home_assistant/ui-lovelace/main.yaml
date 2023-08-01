@@ -63,9 +63,24 @@ cards:
             entity: light.pieter_bedside
             icon: mdi:lamp
           - type: custom:button-card
-            template: basic
-            name: Tivoli
-            entity: switch.tivoli_audio
+            template: rgb_light
+            name: Both Sides
+            entity: light.main_bedroom_group
+            icon: mdi:lamps
+            tap_action:
+              action: call-service
+              service: script.toggle_bedlamps
+            double_tap_action:
+              haptic: medium
+              action: call-service
+              service: script.toggle_light
+              service_data:
+                light: "[[[ return entity.entity_id; ]]]"
+                profile: security
+          # - type: custom:button-card
+          #   template: basic
+          #   name: Tivoli
+          #   entity: switch.tivoli_audio
           - type: custom:button-card
             template: rgb_light
             variables:

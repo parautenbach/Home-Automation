@@ -67,6 +67,9 @@ cards:
             name: Both Sides
             entity: light.main_bedroom_group
             icon: mdi:lamps
+            styles:
+              label:
+                - color: var(--primary-background-color)
             tap_action:
               action: call-service
               service: script.toggle_bedlamps

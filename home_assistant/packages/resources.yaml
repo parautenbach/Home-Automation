@@ -956,6 +956,7 @@ automation:
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
+            tag: "charge-mode-update"
       - if:
           - condition: state
             entity_id: input_boolean.set_charge_point_error

@@ -2661,7 +2661,7 @@
             {%- set from = trigger.from_state.attributes[attribute] | lower -%}
             {%- set to = trigger.to_state.attributes[attribute] | lower -%}
             {%- if from != to -%}
-              {{ name }}: changed {{ from }} to {{ to }}
+              {{ name }}: changed from {{ from }} to {{ to }}
             {%- else -%}
               {{ name }}: {{ to }}
             {%- endif -%}

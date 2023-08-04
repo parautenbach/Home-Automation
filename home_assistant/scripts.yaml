@@ -688,6 +688,38 @@ turn_on_light:
       data:
         profile: "{{ profile }}"
 
+toggle_bedlamps:
+  description: "Toggle the main bedroom bedlamps"
+  mode: single
+  sequence:
+    - choose:
+        - conditions:
+            - condition: template
+              value_template: "{{ is_state(light, 'off') }}"
+          sequence:
+            - service: light.turn_on
+              target:
+                entity_id: light.pieter_bedside
+              data:
+                profile: pieter
+            - service: light.turn_on
+              target:
+                entity_id: light.rouve_bedside
+              data:
+                profile: rouve
+      default:
+        - service: automation.turn_off
+          target:
+            entity_id: automation.dim_bedside_lamp
+        - service: light.turn_off
+          target:
+            entity_id:
+              - light.pieter_bedside
+              - light.rouve_bedside
+        - service: automation.turn_on
+          target:
+            entity_id: automation.dim_bedside_lamp
+
 toggle_light:
   # todo: timer variable?
   description: "Toggle a light using the specified profile when turned on"

@@ -351,12 +351,11 @@ template:
       icon: mdi:tune
       device_class: enum
       state: >-
-        {% set forecast = states('sensor.average_solar_energy_forecast_today') | int(0) %}
+        {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) %}
         {# hysteresis #}
-        {# don't include an equals in here if the band is only 1, because we're working with integers #}
-        {% if forecast > 10 %}
+        {% if forecast >= 10 %}
           Optimistic
-        {% elif forecast < 9 %}
+        {% elif forecast <= 9 %}
           Pessimistic
         {% else %}
           {{ this.state }}
@@ -390,12 +389,11 @@ template:
               }
             }
           %}
-          {% set forecast = states('sensor.average_solar_energy_forecast_today') | int(0) %}
+          {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) %}
           {# hysteresis #}
-          {# don't include an equals in here if the band is only 1, because we're working with integers #}
-          {% if forecast > 10 %}
+          {% if forecast >= 10 %}
             {% set mode = 'Optimistic' %}
-          {% elif forecast < 9 %}
+          {% elif forecast <= 9 %}
             {% set mode = 'Pessimistic' %}
           {% else %}
             {% set mode = this.state %}

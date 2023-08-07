@@ -67,9 +67,36 @@ cards:
             name: Both Sides
             entity: light.main_bedroom_group
             icon: mdi:lamps
+            show_label: false
             styles:
-              label:
-                - color: var(--primary-background-color)
+              grid:
+                - grid-template-areas: '"p s r" "i i i" "n n n"'
+                - grid-template-rows: min-content 1fr min-content
+                - grid-template-columns: 1fr min-content 1fr
+              custom_fields:
+                s:
+                  - color: var(--paper-item-icon-color)
+                p:
+                  - align-self: middle
+                  - justify-self: end
+                  - padding-right: 1ex
+                r:
+                  - align-self: middle
+                  - justify-self: start
+                  - padding-left: 1ex
+            custom_fields:
+              s: >
+                [[[ return '/'; ]]]
+              p: >
+                [[[
+                  var b = states['light.pieter_bedside'].attributes.brightness;
+                  return parseInt(b ? (b/255)*100 : "0") + "%";
+                ]]]
+              r: >
+                [[[
+                  var b = states['light.rouve_bedside'].attributes.brightness;
+                  return parseInt(b ? (b/255)*100 : "0") + "%";
+                ]]]
             tap_action:
               action: call-service
               service: script.toggle_bedlamps

@@ -80,10 +80,12 @@ cards:
                   - align-self: middle
                   - justify-self: end
                   - padding-right: 1ex
+                  - color: var(--paper-item-icon-color)
                 r:
                   - align-self: middle
                   - justify-self: start
                   - padding-left: 1ex
+                  - color: var(--paper-item-icon-color)
             custom_fields:
               s: >
                 [[[ return '/'; ]]]

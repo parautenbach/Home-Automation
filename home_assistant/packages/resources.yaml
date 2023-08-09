@@ -966,6 +966,8 @@ automation:
               entity_id: input_text.last_charge_mode
             data:
               value: "{{ states('sensor.charge_mode') }}"
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.set_charge_point_error
 
   - alias: "Send Daily Solar Summary"
     id: "dd8cd984-90f1-4a9d-b6bb-5411085448b5"

@@ -2594,6 +2594,81 @@
           group: "batteries"
           url: homeassistant://navigate/lovelace/devices
 
+# todo: check if this affects server cpu
+# <Event state_changed[L]:
+# entity_id=sensor.rouve_bedside_light_button_battery,
+# old_state=<state sensor.rouve_bedside_light_button_battery=81;
+#   state_class=measurement,
+#   unit_of_measurement=%,
+#   device_class=battery,
+#   friendly_name=Rouvé's Bedside Light Button Battery,
+#   monitor=True @ 2023-07-17T22:53:35.974894+02:00>,
+# new_state=<state sensor.rouve_bedside_light_button_battery=80;
+#   state_class=measurement,
+#   unit_of_measurement=%,
+#   device_class=battery,
+#   friendly_name=Rouvé's Bedside Light Button Battery,
+#   monitor=True @ 2023-07-19T23:54:56.798866+02:00>>
+- alias: "Notify When Monitored Battery Fully Charged"
+  id: "e3433145-19b2-48bd-a364-5ca87db912e9"
+  initial_state: true
+  trigger:
+    # https://community.home-assistant.io/t/unleash-the-power-of-expand-for-template-sensors/136941/12
+    - platform: event
+      event_type: state_changed
+  condition:
+    - condition: template
+      # https://www.home-assistant.io/docs/configuration/events/#state_changed
+      value_template: >-
+        {{ 'old_state' in trigger.event.data and
+           'new_state' in trigger.event.data and
+           trigger.event.data.new_state.state != trigger.event.data.old_state.state and
+           trigger.event.data.entity_id in state_attr('sensor.monitored_batteries', 'batteries') and
+           trigger.event.data.new_state.state | int(0) == 100 }}
+  action:
+    - service: notify.mobile_app_ceres
+      data:
+        title: "Batteries"
+        message: >
+          The {{ state_attr(trigger.event.data.entity_id, 'friendly_name') }} is fully charged.
+        data:
+          group: "batteries"
+          url: homeassistant://navigate/lovelace/devices
+    - service: persistent_notification.create
+      data:
+        title: "Debug: Battery Fully Charged"
+        message: "{{ trigger.event }}"
+
+- alias: "Battery Event Test"
+  initial_state: false
+  trigger:
+    - platform: event
+      event_type: state_changed
+  mode: single
+  condition:
+    - condition: template
+      # https://www.home-assistant.io/docs/configuration/events/#state_changed
+      value_template: "{{ trigger.event.data.entity_id in state_attr('sensor.monitored_batteries', 'batteries') }}"
+  action:
+    - service: system_log.write
+      data:
+        message: "{{ trigger.event }}"
+        level: debug
+        logger: "homeassistant.components.automation"
+    # - service: notify.mobile_app_ceres
+    #   data:
+    #     title: "Batteries Test"
+    #     message: "{{ trigger.event }}"
+    #     data:
+    #       group: "test"
+    #       url: homeassistant://navigate/lovelace/devices
+    - service: persistent_notification.create
+      data:
+        title: "Batteries Test"
+        message: "{{ trigger.event }}"
+    - service: automation.turn_off
+      entity_id: automation.battery_event_test
+
 # polling should be turned off
 # https://github.com/home-assistant/core/issues/71563
 - alias: "Update DB Size"

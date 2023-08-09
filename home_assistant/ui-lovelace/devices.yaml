@@ -201,6 +201,7 @@ cards:
         - automation.backup_home_assistant
         - automation.backup_home_assistant_db
         - automation.backup_power_battery_critical_alert
+        - automation.battery_event_test
         - automation.bedlamps_auto_on_upon_sunset_or_arrival
         - automation.bedlamps_off_after_sunrise
         - automation.bedlamps_on_upon_low_light
@@ -259,6 +260,7 @@ cards:
         - automation.notify_if_solarassistant_mqtt_bridge_status_changed
         - automation.notify_if_too_far_below_charge_point_target
         - automation.notify_pieter_going_home_from_work_in_cape_town
+        - automation.notify_when_monitored_battery_fully_charged
         - automation.notify_when_server_started_after_being_shut_down_automatically
         - automation.open_garage_door_when_arriving
         - automation.open_the_gate_when_arriving_home

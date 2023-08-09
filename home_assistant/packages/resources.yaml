@@ -944,12 +944,13 @@ automation:
         data:
           title: "Energy"
           message: >-
-            {% if is_state('input_boolean.set_charge_point_error', 'off') %}
-              {% set charge_mode = states('sensor.charge_mode') | lower %}
+            {% set charge_mode = states('sensor.charge_mode') | lower %}
+            {% set last_charge_mode = states('input_text.last_charge_mode') | lower %}
+            {% if is_state('input_boolean.set_charge_point_error', 'off') or charge_mode == last_charge_mode %}
               {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) | round(1) %}
               The backup power system's charge mode has been set to {{ charge_mode }}. The solar energy production forecast for today is {{ forecast }}kWh.
             {% else %}
-              The backup power system's charge mode couldn't be set.
+              The backup power system's charge mode couldn't be changed from {{ last_charge_mode }} to {{ charge_mode }}.
             {% endif %}
           data:
             group: "home-electricity"

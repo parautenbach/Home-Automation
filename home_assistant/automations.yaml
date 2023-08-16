@@ -2622,6 +2622,7 @@
       value_template: >-
         {{ 'old_state' in trigger.event.data and
            'new_state' in trigger.event.data and
+           trigger.event.data.old_state.state != 'unavailable' and
            trigger.event.data.new_state.state != trigger.event.data.old_state.state and
            trigger.event.data.entity_id in state_attr('sensor.monitored_batteries', 'batteries') and
            trigger.event.data.new_state.state | int(0) == 100 }}
@@ -2634,10 +2635,10 @@
         data:
           group: "batteries"
           url: homeassistant://navigate/lovelace/devices
-    - service: persistent_notification.create
-      data:
-        title: "Debug: Battery Fully Charged"
-        message: "{{ trigger.event }}"
+    # - service: persistent_notification.create
+    #   data:
+    #     title: "Debug: Battery Fully Charged"
+    #     message: "{{ trigger.event }}"
 
 - alias: "Battery Event Test"
   initial_state: false

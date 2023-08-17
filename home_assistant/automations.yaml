@@ -168,6 +168,8 @@
   id: "d7833822-f8da-495d-8d24-d98aae2f9b22"
   initial_state: true
   trigger:
+    - platform: template
+      value_template: "{{ today_at(states('input_datetime.wake_up_time')) + timedelta(minutes=1) }}"
     - platform: time
       at: "08:00"
   condition:

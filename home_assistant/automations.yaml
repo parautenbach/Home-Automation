@@ -898,7 +898,7 @@
   condition:
     - condition: numeric_state
       entity_id: sensor.disk_use_percent
-      above: 90
+      above: 89
   action:
     - service: notify.mobile_app_ceres
       data:

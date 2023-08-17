@@ -887,7 +887,7 @@ automation:
                 {% set expected_value =  state_attr('sensor.charge_mode', 'settings')[repeat.index][0] | string %}
                 {{ is_state(entity_id, expected_value) }}
               timeout:
-                seconds: 65  # cover at least to 30s intervals
+                seconds: 180
               continue_on_timeout: true
             - if:
                 - "{{ not wait.completed }}"
@@ -903,7 +903,7 @@ automation:
                 {% set expected_value =  state_attr('sensor.charge_mode', 'settings')[repeat.index][1] %}
                 {{ is_state(entity_id, expected_value) }}
               timeout:
-                seconds: 65  # cover at least to 30s intervals
+                seconds: 180
               continue_on_timeout: true
             - if:
                 - "{{ not wait.completed }}"

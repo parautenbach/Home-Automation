@@ -1058,3 +1058,53 @@ automation:
                 name: default
                 critical: 1
                 volume: 1.0
+
+  - alias: "Notify If Inverter Running Hot"
+    id: "fed52f97-a6ca-4e86-8d2b-f9b01fab40bf"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.inverter_temperature
+        above: 60  # -45ºC ~ 60ºC (>45ºC derating)
+        for:
+          minutes: 5
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Energy"
+          message: >-
+            {% set temperature = states('sensor.inverter_temperature') | int(0) %}
+            The backup power system's inverter is running hot at {{ temperature }}ºC for {{ trigger.for.seconds // 60 }} minutes.
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/resources
+            # push:
+            #   sound:
+            #     name: default
+            #     critical: 1
+            #     volume: 1.0
+
+  - alias: "Notify If Battery Running Hot"
+    id: "a994298c-c2fc-430f-be8e-a8ebb85de410"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.battery_temperature
+        above: 55  # Charge: 0ºC ~ +55ºC / Discharge: -20ºC ~ +55ºC
+        for:
+          minutes: 5
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Energy"
+          message: >-
+            {% set temperature = states('sensor.battery_temperature') | int(0) %}
+            The backup power system's battery is running hot at {{ temperature }}ºC for {{ trigger.for.seconds // 60 }} minutes.
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/resources
+            # push:
+            #   sound:
+            #     name: default
+            #     critical: 1
+            #     volume: 1.0

@@ -248,12 +248,14 @@ cards:
         # - automation.motion_indicator_on
         - automation.notify_doorbell_rang
         - automation.notify_if_back_extender_status_changed
+        - automation.notify_if_battery_running_hot
         - automation.notify_if_cover_was_left_open
         - automation.notify_if_driving_state_changed
         - automation.notify_if_electricity_feed_status_changed
         - automation.notify_if_front_extender_status_changed
         - automation.notify_if_grid_feed_status_changed
         - automation.notify_if_internet_status_changed
+        - automation.notify_if_inverter_running_hot
         - automation.notify_if_new_backup_found
         - automation.notify_if_no_recent_backup
         - automation.notify_if_server_load_high

@@ -2733,9 +2733,8 @@
         # https://community.home-assistant.io/t/trigger-to-from-attribute/325345
         # https://community.home-assistant.io/t/access-attribute-of-from-state/380497
         message: >-
-          {%- macro build_item(sensor) -%}
+          {%- macro build_item(sensor, name) -%}
             {%- set attribute = sensor.split('.')[1] -%}
-            {%- set name = state_attr(sensor, 'friendly_name') | capitalize -%}
             {%- set from = trigger.from_state.attributes[attribute] | lower -%}
             {%- set to = trigger.to_state.attributes[attribute] | lower -%}
             {%- if from != to -%}
@@ -2744,7 +2743,7 @@
               {{ name }}: {{ to }}
             {%- endif -%}
           {%- endmacro -%}
-          {%- set sensors = ['sensor.tree_pollen', 'sensor.grass_pollen', 'sensor.weed_pollen', 'sensor.mould_spores'] -%}
+          {%- set sensors = [('sensor.tree_pollen', 'Trees'), ('sensor.grass_pollen', 'Grasses'), ('sensor.weed_pollen', 'Weeds'), ('sensor.mould_spores', 'Mould')] -%}
           {%- set summary = '' -%}
           {%- set from_state_label = trigger.from_state.attributes.label | lower -%}
           {%- set to_state_label = trigger.to_state.attributes.label | lower -%}
@@ -2754,8 +2753,8 @@
             {%- set summary = 'Pollen levels are ' ~ to_state_label ~ '.' -%}
           {%- endif -%}
           {{ summary }}
-          {%- for sensor in sensors %}
-            - {{ build_item(sensor) }}
+          {%- for (sensor, name) in sensors %}
+            - {{ build_item(sensor, name) }}
           {%- endfor %}
         data:
           group: "environment"

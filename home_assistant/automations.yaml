@@ -164,28 +164,6 @@
         variables:
           light_group: light.inside_security_group
 
-- alias: "Reset Wake Up Time"
-  id: "d7833822-f8da-495d-8d24-d98aae2f9b22"
-  initial_state: true
-  trigger:
-    - platform: template
-      value_template: "{{ today_at(states('input_datetime.wake_up_time')) + timedelta(minutes=1) }}"
-    - platform: time
-      at: "08:00"
-  condition:
-    - condition: state
-      entity_id: binary_sensor.workday
-      state: "on"
-    - condition: state
-      entity_id: input_boolean.skip_next_wake_up_time
-      state: "on"
-      for:
-        minutes: 1
-  action:
-    - service: input_boolean.turn_off
-      target:
-        entity_id: input_boolean.skip_next_wake_up_time
-
 - alias: "Switch On Lights At Wake Up Time"
   id: "5486f6f9-da52-4cf0-8a23-e54f40a80721"
   # don't reset this after a reload/restart, since we might've disabled this deliberately via the ui
@@ -197,57 +175,61 @@
     - condition: state
       entity_id: binary_sensor.workday
       state: "on"
-    - condition: state
-      entity_id: input_boolean.skip_next_wake_up_time
-      state: "off"
-      for:
-        minutes: 1
   action:
-    - service: scene.turn_on
-      target:
-        entity_id: scene.normal_lights
-    # it's a bit wild if alarms go off and lights turn on all at the same time – be gentle
-    - delay:
-        seconds: 10
-    # add a condition for only if we are home – but if it's a workday, why wouldn't we?
-    - service: light.turn_on
-      target:
-        entity_id:
-          - light.pieter_bedside
-          # - light.rouve_bedside
-          - light.hallway
-      data:
-        profile: low
-    - delay:
-        minutes: 1
-    # this call does not block/wait, so the two transitions will start at almost the same time
-    # and the script runs in parallel mode
-    # https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete
-    # temporarily removed
-    # - service: script.turn_on
-    #   target:
-    #     entity_id: script.fade_light
-    #   data:
-    #     variables:
-    #       light: light.pieter_bedside
-    #       target_brightness_pct: 20
-    #       transition_duration: 120
-    # - service: script.turn_on
-    #   target:
-    #     entity_id: script.fade_light
-    #   data:
-    #     variables:
-    #       light: light.rouve_bedside
-    #       target_brightness_pct: 40
-    #       transition_duration: 120
-    # - service: script.turn_on
-    #   target:
-    #     entity_id: script.fade_light
-    #   data:
-    #     variables:
-    #       light: light.hallway
-    #       target_brightness_pct: 60
-    #       transition_duration: 120
+    - if:
+      - condition: state
+        entity_id: input_boolean.skip_next_wake_up_time
+        state: "on"
+      then:
+        - service: input_boolean.turn_off
+          target:
+            entity_id: input_boolean.skip_next_wake_up_time
+      else:
+        - service: scene.turn_on
+          target:
+            entity_id: scene.normal_lights
+        # it's a bit wild if alarms go off and lights turn on all at the same time – be gentle
+        - delay:
+            seconds: 10
+        # add a condition for only if we are home – but if it's a workday, why wouldn't we?
+        - service: light.turn_on
+          target:
+            entity_id:
+              - light.pieter_bedside
+              # - light.rouve_bedside
+              - light.hallway
+          data:
+            profile: low
+        - delay:
+            minutes: 1
+        # this call does not block/wait, so the two transitions will start at almost the same time
+        # and the script runs in parallel mode
+        # https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete
+        # temporarily removed
+        # - service: script.turn_on
+        #   target:
+        #     entity_id: script.fade_light
+        #   data:
+        #     variables:
+        #       light: light.pieter_bedside
+        #       target_brightness_pct: 20
+        #       transition_duration: 120
+        # - service: script.turn_on
+        #   target:
+        #     entity_id: script.fade_light
+        #   data:
+        #     variables:
+        #       light: light.rouve_bedside
+        #       target_brightness_pct: 40
+        #       transition_duration: 120
+        # - service: script.turn_on
+        #   target:
+        #     entity_id: script.fade_light
+        #   data:
+        #     variables:
+        #       light: light.hallway
+        #       target_brightness_pct: 60
+        #       transition_duration: 120
 
 - alias: "Switch On Night Light If Motion Is Detected"
   id: "096415fb-9e87-411a-aef9-b9ba5fb9696d"

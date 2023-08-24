@@ -2674,7 +2674,8 @@
     platform: state
     entity_id: media_player.living_room
     from: standby
-    to: idle
+    # seems like an apple tv can turn on and be in a paused state immediately
+    # to: idle
   mode: single
   action:
     - service: script.turn_on

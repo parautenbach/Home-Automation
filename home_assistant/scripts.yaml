@@ -460,6 +460,10 @@ entertainment_apple_tv_on:
     - service: script.turn_on
       entity_id: script.hk_3380_power_on
     - delay: "00:00:01"
+    # this will also trigger automation "Turn Audio On When Apple TV Turned On"
+    # either just call this and set the input select, while the automation does the rest,
+    # or disable and re-enable the automation in this script
+    # (or just ignore it, because it's probably harmless)
     - service: remote.send_command
       data:
         entity_id: remote.living_room

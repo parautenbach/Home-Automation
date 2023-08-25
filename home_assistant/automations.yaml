@@ -971,6 +971,14 @@
     - platform: state
       entity_id: calendar.housekeeping
       to: "off"
+      not_from: "unavailable"
+  # not strictly necessary, but just make doubly sure it won't trigger at odd times
+  # the bug we're fixing with not_from above was that the calendar went unavailable
+  # late at night and when it became available, it turned on a bunch of lights
+  condition:
+    - condition: time
+      after: "06:00:00"
+      before: "18:00:00"
   action:
     - service: light.turn_off
       entity_id:

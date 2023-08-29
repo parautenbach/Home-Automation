@@ -168,6 +168,8 @@
       # prettyHtml = soup.prettify()
       # with open('pretty.html', 'w') as o:
       #   o.write(prettyHtml)
+      # open file in browser
+      # copy selector
       select: "main > div.page-content > div.elementor-8676 > section.elementor-element-b51f73d > div > div.elementor-element-72d9bb2 > div > div.elementor-element-b529cf5 > div > div > div.postie-post > table:nth-of-type(12) > tr:nth-child(10) > td:nth-child(3) > font"
       value_template: >-
         {{ value }}

@@ -620,7 +620,7 @@ automation:
             {% from 'datetime.jinja' import sec_to_hour_and_min %}
             {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
             {% set after = sec_to_hour_and_min(seconds) %}
-            The grid feed has been {{ 'restored after ' ~ after ~ '.' if is_state('binary_sensor.grid_feed', 'on') else 'cut.' }}
+            The grid feed has been {{ 'restored after ' ~ after ~ '.' if is_state('binary_sensor.grid_feed', 'on') else 'cut. Please switch off and try to avoid using non-essential devices and appliances.' }}
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources

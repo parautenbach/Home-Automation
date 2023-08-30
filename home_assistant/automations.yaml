@@ -159,10 +159,11 @@
         entity_id: scene.inside_security_lights
     - service: script.turn_on
       target:
-        entity_id: script.turn_on_light_group_timers
+        entity_id: script.action_light_group_timers
       data:
         variables:
           light_group: light.inside_security_group
+          timer_action: start
 
 - alias: "Switch On Lights At Wake Up Time"
   id: "5486f6f9-da52-4cf0-8a23-e54f40a80721"
@@ -269,10 +270,11 @@
         entity_id: scene.night_lights
     - service: script.turn_on
       target:
-        entity_id: script.turn_on_light_group_timers
+        entity_id: script.action_light_group_timers
       data:
         variables:
           light_group: light.night_group
+          timer_action: start
 
 - alias: "Switch Off Light When Timer Expires"
   id: "23c86717-220f-4d56-b67c-d19e2f171836"
@@ -1726,6 +1728,13 @@
     - service: scene.turn_on
       target:
         entity_id: scene.normal_lights
+    - service: script.turn_on
+      target:
+        entity_id: script.action_light_group_timers
+      data:
+        variables:
+          light_group: light.night_group
+          timer_action: cancel
 
 # set up automation on device to immediately update the sensors
 # todo: switch off all lights except rouvé's (if on), or at least notify of lights still on

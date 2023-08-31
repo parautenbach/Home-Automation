@@ -325,9 +325,11 @@ cards:
         hours_to_show: 24
         entities:
           - entity: light.pieter_bedside
-            name: Pieter's Side
+            name: Pieter's
           - entity: light.rouve_bedside
-            name: Rouvé's Side
+            name: Rouvé's
+          - entity: light.bedroom_bedlamp
+            name: Julia's
           - entity: light.kitchen_counter
             name: Kitchen Cntr
           - entity: light.living_room_lamp

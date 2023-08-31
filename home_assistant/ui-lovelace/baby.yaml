@@ -33,17 +33,17 @@ badges:
                 .value {
                   color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
                 }
-  - entity: binary_sensor.baby_monitor_sound_alarm
-    name: Sound
-    card_mod:
-      style:
-        ha-state-label-badge:
-          $:
-            ha-label-badge:
-              $: |
-                .value {
-                  color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
-                }
+  # - entity: binary_sensor.baby_monitor_sound_alarm
+  #   name: Sound
+  #   card_mod:
+  #     style:
+  #       ha-state-label-badge:
+  #         $:
+  #           ha-label-badge:
+  #             $: |
+  #               .value {
+  #                 color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
+  #               }
 cards:
   - type: vertical-stack
     cards:
@@ -53,7 +53,7 @@ cards:
         title: Baby Monitor
         entities:
           - entity: binary_sensor.baby_monitor_motion_alarm
-          - entity: binary_sensor.baby_monitor_sound_alarm
+          # - entity: binary_sensor.baby_monitor_sound_alarm
           - entity: camera.baby_monitor_profile000
             tap_action:
               action: call-service
@@ -119,10 +119,12 @@ cards:
       - type: history-graph
         hours_to_show: 24
         entities:
+          - entity: light.bedroom_bedlamp
+            name: Bedlamp
           - entity: binary_sensor.baby_monitor_motion_alarm
             name: Motion
-          - entity: binary_sensor.baby_monitor_sound_alarm
-            name: Sound
+          # - entity: binary_sensor.baby_monitor_sound_alarm
+          #   name: Sound
       - type: horizontal-stack
         cards:
           - type: custom:button-card

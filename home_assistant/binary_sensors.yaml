@@ -160,10 +160,10 @@
   count: 5
   scan_interval: 180
 
-- platform: ffmpeg_noise
-  name: Baby Monitor Sound Alarm
-  input: !secret baby_monitor_stream
-  peak: -30
-  # don't detect ptz movement!
-  duration: 3
-  extra_arguments: -nostats
+# - platform: ffmpeg_noise
+#   name: Baby Monitor Sound Alarm
+#   input: !secret baby_monitor_stream
+#   peak: -30
+#   # don't detect ptz movement!
+#   duration: 3
+#   extra_arguments: -nostats

@@ -90,7 +90,7 @@ cards:
             name: Packet Loss
         header:
           type: custom:mini-graph-card
-          name: Latency
+          name: Round Trip
           entities:
             - entity: sensor.internet_round_trip_time_avg
             - entity: sensor.nighttime_number

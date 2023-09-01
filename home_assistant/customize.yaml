@@ -471,8 +471,8 @@ sensor.daily_grid_feed_outage_time:
   state_class: total_increasing
 sensor.temperature_difference:
   state_class: measurement
-binary_sensor.baby_monitor_sound_alarm:
-  device_class: sound
+# binary_sensor.baby_monitor_sound_alarm:
+#   device_class: sound
 sensor.overall_pollen_risk:
   unit_of_measurement: None
 sensor.grass_pollen:

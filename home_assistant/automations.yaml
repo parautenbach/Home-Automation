@@ -1453,7 +1453,7 @@
           {% endif %}
           {% set last_opened_entity = trigger.entity_id | replace('cover', 'input_datetime') ~ "_opened" %}
           {% set last_opened = as_timestamp(states(last_opened_entity)) %}
-          {{ name }} has been closed after {{ ((as_timestamp(utcnow()) - last_opened) // 60) | int }} min.
+          {{ name }} has been closed after {{ ((as_timestamp(utcnow()) - last_opened) // 60) | int }} minutes.
         data:
           # the timer entity
           # cover.rhs_garage_door -> timer.rhs_garage_door_timer

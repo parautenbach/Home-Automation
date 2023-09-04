@@ -569,7 +569,7 @@
               state: "on"
         - condition: time
           after: "08:00:00"
-          before: "21:00:00"
+          before: "20:00:00"
   action:
     - service: scene.turn_on
       target:

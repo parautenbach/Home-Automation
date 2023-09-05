@@ -1074,7 +1074,7 @@ automation:
           title: "Energy"
           message: >-
             {% set temperature = states('sensor.inverter_temperature') | int(0) %}
-            The backup power system's inverter is running hot at {{ temperature }}ºC for {{ trigger.for.seconds // 60 }} minutes.
+            The backup power system's inverter is running hot at {{ temperature }}ºC for {{ trigger.for.seconds // 60 }} min.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
@@ -1099,7 +1099,7 @@ automation:
           title: "Energy"
           message: >-
             {% set temperature = states('sensor.battery_temperature') | int(0) %}
-            The backup power system's battery is running hot at {{ temperature }}ºC for {{ trigger.for.seconds // 60 }} minutes.
+            The backup power system's battery is running hot at {{ temperature }}ºC for {{ trigger.for.seconds // 60 }} min.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources

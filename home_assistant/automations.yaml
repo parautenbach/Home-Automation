@@ -1536,22 +1536,6 @@
           url: homeassistant://navigate/lovelace/internet
           tag: "internet-status"
 
-- alias: "Notify If Front Extender Status Changed"
-  id: "cbe2fc30-6dfd-4008-b1fd-9d18fdeefaf7"
-  initial_state: true
-  use_blueprint:
-    path: internet_extender_availability.yaml
-    input:
-      extender_entity_id: binary_sensor.front_extender
-
-- alias: "Notify If Back Extender Status Changed"
-  id: "55927daa-c6e2-47d9-9d5d-2fcbe3cd9201"
-  initial_state: true
-  use_blueprint:
-    path: internet_extender_availability.yaml
-    input:
-      extender_entity_id: binary_sensor.back_extender
-
 - alias: "Notify If Electricity Feed Status Changed"
   id: "c021b272-5076-45d4-9e40-e2db20ae66b6"
   initial_state: true

@@ -1,0 +1,117 @@
+# why these when you can just look at the last_changed property?
+# because this is more resilient against restarts
+input_datetime:
+  front_extender_disconnected:
+    has_date: true
+    has_time: true
+  back_extender_disconnected:
+    has_date: true
+    has_time: true
+
+timer:
+  front_extender_disconnected:
+    duration: "00:1:00"
+    restore: true
+  back_extender_disconnected:
+    duration: "00:1:00"
+    restore: true
+
+automation:
+  - alias: "Detect When Extender Disconnected"
+    id: "b5d61b3c-516a-4428-9141-969d9fc47b4c"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.front_extender
+          - binary_sensor.back_extender
+        to: "off"
+    mode: queued
+    action:
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: "{{ trigger.entity_id | replace('binary_sensor', 'input_datetime') }}_disconnected"
+        data:
+          datetime: "{{ now() }}"
+      - service: timer.start
+        target:
+          entity_id: "{{ trigger.entity_id | replace('binary_sensor', 'timer') }}_disconnected"
+        data:
+          # test duration
+          # if changed here, change it in "Notify When Extender Disconnected" too
+          duration: "00:01:00"
+
+  - alias: "Detect When Extender Reconnected"
+    id: "a80aad69-169e-4a24-aec0-088512a443ae"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.front_extender
+          - binary_sensor.back_extender
+        to: "on"
+    mode: queued
+    action:
+      - service: timer.cancel
+        target:
+          entity_id: "{{ trigger.entity_id | replace('binary_sensor', 'timer') }}_disconnected"
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: >-
+                  {% set timer_entity_id = trigger.entity_id | replace('binary_sensor', 'timer') ~ 'disconnected' %}
+                  {% set duration = state_attr(timer_entity_id, 'duration') %}
+                  {% set (hours, minutes, seconds) = duration.split(':') | map('int') %}
+                  {% set threshold =  minutes*60 + seconds %}
+                  {% set input_datetime_entity_id = trigger.entity_id | replace('binary_sensor', 'input_datetime') ~ 'disconnected' %}
+                  {% set last_available = states(input_datetime_entity_id) | as_timestamp %}
+                  {% set utc_now_ts = utcnow() | as_timestamp %}
+                  {{ (utc_now_ts - last_available) | int >= threshold }}
+            sequence:
+              - service: notify.mobile_app_ceres
+                data:
+                  title: "Internet"
+                  message: >-
+                    {% set last_available = states('input_datetime.solarassistant_activity_ceased') | as_timestamp %}
+                    {% set utc_now_ts = utcnow() | as_timestamp %}
+                    {% set minutes = ((utc_now_ts - last_available) // 60) | int %}
+                    {% set extender_name = state_attr(trigger.entity_id, 'friendly_name') | lower %}
+                    The {{ extender_name }} was unavailable for {{ minutes }} min.
+                  data:
+                    group: "home-internet"
+                    url: homeassistant://navigate/lovelace/internet
+                    tag: "{{ trigger.entity_id }}"
+
+  - alias: "Notify When Extender Disconnected"
+    id: "8335b7df-93d6-4ea4-8022-9d0d2ed87e46"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.front_extender_disconnected
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.back_extender_disconnected
+    mode: queued
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Internet"
+          message: >-
+            {% set binary_sensor_entity_id = trigger.entity_id | replace('timer', 'binary_sensor') | replace('_disconnected', '') %}
+            {% set extender_name = state_attr(binary_sensor_entity_id, 'friendly_name') | lower %}
+            {% set minutes = (state_attr(trigger.entity_id, 'duration') | as_timedelta).total_seconds() | multiply(1/60) | int %}
+            The {{ extender_name }} became unavailable {{ minutes }} min ago.
+          data:
+            group: "home-internet"
+            url: homeassistant://navigate/lovelace/internet
+            tag: "{{ trigger.entity_id }}"
+      - service: timer.start
+        target:
+          entity_id: "{{ trigger.entity_id }}"
+        data:
+          # test duration
+          # if changed here, change it in "Detect When Extender Disconnected" too
+          duration: "00:01:00"

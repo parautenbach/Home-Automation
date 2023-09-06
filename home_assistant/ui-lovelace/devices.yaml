@@ -196,7 +196,6 @@ cards:
         - automation.alert_if_gate_opened_or_closed_when_not_supposed_to
         - automation.alert_vacation_end
         - automation.alert_vacation_start
-        # - automation.automatically_start_a_full_irrigation_cycle
         - automation.away_mode
         - automation.backup_home_assistant
         - automation.backup_home_assistant_db
@@ -217,6 +216,10 @@ cards:
         - automation.contractor_mode_enabled_alert
         - automation.contractor_mode_still_enabled_alert
         - automation.cover_left_open_alert
+        - automation.detect_when_extender_disconnected
+        - automation.detect_when_extender_reconnected
+        - automation.detect_when_solarassistant_mqtt_bridge_activity_ceases
+        - automation.detect_when_solarassistant_mqtt_bridge_activity_resumes
         - automation.dim_bedside_lamp
         - automation.disable_contractor_mode
         - automation.disable_contractor_mode_from_alert_action
@@ -228,7 +231,6 @@ cards:
         - automation.enable_contractor_mode_from_alert_action
         - automation.enable_guest_mode_from_alert_action
         - automation.extend_cover_timeout_from_alert_action
-        # - automation.foyer_motion_detected_last
         - automation.guest_mode_disabled_alert
         - automation.guest_mode_enabled_alert
         - automation.hallway_light_off_when_bedroom_lights_off
@@ -241,18 +243,12 @@ cards:
         - automation.lights_on_upon_low_light
         - automation.loadshedding_forecast_notification
         - automation.low_server_battery
-        # - automation.manually_start_a_full_irrigation_cycle
-        # - automation.monitor_inbound_internet_traffic
-        # - automation.monitor_outbound_internet_traffic
-        # - automation.motion_indicator_off
-        # - automation.motion_indicator_on
         - automation.notify_doorbell_rang
-        - automation.notify_if_back_extender_status_changed
         - automation.notify_if_battery_running_hot
+        - automation.notify_if_charge_shutdown_threshold_changed
         - automation.notify_if_cover_was_left_open
         - automation.notify_if_driving_state_changed
         - automation.notify_if_electricity_feed_status_changed
-        - automation.notify_if_front_extender_status_changed
         - automation.notify_if_grid_feed_status_changed
         - automation.notify_if_internet_status_changed
         - automation.notify_if_inverter_running_hot
@@ -261,12 +257,13 @@ cards:
         - automation.notify_if_server_load_high
         - automation.notify_if_too_far_below_charge_point_target
         - automation.notify_pieter_going_home_from_work_in_cape_town
+        - automation.notify_when_extender_disconnected
         - automation.notify_when_monitored_battery_fully_charged
         - automation.notify_when_server_started_after_being_shut_down_automatically
+        - automation.notify_when_solarassistant_mqtt_bridge_activity_ceased
         - automation.open_garage_door_when_arriving
         - automation.open_the_gate_when_arriving_home
         - automation.pollen_levels_update
-        # - automation.proximity_updates
         - automation.reset_battery_notification_governor
         - automation.restore_smart_bulb_statuses_after_power_restored
         - automation.revert_cleaning_day_lights
@@ -286,7 +283,6 @@ cards:
         - automation.start_cover_timer_when_opened
         - automation.start_loadshedding_timer
         - automation.stop_cover_timer_when_closed
-        # - automation.stop_irrigating
         - automation.stop_light_timer_if_running_when_light_turned_off
         - automation.switch_garage_light_according_to_door_status_and_light_conditions
         - automation.switch_off_bedlamp_when_plugging_in_phone

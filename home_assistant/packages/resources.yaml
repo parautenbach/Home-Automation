@@ -604,6 +604,16 @@ input_text:
     name: "Last Charge Mode"
     icon: mdi:tune
 
+input_datetime:
+  solarassistant_activity_ceased:
+    has_date: true
+    has_time: true
+
+timer:
+  solarassistant_inactivity:
+    duration: "00:1:00"
+    restore: true
+
 automation:
   - alias: "Notify If Grid Feed Status Changed"
     id: "b233b973-cf9b-44b5-94e4-5f0813e6eefa"
@@ -819,32 +829,93 @@ automation:
                 critical: 1
                 volume: 1.0
 
-  - alias: "Notify If SolarAssistant MQTT Bridge Status Changed"
-    id: "464bc626-ff8d-4f59-88af-71f2b557e69b"
+  - alias: "Detect When SolarAssistant MQTT Bridge Activity Ceases"
+    id: "3febc063-c872-4847-8abb-0ce1a4186887"
     initial_state: true
     trigger:
       - platform: state
         entity_id:
           - binary_sensor.solarassistant_activity
-        to:
-          - "on"
-          - "off"
-        for:
-          minutes: 1
-    mode: queued
+        to: "off"
+    mode: single
+    action:
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.solarassistant_activity_ceased
+        data:
+          datetime: "{{ now() }}"
+      - service: timer.start
+        target:
+          entity_id: timer.solarassistant_inactivity
+        data:
+          # test duration
+          # if changed here, change it in "Notify When SolarAssistant MQTT Bridge Activity Ceased" too
+          duration: "00:01:00"
+
+  - alias: "Detect When SolarAssistant MQTT Bridge Activity Resumes"
+    id: "3b012ea4-cd46-42c1-86cd-84002ce7d2ee"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.solarassistant_activity
+        to: "on"
+    mode: single
+    action:
+      - service: timer.cancel
+        target:
+          entity_id: timer.solarassistant_inactivity
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: >-
+                  {% set duration = state_attr('timer.solarassistant_inactivity', 'duration') %}
+                  {% set (hours, minutes, seconds) = duration.split(':') | map('int') %}
+                  {% set threshold =  minutes*60 + seconds %}
+                  {% set last_ceased = states('input_datetime.solarassistant_activity_ceased') | as_timestamp %}
+                  {% set utc_now_ts = utcnow() | as_timestamp %}
+                  {{ (utc_now_ts - last_ceased) | int >= threshold }}
+            sequence:
+              - service: notify.mobile_app_ceres
+                data:
+                  title: "System"
+                  message: >-
+                    {% set last_ceased = states('input_datetime.solarassistant_activity_ceased') | as_timestamp %}
+                    {% set utc_now_ts = utcnow() | as_timestamp %}
+                    {% set minutes = ((utc_now_ts - last_ceased) // 60) | int %}
+                    The SolarAssistant bridge's activity has been resumed after {{ minutes }} min.
+                  data:
+                    group: "home-electricity"
+                    url: homeassistant://navigate/lovelace/devices
+                    tag: "solarassistant-bridge-activity"
+
+  - alias: "Notify When SolarAssistant MQTT Bridge Activity Ceased"
+    id: "86cced33-ce28-4559-ba6b-e0d0f30fa183"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.solarassistant_inactivity
+    mode: single
     action:
       - service: notify.mobile_app_ceres
         data:
           title: "System"
           message: >-
-            {% from 'datetime.jinja' import sec_to_hour_and_min %}
-            {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
-            {% set after = sec_to_hour_and_min(seconds) %}
-            The SolarAssistant bridge's activity has {{ 'been resumed after ' ~ after if trigger.to_state.state == 'on' else 'ceased' }}.
+            {% set minutes = (state_attr('timer.solarassistant_inactivity', 'duration') | as_timedelta).total_seconds() | multiply(1/60) | int %}
+            The SolarAssistant bridge's activity has ceased {{ minutes }} min ago.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/devices
             tag: "solarassistant-bridge-activity"
+      - service: timer.start
+        target:
+          entity_id: timer.solarassistant_inactivity
+        data:
+          # test duration
+          # if changed here, change it in "Detect When SolarAssistant MQTT Bridge Activity Ceases" too
+          duration: "00:01:00"
 
   # todo:
   # 1. condition for low soc or low utilisation

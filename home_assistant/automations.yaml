@@ -447,6 +447,13 @@
         variables:
           light: light.rouve_bedside
           profile: rouve
+    - service: script.turn_on
+      target:
+        entity_id: script.turn_on_light
+      data:
+        variables:
+          light: light.bedroom_bedlamp
+          profile: normal
 
 - alias: "Bedlamps On Upon Server Start"
   id: "1e8cf815-a52a-4fe6-a536-e25e234381bc"
@@ -496,6 +503,13 @@
         variables:
           light: light.rouve_bedside
           profile: rouve
+    - service: script.turn_on
+      target:
+        entity_id: script.turn_on_light
+      data:
+        variables:
+          light: light.bedroom_bedlamp
+          profile: normal
 
 # might need to specialise this a bit more in future:
 # e.g. switch on from 6 am when arriving home and light is low
@@ -655,6 +669,13 @@
         variables:
           light: light.rouve_bedside
           profile: rouve
+    - service: script.turn_on
+      target:
+        entity_id: script.turn_on_light
+      data:
+        variables:
+          light: light.bedroom_bedlamp
+          profile: normal
 
 - alias: "Lights Off After Sunrise"
   id: "7f64fa82-a158-4f78-b406-2f0653f8f764"
@@ -1685,6 +1706,8 @@
   action:
     - service: light.turn_off
       entity_id: light.pieter_bedside
+    - service: light.turn_off
+      entity_id: light.bedroom_bedlamp
 
 - alias: "Turn Off Entertainment System When Idle Or Leaving Room"
   description: "Assuming it's bedtime when the living room lamp is turned off after a certain time"

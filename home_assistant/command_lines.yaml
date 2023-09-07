@@ -81,27 +81,6 @@
     scan_interval: 30
 
 - sensor:
-    name: internet_packet_loss
-    command: 'ping -c 5 www.google.com 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
-    unit_of_measurement: "%"
-    value_template: '{{ value | int(0) }}'
-    scan_interval: 180
-
-- sensor:
-    name: front_extender_packet_loss
-    command: 'ping -c 5 front_extender 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
-    unit_of_measurement: "%"
-    value_template: '{{ value | int(0) }}'
-    scan_interval: 30
-
-- sensor:
-    name: back_extender_packet_loss
-    command: 'ping -c 5 back_extender 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
-    unit_of_measurement: "%"
-    value_template: '{{ value | int(0) }}'
-    scan_interval: 30
-
-- sensor:
     name: thor_disk_usage
     command: !secret thor_disk_usage_command
     unit_of_measurement: "%"

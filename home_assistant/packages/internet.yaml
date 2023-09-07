@@ -16,7 +16,205 @@ timer:
     duration: "00:1:00"
     restore: true
 
+utility_meter:
+  daily_internet_usage_in:
+    unique_id: "f6f3293b-81e9-4427-95ad-ed467f642ee3"
+    source: sensor.internet_usage_in
+    cycle: daily
+  monthly_internet_usage_in:
+    unique_id: "692217cc-cb53-4ade-aaf2-a7810c1dd287"
+    source: sensor.internet_usage_in
+    cycle: monthly
+  daily_internet_usage_out:
+    unique_id: "f967f73e-cd3e-428d-873e-0f11ce703c7e"
+    source: sensor.internet_usage_out
+    cycle: daily
+  monthly_internet_usage_out:
+    unique_id: "00f46f8f-f570-4e3f-a883-7b747d36d47f"
+    source: sensor.internet_usage_out
+    cycle: monthly
+
+command_line:
+  - sensor:
+      name: internet_packet_loss
+      command: 'ping -c 5 www.google.com 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
+      unit_of_measurement: "%"
+      value_template: '{{ value | int(0) }}'
+      scan_interval: 180
+
+  - sensor:
+      name: front_extender_packet_loss
+      command: 'ping -c 5 front_extender 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
+      unit_of_measurement: "%"
+      value_template: '{{ value | int(0) }}'
+      scan_interval: 30
+
+  - sensor:
+      name: back_extender_packet_loss
+      command: 'ping -c 5 back_extender 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
+      unit_of_measurement: "%"
+      value_template: '{{ value | int(0) }}'
+      scan_interval: 30
+
+binary_sensor:
+  - platform: template
+    sensors:
+      internet_connection:
+        friendly_name: "Internet"
+        device_class: connectivity
+        value_template: >-
+          {{ is_state('binary_sensor.internet', 'on') }}
+        icon_template: >-
+          {% if is_state('binary_sensor.internet', 'on') %}
+            mdi:server-network
+          {% else %}
+            mdi:server-network-off
+          {% endif %}
+
+  - platform: ping
+    name: Back Extender
+    host: back_extender
+    count: 5
+    scan_interval: 30
+
+  - platform: ping
+    name: Front Extender
+    host: front_extender
+    count: 5
+    scan_interval: 30
+
+  - platform: ping
+    name: Internet
+    host: www.google.com
+    count: 5
+    scan_interval: 180
+
+sensor:
+  - platform: template
+    sensors:
+      # https://github.com/home-assistant/core/blob/dev/homeassistant/const.py#L571
+      internet_speed_in:
+        value_template: '{{ ((states.input_number.wan_traffic_delta_in.state  | float ) / 1000000 ) | round(3) }}'
+        device_class: data_rate
+        unit_of_measurement: 'Mbit/s'
+      internet_speed_out:
+        value_template: '{{ ((states.input_number.wan_traffic_delta_out.state | float ) / 1000000 ) | round(3) }}'
+        device_class: data_rate
+        unit_of_measurement: 'Mbit/s'
+      internet_usage_in:
+        value_template: "{{ ((states('sensor.snmp_wan_in')  | float ) / 1000000000 ) | round(3) }}"
+        device_class: data_size
+        unit_of_measurement: 'GB'
+      internet_usage_out:
+        value_template: "{{ ((states('sensor.snmp_wan_out') | float ) / 1000000000 ) | round(3) }}"
+        device_class: data_size
+        unit_of_measurement: 'GB'
+      internet_round_trip_time_avg:
+        value_template: "{{ state_attr('binary_sensor.internet', 'round_trip_time_avg') }}"
+        unit_of_measurement: 'ms'
+      internet_round_trip_time_mdev:
+        value_template: "{{ state_attr('binary_sensor.internet', 'round_trip_time_mdev') }}"
+        unit_of_measurement: 'ms'
+      front_extender_round_trip_time_avg:
+        value_template: "{{ state_attr('binary_sensor.front_extender', 'round_trip_time_avg') }}"
+        unit_of_measurement: 'ms'
+      front_extender_round_trip_time_mdev:
+        value_template: "{{ state_attr('binary_sensor.front_extender', 'round_trip_time_mdev') }}"
+        unit_of_measurement: 'ms'
+      back_extender_round_trip_time_avg:
+        value_template: "{{ state_attr('binary_sensor.back_extender', 'round_trip_time_avg') }}"
+        unit_of_measurement: 'ms'
+      back_extender_round_trip_time_mdev:
+        value_template: "{{ state_attr('binary_sensor.back_extender', 'round_trip_time_mdev') }}"
+        unit_of_measurement: 'ms'
+
+  # alternative: https://community.home-assistant.io/t/snmp-bandwidth-monitor-using-statistics/96684/82
+  - platform: statistics
+    name: 'Internet Traffic In'
+    entity_id: sensor.internet_speed_in
+    state_characteristic: mean
+    # it's a little unclear how to set this, but let's say if this updates every second,
+    # 100 samples should cover 1 minute even with some misses
+    # https://www.home-assistant.io/integrations/statistics/#an-important-note-on-max_age-and-sampling_size
+    sampling_size: 100
+    max_age:
+      minutes: 1
+
+  - platform: statistics
+    name: 'Internet Traffic Out'
+    entity_id: sensor.internet_speed_out
+    state_characteristic: mean
+    sampling_size: 100
+    max_age:
+      minutes: 1
+
 automation:
+  # https://community.home-assistant.io/t/snmp-bandwidth-monitor/7122
+  # https://community.home-assistant.io/t/snmp-bandwidth-monitor-using-statistics-and-a-utility-meter/176971
+  - alias: "Monitor Inbound Internet Traffic"
+    id: "244f20ae-8cc6-4442-b3aa-0336763508f8"
+    trigger:
+      platform: state
+      entity_id: sensor.snmp_wan_in
+    action:
+      - service: input_number.set_value
+        data:
+          entity_id: input_number.wan_traffic_delta_in
+          value: >-
+            {# safe delta catering for wrap-around of a 32-bit unsigned int (snmp counter is 32-bit unsigned int) #}
+            {# basically taking 2's complement #}
+            {% set from = trigger.from_state.state | int %}
+            {% set to = trigger.to_state.state | int %}
+            {% set traffic_delta = (to - from) if (to >= from) else (4294967295 - from + to + 1) %}
+            {% set time_delta = as_timestamp(trigger.to_state.last_updated) - as_timestamp(trigger.from_state.last_updated) %}
+            {{ (traffic_delta * 8) / time_delta }}
+
+  - alias: "Monitor Outbound Internet Traffic"
+    id: "719b1fd6-bfc1-40b3-bf0e-5a07cff11aea"
+    trigger:
+      platform: state
+      entity_id: sensor.snmp_wan_out
+    action:
+      - service: input_number.set_value
+        data:
+          entity_id: input_number.wan_traffic_delta_out
+          value: >-
+            {# safe delta catering for wrap-around of a 32-bit unsigned int (snmp counter is 32-bit unsigned int) #}
+            {# basically taking 2's complement #}
+            {% set from = trigger.from_state.state | int %}
+            {% set to = trigger.to_state.state | int %}
+            {% set traffic_delta = (to - from) if (to >= from) else (4294967295 - from + to + 1) %}
+            {% set time_delta = as_timestamp(trigger.to_state.last_updated) - as_timestamp(trigger.from_state.last_updated) %}
+            {{ (traffic_delta * 8) / time_delta }}
+
+  - alias: "Notify If Internet Status Changed"
+    id: "ff386c09-1dd5-4381-b404-abad62bffb01"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.internet_connection
+    mode: queued
+    condition:
+      - condition: state
+        entity_id: binary_sensor.pieter_present
+        state: "on"
+      - condition: time
+        after: "05:00:00"
+        before: "23:00:00"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Internet"
+          message: >-
+            {% from 'datetime.jinja' import sec_to_hour_and_min %}
+            {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
+            {% set duration = sec_to_hour_and_min(seconds) %}
+            The Internet {{ 'is unavailable' if trigger.to_state.state == 'off' else 'was unavailable for ' ~  duration }}.
+          data:
+            group: "home-internet"
+            url: homeassistant://navigate/lovelace/internet
+            tag: "internet-status"
+
   - alias: "Detect When Extender Disconnected"
     id: "b5d61b3c-516a-4428-9141-969d9fc47b4c"
     initial_state: true

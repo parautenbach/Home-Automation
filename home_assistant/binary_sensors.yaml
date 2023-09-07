@@ -56,17 +56,6 @@
         {% else %}
           mdi:power-plug
         {% endif %}
-    internet_connection:
-      friendly_name: "Internet"
-      device_class: connectivity
-      value_template: >-
-        {{ is_state('binary_sensor.internet', 'on') }}
-      icon_template: >-
-        {% if is_state('binary_sensor.internet', 'on') %}
-          mdi:server-network
-        {% else %}
-          mdi:server-network-off
-        {% endif %}
     foyer_motion_detected:
       friendly_name: "Foyer Motion Detector"
       device_class: motion
@@ -130,6 +119,9 @@
     nighttime:
       friendly_name: Night-time
       value_template: "{{ state_attr('sun.sun', 'elevation') < 0 }}"
+    daytime:
+      friendly_name: Day-time
+      value_template: "{{ state_attr('sun.sun', 'elevation') >= 0 }}"
     on_air:
       # https://github.com/home-assistant/iOS/issues/1903
       value_template: >
@@ -141,24 +133,6 @@
   entities:
     - binary_sensor.pieter_present
     - binary_sensor.rouve_present
-
-- platform: ping
-  name: Back Extender
-  host: back_extender
-  count: 5
-  scan_interval: 30
-
-- platform: ping
-  name: Front Extender
-  host: front_extender
-  count: 5
-  scan_interval: 30
-
-- platform: ping
-  name: Internet
-  host: www.google.com
-  count: 5
-  scan_interval: 180
 
 # - platform: ffmpeg_noise
 #   name: Baby Monitor Sound Alarm

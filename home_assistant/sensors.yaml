@@ -123,41 +123,6 @@
         {% else %}
           unknown
         {% endif %}
-    # https://github.com/home-assistant/core/blob/dev/homeassistant/const.py#L571
-    internet_speed_in:
-      value_template: '{{ ((states.input_number.wan_traffic_delta_in.state  | float ) / 1000000 ) | round(3) }}'
-      device_class: data_rate
-      unit_of_measurement: 'Mbit/s'
-    internet_speed_out:
-      value_template: '{{ ((states.input_number.wan_traffic_delta_out.state | float ) / 1000000 ) | round(3) }}'
-      device_class: data_rate
-      unit_of_measurement: 'Mbit/s'
-    internet_usage_in:
-      value_template: "{{ ((states('sensor.snmp_wan_in')  | float ) / 1000000000 ) | round(3) }}"
-      device_class: data_size
-      unit_of_measurement: 'GB'
-    internet_usage_out:
-      value_template: "{{ ((states('sensor.snmp_wan_out') | float ) / 1000000000 ) | round(3) }}"
-      device_class: data_size
-      unit_of_measurement: 'GB'
-    internet_round_trip_time_avg:
-      value_template: "{{ state_attr('binary_sensor.internet', 'round_trip_time_avg') }}"
-      unit_of_measurement: 'ms'
-    internet_round_trip_time_mdev:
-      value_template: "{{ state_attr('binary_sensor.internet', 'round_trip_time_mdev') }}"
-      unit_of_measurement: 'ms'
-    front_extender_round_trip_time_avg:
-      value_template: "{{ state_attr('binary_sensor.front_extender', 'round_trip_time_avg') }}"
-      unit_of_measurement: 'ms'
-    front_extender_round_trip_time_mdev:
-      value_template: "{{ state_attr('binary_sensor.front_extender', 'round_trip_time_mdev') }}"
-      unit_of_measurement: 'ms'
-    back_extender_round_trip_time_avg:
-      value_template: "{{ state_attr('binary_sensor.back_extender', 'round_trip_time_avg') }}"
-      unit_of_measurement: 'ms'
-    back_extender_round_trip_time_mdev:
-      value_template: "{{ state_attr('binary_sensor.back_extender', 'round_trip_time_mdev') }}"
-      unit_of_measurement: 'ms'
     # https://companion.home-assistant.io/docs/core/sensors/
     pieter_activity_type:
       value_template: "{{ state_attr('sensor.ceres_activity', 'Types') | first }}"
@@ -286,26 +251,6 @@
   version: 2c
   baseoid: 1.3.6.1.2.1.2.2.1.16.26  # ifOutOctets.26 / nas0_0
   unit_of_measurement: octets
-
-# alternative: https://community.home-assistant.io/t/snmp-bandwidth-monitor-using-statistics/96684/82
-- platform: statistics
-  name: 'Internet Traffic In'
-  entity_id: sensor.internet_speed_in
-  state_characteristic: mean
-  # it's a little unclear how to set this, but let's say if this updates every second,
-  # 100 samples should cover 1 minute even with some misses
-  # https://www.home-assistant.io/integrations/statistics/#an-important-note-on-max_age-and-sampling_size
-  sampling_size: 100
-  max_age:
-    minutes: 1
-
-- platform: statistics
-  name: 'Internet Traffic Out'
-  entity_id: sensor.internet_speed_out
-  state_characteristic: mean
-  sampling_size: 100
-  max_age:
-    minutes: 1
 
 # https://github.com/home-assistant/core/issues/87941
 - platform: filter

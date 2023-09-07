@@ -1091,44 +1091,6 @@
         # also the timedelta will fail if it's None, so cater for that
         datetime: "{{ ((state_attr('calendar.vacation', 'end_time') | as_datetime - timedelta(seconds=1) if state_attr('calendar.vacation', 'end_time') else None) or (states('input_datetime.vacation_end') | as_datetime)).date() }}"
 
-# https://community.home-assistant.io/t/snmp-bandwidth-monitor/7122
-# https://community.home-assistant.io/t/snmp-bandwidth-monitor-using-statistics-and-a-utility-meter/176971
-- alias: "Monitor Inbound Internet Traffic"
-  id: "244f20ae-8cc6-4442-b3aa-0336763508f8"
-  trigger:
-    platform: state
-    entity_id: sensor.snmp_wan_in
-  action:
-    - service: input_number.set_value
-      data:
-        entity_id: input_number.wan_traffic_delta_in
-        value: >-
-          {# safe delta catering for wrap-around of a 32-bit unsigned int (snmp counter is 32-bit unsigned int) #}
-          {# basically taking 2's complement #}
-          {% set from = trigger.from_state.state | int %}
-          {% set to = trigger.to_state.state | int %}
-          {% set traffic_delta = (to - from) if (to >= from) else (4294967295 - from + to + 1) %}
-          {% set time_delta = as_timestamp(trigger.to_state.last_updated) - as_timestamp(trigger.from_state.last_updated) %}
-          {{ (traffic_delta * 8) / time_delta }}
-
-- alias: "Monitor Outbound Internet Traffic"
-  id: "719b1fd6-bfc1-40b3-bf0e-5a07cff11aea"
-  trigger:
-    platform: state
-    entity_id: sensor.snmp_wan_out
-  action:
-    - service: input_number.set_value
-      data:
-        entity_id: input_number.wan_traffic_delta_out
-        value: >-
-          {# safe delta catering for wrap-around of a 32-bit unsigned int (snmp counter is 32-bit unsigned int) #}
-          {# basically taking 2's complement #}
-          {% set from = trigger.from_state.state | int %}
-          {% set to = trigger.to_state.state | int %}
-          {% set traffic_delta = (to - from) if (to >= from) else (4294967295 - from + to + 1) %}
-          {% set time_delta = as_timestamp(trigger.to_state.last_updated) - as_timestamp(trigger.from_state.last_updated) %}
-          {{ (traffic_delta * 8) / time_delta }}
-
 - alias: "Notify Pieter Going Home from Work in Cape Town"
   id: "5515c06c-6c69-443d-9549-eb00999e8b95"
   trigger:
@@ -1507,34 +1469,6 @@
         message: "Pieter is{{ ' not' if is_state('binary_sensor.pieter_driving', 'off') }} driving."
         data:
           url: homeassistant://navigate/lovelace/devices
-
-- alias: "Notify If Internet Status Changed"
-  id: "ff386c09-1dd5-4381-b404-abad62bffb01"
-  initial_state: true
-  trigger:
-    - platform: state
-      entity_id: binary_sensor.internet_connection
-  mode: queued
-  condition:
-    - condition: state
-      entity_id: binary_sensor.pieter_present
-      state: "on"
-    - condition: time
-      after: "05:00:00"
-      before: "23:00:00"
-  action:
-    - service: notify.mobile_app_ceres
-      data:
-        title: "Internet"
-        message: >-
-          {% from 'datetime.jinja' import sec_to_hour_and_min %}
-          {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
-          {% set duration = sec_to_hour_and_min(seconds) %}
-          The Internet {{ 'is unavailable' if trigger.to_state.state == 'off' else 'was unavailable for ' ~  duration }}.
-        data:
-          group: "home-internet"
-          url: homeassistant://navigate/lovelace/internet
-          tag: "internet-status"
 
 - alias: "Notify If Electricity Feed Status Changed"
   id: "c021b272-5076-45d4-9e40-e2db20ae66b6"

@@ -837,6 +837,10 @@ automation:
         entity_id:
           - binary_sensor.solarassistant_activity
         to: "off"
+        # we had this edge case where the binary sensor was off for less than a second,
+        # so the timer got canceled before it actually started
+        for:
+          seconds: 5
     mode: single
     action:
       - service: input_datetime.set_datetime
@@ -871,7 +875,8 @@ automation:
                 value_template: >-
                   {% set duration = state_attr('timer.solarassistant_inactivity', 'duration') %}
                   {% set (hours, minutes, seconds) = duration.split(':') | map('int') %}
-                  {% set threshold =  minutes*60 + seconds %}
+                  {# the timer's actual runtime seems to be a fraction less than the configured duration #}
+                  {% set threshold =  minutes*60 + seconds - 1 %}
                   {% set last_ceased = states('input_datetime.solarassistant_activity_ceased') | as_timestamp %}
                   {% set utc_now_ts = utcnow() | as_timestamp %}
                   {{ (utc_now_ts - last_ceased) | int >= threshold }}

@@ -191,8 +191,6 @@ notify:
       - service: mobile_app_ceres
       - service: mobile_app_rouve
 
-discovery:
-
 ios:
 
 media_source:

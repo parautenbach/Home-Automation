@@ -7,7 +7,37 @@ binary_sensor:
         # motion_sensor_3 is the occupancy sensor and not the raw motion sensor and is delayed in the homebridge config by 5 sec
         value_template: >-
           {{ is_state('binary_sensor.foyer_occupancy_homebridge', 'on') }}
-  
+
+camera:
+  - platform: ffmpeg
+    name: security_camera
+    input: -rtsp_transport tcp -i rtsp://securitypi.local:8554/unicast
+    # https://stackoverflow.com/questions/37427498/how-to-escape-double-and-single-quotes-in-yaml-within-the-same-string
+    # https://stackoverflow.com/questions/6195872/applying-multiple-filters-at-once-with-ffmpeg
+    # https://einar.slaskete.net/2011/09/05/adding-time-stamp-overlay-to-video-stream-using-ffmpeg/
+    # also check /home/pi/v4l2rtspserver/v4l2rtspserver.service (on the pi)
+    # and /etc/modprobe.d/v4l2loopback.conf
+    # https://github.com/umlaeute/v4l2loopback
+    # the ha docs state the -pred 1 is the default, but that option is nowhere to be found in the ffmpeg docs
+    extra_arguments: >-
+      -vf "hue=s=0, drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='%{localtime\:%Y-%m-%d %T}':fontcolor=white@0.8:x=10:y=10"
+  # the proxy camera will contain the overlaid timestamp on the video stream (but you cannot record this stream):
+  # https://community.home-assistant.io/t/camera-using-ffmpeg-platform-and-drawtext-overlay-showing-on-snapshot-but-not-recording/372129
+  # can one configure an overlay in v4l2? yes, but it's hacky (for a dynamic piece of text)
+  # https://www.linux-projects.org/uv4l/tutorials/text-overlay/
+  - platform: proxy
+    name: security_camera_proxy
+    entity_id: camera.security_camera
+    # why on earth doesn't this work?
+    # https://github.com/home-assistant/core/issues/84576
+    # stream_quality: 90
+  - platform: local_file
+    name: security_camera_last_snapshot
+    file_path: /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg
+  - platform: ffmpeg
+    name: security_camera_last_clip
+    input: /home/homeassistant/.homeassistant/www/camera.security_camera_last.mp4
+
 automation:
   - alias: "Take Foyer Motion Snapshots"
     id: "e160923e-daf9-417d-9561-174feb2cd350"

@@ -1,0 +1,11 @@
+automation:
+  - alias: "Change On Air Status"
+    id: "0e9a98bc-dba8-4354-8bad-87b44b50703a"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.on_air
+    mode: single
+    action:
+      - service: "switch.turn_{{ 'on' if is_state('binary_sensor.on_air', 'on') else 'off' }}"
+        entity_id: switch.on_air

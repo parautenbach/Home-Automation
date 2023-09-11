@@ -1,0 +1,866 @@
+automation:
+  - alias: "Switch On Lights At Wake Up Time"
+    id: "5486f6f9-da52-4cf0-8a23-e54f40a80721"
+    # don't reset this after a reload/restart, since we might've disabled this deliberately via the ui
+    # initial_state: true
+    trigger:
+      - platform: time
+        at: input_datetime.wake_up_time
+    condition:
+      - condition: state
+        entity_id: binary_sensor.workday
+        state: "on"
+    action:
+      - if:
+        - condition: state
+          entity_id: input_boolean.skip_next_wake_up_time
+          state: "on"
+        then:
+          - service: input_boolean.turn_off
+            target:
+              entity_id: input_boolean.skip_next_wake_up_time
+        else:
+          - service: scene.turn_on
+            target:
+              entity_id: scene.normal_lights
+          # it's a bit wild if alarms go off and lights turn on all at the same time – be gentle
+          - delay:
+              seconds: 10
+          # add a condition for only if we are home – but if it's a workday, why wouldn't we?
+          - service: light.turn_on
+            target:
+              entity_id:
+                - light.pieter_bedside
+                # - light.rouve_bedside
+                - light.hallway
+            data:
+              profile: low
+          - delay:
+              minutes: 1
+          # this call does not block/wait, so the two transitions will start at almost the same time
+          # and the script runs in parallel mode
+          # https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete
+          # temporarily removed
+          # - service: script.turn_on
+          #   target:
+          #     entity_id: script.fade_light
+          #   data:
+          #     variables:
+          #       light: light.pieter_bedside
+          #       target_brightness_pct: 20
+          #       transition_duration: 120
+          # - service: script.turn_on
+          #   target:
+          #     entity_id: script.fade_light
+          #   data:
+          #     variables:
+          #       light: light.rouve_bedside
+          #       target_brightness_pct: 40
+          #       transition_duration: 120
+          # - service: script.turn_on
+          #   target:
+          #     entity_id: script.fade_light
+          #   data:
+          #     variables:
+          #       light: light.hallway
+          #       target_brightness_pct: 60
+          #       transition_duration: 120
+
+  - alias: "Switch On Night Light If Motion Is Detected"
+    id: "096415fb-9e87-411a-aef9-b9ba5fb9696d"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.foyer_motion_homebridge
+      to: "on"
+    condition:
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: binary_sensor.electricity_feed
+            state: "on"
+          - condition: state
+            entity_id: binary_sensor.anybody_home
+            state: "on"
+          # proxy for everybody in bed
+          - condition: state
+            entity_id: light.living_room_lamp
+            state: "off"
+          # in case light was turned on manually, leave it
+          # commented out for reason: but why would we? we'd probably turn on other lights instead
+          # - condition: state
+          #   entity_id: light.foyer
+          #   state: "off"
+          - condition: or
+            conditions:
+              - condition: time
+                after: "21:00:00"
+              - condition: sun
+                before: sunrise
+                before_offset: "-00:30:00"
+    action:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.night_lights
+      - service: script.turn_on
+        target:
+          entity_id: script.action_light_group_timers
+        data:
+          variables:
+            light_group: light.night_group
+            timer_action: start
+
+  - alias: "Switch Off Light When Timer Expires"
+    id: "23c86717-220f-4d56-b67c-d19e2f171836"
+    initial_state: true
+    trigger:
+      # same entities as for "Stop Light Timer If Running When Light Turned Off"
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.living_room_lamp_timer
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.front_door_timer
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.foyer_timer
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.kitchen_counter_timer
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.hallway_timer
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.bedroom_bedlamp_timer
+    mode: parallel
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: "{{ trigger.event.data.entity_id | replace('_timer', '') | replace('timer', 'light') }}"
+
+  - alias: "Inside Lights Auto On Upon Sunset or Arrival"
+    id: "867f58cb-d941-4944-b919-6b446486a690"
+    initial_state: true
+    trigger:
+      # https://www.home-assistant.io/cookbook/automation_sun/
+      - platform: sun
+        event: sunset
+        offset: "-01:00:00"
+      - platform: state
+        entity_id: binary_sensor.anybody_home
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "on"
+      # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
+      - condition: or
+        conditions:
+          - condition: sun
+            after: sunset
+            after_offset: "-01:00:00"
+          - condition: sun
+            before: sunrise
+            before_offset: "-01:00:00"
+          - condition: state
+            entity_id: binary_sensor.low_light
+            state: "on"
+    action:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.normal_lights
+      - service: light.turn_on
+        target:
+          entity_id: light.hallway
+        data:
+          profile: normal
+
+  - alias: "Bedlamps Auto On Upon Sunset or Arrival"
+    id: "21b972ef-1e21-42b5-a137-9b160f601310"
+    initial_state: true
+    trigger:
+      - platform: sun
+        event: sunset
+        offset: "-00:30:00"
+      - platform: state
+        entity_id: binary_sensor.pieter_present
+        to: "on"
+      - platform: state
+        entity_id: binary_sensor.rouve_present
+        to: "on"
+    mode: single
+    condition:
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: binary_sensor.pieter_present
+            state: "on"
+          - condition: state
+            entity_id: binary_sensor.rouve_present
+            state: "on"
+      # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
+      - condition: or
+        conditions:
+          - condition: sun
+            after: sunset
+            after_offset: "-00:30:00"
+          - condition: sun
+            before: sunrise
+    action:
+      - service: script.turn_on
+        target:
+          entity_id: script.turn_on_light
+        data:
+          variables:
+            light: light.pieter_bedside
+            profile: pieter
+      - service: script.turn_on
+        target:
+          entity_id: script.turn_on_light
+        data:
+          variables:
+            light: light.rouve_bedside
+            profile: rouve
+      - service: script.turn_on
+        target:
+          entity_id: script.turn_on_light
+        data:
+          variables:
+            light: light.bedroom_bedlamp
+            profile: normal
+
+  - alias: "Bedlamps On Upon Server Start"
+    id: "1e8cf815-a52a-4fe6-a536-e25e234381bc"
+    initial_state: true
+    trigger:
+      - platform: homeassistant
+        event: start
+    mode: single
+    condition:
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: binary_sensor.pieter_present
+            state: "on"
+          - condition: state
+            entity_id: binary_sensor.rouve_present
+            state: "on"
+      - condition: template
+        value_template: >-
+          {# this helper contains only a time #}
+          {% set after = states('input_datetime.wake_up_time') | today_at %}
+          {% set before = states('input_datetime.wake_up_time') | today_at + timedelta(minutes=30) %}
+          {{ after <= now() <= before }}
+      - condition: state
+        entity_id: binary_sensor.workday
+        state: "on"
+    action:
+      - wait_template: "{{ is_state('light.pieter_bedside', 'off') }}"
+        timeout:
+          minutes: 2
+        continue_on_timeout: false
+      - wait_template: "{{ is_state('light.rouve_bedside', 'off') }}"
+        timeout:
+          minutes: 2
+        continue_on_timeout: false
+      - service: script.turn_on
+        target:
+          entity_id: script.turn_on_light
+        data:
+          variables:
+            light: light.pieter_bedside
+            profile: pieter
+      - service: script.turn_on
+        target:
+          entity_id: script.turn_on_light
+        data:
+          variables:
+            light: light.rouve_bedside
+            profile: rouve
+      - service: script.turn_on
+        target:
+          entity_id: script.turn_on_light
+        data:
+          variables:
+            light: light.bedroom_bedlamp
+            profile: normal
+
+  # might need to specialise this a bit more in future:
+  # e.g. switch on from 6 am when arriving home and light is low
+  # separate from the default on at 8 am (and maybe only on workdays)
+  - alias: "Lights On Upon Low Light"
+    id: "36373097-6fba-45ae-9888-d88b668b997d"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.low_light
+        to: "on"
+      - platform: time_pattern
+        minutes: "/15"
+      - platform: state
+        entity_id: binary_sensor.anybody_home
+        to: "on"
+      - platform: state
+        entity_id: sensor.ceres_battery_state
+        to: 'Not Charging'
+    condition:
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: light.living_room_lamp
+            state: "off"
+          - condition: state
+            entity_id: light.hallway
+            state: "off"
+          - condition: numeric_state
+            entity_id: light.hallway
+            attribute: brightness
+            below: 26  # 26/255 ~= 10%
+      - condition: state
+        entity_id: binary_sensor.electricity_feed
+        state: "on"
+      - condition: state
+        entity_id: binary_sensor.low_light
+        state: "on"
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "on"
+      - condition: state
+        entity_id: calendar.housekeeping
+        state: "off"
+      - condition: or
+        conditions:
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: binary_sensor.workday
+                state: "on"
+              - condition: template
+                # use sunrise
+                value_template: >-
+                  {% set n = now() %}
+                  {% set wake_up_plus_delta = states('input_datetime.wake_up_time') | today_at + timedelta(minutes=60) %}
+                  {% set sunrise = states('sensor.sun_next_rising') | as_datetime %}
+                  {% set start = min(wake_up_plus_delta, sunrise) %}
+                  {% set end = '08:00' | today_at %}
+                  {{ start < end and start < n < end }}
+              # basically, keep the hallway light dim (if switched on earlier) until phone unplugged
+              - condition: state
+                entity_id: sensor.ceres_battery_state
+                state: 'Not Charging'
+              - condition: state
+                entity_id: input_boolean.skip_next_wake_up_time
+                state: "off"
+              # because we might've turned it off alltogether (via the ui)
+              - condition: state
+                entity_id: automation.switch_on_lights_at_wake_up_time
+                state: "on"
+          - condition: time
+            after: "08:00:00"
+            before: "20:00:00"
+    action:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.normal_lights
+      - service: light.turn_on
+        entity_id: light.hallway
+        data:
+          profile: normal
+
+  - alias: "Lights Off When Loadshedding"
+    id: "e4867511-07e3-4873-bd78-ecaec953adb4"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.electricity_feed
+        to: "off"
+    mode: single
+    condition:
+      - condition: and
+        conditions:
+          - condition: sun
+            after: sunrise
+          - condition: sun
+            before: sunset
+    action:
+      # currently the only light on battery
+      - service: light.turn_off
+        entity_id: light.living_room_lamp
+
+  - alias: "Bedlamps On Upon Low Light"
+    id: "5cdd58f4-dcec-4f50-9451-8d40dd8c2215"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.low_light
+        to: "on"
+      - platform: homeassistant
+        event: start
+    condition:
+      - condition: time
+        after: "16:00:00"
+        before: "21:00:00"
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: binary_sensor.pieter_present
+            state: "on"
+          - condition: state
+            entity_id: binary_sensor.rouve_present
+            state: "on"
+    action:
+      - service: script.turn_on
+        target:
+          entity_id: script.turn_on_light
+        data:
+          variables:
+            light: light.pieter_bedside
+            profile: pieter
+      - service: script.turn_on
+        target:
+          entity_id: script.turn_on_light
+        data:
+          variables:
+            light: light.rouve_bedside
+            profile: rouve
+      - service: script.turn_on
+        target:
+          entity_id: script.turn_on_light
+        data:
+          variables:
+            light: light.bedroom_bedlamp
+            profile: normal
+
+  - alias: "Lights Off After Sunrise"
+    id: "7f64fa82-a158-4f78-b406-2f0653f8f764"
+    initial_state: true
+    trigger:
+      - platform: sun
+        event: sunrise
+        offset: "01:30:00"
+      - platform: state
+        entity_id: binary_sensor.low_light
+        to: "off"
+        # let's see if we can remove this condition permanently, since we're using a real illuminance sensor in the house now
+        # to avoid the light turning off when there briefly is bright sunshine
+        # for:
+        #   minutes: 15
+    # todo: if anybody home?
+    condition:
+      condition: and
+      conditions:
+        # todo: remove
+        - condition: sun
+          after: sunrise
+          after_offset: "01:30:00"
+        - condition: time
+          after: "06:00:00"
+          before: "10:00:00"
+        - condition: state
+          entity_id: binary_sensor.low_light
+          state: "off"
+        # not for as long as we're working from home
+        - condition: state
+          entity_id: binary_sensor.workday
+          state: "off"
+    action:
+      - service: light.turn_off
+        target:
+          entity_id:
+            - light.normal_light_group
+            - light.hallway
+
+  - alias: "Bedlamps Off After Sunrise"
+    id: "7d865580-b23b-47e1-8068-9bb202af535b"
+    initial_state: true
+    trigger:
+      - platform: sun
+        event: sunrise
+        offset: "01:30:00"
+    action:
+      - service: light.turn_off
+        entity_id: light.main_bedroom_group
+
+  - alias: "Switch On Inside Lights When Unplugging Phone"
+    id: "ca60418c-1870-4c55-845d-4d5eba9aea52"
+    trigger:
+      platform: state
+      entity_id: sensor.ceres_battery_state
+      to: 'Not Charging'  # Can be to Charging or Full
+    mode: single
+    condition:
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: binary_sensor.pieter_present
+            state: "on"
+          - condition: time
+            after: "05:00:00"
+            before: "09:00:00"
+          # proxy for nobody inside
+          - condition: state
+            entity_id: light.living_room_lamp
+            state: "off"
+    action:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.normal_lights
+      - service: script.turn_on
+        target:
+          entity_id: script.action_light_group_timers
+        data:
+          variables:
+            light_group: light.night_group
+            timer_action: cancel
+
+  # set up automation on device to immediately update the sensors
+  # todo: switch off all lights except rouvé's (if on), or at least notify of lights still on
+  - alias: "Switch Off Bedlamp When Plugging In Phone"
+    id: "ffd14255-4539-43e3-b9a5-be8b82a6b5b6"
+    trigger:
+      platform: state
+      entity_id: sensor.ceres_battery_state
+      from: 'Not Charging'  # Can be to Charging or Full
+    mode: single
+    condition:
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: binary_sensor.pieter_present
+            state: "on"
+          # todo: maybe have different times over weekends or even skip
+          # "Time condition windows can span across the midnight threshold if both after and before keys are used."
+          # https://www.home-assistant.io/docs/scripts/conditions/#time-condition
+          - condition: time
+            after: "21:00:00"
+            before: "01:00:00"
+          # proxy for nobody inside
+          - condition: state
+            entity_id: light.living_room_lamp
+            state: "off"
+          - condition: state
+            entity_id: light.pieter_bedside
+            state: "on"
+    action:
+      - service: light.turn_off
+        entity_id: light.pieter_bedside
+
+  - alias: "Hallway Light Off When Bedroom Lights Off"
+    id: "d6a989ae-c951-4b0e-baab-cdd49b44269e"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: light.main_bedroom_group
+        to: "off"
+    condition:
+      - condition: time
+        after: "20:00:00"
+        before: "01:00:00"
+      - condition: state
+        entity_id: light.hallway
+        state: "on"
+    action:
+      - service: light.turn_off
+        entity_id: light.hallway
+
+  - alias: "Save Last Smart Bulb State"
+    id: "ba2755f4-d8a2-4f1c-a7f8-32642c780ee7"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id:
+          - light.dining_room
+          - light.music_room
+          - light.foyer
+          - light.hallway
+    mode: parallel
+    condition:
+      # power was NOT recently restored (2 min), causing the light to turn on and connect to hass, and trigger this automation
+      # it would also mean it wasn't a hass restart
+      # - condition: template
+      #   value_template: "{{ ((as_timestamp(utcnow()) - as_timestamp(states.binary_sensor.electricity_feed.last_changed)) / 60) > 2 }}"
+      - condition: state
+        entity_id: binary_sensor.electricity_feed
+        state: "on"
+    action:
+      - service: "input_boolean.turn_{{ 'on' if is_state(trigger.entity_id, 'on') else 'off' }}"
+        data:
+          entity_id: "{{ trigger.entity_id | replace('light.', 'input_boolean.') }}_state"
+
+  - alias: "Restore Smart Bulb Statuses After Power Restored"
+    id: "1d1af600-8b45-49c9-9b10-4d7616080867"
+    initial_state: true
+    trigger:
+      # tp-link smart bulbs always turn on when power is connected
+      # this will thus trigger the moment the smart bulb reconnects to the network and hass
+      - platform: state
+        entity_id:
+          - light.dining_room
+          - light.music_room
+          - light.foyer
+          - light.hallway
+        to: "on"
+    mode: parallel
+    # some other ideas:
+    # - simplify all of this by only have a time window condition and always turn the lights off (say between 11 pm and 6 am)
+    #   downside is that you simply can't turn on the lights during those times.
+    condition:
+      - condition: and
+        conditions:
+          # only if the light state and saved state disagrees: trigger says on; state says off
+          - condition: template
+            value_template: "{{ is_state(trigger.entity_id | replace('light.', 'input_boolean.') ~ '_state', 'off') }}"
+          # power was recently restored (5 min)
+          # what if the sensor didn't pick up the outage if it was too short for it to update?
+          # this solution won't currently work for that scenario
+          - condition: template
+            value_template: "{{ ((as_timestamp(utcnow()) - as_timestamp(states.binary_sensor.electricity_feed.last_changed)) / 60) <= 5 }}"
+          # but the electricity feed sensor didn't update due to a hass restart (2 min)
+          # in other words, give 2 min for HA to restart and then, due to that, don't change the smart bulb statuses
+          - condition: template
+            value_template: "{{ (utcnow() - states('sensor.home_assistant_uptime') | as_datetime).seconds / 60 > 2 }}"
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: "{{ trigger.entity_id }}"
+
+  # https://community.home-assistant.io/t/how-do-i-mix-manual-automations-in-yaml-files-with-use-of-blueprints/295730
+  - alias: "Toggle Pieter's Bedside Lamp"
+    id: "8f52a6f5-0ce5-4024-948d-bb641166bc00"
+    initial_state: true
+    # https://community.home-assistant.io/t/automation-created-using-a-blueprint-not-showing-up-in-ui-after-creating/256753
+    use_blueprint:
+      path: shelly_button.yaml
+      input:
+        button_device_id: ed95f30c451de3426bc63770935ebc18
+        light_entity_id: light.pieter_bedside
+        single_press_profile: pieter
+        double_press_profile: security
+        triple_press_profile: bedlamp_night
+
+  # i thought it might be good to have the reverse of this too:
+  # restore the other lamp to normal mode when the one is turned on, but it's not that simple.
+  # firstly, does one really want that? there's no easy way to check what profile was used
+  # when it was turned on. for example, say lamp 1 is turned on with the night profile, we don't
+  # want lamp 2 to be turned on normally – we'd (probably) want the night profile too.
+  - alias: "Dim Bedside Lamp"
+    # when the one bedlight is turned off, dim the other
+    id: "29c4493b-3254-4622-9456-e80ede2cfd99"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: light.rouve_bedside
+        to: "off"
+        id: "light.pieter_bedside"
+      - platform: state
+        entity_id: light.pieter_bedside
+        to: "off"
+        id: "light.rouve_bedside"
+    condition:
+      - condition: time
+        after: "20:00:00"
+        before: "01:00:00"
+      - condition: state
+        # on if either or both are on
+        entity_id: light.main_bedroom_group
+        state: "on"
+    action:
+      - service: light.turn_on
+        target:
+          entity_id: "{{ trigger.id }}"
+        data:
+          profile: low
+      - condition: state
+        entity_id: light.hallway
+        state: "on"
+      - service: light.turn_on
+        target:
+          entity_id: light.hallway
+        data:
+          profile: low
+
+  - alias: "Toggle Rouvé's Bedside Lamp"
+    id: "6bb6fa7a-3385-4d78-9a30-6f49c90adbf9"
+    initial_state: true
+    use_blueprint:
+      path: shelly_button.yaml
+      input:
+        button_device_id: b7cb6f66fe4f1eefbf0de8480962bd23
+        light_entity_id: light.rouve_bedside
+        single_press_profile: rouve
+        double_press_profile: security
+        triple_press_profile: bedlamp_night
+
+  - alias: "Toggle Dining Room Light"
+    id: "3cd02beb-7a1a-440a-9507-fb555ff9bb98"
+    initial_state: true
+    use_blueprint:
+      path: shelly_button.yaml
+      input:
+        button_device_id: f1a926dd450fbe85ed9bafece8b719b3
+        light_entity_id: light.dining_room
+        single_press_profile: dim
+        double_press_profile: security
+        triple_press_profile: night
+
+  - alias: "Toggle Hallway Light"
+    id: "58a877b7-eed8-4fd7-897c-51eeed892ad7"
+    initial_state: true
+    use_blueprint:
+      path: shelly_button.yaml
+      input:
+        button_device_id: 16bb98a28aa167819bff6fc45f178899
+        light_entity_id: light.hallway
+        single_press_profile: normal
+        double_press_profile: security
+        triple_press_profile: night
+
+  - alias: "Stop Light Timer If Running When Light Turned Off"
+    id: "5878e444-72bc-4633-85c9-de0ebf5a57dd"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id:
+        # same entities as for "Switch Off Light When Timer Expires"
+        - light.living_room_lamp
+        - light.front_door
+        - light.foyer
+        - light.kitchen_counter
+        - light.hallway
+        - light.bedroom_bedlamp
+      to: "off"
+    mode: parallel
+    condition:
+      condition: template
+      value_template: "{{ is_state(trigger.entity_id | replace('light.', 'timer.') ~ '_timer', 'active') }}"
+    action:
+      - service: timer.cancel
+        target:
+          entity_id: "{{ trigger.entity_id | replace('light.', 'timer.') }}_timer"
+
+  - alias: "Switch On Front Door Light When Any Cover Opened"
+    id: "2f00ee50-2203-4ba6-a6f2-37052dfba07e"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id:
+        # todo: use group?
+        - cover.main_gate
+        - cover.lhs_garage_door
+        - cover.rhs_garage_door
+      to: "open"
+    mode: queued
+    condition:
+      - condition: and
+        conditions:
+          - condition: or
+            conditions:
+              - condition: sun
+                after: sunset
+              - condition: sun
+                before: sunrise
+          - condition: state
+            entity_id: light.front_door
+            state: "off"
+    action:
+      - service: script.turn_on
+        target:
+          entity_id: script.turn_on_light_and_timer
+        data:
+          variables:
+            light: light.front_door
+            duration: "00:03:00"
+
+  - alias: "Switch On Or Extend Front Door Light When Cover Closed"
+    id: "5ac8367e-9016-49ee-a3cf-64861c03aa17"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: call_service
+        event_data:
+          domain: cover
+          service: close_cover
+    mode: queued
+    condition:
+      - condition: and
+        conditions:
+          - condition: or
+            conditions:
+              - condition: sun
+                after: sunset
+              - condition: sun
+                before: sunrise
+          - condition: template
+            value_template: >-
+              {# if the timer has already run out or it's about to, turn it on for another brief moment #}
+              {# https://community.home-assistant.io/t/strptime-vs-as-datetime/381500/7 #}
+              {% set timer = 'timer.front_door_timer' %}
+              {% set finishes_at = (state_attr(timer, 'finishes_at') | as_datetime) if state_attr(timer, 'finishes_at') else None %}
+              {{ finishes_at == None or (finishes_at - now()).seconds < 60 }}
+    action:
+      - service: script.turn_on
+        target:
+          entity_id: script.turn_on_light_and_timer
+        data:
+          variables:
+            light: light.front_door
+            duration: "00:00:30"
+
+  - alias: "Switch Garage Light According To Door Status And Light Conditions"
+    id: "33afb33f-1c65-4e9f-83ca-2796d4da5737"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id:
+          - cover.garage_doors
+        id: "garage_door_trigger"
+      - platform: state
+        entity_id: binary_sensor.low_light
+        id: "low_light_trigger"
+    mode: queued
+    condition:
+      - condition: or
+        conditions:
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: "garage_door_trigger"
+              - condition: state
+                entity_id: binary_sensor.low_light
+                state: "on"
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: "low_light_trigger"
+              - condition: state
+                entity_id: cover.garage_doors
+                state: "open"
+    action:
+      # needed because of poor wifi connectivity in that location
+      # todo: also needed for turning on
+      # if the last door has been closed for a minute and the light is still on, turn it off
+      # alternative:
+      # https://community.home-assistant.io/t/most-efficient-way-to-track-if-lights-has-been-left-on-for-over-x-minutes/374544/12
+      # https://www.home-assistant.io/docs/scripts/#wait-for-trigger
+      repeat:
+        sequence:
+          # bug: what if garage doors go unavailable
+          # https://rc.home-assistant.io/blog/2022/04/27/release-20225/#and-there-is-even-more (not_from/to)
+          # add a choose for if light not unavailable and covers not unknown
+          - service: "light.turn_{{ 'on' if is_state('cover.garage_doors', 'open') else 'off' }}"
+            entity_id: light.garage
+          - delay:
+              seconds: 30
+        until:
+          - condition: template
+            value_template: >-
+              {% set covers_state = 'on' if is_state('cover.garage_doors', 'open') else 'off' %}
+              {# todo/add: or is_state('light.garage', 'unavailable') or is_state('cover.garage_doors', 'unavailable') #}
+              {{ is_state('light.garage', covers_state) }}

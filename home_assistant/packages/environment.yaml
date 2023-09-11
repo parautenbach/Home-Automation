@@ -1,0 +1,92 @@
+automation:
+  - alias: "Download Dam Levels Data"
+    id: "0cb4d6ba-5a63-45f7-8adc-efb98724a44e"
+    trigger:
+      - platform: time
+        at: "05:00:00"
+    action:
+      - service: shell_command.download_latest_dam_levels
+
+  - alias: "Pollen Levels Update"
+    id: "eeb7f4a7-367d-4aee-b4d5-cf84da3b1323"
+    initial_state: true
+    trigger:
+      # If only entity_id is given, the trigger will fire for all state changes, even if only state attributes change.
+      # https://www.home-assistant.io/docs/automation/trigger/#state-trigger
+      - platform: state
+        entity_id:
+          - sensor.overall_pollen_risk
+          - sensor.tree_pollen
+          - sensor.grass_pollen
+          - sensor.weed_pollen
+          - sensor.mould_spores
+    mode: single
+    action:
+      - service: notify.family
+        data:
+          title: "Health"
+          # https://community.home-assistant.io/t/trigger-to-from-attribute/325345
+          # https://community.home-assistant.io/t/access-attribute-of-from-state/380497
+          message: >-
+            {%- macro build_item(sensor, name) -%}
+              {%- set attribute = sensor.split('.')[1] -%}
+              {%- set from = trigger.from_state.attributes[attribute] | lower -%}
+              {%- set to = trigger.to_state.attributes[attribute] | lower -%}
+              {%- if from != to -%}
+                {{ name }}: changed from {{ from }} to {{ to }}
+              {%- else -%}
+                {{ name }}: {{ to }}
+              {%- endif -%}
+            {%- endmacro -%}
+            {%- set sensors = [('sensor.tree_pollen', 'Trees'), ('sensor.grass_pollen', 'Grasses'), ('sensor.weed_pollen', 'Weeds'), ('sensor.mould_spores', 'Mould')] -%}
+            {%- set summary = '' -%}
+            {%- set from_state_label = trigger.from_state.attributes.label | lower -%}
+            {%- set to_state_label = trigger.to_state.attributes.label | lower -%}
+            {%- if from_state_label != to_state_label -%}
+              {%- set summary = 'Pollen levels changed from ' ~ from_state_label ~ ' to ' ~ to_state_label ~ '.' -%}
+            {%- else -%}
+              {%- set summary = 'Pollen levels are ' ~ to_state_label ~ '.' -%}
+            {%- endif -%}
+            {{ summary }}
+            {%- for (sensor, name) in sensors %}
+              - {{ build_item(sensor, name) }}
+            {%- endfor %}
+          data:
+            group: "environment"
+            url: homeassistant://navigate/lovelace/environment
+
+  - alias: "High UV Notification"
+    id: "101c7f2d-6839-4a8c-be1a-0de46ed70477"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.openweathermap_uv_index
+        above: 5
+    mode: single
+    action:
+      - service: notify.family
+        data:
+          title: "Health"
+          message: >
+            UV radiation is high. Remember to apply sunscreen.
+          data:
+            group: "environment"
+            url: homeassistant://navigate/lovelace/environment
+
+  - alias: "High Fire Risk Notification"
+    id: "657e1700-f69f-416e-9b62-269d702e8a38"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.winelands_fdi
+        above: 45
+    mode: single
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Environment"
+          message: >-
+            The risk of fires is dangerously high. FDI: {{ states('sensor.winelands_fdi') }}.
+          data:
+            group: "environment"
+            url: homeassistant://navigate/lovelace/environment

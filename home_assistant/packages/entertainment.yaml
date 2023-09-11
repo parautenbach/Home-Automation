@@ -1,0 +1,17 @@
+automation:
+  - alias: "Turn Audio On When Apple TV Turned On"
+    id: "7c3646d2-8fe8-4378-a6f5-979e16cc40ff"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: media_player.living_room
+      from: standby
+      # seems like an apple tv can turn on and be in a paused state immediately
+      # to: idle
+    mode: single
+    action:
+      - service: script.turn_on
+        entity_id: script.hk_3380_power_on
+      - delay: "00:00:10"
+      - service: script.turn_on
+        entity_id: script.samsung_tv_hdmi2

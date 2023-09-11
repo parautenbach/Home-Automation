@@ -1,0 +1,267 @@
+automation:
+  - alias: "See Mobile Devices"
+    id: "6a1a5829-c740-4965-972b-58ce80651de1"
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: time_pattern
+        minutes: "/15"
+    action:
+      # https://companion.home-assistant.io/docs/notifications/notification-commands#request-location-updates
+      - service: notify.mobile_app_ceres
+        data:
+          message: "request_location_update"
+      - service: notify.mobile_app_rouve
+        data:
+          message: "request_location_update"
+
+  - alias: "Shut Down Devices Before Loadshedding"
+    id: "015daeee-a776-4220-b5cb-0f4949dde6a0"
+    initial_state: false
+    trigger:
+      # https://www.home-assistant.io/docs/automation/trigger/#calendar-trigger
+      # https://www.home-assistant.io/integrations/calendar/#automation
+      # manual (fallback option)
+      - platform: calendar
+        entity_id: calendar.loadshedding
+        event: start
+        offset: "-00:05:00"
+      # automatic
+      # really need an offset option here
+      # - platform: time
+      #   at: sensor.loadshedding_start_time
+      - platform: template
+        value_template: >-
+          {% set t = (states('sensor.loadshedding_start_time') | as_datetime | as_local - timedelta(minutes=5)).strftime('%Y-%d-%m %H:%M') %}
+          {% set n = now().strftime('%Y-%d-%m %H:%M') %}
+          {{ n == t }}
+    mode: single
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "System"
+          message: "Systems shutting down prior to loadshedding."
+          data:
+            group: "system-general"
+            url: homeassistant://navigate/lovelace/devices
+      - service: script.turn_on
+        target:
+          entity_id: script.shutdown_all_remote_hosts
+      - delay: "00:05:00"
+      - service: script.turn_on
+        entity_id: script.entertainment_off
+
+  - alias: "Shut Down Gaia Notification"
+    id: "ef1a7da7-d878-4456-a44c-9615b9712c2a"
+    initial_state: false
+    trigger:
+      - platform: time
+        at: sensor.loadshedding_start_time
+    mode: single
+    condition:
+      - condition: state
+        entity_id: binary_sensor.gaia_active
+        state: "on"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Loadshedding"
+          message: "Shut Gaia down now!"
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/devices
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 1.0
+
+  - alias: "Check For Low Batteries"
+    id: "5ff59069-6f3c-4f9d-bc66-b50bea8e184e"
+    initial_state: true
+    variables:
+      level: 5
+      # https://community.home-assistant.io/t/variable-in-automation-not-working-as-expected/431591/2
+      monitored_batteries: >-
+        {{
+          states.sensor
+            | selectattr('attributes.monitor', 'defined')
+            | selectattr('attributes.monitor', 'eq', True)
+            | rejectattr('state', 'in', ['unavailable', 'unknown', 'none'])
+            | selectattr('attributes.device_class', 'eq', 'battery')
+            | map(attribute='entity_id')
+            | list
+        }}
+    trigger:
+      # what if the server is down at this time? for now, we don't care: batteries might last till the next day and there's a flat battery check
+      platform: time
+      at: "09:00:00"
+    condition: >-
+      {{
+        expand(monitored_batteries)
+          | map(attribute='state')
+          | map('int')
+          | select('lt', level)
+          | list
+          | count
+          > 0
+      }}
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          # icon: https://companion.home-assistant.io/docs/notifications/notifications-basic/#notification-icon
+          #       https://companion.home-assistant.io/docs/notifications/actionable-notifications/#icon-values
+          title: "Batteries"
+          # https://community.home-assistant.io/t/recommended-ways-to-manage-devices-and-entities-names/243815/12
+          message: >
+            The following devices have less than {{ level }}% charge:
+            {%- for b in monitored_batteries %}
+              {%- if states(b) | int < level and not is_state(b, 'unavailable') %}
+              - {{ state_attr(b, 'friendly_name') | replace(' Battery', '') }}: {{ states(b) | int }}%
+              {%- endif -%}
+            {%- endfor %}
+          data:
+            group: "batteries"
+            url: homeassistant://navigate/lovelace/devices
+            # https://companion.home-assistant.io/docs/notifications/notifications-basic/#notification-icon
+            # https://community.home-assistant.io/t/mobile-notification-icon-not-showing-up/408050
+            # icon_url: "https://github.com/home-assistant/assets/blob/master/logo/logo-small.png?raw=true"
+
+  # https://community.home-assistant.io/t/why-isnt-there-a-groups-entities-state-trigger/467179
+  # https://community.home-assistant.io/t/unleash-the-power-of-expand-for-template-sensors/136941/22
+  # https://community.home-assistant.io/t/trigger-an-automation-based-on-a-groups-individual-entity-state-change/383560
+  # https://community.home-assistant.io/t/single-automation-for-all-lights/375028/8
+  # todo: alert when battery at 1%
+  - alias: "Check For Flat Batteries"
+    id: "ef76e5b9-fa6d-4940-b89a-ba24cef91463"
+    initial_state: true
+    variables:
+      level: 0
+      monitored_batteries: >-
+        {{
+          states.sensor
+            | selectattr('attributes.monitor', 'defined')
+            | selectattr('attributes.monitor', 'eq', True)
+            | rejectattr('state', 'in', ['unavailable', 'unknown', 'none'])
+            | selectattr('attributes.device_class', 'eq', 'battery')
+            | map(attribute='entity_id')
+            | list
+        }}
+    trigger:
+      - platform: state
+        entity_id: sensor.number_of_flat_batteries
+    condition: >-
+      {{
+        expand(monitored_batteries)
+          | map(attribute='state')
+          | map('int')
+          | select('eq', level)
+          | list
+          | count
+          > 0
+      }}
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Batteries"
+          message: >
+            The following devices have no charge:
+            {%- for b in monitored_batteries %}
+              {%- if states(b) | int == level and not is_state(b, 'unavailable') %}
+              - {{ state_attr(b, 'friendly_name') | replace(' Battery', '') }}
+              {%- endif -%}
+            {%- endfor %}
+          data:
+            group: "batteries"
+            url: homeassistant://navigate/lovelace/devices
+
+  # todo: check if this affects server cpu
+  # <Event state_changed[L]:
+  # entity_id=sensor.rouve_bedside_light_button_battery,
+  # old_state=<state sensor.rouve_bedside_light_button_battery=81;
+  #   state_class=measurement,
+  #   unit_of_measurement=%,
+  #   device_class=battery,
+  #   friendly_name=Rouvé's Bedside Light Button Battery,
+  #   monitor=True @ 2023-07-17T22:53:35.974894+02:00>,
+  # new_state=<state sensor.rouve_bedside_light_button_battery=80;
+  #   state_class=measurement,
+  #   unit_of_measurement=%,
+  #   device_class=battery,
+  #   friendly_name=Rouvé's Bedside Light Button Battery,
+  #   monitor=True @ 2023-07-19T23:54:56.798866+02:00>>
+  - alias: "Notify When Monitored Battery Fully Charged"
+    id: "e3433145-19b2-48bd-a364-5ca87db912e9"
+    initial_state: true
+    trigger:
+      # https://community.home-assistant.io/t/unleash-the-power-of-expand-for-template-sensors/136941/12
+      - platform: event
+        event_type: state_changed
+    condition:
+      - condition: template
+        # https://www.home-assistant.io/docs/configuration/events/#state_changed
+        value_template: >-
+          {{ 'old_state' in trigger.event.data and
+             'new_state' in trigger.event.data and
+             trigger.event.data.old_state.state != 'unavailable' and
+             trigger.event.data.new_state.state != trigger.event.data.old_state.state and
+             trigger.event.data.entity_id in state_attr('sensor.monitored_batteries', 'batteries') and
+             trigger.event.data.new_state.state | int(0) == 100 }}
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Batteries"
+          message: >
+            The {{ state_attr(trigger.event.data.entity_id, 'friendly_name') }} is fully charged.
+          data:
+            group: "batteries"
+            url: homeassistant://navigate/lovelace/devices
+      # - service: persistent_notification.create
+      #   data:
+      #     title: "Debug: Battery Fully Charged"
+      #     message: "{{ trigger.event }}"
+
+  - alias: "Battery Event Test"
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: state_changed
+    mode: single
+    condition:
+      - condition: template
+        # https://www.home-assistant.io/docs/configuration/events/#state_changed
+        value_template: "{{ trigger.event.data.entity_id in state_attr('sensor.monitored_batteries', 'batteries') }}"
+    action:
+      - service: system_log.write
+        data:
+          message: "{{ trigger.event }}"
+          level: debug
+          logger: "homeassistant.components.automation"
+      # - service: notify.mobile_app_ceres
+      #   data:
+      #     title: "Batteries Test"
+      #     message: "{{ trigger.event }}"
+      #     data:
+      #       group: "test"
+      #       url: homeassistant://navigate/lovelace/devices
+      - service: persistent_notification.create
+        data:
+          title: "Batteries Test"
+          message: "{{ trigger.event }}"
+      - service: automation.turn_off
+        entity_id: automation.battery_event_test
+
+  # https://apple.stackexchange.com/questions/363416/how-to-check-if-any-audio-is-currently-playing-via-terminal
+  # $ if [[ "$(pmset -g | grep ' sleep')" == *"coreaudiod"* ]]; then echo audio is playing; else echo no audio playing; fi
+  - alias: "Update Gaia Bluetooth Audio Connection Status"
+    id: "84c4f680-4f0c-4ded-a42f-c931edaee154"
+    initial_state: true
+    trigger:
+      - platform: webhook
+        webhook_id: gaia_bluetooth_audio_connected
+        local_only: true
+    mode: queued
+    action:
+      - service: "input_boolean.turn_{{ 'on' if (trigger.data['status'] | int) else 'off' }}"
+        data:
+          entity_id: input_boolean.gaia_bluetooth_audio_connected

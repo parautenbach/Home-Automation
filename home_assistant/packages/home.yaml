@@ -1,0 +1,558 @@
+automation:
+  - alias: "Away Mode"
+    description: "Activate away mode When leaving home"
+    id: "93bac20d-eeba-48f6-87ef-d6c7f754ddcc"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.anybody_home
+      to: "off"
+    condition:
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "off"
+    action:
+      - service: light.turn_off
+        entity_id: all
+      - service: script.turn_on
+        entity_id: script.entertainment_off
+      - service: switch.turn_off
+        entity_id: switch.tivoli_audio
+
+  - alias: "Turn Off Entertainment System When Idle Or Leaving Room"
+    description: "Assuming it's bedtime when the living room lamp is turned off after a certain time"
+    id: "7976aaad-a575-442d-ae00-538e5412e92f"
+    trigger:
+      # todo: we don't know the decoder's state so we could be turning off the tv just because the apple tv isn't playing...
+      # - platform: state
+      #   entity_id: media_player.living_room
+      #   to: "idle"
+      #   for:
+      #     minutes: 15
+      - platform: state
+        entity_id: light.living_room_lamp
+        to: "off"
+    condition:
+      - condition: time
+        after: "18:00:00"
+        before: "01:00:00"
+    action:
+      # future condition: if only we could know whether it's on
+      - service: script.turn_on
+        entity_id: script.entertainment_off
+      - service: light.turn_off
+        target:
+          entity_id:
+            # this group includes the foyer light, which could be on as warning light when there's no grid power/loadshedding/on backup power
+            - light.living_area_group
+            - light.kitchen_counter
+      - service: script.turn_on
+        target:
+          entity_id: script.fade_light
+        data:
+          variables:
+            light: light.hallway
+            target_brightness_pct: 0
+            transition_duration: 60
+      # todo: make a group for all lights except bedlamps?
+      - service: light.turn_off
+        entity_id: light.bedroom_bedlamp
+
+  - alias: "Switch On The Front Door Light When Arriving Home"
+    id: "47e6883e-b9ab-4559-9603-765e80cdfa81"
+    trigger:
+      # when either of us arrive home, irrespective of whether anybody is home
+      - platform: state
+        entity_id:
+          - binary_sensor.pieter_present
+          - binary_sensor.rouve_present
+        to: "on"
+    mode: single
+    condition:
+      - condition: or
+        conditions:
+          - condition: sun
+            after: sunset
+          - condition: sun
+            before: sunrise
+      - condition: state
+        entity_id: light.front_door
+        state: "off"
+    action:
+      - service: script.turn_on
+        target:
+          entity_id: script.turn_on_light_and_timer
+        data:
+          variables:
+            light: light.front_door
+            duration: "00:03:00"
+
+  - alias: "Open The Gate When Arriving Home"
+    id: "7dcb52a0-3ecc-4a6f-9b89-6d80a6720590"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.pieter_present
+        to: "on"
+        # prevent false positive due to flaky connectivity or after loadshedding and sensors being unavailable
+        not_from: "unavailable"
+    mode: single
+    condition:
+      - condition: and
+        conditions:
+          # prevent a glitch in case the cover was recently closed
+          # since there is also an availability template for the cover defined, it will usually also prevent the gate from opening
+          # when the location gets updated after the power returns (after loadshedding)
+          - condition: state
+            entity_id: cover.main_gate
+            state: "closed"
+            for:
+              minutes: 2
+          - condition: time
+            after: "07:00:00"
+            before: "23:00:00"
+    action:
+      - if:
+          - condition: state
+            entity_id: binary_sensor.pieter_driving
+            state: "on"
+        then:
+          - service: cover.open_cover
+            entity_id: cover.main_gate
+        else:
+          - service: script.turn_on
+            entity_id: script.open_pedestrian_gap
+
+  # open garage door when arriving home:
+  # when moving above a certain (last) speed (so i'm driving, not cycling or otherwise, or getting transported in some other way)
+  #   - the above now done with an ios activity sensor
+  # and connected to my car's bluetooth (thus, open my garage door only for my car)
+  #   - because ios prompts you to run the automation to set the input boolean, it's not useful; installing ultrasonic sensors to track which door to open
+  #   - check for one or both to open (edge case)
+  # and rouve/someone is home (proxy for the alarm being off)
+  # https://www.home-assistant.io/integrations/proximity/
+  # https://www.home-assistant.io/docs/configuration/templating/ (distance function)
+  # https://companion.home-assistant.io/docs/core/sensors/
+  - alias: "Open Garage Door When Arriving"
+    id: "0da9adc5-24df-4669-8160-bbc6782dc283"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.pieter_present
+        to: "on"
+        # prevent false positive due to flaky connectivity or after loadshedding and sensors being unavailable
+        not_from: "unavailable"
+    condition:
+      - condition: and
+        conditions:
+          # prevent a glitch in case the cover was recently closed
+          - condition: state
+            entity_id: cover.rhs_garage_door
+            state: "closed"
+            for:
+              minutes: 5
+          - condition: time
+            after: "07:00:00"
+            before: "23:00:00"
+          # i must be arriving by car
+          - condition: state
+            entity_id: binary_sensor.pieter_driving
+            state: "on"
+          # my cover for my car
+          - condition: state
+            entity_id: binary_sensor.rhs_garage_occupied
+            state: "off"
+          # proxy for the alarm being off
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: binary_sensor.rouve_present
+                state: "on"
+                for:
+                  minutes: 5
+              - condition: state
+                entity_id: binary_sensor.contractor_mode
+                state: "on"
+          # if guest mode is on, someone could be parked in or in front of the garage
+          - condition: state
+            entity_id: switch.guest_mode
+            state: "off"
+    action:
+      - service: cover.open_cover
+        entity_id: cover.rhs_garage_door
+
+  - alias: "Contractor Mode Enabled Alert"
+    id: "86443a8d-cc5d-4017-a7f8-190e9eccc8cc"
+    trigger:
+      - platform: state
+        entity_id: switch.contractor_mode
+        to: "on"
+    mode: queued
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Special Mode"
+          message: "Contractor mode enabled."
+          data:
+            actions:
+              - action: "DISABLE_CONTRACTOR_MODE"
+                title: "Disable"
+            # use threads but don't replace: we want to see whenever the state changed
+            group: "contractor-mode"
+            url: homeassistant://navigate/lovelace/main
+
+  - alias: "Contractor Mode Disabled Alert"
+    id: "123e8e79-6f0e-48f5-a400-951922bf9b80"
+    trigger:
+      - platform: state
+        entity_id: switch.contractor_mode
+        to: "off"
+    mode: queued
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Special Mode"
+          message: "Contractor mode disabled."
+          data:
+            actions:
+              - action: "ENABLE_CONTRACTOR_MODE"
+                title: "Enable"
+            group: "contractor-mode"
+            url: homeassistant://navigate/lovelace/main
+
+  - alias: "Enable Contractor Mode"
+    id: "47fc96f9-bf33-4f9e-97ed-8aaea4da1a12"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: calendar.housekeeping
+        to: "on"
+      - platform: homeassistant
+        event: start
+    condition:
+      - condition: state
+        entity_id: calendar.housekeeping
+        state: "on"
+      - condition: state
+        entity_id: switch.contractor_mode
+        state: "off"
+    action:
+      - service: switch.turn_on
+        entity_id: switch.contractor_mode
+      # cleaning day lights
+      - service: light.turn_on
+        entity_id:
+          - light.hallway
+          - light.music_room
+          - light.dining_room
+        data:
+          profile: security
+      # only turn it on if it's not already on; it could be on already as the warning light due to load shedding
+      - condition: state
+        entity_id: light.foyer
+        state: "off"
+      - service: light.turn_on
+        entity_id: light.foyer
+        data:
+          profile: security
+
+  - alias: "Revert Cleaning Day Lights"
+    id: "9b73e13c-449e-4b9c-82c3-2652156cd7e5"
+    trigger:
+      - platform: state
+        entity_id: calendar.housekeeping
+        to: "off"
+        not_from: "unavailable"
+    # not strictly necessary, but just make doubly sure it won't trigger at odd times
+    # the bug we're fixing with not_from above was that the calendar went unavailable
+    # late at night and when it became available, it turned on a bunch of lights
+    condition:
+      - condition: time
+        after: "06:00:00"
+        before: "18:00:00"
+    action:
+      - service: light.turn_off
+        entity_id:
+          - light.music_room
+          - light.dining_room
+      - service: light.turn_on
+        entity_id: light.hallway
+        data:
+          profile: normal
+      # don't turn it off while being load shed, because this is the warning light and will be red
+      - condition: state
+        entity_id: binary_sensor.grid_feed
+        state: "on"
+      - service: light.turn_off
+        entity_id: light.foyer
+
+  - alias: "Disable Contractor Mode"
+    id: "f63a3c52-fac8-4fc7-a000-0f41b2ee5e8d"
+    initial_state: true
+    trigger:
+      - platform: time
+        at: "16:00:00"
+      - platform: homeassistant
+        event: start
+    condition:
+      - condition: state
+        entity_id: switch.contractor_mode
+        state: "on"
+      - condition: time
+        after: "16:00:00"
+    action:
+      - service: switch.turn_off
+        entity_id: switch.contractor_mode
+
+  - alias: "Contractor Mode Still Enabled Alert"
+    id: "f64b90bf-9234-42d1-a3b7-b34443fd3ea6"
+    initial_state: true
+    trigger:
+      - platform: time_pattern
+        hours: "*"
+        minutes: 0
+        seconds: 0
+    condition:
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: switch.contractor_mode
+            state: "on"
+          - condition: time
+            after: "17:00:00"
+            before: "21:00:00"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Special Mode"
+          message: "Contractor mode is still enabled."
+          data:
+            actions:
+              - action: "DISABLE_CONTRACTOR_MODE"
+                title: "Disable"
+            group: "contractor-mode"
+            url: homeassistant://navigate/lovelace/main
+
+  - alias: "Disable Contractor Mode From Alert Action"
+    id: "496603d1-c6b1-46c0-9048-8601edd627d4"
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: DISABLE_CONTRACTOR_MODE
+    action:
+      - service: switch.turn_off
+        entity_id: switch.contractor_mode
+
+  - alias: "Enable Contractor Mode From Alert Action"
+    id: "84c0360f-3154-4705-904e-ca50ffedce47"
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: ENABLE_CONTRACTOR_MODE
+    action:
+      - service: switch.turn_on
+        entity_id: switch.contractor_mode
+
+  - alias: "Disable Guest Mode When Getting Home"
+    id: "a113f957-602f-44ca-b1a4-559bafab4835"
+    initial_state: true
+    trigger:
+      # don't trigger on binary_sensor.anybody_home, because, should we be away when turning this on,
+      # it will immediately be turned off, as guest mode will turn the binary sensor on
+      # ideally, guest mode should be turned on while home, but reality doesn't always play out like that
+      - platform: state
+        entity_id: binary_sensor.family_present
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: switch.guest_mode
+        state: "on"
+    action:
+      - service: switch.turn_off
+        entity_id: switch.guest_mode
+
+  - alias: "Guest Mode Enabled Alert"
+    id: "6f1be18f-6a43-4512-b537-0bd8aa1581d2"
+    trigger:
+      - platform: state
+        entity_id: switch.guest_mode
+        to: "on"
+    mode: queued
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Special Mode"
+          message: "Guest mode enabled."
+          data:
+            actions:
+              - action: "DISABLE_GUEST_MODE"
+                title: "Disable"
+            group: "guest-mode"
+            url: homeassistant://navigate/lovelace/main
+
+  - alias: "Guest Mode Disabled Alert"
+    id: "f0aff94c-3b99-4917-b399-6f709cdbf80b"
+    trigger:
+      - platform: state
+        entity_id: switch.guest_mode
+        to: "off"
+    mode: queued
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Special Mode"
+          message: "Guest mode disabled."
+          data:
+            actions:
+              - action: "ENABLE_GUEST_MODE"
+                title: "Enable"
+            group: "guest-mode"
+            url: homeassistant://navigate/lovelace/main
+
+  - alias: "Enable Guest Mode From Alert Action"
+    id: "cfeb5963-4854-439b-952e-f1ac37fd125d"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: ENABLE_GUEST_MODE
+    action:
+      - service: switch.turn_on
+        entity_id: switch.guest_mode
+
+  - alias: "Disable Guest Mode From Alert Action"
+    id: "0ad8eed7-dbd3-412f-b1d8-99f3ee74368c"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: DISABLE_GUEST_MODE
+    action:
+      - service: switch.turn_off
+        entity_id: switch.guest_mode
+
+  - alias: "Set Vacation"
+    id: "a5e5cc6f-f66b-458e-9b63-0a60ef5be6a9"
+    trigger:
+      - platform: state
+        entity_id: calendar.vacation
+        to: "on"
+      # add hourly trigger too in case changes are made to the event
+      # (e.g. i forgot to add an event to the calendar on the night before)
+      # this will override any manual changes made by setting the input datetimes directly
+      - platform: time_pattern
+        hours: "/1"
+      - platform: homeassistant
+        event: start
+    action:
+      - service: input_datetime.set_datetime
+        entity_id: input_datetime.vacation_start
+        data:
+          datetime: "{{ ((state_attr('calendar.vacation', 'start_time') or states('input_datetime.vacation_start')) | as_datetime).date() }}"
+      - service: input_datetime.set_datetime
+        entity_id: input_datetime.vacation_end
+        data:
+          # all-day events are set by google to until midnight of the next day
+          # also the timedelta will fail if it's None, so cater for that
+          datetime: "{{ ((state_attr('calendar.vacation', 'end_time') | as_datetime - timedelta(seconds=1) if state_attr('calendar.vacation', 'end_time') else None) or (states('input_datetime.vacation_end') | as_datetime)).date() }}"
+
+  - alias: "Alert Vacation Start"
+    id: "f1be4ad3-042c-4cbd-bb91-99da7bdc5dab"
+    initial_state: true
+    trigger:
+      platform: time
+      at: "21:00:00"
+    condition: "{{ (states('input_datetime.vacation_start') | as_datetime - timedelta(days=1)).date() == now().date() }}"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Routine Change"
+          message: "Wake-up lights will be suspended from tomorrow until {{ states('input_datetime.vacation_end') }}."
+          data:
+            group: "routine-change"
+            url: homeassistant://navigate/lovelace/main
+
+  - alias: "Alert Vacation End"
+    id: "e1ce2573-356f-467d-93e4-c7bcb541db9a"
+    initial_state: true
+    trigger:
+      platform: time
+      at: "21:00:00"
+    # google calendar all-day events go up to midnight of the next day – but this is already catered for when we set the helpers
+    # old: condition: "{{ (states('input_datetime.vacation_end') | as_datetime).date() == now().date() }}"
+    # new: if today is not a work day but tomorrow is (and today isn't weekend, unless it's part of the vacation)
+    # but do we want this every sunday night to trigger? what if sunday is the end of the vacation?
+    condition: >-
+      {{
+        is_state('binary_sensor.workday', 'off') and
+        is_state('binary_sensor.workday_tomorrow', 'on') and
+          (
+            now().strftime('%a') != 'Sun' or
+            (states('input_datetime.vacation_end') | as_datetime).date() == now().date()
+          )
+      }}
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Routine Change"
+          message: "Wake-up lights will be resumed from tomorrow at {{ states('input_datetime.wake_up_time')[:5] }}."
+          data:
+            group: "routine-change"
+            url: homeassistant://navigate/lovelace/main
+
+  - alias: "Notify Pieter Going Home from Work in Cape Town"
+    id: "5515c06c-6c69-443d-9549-eb00999e8b95"
+    trigger:
+      platform: zone
+      entity_id: person.pieter_rautenbach
+      zone: zone.pieter_work_cape_town
+      event: leave
+    # this could potentially be improved by checking whether we are both together
+    # in which case sending a notification won't make sense
+    # seems unlikely though...
+    condition:
+      - condition: and
+        conditions:
+          - condition: time
+            after: "16:00:00"
+            weekday:
+              - mon
+              - tue
+              - wed
+              - thu
+              - fri
+          - condition: numeric_state
+            entity_id: sensor.duration_pieter_work_cape_town
+            above: 1
+    action:
+      - service: script.turn_on
+        entity_id: script.send_pieter_work_cape_town_to_home_eta
+
+  - alias: "Notify Doorbell Rang"
+    id: "46054fb3-4e60-40ad-9e0f-e22b8137b23c"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.doorbell_rang
+        to: "on"
+    mode: queued
+    action:
+      - service: camera.snapshot
+        data:
+          entity_id: camera.doorbell
+          # todo: update security view; make capture scripts generic
+          filename: '/tmp/camera.doorbell_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+      # todo: script.security_camera_create_snapshot
+      - service: notify.mobile_app_ceres
+        data:
+          title: Security
+          message: "Someone rang the doorbell."
+          # todo: thumbnail, url
+          # data:
+          #   group: "security-camera-snapshots"
+          #   attachment:
+          #     url: !secret doorbell_camera_last_snapshot_url

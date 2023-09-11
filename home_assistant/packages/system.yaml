@@ -1,0 +1,272 @@
+automation:
+  - alias: "Set Light Theme"
+    id: "b2139218-ae45-4fc5-a049-1a9692bc387e"
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: sun
+        event: sunrise
+        # 30 min after sunrise
+        offset: "00:30:00"
+    # condition needed for the start trigger
+    condition:
+      - condition: sun
+        after: sunrise
+    action:
+      service: frontend.set_theme
+      data:
+        name: custom-light-mode
+
+  - alias: "Set Dark Theme"
+    id: "2a26deed-9071-4eb4-80b7-d014dfe98def"
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: sun
+        event: sunset
+        # 30 min after sunset
+        offset: "00:30:00"
+    # condition needed for the start trigger
+    condition:
+      - condition: sun
+        after: sunset
+    action:
+      service: frontend.set_theme
+      data:
+        name: slate
+
+  - alias: "Check Disk Space on the Home Assistant Server"
+    id: "e955e738-4162-486e-a915-d30b5952d238"
+    trigger:
+      - platform: time_pattern
+        hours: "*"
+        minutes: 0
+        seconds: 0
+    condition:
+      - condition: numeric_state
+        entity_id: sensor.disk_use_percent
+        above: 89
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "System"
+          message: "Server disk usage is {{ states('sensor.disk_use_percent') }}%!"
+          data:
+            group: "system-disk-space"
+            url: homeassistant://navigate/lovelace/devices
+
+  - alias: "Notify When Server Started After Being Shut Down Automatically"
+    id: "cc787a25-6e55-4388-ab3c-68e9716bce50"
+    trigger:
+      - platform: homeassistant
+        event: start
+    mode: single
+    condition:
+      - condition: state
+        entity_id: input_boolean.server_shut_down_automatically
+        state: "on"
+    action:
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.server_shut_down_automatically
+      - service: notify.mobile_app_ceres
+        data:
+          title: "System"
+          message: "Server started."
+          data:
+            group: "system-general"
+            url: homeassistant://navigate/lovelace/devices
+
+  - alias: "Notify If Server Load High"
+    id: "720ef41c-589a-4b16-9223-6e49d362e721"
+    initial_state: true
+    trigger:
+      platform: numeric_state
+      entity_id: sensor.load_15m
+      above: 1
+      for:
+        minutes: 15
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "System"
+          # https://community.home-assistant.io/t/convert-trigger-for-into-a-relative-age/196979
+          message: "The server load has been {{ states('sensor.load_15m') }} for {{ trigger.for.seconds // 60 }} min."
+          data:
+            group: "system-load"
+            url: homeassistant://navigate/lovelace/devices
+
+  - alias: "Backup Home Assistant"
+    id: "57461782-62af-4987-a6ce-46f602fcc417"
+    trigger:
+      platform: time
+      at:
+        - "02:05:00"
+    condition:
+      - condition: time
+        weekday:
+          - wed
+          - sun
+    action:
+      # https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete
+      - service: script.turn_on
+        entity_id: script.make_backup
+
+  - alias: "Backup Home Assistant DB"
+    id: "23ad9089-b7de-495e-b525-0730fd007c6d"
+    trigger:
+      platform: time
+      at:
+        - "03:05:00"
+    condition:
+      - condition: time
+        weekday:
+          - sun
+    action:
+      # https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete
+      - service: script.turn_on
+        entity_id: script.make_db_backup
+
+  # backup script: https://gist.github.com/riemers/041c6a386a2eab95c55ba3ccaa10e7b0
+  - alias: "Notify If No Recent Backup"
+    id: "1069834c-2087-48a9-9015-e9a4a86262d9"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.no_recent_backup
+        to: "on"
+      # backup check in case there was a restart and the state didn't change
+      - platform: time
+        at: "09:00:00"
+    mode: single
+    condition:
+      - condition: state
+        entity_id: binary_sensor.no_recent_backup
+        state: "on"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "System"
+          # https://community.home-assistant.io/t/duplicate-ios-companion-app-notifications/406161
+          message: "No recent backup found."
+          data:
+            group: "system-backup"
+            url: homeassistant://navigate/lovelace/devices
+
+  - alias: "Notify If New Backup Found"
+    id: "f5382369-7a98-4cc0-bd63-ecf1c6e6f288"
+    trigger:
+      - platform: state
+        entity_id: sensor.last_backup
+    mode: single
+    condition:
+      condition: template
+      value_template: >-
+        {% set last_backup = states('sensor.last_backup') | as_datetime %}
+        {{ ((utcnow() - last_backup).seconds) < 60 }}
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "System"
+          message: "A new Home Assistant backup was made."
+          data:
+            group: "system-backup"
+            url: homeassistant://navigate/lovelace/devices
+
+  - alias: "Low Server Battery"
+    id: "cc72f00c-96e6-49eb-84f3-c72b09f49f7f"
+    initial_state: true
+    trigger:
+      - platform: template
+        value_template: "{{ states('sensor.home_assistant_server_battery') | int <= 10 }}"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "System"
+          message: "Server battery is running low!"
+          data:
+            group: "system-battery"
+            url: homeassistant://navigate/lovelace/devices
+
+  # udevadm monitor
+  # udevadm info --path=/sys/class/power_supply/AC0
+  # /etc/udev/rules.d/60-power.rules
+  # SUBSYSTEM=="power_supply",ENV{POWER_SUPPLY_NAME}=="AC0",RUN+="/usr/bin/curl -s -X POST http://<host>:<port>/api/webhook/<webhook_id> -d 'status=$env{POWER_SUPPLY_ONLINE}'"
+  # udevadm control --reload-rules && udevadm trigger
+  # sudo /etc/init.d/udev restart
+  # udevadm control --log-priority=debug
+  # (sudo) journalctl -f
+  - alias: "Update Server Power Status"
+    id: "3b2aed6b-5894-4339-acec-19e4e8ce97c7"
+    initial_state: true
+    trigger:
+      - platform: webhook
+        webhook_id: server_power_connected
+        local_only: true
+    mode: queued
+    action:
+      # sensor definition: platform: linux_battery
+      - service: homeassistant.update_entity
+        entity_id: sensor.home_assistant_server_battery
+
+  - alias: "Shut Down Server"
+    id: "3fd83ac9-dc07-40d7-a9d1-c50c123b32ff"
+    initial_state: true
+    variables:
+      timeout: 90
+    trigger:
+      - platform: template
+        value_template: "{{ is_state('sensor.home_assistant_server_battery_status', 'Discharging') }}"
+    mode: single
+    action:
+      - service: homeassistant.update_entity
+        target:
+          entity_id: binary_sensor.electricity_feed
+      - service: notify.mobile_app_ceres
+        data:
+          title: "System"
+          message: "Server will shut down in {{ timeout }} seconds."
+          data:
+            group: "system-general"
+            url: homeassistant://navigate/lovelace/devices
+      - wait_template: "{{ not is_state('sensor.home_assistant_server_battery_status', 'Discharging') }}"
+        timeout:
+          seconds: "{{ timeout }}"
+        continue_on_timeout: true
+      - if:
+          - "{{ wait.completed }}"
+        then:
+          - service: notify.mobile_app_ceres
+            data:
+              title: "System"
+              message: "Server shutdown cancelled: Power was restored."
+              data:
+                group: "system-general"
+                url: homeassistant://navigate/lovelace/devices
+        else:
+          - service: input_boolean.turn_on
+            entity_id: input_boolean.server_shut_down_automatically
+          - service: homeassistant.update_entity
+            target:
+              entity_id: binary_sensor.electricity_feed
+          - service: notify.mobile_app_ceres
+            data:
+              title: "System"
+              message: "Server shutting down."
+              data:
+                group: "system-general"
+                url: homeassistant://navigate/lovelace/devices
+          - delay:
+              seconds: 5
+          - service: shell_command.shutdown_server
+
+  # polling should be turned off
+  # https://github.com/home-assistant/core/issues/71563
+  - alias: "Update DB Size"
+    id: "7219415c-c1e4-40dd-a429-2f4eccc7da76"
+    initial_state: true
+    trigger:
+      platform: time_pattern
+      hours: "/3"
+    action:
+      - service: homeassistant.update_entity
+        target:
+          entity_id: sensor.db_size

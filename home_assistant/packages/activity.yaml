@@ -1,0 +1,41 @@
+automation:
+  - alias: "Set Pieter's Driving State"
+    id: "2cc8c07c-384d-4fce-ab9e-11e2c7a25b60"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: sensor.pieter_activity_type
+        to: "Automotive"  # from anything else
+      - platform: state
+        entity_id: sensor.pieter_activity_type
+        from: "Automotive"  # to anything else
+    action:
+      - service: "input_boolean.turn_{{ 'on' if is_state('sensor.pieter_activity_type', 'Automotive') else 'off' }}"
+        entity_id: input_boolean.pieter_driving
+
+  - alias: "Notify If Driving State Changed"
+    id: "e614d071-e6b5-4b20-bc33-5c946e6a1400"
+    initial_state: false
+    trigger:
+      platform: state
+      entity_id: binary_sensor.pieter_driving
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Test"
+          message: "Pieter is{{ ' not' if is_state('binary_sensor.pieter_driving', 'off') }} driving."
+          data:
+            url: homeassistant://navigate/lovelace/devices
+
+  - alias: "Proximity Updates"
+    id: "355d7452-0b56-468b-b434-d0f4b430078b"
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: proximity.home
+    action:
+      - service: persistent_notification.create
+        data:
+          title: Proximity
+          message: >-
+            Distance: {{ states('proximity.home') }}{{ state_attr('proximity.home', 'unit_of_measurement') }}; Direction of travel: {{ state_attr('proximity.home', 'dir_of_travel') }}.

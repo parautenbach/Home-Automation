@@ -636,6 +636,48 @@ automation:
             url: homeassistant://navigate/lovelace/resources
             tag: "grid-feed-status"
 
+  - alias: "Update Automations When Power Status Changed"
+    id: "d322d9a2-9a74-4c10-8c31-110401a8ff31"
+    # because we have backup power now
+    initial_state: false
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.electricity_feed
+        to:
+          - "on"
+          - "off"
+        # we don't want erratic behaviour in case the pulse counter goes offline for a moment
+        for:
+          seconds: 30
+    mode: single
+    action:
+      # https://community.home-assistant.io/t/using-the-new-for-each/419829
+      - service: "automation.turn_{{ 'on' if is_state('binary_sensor.electricity_feed', 'on') else 'off' }}"
+        target:
+          # remember that these automations have an initial value of true, so this practically (on start-up) has no real effect
+          entity_id: "{{ expand('group.automations_to_save_energy') | map(attribute='entity_id') | list }}"
+
+  - alias: "Notify If Electricity Feed Status Changed"
+    id: "c021b272-5076-45d4-9e40-e2db20ae66b6"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.electricity_feed
+    mode: queued
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Energy"
+          message: >-
+            {% from 'datetime.jinja' import sec_to_hour_and_min %}
+            {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
+            {% set after = sec_to_hour_and_min(seconds) %}
+            The electricity feed has been {{ 'restored after ' ~ after ~ '.' if is_state('binary_sensor.electricity_feed', 'on') else 'cut.' }}
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/resources
+            tag: "electricity-feed-status"
+
   - alias: "Update Backup Power Warning Light If Grid Feed Status Changed"
     id: "e6ddb31c-3723-429d-a6c4-38268b831ba9"
     initial_state: true

@@ -1,3 +1,11 @@
+proximity:
+  home:  # this refers to zone.home
+    zone: home
+    devices:
+      - device_tracker.ceres
+    tolerance: 20
+    unit_of_measurement: m
+
 binary_sensor:
   - platform: template
     sensors:

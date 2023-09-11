@@ -1,5 +1,22 @@
 # https://andrewmarsh.com/software/sunpath3d-web/
 
+binary_sensor:
+  - platform: template
+    sensors:
+      # note: this refers to the national grid (aka eskom)
+      electricity_feed:
+        friendly_name: "Electricity"
+        # https://www.home-assistant.io/integrations/binary_sensor/#device-class
+        device_class: power
+        value_template: >-
+          {{ not is_state_attr('sensor.home_assistant_server_battery', 'status', 'Discharging') }}
+        icon_template: >-
+          {% if is_state_attr('sensor.home_assistant_server_battery', 'status', 'Discharging') %}
+            mdi:power-plug-off
+          {% else %}
+            mdi:power-plug
+          {% endif %}
+
 template:
   - binary_sensor:
       - name: "Grid Feed"

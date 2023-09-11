@@ -1,3 +1,11 @@
+binary_sensor:
+  - platform: template
+    sensors:
+      pieter_driving:
+        friendly_name: "Pieter Driving"
+        value_template: >-
+          {{ is_state("input_boolean.pieter_driving", "on") }}
+
 automation:
   - alias: "Set Pieter's Driving State"
     id: "2cc8c07c-384d-4fce-ab9e-11e2c7a25b60"

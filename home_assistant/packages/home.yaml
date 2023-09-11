@@ -1,3 +1,61 @@
+binary_sensor:
+  - platform: template
+    sensors:
+      # https://www.home-assistant.io/integrations/bayesian/
+      pieter_present:
+        friendly_name: "Pieter Present"
+        value_template: >-
+          {{ is_state("input_boolean.pieter_present", "on") or
+             is_state("person.pieter_rautenbach", "home") }}
+      rouve_present:
+        friendly_name: "Rouvé Present"
+        value_template: >-
+          {{ is_state("input_boolean.rouve_present", "on") or
+             is_state("person.rouve_rautenbach", "home") }}
+      tenant_present:
+        friendly_name: "Tenant Present"
+        delay_off:
+          minutes: 15
+        value_template: >-
+          {{ is_state("binary_sensor.tenant_mobile_phone", "on") }}
+      housekeeper_present:
+        friendly_name: "Housekeeper Present"
+        delay_off:
+          minutes: 15
+        value_template: >-
+          {{ is_state("binary_sensor.housekeeper_mobile_phone", "on") }}
+      contractor_mode:
+        friendly_name: "Contractor Mode"
+        value_template: >-
+          {{ is_state("input_boolean.contractor_mode", "on") }}
+      anybody_home:
+        friendly_name: "Anybody Home"
+        value_template: >-
+          {{ is_state("binary_sensor.pieter_present", "on") or is_state("binary_sensor.rouve_present", "on") or
+             is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on") }}
+        icon_template: >-
+          {% if is_state("binary_sensor.pieter_present", "on") or is_state("binary_sensor.rouve_present", "on") or
+                is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on") %}
+            mdi:home-account
+          {% else %}
+            mdi:home
+          {% endif %}
+
+  # - platform: ffmpeg_noise
+  #   name: Baby Monitor Sound Alarm
+  #   input: !secret baby_monitor_stream
+  #   peak: -30
+  #   # don't detect ptz movement!
+  #   duration: 3
+  #   extra_arguments: -nostats
+
+  - platform: group
+    name: "Family Present"
+    device_class: presence
+    entities:
+      - binary_sensor.pieter_present
+      - binary_sensor.rouve_present
+
 automation:
   - alias: "Away Mode"
     description: "Activate away mode When leaving home"

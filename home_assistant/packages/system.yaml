@@ -1,3 +1,31 @@
+binary_sensor:
+  - platform: template
+    sensors:
+      no_recent_backup:
+        friendly_name: "Recent Backup Problem"
+        device_class: problem
+        # get the last file, extract the date and compare
+        value_template: >-
+          {% set last_backup = (0 if states('sensor.last_backup') == "unknown" else states('sensor.last_backup')) | as_datetime %}
+          {{ 'on' if ((utcnow() - last_backup).days > 4) else 'off' }}
+        icon_template: >-
+          {{ state_attr('sensor.last_backup', 'icon') or "mdi:file-alert-outline" }}
+      hacs_updater:
+        friendly_name: HACS Updater
+        device_class: update
+        value_template: >
+         {{ states('sensor.hacs') | int(0) > 0 }}
+      ha_updater:
+        friendly_name: HA Updater
+        device_class: update
+        value_template: >-
+          {{ is_state('binary_sensor.python_package_index_pypi_update_available', 'on') }}
+        attribute_templates:
+          latest_version: >-
+            {{ states('sensor.python_package_index_pypi') }}
+          current_version: >-
+            {{ states('sensor.current_version') }}
+
 automation:
   - alias: "Set Light Theme"
     id: "b2139218-ae45-4fc5-a049-1a9692bc387e"

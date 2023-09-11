@@ -1,3 +1,21 @@
+binary_sensor:
+  - platform: template
+    sensors:
+      workday:
+        friendly_name: Workday Today
+        value_template: >
+          {% set on_vacation = as_timestamp(states('input_datetime.vacation_start')) <= as_timestamp(now().date()) <= as_timestamp(states('input_datetime.vacation_end')) %}
+          {{ is_state('binary_sensor.workday_sensor', 'on') and not on_vacation }}
+      workday_tomorrow:
+        friendly_name: Workday Tomorrow
+        value_template: >
+          {% set on_vacation_tomorrow = as_timestamp(states('input_datetime.vacation_start')) <= as_timestamp((now() + timedelta(days=1)).date()) <= as_timestamp(states('input_datetime.vacation_end')) %}
+          {{ is_state('binary_sensor.workday_sensor_tomorrow', 'on') and not on_vacation_tomorrow }}
+      on_air:
+        # https://github.com/home-assistant/iOS/issues/1903
+        value_template: >
+          {{ states('binary_sensor.gaia_audio_input_in_use') }}
+
 automation:
   - alias: "Change On Air Status"
     id: "0e9a98bc-dba8-4354-8bad-87b44b50703a"

@@ -231,6 +231,11 @@
         {{ (states('sensor.office_temperature') | float(0) - states('sensor.outside_temperature') | float(0)) | round(1) }}
       device_class: temperature
       unit_of_measurement: "°C"
+    fair_weather_time_share:
+      friendly_name: "Fair Weather Time Share"
+      value_template: >-
+        {{ (states('sensor.fair_weather_time') | float(0) / states('sensor.daylight') | float(0) * 100) | round(0) }}
+      unit_of_measurement: "%"
 
 - platform: sun2
   monitored_conditions:

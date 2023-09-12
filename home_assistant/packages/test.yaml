@@ -2,7 +2,13 @@ input_boolean:
   test:
     name: Test
     icon: mdi:test-tube
-    
+
+input_number:
+  test_percentage:
+    min: 0
+    max: 100
+    unit_of_measurement: "%"
+
 alert:
   test:
     name: Test Alert

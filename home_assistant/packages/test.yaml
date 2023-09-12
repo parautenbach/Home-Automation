@@ -22,3 +22,64 @@ alert:
       url: homeassistant://navigate/lovelace/devices
     notifiers:
       - mobile_app_ceres
+
+script:
+  test_foyer_light:
+    fields:
+      profile:
+        description: "A light profile"
+    sequence:
+      - service: persistent_notification.create
+        data:
+          title: "Testing"
+          message: "Test: '{{ profile }}'"
+      - service: light.turn_on
+        target:
+          entity_id: light.foyer
+        data:
+          # entity_id: light.foyer
+          profile: "{{ profile }}"
+
+  test_nav:
+    sequence:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Test"
+          message: "Navigate"
+          data:
+            url: homeassistant://navigate/lovelace/gallery
+
+  test:
+    description: "Test script"
+    fields:
+      param1:
+        description: "Parameter 1"
+        example: "Any text"
+    sequence:
+      - choose:
+          - conditions:
+              # duh
+              # https://community.home-assistant.io/t/using-a-script-variable-field-in-a-choose-action/297289/2
+              - condition: template
+                value_template: "{{ param1 is not defined }}"
+            sequence:
+              - service: persistent_notification.create
+                data:
+                  title: "Testing"
+                  message: "Test: no param"
+        default:
+          - service: persistent_notification.create
+            data:
+              title: "Testing"
+              message: "Test: '{{ param1 }}'"
+
+  test_snapshot:
+    sequence:
+      - service: camera.snapshot
+        # https://github.com/home-assistant/core/issues/40241
+        entity_id: camera.security_camera
+        data:
+          entity_id: camera.security_camera
+          # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
+          # https://www.home-assistant.io/integrations/camera/#service-snapshot
+          filename: '/tmp/snapshot_{{ entity_id.name }}.jpg'

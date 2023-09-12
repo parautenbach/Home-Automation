@@ -217,6 +217,99 @@ shell_command:
   make_backup: "/home/homeassistant/scripts/backup.sh"
   make_db_backup: "/home/homeassistant/scripts/backup_db.sh"
 
+script:
+  noop:
+    sequence:
+      - service: shell_command.noop
+  shutdown_remote_host:
+    description: "Shut down a remote host via SSH"
+    # assumes ssh keys and a config map is set up
+    # https://askubuntu.com/questions/191257/how-could-i-shutdown-a-remote-host-in-my-network-thru-ssh-with-a-local-host
+    fields:
+      name:
+        description: "A display name for the host"
+        example: "example.local"
+      host:
+        description: "The host as defined in the SSH config map"
+        example: "some_host"
+    mode: parallel
+    sequence:
+      - condition: template
+        value_template: "{{ is_state('binary_sensor.' ~ host, 'on') }}"
+      - service: shell_command.shudown_remote_host
+        data:
+          host: "{{ host }}"
+      - delay:
+          seconds: 5
+      - service: homeassistant.update_entity
+        data:
+          entity_id: "binary_sensor.{{ host }}"
+      - wait_template: "{{ is_state('binary_sensor.' ~ host, 'off') }}"
+        timeout:
+          minutes: 1
+        continue_on_timeout: true
+      - service: persistent_notification.create
+        data:
+          title: System
+          # https://community.home-assistant.io/t/work-with-triggered-by-in-automations/400352/8
+          message: >-
+            {% set user_id = states.script.shutdown_remote_host.context.user_id %}
+            {% set triggered_by = (states.person | selectattr('attributes.user_id','==', user_id)) | list %}
+            {% set first_name = "System" if not triggered_by else state_attr((triggered_by | first).entity_id, "friendly_name").split()[0] %}
+            {{ first_name }} shut down {{ name }}.
+
+  shutdown_all_remote_hosts:
+    description: "Shut down all remote hosts"
+    mode: single
+    sequence:
+      - parallel:
+          - service: script.turn_on
+            target:
+              entity_id: script.shutdown_remote_host
+            data:
+              variables:
+                name: Thor
+                host: thor
+          - service: script.turn_on
+            target:
+              entity_id: script.shutdown_remote_host
+            data:
+              variables:
+                name: CCTV
+                host: cctv
+          - service: script.turn_on
+            target:
+              entity_id: script.shutdown_remote_host
+            data:
+              variables:
+                name: Rasplex
+                host: rasplex
+          - service: script.turn_on
+            target:
+              entity_id: script.shutdown_remote_host
+            data:
+              variables:
+                name: Rasplay
+                host: rasplay
+          - delay:
+              seconds: 1
+
+  make_backup:
+    description: "Backup Home Assistant"
+    mode: single
+    sequence:
+      - service: shell_command.make_backup
+      - service: homeassistant.update_entity
+        data:
+          entity_id: sensor.home_assistant
+
+  make_db_backup:
+    description: "Backup Home Assistant DB"
+    mode: single
+    sequence:
+      - service: shell_command.make_db_backup
+
+
 automation:
   - alias: "Set Light Theme"
     id: "b2139218-ae45-4fc5-a049-1a9692bc387e"

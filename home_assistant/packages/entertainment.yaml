@@ -62,6 +62,96 @@ sensor:
           {% set minutes = ((decimal_hours % 1) * 60) | int(0) %}
           {{ '%02i:%02i' % (hours, minutes) }}
 
+script:
+  entertainment_apple_tv_on:
+    mode: single
+    sequence:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.selected_remote
+        data:
+          option: Apple TV
+      - service: script.turn_on
+        entity_id: script.samsung_tv_power_on
+      - delay: "00:00:01"
+      - service: script.turn_on
+        entity_id: script.hk_3380_power_on
+      - delay: "00:00:01"
+      # this will also trigger automation "Turn Audio On When Apple TV Turned On"
+      # either just call this and set the input select, while the automation does the rest,
+      # or disable and re-enable the automation in this script
+      # (or just ignore it, because it's probably harmless)
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room
+          command: wakeup
+      - delay: "00:00:05"
+      - service: script.turn_on
+        entity_id: script.samsung_tv_hdmi2
+
+  entertainment_satellite_on:
+    mode: single
+    sequence:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.selected_remote
+        data:
+          option: Satellite
+      - service: script.turn_on
+        entity_id: script.samsung_tv_power_on
+      - delay: "00:00:01"
+      - service: script.turn_on
+        entity_id: script.hk_3380_power_on
+      - delay: "00:00:01"
+      - service: script.turn_on
+        entity_id: script.dstv_power
+      - delay: "00:00:05"
+      - service: script.turn_on
+        entity_id: script.samsung_tv_hdmi1
+
+  entertainment_off:
+    mode: single
+    sequence:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.selected_remote
+        data:
+          option: Audio
+      - service: script.turn_on
+        entity_id: script.samsung_tv_power_off
+      - delay: "00:00:01"
+      - service: script.turn_on
+        entity_id: script.hk_3380_power_off
+      # state is idle when not playing or off (suspended)
+      # in that case, just let it turn off automatically
+      # we just want to stop anything currently playing (e.g. streaming music) to stop
+      - condition: state
+        entity_id: media_player.living_room
+        state: "playing"
+      # https://github.com/postlund/pyatv/blob/6018ba22851287afaf7c99dafa42de5766b97acf/pyatv/interface.py#L94
+      # the proper way to turn it off
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room
+          command: home_hold
+      - delay: "00:00:02"
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room
+          command: select
+
+  play_radio_paradise:
+    mode: single
+    sequence:
+      - service: media_player.select_source
+        target:
+          entity_id: media_player.living_room
+        data:
+          source: "Radio Paradise"
+      - delay: "00:00:05"
+      - service: script.turn_on
+        entity_id: script.apple_tv_play_pause
+
 automation:
   - alias: "Turn Audio On When Apple TV Turned On"
     id: "7c3646d2-8fe8-4378-a6f5-979e16cc40ff"

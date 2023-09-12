@@ -171,6 +171,39 @@ template:
       auto_off:
         seconds: 5
 
+script:
+  open_pedestrian_gap:
+    mode: single
+    sequence:
+      - condition: state
+        entity_id: cover.main_gate
+        state: "closed"
+      - service: switch.turn_on
+        entity_id: switch.gate_remote
+      - delay: "00:00:05"
+      - service: switch.turn_on
+        entity_id: switch.gate_remote
+
+  close_garage_door_and_main_gate:
+    description: "Close the applicable garage door if it's open and also the main gate if it's open"
+    fields:
+      garage_door:
+        description: "A cover entity"
+        example: "cover.garage_door"
+    mode: single
+    sequence:
+      # https://www.home-assistant.io/docs/scripts/conditions/
+      - condition: template
+        value_template: "{{ states(garage_door) == 'open' }}"
+      - service: cover.close_cover
+        data:
+          entity_id: "{{ garage_door }}"
+      - condition: state
+        entity_id: cover.main_gate
+        state: "open"
+      - service: cover.close_cover
+        entity_id: cover.main_gate
+
 automation:
   - alias: "Notify Doorbell Rang"
     id: "46054fb3-4e60-40ad-9e0f-e22b8137b23c"

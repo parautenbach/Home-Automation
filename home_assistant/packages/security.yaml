@@ -203,6 +203,67 @@ shell_command:
   sync_snapshots: "rsync -a `ls /tmp/camera.security_camera_*.jpg | sort | tail -n5` /home/homeassistant/.homeassistant/www/gallery/"
   trim_snapshots: "ls /home/homeassistant/.homeassistant/www/gallery/ | sort -r | tail -n +6 | xargs -I {} rm -- /home/homeassistant/.homeassistant/www/gallery/{}"
 
+script:
+  security_camera_record_clip:
+    # todo: fire a custom event to catch in another automation and turn on the light (if dark and not already on, etc.)
+    mode: queued
+    sequence:
+      - service: camera.record
+        # https://github.com/home-assistant/core/issues/40241
+        # https://github.com/home-assistant/core/issues/40241#issuecomment-1220046988
+        # entity_id: camera.security_camera
+        data:
+          entity_id: camera.security_camera
+          # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
+          # filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+          # filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+          filename: '/tmp/{{ "{{ entity_id.entity_id }}" }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+          duration: 10
+      # would love to get rid of this. maybe watch for an updated timestamp on the file?
+      - delay: "00:00:15"
+      - service: shell_command.copy_last_video_clip
+      - service: input_datetime.set_datetime
+        entity_id: input_datetime.security_camera_last_clip
+        data:
+          datetime: "{{ now() }}"
+
+  security_camera_create_snapshot:
+    # https://www.reddit.com/r/homeassistant/comments/9fz5e4/show_the_x_most_recent_pictures_in_a_directory/e69alpc/
+    mode: queued
+    sequence:
+      - choose:
+          # same as automation: "Switch On Lights If Motion Is Detected"
+          conditions:
+            - condition: or
+              conditions:
+                - condition: sun
+                  after: sunset
+                  after_offset: "-02:00:00"
+                - condition: sun
+                  before: sunrise
+                  before_offset: "-00:30:00"
+                - condition: state
+                  entity_id: binary_sensor.low_light
+                  state: "on"
+          sequence:
+            - wait_template: "{{ is_state('light.foyer', 'on') }}"
+              timeout:
+                seconds: 1
+      - service: camera.snapshot
+        # https://github.com/home-assistant/core/issues/40241
+        # entity_id: camera.security_camera
+        data:
+          entity_id: camera.security_camera
+          # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
+          # filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+          # filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+          filename: '/tmp/{{ "{{ entity_id.entity_id }}" }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+      - service: input_datetime.set_datetime
+        entity_id: input_datetime.security_camera_last_snapshot
+        data:
+          datetime: "{{ now() }}"
+      - service: shell_command.copy_last_snapshot_image
+
 automation:
   - alias: "Take Foyer Motion Snapshots"
     id: "e160923e-daf9-417d-9561-174feb2cd350"

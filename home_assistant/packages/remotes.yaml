@@ -1,0 +1,444 @@
+script:
+  hk_3380_power_off:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBQAAABIZQTEhMSExITEhMSExITExI3ExITExMSExITNxM2EzcTEhM3EzcTNxM3EzYTExITEzcTExITEhMTExMSEzcTNxITEgAFpgABJ0kTAA0FAAAAAAAAAAA=
+
+  hk_3380_power_on:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBQAAABIZMTExITExITEhMSExITEhM3ExITEhMTEhMSNxM3EzcTEhMSExITExITExITEhM3EzcTNxM3EzcTNxM3EzcTEhMSEwAFqgABJEcUAA0FAAAAAAAAAAA=
+
+  hk_3380_vid1:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBQAAABIpMTExITExITEhMSExITEhM3ExITEhMTEhMSNxM3EzcTEhMSEzcTEhM3ExITEhM3EzgTNxITEzcSFBI3EzcTEhMSEwAFpQABKEkTAA0FAAAAAAAAAAA=
+
+  hk_3380_vid2:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBQAAABIpQTEhMSExITEhMSExMSExM2ExMSExMSExITNxM3EjcTExI3EzcTEhM3ExITEhM3EzgTEhMSEzcTExM3EzYTExITEwAFpgABJkoSAA0FAAAAAAAAAAA=
+
+  hk_3380_dimmer:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBQAAABI5MTEhMSExITEhMSExMSExM3EhMTEhMSExITNxM3EzYTExITExITNxM3EjcTEhM3EzgTNxM3EhMSFBMSEzcSExMSEwAFpQABJ0kUAA0FAAAAAAAAAAA=
+
+  hk_3380_vol_up:
+    mode: queued
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBQAAABI5MTEhMSExITExITExITEhM3ExITEhMSExITNxM3EzcTEhM3EjcTNxMSExMSExM2EzgTEhMSExMSOBM3EzcTEhMSEwAFpwABJkkTAA0FAAAAAAAAAAA=
+
+  hk_3380_vol_up_plus_5:
+    mode: queued
+    sequence:
+      - repeat:
+          count: 5
+          sequence:
+            - service: script.hk_3380_vol_up
+
+  hk_3380_vol_down:
+    mode: queued
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBQAAABI5MTEhMSExMSExMSExITEhM3ExITEhMSExITNxM3EzcTEhMSExITEhM3ExITEhM3EzgTNxM3EjcTExM3EzcTEhMSEwAFpgABJ0gUAA0FAAAAAAAAAAA=
+
+  hk_3380_vol_down_minus_5:
+    mode: queued
+    sequence:
+      - repeat:
+          count: 5
+          sequence:
+            - service: script.hk_3380_vol_down
+
+  hk_3380_mute:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBQAAABI5ITEhMTEhMTEhMSExITEhM3ExITEhMSExMSNxM3EzcTEhM3ExITEhMSExMSExI3EzgTEhM3EzcTOBI3EzcTEhMTEgAFpgABJ0oSAA0FAAAAAAAAAAA=
+
+  dstv_power:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAQcCDwHKghbBysHKggqBzwHAAGSCB0HTgcZByoHGQdcBxgIGAcACkIKGgg7CigHXAcqCCoIKgc8BwABkggcCCoHPAooBxkHWwcZBxgIAAXqBx0HPAcrB1sIKgcqCCoHPAgAAZEIHQcmB0EHKgcZB1wHGAgYBwANBQ==
+
+  dstv_ch_plus:
+    mode: queued
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB6AAYcBz0IKQlaBysHKgkpCTgJAAGTCBwHUwcYBysJOgc0CBcKFgkACkMEHgU+CycJWgsmBysKJwk7CQABkAcdBy8KOgcqCTsKMAYaCRYKAAGQBx0JOgcrClkJBwkYBiwJKAc9CQABkAkbBysGQggpCTsJMQcZBxgKAA0FAAAAAAAAAAAAAAAAAAA=
+
+  dstv_ch_minus:
+    mode: queued
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAQbCDwIKQdcByoIKgcrBzwHAAGSCBwHWAcYCCoIOwcvBxkHGAkACkEKGAk8BysJWgkoBysIKQk7CQABkAcdCTEIPAcqCDwILgcZBxgKAAGPCRsJOwkoB1wJKQcqBykLOgcAAZIJGwguCEAIKgg7CiwIGAcZCAANBQ==
+
+  dstv_vol_up:
+    mode: queued
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAQcCDwHKgdcBysHKgcrBzwHAAGSCBwIGAkXByoIPAcmBxgHGQcACkIHHQc8CCoHXAcqCSkHKgc9BwABkgcdBzwIPAcqCDwHJgcYCBgHAAGSBxsLOggqB1wHKgcrByoIPAcAAZIIHAc4B0EHKgg8ByYHGQcYBwANBQ==
+
+  dstv_vol_down:
+    mode: queued
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB8AAQcCDwHKwdcByoHKgcrBzwHAAGSChsHWwgYByoIPAcqCBgHGQcACkMIGwg8ByoIWwkpByoIKgc8BwABkggdBzgHPAcrBzwHKwcYBxkHAAGSBx0HPQcqB1wHKggqBysHPAcAAZIIHAgzBz8LKAg8ByoIGAcZBwAJ/ggADQUAAAAAAAAAAAAAAAA=
+
+  dstv_mute:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAQcCDwHKghbBysHKgcqCTsIAAGSBx0HWwgYBysHGAhOBxgIGAcACkUFHAg8ByoIWwgqByoIKgc8CAABkQgbCzYHPAcpCRgHTwgXBxkHAAGSBx0HPAgqB1wHKggqByoIPAcAAZIHHQc0B0AIKgcZB04HGQcYBwANBQ==
+
+  dstv_alt:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAQbCDwHKghbCCoIKQgqBzwIAAGSBx0HLwcYCCoHLwcdBxkHGAgACkIJGwc9ByoHXAkpByoHKwc7CQABkQkbCVEIPAcqCC4IHAgYBxkHAAGSCBoLOggqB1wHKggqByoJOwcAAZIJGwhOB0EIKQcvBx0IGAcYCAANBQ==
+
+  dstv_info:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAUbCDsKKAdbCSkHKwkoCjoHAAGSCxkJKQgXBysJOgdcCRYJFwcACkMREwk7ByoHXAkpByoJKQc8CQABkAgbCU4HPAcrCDsIWwcZBxgIAAGRCBwIPAgqB1sJKQkoCSkHPggAAZAHHQhJCT4IKAs6CV4EGAkXBwANBQ==
+
+  dstv_back:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAcZCToHKwlZCigKJwgpBz4NAAGMCRsIKQ4WCCoJOwZYCBcJFwcACkINFwo6CSgKWQkpCSgJKQc8BwABkgcdB1MJOwkoCjoFWQcZChUHAAO+Bx0GPgkoB1wLJwkoBysKOQoAAY8LGghNB0EJKAc9CVUJFwkWBwANBQ==
+
+  dstv_ok:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAQdBzwIKgdcCCkJKQcqCDwHAAGSBx0HPAgYBysHPAlIBxkHGAgACkQPEgg8ByoIWwgqCCkIKgc8BwABkggcCRcHPAgqCDsISQgXCxYHAAGSCBwHPAgqB1sIKgkpByoHPAgAAZIHHQdcB0EJKAc8CEkJFwgYBwANBQ==
+
+  dstv_left:
+    mode: queued
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAQcBz0GLAZdBysFKwcrBj4FAAGVBR0HNwkXCCsIPAZPBhkHGAcACkUFHQc9ByoHXAcqBysHKgg8BwABlAUdB1wHPAkpBz0HTgcYCBgHAAGSCBwIPAcqCFsIKgcqBysHPAkAAZEHHQdXB0EHKwc8B04IGAcZBwANBQ==
+
+  dstv_right:
+    mode: queued
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAUbBzwIKghbByoIKgcqCDwHAAGSBx0HSgcZByoJOwc8BxkHGAgACkIHHAg8ByoIWwkpBygLKQc8CAABkgcbCiUHPAgqBzwIPAcYCBgGAAGTCRsHPAgqB1wHKggqByoIPAcAAZMGHQciB0EHKgc9BzwHGQcYCAANBQ==
+
+  dstv_up:
+    mode: queued
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAQcBz0HKghbCCoHKgcrBzwHAAGSCRsIMwcYCCoHPQdSCBgHGQcACkIIHAc9ByoHXAcqCCoHKwc8BwABkggcCFcHPAgqBzwIUgcZBxgIAAO+CBwHPAcrB1sIKgcrByoHPAgAAZIHHQdTB0EHKgc9B1IIGAcZBwANBQ==
+
+  dstv_down:
+    mode: queued
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAUdBzwHKwdbCCoHKgkpBzwIAAGSBx0HTgcZByoIPAc4BxgIGAcACkIHHQc8CCoHXAcqCSkHKgg8BwABkgcdBysHPAcrBzwINwcZBxgIAAgVCB0HOwopB1sIKgcqCCoHPAgAAZIHHQcmB0EHKgc9BzgHGAcZBwANBQ==
+
+  dstv_0:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB2AAUaBz0NJAdcCicIKgYsBj0JAAGRBxwISQgYCSgHGQcZCRYGGgUACkUJGgo6ByoKWQkpCSgHKwk6CQABkAceCSMJOwcrCRYHGQkWBxoFAAXrBx0KOgkoB1wLJwkpByoJOgkAAZAIHQciBUIJKQkXBxgJNgcADQUAAA==
+
+  dstv_1:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB0AAQbCTwGKgpZByoIKgkpCToGAAGTBx0JRAoVCSkJFwkbCBcGGgUACkUJGgg8CCkGXQooCSgKKAk6BgABlAkbByEHPQkoCzkJFwUaBwADwwQeBzsFLAZdBysJKAsnBT4GAAGUCBwJHAVCCSgHGQoaBhoFAA0FAAAAAA==
+
+  dstv_2:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB2AAgWCjsHKwlZCycJKAkpCjkLAAGPChoHQQcZCSgHGQVDBxkFAApECRsJOwkoB1wIKQkpBSwHPQkAAZAJGwkbBz0HKgcZCR8IGQYZBwABkgkbBzwJKQhbCyYHKwcqBj4KAAGPCQcGDQkXB0EJKQcZCCAJFwkADQUAAA==
+
+  dstv_3:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAQbCTwHKgdcByoJKQcqCDwHAAGSCBwJOwcYCCoHGAgmBxgIGAcACkMHHAg8ByoKVwkrCSgIKgc8BwABkgkbCBgHPAgqBxkHJgcYBxkHAAGSCBwHPAgqB1wHKggqByoIPAcAAZIHHQhbB0EHKggYCCUHGQcYCAANBQ==
+
+  dstv_4:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAQdBzwIKgdcByoIKgcqCDwHAAGSCBwINwkXByoIGAcrBxgJFwcACkMJGgg8ByoIWwsnByoIKgc8CQABkAgdCVoJOgkpCRYGKgsWChYHAAGSCRsIPAkoB1wLJwkoCigHPAkAAZALGgdXCT8JKAsVBiwJFgYaCgANBQ==
+
+  dstv_5:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB2AAQdCDsJKQpYCigJKQonBz0JAAGRBh0MLgoWCCoHGAcvChYHGAkACkMGGwc9ByoHXAkpCSgKKAU+BwABkgkcCVUHPAooDRIJLQgYBhoJAAGQCxkKOQ8jB1wJKAkpCicHPQcAAZIJGwdTCz0JKQkWBy8KFgkADQUAAA==
+
+  dstv_6:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAQcCTsHKglaCSkMJQcrBzwLAAGPCBwHLwcZBisJFgoxChYJFgcACkQGHQc7CygHXAcqBysHKgo6BwABkgkbClAJOggqBxkIMgcZBxgIAAGSCBwHPAcrB1wHKgcrCicJOwcAAZIIHAdODDwHKwcYCDMJFwoVBwANBQ==
+
+  dstv_7:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAQcBzwIKgdcCCkIKgcrCjkHAAGSCRsIKgcYCCoHGQc4CBcHGQcACkQNFQo6CCkJWgcrCCkKKAc8CQABkQccCU0JOgooCBcIOAoVBxkHAAGSBx0JOwonCVoIKQooBysHPAYAAZMJGwdKCj4HKwcYBzgHGQcZBQANBQ==
+
+  dstv_8:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB2AAYaBzwJKQdcCCkIKgcqCDwJAAGQCRsHJgkXByoIGAk7BxgHGQcACkIJGwg7BysJWgkpByoHKwc8CQABkAoaCkcHPQkoChYHPAkXBxkHAAGSCBwIOwooB1wKJwkpCCkHPQkAAZAJGwpDCT8JKAkXBzwJFwgADQUAAA==
+
+  dstv_9:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAgXBz0IKQhbCCkJKQgpCDwHAAGSBx0JIAkWBysHGQk+CBgHGQgACkEJGwo6CCkHXAcrByoKKAg7BwABkgsZB0YHPAkpChUGQggYBxkHAAGSChoHPAsnB1wJKAooCSgHPQcAAZMGHQk/CT8JKQkWB0EHGQcYBwANBQ==
+
+  dstv_menu:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgB4AAUaCToKKAdcCSgJKQkoCjoHAAGSChoHKwoVCigHIgYwCRYJFwkACkEJGwk6CigJWgonCycJKAo6CgABjwkbCkwKOQkpByEHLwoWCRcHAAgWChsHPAkpClgKKAkpCSgJPAgAAZAJGwlICEALJgseBy8JFwcYBgANBQ==
+
+  apple_tv_menu:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBQAAABJpUTEhI3EzYUNhMSEjcUNhM3EjYTNxI3ExISExMTEhITNxI4EjcTERQSEhQSExETExMTNhMSEhMTEhIUERMSExITEgAFlQABJkoTAA0FAAAAAAAAAAA=
+
+  apple_tv_home:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgCoAAABJpURExM3EjcSNxITEzcSNxI3FDYTNhQ1FBEUEhIUEhISNxI3FDcTERMSExMRExQTERMSNxMTERMSExITExMTEhITEgAFlAABKEkTAAxOAAEnShIADE8AASdJFAAMTQABJ0oSAAxPAAEnShIADE8AASdJEwAMTwABJ0kTAAxOAAEnShIADE8AAShIFAAMTgABJ0kSAAxPAAEoSRMADE4AASZKEwANBQ==
+
+  apple_tv_home_double_press:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room
+          command: home
+          num_repeats: 2
+          delay_secs: 0.1
+
+  apple_tv_ok:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgCYAAABKJsRFRE5EDoROBMTEjgSORE5EDoRORI4EhQQFRAVEBUQOhIUEBURORE5ETkQFRE5EhQROBEVERUPFRAVERQRFRAUEQAFTQABJ5wRFBE5EjkQOhEUETkRORI5EToQORI4ERUQFBMTEBUROg86ERQSOBITEhQQFRAWDxUROREVEBURExEVEBUQFg8WDwAFTgABKEsRAA0F"
+
+  apple_tv_up:
+    mode: queued
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBQAAABJ5QTExE3EzcTNxITEjYUNhM2EzYTOBE3ExMRFBISExIUNxISEjcTEhM4ERMSExMTERMSNxURExISFBEUEhMRExMSEwAFlAABJ0oTAA0FAAAAAAAAAAA=
+
+  apple_tv_down:
+    mode: queued
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBQAAABJ5QUEhE3FDYSNxQREjgSNxI3EzcSNxQ1ExMUEBQSEhMSNxIUERMTNhM3ExMRExMSExITNxMTERQRExMTERQRExMTEgAFlAABJ0oTAA0FAAAAAAAAAAA=
+
+  apple_tv_left:
+    mode: queued
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBQAAABKJMSExM3EzYSNxQSEjYUNhI3FDYUNRI4ExISExMSExITNhM2FBITEhI3EhQRExMSFBITNhMSEhMTExMSEhMSEhMTEgAFlAABKEkTAA0FAAAAAAAAAAA=
+
+  apple_tv_right:
+    mode: queued
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBQAAABJ5MUEhI3EjcTNxIUEzUTNhQ2EjcTNhQ2ExMRFBMSEhITNxIUETcTNhMSExQRExUQFBESNxQSEhMSExMSERQTEhITEgAFlQABJ0kXAA0FAAAAAAAAAAA=
+
+  apple_tv_play_pause:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgCYAAABKZoSExE6EDoQOhIUEDoQOhA6EDoQOhQ2EhQSExAVEBUQOhE5EjgSOBE6ETkSFBE4EhMSORITEhMQFREUERUQFBIUEAAFTQABJ5wSExE6EjgQOhEUETkSOBI5EDoQOhI4EhMSExEVERUQORE5EhQQNhYSERUQFREVEBUROBITEhQPFRIUEBUQFg8VEAAFTgABJ0wQAA0F"
+
+  apple_tv_skip_backward:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBQAAABJpUSNxIUETcTEhMTEjcSNxQ2EjcSNxM3EhQSEhMSExISNxM3ExMRNxITFBITNhITEhMSNxMSFBITEhIUExATExMSEwAFlAABJ0kTAA0FAAAAAAAAAAA=
+
+  apple_tv_skip_forward:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBQAAABKJMTNRQTEzYUEhISEjgSNxI3EzYTNxI3FBISExISFBITNhI3EzYUEhMSExMSNhIUERMTNxQRExMRExIUEhMRFBQQEwAFlAABJ0oSAA0FAAAAAAAAAAA=
+
+  samsung_tv_power:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgCMAJCUEzYTNxI3ExISExMSExITEhM2EzcSOBMRExISExMSExISExM2ExITEhITExISExISEjgTEhI3FDYTNxM2FDYTNxIABgOUlBM3EjcTNxITEhITEhITEhMTNxM2EzcTEhMSEhMTERMSEhMSOBITEhITEhITEhMSExI3ExITNxI4EzYTNxM2EzcTAA0FAAAAAAAAAAAAAAAA"
+
+  samsung_tv_power_on:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBGAJKVETkRORA6ERQRFBEUERQRFBE5ETkQOhAVEBUQFREUEBUQOhEUERQRORE5EBURFBA6EBUQOhE5EBUQFRA6EDoRFBEADQUAAA==
+
+  samsung_tv_power_off:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBGAJOVEDoQOhA6DxYPFhAVEBUQFRA6ETkROREUERQRFBEUEBUQFREUERQRORE5EBUQFRE5ETkRORE5ERUQFRA6DzsPFhAADQUAAA==
+
+  samsung_tv_hdmi:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgCMAI+UEjgTNxM2EhMTEhITEhMSEhM3EzcTNhMSExISExMSEhMSNxM3EhMSNxMSEhMSExI4EhITEhI4EhMTNhM3EjgTERMABgKVkxM3EzcSNxMSEhMSExISExISOBI4EjcSExITExISExMREzcSOBITEjcSExITExITNhMSExISOBITEjcTNxM3ExETAA0FAAAAAAAAAAAAAAAA"
+
+  samsung_tv_hdmi1:
+    # https://github.com/yahat/broadlink_mini_homeassistant_ir_codes_samsung_tv
+    # old:
+    # https://community.home-assistant.io/t/broadlink-rm-mini-3-code-database-samsung-tv-hdmi-selection/15612/100 (old)
+    # sat
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBGAJKVETkRORE5ERQQFRAVERQQFRE5ETkROREUERQRFBEUERQRORAVERUPOxAVDzsQOhA6EBUQOhA6EBUQOhAVEBUPFhAADQUAAA==
+
+  samsung_tv_hdmi2:
+    # atv
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBGAJOUETkRORA6ERQQFRAVERQRFBA6ETkROhAVDxYQFQ8WEBUQFQ87EDoRORA6DzsQFRA6DzsPFhAVDxYQFRAVEDoQFRAADQUAAA==
+
+  samsung_tv_picture_mode:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgCMAI+UEzcSOBM2EhMTEhMSEhMSEhM3EjgTNxISExITEhMSExITEhMRExITNxMSEjgSEhMSEjgTNhQ2ExITNxITEjcTNxIABgOVkxM3EzYTNxMSExISEhMSExISOBI3EzcTEhMSExITERMSEhMTEhMSEzYTEhI4ExISExM3EjcTNhMSEjgSExM2EzcSAA0FAAAAAAAAAAAAAAAA"

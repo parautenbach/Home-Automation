@@ -3,8 +3,6 @@ default_config:
 
 homekit: !include homekit.yaml
 
-script: !include scripts.yaml
-
 # https://www.home-assistant.io/docs/configuration/basic/
 homeassistant:
   name: Home

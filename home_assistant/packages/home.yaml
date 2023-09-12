@@ -31,6 +31,26 @@ notify:
       - service: mobile_app_ceres
       - service: mobile_app_rouve
 
+switch:
+  - platform: template
+    switches:
+      guest_mode:
+        value_template: "{{ is_state('input_boolean.guest_mode', 'on') }}"
+        turn_on:
+          - service: input_boolean.turn_on
+            entity_id: input_boolean.guest_mode
+        turn_off:
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.guest_mode
+      contractor_mode:
+        value_template: "{{ is_state('input_boolean.contractor_mode', 'on') }}"
+        turn_on:
+          - service: input_boolean.turn_on
+            entity_id: input_boolean.contractor_mode
+        turn_off:
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.contractor_mode
+
 binary_sensor:
   - platform: template
     sensors:

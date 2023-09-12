@@ -3,7 +3,6 @@ default_config:
 
 homekit: !include homekit.yaml
 
-multiscrape: !include multiscrape.yaml
 rest: !include rest.yaml
 scene: !include scenes.yaml
 script: !include scripts.yaml

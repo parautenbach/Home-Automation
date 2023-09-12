@@ -5,21 +5,6 @@ notify:
       - service: mobile_app_ceres
       - service: mobile_app_rouve
 
-# https://www.dahuasecurity.com/products/All-Products/Video-Intercoms/IP-Products/Door-Stations/VTO2211G-WP
-# https://amcrest.com/smarthome-2-megapixel-wireless-doorbell-security-camera-1920-x-1080p-wifi-doorbell-camera-ip55-weatherproof-two-way-audio-ad110.html
-# https://www.hikvision.com/en/products/Video-Intercom-Products/
-# https://github.com/rroller/dahua
-# https://community.home-assistant.io/t/amcrest-doorbell-ad110-api-local-only/223838
-# https://community.home-assistant.io/t/dahua-vto-custom-integration/293693
-amcrest:
-  - name: Doorbell
-    host: !secret doorbell_host
-    username: !secret doorbell_username
-    password: !secret doorbell_password
-    binary_sensors:
-      - online
-      - motion_detected
-
 binary_sensor:
   - platform: template
     sensors:

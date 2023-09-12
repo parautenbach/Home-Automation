@@ -613,28 +613,3 @@ automation:
     action:
       - service: script.turn_on
         entity_id: script.send_pieter_work_cape_town_to_home_eta
-
-  - alias: "Notify Doorbell Rang"
-    id: "46054fb3-4e60-40ad-9e0f-e22b8137b23c"
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.doorbell_rang
-        to: "on"
-    mode: queued
-    action:
-      - service: camera.snapshot
-        data:
-          entity_id: camera.doorbell
-          # todo: update security view; make capture scripts generic
-          filename: '/tmp/camera.doorbell_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
-      # todo: script.security_camera_create_snapshot
-      - service: notify.mobile_app_ceres
-        data:
-          title: Security
-          message: "Someone rang the doorbell."
-          # todo: thumbnail, url
-          # data:
-          #   group: "security-camera-snapshots"
-          #   attachment:
-          #     url: !secret doorbell_camera_last_snapshot_url

@@ -90,3 +90,44 @@ group:
       - cover.main_gate
       - cover.lhs_garage_door
       - cover.rhs_garage_door
+
+# https://www.dahuasecurity.com/products/All-Products/Video-Intercoms/IP-Products/Door-Stations/VTO2211G-WP
+# https://amcrest.com/smarthome-2-megapixel-wireless-doorbell-security-camera-1920-x-1080p-wifi-doorbell-camera-ip55-weatherproof-two-way-audio-ad110.html
+# https://www.hikvision.com/en/products/Video-Intercom-Products/
+# https://github.com/rroller/dahua
+# https://community.home-assistant.io/t/amcrest-doorbell-ad110-api-local-only/223838
+# https://community.home-assistant.io/t/dahua-vto-custom-integration/293693
+amcrest:
+  - name: Doorbell
+    host: !secret doorbell_host
+    username: !secret doorbell_username
+    password: !secret doorbell_password
+    binary_sensors:
+      - online
+      - motion_detected
+
+automation:
+  - alias: "Notify Doorbell Rang"
+    id: "46054fb3-4e60-40ad-9e0f-e22b8137b23c"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.doorbell_rang
+        to: "on"
+    mode: queued
+    action:
+      - service: camera.snapshot
+        data:
+          entity_id: camera.doorbell
+          # todo: update security view; make capture scripts generic
+          filename: '/tmp/camera.doorbell_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+      # todo: script.security_camera_create_snapshot
+      - service: notify.mobile_app_ceres
+        data:
+          title: Security
+          message: "Someone rang the doorbell."
+          # todo: thumbnail, url
+          # data:
+          #   group: "security-camera-snapshots"
+          #   attachment:
+          #     url: !secret doorbell_camera_last_snapshot_url

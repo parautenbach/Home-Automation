@@ -9,7 +9,6 @@ shell_command: !include shell_commands.yaml
 switch: !include switches.yaml
 template: !include template_sensors.yaml
 timer: !include timers.yaml
-utility_meter: !include utility_meters.yaml
 
 # https://www.home-assistant.io/docs/configuration/basic/
 homeassistant:

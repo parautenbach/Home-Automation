@@ -347,11 +347,11 @@ automation:
           - conditions:
               - condition: template
                 value_template: >-
-                  {% set timer_entity_id = trigger.entity_id | replace('binary_sensor', 'timer') ~ 'disconnected' %}
+                  {% set timer_entity_id = trigger.entity_id | replace('binary_sensor', 'timer') ~ '_disconnected' %}
                   {% set duration = state_attr(timer_entity_id, 'duration') %}
                   {% set (hours, minutes, seconds) = duration.split(':') | map('int') %}
                   {% set threshold =  minutes*60 + seconds - 1 %}
-                  {% set input_datetime_entity_id = trigger.entity_id | replace('binary_sensor', 'input_datetime') ~ 'disconnected' %}
+                  {% set input_datetime_entity_id = trigger.entity_id | replace('binary_sensor', 'input_datetime') ~ '_disconnected' %}
                   {% set last_available = states(input_datetime_entity_id) | as_timestamp %}
                   {% set utc_now_ts = utcnow() | as_timestamp %}
                   {{ (utc_now_ts - last_available) | int >= threshold }}

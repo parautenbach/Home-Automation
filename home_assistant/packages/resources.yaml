@@ -640,14 +640,14 @@ automation:
         entity_id: binary_sensor.grid_feed
     mode: queued
     action:
-      - service: notify.mobile_app_ceres
+      - service: notify.family
         data:
           title: "Energy"
           message: >-
             {% from 'datetime.jinja' import sec_to_hour_and_min %}
             {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
             {% set after = sec_to_hour_and_min(seconds) %}
-            The grid feed has been {{ 'restored after ' ~ after ~ '.' if is_state('binary_sensor.grid_feed', 'on') else 'cut. Please switch off and try to avoid using non-essential devices and appliances.' }}
+            The grid feed has been {{ 'restored after ' ~ after ~ '.' if is_state('binary_sensor.grid_feed', 'on') else 'cut. Please conserve energy.' }}
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
@@ -682,7 +682,7 @@ automation:
       entity_id: binary_sensor.electricity_feed
     mode: queued
     action:
-      - service: notify.mobile_app_ceres
+      - service: notify.family
         data:
           title: "Energy"
           message: >-
@@ -843,12 +843,12 @@ automation:
     # we don't use a condition for whether someone's home – we always want to know if this happens
     condition: []
     action:
-      - service: notify.mobile_app_ceres
+      - service: notify.family
         data:
           title: "Energy"
           message: >-
             {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
-            The backup power battery is critical at {{ battery_soc }}%.
+            The backup power battery's charge is low ({{ battery_soc }}%). Please conserve energy.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
@@ -873,12 +873,12 @@ automation:
         entity_id: binary_sensor.grid_feed
         state: "off"
     action:
-      - service: notify.mobile_app_ceres
+      - service: notify.family
         data:
           title: "Energy"
           message: >-
             {% set load_percentage = states('sensor.load_percentage') | int(0) %}
-            The backup power inverter load is critical at {{ load_percentage }}%. Consider reducing consumption!
+            The backup power inverter load is critical at {{ load_percentage }}%. Please reduce consumption.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
@@ -1154,7 +1154,7 @@ automation:
             {% set user_id = states.context.user_id %}
             {% set triggered_by = (states.person | selectattr('attributes.user_id','==', user_id)) | list %}
             {% set name = "the system" if not triggered_by else state_attr((triggered_by | first).entity_id, "friendly_name").split()[0] %}
-            The backup power battery shutdown threshold has been changed from {{ from }}% to {{ to }}% by {{ name }}.
+            The backup power battery's charge shutdown threshold has been changed from {{ from }}% to {{ to }}% by {{ name }}.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
@@ -1184,7 +1184,7 @@ automation:
           message: >-
             {% set charge = states('sensor.battery_state_of_charge') | int(0) %}
             {% set target = states('sensor.capacity_charge_point') | int(0) %}
-            The backup power battery has discharged to {{ charge }}%, which is 15% below the charge point target ({{ target }}%).
+            The backup power battery has discharged to {{ charge }}%, which is 15% below the charge point target ({{ target }}%). Please conserve energy.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources

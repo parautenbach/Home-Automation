@@ -8,7 +8,6 @@ sensor: !include sensors.yaml
 shell_command: !include shell_commands.yaml
 switch: !include switches.yaml
 template: !include template_sensors.yaml
-timer: !include timers.yaml
 
 # https://www.home-assistant.io/docs/configuration/basic/
 homeassistant:

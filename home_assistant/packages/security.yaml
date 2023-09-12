@@ -9,6 +9,18 @@ input_datetime:
     has_date: true
     has_time: true
 
+timer:
+  # format: <entity_id>_timer
+  main_gate_timer:
+    duration: "00:03:00"
+    restore: true
+  lhs_garage_door_timer:
+    duration: "00:03:00"
+    restore: true
+  rhs_garage_door_timer:
+    duration: "00:03:00"
+    restore: true
+
 binary_sensor:
   - platform: template
     sensors:

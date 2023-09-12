@@ -124,6 +124,29 @@ scene:
       light.living_room_lamp:
         state: "on"
 
+timer:
+  # format: <entity_id>_timer
+  living_room_lamp_timer:
+    duration: "00:05:00"
+    restore: true
+  front_door_timer:
+    duration: "00:03:00"
+    restore: true
+  foyer_timer:
+    duration: "00:03:00"
+    restore: true
+  kitchen_counter_timer:
+    duration: "00:03:00"
+    restore: true
+  # this is not a typo: 30s, because we don't want the hallway light to wake up people even though it's dim and red
+  # https://github.com/home-assistant/core/issues/94908
+  hallway_timer:
+    duration: "00:00:30"
+    restore: true
+  bedroom_bedlamp_timer:
+    duration: "00:3:00"
+    restore: true
+
 automation:
   - alias: "Switch On Lights At Wake Up Time"
     id: "5486f6f9-da52-4cf0-8a23-e54f40a80721"

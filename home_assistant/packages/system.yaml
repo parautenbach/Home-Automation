@@ -31,6 +31,18 @@ binary_sensor:
           current_version: >-
             {{ states('sensor.current_version') }}
 
+mqtt:
+  sensor:
+    - name: MQTT Broker Received Messages (1min load)
+      state_topic: $SYS/broker/load/messages/received/1min
+      unit_of_measurement: 'messages/s'
+      icon: mdi:email-arrow-left-outline
+
+    - name: MQTT Broker Sent Messages (1min load)
+      state_topic: $SYS/broker/load/messages/sent/1min
+      unit_of_measurement: 'messages/s'
+      icon: mdi:email-arrow-right-outline
+
 automation:
   - alias: "Set Light Theme"
     id: "b2139218-ae45-4fc5-a049-1a9692bc387e"

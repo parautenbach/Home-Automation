@@ -117,6 +117,60 @@ amcrest:
       - online
       - motion_detected
 
+template:
+  # example:
+  # {
+  #     "event_type": "amcrest",
+  #     "data": {
+  #         "camera": "Doorbell",
+  #         "event": "CallNoAnswered",
+  #         "payload": {
+  #             "Code": "CallNoAnswered",
+  #             "action": "Start",
+  #             "index": "0",
+  #             "data": {
+  #                 "CallID": "3"
+  #             }
+  #         }
+  #     },
+  #     "origin": "LOCAL",
+  #     "time_fired": "2021-10-16T14:59:57.236917+00:00",
+  #     "context": {
+  #         "id": "381f8debeef10751b18edc4acf3f4491",
+  #         "parent_id": null,
+  #         "user_id": null
+  #     }
+  # }
+  # explanation:
+  # the first trigger updates the state to true, but at this point the icon template
+  # using the sensor itself will still have the old value. the second trigger will be
+  # triggered when the state changes due to the first trigger. this will cause the
+  # icon template to update to whatever the current state of the sensor is. at the same
+  # time, one must prevent an infinite loop, because even if the state doesn't get
+  # updated, there will still be an event emitted. this is why the state template needs
+  # to update only when the first trigger gets triggered.
+  - trigger:
+      - platform: event
+        event_type: amcrest
+        event_data:
+          event: CallNoAnswered
+          payload:
+            action: Start
+      - platform: state
+        entity_id: binary_sensor.doorbell_rang
+        to: "off"
+    binary_sensor:
+      name: Doorbell Rang
+      # https://github.com/home-assistant/core/issues/39932
+      # https://github.com/home-assistant/core/issues/58056
+      # https://github.com/home-assistant/core/issues/66459
+      # https://github.com/home-assistant/home-assistant.io/pull/22021
+      icon: "{{ (trigger.platform == 'event') | iif('mdi:bell-ring-outline', 'mdi:bell-outline') }}"
+      state: "{{ trigger.platform == 'event' }}"
+      # https://github.com/home-assistant/core/issues/67397
+      auto_off:
+        seconds: 5
+
 automation:
   - alias: "Notify Doorbell Rang"
     id: "46054fb3-4e60-40ad-9e0f-e22b8137b23c"

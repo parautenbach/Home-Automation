@@ -4,7 +4,6 @@ default_config:
 homekit: !include homekit.yaml
 
 script: !include scripts.yaml
-template: !include template_sensors.yaml
 
 # https://www.home-assistant.io/docs/configuration/basic/
 homeassistant:
@@ -161,9 +160,3 @@ media_source:
 python_script:
 
 stream:
-
-# https://community.home-assistant.io/t/control-recursion-in-the-folder-watcher-integration/200110
-# folder_watcher:
-#   - folder: /tmp/
-#     patterns:
-#       - 'camera.security_camera_*.jpg'

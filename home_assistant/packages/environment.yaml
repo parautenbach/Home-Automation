@@ -224,6 +224,49 @@ sensor:
           {{ (states('sensor.fair_weather_time') | float(0) / states('sensor.daylight') | float(0) * 100) | round(0) }}
         unit_of_measurement: "%"
 
+template:
+  - binary_sensor:
+      # https://www.home-assistant.io/integrations/weather/#condition-mapping
+      - name: Is Fair Weather
+        # only for daytime
+        state: >-
+          {{ (is_state('weather.openweathermap_hourly', 'sunny') or
+              is_state('weather.openweathermap_hourly', 'partlycloudy')) and
+             state_attr('sun.sun', 'elevation') >= 0 }}
+
+  - sensor:
+      - name: Overall Pollen Risk for Badge
+        state: >-
+          {{ states('sensor.overall_pollen_risk') }}
+        attributes:
+          label: >-
+            {% set mapping = {
+                                1: "Very Low",
+                                2: "Low",
+                                3: "Moderate",
+                                4: "High",
+                                5: "Very High" } %}
+            {% set key = states('sensor.overall_pollen_risk') | int(0) %}
+            {{ mapping[key] if key in mapping else "Unknown" }}
+          color: >-
+            {% set mapping = {
+                                1: "#40b100",
+                                2: "#ffe500",
+                                3: "#ffa800",
+                                4: "#ff5800",
+                                5: "#aa0000" } %}
+            {% set key = states('sensor.overall_pollen_risk') | int(0) %}
+            {{ mapping[key] if key in mapping else "#ffffff" }}
+        icon: >-
+          {% set mapping = {
+                              1: "mdi:gauge-empty",
+                              2: "mdi:gauge-low",
+                              3: "mdi:gauge",
+                              4: "mdi:gauge-full",
+                              5: "mdi:gauge-full" } %}
+          {% set key = states('sensor.overall_pollen_risk') | int(0) %}
+          {{ mapping[key] if key in mapping else "mdi:alert" }}
+
 multiscrape:
   - resource: https://pollencount.co.za/
     scan_interval: 21600  # 60*60*6 or 4 updates per day

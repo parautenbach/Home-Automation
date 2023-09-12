@@ -148,6 +148,66 @@ mqtt:
       unit_of_measurement: 'messages/s'
       icon: mdi:email-arrow-right-outline
 
+template:
+  - trigger:
+      - platform: time_pattern
+        minutes: "*"
+    sensor:
+      # https://community.home-assistant.io/t/sensor-unavailable-offline-detection/147618
+      # https://community.home-assistant.io/t/how-to-list-all-sensors-with-state-unavailable-none-or-unknown/154606
+      - name: Unavailable Entities
+        icon: mdi:help-circle-outline
+        state: "{{ states | selectattr('state', 'in', ['unavailable', 'unknown', 'none']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list | length }}"
+        unit_of_measurement: entities
+        state_class: measurement
+        attributes:
+          # buttons don't have state – we don't care about buttons here
+          unavailable: "{{ states | selectattr('state', 'in', ['unavailable']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
+          unknown: "{{ states | selectattr('state', 'in', ['unknown']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
+          none: "{{ states | selectattr('state', 'in', ['none']) | rejectattr('domain','eq','button') | map(attribute='entity_id') | reject('==', 'sensor.unavailable_entities') | list }}"
+
+  - trigger:
+      - platform: time_pattern
+        minutes: "*"
+    sensor:
+      - name: Disabled Automations
+        icon: mdi:refresh-auto
+        state: "{{ states.automation | selectattr('state', 'eq', 'off') | list | length }}"
+        unit_of_measurement: entities
+        state_class: measurement
+        attributes:
+          automations: "{{ states.automation | selectattr('state', 'eq', 'off') | map(attribute='attributes.friendly_name') | sort | list }}"
+
+  - sensor:
+      - name: Monitored Batteries
+        icon: mdi:battery-alert
+        state: "{{ states.sensor | selectattr('attributes.monitor','eq',True) | map(attribute='entity_id') | list | count }}"
+        unit_of_measurement: batteries
+        state_class: measurement
+        attributes:
+          # https://community.home-assistant.io/t/recommended-ways-to-manage-devices-and-entities-names/243815/12
+          batteries: "{{ states.sensor | selectattr('attributes.monitor', 'eq', True) | map(attribute='entity_id') | list }}"
+
+  - sensor:
+      # https://community.home-assistant.io/t/trigger-an-automation-based-on-a-groups-individual-entity-state-change/383560/2
+      # https://community.home-assistant.io/t/single-automation-for-all-lights/375028/7
+      - name: Number of Flat Batteries
+        icon: mdi:battery-alert-variant-outline
+        state: >
+          {% set level = 0 %}
+          {% set flat_batteries =
+               states.sensor
+                 | selectattr('attributes.monitor', 'defined')
+                 | selectattr('attributes.monitor', 'eq', True)
+                 | rejectattr('state', 'in', ['unavailable', 'unknown', 'none'])
+                 | selectattr('attributes.device_class', 'eq', 'battery')
+                 | map(attribute='state')
+                 | map('int')
+                 | select('eq', level)
+                 | list
+          %}
+          {{ flat_batteries | count }}
+
 shell_command:
   noop: ":"
   shudown_remote_host: "/home/homeassistant/scripts/shutdown_remote_host.sh {{ host }}"

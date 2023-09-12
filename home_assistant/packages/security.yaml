@@ -31,6 +31,12 @@ binary_sensor:
         value_template: >-
           {{ is_state('binary_sensor.foyer_occupancy_homebridge', 'on') }}
 
+# https://community.home-assistant.io/t/control-recursion-in-the-folder-watcher-integration/200110
+# folder_watcher:
+#   - folder: /tmp/
+#     patterns:
+#       - 'camera.security_camera_*.jpg'
+
 sensor:
   # used by the gallery panel
   - platform: files

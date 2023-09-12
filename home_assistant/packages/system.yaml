@@ -43,6 +43,15 @@ mqtt:
       unit_of_measurement: 'messages/s'
       icon: mdi:email-arrow-right-outline
 
+shell_command:
+  noop: ":"
+  shudown_remote_host: "/home/homeassistant/scripts/shutdown_remote_host.sh {{ host }}"
+  # https://www.debian.org/releases/stretch/amd64/ch08s01.html.en
+  # https://www.computernetworkingnotes.com/linux-tutorials/shutdown-reboot-suspend-and-hibernate-a-linux-system.html
+  shutdown_server: "sudo /usr/sbin/shutdown -h now"
+  make_backup: "/home/homeassistant/scripts/backup.sh"
+  make_db_backup: "/home/homeassistant/scripts/backup_db.sh"
+
 automation:
   - alias: "Set Light Theme"
     id: "b2139218-ae45-4fc5-a049-1a9692bc387e"

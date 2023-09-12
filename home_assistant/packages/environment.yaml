@@ -1,3 +1,6 @@
+shell_command:
+  download_latest_dam_levels: "/home/homeassistant/scripts/download_latest_dam_levels.sh"
+
 weather:
   # https://community.home-assistant.io/t/mapping-weather-conditions-in-the-ui/289207
   - platform: template

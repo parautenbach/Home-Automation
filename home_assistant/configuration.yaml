@@ -5,7 +5,6 @@ homekit: !include homekit.yaml
 
 script: !include scripts.yaml
 sensor: !include sensors.yaml
-shell_command: !include shell_commands.yaml
 template: !include template_sensors.yaml
 
 # https://www.home-assistant.io/docs/configuration/basic/

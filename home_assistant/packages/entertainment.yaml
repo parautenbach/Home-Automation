@@ -1,3 +1,14 @@
+input_select:
+  selected_remote:
+    name: Remote
+    options:
+      - TV
+      - Audio
+      - Apple TV
+      - Satellite
+    initial: Audio
+    icon: mdi:remote-tv
+
 automation:
   - alias: "Turn Audio On When Apple TV Turned On"
     id: "7c3646d2-8fe8-4378-a6f5-979e16cc40ff"

@@ -21,6 +21,7 @@ homeassistant:
   media_dirs:
     gallery: /home/homeassistant/.homeassistant/www/gallery
   # https://www.home-assistant.io/docs/configuration/packages/
+  # https://community.home-assistant.io/t/request-to-support-nested-packages-packages-inside-packages/157917/10
   packages: !include_dir_named packages
 
 logger:

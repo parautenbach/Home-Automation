@@ -1,3 +1,8 @@
+input_boolean:
+  gaia_bluetooth_audio_connected:
+    name: Gaia Bluetooth Audio Connected
+    icon: mdi:bluetooth-audio
+
 command_line:
   # https://github.com/home-assistant/core/issues/43188
   # https://github.com/home-assistant/core/pull/43869

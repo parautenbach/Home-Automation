@@ -1,3 +1,8 @@
+input_boolean:
+  test:
+    name: Test
+    icon: mdi:test-tube
+    
 alert:
   test:
     name: Test Alert

@@ -1,3 +1,8 @@
+input_boolean:
+  server_shut_down_automatically:
+    name: Server Shut Down Automatically
+    icon: mdi:server
+
 binary_sensor:
   - platform: template
     sensors:

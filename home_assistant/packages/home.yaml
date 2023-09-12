@@ -5,6 +5,23 @@ notify:
       - service: mobile_app_ceres
       - service: mobile_app_rouve
 
+input_boolean:
+  pieter_present:
+    name: Pieter Presence
+    icon: mdi:account
+  rouve_present:
+    name: Rouvé Presence
+    icon: mdi:account
+  guest_mode:
+    name: Guest Mode
+    icon: mdi:briefcase
+  contractor_mode:
+    name: Contractor Mode
+    icon: mdi:worker
+  skip_next_wake_up_time:
+    name: Skip Next Wake Up Time
+    icon: mdi:alarm-off
+
 binary_sensor:
   - platform: template
     sensors:

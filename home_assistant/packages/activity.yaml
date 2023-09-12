@@ -20,6 +20,10 @@ amcrest:
     binary_sensors:
       - online
       - motion_detected
+input_boolean:
+  pieter_driving:
+    name: Pieter Driving
+    icon: mdi:car
 
 binary_sensor:
   - platform: template

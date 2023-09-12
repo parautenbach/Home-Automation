@@ -3,7 +3,6 @@ default_config:
 
 homekit: !include homekit.yaml
 
-input_datetime: !include input_datetimes.yaml
 input_number: !include input_numbers.yaml
 input_select: !include input_selects.yaml
 light: !include lights.yaml

@@ -1,3 +1,14 @@
+input_datetime:
+  security_camera_last_snapshot:
+    has_date: true
+    has_time: true
+  security_camera_last_clip:
+    has_date: true
+    has_time: true
+  foyer_motion_detected_last:
+    has_date: true
+    has_time: true
+
 binary_sensor:
   - platform: template
     sensors:

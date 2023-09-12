@@ -1,3 +1,14 @@
+input_datetime:
+  main_gate_opened:
+    has_date: true
+    has_time: true
+  lhs_garage_door_opened:
+    has_date: true
+    has_time: true
+  rhs_garage_door_opened:
+    has_date: true
+    has_time: true
+
 cover:
   - platform: template
     covers:

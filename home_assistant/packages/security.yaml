@@ -31,6 +31,126 @@ binary_sensor:
         value_template: >-
           {{ is_state('binary_sensor.foyer_occupancy_homebridge', 'on') }}
 
+sensor:
+  # used by the gallery panel
+  - platform: files
+    folder: /home/homeassistant/.homeassistant/www/gallery/
+    filter: 'camera.security_camera_*.jpg'
+    name: security_camera_snapshots
+    sort: date
+    recursive: False
+
+  # used to sync files from tmp to the gallery
+  # alt: https://www.home-assistant.io/integrations/folder_watcher/
+  # then watch /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg
+  - platform: folder
+    folder: /tmp/
+    filter: 'camera.security_camera_*.jpg'
+
+  - platform: history_stats
+    name: Foyer Motion Detections
+    entity_id: binary_sensor.foyer_motion_detected
+    state: "on"
+    type: count
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"
+
+  - platform: template
+    sensors:
+      security_camera_last_snapshot:
+        device_class: timestamp
+        value_template: "{{ states('input_datetime.security_camera_last_snapshot') | as_datetime | as_local }}"
+      security_camera_last_snapshot_relative:
+        # the first line is a hack to avoid having to write an automation
+        # - https://www.home-assistant.io/integrations/template/#working-without-entities
+        # - https://community.home-assistant.io/t/heads-up-upcoming-breaking-change-in-the-template-integration/223715
+        value_template: >
+          {%- set _ = states('sensor.time') %}
+          {%- set t = state_attr('input_datetime.security_camera_last_snapshot', 'timestamp') %}
+          {%- if t != None %}
+            {%- set n = now().timestamp() %}
+            {%- set d = n-t %}
+            {%- set midnight_today = as_timestamp(strptime(now().date() | string, "%Y-%m-%d")) %}
+            {%- set midnight_yesterday = midnight_today - 86400 %}
+            {%- set midnight_week_ago = midnight_today - 604800 %}
+            {%- if d < 60 %}
+              {{ d | int }} seconds ago
+            {%- elif d >= 60 and d < 120 %}
+              1 minute ago
+            {%- elif d < 3600 %}
+              {{ (d // 60) | int }} minutes ago
+            {%- elif d < n-midnight_today %}
+              Today at {{ t | timestamp_custom('%H:%M') }}
+            {%- elif d < n-midnight_yesterday %}
+              Yesterday at {{ t | timestamp_custom('%H:%M') }}
+            {%- elif d < n-midnight_week_ago %}
+              {{ t | timestamp_custom('%A at %H:%M') }}
+            {%- else %}
+              {{ t | timestamp_custom('%Y-%m-%d %H:%M:%S') }}
+            {%- endif %}
+          {% else %}
+            unknown
+          {% endif %}
+      motion_detected_last_relative:
+        value_template: >
+          {%- set _ = states('sensor.time') %}
+          {%- set t = state_attr('input_datetime.foyer_motion_detected_last', 'timestamp') %}
+          {%- if t != None %}
+            {%- set n = now().timestamp() %}
+            {%- set d = n-t %}
+            {%- set midnight_today = as_timestamp(strptime(now().date() | string, "%Y-%m-%d")) %}
+            {%- set midnight_yesterday = midnight_today - 86400 %}
+            {%- set midnight_week_ago = midnight_today - 604800 %}
+            {%- if d < 60 %}
+              {{ d | int }} seconds ago
+            {%- elif d >= 60 and d < 120 %}
+              1 minute ago
+            {%- elif d < 3600 %}
+              {{ (d // 60) | int }} minutes ago
+            {%- elif d < n-midnight_today %}
+              Today at {{ t | timestamp_custom('%H:%M') }}
+            {%- elif d < n-midnight_yesterday %}
+              Yesterday at {{ t | timestamp_custom('%H:%M') }}
+            {%- elif d < n-midnight_week_ago %}
+              {{ t | timestamp_custom('%A at %H:%M') }}
+            {%- else %}
+              {{ t | timestamp_local }}
+            {%- endif %}
+          {% else %}
+            unknown
+          {% endif %}
+      security_camera_last_clip:
+        device_class: timestamp
+        value_template: "{{ states('input_datetime.security_camera_last_clip') | as_datetime | as_local }}"
+      security_camera_last_clip_relative:
+        value_template: >
+          {%- set _ = states('sensor.time') %}
+          {%- set t = state_attr('input_datetime.security_camera_last_clip', 'timestamp') %}
+          {%- if t != None %}
+            {%- set n = now().timestamp() %}
+            {%- set d = n - t %}
+            {%- set midnight_today = as_timestamp(strptime(now().date() | string, "%Y-%m-%d")) %}
+            {%- set midnight_yesterday = midnight_today - 86400 %}
+            {%- set midnight_week_ago = midnight_today - 604800 %}
+            {%- if d < 60 %}
+              {{ d | int }} seconds ago
+            {%- elif d >= 60 and d < 120 %}
+              1 minute ago
+            {%- elif d < 3600 %}
+              {{ (d // 60) | int }} minutes ago
+            {%- elif d < n - midnight_today %}
+              Today at {{ t | timestamp_custom('%H:%M') }}
+            {%- elif d < n - midnight_yesterday %}
+              Yesterday at {{ t | timestamp_custom('%H:%M') }}
+            {%- elif d < n - midnight_week_ago %}
+              {{ t | timestamp_custom('%A at %H:%M') }}
+            {%- else %}
+              {{ t | timestamp_custom('%Y-%m-%d %H:%M:%S') }}
+            {%- endif %}
+          {% else %}
+            unknown
+          {% endif %}
+
 group:
   security_automations:
     name: Security Automations

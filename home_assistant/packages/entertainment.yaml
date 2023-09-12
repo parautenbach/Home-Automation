@@ -44,6 +44,24 @@ media_player:
     attributes:
       state: switch.tivoli_audio
 
+sensor:
+  - platform: history_stats
+    name: Apple TV Playing
+    entity_id: media_player.living_room
+    state: "playing"
+    type: time
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"
+
+  - platform: template
+    sensors:
+      apple_tv_playing_hours_minutes:
+        value_template: >-
+          {% set decimal_hours = states('sensor.apple_tv_playing') | float(0) %}
+          {% set hours = (decimal_hours - (decimal_hours % 1)) | int(0) %}
+          {% set minutes = ((decimal_hours % 1) * 60) | int(0) %}
+          {{ '%02i:%02i' % (hours, minutes) }}
+
 automation:
   - alias: "Turn Audio On When Apple TV Turned On"
     id: "7c3646d2-8fe8-4378-a6f5-979e16cc40ff"

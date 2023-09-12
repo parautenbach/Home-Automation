@@ -4,7 +4,6 @@ default_config:
 homekit: !include homekit.yaml
 
 script: !include scripts.yaml
-sensor: !include sensors.yaml
 template: !include template_sensors.yaml
 
 # https://www.home-assistant.io/docs/configuration/basic/

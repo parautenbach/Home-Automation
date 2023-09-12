@@ -100,6 +100,22 @@ binary_sensor:
     scan_interval: 180
 
 sensor:
+  - platform: snmp
+    name: snmp_wan_in
+    host: 192.168.0.1
+    community: !secret router_snmp_community
+    version: 2c
+    baseoid: 1.3.6.1.2.1.2.2.1.10.26  # ifInOctets.26 / nas0_0
+    unit_of_measurement: octets
+
+  - platform: snmp
+    name: snmp_wan_out
+    host: 192.168.0.1
+    community: Router
+    version: 2c
+    baseoid: 1.3.6.1.2.1.2.2.1.16.26  # ifOutOctets.26 / nas0_0
+    unit_of_measurement: octets
+
   - platform: template
     sensors:
       # https://github.com/home-assistant/core/blob/dev/homeassistant/const.py#L571

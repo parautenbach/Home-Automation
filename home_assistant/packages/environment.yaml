@@ -49,6 +49,181 @@ binary_sensor:
         friendly_name: Day-time
         value_template: "{{ state_attr('sun.sun', 'elevation') >= 0 }}"
 
+sensor:
+  - platform: openweathermap_all
+    api_key: !secret open_weather_map_api_key
+    latitude: !secret home_latitude
+    longitude: !secret home_longitude
+
+  - platform: sun2
+    monitored_conditions:
+      - daylight
+
+  - platform: filter
+    name: ambient_temperature_filtered
+    entity_id: sensor.conditions_temperature
+    filters:
+      filter: lowpass
+      time_constant: 10
+      precision: 1
+
+  # https://community.home-assistant.io/t/outdoor-illuminance-template-sensor/228581
+  # https://community.home-assistant.io/t/automations-to-turn-on-lights-based-on-actual-season/252830/19
+  # https://www.engineeringtoolbox.com/light-level-rooms-d_708.html
+  - platform: illuminance
+    entity_id: weather.openweathermap_daily
+
+  - platform: file
+    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
+    name: Wemmershoek Dam Level
+    unit_of_measurement: "%"
+    value_template: "{{ '%0.2f'| format(value.split(',')[3] | round(2)) }}"
+    scan_interval: 86400  # every 24 hours
+
+  # scraping example if i ever want to get data from http://www.dwa.gov.za/Hydrology/Weekly/ProvinceWeek.aspx?region=WC instead
+  # https://community.home-assistant.io/t/hours-of-daylight/59422/152
+  # fixed decimals formatting:
+  # https://stackoverflow.com/questions/12681036/is-there-a-direct-approach-to-format-numbers-in-jinja2/12681178
+  # https://support.sendwithus.com/jinja/formatting_numbers/
+  - platform: file
+    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
+    name: Steenbras Lower Dam Level
+    unit_of_measurement: "%"
+    value_template: "{{ '%0.2f'| format(value.split(',')[7] | round(2)) }}"
+    scan_interval: 86400
+
+  - platform: file
+    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
+    name: Steenbras Upper Dam Level
+    unit_of_measurement: "%"
+    value_template: "{{ '%0.2f'| format(value.split(',')[11] | round(2)) }}"
+    scan_interval: 86400
+
+  - platform: file
+    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
+    name: Voëlvlei Dam Level
+    unit_of_measurement: "%"
+    value_template: "{{ '%0.2f'| format(value.split(',')[15] | round(2)) }}"
+    scan_interval: 86400
+
+  - platform: file
+    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
+    name: Theewaterskloof Dam Level
+    unit_of_measurement: "%"
+    value_template: "{{ '%0.2f'| format(value.split(',')[47] | round(2)) }}"
+    scan_interval: 86400
+
+  - platform: file
+    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
+    name: Bergrivier Dam Level
+    unit_of_measurement: "%"
+    value_template: "{{ '%0.2f'| format(value.split(',')[51] | round(2)) }}"
+    scan_interval: 86400
+
+  - platform: file
+    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
+    name: Total Dam Level
+    unit_of_measurement: "%"
+    value_template: "{{ '%0.2f'| format(value.split(',')[54] | round(2)) }}"
+    scan_interval: 86400
+
+  - platform: file
+    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
+    name: Total Dam Level Previous Year
+    unit_of_measurement: "%"
+    value_template: "{{ '%0.2f'| format(value.split(',')[55] | round(2)) }}"
+    scan_interval: 86400
+
+  - platform: file
+    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
+    name: Dam Levels Last Update
+    value_template: "{{ strptime(value.split(',')[0], '%d-%b-%y').date() }}"
+    scan_interval: 86400
+
+  # https://community.home-assistant.io/t/prevent-zone-automation-from-triggering-when-briefly-entering-zone/360107/4
+  - platform: history_stats
+    name: Duration Pieter Work Cape Town
+    entity_id: person.pieter_rautenbach
+    state: "Work (Takealot HQ)"
+    type: time  # duration
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"
+
+  - platform: history_stats
+    name: Duration Pieter Work Stellenbosch
+    entity_id: person.pieter_rautenbach
+    state: "Work (Takealot STB)"
+    type: time  # duration
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"
+
+  - platform: history_stats
+    name: Fair Weather Time
+    entity_id: binary_sensor.is_fair_weather
+    state: "on"
+    type: time  # duration
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"
+
+  # https://aqicn.org/api/
+  # https://api.waqi.info/feed/stellenbosch/?token=<token>
+  # https://aqicn.org/city/south-africa/cape-winelands/stellenboch/
+  - platform: waqi
+    token: !secret waqi_api_token
+    locations:
+      - stellenbosch
+
+  - platform: template
+    sensors:
+      solar_angle:
+        friendly_name: "Sun Angle"
+        unit_of_measurement: '°'
+        value_template: "{{ '%+.1f' | format(state_attr('sun.sun', 'elevation')) }}"
+        icon_template: mdi:sun-angle-outline
+      weather_forecast_precipitation_tomorrow:
+        friendly_name: "Weather Precipitation Tomorrow"
+        value_template: >-
+          {{ (state_attr('weather.openweathermap_daily', 'forecast') | first)['precipitation'] }}
+        icon_template: >-
+          {% if (state_attr('weather.openweathermap_daily', 'forecast') | first)['precipitation'] > 0 %}
+            mdi:water
+          {% else %}
+            mdi:water-off
+          {% endif %}
+      outside_temperature:
+        friendly_name: "Outside Temperature"
+        value_template: >-
+          {{ state_attr('weather.openweathermap_hourly', 'temperature') | float(None) }}
+          {# states('sensor.saaqis_ambient_temperature') | float(None) #}
+        device_class: temperature
+        unit_of_measurement: "°C"
+        icon_template: mdi:thermometer
+      outside_feels_like:
+        friendly_name: "Outside Temperature Feels Like"
+        value_template: >-
+          {{ states('sensor.openweathermap_feels_like_temperature') | round(1)  }}
+        device_class: temperature
+        unit_of_measurement: "°C"
+        icon_template: mdi:thermometer
+      daylight_hm:
+        friendly_name: "Daylight Length"
+        value_template: >-
+          {{ state_attr('sensor.daylight', 'today_hms')[:5] }}
+        icon_template: mdi:weather-sunny
+      nighttime_number:
+        value_template: "{{ iif(is_state('binary_sensor.nighttime', 'on'), 1, 0) }}"
+      temperature_difference:
+        friendly_name: "Inside vs Outside Temperature"
+        value_template: >-
+          {{ (states('sensor.office_temperature') | float(0) - states('sensor.outside_temperature') | float(0)) | round(1) }}
+        device_class: temperature
+        unit_of_measurement: "°C"
+      fair_weather_time_share:
+        friendly_name: "Fair Weather Time Share"
+        value_template: >-
+          {{ (states('sensor.fair_weather_time') | float(0) / states('sensor.daylight') | float(0) * 100) | round(0) }}
+        unit_of_measurement: "%"
+
 multiscrape:
   - resource: https://pollencount.co.za/
     scan_interval: 21600  # 60*60*6 or 4 updates per day

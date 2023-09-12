@@ -560,6 +560,14 @@ mqtt:
       unit_of_measurement: "messages"
       icon: mdi:counter
 
+group:
+  automations_to_save_energy:
+    name: Automations To Save Energy
+    entities:
+      - automation.lights_on_upon_low_light
+      - automation.open_the_gate_when_arriving_home
+      - automation.open_garage_door_when_arriving
+
 utility_meter:
   daily_grid_energy_consumption:
     unique_id: "cb11e11e-259d-43dc-bc65-a9752b0bd31a"

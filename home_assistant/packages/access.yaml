@@ -24,6 +24,7 @@ cover:
             mdi:gate
           {% endif %}
         availability_template: "{{ not is_state('binary_sensor.gate_status', 'unavailable') }}"
+
   - platform: template
     covers:
       lhs_garage_door:
@@ -49,6 +50,7 @@ cover:
             mdi:garage
           {% endif %}
         availability_template: "{{ not is_state('binary_sensor.lhs_garage_door_status', 'unavailable') }}"
+
   - platform: template
     covers:
       rhs_garage_door:
@@ -74,8 +76,17 @@ cover:
             mdi:garage
           {% endif %}
         availability_template: "{{ not is_state('binary_sensor.rhs_garage_door_status', 'unavailable') }}"
+
   - platform: group
     name: "Garage Doors"
     entities:
+      - cover.lhs_garage_door
+      - cover.rhs_garage_door
+
+group:
+  covers_with_timers:
+    name: Covers With Timers
+    entities:
+      - cover.main_gate
       - cover.lhs_garage_door
       - cover.rhs_garage_door

@@ -3,7 +3,6 @@ default_config:
 
 homekit: !include homekit.yaml
 
-media_player: !include media_players.yaml
 mqtt: !include mqtt.yaml
 multiscrape: !include multiscrape.yaml
 rest: !include rest.yaml

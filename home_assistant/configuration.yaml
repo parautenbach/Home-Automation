@@ -1,7 +1,6 @@
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
-cover: !include covers.yaml
 group: !include groups.yaml
 homekit: !include homekit.yaml
 input_boolean: !include input_booleans.yaml

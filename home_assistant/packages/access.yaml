@@ -1,0 +1,81 @@
+cover:
+  - platform: template
+    covers:
+      main_gate:
+        friendly_name: "Main Gate"
+        device_class: gate
+        open_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.gate_remote
+        close_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.gate_remote
+        stop_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.gate_remote
+        value_template: "{{ is_state('binary_sensor.gate_status', 'on') }}"
+        icon_template: >-
+          {% if is_state('binary_sensor.gate_status', 'on') %}
+            mdi:gate-open
+          {% else %}
+            mdi:gate
+          {% endif %}
+        availability_template: "{{ not is_state('binary_sensor.gate_status', 'unavailable') }}"
+  - platform: template
+    covers:
+      lhs_garage_door:
+        friendly_name: "LHS Garage Door"
+        device_class: garage
+        open_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.lhs_garage_door_remote
+        close_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.lhs_garage_door_remote
+        stop_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.lhs_garage_door_remote
+        value_template: "{{ is_state('binary_sensor.lhs_garage_door_status', 'on') }}"
+        icon_template: >-
+          {% if is_state('binary_sensor.lhs_garage_door_status', 'on') %}
+            mdi:garage-open
+          {% else %}
+            mdi:garage
+          {% endif %}
+        availability_template: "{{ not is_state('binary_sensor.lhs_garage_door_status', 'unavailable') }}"
+  - platform: template
+    covers:
+      rhs_garage_door:
+        friendly_name: "RHS Garage Door"
+        device_class: garage
+        open_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.rhs_garage_door_remote
+        close_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.rhs_garage_door_remote
+        stop_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.rhs_garage_door_remote
+        value_template: "{{ is_state('binary_sensor.rhs_garage_door_status', 'on') }}"
+        icon_template: >-
+          {% if is_state('binary_sensor.rhs_garage_door_status', 'on') %}
+            mdi:garage-open
+          {% else %}
+            mdi:garage
+          {% endif %}
+        availability_template: "{{ not is_state('binary_sensor.rhs_garage_door_status', 'unavailable') }}"
+  - platform: group
+    name: "Garage Doors"
+    entities:
+      - cover.lhs_garage_door
+      - cover.rhs_garage_door

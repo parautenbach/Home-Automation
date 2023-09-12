@@ -1,3 +1,15 @@
+homeassistant:
+  customize:
+    binary_sensor.gate_status:
+      icon: mdi:gate
+    binary_sensor.lhs_garage_occupied:
+      icon: mdi:car-connected
+    binary_sensor.rhs_garage_occupied:
+      icon: mdi:car-connected
+    cover.garage_doors:
+      device_class: garage
+      icon: mdi:garage-variant
+
 input_datetime:
   main_gate_opened:
     has_date: true

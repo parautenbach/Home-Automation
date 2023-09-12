@@ -1,3 +1,28 @@
+homeassistant:
+  customize:
+    person.pieter_rautenbach:
+      entity_picture: '/local/pieter.jpg'
+    person.rouve_rautenbach:
+      entity_picture: '/local/rouve.jpg'
+    switch.guest_mode:
+      friendly_name: Guest Mode
+      icon: mdi:briefcase
+    switch.contractor_mode:
+      friendly_name: Contractor Mode
+      icon: mdi:account-hard-hat
+    input_boolean.pieter_present:
+      icon: mdi:account
+    input_boolean.rouve_present:
+      icon: mdi:account
+    input_boolean.guest_mode:
+      icon: mdi:briefcase
+    input_boolean.contractor_mode:
+      icon: mdi:account-hard-hat
+    sensor.google_travel_time:
+      device_class: duration
+    sensor.google_travel_time_filtered:
+      device_class: duration
+
 input_datetime:
   wake_up_time:
     has_time: true

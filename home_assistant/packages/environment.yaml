@@ -1,3 +1,87 @@
+homeassistant:
+  customize:
+    sensor.conditions_temperature:
+      friendly_name: Temperature
+    sensor.conditions_humidity:
+      friendly_name: Humidity
+    sensor.ambient_temperature_filtered:
+      friendly_name: Temperature
+    # sensor.uva_irradiance:
+    #   icon: mdi:weather-sunny-alert
+    # sensor.uvb_irradiance:
+    #   icon: mdi:weather-sunny-alert
+    # sensor.saaqis_pm_coarse:
+    #   icon: mdi:grain
+    # sensor.saaqis_pm_10:
+    #   icon: mdi:grain
+    #   device_class: pm10
+    # sensor.saaqis_pm_2_5:
+    #   icon: mdi:grain
+    #   device_class: pm25
+    sensor.saaqis_o3:
+      icon: mdi:skull-outline
+    sensor.saaqis_no2:
+      icon: mdi:smog
+    sensor.saaqis_so2:
+      icon: mdi:smog
+    sensor.wemmershoek_dam_level:
+      icon: mdi:waves
+    sensor.steenbras_lower_dam_level:
+      icon: mdi:waves
+    sensor.steenbras_upper_dam_level:
+      icon: mdi:waves
+    sensor.voelvlei_dam_level:
+      icon: mdi:waves
+    sensor.theewaterskloof_dam_level:
+      icon: mdi:waves
+    sensor.bergrivier_dam_level:
+      icon: mdi:waves
+    sensor.total_dam_level:
+      icon: mdi:waves
+      state_class: measurement
+    sensor.total_dam_level_previous_year:
+      icon: mdi:waves
+    sensor.dam_levels_last_update:
+      icon: mdi:update
+      device_class: "timestamp"
+    sensor.owm_pollution_overall_air_quality:
+      unit_of_measurement: aqi
+    sensor.waqi_stellenboch_cape_winelands_south_africa:
+      unit_of_measurement: aqi
+    sensor.bedroom_ht_temperature:
+      friendly_name: Bedoom Temperature
+      state_class: measurement
+    sensor.bedroom_ht_humidity:
+      friendly_name: Bedroom Humidity
+    sensor.main_bedroom_ht_temperature:
+      friendly_name: Main Bedroom Temperature
+      state_class: measurement
+    sensor.main_bedroom_ht_humidity:
+      friendly_name: Main Bedroom Humidity
+    sensor.daylight:
+      device_class: duration
+      unit_of_measurement: h
+      state_class: measurement
+    sensor.outside_temperature:
+      state_class: measurement
+    sensor.temperature_difference:
+      state_class: measurement
+    # binary_sensor.baby_monitor_sound_alarm:
+    #   device_class: sound
+    sensor.overall_pollen_risk:
+      unit_of_measurement: None
+    sensor.grass_pollen:
+      unit_of_measurement: None
+    sensor.tree_pollen:
+      unit_of_measurement: None
+    sensor.weed_pollen:
+      unit_of_measurement: None
+    sensor.mould_spores:
+      unit_of_measurement: None
+    sensor.winelands_fdi:
+      unit_of_measurement: None
+    # https://github.com/Limych/ha-average/issues/193
+
 shell_command:
   download_latest_dam_levels: "/home/homeassistant/scripts/download_latest_dam_levels.sh"
 

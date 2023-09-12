@@ -1,3 +1,22 @@
+homeassistant:
+  customize:
+    script.entertainment_apple_tv_on:
+      friendly_name: Apple TV System On
+      icon: mdi:apple
+    script.entertainment_satellite_on:
+      friendly_name: Satellite System On
+      icon: mdi:set-top-box
+    script.entertainment_off:
+      friendly_name: System Off
+      icon: mdi:power
+    switch.tivoli_audio:
+      friendly_name: Tivoli Audio
+      icon: mdi:radio
+    sensor.apple_tv_playing:
+      device_class: duration
+      unit_of_measurement: h
+      state_class: total_increasing
+
 input_select:
   selected_remote:
     name: Remote

@@ -1,3 +1,33 @@
+homeassistant:
+  customize:
+    script.noop:
+      icon: mdi:blank
+    sensor.server_cpu_temp:
+      friendly_name: CPU temperature
+    sensor.cape_town:
+      friendly_name: Cape Town
+    sensor.san_francisco:
+      friendly_name: San Francisco
+    sensor.london:
+      friendly_name: London
+    sensor.thor_disk_usage:
+      friendly_name: Disk use (percent)
+      icon: mdi:harddisk
+    sensor.mqtt_broker_sent_messages_1min_load:
+      friendly_name: MQTT broker messages out
+    sensor.mqtt_broker_received_messages_1min_load:
+      friendly_name: MQTT broker messages in
+    sensor.last_backup:
+      friendly_name: "Most recent backup"
+    sensor.db_size:
+      icon: mdi:database
+    binary_sensor.python_package_index_pypi_update_available:
+      friendly_name: HA Updater
+    sensor.watchman_missing_entities:
+      friendly_name: Missing Entities
+    sensor.watchman_missing_services:
+      friendly_name: Missing Services
+
 input_boolean:
   server_shut_down_automatically:
     name: Server Shut Down Automatically

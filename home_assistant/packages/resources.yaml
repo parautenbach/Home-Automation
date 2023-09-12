@@ -1,5 +1,34 @@
 # https://andrewmarsh.com/software/sunpath3d-web/
 
+homeassistant:
+  customize:
+    sensor.daily_grid_energy_consumption:
+      friendly_name: Daily Grid Energy Consumption
+      icon: mdi:power-plug
+    sensor.monthly_grid_energy_consumption:
+      friendly_name: Daily Grid Energy Consumption  # keywords: power plug guage light alert flash
+      icon: mdi:power-plug
+    # digital power meter in db
+    sensor.total_electricity_consumption:
+      device_class: energy
+    sensor.monthly_grid_energy_consumption_forecast:
+      friendly_name: Monthly Grid Energy Consumption Forecast
+      icon: mdi:trending-up
+    sensor.daily_solar_energy_consumption:
+      state_class: total_increasing
+    sensor.solar_energy_utilisation_today:
+      state_class: total_increasing
+    sensor.geyser_consumption_share:
+      state_class: total_increasing
+    sensor.daily_grid_feed_outage_time:
+      state_class: total_increasing
+    sensor.average_solar_energy_forecast_today:
+      state_class: total_increasing
+    sensor.battery_change_of_charge:
+      icon: mdi:delta
+    binary_sensor.grid_charge_point_status:
+      icon: mdi:transmission-tower
+
 binary_sensor:
   - platform: template
     sensors:

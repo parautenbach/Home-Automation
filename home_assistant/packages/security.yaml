@@ -1,3 +1,35 @@
+homeassistant:
+  customize:
+    camera.security_camera:
+      friendly_name: Security Camera
+    binary_sensor.foyer_motion_homebridge:
+      friendly_name: Foyer Motion Sensor
+      icon: mdi:motion-sensor
+    light.led:
+      icon: mdi:motion-sensor
+      friendly_name: Foyer Motion LED
+    automation.take_foyer_motion_snapshots:
+      icon: mdi:camera
+    script.security_camera_record_clip:
+      friendly_name: Record Security Camera Clip
+      icon: mdi:video
+    script.security_camera_create_snapshot:
+      friendly_name: Take Security Camera Snapshot
+      icon: mdi:camera
+    sensor.security_camera_last_snapshot:
+      icon: mdi:clock-outline
+    sensor.security_camera_last_snapshot_relative:
+      icon: mdi:clock-outline
+    sensor.security_camera_last_clip_relative:
+      icon: mdi:clock-outline
+    sensor.motion_detected_last_relative:
+      icon: mdi:clock-outline
+    input_datetime.security_camera_last_snapshot:
+      friendly_name: Security Camera Last Snapshot
+    sensor.foyer_motion_detections:
+      # unit_of_measurement: count
+      state_class: total_increasing
+
 input_datetime:
   security_camera_last_snapshot:
     has_date: true

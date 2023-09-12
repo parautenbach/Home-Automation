@@ -1,3 +1,67 @@
+homeassistant:
+  customize:
+    sensor.internet_speed_in:
+      friendly_name: 'Download Traffic'
+      icon: mdi:download
+    sensor.internet_speed_out:
+      friendly_name: 'Upload Traffic'
+      icon: mdi:upload
+    sensor.internet_usage_in:
+      friendly_name: 'Download Usage'
+      icon: mdi:download
+    sensor.internet_usage_out:
+      friendly_name: 'Upload Usage'
+      icon: mdi:upload
+    sensor.daily_internet_usage_in:
+      friendly_name: 'Daily Downloads'
+      icon: mdi:download
+      state_class: total_increasing
+    sensor.daily_internet_usage_out:
+      friendly_name: 'Daily Uploads'
+      icon: mdi:upload
+      state_class: total_increasing
+    sensor.monthly_internet_usage_in:
+      friendly_name: 'Monthly Downloads'
+      icon: mdi:download
+    sensor.monthly_internet_usage_out:
+      friendly_name: 'Monthly Uploads'
+      icon: mdi:upload
+    sensor.internet_packet_loss:
+      friendly_name: Internet Packet Loss
+      icon: mdi:cancel
+    sensor.internet_round_trip_time_avg:
+      friendly_name: Internet Mean Ping Time
+      icon: mdi:timer-outline
+    sensor.internet_round_trip_time_mdev:
+      friendly_name: Internet Mean Ping Deviation
+      icon: mdi:sigma-lower
+    sensor.front_extender_packet_loss:
+      friendly_name: Front Extender Packet Loss
+      icon: mdi:cancel
+    sensor.front_extender_round_trip_time_avg:
+      friendly_name: Front Extender Mean Ping Time
+      icon: mdi:timer-outline
+    sensor.front_extender_round_trip_time_mdev:
+      friendly_name: Front Extender Mean Ping Deviation
+      icon: mdi:sigma-lower
+    sensor.back_extender_packet_loss:
+      friendly_name: Back Extender Packet Loss
+      icon: mdi:cancel
+    sensor.back_extender_round_trip_time_avg:
+      friendly_name: Back Extender Mean Ping Time
+      icon: mdi:timer-outline
+    sensor.back_extender_round_trip_time_mdev:
+      friendly_name: Back Extender Mean Ping Deviation
+      icon: mdi:sigma-lower
+    input_number.wan_traffic_delta_in:
+      friendly_name: WAN Traffic Delta In
+    input_number.wan_traffic_delta_out:
+      friendly_name: WAN Traffic Delta Out
+    sensor.network_throughput_in_enp3s0:
+      icon: mdi:download-network-outline
+    sensor.network_throughput_out_enp3s0:
+      icon: mdi:upload-network-outline
+
 # why these when you can just look at the last_changed property?
 # because this is more resilient against restarts
 input_datetime:

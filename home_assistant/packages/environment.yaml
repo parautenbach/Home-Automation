@@ -228,6 +228,255 @@ multiscrape:
         on_error:
           value: last
 
+rest:
+  # https://jsoncrack.com/editor
+
+  # - resource_template: 'http://weather.sun.ac.za/api/getSonbesie.php?start={{ utcnow() | as_timestamp | int - 300 }}&end={{ utcnow() | as_timestamp | int }}'
+  #   method: GET
+  #   scan_interval: 300
+  #   timeout: 15
+  #   sensor:
+  #     - name: Sun Illuminance
+  #       device_class: illuminance
+  #       # http://weather.sun.ac.za/
+  #       # http://weather.sun.ac.za/api/Sonbesie%20metadata.pdf
+  #       # we're using the GHI (global horizontal irradiance here)
+  #       # https://www.ammonit.com/en/wind-solar-wissen/solarmessung
+  #       # https://www.nrel.gov/grid/solar-resource/solar-glossary.html#globalhorizontalradiation
+  #       # GHI = DHI + DNI · cos (θ) (where θ is the solar zenith angle)
+  #       # The total amount of radiation received from above by a horizontal surface. This value includes both Direct Normal Irradiation (DNI) and Diffuse Horizontal Irradiation (DHI).
+  #       # https://physics.stackexchange.com/questions/135618/rm-lux-and-w-m2-relationship
+  #       # https://www.nasa.gov/pdf/583137main_Inverse_Square_Law_of_Light.pdf
+  #       # Identification of residential electricity consumption profiles for building dynamic simulation through smart-meter data:
+  #       # There is no simple conversion from lux to W/m2, since it depends on the wavelength or color of the light. However, a simplification was adapted: for the sun light there is
+  #       # an approximate conversion of 0.0079 W/m2 per lux [72], valid for direct sunlight, while for daylight the appropriate conversion drops to 10% of that value [73].
+  #       # https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjFuLDfl6TwAhXISxUIHQ_yA8sQFjAFegQICBAD&url=https%3A%2F%2Ffenix.tecnico.ulisboa.pt%2FdownloadFile%2F1970719973966843%2FMasterThesis_70481.pdf&usg=AOvVaw35OzdODshLT6JlqkKa_hGJ
+  #       # https://www.researchgate.net/publication/347362859_A_conversion_guide_solar_irradiance_and_lux_illuminance
+  #       # comparing the last two papers: 1/0.0079 W/mˆ2 = 126 lx ~= 122 +- 1 lx
+  #       # general:
+  #       # https://en.wikipedia.org/wiki/Irradiance
+  #       # https://depts.washington.edu/mictech/optics/me557/Radiometry.pdf
+  #       # https://www.jvejournals.com/article/21667
+  #       # https://bg.copernicus.org/preprints/6/10625/2009/bgd-6-10625-2009.pdf
+  #       # https://www.nrel.gov/docs/legosti/old/2436.pdf
+  #       value_template: "{{ value_json[-1].SunWM_Avg | float | multiply(1/0.0079) if value_json else 'unknown' }}"
+  #       unit_of_measurement: "lx"
+  #     - name: Sun Irradiance
+  #       value_template: "{{ value_json[-1].SunWM_Avg | float if value_json else 'unknown' }}"
+  #       unit_of_measurement: "W/m²"
+  #     # https://www.epa.gov/sunsafety/calculating-uv-index-0
+  #     # https://www.canada.ca/en/conservation-institute/services/conservation-preservation-publications/canadian-conservation-institute-notes/measurement-ultraviolet-radiation.html
+  #     # https://www.kippzonen.com/Download/137/Brochure-UV-Radiometers-CUV-5-and-UVS-range -> KippZonen_Brochure_UV_Radiometers_V1508.pdf
+  #     # https://www.kippzonen.com/News/411/Choosing-the-Right-UV-Radiometer#.YRkvs4Qq2Ak
+  #     # To avoid this confusion, United Nations organisations combined to produce the
+  #     # Global Solar UV Index (UVI). This is now accepted world-wide as the basis for
+  #     # public health. information. The erythemal spectral response function is defined
+  #     # by ISO: 17166:1999 / CIE S 007/E-1998. The Global Solar UV Index can be calculated
+  #     # by multiplying the UVE radiation value in W/m² by 40 m²/W. For example, 0.25 W/m²
+  #     # of UVE represents a UV Index of 10. A UVB radiometer is not ideal for the
+  #     # measurement of UVE. The UVS-E-T and UVS-AE-T radiometers are specifically designed
+  #     # for this application.
+  #     # https://www.who.int/uv/publications/en/UVIGuide.pdf
+  #     # https://www.esrl.noaa.gov/gmd/grad/neubrew/docs/UVindex.pdf
+  #     # http://www.dfisica.ubi.pt/~hgil/Fotometria/HandBook/ch07.html
+  #     # https://www.ncbi.nlm.nih.gov/books/NBK401584/
+  #     # https://www.who.int/uv/publications/Protecting_Workers_UV_pub.pdf
+  #     # http://strang.smhi.se/extraction/units-conversion.html
+  #     - name: UVA Irradiance
+  #       value_template: "{{ value_json[-1].UVA_Avg | float if value_json else 'unknown' }}"
+  #       unit_of_measurement: "W/m²"
+  #     - name: UVB Irradiance
+  #       value_template: "{{ value_json[-1].UVB_Avg | float if value_json else 'unknown' }}"
+  #       unit_of_measurement: "W/m²"
+  - resource_template: >-
+      {# station ID: 156 (Stellenbosch) #}
+      {% set from = (now() - timedelta(minutes=30)) | as_timestamp | timestamp_custom('%Y-%m-%dT%H:%M') %}
+      {% set to = now() | as_timestamp | timestamp_custom('%Y-%m-%dT%H:%M') %}
+      https://saaqis.environment.gov.za:44301/v1/envista/stations/156/Average?from={{ from }}&to={{ to }}&fromTimebase=1&toTimebase=1&timeBeginning=false&useBackWard=false&includeSummary=false&roundType=1&unitid=-1
+    headers:
+      Accept-Language: 'en-ZA;q=1.0'
+      User-Agent: 'SouthAfricaAQM/2.0.28 (com.Envitech.SouthAfricaAQM; build:1.0.0; iOS 14.7.1) Alamofire/4.0.1'
+      Accept: '*/*'
+      Authorization: !secret saaqis_api_token
+    method: GET
+    verify_ssl: false
+    scan_interval: 600  # 10 min
+    timeout: 15
+    sensor:
+      # these don't seem to be available anymore
+      # - name: SAAQIS PM Coarse
+      #   value_template: >-
+      #     {% if value_json is defined and "data" in value_json %}
+      #       {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'PM Coarse') | list %}
+      #       {% if data_list != [] %}
+      #         {% set data = data_list | first %}
+      #         {% if data.valid %}
+      #           {% if data.value >= 0 %}
+      #             {{ data.value }}
+      #           {% else %}
+      #             0
+      #           {% endif %}
+      #         {% else %}
+      #           0
+      #         {% endif %}
+      #       {% else %}
+      #         0
+      #       {% endif %}
+      #     {% else %}
+      #       0
+      #     {% endif %}
+      #   unit_of_measurement: "µg/m³"
+      # - name: SAAQIS PM 10
+      #   value_template: >-
+      #     {% if value_json is defined and "data" in value_json %}
+      #       {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'PM10') | list %}
+      #       {% if data_list != [] %}
+      #         {% set data = data_list | first %}
+      #         {% if data.valid %}
+      #           {% if data.value >= 0 %}
+      #             {{ data.value }}
+      #           {% else %}
+      #             0
+      #           {% endif %}
+      #         {% else %}
+      #           0
+      #         {% endif %}
+      #       {% else %}
+      #         0
+      #       {% endif %}
+      #     {% else %}
+      #       0
+      #     {% endif %}
+      #   device_class: pm10
+      #   unit_of_measurement: "µg/m³"
+      # - name: SAAQIS PM 2.5
+      #   value_template: >-
+      #     {% if value_json is defined and "data" in value_json %}
+      #       {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'PM2.5') | list %}
+      #       {% if data_list != [] %}
+      #         {% set data = data_list | first %}
+      #         {% if data.valid %}
+      #           {% if data.value >= 0 %}
+      #             {{ data.value }}
+      #           {% else %}
+      #             0
+      #           {% endif %}
+      #         {% else %}
+      #           0
+      #         {% endif %}
+      #       {% else %}
+      #         0
+      #       {% endif %}
+      #     {% else %}
+      #       0
+      #     {% endif %}
+      #   device_class: pm25
+      #   unit_of_measurement: "µg/m³"
+      # https://www2.dmu.dk/atmosphericenvironment/expost/database/docs/ppm_conversion.pdf
+      # https://cfpub.epa.gov/ncer_abstracts/index.cfm/fuseaction/display.files/fileid/14285
+      # https://www.breeze-technologies.de/blog/air-pollution-how-to-convert-between-mgm3-%C2%B5gm3-ppm-ppb/
+      - name: SAAQIS O3
+        value_template: >-
+          {% if value_json is defined and "data" in value_json %}
+            {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'O3') | list %}
+            {% if data_list != [] %}
+              {% set data = data_list | first %}
+              {% if data.valid %}
+                {% if data.value >= 0 %}
+                  {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
+                  {% set const = 12.187 %}
+                  {% set molecular_weight = 48 %}
+                  {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
+                {% else %}
+                  0
+                {% endif %}
+              {% else %}
+                0
+              {% endif %}
+            {% else %}
+              0
+            {% endif %}
+          {% else %}
+            0
+          {% endif %}
+        device_class: ozone
+        unit_of_measurement: "µg/m³"
+      - name: SAAQIS NO2
+        value_template: >-
+          {% if value_json is defined and "data" in value_json %}
+            {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'NO2') | list %}
+            {% if data_list != [] %}
+              {% set data = data_list | first %}
+              {% if data.valid %}
+                {% if data.value >= 0 %}
+                  {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
+                  {% set const = 12.187 %}
+                  {% set molecular_weight = 46.0055 %}
+                  {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
+                {% else %}
+                  0
+                {% endif %}
+              {% else %}
+                0
+              {% endif %}
+            {% else %}
+              0
+            {% endif %}
+          {% else %}
+            0
+          {% endif %}
+        device_class: nitrogen_dioxide
+        unit_of_measurement: "µg/m³"
+      - name: SAAQIS SO2
+        value_template: >-
+          {% if value_json is defined and "data" in value_json %}
+            {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'SO2') | list %}
+            {% if data_list != [] %}
+              {% set data = data_list | first %}
+              {% if data.valid %}
+                {% if data.value >= 0 %}
+                  {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
+                  {% set const = 12.187 %}
+                  {% set molecular_weight = 64.066 %}
+                  {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
+                {% else %}
+                  0
+                {% endif %}
+              {% else %}
+                0
+              {% endif %}
+            {% else %}
+              0
+            {% endif %}
+          {% else %}
+            0
+          {% endif %}
+        device_class: sulphur_dioxide
+        unit_of_measurement: "µg/m³"
+      - name: SAAQIS Ambient Temperature
+        value_template: >-
+          {% if value_json is defined and "data" in value_json %}
+            {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'Amb Temp') | list %}
+            {% if data_list != [] %}
+              {% set data = data_list | first %}
+              {% if data.valid %}
+                {% if data.value >= 0 %}
+                  {{ data.value | round(1) }}
+                {% else %}
+                  0
+                {% endif %}
+              {% else %}
+                0
+              {% endif %}
+            {% else %}
+              0
+            {% endif %}
+          {% else %}
+            0
+          {% endif %}
+        device_class: temperature
+        unit_of_measurement: "°C"
+
 automation:
   - alias: "Download Dam Levels Data"
     id: "0cb4d6ba-5a63-45f7-8adc-efb98724a44e"

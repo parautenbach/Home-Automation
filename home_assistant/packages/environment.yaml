@@ -845,7 +845,7 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id: sensor.openweathermap_uv_index
-        above: 5
+        above: 7
     mode: single
     action:
       - service: notify.family

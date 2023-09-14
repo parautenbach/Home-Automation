@@ -115,7 +115,7 @@ command_line:
       command_timeout: 15
       unit_of_measurement: "%"
       value_template: '{{ value | int(0) }}'
-      scan_interval: 180
+      scan_interval: 60
 
   - sensor:
       name: front_extender_packet_loss
@@ -164,7 +164,7 @@ binary_sensor:
     name: Internet
     host: www.google.com
     count: 5
-    scan_interval: 180
+    scan_interval: 60
 
 sensor:
   - platform: snmp

@@ -112,6 +112,7 @@ command_line:
   - sensor:
       name: internet_packet_loss
       command: 'ping -c 5 www.google.com 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
+      command_timeout: 15
       unit_of_measurement: "%"
       value_template: '{{ value | int(0) }}'
       scan_interval: 180
@@ -119,6 +120,7 @@ command_line:
   - sensor:
       name: front_extender_packet_loss
       command: 'ping -c 5 front_extender 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
+      command_timeout: 15
       unit_of_measurement: "%"
       value_template: '{{ value | int(0) }}'
       scan_interval: 30
@@ -126,6 +128,7 @@ command_line:
   - sensor:
       name: back_extender_packet_loss
       command: 'ping -c 5 back_extender 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
+      command_timeout: 15
       unit_of_measurement: "%"
       value_template: '{{ value | int(0) }}'
       scan_interval: 30

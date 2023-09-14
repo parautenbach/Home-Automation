@@ -943,7 +943,11 @@ cards:
               - state
       - type: markdown
         title: Loadshedding
-        content: "{{ states('sensor.loadshedding_forecast') }}"
+        content: >-
+          {{ states('sensor.loadshedding_forecast') }}
+
+
+          [Heatmap](https://unofficialeskom.com/heatmap/)
       - type: conditional
         conditions:
           - entity: binary_sensor.loadshedding_active

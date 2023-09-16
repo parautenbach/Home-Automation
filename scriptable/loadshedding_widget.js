@@ -51,39 +51,42 @@ async function createWidget() {
 
     const widget = new ListWidget();
     widget.backgroundColor = new Color(colorCode, 1.0);
-    widget.url = "homeassistant://navigate/lovelace/main";
+    widget.url = "homeassistant://navigate/lovelace/resources";
 
     const header = widget.addStack();
 
     const icon = header.addStack();
     icon.backgroundColor = new Color(colorCode, 1.0)
-    icon.cornerRadius = 1
-    const iconWidget = icon.addImage(iconImage)
-    iconWidget.imageSize = new Size(40, 40)
+    icon.cornerRadius = 1;
+    const iconWidget = icon.addImage(iconImage);
+    iconWidget.imageSize = new Size(30, 30);
 
     header.addSpacer(2);
 
     const title = header.addStack();
     title.setPadding(2, 0, 0, 0);
     const titleText = title.addText("Loadshedding");
-    titleText.font = Font.regularSystemFont(30);
+    titleText.font = Font.regularSystemFont(20);
+    titleText.textColor = Color.white();
 
-    widget.addSpacer(5)
+    widget.addSpacer(5);
 
     const forecast = widget.addStack();
     forecast.setPadding(0, 0, 0, 0);
     forecast.borderWidth = 0;
 
     const forecastText = forecast.addText(forecastData);
-    forecastText.font = Font.regularSystemFont(14);
+    forecastText.font = Font.regularSystemFont(12);
+    forecastText.textColor = Color.white();
 
-    widget.addSpacer(15)
+    widget.addSpacer(15);
 
     const lastUpdated = widget.addStack();
     const time = (new Date()).toLocaleTimeString().slice(0, 5);
     const lastUpdatedText = lastUpdated.addText("Last update: " + time);
     lastUpdatedText.font = Font.regularSystemFont(8);
-    lastUpdatedText.rightAlignText()
+    lastUpdatedText.rightAlignText();
+    lastUpdatedText.textColor = Color.white();
 
     return widget;
 }
@@ -94,15 +97,15 @@ https://gist.github.com/marco79cgn/23ce08fd8711ee893a3be12d4543f2d2
 Retrieves the image from the local file store or downloads it once
 */
 async function getIcon(file, imageUrl) {
-    const fm = FileManager.local()
-    const dir = fm.documentsDirectory()
-    const path = fm.joinPath(dir, file)
+    const fm = FileManager.local();
+    const dir = fm.documentsDirectory();
+    const path = fm.joinPath(dir, file);
     if (fm.fileExists(path)) {
-        return fm.readImage(path)
+        return fm.readImage(path);
     } else {
         const iconImage = await loadImage(imageUrl)
-        fm.writeImage(path, iconImage)
-        return iconImage
+        fm.writeImage(path, iconImage);
+        return iconImage;
     }
 }
 
@@ -112,8 +115,8 @@ https://gist.github.com/marco79cgn/23ce08fd8711ee893a3be12d4543f2d2
 Downloads an image from a given URL
 */
 async function loadImage(imgUrl) {
-    const req = new Request(imgUrl)
-    return await req.loadImage()
+    const req = new Request(imgUrl);
+    return await req.loadImage();
 }
 
 async function getData(serverUrl, token) {
@@ -121,6 +124,6 @@ async function getData(serverUrl, token) {
     req.headers = {
                     "Authorization": "Bearer " + token,
                     "Content-Type": "application/json"
-                  }
+                  };
     return await req.loadJSON();
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>net.ov1d1u.python.micstatus</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/.../python</string>
+        <string>/.../micstatus.py</string>
+    </array>
+    <key>StandardErrorPath</key>
+    <string>/tmp/micstatus.error</string>
+    <key>KeepAlive</key>
+    <true/>
+    <key>WorkingDirectory</key>
+    <string>/tmp</string>
+</dict>
+</plist>

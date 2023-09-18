@@ -363,7 +363,7 @@ automation:
                 data:
                   title: "Internet"
                   message: >-
-                    {% set last_available = states('input_datetime.solarassistant_activity_ceased') | as_timestamp %}
+                    {% set last_available = states(input_datetime_entity_id) | as_timestamp %}
                     {% set utc_now_ts = utcnow() | as_timestamp %}
                     {% set minutes = ((utc_now_ts - last_available) // 60) | int %}
                     {% set extender_name = state_attr(trigger.entity_id, 'friendly_name') | lower %}

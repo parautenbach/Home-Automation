@@ -59,7 +59,7 @@ async function createWidget() {
     icon.backgroundColor = new Color(colorCode, 1.0)
     icon.cornerRadius = 1;
     const iconWidget = icon.addImage(iconImage);
-    iconWidget.imageSize = new Size(30, 30);
+    iconWidget.imageSize = new Size(25, 25);
 
     header.addSpacer(2);
 
@@ -79,7 +79,7 @@ async function createWidget() {
     forecastText.font = Font.regularSystemFont(12);
     forecastText.textColor = Color.white();
 
-    widget.addSpacer(15);
+    widget.addSpacer(5);
 
     const lastUpdated = widget.addStack();
     const time = (new Date()).toLocaleTimeString().slice(0, 5);

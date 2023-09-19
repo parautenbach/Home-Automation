@@ -33,6 +33,7 @@ automation:
     action:
       - service: "switch.turn_{{ 'on' if is_state('binary_sensor.on_air', 'on') else 'off' }}"
         entity_id: switch.on_air
+
   # alternative method due to this issue
   # https://github.com/home-assistant/iOS/issues/1903
   # source for detecting whether the mic is in use:

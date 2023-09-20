@@ -12,7 +12,7 @@ if (setup) {
 const widget = await createWidget();
 
 if (!config.runsInWidget) {
-    await widget.presentLarge();
+    await widget.presentMedium();
 }
 
 Script.setWidget(widget);

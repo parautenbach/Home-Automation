@@ -59,7 +59,7 @@ async function createWidget() {
     icon.backgroundColor = new Color(colorCode, 1.0)
     icon.cornerRadius = 1;
     const iconWidget = icon.addImage(iconImage);
-    iconWidget.imageSize = new Size(25, 25);
+    iconWidget.imageSize = new Size(30, 30);
 
     header.addSpacer(2);
 

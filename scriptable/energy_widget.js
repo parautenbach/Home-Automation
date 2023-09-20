@@ -87,7 +87,7 @@ async function createWidget() {
     parentStack.layoutHorizontally();
     let leftStack = parentStack.addStack();
     leftStack.layoutVertically();
-    parentStack.addSpacer();
+    parentStack.addSpacer(20);
     let rightStack = parentStack.addStack();
     rightStack.layoutVertically();
 

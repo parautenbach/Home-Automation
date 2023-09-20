@@ -12,7 +12,7 @@ if (setup) {
 const widget = await createWidget();
 
 if (!config.runsInWidget) {
-    await widget.presentLarge();
+    await widget.presentMedium();
 }
 
 Script.setWidget(widget);
@@ -115,6 +115,8 @@ async function createWidget() {
     addItem(currentStack, sensor[1], sensor[2], sensor[3]);
     sensor = sensors["grid"];
     addItem(currentStack, sensor[1], sensor[2], sensor[3]);
+    const time = (new Date()).toLocaleTimeString().slice(0, 5);
+    addItem(currentStack, "Last update", time, "");
 
     // for (const [key, values] of Object.entries(sensors)) {
     //     widget.addSpacer(5);
@@ -126,20 +128,39 @@ async function createWidget() {
     //     stackText.textColor = Color.white();
     // }
 
-    widget.addSpacer(15)
+    // widget.addSpacer(3)
+    // const lastUpdated = rightStack.addStack();
+    // const time = (new Date()).toLocaleTimeString().slice(0, 5);
+    // const lastUpdatedText = lastUpdated.addText("Last update: " + time);
+    // lastUpdatedText.font = Font.regularSystemFont(12);
+    // lastUpdatedText.rightAlignText()
+    // lastUpdatedText.textColor = Color.white();
 
-    const lastUpdated = widget.addStack();
-    const time = (new Date()).toLocaleTimeString().slice(0, 5);
-    const lastUpdatedText = lastUpdated.addText("Last update: " + time);
-    lastUpdatedText.font = Font.regularSystemFont(8);
-    lastUpdatedText.rightAlignText()
-    lastUpdatedText.textColor = Color.white();
+    const lineWeight = 5;
+    const lineColor = Color.white();
+    const canvasHeight = 338;
+    const canvasWidth = 720;
+    let drawContext = new DrawContext();
+    drawContext.size = new Size(canvasWidth, canvasHeight);
+    drawContext.opaque = false;
+    let topPoint = new Point(canvasWidth/2, 100);
+    let bottomPoint = new Point(canvasWidth/2, canvasHeight - 40);
+
+    const path = new Path();
+    path.move(topPoint);
+    path.addLine(bottomPoint);
+    drawContext.addPath(path);
+    drawContext.setStrokeColor(lineColor);
+    drawContext.setLineWidth(lineWeight);
+    drawContext.strokePath();
+
+    widget.backgroundImage = (drawContext.getImage());
 
     return widget;
 }
 
 function addItem(widget, label, value, unit) {
-    widget.addSpacer(5);
+    widget.addSpacer(3);
     const stack = widget.addStack();
     stack.setPadding(0, 0, 0, 0);
     stack.borderWidth = 0;

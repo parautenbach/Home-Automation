@@ -114,7 +114,16 @@ async function createWidget() {
     sensor = sensors["home"];
     addItem(currentStack, sensor[1], sensor[2], sensor[3]);
     sensor = sensors["grid"];
-    addItem(currentStack, sensor[1], sensor[2], sensor[3]);
+    let gridValue = "";
+    let gridValueColor = null;
+    if (sensor[2] == "on") {
+        gridValue = "Connected";
+        gridValueColor = Color.yellow();
+    } else {
+        gridValue = "Disconnected";
+        gridValueColor = Color.lightGray();
+    }
+    addItem(currentStack, sensor[1], gridValue, sensor[3]);  //, gridValueColor);
     const time = (new Date()).toLocaleTimeString().slice(0, 5);
     addItem(currentStack, "Last update", time, "");
 
@@ -159,14 +168,25 @@ async function createWidget() {
     return widget;
 }
 
-function addItem(widget, label, value, unit) {
+function addItem(widget, label, value, unit, valueColor) {
     widget.addSpacer(3);
-    const stack = widget.addStack();
-    stack.setPadding(0, 0, 0, 0);
-    stack.borderWidth = 0;
-    const stackText = stack.addText(label + ": " + value + unit);
-    stackText.font = Font.regularSystemFont(12);
-    stackText.textColor = Color.white();
+    const labelStack = widget.addStack();
+    labelStack.setPadding(0, 0, 0, 0);
+    labelStack.borderWidth = 0;
+    const labelStackText = labelStack.addText(label + ": ");
+    labelStackText.font = Font.boldSystemFont(12);
+    labelStackText.textColor = Color.white();
+
+    const valueStack = widget.addStack();
+    valueStack.setPadding(0, 0, 0, 0);
+    valueStack.borderWidth = 0;
+    const valueStackText = labelStack.addText(value + unit);
+    valueStackText.font = Font.regularSystemFont(12);
+    if (valueColor === undefined) {
+        valueStackText.textColor = Color.white();
+    } else {
+        valueStackText.textColor = valueColor;
+    }
 }
 
 /*

@@ -971,6 +971,8 @@ cards:
         entities:
           - entity: binary_sensor.grid_feed
             name: Grid
+          - entity: binary_sensor.electricity_feed
+            name: Home
       - type: statistics-graph
         title: Grid Feed Outage Time
         entities:

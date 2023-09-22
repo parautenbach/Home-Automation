@@ -96,9 +96,13 @@ async function createWidget() {
 
     currentStack = leftStack;
     sensor = sensors["pv"];
-    addItem(currentStack, sensor[1], parseInt(sensor[2]).toLocaleString(), sensor[3]);
+    // only the sensors that track mean values need the conditional check
+    // tl;dr: no samples => no statistic => unknown
+    // https://github.com/home-assistant/core/issues/58748
+    // https://community.home-assistant.io/t/why-does-this-statistics-sensor-have-an-unknown-state/320632
+    addItem(currentStack, sensor[1], parseInt((sensor[2] === "unknown") ? 0 : sensor[2]).toLocaleString(), sensor[3]);
     sensor = sensors["reserve"];
-    addItem(currentStack, sensor[1], sensor[2], sensor[3]);
+    addItem(currentStack, sensor[1], (sensor[2] === "unknown") ? 0 : sensor[2], sensor[3]);
     sensor = sensors["utilisation"];
     addItem(currentStack, sensor[1], sensor[2], sensor[3]);
     sensor = sensors["today"];
@@ -112,7 +116,7 @@ async function createWidget() {
     sensor = sensors["mode"];
     addItem(currentStack, sensor[1], sensor[2], sensor[3]);
     sensor = sensors["home"];
-    addItem(currentStack, sensor[1], parseInt(sensor[2]).toLocaleString(), sensor[3]);
+    addItem(currentStack, sensor[1], parseInt((sensor[2] === "unknown") ? 0 : sensor[2]).toLocaleString(), sensor[3]);
     sensor = sensors["grid"];
     let gridValue = "";
     let gridValueColor = null;

@@ -162,6 +162,14 @@ script:
   play_radio_paradise:
     mode: single
     sequence:
+      - if:
+          - condition: state
+            entity_id: media_player.living_room
+            state: "standby"
+        then:
+          # blocking call
+          - service: script.entertainment_apple_tv_on
+          - delay: "00:00:05"
       - service: media_player.select_source
         target:
           entity_id: media_player.living_room
@@ -179,8 +187,12 @@ automation:
       platform: state
       entity_id: media_player.living_room
       from: standby
+      not_to: "off"
       # seems like an apple tv can turn on and be in a paused state immediately
-      # to: idle
+      # would this be the alternative?
+      # to:
+      #   - "idle"
+      #   - "paused"
     mode: single
     action:
       - service: script.turn_on

@@ -569,6 +569,30 @@ sensor:
     end: '{{ now() }}'
     entities:
       - sensor.energy_production_today
+  - platform: statistics
+    name: 'PV Power 5min Average'
+    entity_id: sensor.pv_power
+    state_characteristic: mean
+    precision: 0
+    sampling_size: 100
+    max_age:
+      minutes: 5
+  - platform: statistics
+    name: 'Solar Reserve Percentage 5min Average'
+    entity_id: sensor.solar_reserve_percentage
+    state_characteristic: mean
+    precision: 0
+    sampling_size: 100
+    max_age:
+      minutes: 5
+  - platform: statistics
+    name: 'Home Power 5min Average'
+    entity_id: sensor.home_power
+    state_characteristic: mean
+    precision: 0
+    sampling_size: 100
+    max_age:
+      minutes: 5
 
 mqtt:
   binary_sensor:

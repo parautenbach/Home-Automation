@@ -43,9 +43,9 @@ async function createWidget() {
     // key: [resource, label, value, unit]
     const sensors = {
         "soc": ["api/states/sensor.battery_state_of_charge", "Battery", "", "%"],
-        "pv": ["api/states/sensor.pv_power_filtered", "Solar", "", "W"],
-        "reserve": ["api/states/sensor.solar_reserve_percentage", "Reserve", "", "%"],
-        "home": ["api/states/sensor.home_power", "Home", "", "W"],
+        "pv": ["api/states/sensor.pv_power_5min_average", "Solar", "", "W"],
+        "reserve": ["api/states/sensor.solar_reserve_percentage_5min_average", "Reserve", "", "%"],
+        "home": ["api/states/sensor.home_power_5min_average", "Home", "", "W"],
         "grid": ["api/states/binary_sensor.grid_feed", "Grid", "off", ""],
         "utilisation": ["api/states/sensor.solar_energy_utilisation_today", "Utilisation", "", "%"],
         "today": ["api/states/sensor.average_solar_energy_forecast_today", "Today", "", "kWh"],
@@ -96,7 +96,7 @@ async function createWidget() {
 
     currentStack = leftStack;
     sensor = sensors["pv"];
-    addItem(currentStack, sensor[1], sensor[2], sensor[3]);
+    addItem(currentStack, sensor[1], parseInt(sensor[2]).toLocaleString(), sensor[3]);
     sensor = sensors["reserve"];
     addItem(currentStack, sensor[1], sensor[2], sensor[3]);
     sensor = sensors["utilisation"];
@@ -112,7 +112,7 @@ async function createWidget() {
     sensor = sensors["mode"];
     addItem(currentStack, sensor[1], sensor[2], sensor[3]);
     sensor = sensors["home"];
-    addItem(currentStack, sensor[1], sensor[2], sensor[3]);
+    addItem(currentStack, sensor[1], parseInt(sensor[2]).toLocaleString(), sensor[3]);
     sensor = sensors["grid"];
     let gridValue = "";
     let gridValueColor = null;

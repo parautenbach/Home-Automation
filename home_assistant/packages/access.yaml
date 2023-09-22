@@ -162,15 +162,15 @@ template:
   # updated, there will still be an event emitted. this is why the state template needs
   # to update only when the first trigger gets triggered.
   - trigger:
-      - platform: event
-        event_type: amcrest
-        event_data:
-          event: CallNoAnswered
-          payload:
-            action: Start
-      - platform: state
-        entity_id: binary_sensor.doorbell_rang
-        to: "off"
+    - platform: event
+      event_type: amcrest
+      event_data:
+        event: CallNoAnswered
+        payload:
+          action: Start
+    - platform: state
+      entity_id: binary_sensor.doorbell_rang
+      to: "off"
     binary_sensor:
       name: Doorbell Rang
       # https://github.com/home-assistant/core/issues/39932

@@ -83,7 +83,9 @@ template:
           {% set pv_potential = states('sensor.power_production_now') | int(0) %}
           {% set pv_power = states('sensor.pv_power_filtered') | int(0) %}
           {% set battery_power = states('sensor.battery_power_filtered') | int(0) %}
-          {% if (pv_power > pv_potential and pv_power > pv_threshold) or (pv_power > pv_threshold and battery_power < -battery_threshold) %}
+          {% if (pv_power > pv_potential and pv_power > pv_threshold) or
+                (pv_power > pv_threshold and battery_power < -battery_threshold) or
+                (states('sensor.battery_state_of_charge') | int(0) < 100) %}
             0
           {% elif pv_potential > 0 %}
             {{ pv_potential - pv_power }}
@@ -105,7 +107,9 @@ template:
           {% set pv_potential = states('sensor.power_production_now') | int(0) %}
           {% set pv_power = states('sensor.pv_power_filtered') | int(0) %}
           {% set battery_power = states('sensor.battery_power_filtered') | int(0) %}
-          {% if (pv_power > pv_potential and pv_power > pv_threshold) or (pv_power > pv_threshold and battery_power < -battery_threshold) %}
+          {% if (pv_power > pv_potential and pv_power > pv_threshold) or
+                (pv_power > pv_threshold and battery_power < -battery_threshold) or
+                (states('sensor.battery_state_of_charge') | int(0) < 100) %}
             100
           {% elif pv_potential > 0 %}
             {{ (pv_power / pv_potential * 100) | round(0) }}
@@ -329,18 +333,18 @@ template:
           {{ states('sensor.battery_state_of_charge') | int(0) - states('sensor.capacity_charge_point') | int(0) }}
         icon: mdi:sigma-lower
   - trigger:
-      - platform: time_pattern
-        hours: "*"
-        minutes: "*"
-        seconds: 0
-      - platform: state
-        entity_id:
-          - number.capacity_point_1
-          - number.capacity_point_2
-          - number.capacity_point_3
-          - number.capacity_point_4
-          - number.capacity_point_5
-          - number.capacity_point_6
+    - platform: time_pattern
+      hours: "*"
+      minutes: "*"
+      seconds: 0
+    - platform: state
+      entity_id:
+        - number.capacity_point_1
+        - number.capacity_point_2
+        - number.capacity_point_3
+        - number.capacity_point_4
+        - number.capacity_point_5
+        - number.capacity_point_6
     sensor:
       - name: "Capacity Charge Point"
         unique_id: "12b69471-fdbc-4f9a-9a75-960545211e3e"
@@ -355,18 +359,18 @@ template:
         device_class: battery
         unit_of_measurement: "%"
   - trigger:
-      - platform: time_pattern
-        hours: "*"
-        minutes: "*"
-        seconds: 0
-      - platform: state
-        entity_id:
-          - switch.grid_charge_point_1
-          - switch.grid_charge_point_2
-          - switch.grid_charge_point_3
-          - switch.grid_charge_point_4
-          - switch.grid_charge_point_5
-          - switch.grid_charge_point_6
+    - platform: time_pattern
+      hours: "*"
+      minutes: "*"
+      seconds: 0
+    - platform: state
+      entity_id:
+        - switch.grid_charge_point_1
+        - switch.grid_charge_point_2
+        - switch.grid_charge_point_3
+        - switch.grid_charge_point_4
+        - switch.grid_charge_point_5
+        - switch.grid_charge_point_6
     binary_sensor:
       - name: "Grid Charge Point Status"
         state: >-
@@ -377,21 +381,21 @@ template:
             {%- from 'resources.jinja' import get_current_entity_id -%}
             {{ get_current_entity_id('switch.grid_charge_point_') }}
   - trigger:
-      - platform: time_pattern
-        hours: "*"
-        minutes: "*"
-        seconds: "/10"
+    - platform: time_pattern
+      hours: "*"
+      minutes: "*"
+      seconds: "/10"
     binary_sensor:
       - name: "SolarAssistant Activity"
         state: >-
           {{ states.sensor.solarassistant_activity_counter.last_updated >= now() - timedelta(seconds=10) }}
         device_class: running
   - trigger:
-      - platform: state
-        entity_id: sensor.average_solar_energy_forecast_today
-        not_to:
-          - "unavailable"
-          - "unknown"
+    - platform: state
+      entity_id: sensor.average_solar_energy_forecast_today
+      not_to:
+        - "unavailable"
+        - "unknown"
     sensor:
       name: "Charge Mode"
       icon: mdi:tune
@@ -449,16 +453,16 @@ template:
   # don't want to use this in the frontend, in case someone changes it accidentally
   # can still change it if you go to the device though...
   - trigger:
-      - platform: state
-        entity_id: number.output_shutdown_capacity
+    - platform: state
+      entity_id: number.output_shutdown_capacity
     sensor:
       name: "Output Shutdown Capacity"
       icon: mdi:ray-vertex
       unit_of_measurement: "%"
       state: "{{ states('number.output_shutdown_capacity') }}"
   - trigger:
-      - platform: state
-        entity_id: sensor.load_power_non_essential
+    - platform: state
+      entity_id: sensor.load_power_non_essential
     sensor:
       name: "Geyser Power"
       icon: mdi:water-boiler

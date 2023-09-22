@@ -84,7 +84,7 @@ async function createWidget() {
     const lastUpdated = widget.addStack();
     const time = (new Date()).toLocaleTimeString().slice(0, 5);
     const lastUpdatedText = lastUpdated.addText("Last update: " + time);
-    lastUpdatedText.font = Font.regularSystemFont(8);
+    lastUpdatedText.font = Font.regularSystemFont(12);
     lastUpdatedText.rightAlignText();
     lastUpdatedText.textColor = Color.white();
 

@@ -392,17 +392,17 @@ automation:
         data:
           title: "Internet"
           message: >-
-            {% set binary_sensor_entity_id = trigger.entity_id | replace('timer', 'binary_sensor') | replace('_disconnected', '') %}
+            {% set binary_sensor_entity_id = trigger.event.data.entity_id | replace('timer', 'binary_sensor') | replace('_disconnected', '') %}
             {% set extender_name = state_attr(binary_sensor_entity_id, 'friendly_name') | lower %}
             {% set minutes = (state_attr(trigger.entity_id, 'duration') | as_timedelta).total_seconds() | multiply(1/60) | int %}
             The {{ extender_name }} became unavailable {{ minutes }} min ago.
           data:
             group: "home-internet"
             url: homeassistant://navigate/lovelace/internet
-            tag: "{{ trigger.entity_id }}"
+            tag: "{{ trigger.event.data.entity_id }}"
       - service: timer.start
         target:
-          entity_id: "{{ trigger.entity_id }}"
+          entity_id: "{{ trigger.event.data.entity_id }}"
         data:
           # test duration
           # if changed here, change it in "Detect When Extender Disconnected" too

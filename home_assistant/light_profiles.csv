@@ -3,6 +3,7 @@ group.all_lights.default,0.3620,0.3708,153
 light.corner_lights.default,0.657,0.333,255
 normal,0.3620,0.3708,153
 night,0.701,0.299,5
+bedlamp_normal,0.456,0.373,153
 bedlamp_night,0.526,0.387,5
 security,0.323,0.329,255
 dim,0.3620,0.3708,71,5

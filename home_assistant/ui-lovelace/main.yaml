@@ -213,7 +213,7 @@ cards:
                   - basic_small
                   - light_preset
                 variables:
-                  profile: normal
+                  profile: bedlamp_normal
                 entity: light.bedroom_bedlamp
                 name: Normal
                 icon: mdi:brightness-5

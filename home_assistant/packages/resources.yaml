@@ -332,6 +332,19 @@ template:
         state: >-
           {{ states('sensor.battery_state_of_charge') | int(0) - states('sensor.capacity_charge_point') | int(0) }}
         icon: mdi:sigma-lower
+      - name: "Resource Widget"
+        unique_id: "e4c30e01-2108-42e8-8deb-85afef795199"
+        state: "{{ now().isoformat() }}"
+        attributes:
+          battery_state_of_charge: "{{ states('sensor.battery_state_of_charge') }}"
+          pv_power: "{{ states('sensor.pv_power_5min_average') }}"
+          solar_reserve_percentage: "{{ states('sensor.solar_reserve_percentage_5min_average') }}"
+          home_power: "{{ states('sensor.home_power_5min_average') }}"
+          grid_feed: "{{ states('binary_sensor.grid_feed') }}"
+          solar_energy_utilisation_today: "{{ states('sensor.solar_energy_utilisation_today') }}"
+          solar_energy_forecast_today: "{{ states('sensor.average_solar_energy_forecast_today') }}"
+          solar_energy_forecast_tomorrow: "{{ states('sensor.energy_production_tomorrow') }}"
+          charge_mode: "{{ states('sensor.charge_mode') }}"
   - trigger:
     - platform: time_pattern
       hours: "*"

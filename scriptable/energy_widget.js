@@ -40,17 +40,18 @@ async function createWidget() {
     const serverUrl = "https://" + Keychain.get(serverHostPortKey) + "/";
     //console.log(serverUrl);
 
-    // key: [resource, label, value, unit]
-    const sensors = {
-        "soc": ["api/states/sensor.battery_state_of_charge", "Battery", "", "%"],
-        "pv": ["api/states/sensor.pv_power_5min_average", "Solar", "", "W"],
-        "reserve": ["api/states/sensor.solar_reserve_percentage_5min_average", "Reserve", "", "%"],
-        "home": ["api/states/sensor.home_power_5min_average", "Home", "", "W"],
-        "grid": ["api/states/binary_sensor.grid_feed", "Grid", "off", ""],
-        "utilisation": ["api/states/sensor.solar_energy_utilisation_today", "Utilisation", "", "%"],
-        "today": ["api/states/sensor.average_solar_energy_forecast_today", "Today", "", "kWh"],
-        "tomorrow": ["api/states/sensor.energy_production_tomorrow", "Tomorrow", "", "kWh"],
-        "mode": ["api/states/sensor.charge_mode", "Mode", "", ""]
+    const resource = "api/states/sensor.resource_widget";
+    // key: [label, value, unit]
+    const sensor_map = {
+        "battery_state_of_charge": ["Battery", "", "%"],
+        "pv_power": ["Solar", "", "W"],
+        "solar_reserve_percentage": ["Reserve", "", "%"],
+        "home_power": ["Home", "", "W"],
+        "grid_feed": ["Grid", "", ""],
+        "solar_energy_utilisation_today": ["Utilisation", "", "%"],
+        "solar_energy_forecast_today": ["Today", "", "kWh"],
+        "solar_energy_forecast_tomorrow": ["Tomorrow", "", "kWh"],
+        "charge_mode": ["Mode", "", ""]
     };
 
     const iconUrl = serverUrl + "static/icons/favicon-192x192.png";
@@ -60,8 +61,7 @@ async function createWidget() {
 
     const iconImage = await getIcon("hass-favicon.png", iconUrl);
 
-    const sensorData = await getData(serverUrl, token, sensors);
-    // console.log(sensors);
+    const sensorData = await getData(serverUrl, resource, token, sensor_map);
 
     const widget = new ListWidget();
     widget.backgroundColor = new Color(colorCode, 1.0);
@@ -95,39 +95,39 @@ async function createWidget() {
     let sensor = null;
 
     currentStack = leftStack;
-    sensor = sensors["pv"];
+    sensor = sensor_map["pv_power"];
     // only the sensors that track mean values need the conditional check
     // tl;dr: no samples => no statistic => unknown
     // https://github.com/home-assistant/core/issues/58748
     // https://community.home-assistant.io/t/why-does-this-statistics-sensor-have-an-unknown-state/320632
-    addItem(currentStack, sensor[1], parseInt((sensor[2] === "unknown") ? 0 : sensor[2]).toLocaleString(), sensor[3]);
-    sensor = sensors["reserve"];
-    addItem(currentStack, sensor[1], (sensor[2] === "unknown") ? 0 : sensor[2], sensor[3]);
-    sensor = sensors["utilisation"];
-    addItem(currentStack, sensor[1], sensor[2], sensor[3]);
-    sensor = sensors["today"];
-    addItem(currentStack, sensor[1], parseFloat(sensor[2]).toFixed(1), sensor[3]);
-    sensor = sensors["tomorrow"];
-    addItem(currentStack, sensor[1], parseFloat(sensor[2]).toFixed(1), sensor[3]);
+    addItem(currentStack, sensor[0], parseInt((sensor[1] === "unknown") ? 0 : sensor[1]).toLocaleString(), sensor[1]);
+    sensor = sensor_map["solar_reserve_percentage"];
+    addItem(currentStack, sensor[0], (sensor[1] === "unknown") ? 0 : sensor[1], sensor[2]);
+    sensor = sensor_map["solar_energy_utilisation_today"];
+    addItem(currentStack, sensor[0], sensor[1], sensor[2]);
+    sensor = sensor_map["solar_energy_forecast_today"];
+    addItem(currentStack, sensor[0], parseFloat(sensor[1]).toFixed(1), sensor[2]);
+    sensor = sensor_map["solar_energy_forecast_tomorrow"];
+    addItem(currentStack, sensor[0], parseFloat(sensor[1]).toFixed(1), sensor[2]);
 
     currentStack = rightStack;
-    sensor = sensors["soc"];
-    addItem(currentStack, sensor[1], sensor[2], sensor[3]);
-    sensor = sensors["mode"];
-    addItem(currentStack, sensor[1], sensor[2], sensor[3]);
-    sensor = sensors["home"];
-    addItem(currentStack, sensor[1], parseInt((sensor[2] === "unknown") ? 0 : sensor[2]).toLocaleString(), sensor[3]);
-    sensor = sensors["grid"];
+    sensor = sensor_map["battery_state_of_charge"];
+    addItem(currentStack, sensor[0], sensor[1], sensor[2]);
+    sensor = sensor_map["charge_mode"];
+    addItem(currentStack, sensor[0], sensor[1], sensor[2]);
+    sensor = sensor_map["home_power"];
+    addItem(currentStack, sensor[0], parseInt((sensor[1] === "unknown") ? 0 : sensor[1]).toLocaleString(), sensor[2]);
+    sensor = sensor_map["grid_feed"];
     let gridValue = "";
     let gridValueColor = null;
-    if (sensor[2] == "on") {
+    if (sensor[1] == "on") {
         gridValue = "Connected";
         gridValueColor = Color.yellow();
     } else {
         gridValue = "Disconnected";
         gridValueColor = Color.lightGray();
     }
-    addItem(currentStack, sensor[1], gridValue, sensor[3]);  //, gridValueColor);
+    addItem(currentStack, sensor[0], gridValue, sensor[2]);  //, gridValueColor);
     const time = (new Date()).toLocaleTimeString().slice(0, 5);
     addItem(currentStack, "Last update", time, "");
 
@@ -221,16 +221,17 @@ async function loadImage(imgUrl) {
     return await req.loadImage()
 }
 
-async function getData(serverUrl, token, sensors) {
-    for (const [key, values] of Object.entries(sensors)) {
-        let req = new Request(serverUrl + values[0])
-        // console.log(req);
-        req.headers = {
-                        "Authorization": "Bearer " + token,
-                        "Content-Type": "application/json"
-                      };
-        let state = (await req.loadJSON()).state;
-        // console.log(state);
-        sensors[key][2] = state;
+async function getData(serverUrl, resource, token, sensor_map) {
+    let req = new Request(serverUrl + resource)
+    console.log(req);
+    req.headers = {
+                    "Authorization": "Bearer " + token,
+                    "Content-Type": "application/json"
+                  };
+    let state = (await req.loadJSON());
+    console.log(state);
+    for (const [key, values] of Object.entries(sensor_map)) {
+        sensor_map[key][1] = state.attributes[key];
     }
+    console.log(sensor_map);
 }

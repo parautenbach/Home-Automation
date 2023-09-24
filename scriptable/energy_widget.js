@@ -100,7 +100,7 @@ async function createWidget() {
     // tl;dr: no samples => no statistic => unknown
     // https://github.com/home-assistant/core/issues/58748
     // https://community.home-assistant.io/t/why-does-this-statistics-sensor-have-an-unknown-state/320632
-    addItem(currentStack, sensor[0], parseInt((sensor[1] === "unknown") ? 0 : sensor[1]).toLocaleString(), sensor[1]);
+    addItem(currentStack, sensor[0], parseInt((sensor[1] === "unknown") ? 0 : sensor[1]).toLocaleString(), sensor[2]);
     sensor = sensor_map["solar_reserve_percentage"];
     addItem(currentStack, sensor[0], (sensor[1] === "unknown") ? 0 : sensor[1], sensor[2]);
     sensor = sensor_map["solar_energy_utilisation_today"];
@@ -223,15 +223,15 @@ async function loadImage(imgUrl) {
 
 async function getData(serverUrl, resource, token, sensor_map) {
     let req = new Request(serverUrl + resource)
-    console.log(req);
+    // console.log(req);
     req.headers = {
                     "Authorization": "Bearer " + token,
                     "Content-Type": "application/json"
                   };
     let state = (await req.loadJSON());
-    console.log(state);
+    // console.log(state);
     for (const [key, values] of Object.entries(sensor_map)) {
         sensor_map[key][1] = state.attributes[key];
     }
-    console.log(sensor_map);
+    // console.log(sensor_map);
 }

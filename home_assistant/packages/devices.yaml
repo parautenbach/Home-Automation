@@ -335,7 +335,8 @@ automation:
         data:
           title: "Batteries"
           message: >
-            The {{ state_attr(trigger.event.data.entity_id, 'friendly_name') }} is fully charged.
+            {% set name = state_attr(trigger.event.data.entity_id, 'friendly_name') | replace(' Battery', '') %}
+            The devices' battery is fully charged: {{ name }}.
           data:
             group: "batteries"
             url: homeassistant://navigate/lovelace/devices

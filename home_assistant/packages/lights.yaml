@@ -714,7 +714,7 @@ automation:
         data:
           variables:
             light: light.bedroom_bedlamp
-            profile: normal
+            profile: bedlamp_normal
 
   - alias: "Bedlamps On Upon Server Start"
     id: "1e8cf815-a52a-4fe6-a536-e25e234381bc"

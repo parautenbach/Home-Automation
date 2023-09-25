@@ -125,7 +125,7 @@ cards:
               average: true
               labels_secondary: false
           - type: custom:mini-graph-card
-            name: Deviation
+            name: Packet Loss
             entities:
               - entity: sensor.internet_packet_loss
               - entity: sensor.nighttime_number

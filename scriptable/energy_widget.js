@@ -102,7 +102,7 @@ async function createWidget() {
     // https://community.home-assistant.io/t/why-does-this-statistics-sensor-have-an-unknown-state/320632
     addItem(currentStack, sensor[0], parseInt((sensor[1] === "unknown") ? 0 : sensor[1]).toLocaleString(), sensor[2]);
     sensor = sensor_map["solar_reserve_percentage"];
-    addItem(currentStack, sensor[0], (sensor[1] === "unknown") ? 0 : sensor[1], sensor[2]);
+    addItem(currentStack, sensor[0], (sensor[1] === "unknown" || sensor[1] === "unavailable") ? 0 : sensor[1], sensor[2]);
     sensor = sensor_map["solar_energy_utilisation_today"];
     addItem(currentStack, sensor[0], sensor[1], sensor[2]);
     sensor = sensor_map["solar_energy_forecast_today"];

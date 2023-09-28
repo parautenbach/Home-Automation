@@ -399,7 +399,9 @@ automation:
           data:
             group: "home-internet"
             url: homeassistant://navigate/lovelace/internet
-            tag: "{{ trigger.event.data.entity_id }}"
+            tag: >-
+              {% set binary_sensor_entity_id = trigger.event.data.entity_id | replace('timer', 'binary_sensor') | replace('_disconnected', '') %}
+              {{ binary_sensor_entity_id }}
       - service: timer.start
         target:
           entity_id: "{{ trigger.event.data.entity_id }}"

@@ -301,6 +301,7 @@ cards:
         - automation.toggle_rouve_s_bedside_lamp
         - automation.turn_audio_on_when_apple_tv_turned_on
         - automation.turn_off_entertainment_system_when_idle_or_leaving_room
+        - automation.turn_off_main_bedroom_media_player_when_idle
         - automation.upcoming_loadshedding_notification
         - automation.update_automations_when_power_status_changed
         - automation.update_backup_power_warning_light_if_grid_feed_status_changed

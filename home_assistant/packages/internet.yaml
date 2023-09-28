@@ -317,7 +317,7 @@ automation:
           - binary_sensor.front_extender
           - binary_sensor.back_extender
         to: "off"
-    mode: queued
+    mode: parallel
     action:
       - service: input_datetime.set_datetime
         target:
@@ -341,7 +341,7 @@ automation:
           - binary_sensor.front_extender
           - binary_sensor.back_extender
         to: "on"
-    mode: queued
+    mode: parallel
     action:
       - service: timer.cancel
         target:
@@ -386,7 +386,7 @@ automation:
         event_type: timer.finished
         event_data:
           entity_id: timer.back_extender_disconnected
-    mode: queued
+    mode: parallel
     action:
       - service: notify.mobile_app_ceres
         data:

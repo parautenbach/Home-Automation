@@ -30,6 +30,8 @@ logger:
     # the warnings from this component is too verbose
     amcrest.http: error
     homeassistant.components.amcrest: error
+    # homeassistant.components.shelly: debug
+    # homeassistant.components.aioshelly: debug
     # homeassistant.components.script: debug
     # homeassistant.components.template.weather: debug
     # homeassistant.components.openuv: debug

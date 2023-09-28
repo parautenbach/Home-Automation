@@ -16,6 +16,14 @@ homeassistant:
     sensor.main_bedroom_ht_battery:
       friendly_name: Main Bedroom H&T Battery
       monitor: True
+    sensor.cabinet_battery:
+      friendly_name: Cabinet Door Sensor Battery
+      monitor: True
+    sensor.kitchen_battery:
+      friendly_name: Kitchen Smoke Detector Battery
+      monitor: True
+    binary_sensor.cabinet_door:
+      device_class: door
 
 input_boolean:
   gaia_bluetooth_audio_connected:

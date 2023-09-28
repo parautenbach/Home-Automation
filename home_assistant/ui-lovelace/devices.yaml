@@ -187,6 +187,10 @@ cards:
           tap_action: more-info
         - entity: sensor.main_bedroom_ht_battery
           tap_action: more-info
+        - entity: sensor.cabinet_battery
+          tap_action: more-info
+        - entity: sensor.kitchen_battery
+          tap_action: more-info
     - type: logbook
       title: Major Automations
       hours_to_show: 24
@@ -196,6 +200,8 @@ cards:
         - automation.alert_if_gate_opened_or_closed_when_not_supposed_to
         - automation.alert_vacation_end
         - automation.alert_vacation_start
+        - automation.alert_when_cabinet_opened
+        - automation.alert_when_smoke_detected
         - automation.away_mode
         - automation.backup_home_assistant
         - automation.backup_home_assistant_db
@@ -668,6 +674,9 @@ cards:
           - entity: sensor.battery_temperature
             name: Battery
             color: var(--custom-color-yellow)
+          - entity: sensor.cabinet_temperature
+            name: Cabinet
+            color: var(--custom-color-magenta)
           - entity: sensor.nighttime_number
             color: var(--custom-color-gray)
             show_line: false

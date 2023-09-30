@@ -947,7 +947,9 @@ cards:
           {{ states('sensor.loadshedding_forecast') }}
 
 
-          [Heatmap](https://unofficialeskom.com/heatmap/)
+          [Unofficial Eskom: heatmap](https://unofficialeskom.com/heatmap/)
+
+          [The Outlier: heatmap](https://loadshed.theoutlier.co.za/)
       - type: conditional
         conditions:
           - entity: binary_sensor.loadshedding_active

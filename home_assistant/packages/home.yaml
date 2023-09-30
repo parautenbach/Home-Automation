@@ -183,7 +183,7 @@ automation:
         to: "off"
     condition:
       - condition: time
-        after: "18:00:00"
+        after: "21:00:00"
         before: "01:00:00"
     action:
       # future condition: if only we could know whether it's on

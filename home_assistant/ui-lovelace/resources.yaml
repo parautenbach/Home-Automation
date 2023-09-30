@@ -987,5 +987,6 @@ cards:
           - state
       - type: markdown
         content: >
-          [SolarAssistant](https://solar-assistant.io/sites)<br>
+          [SolarAssistant](https://solar-assistant.io/sites)
+          
           [Sunsynk](https://www.sunsynk.net/login)

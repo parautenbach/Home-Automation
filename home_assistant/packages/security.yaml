@@ -926,3 +926,33 @@ automation:
                 name: default
                 critical: 1
                 volume: 1.0
+
+  - alias: "Alert When Cabinet Opened"
+    id: "f9a95e6c-e0bf-45a4-bf5c-3b774ff3fd47"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.cabinet_door
+        # https://www.home-assistant.io/integrations/binary_sensor/
+        # not open/close unless it's a cover
+        to: "on"
+        # not going to use this, since it seems the sensor just goes unavailable,
+        # but will come back online when the state changes – annoyingly so (just stay online)
+        # not_from: "unavailable"
+    condition:
+      - condition: time
+        after: "21:00:00"
+        before: "07:00:00"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Security"
+          message: >-
+            The backup power system's cabinet has been opened unexpectedly!
+          data:
+            group: "home-security"
+            url: homeassistant://navigate/lovelace/security
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 1.0

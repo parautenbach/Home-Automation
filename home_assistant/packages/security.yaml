@@ -890,3 +890,39 @@ automation:
               data:
                 group: "{{ trigger.entity_id }}"
                 url: homeassistant://navigate/lovelace/main
+
+  - alias: "Alert When Smoke Detected"
+    id: "3f2d5457-34db-464f-88d2-515fbb3e202a"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.kitchen_smoke
+        # https://www.home-assistant.io/integrations/binary_sensor/
+        to: "on"
+        id: "real"
+      # https://shelly-api-docs.shelly.cloud/gen2/ComponentsAndServices/Smoke/
+      - platform: webhook
+        webhook_id: kitchen_smoke_alarm_test
+        local_only: true
+        # HTTP GET and HEAD requests are not enabled by default
+        # https://www.home-assistant.io/docs/automation/trigger/#webhook-trigger
+        allowed_methods:
+          - GET
+        id: "test"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Safety"
+          message: >-
+            {% set prefix = '' %}
+            {% if trigger.id == 'test' %}
+              {% set prefix = '[Test]' %}
+            {% endif %}
+            {{ prefix }} Smoke has been detected in the kitchen!
+          data:
+            group: "home-safety"
+            url: homeassistant://navigate/lovelace/security
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 1.0

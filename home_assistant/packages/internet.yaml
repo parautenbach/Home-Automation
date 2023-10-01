@@ -319,11 +319,6 @@ automation:
         to: "off"
     mode: parallel
     action:
-      - service: input_datetime.set_datetime
-        target:
-          entity_id: "{{ trigger.entity_id | replace('binary_sensor', 'input_datetime') }}_disconnected"
-        data:
-          datetime: "{{ now() }}"
       - service: timer.start
         target:
           entity_id: "{{ trigger.entity_id | replace('binary_sensor', 'timer') }}_disconnected"
@@ -331,6 +326,11 @@ automation:
           # test duration
           # if changed here, change it in "Notify When Extender Disconnected" too
           duration: "00:01:00"
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: "{{ trigger.entity_id | replace('binary_sensor', 'input_datetime') }}_disconnected"
+        data:
+          datetime: "{{ now() }}"
 
   - alias: "Detect When Extender Reconnected"
     id: "a80aad69-169e-4a24-aec0-088512a443ae"
@@ -341,11 +341,12 @@ automation:
           - binary_sensor.front_extender
           - binary_sensor.back_extender
         to: "on"
+        # this automation and the one to notify an extender has disconnect can race...
+        for:
+          seconds: 5
     mode: parallel
     action:
-      - service: timer.cancel
-        target:
-          entity_id: "{{ trigger.entity_id | replace('binary_sensor', 'timer') }}_disconnected"
+      # if the timer completed at least once
       - choose:
           - conditions:
               - condition: template
@@ -366,13 +367,20 @@ automation:
                     {% set input_datetime_entity_id = trigger.entity_id | replace('binary_sensor', 'input_datetime') ~ '_disconnected' %}
                     {% set last_available = states(input_datetime_entity_id) | as_timestamp %}
                     {% set utc_now_ts = utcnow() | as_timestamp %}
-                    {% set minutes = ((utc_now_ts - last_available) // 60) | int %}
+                    {# note that we assume here and in the next automation that the timer's duration isn't less than 1 min #}
+                    {# for some reason the calculated duration for a 1 min timer will be a second or two less #}
+                    {# i guess this is due to some relative frame of intertia... #}
+                    {% set minutes = ((utc_now_ts - last_available) // 60) | int or 1 %}
                     {% set extender_name = state_attr(trigger.entity_id, 'friendly_name') | lower %}
                     The {{ extender_name }} was unavailable for {{ minutes }} min.
                   data:
                     group: "home-internet"
                     url: homeassistant://navigate/lovelace/internet
                     tag: "{{ trigger.entity_id }}"
+      # add a wait for here?
+      - service: timer.cancel
+        target:
+          entity_id: "{{ trigger.entity_id | replace('binary_sensor', 'timer') }}_disconnected"
 
   - alias: "Notify When Extender Disconnected"
     id: "8335b7df-93d6-4ea4-8022-9d0d2ed87e46"
@@ -388,13 +396,14 @@ automation:
           entity_id: timer.back_extender_disconnected
     mode: parallel
     action:
+      # check if sensor still off?
       - service: notify.mobile_app_ceres
         data:
           title: "Internet"
           message: >-
             {% set binary_sensor_entity_id = trigger.event.data.entity_id | replace('timer', 'binary_sensor') | replace('_disconnected', '') %}
             {% set extender_name = state_attr(binary_sensor_entity_id, 'friendly_name') | lower %}
-            {% set minutes = (state_attr(trigger.event.data.entity_id, 'duration') | as_timedelta).total_seconds() | multiply(1/60) | int %}
+            {% set minutes = (state_attr(trigger.event.data.entity_id, 'duration') | as_timedelta).total_seconds() | multiply(1/60) | int or 1 %}
             The {{ extender_name }} became unavailable {{ minutes }} min ago.
           data:
             group: "home-internet"

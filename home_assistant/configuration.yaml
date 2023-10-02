@@ -160,3 +160,7 @@ media_source:
 python_script:
 
 stream:
+
+# debugpy:
+#   start: false
+#   # wait: false  # false if start is false

@@ -416,7 +416,9 @@ template:
         state: >-
           {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) %}
           {# hysteresis #}
-          {% if forecast >= 10 %}
+          {% if forecast >= 18 %}
+            Very Optimistic
+          {% elif forecast >= 10 and forecast <= 17 %}
             Optimistic
           {% elif forecast <= 9 %}
             Pessimistic
@@ -434,6 +436,14 @@ template:
             {# (int, bool): (battery soc, grid charge allowed) #}
             {% set mappings =
               {
+                'Very Optimistic': {
+                    1: (45, 'on'),
+                    2: (35, 'off'),
+                    3: (35, 'off'),
+                    4: (70, 'off'),
+                    5: (85, 'on'),
+                    6: (85, 'on')
+                  },
                 'Optimistic': {
                     1: (50, 'on'),
                     2: (40, 'off'),
@@ -454,7 +464,9 @@ template:
             %}
             {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) %}
             {# hysteresis #}
-            {% if forecast >= 10 %}
+            {% if forecast >= 18 %}
+              {% set mode = 'Very Optimistic' %}
+            {% elif forecast >= 10 and forecast <= 17 %}
               {% set mode = 'Optimistic' %}
             {% elif forecast <= 9 %}
               {% set mode = 'Pessimistic' %}
@@ -1061,7 +1073,7 @@ automation:
 
   # todo:
   # 1. condition for low soc or low utilisation
-  # 2. if optimistic and soc by 1pm is still less than x% (or y% delta from target), enable grid mode
+  # 2. if (very) optimistic and soc by 1pm is still less than x% (or y% delta from target), enable grid mode
   # 3. if loadshedding
   - alias: "Set Charge Points"
     id: "5bdbcbfd-243a-4428-a6f3-ed2f98aec603"
@@ -1071,10 +1083,13 @@ automation:
     trigger:
       - platform: time
         at:
-          - "03:30:00"
+          # the first slot starts at 01:00, but we need to give the average forecast filter time
+          # to get past its initial transient after midnight
+          - "01:30:00"
         id: "first"
       - platform: time
         at:
+          - "03:30:00"
           - "05:30:00"
           - "07:30:00"
           - "09:30:00"

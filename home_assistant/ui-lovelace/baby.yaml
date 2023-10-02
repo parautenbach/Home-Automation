@@ -58,62 +58,54 @@ cards:
             tap_action:
               action: call-service
               service: onvif.ptz
-              service_data:
+              data:
+                entity_id: camera.baby_monitor_profile000
                 pan: LEFT
                 speed: 1
                 distance: 0.3
                 move_mode: ContinuousMove
-              target:
-                entity_id: camera.baby_monitor_profile000
             name: Pan Left
             show_state: false
             icon: mdi:arrow-left
-            show_icon: true
           - entity: camera.baby_monitor_profile000
             tap_action:
               action: call-service
               service: onvif.ptz
-              service_data:
+              data:
+                entity_id: camera.baby_monitor_profile000
                 tilt: UP
                 speed: 1
                 distance: 0.2
                 move_mode: ContinuousMove
-              target:
-                entity_id: camera.baby_monitor_profile000
             name: Pan Up
             show_state: false
             icon: mdi:arrow-up
-            show_icon: true
           - entity: camera.baby_monitor_profile000
             tap_action:
               action: call-service
               service: onvif.ptz
-              service_data:
+              data:
+                entity_id: camera.baby_monitor_profile000
                 pan: RIGHT
                 speed: 1
                 distance: 0.3
                 move_mode: ContinuousMove
-              target:
-                entity_id: camera.baby_monitor_profile000
             name: Pan right
             show_state: false
             icon: mdi:arrow-right
-            show_icon: true
           - entity: camera.baby_monitor_profile000
             tap_action:
               action: call-service
               service: onvif.ptz
-              service_data:
+              data:
+                entity_id: camera.baby_monitor_profile000
                 tilt: DOWN
                 speed: 1
                 distance: 0.2
                 move_mode: ContinuousMove
-              target:
-                entity_id: camera.baby_monitor_profile000
             name: Pan down
             show_state: false
             icon: mdi:arrow-down
-            show_icon: true
         camera_image: camera.baby_monitor_profile000
         camera_view: live
       - type: history-graph

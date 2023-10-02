@@ -172,16 +172,16 @@ template:
       entity_id: binary_sensor.doorbell_rang
       to: "off"
     binary_sensor:
-      name: Doorbell Rang
-      # https://github.com/home-assistant/core/issues/39932
-      # https://github.com/home-assistant/core/issues/58056
-      # https://github.com/home-assistant/core/issues/66459
-      # https://github.com/home-assistant/home-assistant.io/pull/22021
-      icon: "{{ (trigger.platform == 'event') | iif('mdi:bell-ring-outline', 'mdi:bell-outline') }}"
-      state: "{{ trigger.platform == 'event' }}"
-      # https://github.com/home-assistant/core/issues/67397
-      auto_off:
-        seconds: 5
+      - name: Doorbell Rang
+        # https://github.com/home-assistant/core/issues/39932
+        # https://github.com/home-assistant/core/issues/58056
+        # https://github.com/home-assistant/core/issues/66459
+        # https://github.com/home-assistant/home-assistant.io/pull/22021
+        icon: "{{ (trigger.platform == 'event') | iif('mdi:bell-ring-outline', 'mdi:bell-outline') }}"
+        state: "{{ trigger.platform == 'event' }}"
+        # https://github.com/home-assistant/core/issues/67397
+        auto_off:
+          seconds: 5
 
 script:
   open_pedestrian_gap:

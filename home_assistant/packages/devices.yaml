@@ -392,6 +392,8 @@ automation:
       - platform: webhook
         webhook_id: gaia_bluetooth_audio_connected
         local_only: true
+        allowed_methods:
+          - PUT
     mode: queued
     action:
       - service: "input_boolean.turn_{{ 'on' if (trigger.data['status'] | int) else 'off' }}"

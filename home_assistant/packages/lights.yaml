@@ -345,7 +345,8 @@ script:
         required: true
         selector:
           entity:
-            domain: light
+            filter:
+              domain: light
       initial_profile:
         name: Initial Light Profile
         description: "The initial light profile when turning on the light as defined in light_profiles.csv"
@@ -355,7 +356,7 @@ script:
       target_brightness_pct:
         name: Target Brightness
         description: "Target brightness as a percentage between 0 and 100 inclusive"
-        example: 80
+        example: "80"
         default: 80
         required: true
         selector:
@@ -368,7 +369,7 @@ script:
       transition_duration:
         name: Transition Duration
         description: "Time period in seconds to transition over"
-        example: 10
+        example: "10"
         default: 10
         required: true
         selector:

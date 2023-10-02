@@ -543,6 +543,8 @@ automation:
       - platform: webhook
         webhook_id: server_power_connected
         local_only: true
+        allowed_methods:
+          - POST
     mode: queued
     action:
       # sensor definition: platform: linux_battery

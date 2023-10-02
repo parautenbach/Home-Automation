@@ -410,58 +410,58 @@ template:
         - "unavailable"
         - "unknown"
     sensor:
-      name: "Charge Mode"
-      icon: mdi:tune
-      device_class: enum
-      state: >-
-        {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) %}
-        {# hysteresis #}
-        {% if forecast >= 10 %}
-          Optimistic
-        {% elif forecast <= 9 %}
-          Pessimistic
-        {% else %}
-          {{ this.state }}
-        {% endif %}
-      attributes:
-        settings: >-
-          {# 1: 01:00-05:00 #}
-          {# 2: 05:00-08:00 #}
-          {# 3: 08:00-13:00 #}
-          {# 4: 13:00-17:00 #}
-          {# 5: 17:00-21:00 #}
-          {# 6: 21:00-01:00 #}
-          {# (int, bool): (battery soc, grid charge allowed) #}
-          {% set mappings =
-            {
-              'Optimistic': {
-                  1: (50, 'on'),
-                  2: (40, 'off'),
-                  3: (45, 'off'),
-                  4: (75, 'off'),
-                  5: (85, 'on'),
-                  6: (85, 'on')
-                },
-              'Pessimistic': {
-                  1: (50, 'on'),
-                  2: (60, 'on'),
-                  3: (60, 'on'),
-                  4: (75, 'on'),
-                  5: (85, 'on'),
-                  6: (85, 'on')
-              }
-            }
-          %}
+      - name: "Charge Mode"
+        icon: mdi:tune
+        device_class: enum
+        state: >-
           {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) %}
           {# hysteresis #}
           {% if forecast >= 10 %}
-            {% set mode = 'Optimistic' %}
+            Optimistic
           {% elif forecast <= 9 %}
-            {% set mode = 'Pessimistic' %}
+            Pessimistic
           {% else %}
-            {% set mode = this.state %}
+            {{ this.state }}
           {% endif %}
-          {{ mappings[mode] }}
+        attributes:
+          settings: >-
+            {# 1: 01:00-05:00 #}
+            {# 2: 05:00-08:00 #}
+            {# 3: 08:00-13:00 #}
+            {# 4: 13:00-17:00 #}
+            {# 5: 17:00-21:00 #}
+            {# 6: 21:00-01:00 #}
+            {# (int, bool): (battery soc, grid charge allowed) #}
+            {% set mappings =
+              {
+                'Optimistic': {
+                    1: (50, 'on'),
+                    2: (40, 'off'),
+                    3: (45, 'off'),
+                    4: (75, 'off'),
+                    5: (85, 'on'),
+                    6: (85, 'on')
+                  },
+                'Pessimistic': {
+                    1: (50, 'on'),
+                    2: (60, 'on'),
+                    3: (60, 'on'),
+                    4: (75, 'on'),
+                    5: (85, 'on'),
+                    6: (85, 'on')
+                }
+              }
+            %}
+            {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) %}
+            {# hysteresis #}
+            {% if forecast >= 10 %}
+              {% set mode = 'Optimistic' %}
+            {% elif forecast <= 9 %}
+              {% set mode = 'Pessimistic' %}
+            {% else %}
+              {% set mode = this.state %}
+            {% endif %}
+            {{ mappings[mode] }}
   # solarassistant should actually provide this as a sensor, but they only provide a control
   # don't want to use this in the frontend, in case someone changes it accidentally
   # can still change it if you go to the device though...
@@ -469,23 +469,23 @@ template:
     - platform: state
       entity_id: number.output_shutdown_capacity
     sensor:
-      name: "Output Shutdown Capacity"
-      icon: mdi:ray-vertex
-      unit_of_measurement: "%"
-      state: "{{ states('number.output_shutdown_capacity') }}"
+      - name: "Output Shutdown Capacity"
+        icon: mdi:ray-vertex
+        unit_of_measurement: "%"
+        state: "{{ states('number.output_shutdown_capacity') }}"
   - trigger:
     - platform: state
       entity_id: sensor.load_power_non_essential
     sensor:
-      name: "Geyser Power"
-      icon: mdi:water-boiler
-      unit_of_measurement: W
-      device_class: power
-      state: >-
-        {# the geyser is the only device on the non-essential circuit #}
-        {# for some reason this sensor reports small negative values when the grid is connected #}
-        {% set geyser = states('sensor.load_power_non_essential') | int(0) %}
-        {{ geyser if geyser > 0 else 0 }}
+      - name: "Geyser Power"
+        icon: mdi:water-boiler
+        unit_of_measurement: W
+        device_class: power
+        state: >-
+          {# the geyser is the only device on the non-essential circuit #}
+          {# for some reason this sensor reports small negative values when the grid is connected #}
+          {% set geyser = states('sensor.load_power_non_essential') | int(0) %}
+          {{ geyser if geyser > 0 else 0 }}
 
 sensor:
   # digital power meter in db

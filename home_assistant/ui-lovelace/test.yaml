@@ -56,7 +56,7 @@ cards:
       - binary_sensor.doorbell_motion_detected
   # https://www.home-assistant.io/integrations/amcrest/
   - type: picture-elements
-    entity: camera.baby_monitor_profile000
+    image: camera.baby_monitor_profile000
     camera_image: camera.baby_monitor_profile000
     camera_view: live
     elements:
@@ -69,13 +69,12 @@ cards:
         tap_action:
           action: call-service
           service: onvif.ptz
-          service_data:
+          data:
+            entity_id: camera.baby_monitor_profile000
             tilt: UP
             speed: 1
             distance: 0.2
             move_mode: ContinuousMove
-          target:
-            entity_id: camera.baby_monitor_profile000
       - type: icon
         icon: "mdi:arrow-down"
         style:
@@ -85,13 +84,12 @@ cards:
         tap_action:
           action: call-service
           service: onvif.ptz
-          service_data:
+          data:
+            entity_id: camera.baby_monitor_profile000
             tilt: DOWN
             speed: 1
             distance: 0.2
             move_mode: ContinuousMove
-          target:
-            entity_id: camera.baby_monitor_profile000
       - type: icon
         icon: "mdi:arrow-left"
         style:
@@ -101,13 +99,12 @@ cards:
         tap_action:
           action: call-service
           service: onvif.ptz
-          service_data:
+          data:
+            entity_id: camera.baby_monitor_profile000
             pan: LEFT
             speed: 1
             distance: 0.3
             move_mode: ContinuousMove
-          target:
-            entity_id: camera.baby_monitor_profile000
       - type: icon
         icon: "mdi:arrow-right"
         style:
@@ -117,13 +114,12 @@ cards:
         tap_action:
           action: call-service
           service: onvif.ptz
-          service_data:
+          data:
+            entity_id: camera.baby_monitor_profile000
             pan: RIGHT
             speed: 1
             distance: 0.3
             move_mode: ContinuousMove
-          target:
-            entity_id: camera.baby_monitor_profile000
       - type: icon
         icon: "mdi:magnify"
         style:
@@ -133,7 +129,7 @@ cards:
         tap_action:
           action: call-service
           service: amcrest.ptz_control
-          service_data:
+          data:
             entity_id: camera.baby_monitor_profile000
             movement: zoom_in
         hold_action:

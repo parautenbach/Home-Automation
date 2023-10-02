@@ -1,6 +1,6 @@
 title: Gallery
 path: gallery
-panel: true
+type: panel
 icon: mdi:cctv
 badges: []
 cards:

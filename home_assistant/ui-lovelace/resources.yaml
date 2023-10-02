@@ -519,7 +519,7 @@ cards:
                     .: |
                       .state {
                         color:
-                          {%- if states(config.entity) == 'Optimistic' -%}
+                          {%- if 'Optimistic' in states(config.entity) -%}
                             var(--custom-color-green);
                           {%- else -%}
                             var(--custom-color-red);
@@ -666,7 +666,7 @@ cards:
                 card_mod: &grid_charge_mod
                   style: |
                     .state {
-                      color: {{ 'green' if is_state(config.entity, 'on') else 'red' }};
+                      color: {{ 'var(--custom-color-green)' if is_state(config.entity, 'on') else 'var(--custom-color-red)' }};
                       }
                     }
                 tap_action: &tap_action
@@ -988,5 +988,5 @@ cards:
       - type: markdown
         content: >
           [SolarAssistant](https://solar-assistant.io/sites)
-          
+
           [Sunsynk](https://www.sunsynk.net/login)

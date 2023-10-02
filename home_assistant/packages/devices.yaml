@@ -29,6 +29,9 @@ input_boolean:
   gaia_bluetooth_audio_connected:
     name: Gaia Bluetooth Audio Connected
     icon: mdi:bluetooth-audio
+  gaia_audio_input_in_use_alt:
+    name: Gaia Audio Input In Use (Alt)
+    icon: mdi:microphone
 
 command_line:
   # https://github.com/home-assistant/core/issues/43188
@@ -128,6 +131,15 @@ command_line:
       unit_of_measurement: "°C"
       value_template: '{{ value | multiply(0.001) | round(2) }}'
       scan_interval: 60
+
+binary_sensor:
+  - platform: template
+    sensors:
+      on_air:
+        # https://github.com/home-assistant/iOS/issues/1903
+        value_template: >
+          {{ is_state('binary_sensor.gaia_audio_input_in_use', 'on') or
+             is_state('input_boolean.gaia_audio_input_in_use_alt', 'on') }}
 
 automation:
   - alias: "See Mobile Devices"
@@ -399,3 +411,33 @@ automation:
       - service: "input_boolean.turn_{{ 'on' if (trigger.data['status'] | int) else 'off' }}"
         data:
           entity_id: input_boolean.gaia_bluetooth_audio_connected
+
+  # alternative method due to this issue
+  # https://github.com/home-assistant/iOS/issues/1903
+  # source for detecting whether the mic is in use:
+  # https://gist.github.com/ov1d1u/8e6ec1f0a087d1f410c65f16217273ba
+  - alias: "Update Gaia Audio Input In Use (Alt)"
+    id: "1f9cf72d-7e49-46fd-96c4-b422b6e923af"
+    initial_state: true
+    trigger:
+      # curl -s -X PUT http://<host>:<port>/api/webhook/gaia_audio_input_in_use_alt -d 'status=<on/off>'
+      - platform: webhook
+        webhook_id: gaia_audio_input_in_use_alt
+        allowed_methods:
+          - PUT
+        local_only: true
+    mode: queued
+    action:
+      - service: "input_boolean.turn_{{ trigger.data.status }}"
+        entity_id: input_boolean.gaia_audio_input_in_use_alt
+
+  - alias: "Change On Air Status"
+    id: "0e9a98bc-dba8-4354-8bad-87b44b50703a"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.on_air
+    mode: single
+    action:
+      - service: "switch.turn_{{ 'on' if is_state('binary_sensor.on_air', 'on') else 'off' }}"
+        entity_id: switch.on_air

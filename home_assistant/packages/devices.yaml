@@ -387,7 +387,7 @@ automation:
   # $ if [[ "$(pmset -g | grep ' sleep')" == *"coreaudiod"* ]]; then echo audio is playing; else echo no audio playing; fi
   - alias: "Update Gaia Bluetooth Audio Connection Status"
     id: "84c4f680-4f0c-4ded-a42f-c931edaee154"
-    initial_state: true
+    initial_state: false
     trigger:
       - platform: webhook
         webhook_id: gaia_bluetooth_audio_connected

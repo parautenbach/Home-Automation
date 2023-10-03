@@ -87,7 +87,7 @@ async function createWidget() {
     parentStack.layoutHorizontally();
     let leftStack = parentStack.addStack();
     leftStack.layoutVertically();
-    parentStack.addSpacer(20);
+    parentStack.addSpacer(30);
     let rightStack = parentStack.addStack();
     rightStack.layoutVertically();
 
@@ -156,8 +156,8 @@ async function createWidget() {
     let drawContext = new DrawContext();
     drawContext.size = new Size(canvasWidth, canvasHeight);
     drawContext.opaque = false;
-    let topPoint = new Point(canvasWidth/2, 100);
-    let bottomPoint = new Point(canvasWidth/2, canvasHeight - 40);
+    let topPoint = new Point(canvasWidth/2, 110);
+    let bottomPoint = new Point(canvasWidth/2, canvasHeight - 35);
 
     const path = new Path();
     path.move(topPoint);

@@ -45,7 +45,10 @@ switch:
     id: gate_remote
     name: "Gate Remote"
     icon: "mdi:remote"
-    restore_state: False
+    # restore_status: False -> restore_mode: DISABLED
+    # https://community.home-assistant.io/t/esphome-v2023-7-restore-state-breaking-change/593364/9
+    # https://esphome.io/components/switch/index.html
+    restore_mode: DISABLED
     turn_on_action:
       - switch.turn_on: gate_control
       - delay: 1000ms

@@ -73,7 +73,7 @@ switch:
     id: rhs_garage_door_remote
     name: "RHS Garage Door Remote"
     icon: "mdi:remote"
-    restore_state: False
+    restore_mode: DISABLED
     turn_on_action:
       - switch.turn_on: rhs_garage_door_control
       - delay: 500ms
@@ -87,7 +87,7 @@ switch:
     id: lhs_garage_door_remote
     name: "LHS Garage Door Remote"
     icon: "mdi:remote"
-    restore_state: False
+    restore_mode: DISABLED
     turn_on_action:
       - switch.turn_on: lhs_garage_door_control
       - delay: 500ms

@@ -23,7 +23,7 @@ rest:
     headers:
       token: !secret eskomsepush
     params:
-      id: "westerncape-2-stellenboschmunicipality"
+      id: "eskme-2-stellenboschstellenboschwesterncape"
     sensor:
       - name: EskomSePush
         force_update: true

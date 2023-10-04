@@ -58,6 +58,7 @@ sensor:
         device_class: timestamp
         value_template: >-
           {% if states('sensor.eskomsepush')
+                and not state_attr('sensor.eskomsepush', 'events') is none
                 and state_attr('sensor.eskomsepush', 'events') != []
                 and 'start' in (state_attr('sensor.eskomsepush', 'events') | first) %}
             {{ (state_attr('sensor.eskomsepush', 'events') | first).start }}
@@ -70,6 +71,7 @@ sensor:
         device_class: timestamp
         value_template: >-
           {% if states('sensor.eskomsepush')
+                and not state_attr('sensor.eskomsepush', 'events') is none
                 and state_attr('sensor.eskomsepush', 'events') != []
                 and 'end' in (state_attr('sensor.eskomsepush', 'events') | first) %}
             {{ (state_attr('sensor.eskomsepush', 'events') | first).end }}
@@ -81,6 +83,7 @@ sensor:
         friendly_name: Loadshedding Stage
         icon_template: >-
           {% if states('sensor.eskomsepush')
+                and not state_attr('sensor.eskomsepush', 'events') is none
                 and state_attr('sensor.eskomsepush', 'events') != []
                 and 'note' in (state_attr('sensor.eskomsepush', 'events') | first) %}
             {% set stage = (state_attr('sensor.eskomsepush', 'events') | first).note %}
@@ -98,6 +101,7 @@ sensor:
           {% endif %}
         value_template: >-
           {% if states('sensor.eskomsepush')
+                and not state_attr('sensor.eskomsepush', 'events') is none
                 and state_attr('sensor.eskomsepush', 'events') != []
                 and 'note' in (state_attr('sensor.eskomsepush', 'events') | first) %}
             {{ (state_attr('sensor.eskomsepush', 'events') | first).note }}
@@ -110,7 +114,9 @@ sensor:
         device_class: duration
         unit_of_measurement: h
         value_template: >-
-          {%- if states('sensor.eskomsepush') and state_attr('sensor.eskomsepush', 'events') != [] -%}
+          {%- if states('sensor.eskomsepush')
+                 and not state_attr('sensor.eskomsepush', 'events') is none
+                 and state_attr('sensor.eskomsepush', 'events') != [] -%}
             {{ (states('sensor.loadshedding_end_time') | as_datetime - states('sensor.loadshedding_start_time') | as_datetime).seconds/60/60 }}
           {%- else -%}
             {{ 0 }}
@@ -125,9 +131,10 @@ sensor:
         friendly_name: Loadshedding Forecast
         value_template: >
           Your latest forecast:
-          {# to not exceed the 255 character limit of the sensor, limit this to the next 3 events #}
-          {% set events = state_attr('sensor.eskomsepush', 'events')[0:3] %}
-          {%- if events != [] -%}
+          {% if state_attr('sensor.eskomsepush', 'events') != []
+                and not state_attr('sensor.eskomsepush', 'events') is none -%}
+            {#- to not exceed the 255 character limit of the sensor, limit this to the next 3 events -#}
+            {%- set events = state_attr('sensor.eskomsepush', 'events')[0:3] -%}
             {%- for event in events %}
               {%- set date = as_timestamp(event['start']) | timestamp_custom('%a %d') -%}
               {%- set stage = event['note'] -%}
@@ -149,7 +156,8 @@ binary_sensor:
         friendly_name: Loadshedding Active
         device_class: problem
         value_template: >-
-          {%- if state_attr('sensor.eskomsepush', 'events') == [] -%}
+          {%- if state_attr('sensor.eskomsepush', 'events') == []
+                 or state_attr('sensor.eskomsepush', 'events') is none -%}
             False
           {%- else -%}
             {% set start = (state_attr('sensor.eskomsepush', 'events') | first).start | as_datetime %}

@@ -89,19 +89,19 @@ weather:
   # https://community.home-assistant.io/t/mapping-weather-conditions-in-the-ui/289207
   - platform: template
     name: "Forecast Tomorrow"
-    condition_template: "{{ state_attr('weather.openweathermap_daily', 'forecast')[1]['condition'] }}"
-    temperature_template: "{{ state_attr('weather.openweathermap_daily', 'forecast')[1]['temperature'] }}"
+    condition_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['condition'] }}"
+    temperature_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['temperature'] }}"
     temperature_unit: "°C"
     # workaround: https://github.com/home-assistant/core/issues/91620
     humidity_template: "{{ 0.0 | float(0) }}"
-    pressure_template: "{{ state_attr('weather.openweathermap_daily', 'forecast')[1]['pressure'] }}"
+    pressure_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['pressure'] }}"
     pressure_unit: "hPa"
-    wind_speed_template: "{{ state_attr('weather.openweathermap_daily', 'forecast')[1]['wind_speed'] }}"
+    wind_speed_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['wind_speed'] }}"
     wind_speed_unit: "km/h"
-    wind_bearing_template: "{{ state_attr('weather.openweathermap_daily', 'forecast')[1]['wind_bearing'] }}"
+    wind_bearing_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['wind_bearing'] }}"
     precipitation_unit: "mm"
-    # forecast_template: "{{ state_attr('weather.openweathermap_daily', 'forecast')[1:] }}"
-    attribution_template: "{{ state_attr('weather.openweathermap_daily', 'attribution') }}"
+    # forecast_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0:] }}"
+    attribution_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'attribution') }}"
 
 binary_sensor:
   - platform: template
@@ -267,9 +267,9 @@ sensor:
       weather_forecast_precipitation_tomorrow:
         friendly_name: "Weather Precipitation Tomorrow"
         value_template: >-
-          {{ (state_attr('weather.openweathermap_daily', 'forecast') | first)['precipitation'] }}
+          {{ (state_attr('sensor.weather_tomorrow_hourly', 'forecast') | first)['precipitation'] }}
         icon_template: >-
-          {% if (state_attr('weather.openweathermap_daily', 'forecast') | first)['precipitation'] > 0 %}
+          {% if (state_attr('sensor.weather_tomorrow_hourly', 'forecast') | first)['precipitation'] > 0 %}
             mdi:water
           {% else %}
             mdi:water-off
@@ -350,6 +350,34 @@ template:
                               5: "mdi:gauge-full" } %}
           {% set key = states('sensor.overall_pollen_risk') | int(0) %}
           {{ mapping[key] if key in mapping else "mdi:alert" }}
+
+  # https://www.home-assistant.io/integrations/template/#trigger-based-handling-of-service-response-data
+  # https://community.home-assistant.io/t/petition-dont-delete-the-forecast-attribute/609298/38
+  # https://community.home-assistant.io/t/petition-dont-delete-the-forecast-attribute/609298/240
+  - trigger:
+    - platform: time_pattern
+      # every 5 minutes past the hour
+      hours: "*"
+      minutes: "5"
+    - platform: state
+      entity_id: weather.openweathermap_hourly
+    action:
+      - service: weather.get_forecast
+        target:
+          entity_id: weather.openweathermap_hourly
+        data:
+          type: hourly
+        response_variable: hourly
+    sensor:
+      - name: Weather Tomorrow Hourly
+        unique_id: "3e214cd0-be86-4ec9-b9ae-d9f7133a35a2"
+        # make temperature? (and then device_class and uom)
+        state: "{{ now().isoformat() }}"
+        # device_class: duration
+        # unit_of_measurement: s
+        attributes:
+          forecast: "{{ hourly.forecast[24:] }}"
+          attribution: "{{ state_attr('sensor.weather_tomorrow_hourly', 'attribution') }}"
 
 multiscrape:
   - resource: https://pollencount.co.za/

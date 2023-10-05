@@ -1085,11 +1085,10 @@ automation:
         at:
           # the first slot starts at 01:00, but we need to give the average forecast filter time
           # to get past its initial transient after midnight
-          - "01:30:00"
+          - "03:30:00"
         id: "first"
       - platform: time
         at:
-          - "03:30:00"
           - "05:30:00"
           - "07:30:00"
           - "09:30:00"

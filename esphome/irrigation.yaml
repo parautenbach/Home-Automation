@@ -1,0 +1,294 @@
+esphome:
+  # https://devices.esphome.io/devices/Sonoff-4CH-Pro-R2
+  name: irrigation
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  power_save_mode: none
+  networks:
+    - ssid: !secret wifi_ssid
+      password: !secret wifi_password
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Irrigation Fallback Hotspot"
+    password: !secret fallback_ap_password
+
+<<: !include common.yaml
+
+switch:
+  - platform: restart
+    id: irrigation_restart
+    name: "Restart"
+  - platform: gpio
+    name: "Zone 1"
+    pin: GPIO12
+    id: "relay_1"
+    internal: true
+    restore_mode: ALWAYS_OFF
+    # the sprinkler controller ensures only one valve can be on at a time
+    # https://esphome.io/components/switch/gpio.html?highlight=interlock#switch-gpio-interlocking
+    # interlock: &interlock_group [relay_1, relay_2, relay_3, relay_4]
+    # this gets performed by a home assistant automation by triggering on the relevant switch's state
+    # on_turn_on:
+    #   then:
+    #     # https://esphome.io/components/api#homeassistant-event-action
+    #     # note: only works when using the native api
+    #     - homeassistant.event:
+    #         variables:
+    #           duration: |-
+    #             return id(irrigation_controller).time_remaining_current_operation().value_or(0);
+    #         event: esphome.irrigation_valve_1_opened
+    #         data_template:
+    #           duration: "{{ duration }}"
+  - platform: gpio
+    name: "Zone 2"
+    pin: GPIO5
+    id: "relay_2"
+    internal: true
+    restore_mode: ALWAYS_OFF
+    # interlock: *interlock_group
+  - platform: gpio
+    name: "Zone 3"
+    pin: GPIO4
+    id: "relay_3"
+    internal: true
+    restore_mode: ALWAYS_OFF
+    # interlock: *interlock_group
+  - platform: gpio
+    name: "Zone 4"
+    pin: GPIO15
+    id: "relay_4"
+    internal: true
+    restore_mode: ALWAYS_OFF
+    # interlock: *interlock_group
+
+binary_sensor:
+  # the sprinkler's main state doesn't have an associated entity one can create an automation on.
+  # this sensor duplicates the sprinkler's state in order to publish the remaining time to a duration sensor
+  # in order to create a countdown timer in home assistant.
+  - platform: template
+    name: "Main State"
+    id: "main_state"
+    # device_class: running
+    internal: true
+    lambda: |-
+      return id(irrigation_controller).active_valve().has_value();
+    on_state:
+      then:
+        if:
+          condition:
+            binary_sensor.is_on: main_state
+          then:
+            - sensor.template.publish:
+                id: main_run_duration
+                state: !lambda 'return id(irrigation_controller).time_remaining_current_operation().value_or(0);'
+          else:
+            - sensor.template.publish:
+                id: main_run_duration
+                state: 0
+  # relays
+  - platform: gpio
+    id: binary_sensor_1
+    name: "Relay Zone 1"
+    # https://github.com/home-assistant/architecture/discussions/975
+    # device_class: valve
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: True
+    on_press:
+      then:
+        if:
+          condition:
+            switch.is_off: relay_1
+          then:
+            sprinkler.start_single_valve:
+              id: irrigation_controller
+              valve_number: 0
+          else:
+            sprinkler.shutdown: irrigation_controller
+  - platform: gpio
+    id: binary_sensor_2
+    name: "Relay Zone 2"
+    pin:
+      number: GPIO9
+      mode: INPUT_PULLUP
+      inverted: True
+    on_press:
+      then:
+        if:
+          condition:
+            switch.is_off: relay_2
+          then:
+            sprinkler.start_single_valve:
+              id: irrigation_controller
+              valve_number: 1
+          else:
+            sprinkler.shutdown: irrigation_controller
+  - platform: gpio
+    id: binary_sensor_3
+    name: "Relay Zone 3"
+    pin:
+      number: GPIO10
+      mode: INPUT_PULLUP
+      inverted: True
+    on_press:
+      then:
+        if:
+          condition:
+            switch.is_off: relay_3
+          then:
+            sprinkler.start_single_valve:
+              id: irrigation_controller
+              valve_number: 2
+          else:
+            sprinkler.shutdown: irrigation_controller
+  - platform: gpio
+    id: binary_sensor_4
+    name: "Relay Zone 4"
+    pin:
+      number: GPIO14
+      mode: INPUT_PULLUP
+      inverted: True
+    on_press:
+      then:
+        if:
+          condition:
+            switch.is_off: relay_4
+          then:
+            sprinkler.start_single_valve:
+              id: irrigation_controller
+              valve_number: 3
+          else:
+            sprinkler.shutdown: irrigation_controller
+  # physical buttons
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: True
+    name: "Button Zone 1"
+  - platform: gpio
+    pin:
+      number: GPIO9
+      mode: INPUT_PULLUP
+      inverted: True
+    name: "Button Zone 2"
+  - platform: gpio
+    pin:
+      number: GPIO10
+      mode: INPUT_PULLUP
+      inverted: True
+    name: "Button Zone 3"
+  - platform: gpio
+    pin:
+      number: GPIO14
+      mode: INPUT_PULLUP
+      inverted: True
+    name: "Button Zone 4"
+  # other
+  - platform: status
+    name: "Status"
+
+# saving this as an example of how to expose a real-time countdown to home assistant
+# it's too chatty though; the event mechanism i think is a lot better, but only works
+# via the api and not mqtt
+# sensor:
+#   - platform: template
+#     name: "Time Remaining Current Operation"
+#     # if active/running x else
+#     lambda: |-
+#       if (id(irrigation_controller).active_valve().has_value()) {
+#           return id(irrigation_controller).time_remaining_current_operation().value_or(0);
+#         } else {
+#           return {};
+#         }
+#     update_interval: 1s
+#     device_class: duration
+#     unit_of_measurement: "s"
+#     accuracy_decimals: 0
+#   - platform: template
+#     name: "Time Remaining Active Valve"
+#     lambda: |-
+#       if (id(irrigation_controller).active_valve().has_value()) {
+#           return id(irrigation_controller).time_remaining_active_valve().value_or(0);
+#         } else {
+#           return {};
+#         }
+#     update_interval: 1s
+#     device_class: duration
+#     unit_of_measurement: "s"
+#     accuracy_decimals: 0
+
+sensor:
+  - platform: template
+    name: "Main Run Duration"
+    id: main_run_duration
+    device_class: duration
+    unit_of_measurement: "s"
+    accuracy_decimals: 0
+
+# https://esphome.io/components/sprinkler
+sprinkler:
+  - id: irrigation_controller
+    main_switch: "Main"
+    auto_advance_switch: "Auto Advance"
+    multiplier_number:
+      name: "Multiplier"
+      initial_value: 1
+      min_value: 0.5
+      max_value: 1.5
+      step: 0.1
+      restore_value: true
+    # valve_open_delay: 1s
+    # the order of valves here control the automatic run order
+    valves:
+      - valve_switch: "Front Lawn"
+        valve_switch_id: relay_1
+        enable_switch: "Enable Front Lawn Zone"
+        run_duration_number:
+          name: "Front Lawn Run Duration"
+          unit_of_measurement: min
+          initial_value: 10
+          min_value: 5
+          max_value: 15
+          step: 1
+          restore_value: true
+      - valve_switch: "Front Beds"
+        valve_switch_id: relay_2
+        enable_switch: "Enable Front Beds Zone"
+        run_duration_number:
+          name: "Front Beds Run Duration"
+          unit_of_measurement: min
+          initial_value: 10
+          min_value: 5
+          max_value: 15
+          step: 1
+          restore_value: true
+      - valve_switch: "Rear Lawn"
+        valve_switch_id: relay_3
+        enable_switch: "Enable Rear Lawn Zone"
+        run_duration_number:
+          name: "Rear Lawn Run Duration"
+          unit_of_measurement: min
+          initial_value: 10
+          min_value: 5
+          max_value: 15
+          step: 1
+          restore_value: true
+      - valve_switch: "Rear Beds"
+        valve_switch_id: relay_4
+        enable_switch: "Enable Rear Beds Zone"
+        run_duration_number:
+          name: "Rear Beds Run Duration"
+          unit_of_measurement: min
+          initial_value: 10
+          min_value: 5
+          max_value: 15
+          step: 1
+          restore_value: true
+
+# https://github.com/bruxy70/Irrigation-with-display/blob/master/irrigation.yaml
+# https://github.com/bruxy70/Irrigation-with-display/blob/master/irrigation-advanced.yaml
+# https://github.com/bruxy70/Irrigation-with-display/blob/master/irrigation.h

@@ -91,6 +91,7 @@ binary_sensor:
   - platform: gpio
     id: binary_sensor_1
     name: "Relay Zone 1"
+    internal: true
     # https://github.com/home-assistant/architecture/discussions/975
     # device_class: valve
     pin:
@@ -111,6 +112,7 @@ binary_sensor:
   - platform: gpio
     id: binary_sensor_2
     name: "Relay Zone 2"
+    internal: true
     pin:
       number: GPIO9
       mode: INPUT_PULLUP
@@ -129,6 +131,7 @@ binary_sensor:
   - platform: gpio
     id: binary_sensor_3
     name: "Relay Zone 3"
+    internal: true
     pin:
       number: GPIO10
       mode: INPUT_PULLUP
@@ -147,6 +150,7 @@ binary_sensor:
   - platform: gpio
     id: binary_sensor_4
     name: "Relay Zone 4"
+    internal: true
     pin:
       number: GPIO14
       mode: INPUT_PULLUP
@@ -169,24 +173,28 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: True
     name: "Button Zone 1"
+    internal: true
   - platform: gpio
     pin:
       number: GPIO9
       mode: INPUT_PULLUP
       inverted: True
     name: "Button Zone 2"
+    internal: true
   - platform: gpio
     pin:
       number: GPIO10
       mode: INPUT_PULLUP
       inverted: True
     name: "Button Zone 3"
+    internal: true
   - platform: gpio
     pin:
       number: GPIO14
       mode: INPUT_PULLUP
       inverted: True
     name: "Button Zone 4"
+    internal: true
   # other
   - platform: status
     name: "Status"

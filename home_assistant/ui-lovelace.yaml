@@ -506,6 +506,12 @@ button_card_templates:
         return entity.attributes.label;
       ]]]
     styles:
+      name:
+        - color: var(--primary-background-color)
+      icon:
+        - color: var(--primary-background-color)
+      label:
+        - color: var(--primary-background-color)
       grid:
         - grid-template-areas: '"n" "i" "l"'
       card:

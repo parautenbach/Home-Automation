@@ -147,6 +147,13 @@ cards:
             switch_entity: switch.garage_doors_restart
         - type: custom:button-card
           template: restart
+          entity: binary_sensor.irrigation_status
+          icon: mdi:sprinkler-variant
+          variables:
+            name: Irrigation
+            switch_entity: switch.irrigation_restart
+        - type: custom:button-card
+          template: restart
           entity: binary_sensor.power_meter
           icon: mdi:power-plug
           variables:
@@ -171,6 +178,8 @@ cards:
         - entity: binary_sensor.rasplay
         - entity: binary_sensor.main_gate
         - entity: binary_sensor.garage_doors
+        - entity: binary_sensor.irrigation_status
+          name: Irrigation
         - entity: binary_sensor.power_meter
     - type: custom:battery-state-card
       title: Batteries

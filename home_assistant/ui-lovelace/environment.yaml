@@ -346,6 +346,9 @@ cards:
                   haptic: light
                 # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/1190
                 style: |
+                  .entities-row .entity {
+                    margin-right: 10px !important;
+                  }
                   .entities-row div.entity:nth-child(1) {
                     color: {{ 'var(--custom-color-green)' if is_state('input_boolean.irrigation_monday', 'on') else 'var(--custom-color-red)' }};
                   }

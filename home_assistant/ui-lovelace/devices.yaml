@@ -143,7 +143,7 @@ cards:
           entity: binary_sensor.garage_doors
           icon: mdi:garage-variant
           variables:
-            name: Garage Doors
+            name: Garages
             switch_entity: switch.garage_doors_restart
         - type: custom:button-card
           template: restart
@@ -173,14 +173,17 @@ cards:
         - entity: binary_sensor.back_extender
         - entity: binary_sensor.cctv
         - entity: binary_sensor.doorbell_online
+          name: Doorbell
         - entity: binary_sensor.thor
         - entity: binary_sensor.rasplex
         - entity: binary_sensor.rasplay
         - entity: binary_sensor.main_gate
         - entity: binary_sensor.garage_doors
+          name: Garages
         - entity: binary_sensor.irrigation_status
           name: Irrigation
         - entity: binary_sensor.power_meter
+        - entity: binary_sensor.office
     - type: custom:battery-state-card
       title: Batteries
       entities:

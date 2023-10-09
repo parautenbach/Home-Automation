@@ -130,6 +130,35 @@ cards:
                       {%- set state = states(config.entity) | float(0) -%}
                       {{ gradient_color(state, temp_degrees_c_human_map) }}
                   }
+          - entity: sensor.thermal_comfort_summer_simmer_perception
+            name: Comfort
+            card_mod:
+              # #0484d9: blue
+              # #3498db: light blue
+              # #34dbd5: cyan
+              # #70a03c: green
+              # #ff9800: orange
+              # #e74c3c: red
+              # #db200b: dark red
+              style:
+                .: |
+                  div:nth-child(3) {
+                    color:
+                      {# https://www.sciencedirect.com/science/article/pii/S0378778819314070 #}
+                      {%- set comfort_map =
+                            {
+                              'cold':          '#0484d9',
+                              'cool':          '#3498db',
+                              'slightly_cool': '#34dbd5',
+                              'comfortable':   '#70a03c',
+                              'slightly_warm': '#ff9800',
+                              'warm':          '#e74c3c',
+                              'hot':           '#db200b',
+                            }
+                        -%}
+                      {%- set state = states(config.entity) -%}
+                      {{ comfort_map[state] }};
+                  }
       - type: custom:weather-card
         name: Stellies
         entity: weather.openweathermap_hourly
@@ -148,6 +177,8 @@ cards:
       - type: history-graph
         hours_to_show: 72
         entities:
+          - entity: sensor.thermal_comfort_summer_simmer_perception
+            name: Comfort
           - entity: weather.openweathermap_daily
             name: Today
           - entity: weather.forecast_tomorrow

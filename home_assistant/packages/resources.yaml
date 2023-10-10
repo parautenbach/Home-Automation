@@ -862,8 +862,8 @@ automation:
         value_template: >-
           {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
           {% set charge_point = states('sensor.capacity_charge_point') | int(0) %}
-          {# we have a critical alert for when we reach 35% #}
-          {{ (battery_soc == battery_soc // 10 * 10 or battery_soc == charge_point) and battery_soc > 35 }}
+          {# we have a critical alert for very low soc #}
+          {{ (battery_soc == battery_soc // 10 * 10 or battery_soc == charge_point) and battery_soc > 30 }}
     condition:
       - condition: state
         entity_id: input_boolean.battery_notification_governor
@@ -929,6 +929,7 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id: sensor.battery_state_of_charge
+        # keep in sync with "Send Backup Power Battery Update"
         below: 31
     # we don't use a condition for whether someone's home – we always want to know if this happens
     condition: []
@@ -1271,6 +1272,7 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id: sensor.battery_charge_variance
+        # keep in sync with "Send Backup Power Battery Update"
         below: -14
     condition:
       - condition: state

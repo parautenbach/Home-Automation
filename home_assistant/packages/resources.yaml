@@ -439,7 +439,7 @@ template:
                 'Very Optimistic': {
                     1: (45, 'on'),
                     2: (35, 'off'),
-                    3: (35, 'off'),
+                    3: (30, 'off'),
                     4: (65, 'off'),
                     5: (75, 'on'),
                     6: (75, 'on')

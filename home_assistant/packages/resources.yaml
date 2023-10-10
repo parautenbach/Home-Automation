@@ -1256,7 +1256,6 @@ automation:
                 critical: 1
                 volume: 1.0
 
-  # todo: devices.yaml
   - alias: "Notify If Too Far Below Charge Point Target"
     id: "77692f4f-04fb-4bf3-9c67-69cffb0a4c27"
     initial_state: true

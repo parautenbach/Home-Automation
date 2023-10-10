@@ -898,7 +898,7 @@ automation:
         data:
           title: "Environment"
           message: >-
-            The risk of fires is dangerously high. FDI: {{ states('sensor.winelands_fdi') }}.
+            The risk of fires is high. FDI: {{ states('sensor.winelands_fdi') }}.
           data:
             group: "environment"
             url: homeassistant://navigate/lovelace/environment

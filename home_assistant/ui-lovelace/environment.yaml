@@ -326,8 +326,10 @@ cards:
             }
         show_header_toggle: false
         entities:
+          - type: section
+            label: Main
           - entity: switch.irrigation_main
-            name: Full Cycle
+            name: Control
             icon: mdi:water-sync
             type: button
             action_name: Start/Stop
@@ -338,8 +340,11 @@ cards:
               action: toggle
               confirmation:
                 text: Are you sure?
+
           - entity: timer.irrigation_full_cycle_runtime
-            name: Full Cycle
+            name: Remainder
+          - type: section
+            label: Zone Timers
           - entity: timer.irrigation_front_lawn
             name: Front Lawn
           - entity: timer.irrigation_front_beds

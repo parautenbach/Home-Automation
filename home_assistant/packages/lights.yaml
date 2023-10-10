@@ -516,8 +516,8 @@ automation:
                 - light.hallway
             data:
               profile: low
-          - delay:
-              minutes: 1
+          # - delay:
+          #     minutes: 1
           # this call does not block/wait, so the two transitions will start at almost the same time
           # and the script runs in parallel mode
           # https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete

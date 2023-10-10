@@ -319,6 +319,11 @@ cards:
       - type: entities
         title: Irrigation
         icon: mdi:sprinkler-variant
+        card_mod:
+          style: |
+            .icon {
+              color: var(--paper-item-icon-color);
+            }
         show_header_toggle: false
         entities:
           - entity: switch.irrigation_main
@@ -334,15 +339,15 @@ cards:
               confirmation:
                 text: Are you sure?
           - entity: timer.irrigation_full_cycle_runtime
-            name: Full Cycle Remainder
+            name: Full Cycle
           - entity: timer.irrigation_front_lawn
-            name: Front Lawn Remainder
+            name: Front Lawn
           - entity: timer.irrigation_front_beds
-            name: Front Beds Remainder
+            name: Front Beds
           - entity: timer.irrigation_rear_lawn
-            name: Rear Lawn Remainder
+            name: Rear Lawn
           - entity: timer.irrigation_rear_beds
-            name: Rear Beds Remainder
+            name: Rear Beds
           - type: custom:fold-entity-row
             head:
               type: section
@@ -426,6 +431,7 @@ cards:
               - type: section
                 label: Runtimes
               - entity: number.irrigation_front_lawn_run_duration
+                name: Front Lawn
                 icon: mdi:timer-edit-outline
                 card_mod:
                   style:
@@ -441,6 +447,7 @@ cards:
                             height: 3em !important;
                           }
               - entity: number.irrigation_front_beds_run_duration
+                name: Front Beds
                 icon: mdi:timer-edit-outline
                 card_mod:
                   style:
@@ -456,6 +463,7 @@ cards:
                             height: 3em !important;
                           }
               - entity: number.irrigation_rear_lawn_run_duration
+                name: Rear Lawn
                 icon: mdi:timer-edit-outline
                 card_mod:
                   style:
@@ -471,6 +479,7 @@ cards:
                             height: 3em !important;
                           }
               - entity: number.irrigation_rear_beds_run_duration
+                name: Rear Beds
                 icon: mdi:timer-edit-outline
                 card_mod:
                   style:

@@ -843,11 +843,13 @@ automation:
               - condition: state
                 entity_id: automation.switch_on_lights_at_wake_up_time
                 state: "on"
-          - condition: sun
-            after: sunrise
-            after_offset: "01:30:00"
-          - condition: time
-            before: "20:00:00"
+          - condition: and
+            conditions:
+              - condition: sun
+                after: sunrise
+                after_offset: "01:30:00"
+              - condition: time
+                before: "20:00:00"
     action:
       - service: scene.turn_on
         target:

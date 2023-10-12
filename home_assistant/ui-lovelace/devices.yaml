@@ -276,6 +276,7 @@ cards:
         - automation.notify_if_too_far_below_charge_point_target
         - automation.notify_pieter_going_home_from_work_in_cape_town
         - automation.notify_when_extender_disconnected
+        - automation.notify_when_irrigation_status_changed
         - automation.notify_when_monitored_battery_fully_charged
         - automation.notify_when_server_started_after_being_shut_down_automatically
         - automation.notify_when_solarassistant_mqtt_bridge_activity_ceased
@@ -298,6 +299,7 @@ cards:
         - automation.shut_down_devices_before_loadshedding
         - automation.shut_down_gaia_notification
         - automation.shut_down_server
+        - automation.start_a_full_irrigation_cycle
         - automation.start_cover_timer_when_opened
         - automation.start_loadshedding_timer
         - automation.stop_cover_timer_when_closed
@@ -326,6 +328,8 @@ cards:
         - automation.update_db_size
         - automation.update_gaia_audio_input_in_use_alt
         - automation.update_gaia_bluetooth_audio_connection_status
+        - automation.update_irrigation_full_cycle_runtime_timer
+        - automation.update_irrigation_zone_timer
         - automation.update_security_camera_snapshot_gallery
         - automation.update_server_power_status
         - automation.update_timers_for_covers_on_startup

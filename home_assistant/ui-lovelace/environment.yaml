@@ -438,7 +438,7 @@ cards:
               - entity: number.irrigation_front_lawn_run_duration
                 name: Front Lawn
                 icon: mdi:timer-edit-outline
-                card_mod:
+                card_mod: &runtime_timer_mods
                   style:
                     ha-time-input $ ha-base-time-input $:
                       ha-textfield:
@@ -454,51 +454,28 @@ cards:
               - entity: number.irrigation_front_beds_run_duration
                 name: Front Beds
                 icon: mdi:timer-edit-outline
-                card_mod:
-                  style:
-                    ha-time-input $ ha-base-time-input $:
-                      ha-textfield:
-                        $: |
-                          .mdc-text-field {
-                            height: 3em !important;
-                          }
-                      ha-select:
-                        $: |
-                          .mdc-select__anchor {
-                            height: 3em !important;
-                          }
+                card_mod: *runtime_timer_mods
               - entity: number.irrigation_rear_lawn_run_duration
                 name: Rear Lawn
                 icon: mdi:timer-edit-outline
-                card_mod:
-                  style:
-                    ha-time-input $ ha-base-time-input $:
-                      ha-textfield:
-                        $: |
-                          .mdc-text-field {
-                            height: 3em !important;
-                          }
-                      ha-select:
-                        $: |
-                          .mdc-select__anchor {
-                            height: 3em !important;
-                          }
+                card_mod: *runtime_timer_mods
               - entity: number.irrigation_rear_beds_run_duration
                 name: Rear Beds
                 icon: mdi:timer-edit-outline
-                card_mod:
-                  style:
-                    ha-time-input $ ha-base-time-input $:
-                      ha-textfield:
-                        $: |
-                          .mdc-text-field {
-                            height: 3em !important;
-                          }
-                      ha-select:
-                        $: |
-                          .mdc-select__anchor {
-                            height: 3em !important;
-                          }
+                card_mod: *runtime_timer_mods
+      - type: history-graph
+        hours_to_show: 24
+        entities:
+          - entity: switch.irrigation_main
+            name: Main
+          - entity: switch.irrigation_front_lawn
+            name: F. Lawn
+          - entity: switch.irrigation_front_beds
+            name: F. Beds
+          - entity: switch.irrigation_rear_lawn
+            name: R. Lawn
+          - entity: switch.irrigation_rear_beds
+            name: R. Beds
   - type: vertical-stack
     cards:
       - type: custom:swipe-card

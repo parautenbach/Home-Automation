@@ -328,8 +328,14 @@ cards:
         entities:
           - type: section
             label: Main
+          - entity: automation.start_a_full_irrigation_cycle
+            name: Automatic Running
+            icon: mdi:auto-mode
+          - entity: sensor.weather_forecast_precipitation_tomorrow
+            name: Rain Forecast Tomorrow
+            icon: mdi:weather-partly-rainy
           - entity: switch.irrigation_main
-            name: Control
+            name: Full Cycle
             icon: mdi:water-sync
             type: button
             action_name: Start/Stop
@@ -340,7 +346,6 @@ cards:
               action: toggle
               confirmation:
                 text: Are you sure?
-
           - entity: timer.irrigation_full_cycle_runtime
             name: Remainder
           - type: section

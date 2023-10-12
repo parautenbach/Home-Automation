@@ -265,16 +265,6 @@ sensor:
         unit_of_measurement: '°'
         value_template: "{{ '%+.1f' | format(state_attr('sun.sun', 'elevation')) }}"
         icon_template: mdi:sun-angle-outline
-      weather_forecast_precipitation_tomorrow:
-        friendly_name: "Weather Precipitation Tomorrow"
-        value_template: >-
-          {{ (state_attr('sensor.weather_tomorrow_hourly', 'forecast') | first)['precipitation'] }}
-        icon_template: >-
-          {% if (state_attr('sensor.weather_tomorrow_hourly', 'forecast') | first)['precipitation'] > 0 %}
-            mdi:water
-          {% else %}
-            mdi:water-off
-          {% endif %}
       outside_temperature:
         friendly_name: "Outside Temperature"
         value_template: >-
@@ -379,6 +369,33 @@ template:
         attributes:
           forecast: "{{ hourly.forecast[24:] }}"
           attribution: "{{ state_attr('sensor.weather_tomorrow_hourly', 'attribution') }}"
+  - trigger:
+    - platform: time_pattern
+      # every 5 minutes past the hour
+      hours: "*"
+      minutes: "5"
+    - platform: state
+      entity_id: weather.openweathermap_daily
+    action:
+      - service: weather.get_forecast
+        target:
+          entity_id: weather.openweathermap_daily
+        data:
+          type: daily
+        response_variable: daily
+    sensor:
+      - name: Weather Forecast Precipitation Tomorrow
+        unique_id: "2f58f787-0427-462d-a5c1-c2e1b568f0c7"
+        state: >-
+          {{ state_attr('weather.openweathermap_daily', 'forecast')[1]['precipitation'] }}
+        device_class: precipitation
+        unit_of_measurement: "mm"
+        icon: >-
+          {% if (state_attr('weather.openweathermap_daily', 'forecast')[1])['precipitation'] > 0 %}
+            mdi:water
+          {% else %}
+            mdi:water-off
+          {% endif %}
 
 multiscrape:
   - resource: https://pollencount.co.za/

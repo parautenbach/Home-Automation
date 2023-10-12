@@ -82,13 +82,15 @@ binary_sensor:
       # https://www.home-assistant.io/integrations/bayesian/
       pieter_present:
         friendly_name: "Pieter Present"
+        # DO NOT change this to an or condition
+        # false positives for not being home will trigger automations when it changes to home
         value_template: >-
-          {{ is_state("input_boolean.pieter_present", "on") and
+          {{ is_state("input_boolean.pieter_present", "on") or
              is_state("person.pieter_rautenbach", "home") }}
       rouve_present:
         friendly_name: "Rouvé Present"
         value_template: >-
-          {{ is_state("input_boolean.rouve_present", "on") and
+          {{ is_state("input_boolean.rouve_present", "on") or
              is_state("person.rouve_rautenbach", "home") }}
       tenant_present:
         friendly_name: "Tenant Present"

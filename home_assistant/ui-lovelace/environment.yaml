@@ -147,6 +147,7 @@ cards:
                       {# https://www.sciencedirect.com/science/article/pii/S0378778819314070 #}
                       {%- set comfort_map =
                             {
+                              'unknown':       '',
                               'cold':          '#0484d9',
                               'cool':          '#3498db',
                               'slightly_cool': '#34dbd5',

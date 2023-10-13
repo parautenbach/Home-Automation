@@ -59,6 +59,25 @@ automation:
         target:
           entity_id: switch.irrigation_main
 
+  - alias: "Notify When Irrigation Status Changed"
+    id: "53f24f14-12a3-493a-a6d8-fcb4c552c236"
+    trigger:
+      - platform: state
+        entity_id: switch.irrigation_main
+        to:
+          - "on"
+          - "off"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          # yard?
+          title: "Garden"
+          message: >-
+            The irrigation has been turned {{ states('switch.irrigation_main') }}.
+          data:
+            group: "home-garden"
+            url: homeassistant://navigate/lovelace/environment
+
   - alias: "Update Irrigation Full Cycle Runtime Timer"
     id: "df395613-0ba1-4245-a18b-e6bac386fa30"
     trigger:

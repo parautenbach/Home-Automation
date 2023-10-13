@@ -470,7 +470,8 @@ cards:
                 icon: mdi:timer-edit-outline
                 card_mod: *runtime_timer_mods
       - type: history-graph
-        hours_to_show: 24
+        title: Runtime History
+        hours_to_show: 4
         entities:
           - entity: switch.irrigation_main
             name: Main

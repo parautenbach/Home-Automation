@@ -349,16 +349,21 @@ cards:
                 text: Are you sure?
           - entity: timer.irrigation_full_cycle_runtime
             name: Remainder
-          - type: section
-            label: Zone Timers
-          - entity: timer.irrigation_front_lawn
-            name: Front Lawn
-          - entity: timer.irrigation_front_beds
-            name: Front Beds
-          - entity: timer.irrigation_rear_lawn
-            name: Rear Lawn
-          - entity: timer.irrigation_rear_beds
-            name: Rear Beds
+          - type: custom:fold-entity-row
+            head:
+              type: section
+              label: Zone Timers
+              # not an option
+              # icon: mdi:cog
+            entities:
+              - entity: timer.irrigation_front_lawn
+                name: Front Lawn
+              - entity: timer.irrigation_front_beds
+                name: Front Beds
+              - entity: timer.irrigation_rear_lawn
+                name: Rear Lawn
+              - entity: timer.irrigation_rear_beds
+                name: Rear Beds
           - type: custom:fold-entity-row
             head:
               type: section

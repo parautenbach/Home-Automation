@@ -67,6 +67,7 @@ automation:
         to:
           - "on"
           - "off"
+        not_from: "unavailable"
     action:
       - service: notify.mobile_app_ceres
         data:

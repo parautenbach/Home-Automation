@@ -157,7 +157,7 @@ cards:
           entity: binary_sensor.power_meter
           icon: mdi:power-plug
           variables:
-            name: Power Meter
+            name: Pwr Meter
             switch_entity: switch.electricity_pulse_counter_restart
         - type: custom:button-card
           template: restart
@@ -170,7 +170,9 @@ cards:
       hours_to_show: 24
       entities:
         - entity: binary_sensor.front_extender
+          name: Front Ext.
         - entity: binary_sensor.back_extender
+          name: Back Ext.
         - entity: binary_sensor.cctv
         - entity: binary_sensor.doorbell_online
           name: Doorbell
@@ -183,6 +185,7 @@ cards:
         - entity: binary_sensor.irrigation_status
           name: Irrigation
         - entity: binary_sensor.power_meter
+          name: Pwr Meter
         - entity: binary_sensor.office
     - type: custom:battery-state-card
       title: Batteries

@@ -85,7 +85,7 @@ cards:
           - entity: sensor.office_temperature
             name: Living Room
             icon: mdi:sofa-outline
-            card_mod:
+            card_mod: &card_mod_temp_style
               style:
                 .: |
                   div:nth-child(3) {
@@ -93,46 +93,50 @@ cards:
                       {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
                       {%- set state = states(config.entity) | float(0) -%}
                       {{ gradient_color(state, temp_degrees_c_human_map) }}
+                  }
+                  state-badge {
+                    margin: 0;
                   }
           - entity: sensor.main_bedroom_ht_temperature
             name: Main Bedroom
             icon: mdi:bed-king-outline
-            card_mod:
-              style:
-                .: |
-                  div:nth-child(3) {
-                    color:
-                      {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
-                      {%- set state = states(config.entity) | float(0) -%}
-                      {{ gradient_color(state, temp_degrees_c_human_map) }}
-                  }
+            card_mod: *card_mod_temp_style
           - entity: sensor.bedroom_ht_temperature
             name: Bedroom
             icon: mdi:bed-single-outline
-            card_mod:
-              style:
-                .: |
-                  div:nth-child(3) {
-                    color:
-                      {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
-                      {%- set state = states(config.entity) | float(0) -%}
-                      {{ gradient_color(state, temp_degrees_c_human_map) }}
-                  }
+            card_mod: *card_mod_temp_style
           - entity: sensor.outside_temperature
             name: Outside
             icon: mdi:weather-partly-cloudy
+            card_mod: *card_mod_temp_style
+      - type: glance
+        entities:
+          - entity: sensor.season
             card_mod:
               style:
                 .: |
                   div:nth-child(3) {
                     color:
-                      {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
-                      {%- set state = states(config.entity) | float(0) -%}
-                      {{ gradient_color(state, temp_degrees_c_human_map) }}
+                      {# https://www.sciencedirect.com/science/article/pii/S0378778819314070 #}
+                      {%- set comfort_map =
+                            {
+                              'unknown': '',
+                              'spring':  '#70a03c',
+                              'summer':  '#e74c3c',
+                              'autumn':  '#ff9800',
+                              'winter':  '#0484d9'
+                            }
+                        -%}
+                      {%- set state = states(config.entity) -%}
+                      {{ comfort_map[state] }};
                   }
-          - entity: sensor.thermal_comfort_summer_simmer_perception
-            name: Comfort
-            card_mod:
+                  state-badge {
+                    margin: 0;
+                  }
+          - entity: sensor.thermal_comfort_inside_summer_simmer_perception
+            name: Inside
+            icon: mdi:home-thermometer-outline
+            card_mod: &card_mod_comfort_style
               # #0484d9: blue
               # #3498db: light blue
               # #34dbd5: cyan
@@ -154,12 +158,19 @@ cards:
                               'comfortable':   '#70a03c',
                               'slightly_warm': '#ff9800',
                               'warm':          '#e74c3c',
-                              'hot':           '#db200b',
+                              'hot':           '#db200b'
                             }
                         -%}
                       {%- set state = states(config.entity) -%}
                       {{ comfort_map[state] }};
                   }
+                  state-badge {
+                    margin: 0;
+                  }
+          - entity: sensor.thermal_comfort_outside_summer_simmer_perception
+            name: Outside
+            icon: mdi:sun-thermometer-outline
+            card_mod: *card_mod_comfort_style
       - type: custom:weather-card
         name: Stellies
         entity: weather.openweathermap_hourly
@@ -178,8 +189,10 @@ cards:
       - type: history-graph
         hours_to_show: 72
         entities:
-          - entity: sensor.thermal_comfort_summer_simmer_perception
-            name: Comfort
+          - entity: sensor.thermal_comfort_inside_summer_simmer_perception
+            name: Inside
+          - entity: sensor.thermal_comfort_outside_summer_simmer_perception
+            name: Outside
           - entity: weather.openweathermap_daily
             name: Today
           - entity: weather.forecast_tomorrow

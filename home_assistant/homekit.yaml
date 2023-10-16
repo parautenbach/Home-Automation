@@ -11,12 +11,14 @@
       - binary_sensor.electricity_feed
       - binary_sensor.internet_connection
       - binary_sensor.foyer_motion_detected
+      - binary_sensor.cabinet_door
       - sensor.main_bedroom_ht_temperature
       - sensor.main_bedroom_ht_humidity
       - sensor.bedroom_ht_temperature
       - sensor.bedroom_ht_humidity
       - sensor.office_temperature
       - sensor.office_humidity
+      - sensor.cabinet_temperature
       - light.living_room_lamp
       - light.pieter_bedside
       - light.rouve_bedside
@@ -32,6 +34,7 @@
       - light.hallway
       - light.bedroom_bedlamp
       - switch.tivoli_audio
+      - switch.irrigation_main
       - cover.main_gate
       - cover.lhs_garage_door
       - cover.rhs_garage_door
@@ -40,6 +43,8 @@
       - script.entertainment_off
       - script.open_pedestrian_gap
   entity_config:
+    binary_sensor.cabinet_door:
+      linked_battery_sensor: sensor.cabinet_battery
     sensor.bedroom_ht_temperature:
       linked_battery_sensor: sensor.bedroom_ht_battery
     sensor.bedroom_ht_humidity:
@@ -75,6 +80,9 @@
       name: Motion LED
     switch.tivoli_audio:
       name: Tivoli Audio
+    switch.irrigation_main:
+      name: Irrigation
+      type: sprinkler
     cover.main_gate:
       name: Main Gate
     cover.lhs_garage_door:

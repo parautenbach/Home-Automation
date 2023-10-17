@@ -6,6 +6,7 @@ badges:
   # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/1396
   # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/1310
   - entity: binary_sensor.ha_updater
+    name: Update
     card_mod:
       style:
         ha-state-label-badge:
@@ -27,7 +28,9 @@ badges:
                   color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
                 }
   - entity: person.pieter_rautenbach
+    name: Pieter
   - entity: person.rouve_rautenbach
+    name: Rouvé
   - entity: binary_sensor.electricity_feed
     card_mod:
       style:

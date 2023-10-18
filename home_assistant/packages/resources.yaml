@@ -438,7 +438,7 @@ template:
               {
                 'Very Optimistic': {
                     1: (45, 'on'),
-                    2: (35, 'off'),
+                    2: (30, 'off'),
                     3: (30, 'off'),
                     4: (65, 'off'),
                     5: (75, 'on'),
@@ -930,7 +930,7 @@ automation:
       - platform: numeric_state
         entity_id: sensor.battery_state_of_charge
         # keep in sync with "Send Backup Power Battery Update"
-        below: 31
+        below: 26
     # we don't use a condition for whether someone's home – we always want to know if this happens
     condition: []
     action:

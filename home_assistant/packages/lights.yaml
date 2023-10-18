@@ -779,6 +779,8 @@ automation:
   - alias: "Lights On Upon Low Light"
     id: "36373097-6fba-45ae-9888-d88b668b997d"
     initial_state: true
+    trace:
+      stored_traces: 20
     trigger:
       - platform: state
         entity_id: binary_sensor.low_light

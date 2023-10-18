@@ -577,7 +577,7 @@ cards:
                     text: Daylight
                   legend:
                     show: false
-                  plotOptions: &radial_bar_apex_config_plot_options
+                  plotOptions:
                     radialBar:
                       startAngle: -170
                       endAngle: 170
@@ -601,16 +601,38 @@ cards:
               - type: custom:apexcharts-card
                 series:
                   - entity: sensor.fair_weather_time
+                    transform: "return x / parseFloat(hass.states['sensor.daylight'].state) * 100;"
                     color: var(--custom-color-yellow)
                     min: 0
-                    max: 24
+                    max: 100
                 chart_type: radialBar
                 apex_config:
                   title:
                     text: Fair Weather
                   legend:
                     show: false
-                  plotOptions: *radial_bar_apex_config_plot_options
+                  plotOptions:
+                    radialBar:
+                      startAngle: -170
+                      endAngle: 170
+                      dataLabels:
+                        name:
+                          show: false
+                        value:
+                          show: true
+                          fontSize: 10px
+                          offsetY: -4
+                          # https://community.home-assistant.io/t/apexcharts-card-a-highly-customizable-graph-card/272877/2608
+                          formatter: |
+                            EVAL:function (percentage) {
+                              // would've loved to make this snippet more readible, but getElementsByTagName returns some kind of live object
+                              // which means you need to resolve the whole thing; can't make no hass object first.
+                              const daylight = parseFloat(document.getElementsByTagName('home-assistant')[0].hass.states['sensor.daylight'].state);
+                              const value = percentage / 100 * parseFloat(daylight);
+                              const hour = Math.floor(value);
+                              const minute = Math.round((value - hour) * 60);
+                              return [`${hour}h${minute.toString().padStart(2, '0')}m`, `(${percentage.toFixed(0)}%)`];
+                            }
           - type: statistics-graph
             title: Daylight
             entities:

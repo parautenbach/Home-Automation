@@ -623,6 +623,7 @@ cards:
                           fontSize: 10px
                           offsetY: -4
                           # https://community.home-assistant.io/t/apexcharts-card-a-highly-customizable-graph-card/272877/2608
+                          # alternative chart: https://github.com/AmoebeLabs/flex-horseshoe-card
                           formatter: |
                             EVAL:function (percentage) {
                               // would've loved to make this snippet more readible, but getElementsByTagName returns some kind of live object

@@ -656,6 +656,9 @@ cards:
               type: section
               label: Charge Points
             entities:
+              - entity: automation.set_charge_points
+                name: Automatic Setting
+                icon: mdi:map-clock-outline
               - type: custom:multiple-entity-row
                 entity: switch.grid_charge_point_1
                 name: 01:00-05:00

@@ -1,0 +1,36 @@
+{# https://www.home-assistant.io/docs/configuration/templating/#reusing-templates #}
+
+{#
+Get the alert status for a cover.
+
+:param name_slug: An entity slug part. For example, from binary_sensor.main_gate_status it would be main_gate.
+
+:returns: A boolean value indicating whether the entity is in an alert state.
+#}
+{%- macro get_alert_status(name_slug) -%}
+    {%- set open = is_state('binary_sensor.' ~ name_slug ~ '_status', 'on') -%}
+    {%- set last_opened = as_timestamp(states('input_datetime.' ~ name_slug ~ '_opened')) -%}
+    {%- set utc_now_ts = as_timestamp(utcnow()) -%}
+    {%- set timeout = (state_attr('timer.' ~ name_slug ~ '_timer', 'duration') | as_timedelta).total_seconds() -%}
+    {{ open and (utc_now_ts - last_opened) | int >= timeout }}
+{%- endmacro -%}
+
+{#
+Get the status icon for a cover.
+
+:param name_slug: An entity slug part. For example, from binary_sensor.main_gate_status it would be main_gate.
+:param icon_base: An MDI icon part for which an -alert and -open suffix would be valid.
+
+:returns: An MDI icon string.
+#}
+{%- macro get_cover_icon(name_slug, icon_base) -%}
+    {% set open = is_state('binary_sensor.' ~ name_slug ~ '_status', 'on') %}
+    {% set alert = is_state('binary_sensor.' ~ name_slug ~ '_alert', 'on') %}
+    {% if alert %}
+        {{ icon_base ~ '-alert' }}
+    {% elif open %}
+        {{ icon_base ~ '-open' }}
+    {% else %}
+        {{ icon_base }}
+    {% endif %}
+{%- endmacro -%}

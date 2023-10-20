@@ -367,6 +367,13 @@ button_card_templates:
         - grid-template-rows: min-content 1fr min-content
         - grid-template-columns: 1fr
     state:
+      - operator: template
+        value: >
+          [[[
+            var alert_entity_id = "binary_sensor." + entity.entity_id.replace("cover.", "") + "_alert";
+            return states[alert_entity_id].state == "on";
+          ]]]
+        color: var(--custom-color-red)
       - value: 'unavailable'
         styles:
           icon:

@@ -16,7 +16,7 @@ cards:
       # console_log_level: debug
       rules:
         - entities:
-            - binary_sensor.gate_status
+            - binary_sensor.main_gate_status
             - binary_sensor.lhs_garage_occupied
             - binary_sensor.rhs_garage_occupied
             - binary_sensor.foyer_motion_homebridge

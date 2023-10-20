@@ -137,7 +137,7 @@ cards:
           icon: mdi:gate
           variables:
             name: Main Gate
-            switch_entity: switch.gate_restart
+            switch_entity: switch.main_gate_restart
         - type: custom:button-card
           template: restart
           entity: binary_sensor.garage_doors

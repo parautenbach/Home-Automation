@@ -22,7 +22,7 @@ wifi:
 # https://esphome.io/components/binary_sensor/gpio.html
 binary_sensor:
   - platform: gpio
-    id: gate_status
+    id: main_gate_status
     name: "Gate Status"
     device_class: door
     pin:
@@ -35,14 +35,14 @@ binary_sensor:
 # https://esphome.io/components/switch/gpio.html
 switch:
   - platform: gpio
-    id: gate_control
+    id: main_gate_control
     name: "Gate Control"
     pin: 14
     restore_mode: ALWAYS_OFF
   # since v2022.2 this can be made a button, but we're not going to change something that works
   # https://esphome.io/components/button/output.html
   - platform: template
-    id: gate_remote
+    id: main_gate_remote
     name: "Gate Remote"
     icon: "mdi:remote"
     # restore_status: False -> restore_mode: DISABLED
@@ -50,9 +50,9 @@ switch:
     # https://esphome.io/components/switch/index.html
     restore_mode: DISABLED
     turn_on_action:
-      - switch.turn_on: gate_control
+      - switch.turn_on: main_gate_control
       - delay: 1000ms
-      - switch.turn_off: gate_control
+      - switch.turn_off: main_gate_control
   - platform: restart
-    id: gate_restart
+    id: main_gate_restart
     name: "Gate Restart"

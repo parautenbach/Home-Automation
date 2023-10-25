@@ -11,3 +11,21 @@ binary_sensor:
         value_template: >
           {% set on_vacation_tomorrow = as_timestamp(states('input_datetime.vacation_start')) <= as_timestamp((now() + timedelta(days=1)).date()) <= as_timestamp(states('input_datetime.vacation_end')) %}
           {{ is_state('binary_sensor.workday_sensor_tomorrow', 'on') and not on_vacation_tomorrow }}
+
+sensor:
+  # https://community.home-assistant.io/t/prevent-zone-automation-from-triggering-when-briefly-entering-zone/360107/4
+  - platform: history_stats
+    name: Duration Pieter Work Cape Town
+    entity_id: person.pieter_rautenbach
+    state: "Work (Takealot HQ)"
+    type: time  # duration
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"
+
+  - platform: history_stats
+    name: Duration Pieter Work Stellenbosch
+    entity_id: person.pieter_rautenbach
+    state: "Work (Takealot STB)"
+    type: time  # duration
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"

@@ -151,7 +151,7 @@ script:
 
 automation:
   - alias: "Away Mode"
-    description: "Activate away mode When leaving home"
+    description: "Activate away mode when leaving home"
     id: "93bac20d-eeba-48f6-87ef-d6c7f754ddcc"
     initial_state: true
     trigger:

@@ -403,6 +403,7 @@ template:
         state: >-
           {{ states.sensor.solarassistant_activity_counter.last_updated >= now() - timedelta(seconds=10) }}
         device_class: running
+  # https://docs.google.com/spreadsheets/d/1bfyoQDx-s5W7BBBhJeABa-aw1v9K8Z9-ETFwj0kDMYE/edit#gid=2129307858
   - trigger:
     - platform: state
       entity_id: sensor.average_solar_energy_forecast_today
@@ -437,19 +438,19 @@ template:
             {% set mappings =
               {
                 'Very Optimistic': {
-                    1: (45, 'on'),
+                    1: (40, 'on'),
                     2: (30, 'off'),
                     3: (30, 'off'),
                     4: (65, 'off'),
-                    5: (75, 'on'),
-                    6: (75, 'on')
+                    5: (70, 'on'),
+                    6: (70, 'on')
                   },
                 'Optimistic': {
-                    1: (50, 'on'),
+                    1: (45, 'on'),
                     2: (40, 'off'),
                     3: (45, 'off'),
-                    4: (75, 'off'),
-                    5: (85, 'on'),
+                    4: (70, 'off'),
+                    5: (80, 'on'),
                     6: (75, 'on')
                   },
                 'Pessimistic': {

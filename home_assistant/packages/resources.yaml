@@ -24,6 +24,8 @@ homeassistant:
       state_class: total_increasing
     sensor.average_solar_energy_forecast_today:
       state_class: total_increasing
+    sensor.battery_state_of_charge:
+      state_class: measurement
     sensor.battery_change_of_charge:
       icon: mdi:delta
     binary_sensor.grid_charge_point_status:

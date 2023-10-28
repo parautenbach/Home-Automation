@@ -1125,13 +1125,16 @@ automation:
                 entity_id: "number.capacity_point_{{ repeat.index }}"
               data:
                 value: "{{ state_attr('sensor.charge_mode', 'settings')[repeat.index][0] }}"
-            # - delay:
-            #     seconds: 30
-            # - service: number.set_value
-            #   target:
-            #     entity_id: "number.capacity_point_{{ repeat.index }}"
-            #   data:
-            #     value: "{{ state_attr('sensor.charge_mode', 'settings')[repeat.index][0] }}"
+            # all this nonsense is because the commands don't seem to persist when set
+            # so, before this, we set, then we wait and set again, and only then do we
+            # check whether the value took effect
+            - delay:
+                seconds: 10
+            - service: number.set_value
+              target:
+                entity_id: "number.capacity_point_{{ repeat.index }}"
+              data:
+                value: "{{ state_attr('sensor.charge_mode', 'settings')[repeat.index][0] }}"
             # basically an assertion
             # this would be useful, but not available (yet) for these service calls:
             # https://www.home-assistant.io/blog/2023/07/05/release-20237/#services-can-now-respond
@@ -1152,8 +1155,11 @@ automation:
             - service: "switch.turn_{{ state_attr('sensor.charge_mode', 'settings')[repeat.index][1] }}"
               target:
                 entity_id: "switch.grid_charge_point_{{ repeat.index }}"
-            # - delay:
-            #     seconds: 10
+            - delay:
+                seconds: 10
+            - service: "switch.turn_{{ state_attr('sensor.charge_mode', 'settings')[repeat.index][1] }}"
+              target:
+                entity_id: "switch.grid_charge_point_{{ repeat.index }}"
             # another assertion
             - wait_template: >-
                 {% set entity_id = 'switch.grid_charge_point_' ~ repeat.index %}

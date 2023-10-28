@@ -3,6 +3,7 @@ path: resources
 icon: mdi:earth
 badges:
   - entity: binary_sensor.electricity_feed
+    name: Home
     card_mod:
       style:
         ha-state-label-badge:

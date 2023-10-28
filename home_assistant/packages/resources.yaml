@@ -440,25 +440,33 @@ template:
             {% set mappings =
               {
                 'Very Optimistic': {
-                    1: (40, 'on'),
+                    1: (35, 'on'),
                     2: (30, 'off'),
                     3: (30, 'off'),
-                    4: (65, 'off'),
+                    4: (60, 'off'),
                     5: (70, 'on'),
                     6: (70, 'on')
                   },
                 'Optimistic': {
-                    1: (45, 'on'),
+                    1: (40, 'on'),
                     2: (40, 'off'),
                     3: (45, 'off'),
-                    4: (70, 'off'),
-                    5: (80, 'on'),
+                    4: (65, 'off'),
+                    5: (75, 'on'),
                     6: (75, 'on')
                   },
                 'Pessimistic': {
+                    1: (45, 'on'),
+                    2: (50, 'on'),
+                    3: (55, 'on'),
+                    4: (70, 'on'),
+                    5: (80, 'on'),
+                    6: (80, 'on')
+                },
+                'Very Pessimistic': {
                     1: (50, 'on'),
                     2: (60, 'on'),
-                    3: (60, 'on'),
+                    3: (65, 'on'),
                     4: (75, 'on'),
                     5: (85, 'on'),
                     6: (85, 'on')
@@ -467,12 +475,14 @@ template:
             %}
             {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) %}
             {# hysteresis #}
-            {% if forecast >= 18 %}
+            {% if 18 <= forecast %}
               {% set mode = 'Very Optimistic' %}
-            {% elif forecast >= 10 and forecast <= 17 %}
+            {% elif 10 <= forecast <= 17 %}
               {% set mode = 'Optimistic' %}
-            {% elif forecast <= 9 %}
+            {% elif 5 <= forecast <= 9 %}
               {% set mode = 'Pessimistic' %}
+            {% elif forecast <= 4 %}
+              {% set mode = 'Very Pessimistic' %}
             {% else %}
               {% set mode = this.state %}
             {% endif %}

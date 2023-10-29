@@ -440,12 +440,12 @@ template:
             {% set mappings =
               {
                 'Very Optimistic': {
-                    1: (35, 'on'),
+                    1: (30, 'on'),
                     2: (30, 'off'),
                     3: (30, 'off'),
                     4: (60, 'off'),
                     5: (70, 'on'),
-                    6: (70, 'on')
+                    6: (60, 'on')
                   },
                 'Optimistic': {
                     1: (40, 'on'),
@@ -453,7 +453,7 @@ template:
                     3: (45, 'off'),
                     4: (65, 'off'),
                     5: (75, 'on'),
-                    6: (75, 'on')
+                    6: (70, 'on')
                   },
                 'Pessimistic': {
                     1: (45, 'on'),

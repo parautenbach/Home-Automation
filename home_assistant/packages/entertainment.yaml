@@ -200,6 +200,7 @@ automation:
       - delay: "00:00:05"
       - service: script.turn_on
         entity_id: script.samsung_tv_hdmi2
+
   - alias: "Turn Off Main Bedroom Media Player When Idle"
     id: "f1f1a138-2f7a-46e9-8beb-2265f6fd5b70"
     initial_state: true

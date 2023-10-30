@@ -351,7 +351,7 @@ cards:
           - entity: light.rouve_bedside
             name: Rouvé's
           - entity: light.bedroom_bedlamp
-            name: Julia's
+            name: Baby's
           - entity: light.kitchen_counter
             name: Kitchen Cntr
           - entity: light.living_room_lamp

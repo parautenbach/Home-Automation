@@ -985,7 +985,7 @@ automation:
             The backup power inverter load is critical at {{ load_percentage }}%. Please reduce consumption.
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/resources
+            url: homeassistant://navigate/lovelace/devices
             push:
               sound:
                 name: default

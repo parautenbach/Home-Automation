@@ -513,7 +513,7 @@ template:
           {{ geyser if geyser > 0 else 0 }}
 
 sensor:
-  # digital power meter in db
+  # digital power meter in db - measures only grid
   - platform: integration
     unique_id: "0e503fd7-9ae9-446b-8c73-28d8068b69eb"
     name: "Total Electricity Consumption"

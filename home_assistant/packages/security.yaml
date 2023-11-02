@@ -527,7 +527,7 @@ automation:
                         sound:
                           name: default
                           critical: 1
-                          volume: 1.0
+                          volume: 0.5
                 # saving for later:
                 # if e.g. the gate is open, but the timer was disabled, don't start it now, since it was intentional
                 # if the timer wasn't disabled, it will be restored, so the normal mechanism will notify
@@ -624,7 +624,7 @@ automation:
               sound:
                 name: default
                 critical: 1
-                volume: 1.0
+                volume: 0.5
       - service: timer.start
         data:
           entity_id: "{{ trigger.event.data.entity_id }}"
@@ -925,7 +925,7 @@ automation:
               sound:
                 name: default
                 critical: 1
-                volume: 1.0
+                volume: 0.5
 
   - alias: "Alert When Cabinet Opened"
     id: "f9a95e6c-e0bf-45a4-bf5c-3b774ff3fd47"
@@ -961,7 +961,7 @@ automation:
                       sound:
                         name: default
                         critical: 1
-                        volume: 1.0
+                        volume: 0.5
         default:
           - service: notify.mobile_app_ceres
             data:

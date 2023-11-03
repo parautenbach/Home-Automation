@@ -27,6 +27,7 @@ cards:
       - input_datetime.lhs_garage_door_opened
       - input_datetime.rhs_garage_door_opened
       - weather.forecast_tomorrow
+      - input_number.test_percentage
     show_header_toggle: true
   - type: history-graph
     title: Proximity
@@ -138,3 +139,12 @@ cards:
           data:
             entity_id: camera.baby_monitor_profile000
             movement: zoom_out
+  - type: gauge
+    name: Test
+    entity: input_number.test_percentage
+    min: -30
+    max: 70
+    severity:
+      green: 15
+      yellow: 5
+      red: -100

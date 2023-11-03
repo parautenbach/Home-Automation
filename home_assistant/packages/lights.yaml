@@ -939,7 +939,6 @@ automation:
         # to avoid the light turning off when there briefly is bright sunshine
         # for:
         #   minutes: 15
-    # todo: if anybody home?
     condition:
       condition: and
       conditions:

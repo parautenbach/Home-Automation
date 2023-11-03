@@ -1018,7 +1018,6 @@ automation:
         target:
           entity_id: timer.solarassistant_inactivity
         data:
-          # test duration
           # if changed here, change it in "Notify When SolarAssistant MQTT Bridge Activity Ceased" too
           duration: "00:01:00"
 
@@ -1084,7 +1083,6 @@ automation:
         target:
           entity_id: timer.solarassistant_inactivity
         data:
-          # test duration
           # if changed here, change it in "Detect When SolarAssistant MQTT Bridge Activity Ceases" too
           duration: "00:01:00"
 

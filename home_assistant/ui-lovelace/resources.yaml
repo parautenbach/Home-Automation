@@ -404,7 +404,7 @@ cards:
                 y_axis: secondary
               - entity: sensor.output_shutdown_capacity
                 name: Charge Threshold
-                color: var(--custom-color-gray)
+                color: var(--custom-color-yellow)
             hours_to_show: 24
             hour24: true
             lower_bound: 0
@@ -430,12 +430,12 @@ cards:
               - entity: sensor.capacity_charge_point
                 name: Charge Point
                 color: var(--custom-color-gray)
-                show_line: false
+                show_line: true
                 show_points: false
                 show_legend: true
               - entity: sensor.output_shutdown_capacity
                 name: Charge Threshold
-                color: var(--custom-color-gray)
+                color: var(--custom-color-yellow)
             hours_to_show: 24
             hour24: true
             lower_bound: 0
@@ -485,7 +485,7 @@ cards:
                 name: Charge Point
                 color: var(--custom-color-gray)
                 y_axis: secondary
-                show_line: false
+                show_line: true
                 show_points: false
                 show_legend: true
             hours_to_show: 24

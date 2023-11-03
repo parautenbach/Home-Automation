@@ -715,6 +715,12 @@ input_boolean:
   set_charge_point_error:
     name: Set Charge Point Error
     icon: mdi:alert-outline
+  inverter_temperature_notification_governor:
+    name: Inverter Temperature Notification Governor
+    icon: mdi:speedometer
+  inverter_battery_temperature_notification_governor:
+    name: Inverter Battery Temperature Notification Governor
+    icon: mdi:speedometer
 
 input_number:
   last_battery_soc_notification:
@@ -1316,38 +1322,82 @@ automation:
                 critical: 1
                 volume: 0.5
 
-  - alias: "Notify If Inverter Running Hot"
+  - alias: "Notify If Inverter Temperature High"
     id: "fed52f97-a6ca-4e86-8d2b-f9b01fab40bf"
     initial_state: true
     trigger:
       - platform: numeric_state
         entity_id: sensor.inverter_temperature
-        above: 60  # -45ºC ~ 60ºC (>45ºC derating)
+        above: 60  # -45 ºC ~ 60 ºC (>45 ºC derating)
         for:
           minutes: 5
+    mode: single
+    condition:
+      - condition: state
+        entity_id: input_boolean.inverter_temperature_notification_governor
+        state: "off"
     action:
       - service: notify.mobile_app_ceres
         data:
           title: "Energy"
           message: >-
             {% set temperature = states('sensor.inverter_temperature') | int(0) %}
-            The backup power system's inverter is running hot at {{ temperature }}ºC for {{ trigger.for.seconds // 60 }} min.
+            {% set load = states('sensor.home_power_kw') | float(0) | round(1) %}
+            The inverter's running hot at {{ temperature }} ºC for {{ trigger.for.seconds // 60 }} min. The load is {{ load }} kW.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
+            tag: "inverter-temperature"
             # push:
             #   sound:
             #     name: default
             #     critical: 1
             #     volume: 0.5
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.inverter_temperature_notification_governor
 
-  - alias: "Notify If Battery Running Hot"
+  - alias: "Notify If Inverter Temperature Recovered"
+    id: "22b9f0e8-e6ff-4545-9ff5-5b58fb95cebc"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.inverter_temperature
+        below: 60
+    mode: single
+    condition:
+      - condition: state
+        entity_id: input_boolean.inverter_temperature_notification_governor
+        state: "on"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Energy"
+          message: >-
+            {% set temperature = states('sensor.inverter_temperature') | int(0) %}
+            {% set load = states('sensor.home_power_kw') | float(0) | round(1) %}
+            {% set last_changed = states.input_boolean.inverter_temperature_notification_governor.last_changed %}
+            {# the 5 is for the for criterium at the time when the governor was set #}
+            {% set after =  5 + (now() - last_changed).total_seconds() | multiply(1/60) | int(0) %}
+            The inverter's temperature recovered to {{ temperature }} ºC after {{ after }} min. The load is {{ load }} kW.
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/resources
+            tag: "inverter-temperature"
+            # push:
+            #   sound:
+            #     name: default
+            #     critical: 1
+            #     volume: 0.5
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.inverter_temperature_notification_governor
+
+  - alias: "Notify If Inverter Battery Temperature High"
     id: "a994298c-c2fc-430f-be8e-a8ebb85de410"
     initial_state: true
     trigger:
       - platform: numeric_state
         entity_id: sensor.battery_temperature
-        above: 55  # Charge: 0ºC ~ +55ºC / Discharge: -20ºC ~ +55ºC
+        above: 40  # Charge: 0 ºC ~ +55 ºC / Discharge: -20 ºC ~ +55 ºC
         for:
           minutes: 5
     action:
@@ -1356,7 +1406,70 @@ automation:
           title: "Energy"
           message: >-
             {% set temperature = states('sensor.battery_temperature') | int(0) %}
-            The backup power system's battery is running hot at {{ temperature }}ºC for {{ trigger.for.seconds // 60 }} min.
+            {% set load = states('sensor.home_power_kw') | float(0) | round(1) %}
+            The inverter's battery is running hot at {{ temperature }} ºC for {{ trigger.for.seconds // 60 }} min. The load is {{ load }} kW.
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/resources
+            tag: "inverter-battery-temperature"
+            # push:
+            #   sound:
+            #     name: default
+            #     critical: 1
+            #     volume: 0.5
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.inverter_battery_temperature_notification_governor
+
+  - alias: "Notify If Inverter Battery Temperature Recovered"
+    id: "3a4013a7-9c4e-435e-ae87-d5373fe49fb4"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.battery_temperature
+        below: 40
+    mode: single
+    condition:
+      - condition: state
+        entity_id: input_boolean.inverter_battery_temperature_notification_governor
+        state: "on"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Energy"
+          message: >-
+            {% set temperature = states('sensor.battery_temperature') | int(0) %}
+            {% set load = states('sensor.home_power_kw') | float(0) | round(1) %}
+            {% set last_changed = states.input_boolean.inverter_battery_temperature_notification_governor.last_changed %}
+            {# the 5 is for the for criterium at the time when the governor was set #}
+            {% set after =  5 + (now() - last_changed).total_seconds() | multiply(1/60) | int(0) %}
+            The inverter's battery temperature recovered to {{ temperature }} ºC after {{ after }} min. The load is {{ load }} kW.
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/resources
+            tag: "inverter-battery-temperature"
+            # push:
+            #   sound:
+            #     name: default
+            #     critical: 1
+            #     volume: 0.5
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.inverter_temperature_notification_governor
+
+  - alias: "Notify If Geyser Heating For Long"
+    id: "3851f3fa-988e-4c2b-9b65-896c82db78ad"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.geyser_power
+        above: 3000  # W
+        for:
+          minutes: 30
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Energy"
+          message: >-
+            The geyser has been heating for {{ trigger.for.seconds // 60 }} min.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources

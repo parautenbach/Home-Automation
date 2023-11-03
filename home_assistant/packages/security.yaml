@@ -597,7 +597,6 @@ automation:
             {% set utc_now_ts = as_timestamp(utcnow()) %}
             {{ name }} has been left open for {{ ((utc_now_ts - last_opened) // 60) | int }} min.
           data:
-            # todo: clear notifications when closed
             # https://github.com/home-assistant/iOS/issues/579
             # https://github.com/home-assistant/iOS/issues/215
             # https://companion.home-assistant.io/docs/notifications/notifications-basic (to clear and/or replace; note the quotes around 'apns-collapse-id')
@@ -812,7 +811,6 @@ automation:
                       cover_id: "{{ trigger.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
                       timer_id: "{{ trigger.entity_id }}"
                     # todo: make critical?
-                    # todo: alert/call security company
         default:
           - service: notify.mobile_app_ceres
             data:
@@ -881,7 +879,6 @@ automation:
                       cover_id: "{{ trigger.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
                       timer_id: "{{ trigger.entity_id }}"
                     # todo: make critical?
-                    # todo: alert/call security company
         default:
           - service: notify.mobile_app_ceres
             data:

@@ -274,7 +274,6 @@ automation:
   # https://community.home-assistant.io/t/unleash-the-power-of-expand-for-template-sensors/136941/22
   # https://community.home-assistant.io/t/trigger-an-automation-based-on-a-groups-individual-entity-state-change/383560
   # https://community.home-assistant.io/t/single-automation-for-all-lights/375028/8
-  # todo: alert when battery at 1%
   - alias: "Check For Flat Batteries"
     id: "ef76e5b9-fa6d-4940-b89a-ba24cef91463"
     initial_state: true

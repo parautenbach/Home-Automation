@@ -49,7 +49,6 @@ sensor:
     scan_interval: 3600
 
   # template sensors abased on ESP above
-  # todo: what if there's no loadshedding?
   - platform: template
     sensors:
       loadshedding_start_time:

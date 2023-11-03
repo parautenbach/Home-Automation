@@ -440,3 +440,21 @@ automation:
     action:
       - service: "switch.turn_{{ 'on' if is_state('binary_sensor.on_air', 'on') else 'off' }}"
         entity_id: switch.on_air
+
+  - alias: "Notify If Baby Monitor Is Offline"
+    id: "27664018-432b-41c4-920d-88d05115f112"
+    trigger:
+      - platform: state
+        entity_id: camera.baby_monitor_profile000
+        to: "unavailable"
+        for:
+          minutes: 2
+    mode: single
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Devices"
+          message: "The baby monitor is offline."
+          data:
+            group: "nursery"
+            url: homeassistant://navigate/lovelace/baby

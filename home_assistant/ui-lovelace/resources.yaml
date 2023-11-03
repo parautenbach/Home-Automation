@@ -149,14 +149,14 @@ cards:
               yellow: 85
               red: 95
           - type: gauge
-            name: Battery Charge
-            entity: sensor.battery_state_of_charge
-            min: 0
-            max: 100
+            name: Battery Buffer
+            entity: sensor.battery_charge_variance
+            min: -30
+            max: 70
             severity:
-              green: 80
-              yellow: 50
-              red: 30
+              green: 15
+              yellow: 5
+              red: -100
       # https://github.com/ulic75/power-flow-card#inverted-entities-example
       - type: custom:power-flow-card
         entities:

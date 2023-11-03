@@ -1238,7 +1238,6 @@ automation:
     trigger:
       platform: state
       entity_id:
-        # todo: use group?
         - cover.main_gate
         - cover.lhs_garage_door
         - cover.rhs_garage_door

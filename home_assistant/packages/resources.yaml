@@ -1099,6 +1099,8 @@ automation:
   - alias: "Set Charge Points"
     id: "5bdbcbfd-243a-4428-a6f3-ed2f98aec603"
     initial_state: true
+    trace:
+      stored_traces: 20
     # don't want this to coincide with loadshedding start slots
     # this gives us a bit of time to charge the battery if needed before the potential start of a loadshedding slot
     trigger:
@@ -1107,18 +1109,17 @@ automation:
           # the first slot starts at 01:00, but we need to give the average forecast filter time
           # to get past its initial transient after midnight
           - "03:30:00"
+        # first run of the day
         id: "first"
-      - platform: time
-        at:
-          - "05:30:00"
-          - "07:30:00"
-          - "09:30:00"
-          - "11:30:00"
-        id: "rest"
+      - platform: time_pattern
+        minutes: "/30"
     mode: single
     # this would ensure we only get a notification if the mode has changed
     # but do we really want to do this? perhaps it's good to know every time, so that a human can do a sanity check
     condition:
+      # default for multiple conditions is AND
+      - condition: template
+        value_template: "{{ today_at('03:30') <= now() <= today_at('11:30') }}"
       - condition: template
         value_template: "{{ not is_state('sensor.charge_mode', states('input_text.last_charge_mode')) or trigger.id == 'first' }}"
     action:

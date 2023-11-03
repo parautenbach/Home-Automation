@@ -48,6 +48,9 @@ input_boolean:
   skip_next_wake_up_time:
     name: Skip Next Wake Up Time
     icon: mdi:alarm-off
+  baby_sleep_mode:
+    name: Baby's Sleep Mode
+    icon: mdi:bell-sleep-outline
 
 notify:
   - name: family
@@ -135,6 +138,18 @@ binary_sensor:
     entities:
       - binary_sensor.pieter_present
       - binary_sensor.rouve_present
+
+template:
+  - binary_sensor:
+      - name: "Baby Sleeping"
+        unique_id: "8543fff9-562e-47e7-9d12-0a8f9349168d"
+        state: "{{ is_state('input_boolean.baby_sleep_mode', 'on') }}"
+        icon: >-
+          {% if is_state('input_boolean.baby_sleep_mode', 'on') %}
+            mdi:sleep
+          {% else %}
+            mdi:sleep-off
+          {% endif %}
 
 script:
   send_pieter_work_cape_town_to_home_eta:

@@ -670,6 +670,7 @@ automation:
       - platform: sun
         event: sunset
         offset: "-00:30:00"
+        id: "sunset"
       - platform: state
         entity_id: binary_sensor.pieter_present
         to: "on"
@@ -709,6 +710,10 @@ automation:
           variables:
             light: light.rouve_bedside
             profile: rouve
+      # if one of us stepped out and baby's asleep in her room, then her light will turn on upon arrival, waking her.
+      # even if we changed it to turn on if we (the parents) were out together, baby might not have been with us,
+      # e.g. if we had a babysitter.
+      - condition: "{{ trigger.id == 'sunset' and is_state('input_boolean.baby_sleep_mode', 'off') }}"
       - service: script.turn_on
         target:
           entity_id: script.turn_on_light
@@ -765,6 +770,7 @@ automation:
           variables:
             light: light.rouve_bedside
             profile: rouve
+      - condition: "{{ is_state('input_boolean.baby_sleep_mode', 'off') }}"
       - service: script.turn_on
         target:
           entity_id: script.turn_on_light
@@ -917,6 +923,7 @@ automation:
           variables:
             light: light.rouve_bedside
             profile: rouve
+      - condition: "{{ is_state('input_boolean.baby_sleep_mode', 'off') }}"
       - service: script.turn_on
         target:
           entity_id: script.turn_on_light

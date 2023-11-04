@@ -229,7 +229,7 @@ script:
         entity_id: cover.main_gate
 
 automation:
-  - alias: "Notify Doorbell Rang"
+  - alias: "Notify If Doorbell Rang"
     id: "46054fb3-4e60-40ad-9e0f-e22b8137b23c"
     initial_state: true
     trigger:
@@ -249,7 +249,10 @@ automation:
           title: Security
           message: "Someone rang the doorbell."
           # todo: thumbnail, url
-          # data:
-          #   group: "security-camera-snapshots"
+          data:
+            group: "doorbell"
+            url: homeassistant://navigate/lovelace/security
+            entity_id: camera.doorbell
+            sound: "Doorbell.caf"
           #   attachment:
           #     url: !secret doorbell_camera_last_snapshot_url

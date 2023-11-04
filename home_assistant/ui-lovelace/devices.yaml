@@ -264,10 +264,10 @@ cards:
         - automation.lights_on_upon_low_light
         - automation.loadshedding_forecast_notification
         - automation.low_server_battery
-        - automation.notify_doorbell_rang
         - automation.notify_if_baby_monitor_is_offline
         - automation.notify_if_charge_shutdown_threshold_changed
         - automation.notify_if_cover_was_left_open
+        - automation.notify_if_doorbell_rang
         - automation.notify_if_driving_state_changed
         - automation.notify_if_electricity_feed_status_changed
         - automation.notify_if_geyser_heating_for_long

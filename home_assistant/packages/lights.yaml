@@ -949,6 +949,9 @@ automation:
     condition:
       condition: and
       conditions:
+        - condition: state
+          entity_id: light.normal_light_group
+          state: "on"
         # todo: remove
         - condition: sun
           after: sunrise

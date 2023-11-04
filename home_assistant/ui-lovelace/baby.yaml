@@ -124,17 +124,8 @@ cards:
         entities:
           - entity: input_boolean.baby_sleep_mode
             name: "Sleep Mode"
-      - type: history-graph
-        hours_to_show: 24
-        entities:
-          - entity: light.bedroom_bedlamp
-            name: Bedlamp
-          - entity: binary_sensor.baby_monitor_motion_alarm
-            name: Motion
-          # - entity: binary_sensor.baby_monitor_sound_alarm
-          #   name: Sound
-          - entity: input_boolean.baby_sleep_mode
-            name: Sleep
+          - entity: sensor.baby_sleeping
+            name: Sleep Time
       - type: horizontal-stack
         cards:
           - type: custom:button-card
@@ -274,3 +265,24 @@ cards:
             show:
               extrema: true
               labels_secondary: false
+      - type: history-graph
+        hours_to_show: 6
+        entities:
+          - entity: light.bedroom_bedlamp
+            name: Bedlamp
+          - entity: binary_sensor.baby_monitor_motion_alarm
+            name: Motion
+          # - entity: binary_sensor.baby_monitor_sound_alarm
+          #   name: Sound
+          - entity: input_boolean.baby_sleep_mode
+            name: Sleep
+      - type: statistics-graph
+        title: Sleep Time
+        hide_legend: true
+        entities:
+          - sensor.baby_sleeping
+        days_to_show: 7
+        period: day
+        chart_type: bar
+        stat_types:
+          - state

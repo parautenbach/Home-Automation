@@ -22,6 +22,10 @@ homeassistant:
       device_class: duration
     sensor.google_travel_time_filtered:
       device_class: duration
+    sensor.baby_sleeping:
+      device_class: duration
+      unit_of_measurement: h
+      state_class: total_increasing
 
 input_datetime:
   wake_up_time:
@@ -138,6 +142,16 @@ binary_sensor:
     entities:
       - binary_sensor.pieter_present
       - binary_sensor.rouve_present
+
+sensor:
+  - platform: history_stats
+    unique_id: "3bfae997-a2dc-4af4-a654-680733bd66ef"
+    name: Baby Sleeping
+    entity_id: input_boolean.baby_sleep_mode
+    state: "on"
+    type: time
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"
 
 template:
   - binary_sensor:

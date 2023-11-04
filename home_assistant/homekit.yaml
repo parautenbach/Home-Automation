@@ -8,6 +8,7 @@
       - input_boolean.guest_mode
       - input_boolean.contractor_mode
       - input_boolean.pieter_driving
+      - input_boolean.baby_sleep_mode
       - binary_sensor.electricity_feed
       - binary_sensor.internet_connection
       - binary_sensor.foyer_motion_detected

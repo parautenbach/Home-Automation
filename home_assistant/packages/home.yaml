@@ -711,3 +711,57 @@ automation:
     action:
       - service: script.turn_on
         entity_id: script.send_pieter_work_cape_town_to_home_eta
+
+  - alias: "Notify When Motion Detected In The Nursery"
+    id: "c85b1a55-74fe-4576-8ef4-346d1c94c31e"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.baby_monitor_motion_alarm
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.baby_sleep_mode
+        state: "on"
+        for:
+          minutes: 5
+    mode: single
+    action:
+      # only during night => critical?
+      # example to split: "Alert If Garages Opened Or Closed When Not Supposed To"
+      # todo: family (check who's home?)
+      - service: notify.family
+        data:
+          title: "Nursery"
+          message: "Motion detected!"
+          data:
+            group: "nursery"
+            url: homeassistant://navigate/lovelace/baby
+            # https://companion.home-assistant.io/docs/notifications/dynamic-content
+            entity_id: camera.baby_monitor_profile000
+            actions:
+              - action: "SLEEP_OFF"
+                title: "Sleep off"
+            sound:
+              # apple watch doesn't support custom sounds:
+              # https://community.home-assistant.io/t/custom-notification-sounds-on-not-playing-on-apple-watch/540387
+              # it may also not be used on iphone when it's locked:
+              # https://stackoverflow.com/questions/72671060/ios-custom-notification-sound-unnotificationsound-doesnt-play-when-iphone-is
+              name: "go_to_sleep_alert.caf"
+              critical: 1
+              volume: 0.5
+            # https://companion.home-assistant.io/docs/notifications/notification-attachments#configuration
+            # attachment:
+            #   hide-thumbnail: true
+            #   lazy: true
+
+  - alias: "Turn Sleep Mode Off From Alert Action"
+    id: "7a1711ca-b9c7-4e2b-b5ba-1dce04aca077"
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: SLEEP_OFF
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.baby_sleep_mode

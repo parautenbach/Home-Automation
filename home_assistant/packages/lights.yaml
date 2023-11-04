@@ -1041,12 +1041,45 @@ automation:
           - condition: state
             entity_id: light.living_room_lamp
             state: "off"
-          - condition: state
-            entity_id: light.pieter_bedside
-            state: "on"
+          # don't check this, since it may already be off and we'd still want to check for other lights that are on (in the action)
+          # - condition: state
+          #   entity_id: light.pieter_bedside
+          #   state: "on"
     action:
       - service: light.turn_off
-        entity_id: light.pieter_bedside
+        target:
+          entity_id: light.pieter_bedside
+      - wait_template: "{{ is_state('light.pieter_bedside', 'off') }}"
+        continue_on_timeout: false
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Lights"
+          message: >-
+            {# exclude light groups #}
+            {# https://community.home-assistant.io/t/count-lights-that-ar-not-a-group/342008/4 #}
+            {% set lights = states.light | selectattr('state', 'eq', 'on') | rejectattr('attributes.entity_id', 'defined') | sort(attribute='attributes.friendly_name') | list %}
+            The following lights are still on:
+            {%- for light in lights %}
+              - {{ state_attr(light.entity_id, 'friendly_name') | replace(' Lights', '') | replace(' Light', '') }}
+            {%- endfor %}
+          data:
+            group: "lights"
+            url: homeassistant://navigate/lovelace/main
+            actions:
+              - action: "LIGHTS_OFF"
+                title: "Turn off all"
+
+  - alias: "Turn Off All Lights From Alert Action"
+    id: "d04f66b5-1ae9-4f6d-bfb2-6c204e82ba19"
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: LIGHTS_OFF
+    action:
+      - service: light.turn_off
+        target:
+          entity_id: "{{ states.light | selectattr('state', 'eq', 'on') | rejectattr('attributes.entity_id', 'defined') | map(attribute='entity_id') | list }}"
 
   - alias: "Hallway Light Off When Bedroom Lights Off"
     id: "d6a989ae-c951-4b0e-baab-cdd49b44269e"

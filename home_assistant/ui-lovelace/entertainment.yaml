@@ -669,6 +669,8 @@ cards:
             name: Apple TV
         hours_to_show: 24
       - type: statistics-graph
+        title: Apple TV Watch Time
+        hide_legend: true
         entities:
           - sensor.apple_tv_playing
         days_to_show: 7

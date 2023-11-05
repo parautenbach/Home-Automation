@@ -210,6 +210,81 @@ cards:
                   # timer can be cancelled here
                   action: more-info
                   haptic: heavy
+      - type: history-graph
+        hours_to_show: 6
+        entities:
+          - entity: light.bedroom_bedlamp
+            name: Bedlamp
+          - entity: binary_sensor.baby_monitor_motion_alarm
+            name: Motion
+          # - entity: binary_sensor.baby_monitor_sound_alarm
+          #   name: Sound
+          - entity: input_boolean.baby_sleep_mode
+            name: Sleep
+  - type: vertical-stack
+    cards:
+      - type: glance
+        entities:
+          - entity: sensor.season
+            card_mod:
+              style:
+                .: |
+                  div:nth-child(3) {
+                    color:
+                      {# https://www.sciencedirect.com/science/article/pii/S0378778819314070 #}
+                      {%- set comfort_map =
+                            {
+                              'unknown': '',
+                              'spring':  '#70a03c',
+                              'summer':  '#e74c3c',
+                              'autumn':  '#ff9800',
+                              'winter':  '#0484d9'
+                            }
+                        -%}
+                      {%- set state = states(config.entity) -%}
+                      {{ comfort_map[state] }};
+                  }
+                  state-badge {
+                    margin: 0;
+                  }
+          - entity: sensor.thermal_comfort_inside_summer_simmer_perception
+            name: Inside
+            icon: mdi:home-thermometer-outline
+            card_mod: &card_mod_comfort_style
+              # #0484d9: blue
+              # #3498db: light blue
+              # #34dbd5: cyan
+              # #70a03c: green
+              # #ff9800: orange
+              # #e74c3c: red
+              # #db200b: dark red
+              style:
+                .: |
+                  div:nth-child(3) {
+                    color:
+                      {# https://www.sciencedirect.com/science/article/pii/S0378778819314070 #}
+                      {%- set comfort_map =
+                            {
+                              'unknown':       '',
+                              'cold':          '#0484d9',
+                              'cool':          '#3498db',
+                              'slightly_cool': '#34dbd5',
+                              'comfortable':   '#70a03c',
+                              'slightly_warm': '#ff9800',
+                              'warm':          '#e74c3c',
+                              'hot':           '#db200b'
+                            }
+                        -%}
+                      {%- set state = states(config.entity) -%}
+                      {{ comfort_map[state] }};
+                  }
+                  state-badge {
+                    margin: 0;
+                  }
+          - entity: sensor.thermal_comfort_outside_summer_simmer_perception
+            name: Outside
+            icon: mdi:sun-thermometer-outline
+            card_mod: *card_mod_comfort_style
       - type: custom:swipe-card
         parameters:
           autoHeight: true
@@ -265,17 +340,8 @@ cards:
             show:
               extrema: true
               labels_secondary: false
-      - type: history-graph
-        hours_to_show: 6
-        entities:
-          - entity: light.bedroom_bedlamp
-            name: Bedlamp
-          - entity: binary_sensor.baby_monitor_motion_alarm
-            name: Motion
-          # - entity: binary_sensor.baby_monitor_sound_alarm
-          #   name: Sound
-          - entity: input_boolean.baby_sleep_mode
-            name: Sleep
+  - type: vertical-stack
+    cards:
       - type: statistics-graph
         title: Sleep Time
         hide_legend: true

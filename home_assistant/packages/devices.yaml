@@ -353,9 +353,14 @@ automation:
       - service: notify.mobile_app_ceres
         data:
           title: "Batteries"
-          message: >
-            {% set name = state_attr(trigger.event.data.entity_id, 'friendly_name') | replace(' Battery', '') %}
-            This devices' battery is fully charged: {{ name }}.
+          message: >-
+            {% set suffix = ' battery is fully charged.' %}
+            {% set name = state_attr(trigger.event.data.entity_id, 'friendly_name') | replace(' Battery', '') | lower | replace('pieter', 'Pieter') | replace('rouvé', 'Rouvé') %}
+            {% if 'Pieter' in name or 'Rouvé' in name %}
+             {{ name ~ suffix  }}
+            {% else %}
+             {{ 'The ' ~ name ~ suffix}}
+            {% endif %}
           data:
             group: "batteries"
             url: homeassistant://navigate/lovelace/devices

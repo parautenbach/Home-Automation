@@ -1467,6 +1467,7 @@ automation:
         for:
           minutes: 30
     action:
+      # night (normal) vs day (critical)?
       - service: notify.mobile_app_ceres
         data:
           title: "Energy"

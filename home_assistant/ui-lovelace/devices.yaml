@@ -265,6 +265,7 @@ cards:
         - automation.loadshedding_forecast_notification
         - automation.low_server_battery
         - automation.notify_if_baby_monitor_is_offline
+        - automation.notify_if_charge_point_setting_automation_state_was_changed
         - automation.notify_if_charge_shutdown_threshold_changed
         - automation.notify_if_cover_was_left_open
         - automation.notify_if_doorbell_rang
@@ -314,6 +315,7 @@ cards:
         - automation.stop_light_timer_if_running_when_light_turned_off
         - automation.switch_garage_light_according_to_door_status_and_light_conditions
         - automation.switch_off_bedlamp_when_plugging_in_phone
+        - automation.switch_off_bedroom_bedlamp_when_sleep_mode_enabled
         - automation.switch_off_light_when_timer_expires
         - automation.switch_on_front_door_light_when_any_cover_opened
         - automation.switch_on_inside_lights_when_unplugging_phone
@@ -328,8 +330,10 @@ cards:
         - automation.toggle_pieter_s_bedside_lamp
         - automation.toggle_rouve_s_bedside_lamp
         - automation.turn_audio_on_when_apple_tv_turned_on
+        - automation.turn_off_all_lights_from_alert_action
         - automation.turn_off_entertainment_system_when_idle_or_leaving_room
         - automation.turn_off_main_bedroom_media_player_when_idle
+        - automation.turn_off_sleep_mode_from_alert_action
         - automation.upcoming_loadshedding_notification
         - automation.update_automations_when_power_status_changed
         - automation.update_backup_power_warning_light_if_grid_feed_status_changed

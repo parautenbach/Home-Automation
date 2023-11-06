@@ -747,6 +747,9 @@ automation:
       - condition: state
         entity_id: binary_sensor.workday
         state: "on"
+      - condition: state
+        entity_id: input_boolean.skip_next_wake_up_time
+        state: "off"
     action:
       - wait_template: "{{ is_state('light.pieter_bedside', 'off') }}"
         timeout:

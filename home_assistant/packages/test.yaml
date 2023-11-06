@@ -88,3 +88,35 @@ script:
           # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
           # https://www.home-assistant.io/integrations/camera/#service-snapshot
           filename: '/tmp/snapshot_{{ entity_id.name }}.jpg'
+
+automation:
+  - alias: "Battery Event Test"
+    initial_state: false
+    trigger:
+      - platform: event
+        event_type: state_changed
+    mode: single
+    condition:
+      - condition: template
+        # https://www.home-assistant.io/docs/configuration/events/#state_changed
+        value_template: "{{ trigger.event.data.entity_id in state_attr('sensor.monitored_batteries', 'batteries') }}"
+    action:
+      - service: system_log.write
+        data:
+          message: "{{ trigger.event }}"
+          level: debug
+          logger: "homeassistant.components.automation"
+      # - service: notify.mobile_app_ceres
+      #   data:
+      #     title: "Batteries Test"
+      #     message: "{{ trigger.event }}"
+      #     data:
+      #       group: "test"
+      #       url: homeassistant://navigate/lovelace/devices
+      - service: persistent_notification.create
+        data:
+          title: "Batteries Test"
+          message: "{{ trigger.event }}"
+      - service: automation.turn_off
+        target:
+          entity_id: "{{ this.entity_id }}"

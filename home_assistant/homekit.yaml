@@ -10,6 +10,7 @@
       - input_boolean.pieter_driving
       - input_boolean.baby_sleep_mode
       - binary_sensor.electricity_feed
+      - binary_sensor.grid_feed
       - binary_sensor.internet_connection
       - binary_sensor.foyer_motion_detected
       - binary_sensor.cabinet_door
@@ -98,6 +99,8 @@
       name: Entertainment Sys Off
     script.open_pedestrian_gap:
       name: Open Pedestrian Gap
+    input_boolean.baby_sleep_mode:
+      name: Sleep Mode
 - name: Foyer Camera
   port: 21064
   mode: accessory

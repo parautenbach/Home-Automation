@@ -783,6 +783,9 @@ cards:
               - entity: sensor.grid_power
                 name: Grid
                 color: var(--custom-color-blue)
+              - entity: sensor.geyser_power
+                name: Geyser
+                color: var(--custom-color-yellow)
               - entity: sensor.nighttime_number
                 name: Day/Night
                 color: var(--custom-color-gray)

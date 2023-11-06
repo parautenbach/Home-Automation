@@ -723,7 +723,7 @@ automation:
         entity_id: input_boolean.baby_sleep_mode
         state: "on"
         for:
-          minutes: 5
+          minutes: 2
     mode: single
     action:
       # only during night => critical?

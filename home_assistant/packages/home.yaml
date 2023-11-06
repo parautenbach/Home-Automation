@@ -166,6 +166,20 @@ template:
             mdi:sleep-off
           {% endif %}
 
+  # https://community.home-assistant.io/t/template-sensor-to-tell-me-how-long-a-door-remained-open-for-the-last-time/419416/8?u=parautenbach
+  - trigger:
+      - platform: state
+        entity_id: input_boolean.baby_sleep_mode
+        from: "on"
+        to: "off"
+    sensor:
+      - name: "Baby Last Sleep Session"
+        unique_id: "27531163-2af9-4f3c-b67d-a75f78703705"
+        state: "{{ (trigger.to_state.last_updated | as_timestamp(0) - trigger.from_state.last_updated | as_timestamp(0)) | int(0) }}"
+        device_class: duration
+        unit_of_measurement: s
+        icon: mdi:timer-outline
+
 script:
   send_pieter_work_cape_town_to_home_eta:
     mode: single

@@ -124,8 +124,10 @@ cards:
         entities:
           - entity: input_boolean.baby_sleep_mode
             name: "Sleep Mode"
+          - entity: sensor.baby_last_sleep_session
+            name: "Last Sleep Session"
           - entity: sensor.baby_sleeping
-            name: Sleep Time
+            name: "Today's Sleep Time"
       - type: horizontal-stack
         cards:
           - type: custom:button-card

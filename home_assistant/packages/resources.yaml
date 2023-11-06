@@ -1480,3 +1480,28 @@ automation:
             #     name: default
             #     critical: 1
             #     volume: 0.5
+
+  - alias: "Notify If Charge Point Setting Automation State Was Changed"
+    id: "0a36f9de-1f1d-4a4d-8079-1cf7d75d2dc8"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: automation.set_charge_points
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Energy"
+          message: >-
+            {% set is_enabled = trigger.to_state.state | bool(False) %}
+            {% set user_id = states.context.user_id %}
+            {% set triggered_by = (states.person | selectattr('attributes.user_id','==', user_id)) | list %}
+            {% set name = 'the system' if not triggered_by else state_attr((triggered_by | first).entity_id, 'friendly_name').split()[0] %}
+            The automation for setting charge points has been {{ 'enabled' if is_enabled else 'disabled' }} by {{ name }}.
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/resources
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 0.5

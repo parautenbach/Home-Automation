@@ -25,6 +25,7 @@ homeassistant:
     sensor.baby_sleeping:
       device_class: duration
       unit_of_measurement: h
+      icon: mdi:bed-clock
       state_class: total_increasing
 
 input_datetime:

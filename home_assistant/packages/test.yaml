@@ -91,6 +91,7 @@ script:
 
 automation:
   - alias: "Battery Event Test"
+    id: "af2a77e9-483f-4391-abe8-401c19c4baf0"
     initial_state: false
     trigger:
       - platform: event

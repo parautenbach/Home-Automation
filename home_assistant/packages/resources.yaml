@@ -966,7 +966,7 @@ automation:
       - platform: numeric_state
         entity_id: sensor.battery_state_of_charge
         # keep in sync with "Send Backup Power Battery Update"
-        below: 26
+        below: 21
     # we don't use a condition for whether someone's home – we always want to know if this happens
     condition: []
     action:

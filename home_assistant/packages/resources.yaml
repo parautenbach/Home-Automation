@@ -1115,18 +1115,15 @@ automation:
     initial_state: true
     trace:
       stored_traces: 20
-    # don't want this to coincide with loadshedding start slots
-    # this gives us a bit of time to charge the battery if needed before the potential start of a loadshedding slot
     trigger:
-      - platform: time
-        at:
-          # the first slot starts at 01:00, but we need to give the average forecast filter time
-          # to get past its initial transient after midnight
-          - "03:30:00"
-        # first run of the day
-        id: "first"
       - platform: time_pattern
         minutes: "/30"
+        variables:
+          # we need to give the average forecast filter time to get past its initial transient after midnight
+          first_run: >-
+            {# this isn't available here :-( #}
+            {% set current_trigger = now().replace(microsecond=0) %}
+            {{ current_trigger == ('03:30' | today_at) }}
     mode: single
     # this would ensure we only get a notification if the mode has changed
     # but do we really want to do this? perhaps it's good to know every time, so that a human can do a sanity check
@@ -1134,9 +1131,10 @@ automation:
       # it's the first run for the day, or, it's during the later window and the charge mode has changed
       # this condition prevents both triggers from triggering for the 03:30 slot
       - condition: template
-        value_template: "{{ (trigger.id == 'first') or
-                            ((today_at('04:00') <= now() <= today_at('11:30')) and
-                             (not is_state('sensor.charge_mode', states('input_text.last_charge_mode')))) }}"
+        value_template: >-
+          {% set within_window = today_at('03:30') <= now() <= today_at('11:30') %}
+          {% set mode_changed = not is_state('sensor.charge_mode', states('input_text.last_charge_mode')) %}
+          {{ first_run or (within_window and mode_changed) }}
     action:
       - service: input_boolean.turn_off
         entity_id: input_boolean.set_charge_point_error

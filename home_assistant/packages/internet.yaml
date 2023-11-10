@@ -300,7 +300,7 @@ automation:
           title: "Internet"
           message: >-
             {% from 'datetime.jinja' import sec_to_hour_and_min %}
-            {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
+            {% set seconds = max((as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int, 60) %}
             {% set duration = sec_to_hour_and_min(seconds) %}
             The Internet {{ 'is unavailable' if trigger.to_state.state == 'off' else 'was unavailable for ' ~  duration }}.
           data:

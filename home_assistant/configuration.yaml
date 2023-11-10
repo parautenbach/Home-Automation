@@ -24,12 +24,17 @@ homeassistant:
   # https://community.home-assistant.io/t/request-to-support-nested-packages-packages-inside-packages/157917/10
   packages: !include_dir_named packages
 
+# https://www.home-assistant.io/integrations/logger/
 logger:
   default: warning
   logs:
     # the warnings from this component is too verbose
     amcrest.http: error
     homeassistant.components.amcrest: error
+    # why the ping sensor needs to error on timeout, beats me.
+    # to be off, it _needs_ to timeout, so why raise an error?
+    homeassistant.components.ping.binary_sensor: fatal
+    # for debugging
     # homeassistant.components.shelly: debug
     # homeassistant.components.aioshelly: debug
     # homeassistant.components.script: debug

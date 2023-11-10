@@ -23,9 +23,12 @@ cards:
       - proximity.home
       - input_boolean.pieter_present
       - input_boolean.rouve_present
-      - input_datetime.main_gate_opened
-      - input_datetime.lhs_garage_door_opened
-      - input_datetime.rhs_garage_door_opened
+      - entity: input_datetime.main_gate_opened
+        type: simple-entity
+      - entity: input_datetime.lhs_garage_door_opened
+        type: simple-entity
+      - entity: input_datetime.rhs_garage_door_opened
+        type: simple-entity
       - weather.forecast_tomorrow
       - input_number.test_percentage
     show_header_toggle: true

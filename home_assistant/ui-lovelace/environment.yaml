@@ -199,8 +199,9 @@ cards:
             name: Tomorrow
       - type: markdown
         content: >
-          [La Colline Observatory, Stellenbosch](http://www.weather.lcao.co.za/index.php/Special_WeatherStatsRainfall)</br>
-          [Historical Daily Recorded Rainfall Figures](https://afriwx.co.za/rainfall-reenval/daily-recorded-rainfall-south-africa-historical/)
+          **[LA COLLINE OBSERVATORY, STELLENBOSCH](http://www.weather.lcao.co.za/index.php/Special_WeatherStatsRainfall)**
+
+          **[HISTORICAL DAILY RECORDED RAINFALL FIGURES](https://afriwx.co.za/rainfall-reenval/daily-recorded-rainfall-south-africa-historical/)**
       - type: custom:swipe-card
         parameters:
           autoHeight: true
@@ -722,8 +723,9 @@ cards:
         hide_legend: true
       - type: markdown
         content: >
-          [Cape Town Dam Levels](https://www.capetown.gov.za/Family%20and%20home/residential-utility-services/residential-water-and-sanitation-services/this-weeks-dam-levels)</br>
-          [Western Cape Dam Levels](https://www.dws.gov.za/Hydrology/Weekly/ProvinceWeek.aspx?region=WC)
+          **[CAPE TOWN DAM LEVELS](https://www.capetown.gov.za/Family%20and%20home/residential-utility-services/residential-water-and-sanitation-services/this-weeks-dam-levels)**
+
+          **[WESTERN CAPE DAM LEVELS](https://www.dws.gov.za/Hydrology/Weekly/ProvinceWeek.aspx?region=WC)**
   - type: vertical-stack
     title: Fire
     cards:

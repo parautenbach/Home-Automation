@@ -77,7 +77,7 @@ cards:
           - entity: binary_sensor.internet_connection
             name: Internet
       - type: markdown
-        content: "[Management Interface](http://192.168.0.1/)"
+        content: "[MANAGEMENT INTERFACE](http://192.168.0.1/)"
       - type: custom:swipe-card
         parameters:
           autoHeight: true
@@ -239,9 +239,9 @@ cards:
                 }
       - type: markdown
         content: >
-          [Front extender](http://192.168.0.6/)
+          **[FRONT EXTENDER](http://192.168.0.6/)**
 
-          [Back extender](http://192.168.0.5/)
+          **[BACK EXTENDER](http://192.168.0.5/)**
   - type: vertical-stack
     title: Join Home Network
     cards:

@@ -336,6 +336,7 @@ cards:
         - automation.turn_off_sleep_mode_from_alert_action
         - automation.upcoming_loadshedding_notification
         - automation.update_automations_when_power_status_changed
+        - automation.update_baby_sleep_session_counter
         - automation.update_backup_power_warning_light_if_grid_feed_status_changed
         - automation.update_db_size
         - automation.update_gaia_audio_input_in_use_alt

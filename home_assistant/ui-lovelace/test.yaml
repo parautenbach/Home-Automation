@@ -51,13 +51,6 @@ cards:
     entities:
       - entity: sensor.saaqis_ambient_temperature
       - entity: sensor.office_temperature
-  - type: picture-glance
-    title: Doorbell Camera
-    camera_image: camera.doorbell
-    camera_view: live
-    entities:
-      - binary_sensor.doorbell_rang
-      - binary_sensor.doorbell_motion_detected
   # https://www.home-assistant.io/integrations/amcrest/
   - type: picture-elements
     image: camera.baby_monitor_profile000

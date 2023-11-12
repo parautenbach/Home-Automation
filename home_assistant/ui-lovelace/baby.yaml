@@ -124,6 +124,8 @@ cards:
         entities:
           - entity: input_boolean.baby_sleep_mode
             name: "Sleep Mode"
+          - entity: sensor.baby_current_sleep_session
+            name: "Current Sleep Session"
           - entity: sensor.baby_last_sleep_session
             name: "Last Sleep Session"
           - entity: sensor.baby_sleeping

@@ -57,6 +57,13 @@ input_boolean:
     name: Baby's Sleep Mode
     icon: mdi:bell-sleep-outline
 
+input_number:
+  baby_current_sleep_session:
+    name: Baby's Current Sleep Session
+    icon: mdi:timer-outline
+    min: 0
+    max: 86400
+
 notify:
   - name: family
     platform: group
@@ -176,6 +183,16 @@ template:
       - name: "Baby Last Sleep Session"
         unique_id: "27531163-2af9-4f3c-b67d-a75f78703705"
         state: "{{ (trigger.to_state.last_updated | as_timestamp(0) - trigger.from_state.last_updated | as_timestamp(0)) | int(0) }}"
+        device_class: duration
+        unit_of_measurement: s
+        icon: mdi:timer-outline
+
+  # https://community.home-assistant.io/t/time-elapsed-counter/139907/10
+  # https://community.home-assistant.io/t/timer-and-stopwatch/188524/4
+  - sensor:
+      - name: "Baby Current Sleep Session"
+        unique_id: "33230253-7dd3-4074-b4fd-d5d5406f7114"
+        state: "{{ max(states('input_number.baby_current_sleep_session') | int(0) - 1, 0) }}"
         device_class: duration
         unit_of_measurement: s
         icon: mdi:timer-outline
@@ -780,3 +797,20 @@ automation:
       - service: input_boolean.turn_off
         target:
           entity_id: input_boolean.baby_sleep_mode
+
+  - alias: "Update Baby Sleep Session Counter"
+    id: "3d9714c9-dc53-4114-8df8-49a6efc98cc6"
+    trigger:
+      - platform: time_pattern
+        seconds: "*"
+    action:
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.baby_current_sleep_session
+        data:
+          value: >-
+            {% if is_state('input_boolean.baby_sleep_mode', 'on') %}
+              {{ states('input_number.baby_current_sleep_session') | int(0) + 1 }}
+            {% else %}
+              0
+            {% endif %}

@@ -135,24 +135,30 @@ cards:
             name: Pieter
   - type: vertical-stack
     cards:
-      - type: picture-glance
-        title: Last Snapshot Captured
-        camera_image: camera.security_camera_last_snapshot
-        entities: []
-        card_mod:
-          style: |
-            .title:after {
-              content: ": {{ states('sensor.security_camera_last_snapshot_relative') }}";
-            }
-      - type: picture-glance
-        title: Last Clip Captured
-        camera_image: camera.security_camera_last_clip
-        entities: []
-        card_mod:
-          style: |
-            .title:after {
-              content: ": {{ states('sensor.security_camera_last_clip_relative') }}";
-            }
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+          - type: picture-glance
+            title: Last Snapshot Captured
+            camera_image: camera.security_camera_last_snapshot
+            entities: []
+            card_mod:
+              style: |
+                .title:after {
+                  content: ": {{ states('sensor.security_camera_last_snapshot_relative') }}";
+                }
+          - type: picture-glance
+            title: Last Clip Captured
+            camera_image: camera.security_camera_last_clip
+            entities: []
+            card_mod:
+              style: |
+                .title:after {
+                  content: ": {{ states('sensor.security_camera_last_clip_relative') }}";
+                }
       - type: entities
         entities:
           - entity: sensor.motion_detected_last_relative

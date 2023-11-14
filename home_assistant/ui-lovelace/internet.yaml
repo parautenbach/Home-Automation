@@ -77,7 +77,7 @@ cards:
           - entity: binary_sensor.internet_connection
             name: Internet
       - type: markdown
-        content: "[MANAGEMENT INTERFACE](http://192.168.0.1/)"
+        content: "**[MANAGEMENT INTERFACE](http://192.168.0.1/)**"
       - type: custom:swipe-card
         parameters:
           autoHeight: true

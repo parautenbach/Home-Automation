@@ -112,11 +112,11 @@ cards:
           - entity: cover.rhs_garage_door
             name: Pieter
           - entity: light.garage
-            name: Garage
+            name: Garage L.
           - entity: light.front_door
-            name: Front Door
+            name: Front Door L.
           - entity: light.backyard
-            name: Backyard
+            name: Backyard L.
       - type: entities
         entities:
           - entity: timer.main_gate_timer

@@ -179,6 +179,8 @@ cards:
             name: Foyer Light
           - entity: light.living_room_lamp
             name: Living R. Lamp
+          - entity: binary_sensor.doorbell_motion_detected
+            name: Doorbell
       - type: statistics-graph
         entities:
           - entity: sensor.foyer_motion_detections

@@ -954,9 +954,11 @@ cards:
           {{ states('sensor.loadshedding_forecast') }}
 
 
-          [Unofficial Eskom: heatmap](https://unofficialeskom.com/heatmap/)
+          **[UNOFFICIAL ESKOM: HEATMAP](https://unofficialeskom.com/heatmap/)**
 
-          [The Outlier: heatmap](https://loadshed.theoutlier.co.za/)
+          **[THE OUTLIER: HEATMAP](https://loadshed.theoutlier.co.za/)**
+
+          **[FRANCOIS THERON'S DASHBOARD](https://grafana.x.fhtheron.net/d/18Esmjc7z/electricity-grid?orgId=4)**
       - type: entities
         entities:
           - entity: binary_sensor.loadshedding_active

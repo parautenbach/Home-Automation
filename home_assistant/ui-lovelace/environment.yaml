@@ -137,6 +137,7 @@ cards:
             name: Inside
             icon: mdi:home-thermometer-outline
             card_mod: &card_mod_comfort_style
+              # https://github.com/dolezsa/thermal_comfort/blob/master/custom_components/thermal_comfort/translations/en.json#L129
               # #0484d9: blue
               # #3498db: light blue
               # #34dbd5: cyan
@@ -151,14 +152,15 @@ cards:
                       {# https://www.sciencedirect.com/science/article/pii/S0378778819314070 #}
                       {%- set comfort_map =
                             {
-                              'unknown':       '',
-                              'cold':          '#0484d9',
-                              'cool':          '#3498db',
-                              'slightly_cool': '#34dbd5',
-                              'comfortable':   '#70a03c',
-                              'slightly_warm': '#ff9800',
-                              'warm':          '#e74c3c',
-                              'hot':           '#db200b'
+                              'unknown':               '',
+                              'cold':                  '#0484d9',
+                              'cool':                  '#3498db',
+                              'slightly_cool':         '#34dbd5',
+                              'comfortable':           '#70a03c',
+                              'slightly_warm':         '#ff9800',
+                              'increasing_discomfort': '#e74c3c',
+                              'extremely_warm':        '#db200b',
+                              'danger_of_heatstroke':  '#db200b'
                             }
                         -%}
                       {%- set state = states(config.entity) -%}

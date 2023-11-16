@@ -785,8 +785,9 @@ automation:
         target:
           entity_id: script.take_snapshot
         data:
-          camera_entity_id: camera.baby_monitor_profile000
-          subdirectory: "baby_monitor"
+          variables:
+            camera_entity_id: camera.baby_monitor_profile000
+            subdirectory: "baby_monitor"
       - service: notify.family
         data:
           title: "Nursery"

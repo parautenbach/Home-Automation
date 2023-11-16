@@ -243,8 +243,9 @@ automation:
         target:
           entity_id: script.take_snapshot
         data:
-          camera_entity_id: camera.doorbell
-          subdirectory: "doorbell"
+          variables:
+            camera_entity_id: camera.doorbell
+            subdirectory: "doorbell"
       - service: notify.family
         data:
           title: Security

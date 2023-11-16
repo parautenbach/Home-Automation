@@ -245,6 +245,7 @@ automation:
         data:
           camera_entity_id: camera.doorbell
           subdirectory: "doorbell"
+      - service: notify.family
         data:
           title: Security
           message: "Someone rang the doorbell."

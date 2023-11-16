@@ -238,28 +238,30 @@ automation:
         to: "on"
     mode: queued
     action:
-      # non-blocking call
-      - service: script.turn_on
-        target:
-          entity_id: script.take_snapshot
-        data:
-          variables:
-            camera_entity_id: camera.doorbell
-            subdirectory: "doorbell"
-      - service: notify.family
-        data:
-          title: Security
-          message: "Someone rang the doorbell."
-          # todo: thumbnail, url
+      - parallel:
+        - service: notify.family
           data:
-            group: "doorbell"
-            url: homeassistant://navigate/lovelace/security
-            entity_id: camera.doorbell
-            sound:
-              name: "Doorbell.caf"
-              critical: 1
-              volume: 0.5
-            attachment:
-              # url: !secret doorbell_camera_last_snapshot_url
-              hide-thumbnail: true
-              lazy: true
+            title: Security
+            message: "Someone rang the doorbell."
+            # todo: thumbnail, url
+            data:
+              group: "doorbell"
+              # or open the amcrest app?
+              url: homeassistant://navigate/lovelace/security
+              entity_id: camera.doorbell
+              sound:
+                name: "Doorbell.caf"
+                critical: 1
+                volume: 0.5
+              attachment:
+                # url: !secret doorbell_camera_last_snapshot_url
+                hide-thumbnail: true
+                lazy: true
+        # non-blocking call
+        - service: script.turn_on
+          target:
+            entity_id: script.take_snapshot
+          data:
+            variables:
+              camera_entity_id: camera.doorbell
+              subdirectory: "doorbell"

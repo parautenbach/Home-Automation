@@ -117,6 +117,14 @@ cards:
             name: Pan down
             show_state: false
             icon: mdi:arrow-down
+          # blocking call
+          - entity: script.take_snapshot
+            tap_action:
+              action: call-service
+              service: script.take_snapshot
+              data:
+                camera_entity_id: camera.baby_monitor_profile000
+                subdirectory: "baby_monitor"
           - entity: input_boolean.baby_sleep_mode
         camera_image: camera.baby_monitor_profile000
         camera_view: live

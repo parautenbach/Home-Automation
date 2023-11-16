@@ -238,13 +238,13 @@ automation:
         to: "on"
     mode: queued
     action:
-      - service: camera.snapshot
+      # non-blocking call
+      - service: script.turn_on
+        target:
+          entity_id: script.take_snapshot
         data:
-          entity_id: camera.doorbell
-          # todo: update security view; make capture scripts generic
-          filename: '/tmp/camera.doorbell_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
-      # todo: script.security_camera_create_snapshot
-      - service: notify.mobile_app_ceres
+          camera_entity_id: camera.doorbell
+          subdirectory: "doorbell"
         data:
           title: Security
           message: "Someone rang the doorbell."

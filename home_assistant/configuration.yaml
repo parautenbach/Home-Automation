@@ -17,7 +17,12 @@ homeassistant:
     - /tmp
     - /mnt/nas/Backups/home_assistant/
     - /sys/class/power_supply/
-    - /home/homeassistant/.homeassistant/downloads
+    - /home/homeassistant/.homeassistant/downloads/
+    - /home/homeassistant/.homeassistant/www/
+    - /home/homeassistant/.homeassistant/www/gallery/
+    - /home/homeassistant/.homeassistant/www/gallery/baby_monitor/
+    - /home/homeassistant/.homeassistant/www/gallery/doorbell/
+    - /home/homeassistant/.homeassistant/www/gallery/security_camera/
   media_dirs:
     gallery: /home/homeassistant/.homeassistant/www/gallery
   # https://www.home-assistant.io/docs/configuration/packages/

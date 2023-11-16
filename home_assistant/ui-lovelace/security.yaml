@@ -67,6 +67,14 @@ cards:
         entities:
           - binary_sensor.doorbell_rang
           - binary_sensor.doorbell_motion_detected
+          # blocking call
+          - entity: script.take_snapshot
+            tap_action:
+              action: call-service
+              service: script.take_snapshot
+              data:
+                camera_entity_id: camera.doorbell
+                subdirectory: "doorbell"
       - type: picture-glance
         title: Security Camera
         camera_image: camera.security_camera_proxy

@@ -27,6 +27,9 @@ homeassistant:
       unit_of_measurement: h
       icon: mdi:bed-clock
       state_class: total_increasing
+    script.take_snapshot:
+      friendly_name: Take Camera Snapshot
+      icon: mdi:camera
 
 input_datetime:
   wake_up_time:
@@ -209,6 +212,22 @@ script:
           data:
             group: "travel-eta"
             url: homeassistant://navigate/lovelace/main
+
+  take_snapshot:
+    fields:
+      camera_entity_id:
+        description: "A camera entity"
+        example: "camera.my_camera"
+      subdirectory:
+        description: "The subdirectory under www/gallery/ to write the snapshot to."
+        example: "my_subdirectory"
+    mode: parallel
+    sequence:
+      - service: camera.snapshot
+        target:
+          entity_id: "{{ camera_entity_id }}"
+        data:
+          filename: '/home/homeassistant/.homeassistant/www/gallery/{{ subdirectory }}/{{ camera_entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
 
 automation:
   - alias: "Away Mode"
@@ -761,6 +780,13 @@ automation:
       # only during night => critical?
       # example to split: "Alert If Garages Opened Or Closed When Not Supposed To"
       # todo: family (check who's home?)
+      # non-blocking call
+      - service: script.turn_on
+        target:
+          entity_id: script.take_snapshot
+        data:
+          camera_entity_id: camera.baby_monitor_profile000
+          subdirectory: "baby_monitor"
       - service: notify.family
         data:
           title: "Nursery"

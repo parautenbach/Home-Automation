@@ -1,0 +1,22 @@
+{# https://www.home-assistant.io/docs/configuration/templating/#reusing-templates #}
+
+{#
+Get the triggered by details given a context.
+
+:param context: A state object context.
+
+:returns: A tuple where the first element is the method ([physical, system, ui, unknown]) and the second none in the case of a physical or system (script or automation) invocation or the friendly name of the user if it was via the UI.
+
+:seealso: https://community.home-assistant.io/t/work-with-triggered-by-in-automations/400352/8
+#}
+{%- macro get_triggered_by_details(context) -%}
+    {%- if context.user_id -%}
+        {%- set triggered_by = states.person | selectattr('attributes.user_id','==', context.user_id) | list | first -%}
+        {%- set name = state_attr((triggered_by).entity_id, "friendly_name") -%}
+        {{ ('ui', name) }}
+    {%- elif context.parent_id -%}
+        {{ ('system', none) }}
+    {%- else -%}
+        {{ ('physical', none) }}
+    {%- endif -%}
+{%- endmacro -%}

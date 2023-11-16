@@ -89,6 +89,16 @@ script:
           # https://www.home-assistant.io/integrations/camera/#service-snapshot
           filename: '/tmp/snapshot_{{ entity_id.name }}.jpg'
 
+  test_notification:
+    sequence:
+      - service: persistent_notification.create
+        data:
+          title: "Script Context Test"
+          message: >-
+            {% from 'util.jinja' import get_triggered_by_details %}
+            {% set triggered_by = get_triggered_by_details(this.context) %}
+            {{ triggered_by ~ '\n\n context: ' ~ (context.id, context.parent_id, context.user_id) ~ '\n\n this.context: ' ~ (this.context.id, this.context.parent_id, this.context.user_id) ~ '\n\n states.context: ' ~ (states.context.id, states.context.parent_id, states.context.user_id) }}
+
 automation:
   - alias: "Battery Event Test"
     id: "af2a77e9-483f-4391-abe8-401c19c4baf0"
@@ -118,6 +128,26 @@ automation:
         data:
           title: "Batteries Test"
           message: "{{ trigger.event }}"
+      - service: automation.turn_off
+        target:
+          entity_id: "{{ this.entity_id }}"
+
+  - alias: "Test Trigger Context"
+    id: "a91edab1-0b60-40c1-89fa-cdf8a8112bd4"
+    initial_state: false
+    trigger:
+      - platform: time_pattern
+        seconds: "/1"
+    action:
+      - service: persistent_notification.create
+        data:
+          title: "Automation Context Test"
+          # one can look at this under the automation trace, actually... (one needs a unique id for the automation)
+          message: >-
+            {% from 'util.jinja' import get_triggered_by_details %}
+            {% set triggered_by = get_triggered_by_details(this.context) %}
+            {{ triggered_by ~ '\n\n context: ' ~ (context.id, context.parent_id, context.user_id) ~ '\n\n this.context: ' ~ (this.context.id, this.context.parent_id, this.context.user_id) ~ '\n\n states.context: ' ~ (states.context.id, states.context.parent_id, states.context.user_id) }}
+      - service: script.test_notification
       - service: automation.turn_off
         target:
           entity_id: "{{ this.entity_id }}"

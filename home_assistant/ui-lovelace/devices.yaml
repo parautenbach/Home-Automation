@@ -325,6 +325,7 @@ cards:
         - automation.switch_on_or_extend_front_door_light_when_cover_closed
         - automation.switch_on_the_front_door_light_when_arriving_home
         - automation.take_foyer_motion_snapshots
+        - automation.test_trigger_context
         - automation.toggle_dining_room_light
         - automation.toggle_hallway_light
         - automation.toggle_pieter_s_bedside_lamp

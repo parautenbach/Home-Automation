@@ -254,6 +254,7 @@ automation:
             group: "doorbell"
             url: homeassistant://navigate/lovelace/security
             entity_id: camera.doorbell
-            sound: "Doorbell.caf"
-          #   attachment:
-          #     url: !secret doorbell_camera_last_snapshot_url
+            sound:
+              name: "Doorbell.caf"
+              critical: 1
+              volume: 0.5

@@ -971,6 +971,8 @@ cards:
             name: End Time
           - entity: timer.loadshedding_duration
             name: Duration Remainder
+            type: custom:timer-bar-card
+            bar_radius: 4px
           - entity: sensor.eskomsepush_calls_remaining
             name: API Calls Remaining
         show_header_toggle: false

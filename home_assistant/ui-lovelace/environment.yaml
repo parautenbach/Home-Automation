@@ -374,12 +374,20 @@ cards:
             entities:
               - entity: timer.irrigation_front_lawn
                 name: Front Lawn
+                type: custom:timer-bar-card
+                bar_radius: 4px
               - entity: timer.irrigation_front_beds
                 name: Front Beds
+                type: custom:timer-bar-card
+                bar_radius: 4px
               - entity: timer.irrigation_rear_lawn
                 name: Rear Lawn
+                type: custom:timer-bar-card
+                bar_radius: 4px
               - entity: timer.irrigation_rear_beds
                 name: Rear Beds
+                type: custom:timer-bar-card
+                bar_radius: 4px
           - type: custom:fold-entity-row
             head:
               type: section

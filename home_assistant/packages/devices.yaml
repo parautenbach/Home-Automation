@@ -433,3 +433,21 @@ automation:
           data:
             group: "nursery"
             url: homeassistant://navigate/lovelace/baby
+
+  - alias: "Notify If Doorbell Is Offline"
+    id: "78f795e0-43a7-41ba-bf52-5e3cf271faa3"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.doorbell_online
+        to: "off"
+        for:
+          minutes: 2
+    mode: single
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Devices"
+          message: "The doorbell is offline."
+          data:
+            group: "doorbell"
+            url: homeassistant://navigate/lovelace/devices

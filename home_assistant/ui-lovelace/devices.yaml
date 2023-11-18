@@ -268,6 +268,7 @@ cards:
         - automation.notify_if_charge_point_setting_automation_state_was_changed
         - automation.notify_if_charge_shutdown_threshold_changed
         - automation.notify_if_cover_was_left_open
+        - automation.notify_if_doorbell_is_offline
         - automation.notify_if_doorbell_rang
         - automation.notify_if_driving_state_changed
         - automation.notify_if_electricity_feed_status_changed

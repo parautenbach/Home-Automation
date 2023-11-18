@@ -432,7 +432,7 @@ automation:
           message: "The baby monitor is offline."
           data:
             group: "nursery"
-            url: homeassistant://navigate/lovelace/baby
+            url: homeassistant://navigate/lovelace/devices
 
   - alias: "Notify If Doorbell Is Offline"
     id: "78f795e0-43a7-41ba-bf52-5e3cf271faa3"

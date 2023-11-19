@@ -209,7 +209,7 @@ automation:
       entity_id: media_player.main_bedroom_universal
       to: idle
       for:
-        minutes: 15
+        minutes: 5
     mode: single
     action:
       - service: media_player.turn_off

@@ -7,3 +7,4 @@ automation.motion_indicator_off
 automation.motion_indicator
 automation.proximity_updates
 automation.stop_irrigating
+automation.update_baby_sleep_session_counter

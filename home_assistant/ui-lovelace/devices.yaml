@@ -557,10 +557,59 @@ cards:
       #     state: true
   - type: vertical-stack
     cards:
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+          - type: custom:mini-graph-card
+            name: Server Load
+            entities:
+              - entity: sensor.load_1m
+                name: 1 min load
+              - entity: sensor.load_5m
+                name: 5 min load
+              - entity: sensor.load_15m
+                name: 15 min load
+              - entity: sensor.nighttime_number
+                color: var(--custom-color-gray)
+                show_line: false
+                show_points: false
+                show_legend: false
+                y_axis: secondary
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 12  # every 5 min
+            line_width: 2
+            show:
+              extrema: true
+              average: true
+          - type: custom:mini-graph-card
+            name: Server Memory
+            entities:
+              - entity: sensor.memory_use_percent
+                name: Memory Usage
+                min: 0
+                max: 100
+              - entity: sensor.nighttime_number
+                color: var(--custom-color-gray)
+                show_line: false
+                show_points: false
+                show_legend: false
+                y_axis: secondary
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 12  # every 5 min
+            line_width: 2
+            show:
+              extrema: true
+              average: true
       - type: entities
         show_header_toggle: false
         entities:
-          - type: divider
           - binary_sensor.remote_ui
           - sensor.disk_use_percent
           - sensor.memory_use_percent
@@ -594,36 +643,6 @@ cards:
             name: Battery status
           # todo: - binary_sensor.rpi_power_status
           - sensor.last_boot
-        header:
-          type: custom:mini-graph-card
-          name: Server
-          entities:
-            - entity: sensor.load_1m
-              name: 1 min load
-            - entity: sensor.load_5m
-              name: 5 min load
-            - entity: sensor.load_15m
-              name: 15 min load
-            - entity: sensor.nighttime_number
-              color: var(--custom-color-gray)
-              show_line: false
-              show_points: false
-              show_legend: false
-              y_axis: secondary
-          hours_to_show: 24
-          hour24: true
-          smoothing: true
-          points_per_hour: 12  # every 5 min
-          line_width: 2
-          show:
-            extrema: true
-            average: true
-          card_mod:
-            style:
-              .: |
-                ha-card {
-                  border: 0px;
-                }
       - type: history-graph
         hours_to_show: 24
         entities:

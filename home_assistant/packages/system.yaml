@@ -437,6 +437,22 @@ automation:
             group: "system-load"
             url: homeassistant://navigate/lovelace/devices
 
+  - alias: "Notify If Server Memory Usage High"
+    id: "5bc47b01-199c-4f97-bf2e-b3661380fcc6"
+    initial_state: true
+    trigger:
+      platform: numeric_state
+      entity_id: sensor.memory_use_percent
+      above: 90
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "System"
+          message: "The server's memory usage is high ({{ states('sensor.memory_use_percent') }}%)."
+          data:
+            group: "system-resources"
+            url: homeassistant://navigate/lovelace/devices
+
   - alias: "Backup Home Assistant"
     id: "57461782-62af-4987-a6ce-46f602fcc417"
     trigger:

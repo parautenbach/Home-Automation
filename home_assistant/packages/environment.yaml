@@ -46,8 +46,6 @@ homeassistant:
       device_class: "timestamp"
     sensor.owm_pollution_overall_air_quality:
       unit_of_measurement: aqi
-    sensor.waqi_stellenboch_cape_winelands_south_africa:
-      unit_of_measurement: aqi
     sensor.bedroom_ht_temperature:
       friendly_name: Bedoom Temperature
       state_class: measurement
@@ -232,14 +230,6 @@ sensor:
     type: time  # duration
     start: "{{ now().replace(hour=0, minute=0, second=0) }}"
     end: "{{ now() }}"
-
-  # https://aqicn.org/api/
-  # https://api.waqi.info/feed/stellenbosch/?token=<token>
-  # https://aqicn.org/city/south-africa/cape-winelands/stellenboch/
-  - platform: waqi
-    token: !secret waqi_api_token
-    locations:
-      - stellenbosch
 
   - platform: template
     sensors:

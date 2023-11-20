@@ -888,7 +888,7 @@ cards:
             name: Air Quality (WAQI)
             icon: mdi:lungs
             entities:
-              - entity: sensor.waqi_stellenboch_cape_winelands_south_africa
+              - entity: sensor.stellenboch_cape_winelands_south_africa_air_quality_index
                 name: WAQI
               - entity: sensor.nighttime_number
                 color: var(--custom-color-gray)
@@ -1110,7 +1110,7 @@ cards:
             name: NO₂
             state_header: OWM
             entities:
-              - entity: sensor.waqi_stellenboch_cape_winelands_south_africa
+              - entity: sensor.stellenboch_cape_winelands_south_africa_nitrogen_dioxide
                 attribute: nitrogen_dioxide
                 format: precision1
                 unit: ppb
@@ -1124,7 +1124,7 @@ cards:
             name: SO₂
             state_header: OWM
             entities:
-              - entity: sensor.waqi_stellenboch_cape_winelands_south_africa
+              - entity: sensor.stellenboch_cape_winelands_south_africa_sulphur_dioxide
                 attribute: sulfur_dioxide
                 format: precision1
                 unit: ppb
@@ -1138,7 +1138,7 @@ cards:
             name: O₃
             state_header: OWM
             entities:
-              - entity: sensor.waqi_stellenboch_cape_winelands_south_africa
+              - entity: sensor.stellenboch_cape_winelands_south_africa_ozone
                 attribute: ozone
                 format: precision1
                 unit: ppb

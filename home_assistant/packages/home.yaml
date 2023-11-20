@@ -765,6 +765,7 @@ automation:
 
   - alias: "Notify When Motion Detected In The Nursery"
     id: "c85b1a55-74fe-4576-8ef4-346d1c94c31e"
+    initial_state: true
     trigger:
       - platform: state
         entity_id: binary_sensor.baby_monitor_motion_alarm
@@ -816,6 +817,7 @@ automation:
   
   - alias: "Turn Off Sleep Mode From Alert Action"
     id: "7a1711ca-b9c7-4e2b-b5ba-1dce04aca077"
+    initial_state: true
     trigger:
       - platform: event
         event_type: mobile_app_notification_action
@@ -828,6 +830,7 @@ automation:
 
   - alias: "Update Baby Sleep Session Counter"
     id: "3d9714c9-dc53-4114-8df8-49a6efc98cc6"
+    initial_state: true
     trigger:
       - platform: time_pattern
         seconds: "*"

@@ -5,10 +5,6 @@ visible:
   - user: 75cfafa25f36464abc9116845e53f2ca
 badges: []
 cards:
-  - type: custom:hourly-weather
-    entity: weather.openweathermap_hourly
-    num_segments: 12
-    name: Hourly Conditions
   - type: entities
     title: Test
     entities:
@@ -21,8 +17,6 @@ cards:
       - sensor.conditions_temperature
       - sensor.conditions_humidity
       - proximity.home
-      - input_boolean.pieter_present
-      - input_boolean.rouve_present
       - entity: input_datetime.main_gate_opened
         type: simple-entity
       - entity: input_datetime.lhs_garage_door_opened
@@ -32,109 +26,90 @@ cards:
       - weather.forecast_tomorrow
       - input_number.test_percentage
     show_header_toggle: true
-  - type: history-graph
-    title: Proximity
-    hours_to_show: 24
-    entities:
-      - entity: proximity.home
-        name: Home
-  - type: history-graph
-    title: Outside Temps
-    hours_to_show: 72
-    entities:
-      - entity: sensor.outside_feels_like
-      - entity: sensor.outside_temperature
-      - entity: sensor.saaqis_ambient_temperature
-  - type: history-graph
-    title: Inside vs Outside
-    hours_to_show: 72
-    entities:
-      - entity: sensor.saaqis_ambient_temperature
-      - entity: sensor.office_temperature
   # https://www.home-assistant.io/integrations/amcrest/
-  - type: picture-elements
-    image: camera.baby_monitor_profile000
-    camera_image: camera.baby_monitor_profile000
-    camera_view: live
-    elements:
-      - type: icon
-        icon: "mdi:arrow-up"
-        style:
-          background: "rgba(255, 255, 255, 0.25)"
-          right: 25px
-          bottom: 50px
-        tap_action:
-          action: call-service
-          service: onvif.ptz
-          data:
-            entity_id: camera.baby_monitor_profile000
-            tilt: UP
-            speed: 1
-            distance: 0.2
-            move_mode: ContinuousMove
-      - type: icon
-        icon: "mdi:arrow-down"
-        style:
-          background: "rgba(255, 255, 255, 0.25)"
-          right: 25px
-          bottom: 0px
-        tap_action:
-          action: call-service
-          service: onvif.ptz
-          data:
-            entity_id: camera.baby_monitor_profile000
-            tilt: DOWN
-            speed: 1
-            distance: 0.2
-            move_mode: ContinuousMove
-      - type: icon
-        icon: "mdi:arrow-left"
-        style:
-          background: "rgba(255, 255, 255, 0.25)"
-          right: 50px
-          bottom: 25px
-        tap_action:
-          action: call-service
-          service: onvif.ptz
-          data:
-            entity_id: camera.baby_monitor_profile000
-            pan: LEFT
-            speed: 1
-            distance: 0.3
-            move_mode: ContinuousMove
-      - type: icon
-        icon: "mdi:arrow-right"
-        style:
-          background: "rgba(255, 255, 255, 0.25)"
-          right: 0px
-          bottom: 25px
-        tap_action:
-          action: call-service
-          service: onvif.ptz
-          data:
-            entity_id: camera.baby_monitor_profile000
-            pan: RIGHT
-            speed: 1
-            distance: 0.3
-            move_mode: ContinuousMove
-      - type: icon
-        icon: "mdi:magnify"
-        style:
-          background: "rgba(255, 255, 255, 0.25)"
-          bottom: 25px
-          right: 25px
-        tap_action:
-          action: call-service
-          service: amcrest.ptz_control
-          data:
-            entity_id: camera.baby_monitor_profile000
-            movement: zoom_in
-        hold_action:
-          action: call-service
-          service: amcrest.ptz_control
-          data:
-            entity_id: camera.baby_monitor_profile000
-            movement: zoom_out
+  # - type: picture-elements
+  #   image: camera.baby_monitor_profile000
+  #   camera_image: camera.baby_monitor_profile000
+  #   camera_view: live
+  #   elements:
+  #     - type: icon
+  #       icon: "mdi:arrow-up"
+  #       style:
+  #         background: "rgba(255, 255, 255, 0.25)"
+  #         right: 25px
+  #         bottom: 50px
+  #       tap_action:
+  #         action: call-service
+  #         service: onvif.ptz
+  #         data:
+  #           entity_id: camera.baby_monitor_profile000
+  #           tilt: UP
+  #           speed: 1
+  #           distance: 0.2
+  #           move_mode: ContinuousMove
+  #     - type: icon
+  #       icon: "mdi:arrow-down"
+  #       style:
+  #         background: "rgba(255, 255, 255, 0.25)"
+  #         right: 25px
+  #         bottom: 0px
+  #       tap_action:
+  #         action: call-service
+  #         service: onvif.ptz
+  #         data:
+  #           entity_id: camera.baby_monitor_profile000
+  #           tilt: DOWN
+  #           speed: 1
+  #           distance: 0.2
+  #           move_mode: ContinuousMove
+  #     - type: icon
+  #       icon: "mdi:arrow-left"
+  #       style:
+  #         background: "rgba(255, 255, 255, 0.25)"
+  #         right: 50px
+  #         bottom: 25px
+  #       tap_action:
+  #         action: call-service
+  #         service: onvif.ptz
+  #         data:
+  #           entity_id: camera.baby_monitor_profile000
+  #           pan: LEFT
+  #           speed: 1
+  #           distance: 0.3
+  #           move_mode: ContinuousMove
+  #     - type: icon
+  #       icon: "mdi:arrow-right"
+  #       style:
+  #         background: "rgba(255, 255, 255, 0.25)"
+  #         right: 0px
+  #         bottom: 25px
+  #       tap_action:
+  #         action: call-service
+  #         service: onvif.ptz
+  #         data:
+  #           entity_id: camera.baby_monitor_profile000
+  #           pan: RIGHT
+  #           speed: 1
+  #           distance: 0.3
+  #           move_mode: ContinuousMove
+  #     - type: icon
+  #       icon: "mdi:magnify"
+  #       style:
+  #         background: "rgba(255, 255, 255, 0.25)"
+  #         bottom: 25px
+  #         right: 25px
+  #       tap_action:
+  #         action: call-service
+  #         service: amcrest.ptz_control
+  #         data:
+  #           entity_id: camera.baby_monitor_profile000
+  #           movement: zoom_in
+  #       hold_action:
+  #         action: call-service
+  #         service: amcrest.ptz_control
+  #         data:
+  #           entity_id: camera.baby_monitor_profile000
+  #           movement: zoom_out
   - type: gauge
     name: Test
     entity: input_number.test_percentage

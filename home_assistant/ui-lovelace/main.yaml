@@ -205,7 +205,7 @@ cards:
               - rgb_light
               - rgb_light_with_timer
             variables:
-              profile: bedroom_lilac
+              profile: normal
             name: Bedlamp
             entity: light.bedroom_bedlamp
             icon: mdi:alarm-light-outline
@@ -216,7 +216,7 @@ cards:
                   - basic_small
                   - light_preset
                 variables:
-                  profile: bedlamp_normal
+                  profile: bedroom_lilac
                 entity: light.bedroom_bedlamp
                 name: Normal
                 icon: mdi:brightness-5

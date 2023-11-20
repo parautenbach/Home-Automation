@@ -31,6 +31,14 @@ badges:
 cards:
   - type: vertical-stack
     cards:
+    - type: entities
+      show_header_toggle: false
+      title: Presence Controls
+      entities:
+        - entity: input_boolean.pieter_present
+          name: Pieter
+        - entity: input_boolean.rouve_present
+          name: Rouvé
     - type: glance
       entities:
         - entity: sensor.pieter_activity_type

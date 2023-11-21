@@ -782,38 +782,38 @@ automation:
       # example to split: "Alert If Garages Opened Or Closed When Not Supposed To"
       # todo: family (check who's home?)
       - parallel:
-        - service: notify.family
-          data:
-            title: "Nursery"
-            message: "Motion detected!"
+          - service: notify.family
             data:
-              group: "nursery"
-              url: homeassistant://navigate/lovelace/baby
-              # https://companion.home-assistant.io/docs/notifications/dynamic-content
-              entity_id: camera.baby_monitor_profile000
-              actions:
-                - action: "SLEEP_OFF"
-                  title: "Sleep off"
-              sound:
-                # apple watch doesn't support custom sounds:
-                # https://community.home-assistant.io/t/custom-notification-sounds-on-not-playing-on-apple-watch/540387
-                # it may also not be used on iphone when it's locked:
-                # https://stackoverflow.com/questions/72671060/ios-custom-notification-sound-unnotificationsound-doesnt-play-when-iphone-is
-                name: "go_to_sleep_alert.caf"
-                critical: 1
-                volume: 0.5
-              # https://companion.home-assistant.io/docs/notifications/notification-attachments#configuration
-              attachment:
-                hide-thumbnail: true
-                lazy: true
-        # non-blocking call
-        - service: script.turn_on
-          target:
-            entity_id: script.take_snapshot
-          data:
-            variables:
-              camera_entity_id: camera.baby_monitor_profile000
-              subdirectory: "baby_monitor"
+              title: "Nursery"
+              message: "Motion detected!"
+              data:
+                group: "nursery"
+                url: homeassistant://navigate/lovelace/baby
+                # https://companion.home-assistant.io/docs/notifications/dynamic-content
+                entity_id: camera.baby_monitor_profile000
+                actions:
+                  - action: "SLEEP_OFF"
+                    title: "Sleep off"
+                sound:
+                  # apple watch doesn't support custom sounds:
+                  # https://community.home-assistant.io/t/custom-notification-sounds-on-not-playing-on-apple-watch/540387
+                  # it may also not be used on iphone when it's locked:
+                  # https://stackoverflow.com/questions/72671060/ios-custom-notification-sound-unnotificationsound-doesnt-play-when-iphone-is
+                  name: "go_to_sleep_alert.caf"
+                  critical: 1
+                  volume: 0.5
+                # https://companion.home-assistant.io/docs/notifications/notification-attachments#configuration
+                attachment:
+                  hide-thumbnail: true
+                  lazy: true
+          # non-blocking call
+          - service: script.turn_on
+            target:
+              entity_id: script.take_snapshot
+            data:
+              variables:
+                camera_entity_id: camera.baby_monitor_profile000
+                subdirectory: "baby_monitor"
   
   - alias: "Turn Off Sleep Mode From Alert Action"
     id: "7a1711ca-b9c7-4e2b-b5ba-1dce04aca077"

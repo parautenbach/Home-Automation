@@ -79,6 +79,14 @@ cards:
         title: Security Camera
         camera_image: camera.security_camera_proxy
         camera_view: live
+      - type: custom:home-feed-card
+        title: Events
+        show_empty: true
+        max_item_count: 20
+        state_color: false
+        compact_mode: true
+        show_icons: false
+        max_height: 14em
         entities:
           - binary_sensor.foyer_motion_detected
           - entity: script.security_camera_create_snapshot
@@ -101,6 +109,52 @@ cards:
                 light: light.foyer
                 profile: security
           - group.security_automations
+          - entity: binary_sensor.doorbell_rang
+            include_history: true
+            max_history: 5
+            remove_repeats: false
+            exclude_states:
+              - "off"
+              - "unknown"
+              - "unavailable"
+            format: datetime
+            content_template: "Doorbell rang"
+          - entity: cover.main_gate
+            include_history: true
+            max_history: 5
+            remove_repeats: false
+            exclude_states:
+              - "closed"
+              - "unknown"
+              - "unavailable"
+            format: datetime
+            state_map:
+              open: "opened"
+            content_template: "Main gate {{state}}"
+          - entity: cover.lhs_garage_door
+            include_history: true
+            max_history: 5
+            remove_repeats: false
+            exclude_states:
+              - "closed"
+              - "unknown"
+              - "unavailable"
+            format: datetime
+            state_map:
+              open: "opened"
+            content_template: "Pieter's garage door {{state}}"
+          - entity: cover.rhs_garage_door
+            include_history: true
+            max_history: 5
+            remove_repeats: false
+            exclude_states:
+              - "closed"
+              - "unknown"
+              - "unavailable"
+            format: datetime
+            state_map:
+              open: "opened"
+            content_template: "Rouvé's garage door {{state}}"
       - type: entities
         title: "Gates & Doors"
         show_header_toggle: false

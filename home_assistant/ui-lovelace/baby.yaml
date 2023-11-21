@@ -127,7 +127,7 @@ cards:
                 subdirectory: "baby_monitor"
           - entity: input_boolean.baby_sleep_mode
         camera_image: camera.baby_monitor_profile000
-        camera_view: live
+        camera_view: auto
       - type: entities
         entities:
           - entity: input_boolean.baby_sleep_mode

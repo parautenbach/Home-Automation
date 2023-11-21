@@ -598,14 +598,14 @@ cards:
             entities:
               - entity: sensor.memory_use_percent
                 name: Memory Usage
-                min: 0
-                max: 100
               - entity: sensor.nighttime_number
                 color: var(--custom-color-gray)
                 show_line: false
                 show_points: false
                 show_legend: false
                 y_axis: secondary
+            lower_bound: 0
+            upper_bound: 100
             hours_to_show: 24
             hour24: true
             smoothing: true

@@ -75,10 +75,6 @@ cards:
               data:
                 camera_entity_id: camera.doorbell
                 subdirectory: "doorbell"
-      - type: picture-glance
-        title: Security Camera
-        camera_image: camera.security_camera_proxy
-        camera_view: live
       - type: custom:home-feed-card
         title: Events
         show_empty: true
@@ -88,27 +84,6 @@ cards:
         show_icons: false
         max_height: 14em
         entities:
-          - binary_sensor.foyer_motion_detected
-          - entity: script.security_camera_create_snapshot
-            tap_action:
-              action: call-service
-              service: script.turn_on
-              service_data:
-                entity_id: script.security_camera_create_snapshot
-          - entity: script.security_camera_record_clip
-            tap_action:
-              action: call-service
-              service: script.turn_on
-              service_data:
-                entity_id: script.security_camera_record_clip
-          - entity: light.foyer
-            tap_action:
-              action: call-service
-              service: script.toggle_light
-              service_data:
-                light: light.foyer
-                profile: security
-          - group.security_automations
           - entity: binary_sensor.doorbell_rang
             include_history: true
             max_history: 5
@@ -197,6 +172,32 @@ cards:
             name: Pieter
   - type: vertical-stack
     cards:
+      - type: picture-glance
+        title: Security Camera
+        camera_image: camera.security_camera_proxy
+        camera_view: auto
+        entities:
+          - binary_sensor.foyer_motion_detected
+          - entity: script.security_camera_create_snapshot
+            tap_action:
+              action: call-service
+              service: script.turn_on
+              service_data:
+                entity_id: script.security_camera_create_snapshot
+          - entity: script.security_camera_record_clip
+            tap_action:
+              action: call-service
+              service: script.turn_on
+              service_data:
+                entity_id: script.security_camera_record_clip
+          - entity: light.foyer
+            tap_action:
+              action: call-service
+              service: script.toggle_light
+              service_data:
+                light: light.foyer
+                profile: security
+          - group.security_automations
       - type: custom:swipe-card
         parameters:
           autoHeight: true

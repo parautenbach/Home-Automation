@@ -197,23 +197,13 @@ cards:
         - entity: binary_sensor.office
     - type: custom:battery-state-card
       title: Batteries
-      entities:
-        - entity: sensor.pieter_bedside_light_button_battery
-          tap_action: more-info
-        - entity: sensor.rouve_bedside_light_button_battery
-          tap_action: more-info
-        - entity: sensor.dining_room_light_button_battery
-          tap_action: more-info
-        - entity: sensor.hallway_light_button_battery
-          tap_action: more-info
-        - entity: sensor.bedroom_ht_battery
-          tap_action: more-info
-        - entity: sensor.main_bedroom_ht_battery
-          tap_action: more-info
-        - entity: sensor.cabinet_battery
-          tap_action: more-info
-        - entity: sensor.kitchen_battery
-          tap_action: more-info
+      filter:
+        include:
+          - name: "attributes.monitor"
+            value: True
+      sort:
+        - "state"
+        - "name"
     - type: logbook
       title: Major Automations
       hours_to_show: 24

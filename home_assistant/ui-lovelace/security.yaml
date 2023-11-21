@@ -117,7 +117,7 @@ cards:
             format: datetime
             state_map:
               open: "opened"
-            content_template: "Pieter's garage door {{state}}"
+            content_template: "Rouvé's garage door {{state}}"
           - entity: cover.rhs_garage_door
             include_history: true
             max_history: 5
@@ -129,7 +129,7 @@ cards:
             format: datetime
             state_map:
               open: "opened"
-            content_template: "Rouvé's garage door {{state}}"
+            content_template: "Pieter's garage door {{state}}"
       - type: entities
         title: "Gates & Doors"
         show_header_toggle: false

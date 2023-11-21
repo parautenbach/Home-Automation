@@ -236,14 +236,14 @@ cards:
         title: Movement
         hours_to_show: 24
         entities:
+          - entity: binary_sensor.doorbell_motion_detected
+            name: Doorbell
           - entity: binary_sensor.foyer_occupancy_homebridge
             name: Foyer Motion
           - entity: light.foyer
             name: Foyer Light
           - entity: light.living_room_lamp
             name: Living R. Lamp
-          - entity: binary_sensor.doorbell_motion_detected
-            name: Doorbell
       - type: statistics-graph
         entities:
           - entity: sensor.foyer_motion_detections

@@ -284,6 +284,7 @@ cards:
         - automation.notify_if_new_backup_found
         - automation.notify_if_no_recent_backup
         - automation.notify_if_server_load_high
+        - automation.notify_if_server_memory_usage_high
         - automation.notify_if_too_far_below_charge_point_target
         - automation.notify_pieter_going_home_from_work_in_cape_town
         - automation.notify_when_extender_disconnected

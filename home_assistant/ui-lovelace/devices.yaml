@@ -33,12 +33,16 @@ cards:
     cards:
     - type: entities
       show_header_toggle: false
-      title: Presence Controls
+      title: Controls
       entities:
         - entity: input_boolean.pieter_present
-          name: Pieter
+          name: Pieter HomeKit Presence
         - entity: input_boolean.rouve_present
-          name: Rouvé
+          name: Rouvé HomeKit Presence
+        - entity: input_boolean.inverter_temperature_notification_governor
+          name: Inverter Temperature Notification Governor
+        - entity: input_boolean.inverter_battery_temperature_notification_governor
+          name: Inverter Battery Temperature Notification Governor
     - type: glance
       entities:
         - entity: sensor.pieter_activity_type

@@ -917,14 +917,15 @@ automation:
           message: >-
             {# we're assuming we will never get to 0% SOC – not coding for that edge case; it will work, but the working will be awkward #}
             {# The backup power battery is {{ 'at ' ~ battery_soc ~ '% and ' ~ battery_status if battery_soc < 100 else 'fully charged.' }} #}
+            {% set target = states('sensor.capacity_charge_point') %}
             {% if is_state('sensor.battery_status', 'Charging') and battery_soc < 100 %}
-              The backup power battery has charged to {{ battery_soc }}%.
+              The backup power battery has charged to {{ battery_soc }}% (target: {{ target }}%).
             {% elif is_state('sensor.battery_status', 'Discharging') and battery_soc < 100 %}
-              The backup power battery has discharged to {{ battery_soc }}%.
+              The backup power battery has discharged to {{ battery_soc }}% (target: {{ target }}%).
             {% elif is_state('sensor.battery_status', 'Trickling') and battery_soc < 100 %}
-              The backup power battery is trickling at {{ battery_soc }}%.
+              The backup power battery is trickling at {{ battery_soc }}% (target: {{ target }}%).
             {% else %}
-              The backup power battery is fully charged.
+              The backup power battery is fully charged (target: {{ target }}%).
             {% endif %}
           data:
             group: "home-electricity"

@@ -10,7 +10,7 @@ input_boolean:
 
 input_number:
   test_percentage:
-    min: 0
+    min: -100
     max: 100
     unit_of_measurement: "%"
 

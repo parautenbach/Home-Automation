@@ -113,9 +113,10 @@ cards:
   - type: gauge
     name: Test
     entity: input_number.test_percentage
-    min: -30
-    max: 70
+    min: -100
+    max: 100
+    needle: true
     severity:
-      green: 15
-      yellow: 5
+      green: 10
+      yellow: -10
       red: -100

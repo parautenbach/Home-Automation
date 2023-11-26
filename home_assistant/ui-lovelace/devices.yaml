@@ -334,6 +334,8 @@ cards:
         - automation.toggle_hallway_light
         - automation.toggle_pieter_s_bedside_lamp
         - automation.toggle_rouve_s_bedside_lamp
+        - automation.track_motion_at_doorbell
+        - automation.trim_doorbell_snapshots
         - automation.turn_audio_on_when_apple_tv_turned_on
         - automation.turn_off_all_lights_from_alert_action
         - automation.turn_off_entertainment_system_when_idle_or_leaving_room

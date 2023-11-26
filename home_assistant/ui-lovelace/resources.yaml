@@ -151,8 +151,8 @@ cards:
           - type: gauge
             name: Battery Buffer
             entity: sensor.battery_charge_variance
-            min: -100
-            max: 100
+            min: -30
+            max: 30
             needle: true
             severity:
               green: 10

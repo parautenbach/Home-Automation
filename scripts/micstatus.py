@@ -16,7 +16,7 @@ mic_state_prev = False
 while True:
     elems = [elem for elem in CONTROL_CENTER.findAllR() if 'AXDescription' in elem.getAttributes()]
     descs = [elem for elem in elems if 'Microphone' in elem.AXDescription.split() and 'use' in elem.AXDescription.split()]
-    print(descs)
+    # print(descs)
     # True if list isn't empty
     mic_state = bool(descs)
 

@@ -460,11 +460,13 @@ cards:
             name: Sydney
             entity: sensor.sydney
       - type: entities
-        title: Schedule
+        title: Routine
         show_header_toggle: false
         entities:
           - entity: automation.switch_on_lights_at_wake_up_time
             name: Automatic Wake-up Lights
+          - entity: input_boolean.disable_auto_on_bedlamps
+            name: Disable Auto On Bedlamps
           - entity: input_datetime.wake_up_time
             name: Wake-up Time
             # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/3388

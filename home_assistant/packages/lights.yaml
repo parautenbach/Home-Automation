@@ -65,6 +65,10 @@ input_boolean:
   hallway_state:
     name: Hallway State
     icon: mdi:lightbulb
+  # excludes wake-up lights
+  disable_auto_on_bedlamps:
+    name: Disable Auto On Bedlamps
+    icon: mdi:robot
 
 light:
   - platform: switch
@@ -679,6 +683,9 @@ automation:
         to: "on"
     mode: single
     condition:
+      - condition: state
+        entity_id: input_boolean.disable_auto_on_bedlamps
+        state: "off"
       - condition: or
         conditions:
           - condition: state
@@ -898,6 +905,9 @@ automation:
         entity_id: binary_sensor.low_light
         to: "on"
     condition:
+      - condition: state
+        entity_id: input_boolean.disable_auto_on_bedlamps
+        state: "off"
       - condition: time
         after: "16:00:00"
         before: "20:00:00"
@@ -1409,3 +1419,13 @@ automation:
       - service: light.turn_off
         target:
           entity_id: light.bedroom_bedlamp
+
+  - alias: "Enable Auto On Bedlamps"
+    id: "f7b5e209-9efd-421a-a598-aa7493b7f52e"
+    trigger:
+      - platform: time
+        at: "00:00"
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.disable_auto_on_bedlamps

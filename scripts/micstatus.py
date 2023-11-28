@@ -7,23 +7,34 @@ import time
 import requests
 import atomacos
 
-CONTROL_CENTER = atomacos.getAppRefByBundleId('com.apple.controlcenter')
-HA_API_URL = "http://<host>:<port>/api/webhook/gaia_audio_input_in_use_alt"
+from multiprocessing import Pool
 
-mic_state = False
-mic_state_prev = False
+def run(mic_state_prev):
+    control_center = atomacos.getAppRefByBundleId('com.apple.controlcenter')
+    ha_api_url = "http://<host>:<port>/api/webhook/gaia_audio_input_in_use_alt"
 
-while True:
-    elems = [elem for elem in CONTROL_CENTER.findAllR() if 'AXDescription' in elem.getAttributes()]
+    # these two calls leak memory (40MB -> 500MB in a few hours)
+    elems = [elem for elem in control_center.findAllR() if 'AXDescription' in elem.getAttributes()]
     descs = [elem for elem in elems if 'Microphone' in elem.AXDescription.split() and 'use' in elem.AXDescription.split()]
-    # print(descs)
     # True if list isn't empty
     mic_state = bool(descs)
+    # print('On' if mic_state else 'Off')
 
     if mic_state != mic_state_prev:
+        # print('State changed')
         try:
-            requests.put(HA_API_URL, data=[('status', 'on' if mic_state else 'off')])
-        except:
+            response = requests.put(ha_api_url, data=[('status', 'on' if mic_state else 'off')])
+            # print(response.status_code)
+        except Exception as e:
+            # print(e)
             pass
-        mic_state_prev = mic_state
-    time.sleep(1)
+
+    return mic_state
+
+if __name__ == '__main__':
+    mic_state_prev = False
+
+    with Pool(processes=1) as pool:
+        while True:
+            mic_state_prev = pool.apply(run, args=(mic_state_prev,))
+            time.sleep(3)

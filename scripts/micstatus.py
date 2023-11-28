@@ -5,11 +5,13 @@
 
 import time
 import requests
-import atomacos
+import importlib
 
 from multiprocessing import Pool
 
 def run(mic_state_prev):
+    atomacos = importlib.import_module('atomacos')
+
     control_center = atomacos.getAppRefByBundleId('com.apple.controlcenter')
     ha_api_url = "http://<host>:<port>/api/webhook/gaia_audio_input_in_use_alt"
 

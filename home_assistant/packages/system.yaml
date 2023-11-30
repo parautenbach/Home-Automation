@@ -94,6 +94,7 @@ sensor:
         arg: /
       - type: memory_use_percent
       - type: processor_use
+      - type: processor_temperature
       - type: load_1m
       - type: load_5m
       - type: load_15m

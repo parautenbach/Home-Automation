@@ -4,21 +4,50 @@ type: panel
 icon: mdi:cctv
 badges: []
 cards:
-  - type: 'custom:gallery-card'
-    title: Security Camera Snapshots
-    entities:
-      - sensor.security_camera_snapshots
-    menu_alignment: Responsive
-    maximum_files: 5
-    # FFS, because, using AN EXISTING STANDARD for parsing and formatting is too hard
-    # file_name_format isn't a file name format, but should be something like file_name_datetime_format,
-    #   because it doesn't encapsulate the full name, only a part of it
-    # localisation doesn't work for the caption
-    # caption format should just use the same setting as HA (as default)
-    # the fromNow/AGO functionality doesn't work:
-    #   past dates rendered as dates in the future if a time is part of the datetime
-    # this stinks shit balls
-    # don't use it
-    file_name_format: 'YYYYMMDD-HHmmss'
-    caption_format: 'YYYY-MM-DD HH:mm:ss'
+  - type: custom:swipe-card
+    parameters:
+      autoHeight: true
+      pagination:
+        type: 'bullets'
+    cards:
+      - type: 'custom:gallery-card'
+        title: Doorbell Snapshots
+        entities:
+          - path: 'media-source://media_source/gallery/doorbell/'
+        include_images: true
+        include_video: false
+        menu_alignment: Responsive
+        maximum_files: 5
+        reverse_sort: true
+        file_name_format: 'YYYYMMDD-HHmmss'
+        caption_format: 'YYYY-MM-DD HH:mm:ss'
+      - type: 'custom:gallery-card'
+        title: Security Camera Snapshots
+        entities:
+          - sensor.security_camera_snapshots
+        menu_alignment: Responsive
+        maximum_files: 5
+        reverse_sort: true
+        # FFS, because, using AN EXISTING STANDARD for parsing and formatting is too hard
+        # file_name_format isn't a file name format, but should be something like file_name_datetime_format,
+        #   because it doesn't encapsulate the full name, only a part of it
+        # localisation doesn't work for the caption
+        # caption format should just use the same setting as HA (as default)
+        # the fromNow/AGO functionality doesn't work:
+        #   past dates rendered as dates in the future if a time is part of the datetime
+        # this stinks shit balls
+        # don't use it
+        file_name_format: 'YYYYMMDD-HHmmss'
+        caption_format: 'YYYY-MM-DD HH:mm:ss'
+      - type: 'custom:gallery-card'
+        title: Baby Monitor Snapshots
+        entities:
+          - path: 'media-source://media_source/gallery/baby_monitor/'
+        include_images: true
+        include_video: false
+        menu_alignment: Responsive
+        maximum_files: 5
+        reverse_sort: true
+        file_name_format: 'YYYYMMDD-HHmmss'
+        caption_format: 'YYYY-MM-DD HH:mm:ss'
 # todo: clips

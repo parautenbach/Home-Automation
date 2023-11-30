@@ -126,15 +126,6 @@ command_line:
       value_template: '{{ value | int(0) }}'
       scan_interval: 3600
 
-  - sensor:
-      name: server_cpu_temp
-      command: "cat /sys/class/thermal/thermal_zone0/temp"
-      # not a valid option for this platform
-      # device_class: temperature
-      unit_of_measurement: "°C"
-      value_template: '{{ value | multiply(0.001) | round(2) }}'
-      scan_interval: 60
-
 binary_sensor:
   - platform: template
     sensors:

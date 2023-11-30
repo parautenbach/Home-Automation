@@ -258,6 +258,7 @@ cards:
         - automation.guest_mode_disabled_alert
         - automation.guest_mode_enabled_alert
         - automation.hallway_light_off_when_bedroom_lights_off
+        - automation.handle_doorbell_alert_action
         - automation.high_fire_risk_notification
         - automation.high_inverter_load_alert
         - automation.high_uv_notification

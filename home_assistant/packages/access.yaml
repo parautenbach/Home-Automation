@@ -257,6 +257,11 @@ automation:
                   # url: !secret doorbell_camera_last_snapshot_url
                   hide-thumbnail: true
                   lazy: true
+                actions:
+                  - action: "PARTLY_OPEN_GATE"
+                    title: "Partly open gate"
+                  - action: "FULLY_OPEN_GATE"
+                    title: "Fully open gate"
           # non-blocking call
           - service: script.turn_on
             target:
@@ -265,3 +270,33 @@ automation:
               variables:
                 camera_entity_id: camera.doorbell
                 subdirectory: "doorbell"
+
+  - alias: "Handle Doorbell Alert Action"
+    id: "c39b4bb0-9a1d-475c-ac7d-ee93fbee8e69"
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: PARTLY_OPEN_GATE
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: FULLY_OPEN_GATE
+    condition:
+      - condition: state
+        entity_id: cover.main_gate
+        state: "closed"
+    action:
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.event.data.action == 'FULLY_OPEN_GATE' }}"
+            sequence:
+              - service: cover.open_cover
+                data:
+                  entity_id: cover.main_gate
+        default:
+          # non-blocking call
+          - service: script.turn_on
+            target:
+              entity_id: script.open_pedestrian_gap

@@ -246,7 +246,7 @@ automation:
               # todo: thumbnail, url
               data:
                 group: "doorbell"
-                # or open the amcrest app?
+                # or open the amcrest app? (seems like it doesn't register a schema handler, so can't do it, unfortunately)
                 url: homeassistant://navigate/lovelace/security
                 entity_id: camera.doorbell
                 sound:

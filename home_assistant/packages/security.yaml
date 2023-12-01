@@ -41,6 +41,11 @@ input_datetime:
     has_date: true
     has_time: true
 
+input_boolean:
+  kitchen_smoke_detector_reminder:
+    name: Kitchen Smoke Detector Reminder
+    icon: mdi:reminder
+
 timer:
   # format: <entity_id>_timer
   main_gate_timer:
@@ -893,11 +898,13 @@ automation:
     id: "3f2d5457-34db-464f-88d2-515fbb3e202a"
     trigger:
       - platform: state
-        entity_id: binary_sensor.kitchen_smoke
+        entity_id:
+          - binary_sensor.kitchen_smoke
         # https://www.home-assistant.io/integrations/binary_sensor/
         to: "on"
         id: "real"
       # https://shelly-api-docs.shelly.cloud/gen2/ComponentsAndServices/Smoke/
+      # curl -s -X GET http://<host>:<port>/api/webhook/kitchen_smoke_alarm_test
       - platform: webhook
         webhook_id: kitchen_smoke_alarm_test
         local_only: true
@@ -905,17 +912,22 @@ automation:
         # https://www.home-assistant.io/docs/automation/trigger/#webhook-trigger
         allowed_methods:
           - GET
-        id: "test"
+        id: "test_kitchen_smoke"
     action:
       - service: notify.mobile_app_ceres
         data:
           title: "Safety"
           message: >-
             {% set prefix = '' %}
-            {% if trigger.id == 'test' %}
+            {% set entity_id = '' %}
+            {% if 'id' in trigger and 'test' in trigger.id %}
               {% set prefix = '[Test]' %}
+              {% set entity_id = trigger.id | replace('test_', 'binary_sensor.') %}
+            {% else %}
+              {% set entity_id = trigger.entity_id %}
             {% endif %}
-            {{ prefix }} Smoke has been detected in the kitchen!
+            {% set area = area_name(entity_id) | lower %}
+            {{ prefix }} Smoke has been detected in the {{ area }}!
           data:
             group: "home-safety"
             url: homeassistant://navigate/lovelace/security
@@ -924,6 +936,55 @@ automation:
                 name: default
                 critical: 1
                 volume: 0.5
+      - if:
+          - "{{ 'id' in trigger and 'test' in trigger.id }}"
+        then:
+          - service: input_boolean.turn_off
+            target:
+              entity_id: >-
+                {% set reminder_entity = trigger.id | replace('test_', 'input_boolean.') ~ '_detector_reminder' %}
+                {{ reminder_entity }}
+
+  - alias: "Enable Smoke Detector Testing Reminders"
+    id: "6e3c5bfb-6830-4aa4-b70c-bd53db3b51a6"
+    trigger:
+      - platform: time
+        at: "01:00:00"
+    condition:
+      - condition: template
+        value_template: "{{ now().day == 1 }}"
+    action:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.kitchen_smoke_detector_reminder
+
+  - alias: "Remind To Test Smoke Detectors"
+    id: "07bcfd63-e5a3-44f1-9ff1-c8240e5f8ca6"
+    variables:
+      smoke_detectors:
+        - binary_sensor.kitchen_smoke
+    trigger:
+      - platform: time
+        at: "09:00:00"
+    action:
+      - repeat:
+          for_each: "{{ smoke_detectors }}"
+          sequence:
+            - if:
+                - condition: template
+                  value_template: >-
+                    {% set reminder_entity = repeat.item | replace('binary_sensor', 'input_boolean') ~ '_detector_reminder' %}
+                    {{ is_state(reminder_entity,'on') }}
+              then:
+                - service: notify.mobile_app_ceres
+                  data:
+                    title: "Safety"
+                    message: >-
+                      {% set area = area_name(repeat.item) | lower %}
+                      Please test the {{ area }}'s smoke detector by pressing and holding the button for 3 sec.
+                    data:
+                      group: "home-safety"
+                      url: homeassistant://navigate/lovelace/security
 
   - alias: "Alert When Cabinet Opened"
     id: "f9a95e6c-e0bf-45a4-bf5c-3b774ff3fd47"

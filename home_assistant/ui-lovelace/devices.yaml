@@ -254,6 +254,7 @@ cards:
         - automation.enable_contractor_mode
         - automation.enable_contractor_mode_from_alert_action
         - automation.enable_guest_mode_from_alert_action
+        - automation.enable_smoke_detector_testing_reminders
         - automation.extend_cover_timeout_from_alert_action
         - automation.guest_mode_disabled_alert
         - automation.guest_mode_enabled_alert
@@ -298,6 +299,7 @@ cards:
         - automation.open_garage_door_when_arriving
         - automation.open_the_gate_when_arriving_home
         - automation.pollen_levels_update
+        - automation.remind_to_test_smoke_detectors
         - automation.reset_battery_notification_governor
         - automation.restore_smart_bulb_statuses_after_power_restored
         - automation.revert_cleaning_day_lights

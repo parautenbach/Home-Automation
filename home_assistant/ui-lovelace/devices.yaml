@@ -164,12 +164,14 @@ cards:
           variables:
             name: Irrigation
             switch_entity: switch.irrigation_restart
+    - type: horizontal-stack
+      cards:
         - type: custom:button-card
           template: restart
           entity: binary_sensor.power_meter
           icon: mdi:power-plug
           variables:
-            name: Pwr Meter
+            name: Power Meter
             switch_entity: switch.electricity_pulse_counter_restart
         - type: custom:button-card
           template: restart
@@ -178,6 +180,13 @@ cards:
           variables:
             name: Office
             switch_entity: switch.office_restart
+        - type: custom:button-card
+          template: restart
+          entity: binary_sensor.bed_occupancy
+          icon: mdi:bed
+          variables:
+            name: Bed Occupancy
+            switch_entity: switch.bed_occupancy_restart
     - type: history-graph
       hours_to_show: 24
       entities:
@@ -199,6 +208,8 @@ cards:
         - entity: binary_sensor.power_meter
           name: Pwr Meter
         - entity: binary_sensor.office
+        - entity: binary_sensor.bed_occupancy
+          name: Bed Occ.
     - type: custom:battery-state-card
       title: Batteries
       filter:
@@ -355,6 +366,7 @@ cards:
         - automation.update_irrigation_zone_timer
         - automation.update_security_camera_snapshot_gallery
         - automation.update_server_power_status
+        - automation.update_sleep_mode_based_on_bed_occupancy
         - automation.update_timers_for_covers_on_startup
   - type: vertical-stack
     cards:

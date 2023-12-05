@@ -1,0 +1,68 @@
+# https://community.home-assistant.io/t/fsr-the-best-bed-occupancy-sensor/365795
+
+esphome:
+  name: bed-occupancy
+
+esp8266:
+  board: d1_mini
+  framework:
+    version: recommended
+
+wifi:
+  power_save_mode: none
+  networks:
+    - ssid: !secret wifi_ssid
+      password: !secret wifi_password
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Bed Occupancy Fallback Hotspot"
+    password: !secret fallback_ap_password
+
+<<: !include common.yaml
+
+number:
+  - platform: template
+    name: "Trigger Level"
+    id: "trigger_level"
+    icon: mdi:menu
+    initial_value: 1
+    restore_value: true
+    optimistic: true
+    unit_of_measurement: V
+    min_value: 0
+    max_value: 3.5
+    step: 0.05
+
+sensor:
+  - platform: adc
+    pin: A0
+    name: "Bed Occupancy Signal"
+    id: "bed_occupancy_signal"
+    icon: mdi:bed
+    unit_of_measurement: V
+    update_interval: 0.5s
+    filters:
+      - multiply: 3.3
+      - sliding_window_moving_average:
+          window_size: 10
+          send_every: 1
+      - or:
+          - throttle: 10s
+          - delta: 0.02
+
+binary_sensor:
+  - platform: template
+    name: "Bed Occupied"
+    id: "bed_occupied"
+    device_class: occupancy
+    lambda: |-
+      if (id(bed_occupancy_signal).state < id(trigger_level).state) {
+        return true;
+      } else {
+        return false;
+      }
+
+switch:
+  - platform: restart
+    id: bed_occupancy_restart
+    name: "Bed Occupancy Restart"

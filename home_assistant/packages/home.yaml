@@ -791,9 +791,9 @@ automation:
                 url: homeassistant://navigate/lovelace/baby
                 # https://companion.home-assistant.io/docs/notifications/dynamic-content
                 entity_id: camera.baby_monitor_profile000
-                actions:
-                  - action: "SLEEP_OFF"
-                    title: "Sleep off"
+                # actions:
+                #   - action: "SLEEP_OFF"
+                #     title: "Sleep off"
                 sound:
                   # apple watch doesn't support custom sounds:
                   # https://community.home-assistant.io/t/custom-notification-sounds-on-not-playing-on-apple-watch/540387
@@ -815,9 +815,28 @@ automation:
                 camera_entity_id: camera.baby_monitor_profile000
                 subdirectory: "baby_monitor"
   
+  - alias: "Update Sleep Mode Based On Bed Occupancy"
+    id: "106574a8-11b2-4679-aff1-f5b25b8e0b74"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.bed_occupied
+        to: "on"
+        for:
+          seconds: 10
+      - platform: state
+        entity_id: binary_sensor.bed_occupied
+        to: "off"
+        for:
+          seconds: 10
+    action:
+      - service: "input_boolean.turn_{{ trigger.to_state.state }}"
+        target:
+          entity_id: input_boolean.baby_sleep_mode
+
   - alias: "Turn Off Sleep Mode From Alert Action"
     id: "7a1711ca-b9c7-4e2b-b5ba-1dce04aca077"
-    initial_state: true
+    initial_state: false
     trigger:
       - platform: event
         event_type: mobile_app_notification_action

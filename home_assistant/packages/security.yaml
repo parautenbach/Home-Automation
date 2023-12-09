@@ -1041,19 +1041,20 @@ automation:
     mode: single
     condition:
       - condition: template
-        value_template: "{{ now() - this.attributes.last_triggered > timedelta(minutes=5) }}"
+        value_template: "{{ now() - this.attributes.last_triggered > timedelta(minutes=1) }}"
       - condition: or
         conditions:
           - condition: and
             conditions:
               # proxy for sleeping/in bed
-              - condition: state
-                entity_id: light.living_room_lamp
-                state: "off"
+              # - condition: state
+              #   entity_id: light.living_room_lamp
+              #   state: "off"
               - condition: time
-                after: "21:00:00"
-                before: "07:00:00"
-              # sunset/sunrise
+                after: "17:00:00"
+                before: "09:00:00"
+              - condition: template
+                value_template: "{{ state_attr('sun.sun','elevation') | float >= -5 }}"
           - condition: state
             entity_id: binary_sensor.anybody_home
             state: "off"

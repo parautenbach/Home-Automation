@@ -151,7 +151,9 @@ recorder:
   # SQLite does not recover the disk space after you have done this, so it is necessary to ‘vacuum’ the database. Simply issue the following command:
   # vacuum;
   auto_purge: true
-  purge_keep_days: 7
+  auto_repack: true
+  purge_keep_days: 10
+  commit_interval: 5
 
 tts:
   - platform: google_translate

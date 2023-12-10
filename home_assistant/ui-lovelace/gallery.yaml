@@ -17,7 +17,7 @@ cards:
         include_images: true
         include_video: false
         menu_alignment: Responsive
-        maximum_files: 5
+        maximum_files: 10
         reverse_sort: true
         file_name_format: 'YYYYMMDD-HHmmss'
         caption_format: 'YYYY-MM-DD HH:mm:ss'

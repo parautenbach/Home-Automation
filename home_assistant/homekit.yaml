@@ -44,6 +44,8 @@
       - script.entertainment_satellite_on
       - script.entertainment_off
       - script.open_pedestrian_gap
+      # this just creates a bunch of switches, which sucks as the ux
+      # - media_player.main_bedroom_universal
   entity_config:
     binary_sensor.cabinet_door:
       linked_battery_sensor: sensor.cabinet_battery
@@ -101,6 +103,11 @@
       name: Open Pedestrian Gap
     input_boolean.baby_sleep_mode:
       name: Sleep Mode
+    # media_player.main_bedroom_universal:
+    #   feature_list:
+    #     - feature: on_off
+    #     - feature: play_pause
+    #     - feature: play_stop
 - name: Foyer Camera
   port: 21064
   mode: accessory

@@ -30,6 +30,9 @@ homeassistant:
     script.take_snapshot:
       friendly_name: Take Camera Snapshot
       icon: mdi:camera
+    switch.bug_zapper:
+      friendly_name: Bug Zapper
+      icon: mdi:bug-outline
 
 input_datetime:
   wake_up_time:
@@ -288,6 +291,9 @@ automation:
       # todo: make a group for all lights except bedlamps?
       - service: light.turn_off
         entity_id: light.bedroom_bedlamp
+      - service: switch.turn_off
+        target:
+          entity_id: switch.bug_zapper
 
   - alias: "Switch On The Front Door Light When Arriving Home"
     id: "47e6883e-b9ab-4559-9603-765e80cdfa81"
@@ -864,3 +870,47 @@ automation:
             {% else %}
               0
             {% endif %}
+
+  - alias: "Turn On Bug Zapper"
+    id: "dad30264-ab99-41df-83ee-a9ff0e768146"
+    initial_state: true
+    trigger:
+      - platform: sun
+        event: sunset
+        offset: "-01:00:00"
+    condition:
+      - condition: state
+        entity_id: sensor.season
+        state:
+          - spring
+          - summer
+          - autumn
+    action:
+      - service: weather.get_forecast
+        target:
+          entity_id: weather.openweathermap_hourly
+        data:
+          type: hourly
+        response_variable: hourly
+      # basically no rain atm
+      # - condition: "{{ hourly.forecast[0]['precipitation'] | float(0) < 1 }}"
+      # or (but remove the service call above then)
+      # - condition: "{{ states('sensor.openweathermap_rain') | float(0) < 1 }}"
+      # basically no rain in the next 5 hours
+      # true if at least one forecast value has a precipitation value of greater or equal to 1 mm
+      - condition: "{{ state_attr('weather.openweathermap_hourly', 'forecast')[0:5] | map(attribute='precipitation') | select('ge', 1) | list | length == 0 }}"
+      - service: switch.turn_on
+        target:
+          entity_id: switch.bug_zapper
+
+  - alias: "Switch Off Bug Zapper When Baby Goes To Bed"
+    id: "c54d5d40-a900-4013-98f5-e968be87a0b6"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: input_boolean.baby_sleep_mode
+        to: "on"
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: switch.bug_zapper

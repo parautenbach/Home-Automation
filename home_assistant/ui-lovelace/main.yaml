@@ -283,7 +283,7 @@ cards:
                   action: more-info
                   haptic: heavy
       - type: horizontal-stack
-        title: Outside Lights
+        title: Yard
         cards:
           - type: custom:button-card
             template: light_with_timer
@@ -297,6 +297,10 @@ cards:
             template: basic
             name: Backyard
             entity: light.backyard
+          - type: custom:button-card
+            template: basic
+            name: Bug Zapper
+            entity: switch.bug_zapper
       - type: vertical-stack
         title: Entertainment
         cards:

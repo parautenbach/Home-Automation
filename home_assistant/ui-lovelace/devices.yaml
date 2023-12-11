@@ -335,6 +335,7 @@ cards:
         - automation.switch_garage_light_according_to_door_status_and_light_conditions
         - automation.switch_off_bedlamp_when_plugging_in_phone
         - automation.switch_off_bedroom_bedlamp_when_sleep_mode_enabled
+        - automation.switch_off_bug_zapper_when_baby_goes_to_bed
         - automation.switch_off_light_when_timer_expires
         - automation.switch_on_front_door_light_when_any_cover_opened
         - automation.switch_on_inside_lights_when_unplugging_phone
@@ -356,6 +357,7 @@ cards:
         - automation.turn_off_entertainment_system_when_idle_or_leaving_room
         - automation.turn_off_main_bedroom_media_player_when_idle
         - automation.turn_off_sleep_mode_from_alert_action
+        - automation.turn_on_bug_zapper
         - automation.upcoming_loadshedding_notification
         - automation.update_automations_when_power_status_changed
         - automation.update_backup_power_warning_light_if_grid_feed_status_changed
@@ -400,6 +402,8 @@ cards:
             name: Garage
           - entity: light.backyard
             name: Backyard
+          - entity: switch.bug_zapper
+            name: Bug Zapper
       - type: custom:button-card
         show_label: true
         label: >

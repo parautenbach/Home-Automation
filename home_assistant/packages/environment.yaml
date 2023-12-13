@@ -236,7 +236,7 @@ sensor:
       solar_angle:
         friendly_name: "Sun Angle"
         unit_of_measurement: '°'
-        value_template: "{{ '%+.1f' | format(states('sensor.solar_angle') | float(0)) }}"
+        value_template: "{{ '%+.1f' | format(state_attr('sun.sun', 'elevation')) }}"
         icon_template: mdi:sun-angle-outline
       outside_temperature:
         friendly_name: "Outside Temperature"

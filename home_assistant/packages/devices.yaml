@@ -390,8 +390,10 @@ automation:
 
   # alternative method due to this issue
   # https://github.com/home-assistant/iOS/issues/1903
+  # the above issue has been resolved with an upgrade to macos sonoma 14.x (14.2, in my case)
   # source for detecting whether the mic is in use:
   # https://gist.github.com/ov1d1u/8e6ec1f0a087d1f410c65f16217273ba
+  # actual script and plist is on this ha repo
   - alias: "Update Gaia Audio Input In Use (Alt)"
     id: "1f9cf72d-7e49-46fd-96c4-b422b6e923af"
     initial_state: true

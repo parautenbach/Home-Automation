@@ -516,7 +516,7 @@ automation:
             target:
               entity_id:
                 - light.pieter_bedside
-                # - light.rouve_bedside
+                - light.rouve_bedside
                 - light.hallway
             data:
               profile: low

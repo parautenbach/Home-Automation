@@ -22,14 +22,6 @@ wifi:
 # https://esphome.io/components/sensor/pulse_counter.html
 sensor:
   - platform: pulse_counter
-    id: electricity_current_energy
-    name: "Current Energy"
-    # internal pull-up 45k
-    pin: 33
-    unit_of_measurement: "Wh"
-    update_interval: 60s
-    accuracy_decimals: 0
-  - platform: pulse_counter
     id: electricity_current_power
     name: "Current Power"
     # internal pull-up 45k

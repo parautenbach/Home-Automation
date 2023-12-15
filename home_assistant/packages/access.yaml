@@ -280,6 +280,8 @@ automation:
                   hide-thumbnail: true
                   lazy: true
                 actions:
+                  - action: "PARTLY_OPEN_AND_CLOSE_GATE"
+                    title: "Partly open and close gate"
                   - action: "PARTLY_OPEN_GATE"
                     title: "Partly open gate"
                   - action: "FULLY_OPEN_GATE"
@@ -296,6 +298,10 @@ automation:
   - alias: "Handle Doorbell Alert Action"
     id: "c39b4bb0-9a1d-475c-ac7d-ee93fbee8e69"
     trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: PARTLY_OPEN_AND_CLOSE_GATE
       - platform: event
         event_type: mobile_app_notification_action
         event_data:
@@ -317,8 +323,23 @@ automation:
               - service: cover.open_cover
                 data:
                   entity_id: cover.main_gate
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.event.data.action == 'PARTLY_OPEN_GATE' }}"
+            sequence:
+              # non-blocking call
+              - service: script.turn_on
+                target:
+                  entity_id: script.open_pedestrian_gap
+        # PARTLY_OPEN_AND_CLOSE_GATE
         default:
           # non-blocking call
           - service: script.turn_on
             target:
               entity_id: script.open_pedestrian_gap
+          - delay:
+              seconds: 15
+          - condition: "{{ is_state('cover.main_gate', 'open') }}"
+          - service: cover.close_cover
+            data:
+              entity_id: cover.main_gate

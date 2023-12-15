@@ -116,6 +116,7 @@ switch:
   # https://frenck.dev/diy-smart-doorbell-for-just-2-dollar/
   # https://www.reddit.com/r/homeassistant/comments/kxtp41/comment/gl5w556/?utm_source=share&utm_medium=web2x&context=3
   - platform: template
+    id: office_on_air
     name: "On Air"
     lambda: |-
       return id(on_air);

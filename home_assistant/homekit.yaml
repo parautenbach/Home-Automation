@@ -37,6 +37,7 @@
       - light.bedroom_bedlamp
       - switch.tivoli_audio
       - switch.irrigation_main
+      - switch.bug_zapper
       - cover.main_gate
       - cover.lhs_garage_door
       - cover.rhs_garage_door

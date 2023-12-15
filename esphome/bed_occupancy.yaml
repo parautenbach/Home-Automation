@@ -36,7 +36,7 @@ number:
 sensor:
   - platform: adc
     pin: A0
-    name: "Bed Occupancy Signal"
+    name: "Signal"
     id: "bed_occupancy_signal"
     icon: mdi:bed
     unit_of_measurement: V
@@ -65,4 +65,4 @@ binary_sensor:
 switch:
   - platform: restart
     id: bed_occupancy_restart
-    name: "Bed Occupancy Restart"
+    name: "Restart"

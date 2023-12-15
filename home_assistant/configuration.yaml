@@ -154,6 +154,38 @@ recorder:
   auto_repack: true
   purge_keep_days: 10
   commit_interval: 5
+  # https://community.home-assistant.io/t/how-to-reduce-your-database-size-and-extend-the-life-of-your-sd-card/205299/
+  # https://community.home-assistant.io/t/find-most-frequently-updated-sensor/302102/
+  # SELECT
+  #     s.metadata_id,
+  #     m.entity_id,
+  #     COUNT(*) AS cnt
+  # FROM states AS s
+  # LEFT JOIN states_meta AS m
+  # ON s.metadata_id = m.metadata_id
+  # GROUP BY
+  #     s.metadata_id,
+  #     m.entity_id
+  # ORDER BY
+  #     COUNT(*) DESC
+  # LIMIT 100;
+  #
+  # SELECT
+  #     (shared_data::json->>'entity_id') AS entity_id,
+  #     COUNT(*) AS cnt
+  # FROM event_data
+  # WHERE
+  #     shared_data::json->>'entity_id' IS NOT NULL
+  # GROUP BY
+  #     (shared_data::json->>'entity_id')
+  # HAVING COUNT(*) > 1
+  # ORDER BY
+  #     COUNT(*) DESC;
+  exclude:
+    entities:
+      - automation.update_baby_sleep_session_counter
+      - input_number.baby_current_sleep_session
+      - sensor.solarassistant_activity_counter
 
 tts:
   - platform: google_translate

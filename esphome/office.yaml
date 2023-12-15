@@ -38,7 +38,7 @@ sensor:
     model: AM2302
     pin: 33
     temperature:
-      name: "Office Temperature"
+      name: "Temperature"
       id: office_temperature
       # https://community.home-assistant.io/t/debug-esphome-sensors/134688/18
       filters:
@@ -64,7 +64,7 @@ sensor:
         # - lambda: return 1.05*x - 3;
         - lambda: return x - 2;
     humidity:
-      name: "Office Humidity"
+      name: "Humidity"
       id: office_humidity
       filters:
         - sliding_window_moving_average:
@@ -75,7 +75,7 @@ sensor:
   # https://community.home-assistant.io/t/outdoor-lux-sensor/421926
   # hint: use twisted pairs for long cables
   - platform: bh1750
-    name: "Office Illuminance"
+    name: "Illuminance"
     id: office_illuminance
     address: 0x23  # low (0x5C if addr pin is pulled high)
     filters:
@@ -83,6 +83,9 @@ sensor:
           alpha: 0.1
           send_every: 15
           send_first_at: 3
+  - platform: internal_temperature
+    id: office_device_temperature
+    name: "Device Temperature"
 
 # https://microcontrollerslab.com/led-dot-matrix-display-esp32-max7219/
 spi:
@@ -109,7 +112,7 @@ display:
 switch:
   - platform: restart
     id: office_restart
-    name: "Office Restart"
+    name: "Restart"
   # https://frenck.dev/diy-smart-doorbell-for-just-2-dollar/
   # https://www.reddit.com/r/homeassistant/comments/kxtp41/comment/gl5w556/?utm_source=share&utm_medium=web2x&context=3
   - platform: template

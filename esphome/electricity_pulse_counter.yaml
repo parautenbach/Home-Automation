@@ -22,7 +22,7 @@ wifi:
 # https://esphome.io/components/sensor/pulse_counter.html
 sensor:
   - platform: pulse_counter
-    id: electricity_current_power
+    id: electricity_pulse_counter_current_power
     name: "Current Power"
     # internal pull-up 45k
     pin: 33

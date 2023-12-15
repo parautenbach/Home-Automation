@@ -29,3 +29,11 @@ sensor:
     type: time  # duration
     start: "{{ now().replace(hour=0, minute=0, second=0) }}"
     end: "{{ now() }}"
+
+  - platform: history_stats
+    name: Duration Online Calls
+    entity_id: binary_sensor.on_air
+    state: "on"
+    type: time  # duration
+    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    end: "{{ now() }}"

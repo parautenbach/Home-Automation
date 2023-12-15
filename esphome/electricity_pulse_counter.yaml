@@ -35,4 +35,4 @@ sensor:
 switch:
   - platform: restart
     id: electricity_pulse_counter_restart
-    name: "Electricity Pulse Counter Restart"
+    name: "Restart"

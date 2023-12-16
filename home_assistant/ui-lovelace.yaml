@@ -370,7 +370,7 @@ button_card_templates:
       - operator: template
         value: >
           [[[
-            var alert_entity_id = "binary_sensor." + entity.entity_id.replace("cover.", "") + "_alert";
+            var alert_entity_id = entity.entity_id.replace("cover.", "binary_sensor.") + "_alert";
             return states[alert_entity_id].state == "on";
           ]]]
         color: var(--custom-color-red)

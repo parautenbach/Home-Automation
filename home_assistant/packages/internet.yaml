@@ -403,7 +403,8 @@ automation:
           message: >-
             {% set binary_sensor_entity_id = trigger.event.data.entity_id | replace('timer', 'binary_sensor') | replace('_disconnected', '') %}
             {% set extender_name = state_attr(binary_sensor_entity_id, 'friendly_name') | lower %}
-            {% set minutes = (state_attr(trigger.event.data.entity_id, 'duration') | as_timedelta).total_seconds() | multiply(1/60) | int or 1 %}
+            {% set extender_slug = binary_sensor_entity_id | replace('binary_sensor.', '') %}
+            {% set minutes = (now() - states.binary_sensor[extender_slug].last_updated).total_seconds() | multiply(1/60) | int or 1 %}
             The {{ extender_name }} became unavailable {{ minutes }} min ago.
           data:
             group: "home-internet"

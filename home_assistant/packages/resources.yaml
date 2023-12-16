@@ -1095,7 +1095,7 @@ automation:
         data:
           title: "System"
           message: >-
-            {% set minutes = (state_attr('timer.solarassistant_inactivity', 'duration') | as_timedelta).total_seconds() | multiply(1/60) | int %}
+            {% set minutes = (now() - states.binary_sensor.solarassistant_activity.last_updated).total_seconds() | multiply(1/60) | int or 1 %}
             The SolarAssistant bridge's activity has ceased {{ minutes }} min ago.
           data:
             group: "home-electricity"

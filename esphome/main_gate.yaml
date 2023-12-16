@@ -1,3 +1,7 @@
+substitutions:
+  device_name_upper: "Main Gate"
+  device_name_lower: "main_gate"
+
 esphome:
   name: main-gate
   platform: ESP32
@@ -14,7 +18,7 @@ wifi:
       password: !secret wifi_password
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "Main Gate Fallback Hotspot"
+    ssid: "${device_name_upper} Fallback Hotspot"
     password: !secret fallback_ap_password
 
 <<: !include common.yaml
@@ -22,8 +26,8 @@ wifi:
 # https://esphome.io/components/binary_sensor/gpio.html
 binary_sensor:
   - platform: gpio
-    id: main_gate_status
-    name: "Gate Status"
+    id: ${device_name_lower}_gate_status
+    name: "${device_name_upper} Status"
     device_class: door
     pin:
       number: 34
@@ -32,27 +36,32 @@ binary_sensor:
       - delayed_on: 100ms
       - delayed_off: 100ms
 
+sensor:
+  - platform: internal_temperature
+    id: ${device_name_lower}_device_temperature
+    name: "${device_name_upper} Device Temperature"
+
 # https://esphome.io/components/switch/gpio.html
 switch:
   - platform: gpio
-    id: main_gate_control
-    name: "Gate Control"
+    id: ${device_name_lower}_control
+    name: "${device_name_upper} Control"
     pin: 14
     restore_mode: ALWAYS_OFF
   # since v2022.2 this can be made a button, but we're not going to change something that works
   # https://esphome.io/components/button/output.html
   - platform: template
-    id: main_gate_remote
-    name: "Gate Remote"
+    id: ${device_name_lower}_remote
+    name: "${device_name_upper} Remote"
     icon: "mdi:remote"
     # restore_status: False -> restore_mode: DISABLED
     # https://community.home-assistant.io/t/esphome-v2023-7-restore-state-breaking-change/593364/9
     # https://esphome.io/components/switch/index.html
     restore_mode: DISABLED
     turn_on_action:
-      - switch.turn_on: main_gate_control
+      - switch.turn_on: ${device_name_lower}_control
       - delay: 1000ms
-      - switch.turn_off: main_gate_control
+      - switch.turn_off: ${device_name_lower}_control
   - platform: restart
-    id: main_gate_restart
-    name: "Gate Restart"
+    id: ${device_name_lower}_restart
+    name: "${device_name_upper} Restart"

@@ -1,3 +1,7 @@
+substitutions:
+  device_name_upper: "Office"
+  device_name_lower: "office"
+
 esphome:
   name: office
   platform: ESP32
@@ -14,7 +18,7 @@ wifi:
       password: !secret wifi_password
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "Office Fallback Hotspot"
+    ssid: "${device_name_upper} Fallback Hotspot"
     password: !secret fallback_ap_password
 
 <<: !include common.yaml
@@ -38,8 +42,8 @@ sensor:
     model: AM2302
     pin: 33
     temperature:
-      name: "Temperature"
-      id: office_temperature
+      name: "${device_name_upper} Temperature"
+      id: ${device_name_lower}_temperature
       # https://community.home-assistant.io/t/debug-esphome-sensors/134688/18
       filters:
         - sliding_window_moving_average:
@@ -64,8 +68,8 @@ sensor:
         # - lambda: return 1.05*x - 3;
         - lambda: return x - 2;
     humidity:
-      name: "Humidity"
-      id: office_humidity
+      name: "${device_name_upper} Humidity"
+      id: ${device_name_lower}_humidity
       filters:
         - sliding_window_moving_average:
             window_size: 10
@@ -75,8 +79,8 @@ sensor:
   # https://community.home-assistant.io/t/outdoor-lux-sensor/421926
   # hint: use twisted pairs for long cables
   - platform: bh1750
-    name: "Illuminance"
-    id: office_illuminance
+    name: "${device_name_upper} Illuminance"
+    id: ${device_name_lower}_illuminance
     address: 0x23  # low (0x5C if addr pin is pulled high)
     filters:
       - exponential_moving_average:
@@ -84,8 +88,8 @@ sensor:
           send_every: 15
           send_first_at: 3
   - platform: internal_temperature
-    id: office_device_temperature
-    name: "Device Temperature"
+    id: ${device_name_lower}_device_temperature
+    name: "${device_name_upper} Device Temperature"
 
 # https://microcontrollerslab.com/led-dot-matrix-display-esp32-max7219/
 spi:
@@ -111,13 +115,13 @@ display:
 
 switch:
   - platform: restart
-    id: office_restart
-    name: "Restart"
+    id: ${device_name_lower}_restart
+    name: "${device_name_upper} Restart"
   # https://frenck.dev/diy-smart-doorbell-for-just-2-dollar/
   # https://www.reddit.com/r/homeassistant/comments/kxtp41/comment/gl5w556/?utm_source=share&utm_medium=web2x&context=3
   - platform: template
-    id: office_on_air
-    name: "On Air"
+    id: ${device_name_lower}_on_air
+    name: "${device_name_upper} On Air"
     lambda: |-
       return id(on_air);
     turn_on_action:

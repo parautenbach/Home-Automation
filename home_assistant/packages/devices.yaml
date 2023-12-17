@@ -418,7 +418,7 @@ automation:
     mode: single
     action:
       - service: "switch.turn_{{ 'on' if is_state('binary_sensor.on_air', 'on') else 'off' }}"
-        entity_id: switch.on_air
+        entity_id: switch.office_on_air
 
   - alias: "Notify If Baby Monitor Is Offline"
     id: "27664018-432b-41c4-920d-88d05115f112"

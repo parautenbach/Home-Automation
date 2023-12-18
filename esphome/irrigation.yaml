@@ -1,3 +1,7 @@
+substitutions:
+  device_name_upper: "Irrigation"
+  device_name_lower: "irrigation"
+
 esphome:
   # https://devices.esphome.io/devices/Sonoff-4CH-Pro-R2
   name: irrigation
@@ -11,19 +15,19 @@ wifi:
       password: !secret wifi_password
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "Irrigation Fallback Hotspot"
+    ssid: "${device_name_upper} Fallback Hotspot"
     password: !secret fallback_ap_password
 
 <<: !include common.yaml
 
 switch:
   - platform: restart
-    id: irrigation_restart
-    name: "Restart"
+    id: ${device_name_lower}_restart
+    name: "${device_name_upper} Restart"
   - platform: gpio
-    name: "Zone 1"
+    name: "${device_name_upper} Zone 1"
     pin: GPIO12
-    id: "relay_1"
+    id: "${device_name_lower}_relay_1"
     internal: true
     restore_mode: ALWAYS_OFF
     # the sprinkler controller ensures only one valve can be on at a time
@@ -42,23 +46,23 @@ switch:
     #         data_template:
     #           duration: "{{ duration }}"
   - platform: gpio
-    name: "Zone 2"
+    name: "${device_name_upper} Zone 2"
     pin: GPIO5
-    id: "relay_2"
+    id: "${device_name_lower}_relay_2"
     internal: true
     restore_mode: ALWAYS_OFF
     # interlock: *interlock_group
   - platform: gpio
-    name: "Zone 3"
+    name: "${device_name_upper} Zone 3"
     pin: GPIO4
-    id: "relay_3"
+    id: "${device_name_lower}_relay_3"
     internal: true
     restore_mode: ALWAYS_OFF
     # interlock: *interlock_group
   - platform: gpio
-    name: "Zone 4"
+    name: "${device_name_upper} Zone 4"
     pin: GPIO15
-    id: "relay_4"
+    id: "${device_name_lower}_relay_4"
     internal: true
     restore_mode: ALWAYS_OFF
     # interlock: *interlock_group
@@ -68,29 +72,29 @@ binary_sensor:
   # this sensor duplicates the sprinkler's state in order to publish the remaining time to a duration sensor
   # in order to create a countdown timer in home assistant.
   - platform: template
-    name: "Main State"
-    id: "main_state"
+    name: "${device_name_upper} Main State"
+    id: "${device_name_lower}_main_state"
     # device_class: running
     internal: true
     lambda: |-
-      return id(irrigation_controller).active_valve().has_value();
+      return id(${device_name_lower}_controller).active_valve().has_value();
     on_state:
       then:
         if:
           condition:
-            binary_sensor.is_on: main_state
+            binary_sensor.is_on: ${device_name_lower}_main_state
           then:
             - sensor.template.publish:
-                id: main_run_duration
-                state: !lambda 'return id(irrigation_controller).time_remaining_current_operation().value_or(0);'
+                id: ${device_name_lower}_main_run_duration
+                state: !lambda 'return id(${device_name_lower}_controller).time_remaining_current_operation().value_or(0);'
           else:
             - sensor.template.publish:
-                id: main_run_duration
+                id: ${device_name_lower}_main_run_duration
                 state: 0
   # relays
   - platform: gpio
-    id: binary_sensor_1
-    name: "Relay Zone 1"
+    id: ${device_name_lower}_binary_sensor_1
+    name: "${device_name_upper} Relay Zone 1"
     internal: true
     # https://github.com/home-assistant/architecture/discussions/975
     # device_class: valve
@@ -102,16 +106,16 @@ binary_sensor:
       then:
         if:
           condition:
-            switch.is_off: relay_1
+            switch.is_off: ${device_name_lower}_relay_1
           then:
             sprinkler.start_single_valve:
-              id: irrigation_controller
+              id: ${device_name_lower}_controller
               valve_number: 0
           else:
-            sprinkler.shutdown: irrigation_controller
+            sprinkler.shutdown: ${device_name_lower}_controller
   - platform: gpio
-    id: binary_sensor_2
-    name: "Relay Zone 2"
+    id: ${device_name_lower}_binary_sensor_2
+    name: "${device_name_upper} Relay Zone 2"
     internal: true
     pin:
       number: GPIO9
@@ -121,16 +125,16 @@ binary_sensor:
       then:
         if:
           condition:
-            switch.is_off: relay_2
+            switch.is_off: ${device_name_lower}_relay_2
           then:
             sprinkler.start_single_valve:
-              id: irrigation_controller
+              id: ${device_name_lower}_controller
               valve_number: 1
           else:
-            sprinkler.shutdown: irrigation_controller
+            sprinkler.shutdown: ${device_name_lower}_controller
   - platform: gpio
-    id: binary_sensor_3
-    name: "Relay Zone 3"
+    id: ${device_name_lower}_binary_sensor_3
+    name: "${device_name_upper} Relay Zone 3"
     internal: true
     pin:
       number: GPIO10
@@ -140,16 +144,16 @@ binary_sensor:
       then:
         if:
           condition:
-            switch.is_off: relay_3
+            switch.is_off: ${device_name_lower}_relay_3
           then:
             sprinkler.start_single_valve:
-              id: irrigation_controller
+              id: ${device_name_lower}_controller
               valve_number: 2
           else:
-            sprinkler.shutdown: irrigation_controller
+            sprinkler.shutdown: ${device_name_lower}_controller
   - platform: gpio
-    id: binary_sensor_4
-    name: "Relay Zone 4"
+    id: ${device_name_lower}_binary_sensor_4
+    name: "${device_name_upper} Relay Zone 4"
     internal: true
     pin:
       number: GPIO14
@@ -159,45 +163,45 @@ binary_sensor:
       then:
         if:
           condition:
-            switch.is_off: relay_4
+            switch.is_off: ${device_name_lower}_relay_4
           then:
             sprinkler.start_single_valve:
-              id: irrigation_controller
+              id: ${device_name_lower}_controller
               valve_number: 3
           else:
-            sprinkler.shutdown: irrigation_controller
+            sprinkler.shutdown: ${device_name_lower}_controller
   # physical buttons
   - platform: gpio
     pin:
       number: GPIO0
       mode: INPUT_PULLUP
       inverted: True
-    name: "Button Zone 1"
+    name: "${device_name_upper} Button Zone 1"
     internal: true
   - platform: gpio
     pin:
       number: GPIO9
       mode: INPUT_PULLUP
       inverted: True
-    name: "Button Zone 2"
+    name: "${device_name_upper} Button Zone 2"
     internal: true
   - platform: gpio
     pin:
       number: GPIO10
       mode: INPUT_PULLUP
       inverted: True
-    name: "Button Zone 3"
+    name: "${device_name_upper} Button Zone 3"
     internal: true
   - platform: gpio
     pin:
       number: GPIO14
       mode: INPUT_PULLUP
       inverted: True
-    name: "Button Zone 4"
+    name: "${device_name_upper} Button Zone 4"
     internal: true
   # other
   - platform: status
-    name: "Status"
+    name: "${device_name_upper} Status"
 
 # saving this as an example of how to expose a real-time countdown to home assistant
 # it's too chatty though; the event mechanism i think is a lot better, but only works
@@ -231,19 +235,19 @@ binary_sensor:
 
 sensor:
   - platform: template
-    name: "Main Run Duration"
-    id: main_run_duration
+    name: "${device_name_upper} Main Run Duration"
+    id: ${device_name_lower}_main_run_duration
     device_class: duration
     unit_of_measurement: "s"
     accuracy_decimals: 0
 
 # https://esphome.io/components/sprinkler
 sprinkler:
-  - id: irrigation_controller
-    main_switch: "Main"
-    auto_advance_switch: "Auto Advance"
+  - id: ${device_name_lower}_controller
+    main_switch: "${device_name_upper} Main"
+    auto_advance_switch: "${device_name_upper} Auto Advance"
     multiplier_number:
-      name: "Multiplier"
+      name: "${device_name_upper} Multiplier"
       initial_value: 1
       min_value: 0.5
       max_value: 1.5
@@ -253,10 +257,10 @@ sprinkler:
     # the order of valves here control the automatic run order
     valves:
       - valve_switch: "Front Lawn"
-        valve_switch_id: relay_1
+        valve_switch_id: ${device_name_lower}_relay_1
         enable_switch: "Enable Front Lawn Zone"
         run_duration_number:
-          name: "Front Lawn Run Duration"
+          name: "${device_name_upper} Front Lawn Run Duration"
           unit_of_measurement: min
           initial_value: 10
           min_value: 5
@@ -264,10 +268,10 @@ sprinkler:
           step: 1
           restore_value: true
       - valve_switch: "Front Beds"
-        valve_switch_id: relay_2
+        valve_switch_id: ${device_name_lower}_relay_2
         enable_switch: "Enable Front Beds Zone"
         run_duration_number:
-          name: "Front Beds Run Duration"
+          name: "${device_name_upper} Front Beds Run Duration"
           unit_of_measurement: min
           initial_value: 10
           min_value: 5
@@ -275,10 +279,10 @@ sprinkler:
           step: 1
           restore_value: true
       - valve_switch: "Rear Lawn"
-        valve_switch_id: relay_3
+        valve_switch_id: ${device_name_lower}_relay_3
         enable_switch: "Enable Rear Lawn Zone"
         run_duration_number:
-          name: "Rear Lawn Run Duration"
+          name: "${device_name_upper} Rear Lawn Run Duration"
           unit_of_measurement: min
           initial_value: 10
           min_value: 5
@@ -286,10 +290,10 @@ sprinkler:
           step: 1
           restore_value: true
       - valve_switch: "Rear Beds"
-        valve_switch_id: relay_4
+        valve_switch_id: ${device_name_lower}_relay_4
         enable_switch: "Enable Rear Beds Zone"
         run_duration_number:
-          name: "Rear Beds Run Duration"
+          name: "${device_name_upper} Rear Beds Run Duration"
           unit_of_measurement: min
           initial_value: 10
           min_value: 5

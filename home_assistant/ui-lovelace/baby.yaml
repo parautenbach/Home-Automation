@@ -132,7 +132,7 @@ cards:
         entities:
           - entity: input_boolean.baby_sleep_mode
             name: "Sleep Mode"
-          - entity: binary_sensor.bed_occupied
+          - entity: binary_sensor.bed_occupancy_bed_occupied
             name: "In Bed"
             icon: mdi:bed
           - entity: sensor.baby_current_sleep_session
@@ -232,7 +232,7 @@ cards:
             name: Bedlamp
           - entity: binary_sensor.baby_monitor_motion_alarm
             name: Motion
-          - entity: binary_sensor.bed_occupied
+          - entity: binary_sensor.bed_occupancy_bed_occupied
             name: In Bed
           # - entity: binary_sensor.baby_monitor_sound_alarm
           #   name: Sound

@@ -826,12 +826,12 @@ automation:
     initial_state: true
     trigger:
       - platform: state
-        entity_id: binary_sensor.bed_occupied
+        entity_id: binary_sensor.bed_occupancy_bed_occupied
         to: "on"
         for:
           seconds: 10
       - platform: state
-        entity_id: binary_sensor.bed_occupied
+        entity_id: binary_sensor.bed_occupancy_bed_occupied
         to: "off"
         for:
           seconds: 10

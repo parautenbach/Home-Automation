@@ -1,5 +1,9 @@
 # https://community.home-assistant.io/t/fsr-the-best-bed-occupancy-sensor/365795
 
+substitutions:
+  device_name_upper: "Bed Occupancy"
+  device_name_lower: "bed_occupancy"
+
 esphome:
   name: bed-occupancy
 
@@ -15,15 +19,15 @@ wifi:
       password: !secret wifi_password
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "Bed Occupancy Fallback Hotspot"
+    ssid: "${device_name_upper} Fallback Hotspot"
     password: !secret fallback_ap_password
 
 <<: !include common.yaml
 
 number:
   - platform: template
-    name: "Trigger Level"
-    id: "trigger_level"
+    name: "${device_name_upper} Trigger Level"
+    id: "${device_name_lower}_trigger_level"
     icon: mdi:menu
     initial_value: 1
     restore_value: true
@@ -36,8 +40,8 @@ number:
 sensor:
   - platform: adc
     pin: A0
-    name: "Signal"
-    id: "bed_occupancy_signal"
+    name: "${device_name_upper} Signal"
+    id: "${device_name_lower}_signal"
     icon: mdi:bed
     unit_of_measurement: V
     update_interval: 0.5s
@@ -52,11 +56,11 @@ sensor:
 
 binary_sensor:
   - platform: template
-    name: "Bed Occupied"
-    id: "bed_occupied"
+    name: "${device_name_upper} Bed Occupied"
+    id: "${device_name_lower}_bed_occupied"
     device_class: occupancy
     lambda: |-
-      if (id(bed_occupancy_signal).state < id(trigger_level).state) {
+      if (id(${device_name_lower}_signal).state < id(${device_name_lower}_trigger_level).state) {
         return true;
       } else {
         return false;
@@ -64,5 +68,5 @@ binary_sensor:
 
 switch:
   - platform: restart
-    id: bed_occupancy_restart
-    name: "Restart"
+    id: ${device_name_lower}_restart
+    name: "${device_name_upper} Restart"

@@ -241,6 +241,37 @@ sensor:
     unit_of_measurement: "s"
     accuracy_decimals: 0
 
+# https://community.home-assistant.io/t/esphome-esp32-wifi-connected-led/184399/
+# https://esphome.io/devices/sonoff_4ch.html#step-5-adding-the-button-relay-and-leds
+# https://devices.esphome.io/devices/Sonoff-4CH-Pro-R2
+# alt: https://esphome.io/components/status_led.html
+output:
+  - platform: esp8266_pwm
+    id: blue_led
+    pin: GPIO13
+    inverted: true
+
+interval:
+  - interval: 1s
+    then:
+      if:
+        condition:
+          wifi.connected:
+        then:
+          - if:
+              condition:
+                api.connected:
+              then:
+                - output.turn_on: blue_led
+              else:
+                - output.turn_on: blue_led
+                - delay: 500ms
+                - output.turn_off: blue_led
+                - delay: 500ms
+          - output.turn_on: blue_led
+        else:
+          - output.turn_off: blue_led
+
 # https://esphome.io/components/sprinkler
 sprinkler:
   - id: ${device_name_lower}_controller

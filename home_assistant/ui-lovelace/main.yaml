@@ -366,9 +366,9 @@ cards:
               - cover_with_timer
               - cover_with_occupancy
             variables:
-              occupancy_entity: binary_sensor.lhs_garage_occupied
+              occupancy_entity: binary_sensor.garage_doors_lhs_occupied
             name: Rouvé
-            entity: cover.lhs_garage_door
+            entity: cover.garage_doors_lhs
           - type: custom:button-card
             template:
               - cover_with_timer
@@ -385,9 +385,9 @@ cards:
               - cover_with_timer
               - cover_with_occupancy
             variables:
-              occupancy_entity: binary_sensor.rhs_garage_occupied
+              occupancy_entity: binary_sensor.garage_doors_rhs_occupied
             name: Pieter
-            entity: cover.rhs_garage_door
+            entity: cover.garage_doors_rhs
       - type: history-graph
         title: Who's Home?
         hours_to_show: 24

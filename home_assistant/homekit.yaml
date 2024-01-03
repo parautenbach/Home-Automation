@@ -40,8 +40,8 @@
       - switch.bug_zapper
       # seems like ios can't show a gate (can't change it in the home app either)
       - cover.main_gate
-      - cover.lhs_garage_door
-      - cover.rhs_garage_door
+      - cover.garage_doors_lhs
+      - cover.garage_doors_rhs
       - script.entertainment_apple_tv_on
       - script.entertainment_satellite_on
       - script.entertainment_off
@@ -91,9 +91,9 @@
       type: sprinkler
     cover.main_gate:
       name: Main Gate
-    cover.lhs_garage_door:
+    cover.garage_doors_lhs:
       name: Rouvé's Garage Door
-    cover.rhs_garage_door:
+    cover.garage_doors_rhs:
       name: Pieter's Garage Door
     script.entertainment_apple_tv_on:
       name: Apple TV Sys On

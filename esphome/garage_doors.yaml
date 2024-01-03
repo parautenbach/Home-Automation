@@ -1,3 +1,10 @@
+# maybe one day we'll do this (this was my first esphome project, so i didn't know it too well at the time)
+# https://esphome.io/components/cover/
+
+substitutions:
+  device_name_upper: "Garage Doors"
+  device_name_lower: "garage_doors"
+
 esphome:
   name: garage-doors
   platform: ESP32
@@ -14,7 +21,7 @@ wifi:
       password: !secret wifi_password
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: "Garage Doors Fallback Hotspot"
+    ssid: "${device_name_upper} Fallback Hotspot"
     password: !secret fallback_ap_password
 
 <<: !include common.yaml
@@ -22,8 +29,8 @@ wifi:
 # https://esphome.io/components/binary_sensor/gpio.html
 binary_sensor:
   - platform: gpio
-    id: rhs_garage_door_status
-    name: "RHS Garage Door Status"
+    id: ${device_name_lower}_rhs_status
+    name: "${device_name_upper} RHS Status"
     device_class: garage_door
     pin:
       number: 32
@@ -33,8 +40,8 @@ binary_sensor:
       - delayed_on: 1000ms
       - delayed_off: 1000ms
   - platform: gpio
-    id: lhs_garage_door_status
-    name: "LHS Garage Door Status"
+    id: ${device_name_lower}_lhs_status
+    name: "${device_name_upper} LHS Status"
     device_class: garage_door
     pin:
       number: 35
@@ -46,17 +53,17 @@ binary_sensor:
   # 100cm / 1m
   # true => occupied; false => empty
   - platform: template
-    name: "LHS Garage Occupied"
+    name: "${device_name_upper} LHS Occupied"
     lambda: |-
-      if (id(lhs_garage_ultrasonic_sensor).state < 1) {
+      if (id(${device_name_lower}_lhs_ultrasonic_sensor).state < 1) {
         return true;
       } else {
         return false;
       }
   - platform: template
-    name: "RHS Garage Occupied"
+    name: "${device_name_upper} RHS Occupied"
     lambda: |-
-      if (id(rhs_garage_ultrasonic_sensor).state < 1) {
+      if (id(${device_name_lower}_rhs_ultrasonic_sensor).state < 1) {
         return true;
       } else {
         return false;
@@ -65,41 +72,41 @@ binary_sensor:
 # https://esphome.io/components/switch/gpio.html
 switch:
   - platform: gpio
-    id: rhs_garage_door_control
-    name: "RHS Garage Door Control"
+    id: ${device_name_lower}_rhs_control
+    name: "${device_name_upper} RHS Control"
     pin: 12
     restore_mode: ALWAYS_OFF
   - platform: template
-    id: rhs_garage_door_remote
-    name: "RHS Garage Door Remote"
+    id: ${device_name_lower}_rhs_remote
+    name: "${device_name_upper} RHS Remote"
     icon: "mdi:remote"
     restore_mode: DISABLED
     turn_on_action:
-      - switch.turn_on: rhs_garage_door_control
+      - switch.turn_on: ${device_name_lower}_rhs_control
       - delay: 500ms
-      - switch.turn_off: rhs_garage_door_control
+      - switch.turn_off: ${device_name_lower}_rhs_control
   - platform: gpio
-    id: lhs_garage_door_control
-    name: "LHS Garage Door Control"
+    id: ${device_name_lower}_lhs_control
+    name: "${device_name_upper} LHS Control"
     pin: 14
     restore_mode: ALWAYS_OFF
   - platform: template
-    id: lhs_garage_door_remote
-    name: "LHS Garage Door Remote"
+    id: ${device_name_lower}_lhs_remote
+    name: "${device_name_upper} LHS Remote"
     icon: "mdi:remote"
     restore_mode: DISABLED
     turn_on_action:
-      - switch.turn_on: lhs_garage_door_control
+      - switch.turn_on: ${device_name_lower}_lhs_control
       - delay: 500ms
-      - switch.turn_off: lhs_garage_door_control
+      - switch.turn_off: ${device_name_lower}_lhs_control
   - platform: restart
-    id: garage_doors_restart
-    name: "Garage Doors Restart"
+    id: ${device_name_lower}_restart
+    name: "${device_name_upper} Restart"
 
 sensor:
   - platform: ultrasonic
-    id: lhs_garage_ultrasonic_sensor
-    name: "LHS Garage Ultrasonic Sensor"
+    id: ${device_name_lower}_lhs_ultrasonic_sensor
+    name: "${device_name_upper} LHS Ultrasonic Sensor"
     icon: "mdi:contactless-payment"
     trigger_pin: 26
     echo_pin: 27
@@ -108,8 +115,8 @@ sensor:
     filters:
       - lambda: if (isnan(x)) { return 99; } return x;
   - platform: ultrasonic
-    id: rhs_garage_ultrasonic_sensor
-    name: "RHS Garage Ultrasonic Sensor"
+    id: ${device_name_lower}_rhs_ultrasonic_sensor
+    name: "${device_name_upper} RHS Ultrasonic Sensor"
     icon: "mdi:contactless-payment"
     trigger_pin: 33
     echo_pin: 25

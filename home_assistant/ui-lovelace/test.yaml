@@ -19,9 +19,9 @@ cards:
       - proximity.home
       - entity: input_datetime.main_gate_opened
         type: simple-entity
-      - entity: input_datetime.lhs_garage_door_opened
+      - entity: input_datetime.garage_doors_lhs_opened
         type: simple-entity
-      - entity: input_datetime.rhs_garage_door_opened
+      - entity: input_datetime.garage_doors_rhs_opened
         type: simple-entity
       - weather.forecast_tomorrow
       - input_number.test_percentage

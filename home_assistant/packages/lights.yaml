@@ -1296,8 +1296,8 @@ automation:
       platform: state
       entity_id:
         - cover.main_gate
-        - cover.lhs_garage_door
-        - cover.rhs_garage_door
+        - cover.garage_doors_lhs
+        - cover.garage_doors_rhs
       to: "open"
     mode: queued
     condition:

@@ -2,9 +2,9 @@ homeassistant:
   customize:
     binary_sensor.main_gate_status:
       icon: mdi:gate
-    binary_sensor.lhs_garage_occupied:
+    binary_sensor.garage_doors_lhs_occupied:
       icon: mdi:car-connected
-    binary_sensor.rhs_garage_occupied:
+    binary_sensor.garage_doors_rhs_occupied:
       icon: mdi:car-connected
     cover.garage_doors:
       device_class: garage
@@ -14,10 +14,10 @@ input_datetime:
   main_gate_opened:
     has_date: true
     has_time: true
-  lhs_garage_door_opened:
+  garage_doors_lhs_opened:
     has_date: true
     has_time: true
-  rhs_garage_door_opened:
+  garage_doors_rhs_opened:
     has_date: true
     has_time: true
 
@@ -55,77 +55,77 @@ cover:
 
   - platform: template
     covers:
-      lhs_garage_door:
-        friendly_name: "LHS Garage Door"
+      garage_doors_lhs:
+        friendly_name: "Garage Doors LHS"
         device_class: garage
         open_cover:
           - condition: state
-            entity_id: binary_sensor.lhs_garage_door_status
+            entity_id: binary_sensor.garage_doors_lhs_status
             state: "off"
           - service: switch.turn_on
             data:
-              entity_id: switch.lhs_garage_door_remote
+              entity_id: switch.garage_doors_lhs_remote
         close_cover:
           - condition: state
-            entity_id: binary_sensor.lhs_garage_door_status
+            entity_id: binary_sensor.garage_doors_lhs_status
             state: "on"
           - service: switch.turn_on
             data:
-              entity_id: switch.lhs_garage_door_remote
+              entity_id: switch.garage_doors_lhs_remote
         stop_cover:
           service: switch.turn_on
           data:
-            entity_id: switch.lhs_garage_door_remote
+            entity_id: switch.garage_doors_lhs_remote
         # true (on) means open
-        value_template: "{{ is_state('binary_sensor.lhs_garage_door_status', 'on') }}"
+        value_template: "{{ is_state('binary_sensor.garage_doors_lhs_status', 'on') }}"
         icon_template: >-
           {%- from 'security.jinja' import get_cover_icon -%}
-          {{ get_cover_icon('lhs_garage_door', 'mdi:garage') }}
-        availability_template: "{{ not is_state('binary_sensor.lhs_garage_door_status', 'unavailable') }}"
+          {{ get_cover_icon('garage_doors_lhs', 'mdi:garage') }}
+        availability_template: "{{ not is_state('binary_sensor.garage_doors_lhs_status', 'unavailable') }}"
 
   - platform: template
     covers:
-      rhs_garage_door:
-        friendly_name: "RHS Garage Door"
+      garage_doors_rhs:
+        friendly_name: "Garage Doors RHS"
         device_class: garage
         open_cover:
           - condition: state
-            entity_id: binary_sensor.rhs_garage_door_status
+            entity_id: binary_sensor.garage_doors_rhs_status
             state: "off"
           - service: switch.turn_on
             data:
-              entity_id: switch.rhs_garage_door_remote
+              entity_id: switch.garage_doors_rhs_remote
         close_cover:
           - condition: state
-            entity_id: binary_sensor.rhs_garage_door_status
+            entity_id: binary_sensor.garage_doors_rhs_status
             state: "off"
           - service: switch.turn_on
             data:
-              entity_id: switch.rhs_garage_door_remote
+              entity_id: switch.garage_doors_rhs_remote
         stop_cover:
           service: switch.turn_on
           data:
-            entity_id: switch.rhs_garage_door_remote
+            entity_id: switch.garage_doors_rhs_remote
         # true (on) means open
-        value_template: "{{ is_state('binary_sensor.rhs_garage_door_status', 'on') }}"
+        value_template: "{{ is_state('binary_sensor.garage_doors_rhs_status', 'on') }}"
         icon_template: >-
           {%- from 'security.jinja' import get_cover_icon -%}
-          {{ get_cover_icon('rhs_garage_door', 'mdi:garage') }}
-        availability_template: "{{ not is_state('binary_sensor.rhs_garage_door_status', 'unavailable') }}"
+          {{ get_cover_icon('garage_doors_rhs', 'mdi:garage') }}
+        availability_template: "{{ not is_state('binary_sensor.garage_doors_rhs_status', 'unavailable') }}"
 
   - platform: group
     name: "Garage Doors"
     entities:
-      - cover.lhs_garage_door
-      - cover.rhs_garage_door
+      - cover.garage_doors_lhs
+      - cover.garage_doors_rhs
 
 group:
   covers_with_timers:
     name: Covers With Timers
     entities:
       - cover.main_gate
-      - cover.lhs_garage_door
-      - cover.rhs_garage_door
+      - cover.garage_doors_lhs
+      - cover.garage_doors_rhs
 
 # https://www.dahuasecurity.com/products/All-Products/Video-Intercoms/IP-Products/Door-Stations/VTO2211G-WP
 # https://amcrest.com/smarthome-2-megapixel-wireless-doorbell-security-camera-1920-x-1080p-wifi-doorbell-camera-ip55-weatherproof-two-way-audio-ad110.html
@@ -203,18 +203,18 @@ template:
           {{ get_alert_status('main_gate') }}
         device_class: problem
   - binary_sensor:
-      - name: "LHS Garage Door Alert"
+      - name: "Garage Doors LHS Alert"
         unique_id: "8683ff75-958e-44f0-9233-36a5a8bfe3c8"
         state: >-
           {%- from 'security.jinja' import get_alert_status -%}
-          {{ get_alert_status('lhs_garage_door') }}
+          {{ get_alert_status('garage_doors_lhs') }}
         device_class: problem
   - binary_sensor:
-      - name: "RHS Garage Door Alert"
+      - name: "Garage Doors RHS Alert"
         unique_id: "74597585-0fb3-459e-b90f-3cd6ba034a1a"
         state: >-
           {%- from 'security.jinja' import get_alert_status -%}
-          {{ get_alert_status('rhs_garage_door') }}
+          {{ get_alert_status('garage_doors_rhs') }}
         device_class: problem
 
 script:

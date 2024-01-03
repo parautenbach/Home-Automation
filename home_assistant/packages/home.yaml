@@ -384,7 +384,7 @@ automation:
         conditions:
           # prevent a glitch in case the cover was recently closed
           - condition: state
-            entity_id: cover.rhs_garage_door
+            entity_id: cover.garage_doors_rhs
             state: "closed"
             for:
               minutes: 5
@@ -397,7 +397,7 @@ automation:
             state: "on"
           # my cover for my car
           - condition: state
-            entity_id: binary_sensor.rhs_garage_occupied
+            entity_id: binary_sensor.garage_doors_rhs_occupied
             state: "off"
           # proxy for the alarm being off
           - condition: or
@@ -416,7 +416,7 @@ automation:
             state: "off"
     action:
       - service: cover.open_cover
-        entity_id: cover.rhs_garage_door
+        entity_id: cover.garage_doors_rhs
 
   - alias: "Contractor Mode Enabled Alert"
     id: "86443a8d-cc5d-4017-a7f8-190e9eccc8cc"

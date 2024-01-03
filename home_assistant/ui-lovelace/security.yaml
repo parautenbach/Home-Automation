@@ -106,7 +106,7 @@ cards:
             state_map:
               open: "opened"
             content_template: "Main gate {{state}}"
-          - entity: cover.lhs_garage_door
+          - entity: cover.garage_doors_lhs
             include_history: true
             max_history: 5
             remove_repeats: false
@@ -118,7 +118,7 @@ cards:
             state_map:
               open: "opened"
             content_template: "Rouvé's garage door {{state}}"
-          - entity: cover.rhs_garage_door
+          - entity: cover.garage_doors_rhs
             include_history: true
             max_history: 5
             remove_repeats: false
@@ -135,18 +135,18 @@ cards:
         show_header_toggle: false
         entities:
           - entity: cover.main_gate
-          - entity: cover.lhs_garage_door
-            name: Rouvé's Garage Door Open (LHS)
-          - entity: cover.rhs_garage_door
-            name: Pieter's Garage Door Open (RHS)
+          - entity: cover.garage_doors_lhs
+            name: Rouvé's Garage Door (LHS)
+          - entity: cover.garage_doors_rhs
+            name: Pieter's Garage Door (RHS)
       - type: history-graph
         hours_to_show: 24
         entities:
           - entity: cover.main_gate
             name: Gate
-          - entity: cover.lhs_garage_door
+          - entity: cover.garage_doors_lhs
             name: Rouvé
-          - entity: cover.rhs_garage_door
+          - entity: cover.garage_doors_rhs
             name: Pieter
           - entity: light.garage
             name: Garage L.
@@ -158,17 +158,17 @@ cards:
         entities:
           - entity: timer.main_gate_timer
             name: Main Gate Open Timeout
-          - entity: timer.lhs_garage_door_timer
+          - entity: timer.garage_doors_lhs_timer
             name: Rouvé's Garage Door Open Timeout (LHS)
-          - entity: timer.rhs_garage_door_timer
+          - entity: timer.garage_doors_rhs_timer
             name: Pieter's Garage Door Open Timeout (RHS)
       - type: history-graph
         title: Vehicles
         hours_to_show: 24
         entities:
-          - entity: binary_sensor.lhs_garage_occupied
+          - entity: binary_sensor.garage_doors_lhs_occupied
             name: Rouvé
-          - entity: binary_sensor.rhs_garage_occupied
+          - entity: binary_sensor.garage_doors_rhs_occupied
             name: Pieter
   - type: vertical-stack
     cards:

@@ -51,10 +51,10 @@ timer:
   main_gate_timer:
     duration: "00:03:00"
     restore: true
-  lhs_garage_door_timer:
+  garage_doors_lhs_timer:
     duration: "00:03:00"
     restore: true
-  rhs_garage_door_timer:
+  garage_doors_rhs_timer:
     duration: "00:03:00"
     restore: true
 
@@ -464,8 +464,8 @@ automation:
       - platform: state
         entity_id:
           - cover.main_gate
-          - cover.lhs_garage_door
-          - cover.rhs_garage_door
+          - cover.garage_doors_lhs
+          - cover.garage_doors_rhs
         to: "open"
     mode: queued
     action:
@@ -565,11 +565,11 @@ automation:
       - platform: event
         event_type: timer.finished
         event_data:
-          entity_id: timer.lhs_garage_door_timer
+          entity_id: timer.garage_doors_lhs_timer
       - platform: event
         event_type: timer.finished
         event_data:
-          entity_id: timer.rhs_garage_door_timer
+          entity_id: timer.garage_doors_rhs_timer
     mode: queued
     condition:
       - condition: or
@@ -578,17 +578,17 @@ automation:
             entity_id: cover.main_gate
             state: "open"
           - condition: state
-            entity_id: cover.lhs_garage_door
+            entity_id: cover.garage_doors_lhs
             state: "open"
           - condition: state
-            entity_id: cover.rhs_garage_door
+            entity_id: cover.garage_door_rhs
             state: "open"
     action:
       # https://companion.home-assistant.io/docs/notifications/critical-notifications/
       - service: notify.mobile_app_ceres
         data:
           title: "Security"
-          # timer.rhs_garage_door_timer -> Pieter's garage door
+          # timer.garage_doors_lhs_timer -> Pieter's garage door
           message: >-
             {% set name = None %}
             {% if trigger.event.data.entity_id | regex_search("lhs", ignorecase=True) %}
@@ -676,8 +676,8 @@ automation:
           #     'event': <Event mobile_app_notification_action[R]:
           #       action=EXTEND_COVER_TIMEOUT_05_MIN,
           #       action_data=
-          #         cover_id=cover.rhs_garage_door,
-          #         timer_id=timer.rhs_garage_door_timer>,
+          #         cover_id=cover.garage_doors_rhs,
+          #         timer_id=timer.garage_doors_rhs_timer>,
           #       'description': "event 'mobile_app_notification_action'"
           # }
           entity_id: "{{ trigger.event.data.action_data.timer_id }}"
@@ -703,8 +703,8 @@ automation:
       - platform: state
         entity_id:
           - cover.main_gate
-          - cover.lhs_garage_door
-          - cover.rhs_garage_door
+          - cover.garage_doors_lhs
+          - cover.garage_doors_rhs
         to: "closed"
     mode: queued
     action:
@@ -719,8 +719,8 @@ automation:
       platform: state
       entity_id:
         - cover.main_gate
-        - cover.lhs_garage_door
-        - cover.rhs_garage_door
+        - cover.garage_doors_lhs
+        - cover.garage_doors_rhs
       to: "closed"
       # prevent false positive due to flaky connectivity or after loadshedding and sensors being unavailable
       not_from: "unavailable"
@@ -740,7 +740,7 @@ automation:
       - service: notify.mobile_app_ceres
         data:
           title: "Security"
-          # cover.rhs_garage_door -> Pieter's garage door
+          # cover.garage_doors_rhs -> Pieter's garage door
           message: >-
             {% set name = None %}
             {% if trigger.entity_id | regex_search("lhs", ignorecase=True) %}
@@ -755,7 +755,7 @@ automation:
             {{ name }} has been closed after {{ ((as_timestamp(utcnow()) - last_opened) // 60) | int }} min.
           data:
             # the timer entity
-            # cover.rhs_garage_door -> timer.rhs_garage_door_timer
+            # cover.garage_doors_rhs -> timer.garage_doors_rhs_timer
             group: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
             url: homeassistant://navigate/lovelace/main
 
@@ -765,8 +765,8 @@ automation:
     trigger:
       platform: state
       entity_id:
-        - cover.lhs_garage_door
-        - cover.rhs_garage_door
+        - cover.garage_doors_lhs
+        - cover.garage_doors_rhs
       from:
         - "open"
         - "closed"

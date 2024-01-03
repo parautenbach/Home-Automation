@@ -769,7 +769,7 @@ automation:
     action:
       - service: notify.family
         data:
-          title: "Energy"
+          title: "🔌 Energy"
           message: >-
             {% from 'datetime.jinja' import sec_to_hour_and_min %}
             {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
@@ -811,7 +811,7 @@ automation:
     action:
       - service: notify.family
         data:
-          title: "Energy"
+          title: "🔌 Energy"
           message: >-
             {% from 'datetime.jinja' import sec_to_hour_and_min %}
             {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
@@ -913,7 +913,7 @@ automation:
           battery_soc: "{{ states('sensor.battery_state_of_charge') | int(0) }}"
       - service: notify.mobile_app_ceres
         data:
-          title: "Energy"
+          title: "🔋 Energy"
           message: >-
             {# we're assuming we will never get to 0% SOC – not coding for that edge case; it will work, but the working will be awkward #}
             {# The backup power battery is {{ 'at ' ~ battery_soc ~ '% and ' ~ battery_status if battery_soc < 100 else 'fully charged.' }} #}
@@ -974,7 +974,7 @@ automation:
     action:
       - service: notify.family
         data:
-          title: "Energy"
+          title: "🪫 Energy"
           message: >-
             {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
             The backup power battery's charge is low ({{ battery_soc }}%). Please conserve energy.
@@ -1004,7 +1004,7 @@ automation:
     action:
       - service: notify.family
         data:
-          title: "Energy"
+          title: "⚠️ Energy"
           message: >-
             {% set load_percentage = states('sensor.load_percentage') | int(0) %}
             The backup power inverter load is critical at {{ load_percentage }}%. Please reduce consumption.
@@ -1070,7 +1070,7 @@ automation:
             sequence:
               - service: notify.mobile_app_ceres
                 data:
-                  title: "System"
+                  title: "⚠️ System"
                   message: >-
                     {% set last_ceased = states('input_datetime.solarassistant_activity_ceased') | as_timestamp %}
                     {% set utc_now_ts = utcnow() | as_timestamp %}
@@ -1093,7 +1093,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "System"
+          title: "⚠️ System"
           message: >-
             {% set minutes = (now() - states.binary_sensor.solarassistant_activity.last_updated).total_seconds() | multiply(1/60) | int or 1 %}
             The SolarAssistant bridge's activity has ceased {{ minutes }} min ago.
@@ -1228,7 +1228,7 @@ automation:
       #       url: homeassistant://navigate/lovelace/resources
       - service: notify.mobile_app_ceres
         data:
-          title: "Energy"
+          title: "⚙️ Energy"
           message: >-
             {% set charge_mode = states('sensor.charge_mode') | lower %}
             {% set last_charge_mode = states('input_text.last_charge_mode') | lower %}
@@ -1265,7 +1265,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Energy"
+          title: "🗒️ Energy"
           message: >-
             {% set consumption = states('sensor.daily_solar_energy_consumption') | float(0) %}
             {% set forecast_today = states('sensor.average_solar_energy_forecast_today') | float(0) | round(1) %}
@@ -1291,7 +1291,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Energy"
+          title: "⚠️ Energy"
           message: >-
             {% set from = trigger.from_state.state | int(0) %}
             {% set to = trigger.to_state.state | int(0) %}
@@ -1324,7 +1324,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Energy"
+          title: "⚠️ Energy"
           message: >-
             {% set charge = states('sensor.battery_state_of_charge') | int(0) %}
             {% set target = states('sensor.capacity_charge_point') | int(0) %}
@@ -1355,7 +1355,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Energy"
+          title: "🌡️ Energy"
           message: >-
             {% set temperature = states('sensor.inverter_temperature') | int(0) %}
             {% set load = states('sensor.home_power_kw') | float(0) | round(1) %}
@@ -1387,7 +1387,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Energy"
+          title: "🌡️ Energy"
           message: >-
             {% set temperature = states('sensor.inverter_temperature') | int(0) %}
             {% set load = states('sensor.home_power_kw') | float(0) | round(1) %}
@@ -1419,7 +1419,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Energy"
+          title: "🌡️ Energy"
           message: >-
             {% set temperature = states('sensor.battery_temperature') | int(0) %}
             {% set load = states('sensor.home_power_kw') | float(0) | round(1) %}
@@ -1451,7 +1451,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Energy"
+          title: "🌡️ Energy"
           message: >-
             {% set temperature = states('sensor.battery_temperature') | int(0) %}
             {% set load = states('sensor.home_power_kw') | float(0) | round(1) %}
@@ -1484,7 +1484,7 @@ automation:
       # night (normal) vs day (critical)?
       - service: notify.mobile_app_ceres
         data:
-          title: "Energy"
+          title: "⏱️ Energy"
           message: >-
             The geyser has been heating for {{ trigger.for.seconds // 60 }} min.
           data:
@@ -1508,7 +1508,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Energy"
+          title: "⚙️ Energy"
           message: >-
             {% set is_enabled = trigger.to_state.state | bool(False) %}
             {% set user_id = states.context.user_id %}

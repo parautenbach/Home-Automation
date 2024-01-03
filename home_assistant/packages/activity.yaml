@@ -81,7 +81,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Test"
+          title: "🚘 Test"
           message: "Pieter is{{ ' not' if is_state('binary_sensor.pieter_driving', 'off') }} driving."
           data:
             url: homeassistant://navigate/lovelace/devices

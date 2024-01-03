@@ -1065,7 +1065,7 @@ automation:
       - condition: "{{ states.light | selectattr('state', 'eq', 'on') | rejectattr('attributes.entity_id', 'defined') | list | length > 0 }}"
       - service: notify.mobile_app_ceres
         data:
-          title: "Lights"
+          title: "💡 Lights"
           message: >-
             {# exclude light groups #}
             {# https://community.home-assistant.io/t/count-lights-that-ar-not-a-group/342008/4 #}

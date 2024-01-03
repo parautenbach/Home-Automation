@@ -263,7 +263,7 @@ automation:
       - parallel:
           - service: notify.family
             data:
-              title: Security
+              title: "🔔 Security"
               message: "Someone rang the doorbell."
               # todo: thumbnail, url
               data:

@@ -209,7 +209,7 @@ script:
     sequence:
       - service: notify.family
         data:
-          title: Home ETA
+          title: "🕓 Home ETA"
           # subtract 5 min because we're already on our way when we leave the zone
           message: "Pieter left work and will be home at {{ (now().timestamp() + (states('sensor.google_travel_time') | float - 5)*60) | timestamp_custom('%H:%M', True) }}."
           data:
@@ -428,7 +428,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Special Mode"
+          title: "👷 Special Mode"
           message: "Contractor mode enabled."
           data:
             actions:
@@ -448,7 +448,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Special Mode"
+          title: "👷 Special Mode"
           message: "Contractor mode disabled."
           data:
             actions:
@@ -561,7 +561,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Special Mode"
+          title: "👷 Special Mode"
           message: "Contractor mode is still enabled."
           data:
             actions:
@@ -620,7 +620,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Special Mode"
+          title: "🧳 Special Mode"
           message: "Guest mode enabled."
           data:
             actions:
@@ -639,7 +639,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Special Mode"
+          title: "🧳 Special Mode"
           message: "Guest mode disabled."
           data:
             actions:
@@ -707,7 +707,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Routine Change"
+          title: "⏰ Routine Change"
           message: "Wake-up lights will be suspended from tomorrow until {{ states('input_datetime.vacation_end') }}."
           data:
             group: "routine-change"
@@ -735,7 +735,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Routine Change"
+          title: "⏰ Routine Change"
           message: "Wake-up lights will be resumed from tomorrow at {{ states('input_datetime.wake_up_time')[:5] }}."
           data:
             group: "routine-change"
@@ -790,7 +790,7 @@ automation:
       - parallel:
           - service: notify.family
             data:
-              title: "Nursery"
+              title: "👶 Nursery"
               message: "Motion detected!"
               data:
                 group: "nursery"

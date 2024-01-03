@@ -210,7 +210,7 @@ automation:
     action:
       - service: notify.family
         data:
-          title: "Loadshedding"
+          title: "⚡️ Loadshedding"
           message: "{{ states('sensor.loadshedding_forecast') }}"
           data:
             group: "home-electricity"
@@ -244,7 +244,7 @@ automation:
     action:
       - service: notify.family
         data:
-          title: "Loadshedding"
+          title: "⚡️ Loadshedding"
           message: >-
             {% set start = (states('sensor.loadshedding_start_time') | as_datetime | as_local).strftime('%H:%M') %}
             {% set end = (states('sensor.loadshedding_end_time') | as_datetime | as_local).strftime('%H:%M') %}

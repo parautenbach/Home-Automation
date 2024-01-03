@@ -827,7 +827,7 @@ automation:
     action:
       - service: notify.family
         data:
-          title: "Health"
+          title: "⛑️ Health"
           # https://community.home-assistant.io/t/trigger-to-from-attribute/325345
           # https://community.home-assistant.io/t/access-attribute-of-from-state/380497
           message: >-
@@ -869,7 +869,7 @@ automation:
     action:
       - service: notify.family
         data:
-          title: "Health"
+          title: "☀️ Health"
           message: >
             UV radiation is high. Remember to apply sunscreen.
           data:
@@ -887,7 +887,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Environment"
+          title: "🔥 Environment"
           message: >-
             The risk of fires is high. FDI: {{ states('sensor.winelands_fdi') }}.
           data:

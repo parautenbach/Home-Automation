@@ -211,7 +211,7 @@ automation:
       - service: notify.mobile_app_ceres
         data:
           title: "Loadshedding"
-          message: "Shut Gaia down now!"
+          message: "⛔️ Shut Gaia down now!"
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/devices
@@ -256,7 +256,7 @@ automation:
         data:
           # icon: https://companion.home-assistant.io/docs/notifications/notifications-basic/#notification-icon
           #       https://companion.home-assistant.io/docs/notifications/actionable-notifications/#icon-values
-          title: "Batteries"
+          title: "🪫 Batteries"
           # https://community.home-assistant.io/t/recommended-ways-to-manage-devices-and-entities-names/243815/12
           message: >
             The following devices have less than {{ level }}% charge:
@@ -307,7 +307,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Batteries"
+          title: "🪫 Batteries"
           message: >
             The following devices have no charge:
             {%- for b in monitored_batteries %}
@@ -354,7 +354,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Batteries"
+          title: "🔋 Batteries"
           message: >-
             {% set suffix = ' battery is fully charged.' %}
             {% set name = state_attr(trigger.event.data.entity_id, 'friendly_name') | replace(' Battery', '') | lower | replace('pieter', 'Pieter') | replace('rouvé', 'Rouvé') %}
@@ -432,7 +432,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Devices"
+          title: "📵 Devices"
           message: "The baby monitor is offline."
           data:
             group: "nursery"
@@ -450,7 +450,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Devices"
+          title: "📵 Devices"
           message: "The doorbell is offline."
           data:
             group: "doorbell"

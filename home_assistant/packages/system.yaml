@@ -402,7 +402,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "System"
+          title: "⚠️ System"
           message: "Server disk usage is {{ states('sensor.disk_use_percent') }}%!"
           data:
             group: "system-disk-space"
@@ -423,7 +423,7 @@ automation:
         entity_id: input_boolean.server_shut_down_automatically
       - service: notify.mobile_app_ceres
         data:
-          title: "System"
+          title: "✅ System"
           message: "Server started."
           data:
             group: "system-general"
@@ -441,7 +441,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "System"
+          title: "⚠️ System"
           # https://community.home-assistant.io/t/convert-trigger-for-into-a-relative-age/196979
           message: "The server's load has been {{ states('sensor.load_15m') }} for {{ trigger.for.seconds // 60 }} min."
           data:
@@ -458,7 +458,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "System"
+          title: "⚠️ System"
           message: "The server's memory usage is high ({{ states('sensor.memory_use_percent') }}%)."
           data:
             group: "system-resources"
@@ -513,7 +513,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "System"
+          title: "⚠️ System"
           # https://community.home-assistant.io/t/duplicate-ios-companion-app-notifications/406161
           message: "No recent backup found."
           data:
@@ -534,7 +534,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "System"
+          title: "💾 System"
           message: "A new Home Assistant backup was made."
           data:
             group: "system-backup"
@@ -549,7 +549,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "System"
+          title: "🪫 System"
           message: "Server battery is running low!"
           data:
             group: "system-battery"
@@ -593,7 +593,7 @@ automation:
           entity_id: binary_sensor.electricity_feed
       - service: notify.mobile_app_ceres
         data:
-          title: "System"
+          title: "⛔️ System"
           message: "Server will shut down in {{ timeout }} seconds."
           data:
             group: "system-general"
@@ -607,7 +607,7 @@ automation:
         then:
           - service: notify.mobile_app_ceres
             data:
-              title: "System"
+              title: "⚠️ System"
               message: "Server shutdown cancelled: Power was restored."
               data:
                 group: "system-general"
@@ -620,7 +620,7 @@ automation:
               entity_id: binary_sensor.electricity_feed
           - service: notify.mobile_app_ceres
             data:
-              title: "System"
+              title: "⛔️ System"
               message: "Server shutting down."
               data:
                 group: "system-general"

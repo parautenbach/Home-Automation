@@ -328,7 +328,7 @@ automation:
       - service: notify.family
         data:
           title: Security
-          message: "Motion detected!"
+          message: "⚠️ Motion detected!"
           data:
             group: "security-camera-snapshots"
             url: homeassistant://navigate/lovelace/security
@@ -500,7 +500,7 @@ automation:
               then:
                 - service: notify.mobile_app_ceres
                   data:
-                    title: "Security"
+                    title: "⚠️ Security"
                     message: >-
                       {% set name = None %}
                       {% if repeat.item | regex_search("lhs", ignorecase=True) %}
@@ -587,7 +587,7 @@ automation:
       # https://companion.home-assistant.io/docs/notifications/critical-notifications/
       - service: notify.mobile_app_ceres
         data:
-          title: "Security"
+          title: "⚠️ Security"
           # timer.garage_doors_lhs_timer -> Pieter's garage door
           message: >-
             {% set name = None %}
@@ -739,7 +739,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Security"
+          title: "⚠️ Security"
           # cover.garage_doors_rhs -> Pieter's garage door
           message: >-
             {% set name = None %}
@@ -804,7 +804,7 @@ automation:
             sequence:
               - service: notify.mobile_app_ceres
                 data:
-                  title: "Security"
+                  title: "⚠️ Security"
                   message: "{{ message }}"
                   data:
                     group: "{{ trigger.entity_id }}"
@@ -820,7 +820,7 @@ automation:
         default:
           - service: notify.mobile_app_ceres
             data:
-              title: "Security"
+              title: "⚠️ Security"
               message: "{{ message }}"
               data:
                 group: "{{ trigger.entity_id }}"
@@ -871,7 +871,7 @@ automation:
             sequence:
               - service: notify.mobile_app_ceres
                 data:
-                  title: "Security"
+                  title: "⚠️ Security"
                   message: "{{ message }}"
                   data:
                     group: "{{ trigger.entity_id }}"
@@ -888,7 +888,7 @@ automation:
         default:
           - service: notify.mobile_app_ceres
             data:
-              title: "Security"
+              title: "⚠️ Security"
               message: "{{ message }}"
               data:
                 group: "{{ trigger.entity_id }}"
@@ -910,13 +910,14 @@ automation:
         local_only: true
         # HTTP GET and HEAD requests are not enabled by default
         # https://www.home-assistant.io/docs/automation/trigger/#webhook-trigger
+        # WHY IS THIS A GET?
         allowed_methods:
           - GET
         id: "test_kitchen_smoke"
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Safety"
+          title: "🔥 Safety"
           message: >-
             {% set prefix = '' %}
             {% set entity_id = '' %}
@@ -979,7 +980,7 @@ automation:
               then:
                 - service: notify.mobile_app_ceres
                   data:
-                    title: "Safety"
+                    title: "✅ Safety Check"
                     message: >-
                       {% set area = area_name(repeat.item) | lower %}
                       Please test the {{ area }}'s smoke detector by pressing and holding the button for 3 sec.
@@ -1011,7 +1012,7 @@ automation:
             sequence:
               - service: notify.mobile_app_ceres
                 data:
-                  title: "Security"
+                  title: "⚠️ Security"
                   message: >-
                     The backup power system's cabinet has been opened unexpectedly!
                   data:
@@ -1025,7 +1026,7 @@ automation:
         default:
           - service: notify.mobile_app_ceres
             data:
-              title: "Security"
+              title: "⚠️ Security"
               message: >-
                 The backup power system's cabinet has been opened.
               data:

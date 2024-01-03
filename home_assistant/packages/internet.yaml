@@ -297,7 +297,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Internet"
+          title: "⚠️ Internet"
           message: >-
             {% from 'datetime.jinja' import sec_to_hour_and_min %}
             {% set seconds = max((as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int, 60) %}
@@ -362,7 +362,7 @@ automation:
             sequence:
               - service: notify.mobile_app_ceres
                 data:
-                  title: "Internet"
+                  title: "⚠️ Internet"
                   message: >-
                     {% set input_datetime_entity_id = trigger.entity_id | replace('binary_sensor', 'input_datetime') ~ '_disconnected' %}
                     {% set last_available = states(input_datetime_entity_id) | as_timestamp %}
@@ -399,7 +399,7 @@ automation:
       # check if sensor still off?
       - service: notify.mobile_app_ceres
         data:
-          title: "Internet"
+          title: "⚠️ Internet"
           message: >-
             {% set binary_sensor_entity_id = trigger.event.data.entity_id | replace('timer', 'binary_sensor') | replace('_disconnected', '') %}
             {% set extender_name = state_attr(binary_sensor_entity_id, 'friendly_name') | lower %}

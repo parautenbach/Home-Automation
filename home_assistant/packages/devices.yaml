@@ -184,7 +184,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "System"
+          title: "⚠️ System"
           message: "Systems shutting down prior to loadshedding."
           data:
             group: "system-general"

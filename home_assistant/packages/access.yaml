@@ -98,7 +98,7 @@ cover:
         close_cover:
           - condition: state
             entity_id: binary_sensor.garage_doors_rhs_status
-            state: "off"
+            state: "on"
           - service: switch.turn_on
             data:
               entity_id: switch.garage_doors_rhs_remote

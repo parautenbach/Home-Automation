@@ -581,7 +581,7 @@ automation:
             entity_id: cover.garage_doors_lhs
             state: "open"
           - condition: state
-            entity_id: cover.garage_door_rhs
+            entity_id: cover.garage_doors_rhs
             state: "open"
     action:
       # https://companion.home-assistant.io/docs/notifications/critical-notifications/

@@ -124,7 +124,8 @@ binary_sensor:
         # don't use office illuminance, because we might turn on the desk lamp, which will then trigger a low light condition
         # value_template: "{{ states('sensor.office_illuminance') | int(0) <= 25 }}"
         value_template: >
-          {{ states('sensor.illuminance') | int(0) < 30000 or is_state('binary_sensor.is_fair_weather', 'off') }}
+          {{ states('sensor.illuminance') | int(0) < 35000 or is_state('binary_sensor.is_fair_weather', 'off') }}
+      # https://github.com/pnbruckner/ha-sun2/blob/master/custom_components/sun2/const.py
       nighttime:
         friendly_name: Night-time
         value_template: "{{  states('sensor.solar_angle') | float(0) < -0.833 }}"

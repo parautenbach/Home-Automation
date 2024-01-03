@@ -357,7 +357,7 @@ automation:
           title: "🔋 Batteries"
           message: >-
             {% set suffix = ' battery is fully charged.' %}
-            {% set name = state_attr(trigger.event.data.entity_id, 'friendly_name') | replace(' Battery', '') | lower | replace('pieter', 'Pieter') | replace('rouvé', 'Rouvé') %}
+            {% set name = state_attr(trigger.event.data.entity_id, 'friendly_name') | replace(' Battery', '') | lower | replace('pieter', 'Pieter') | replace('rouvé', 'Rouvé') | replace('h&t', 'temperature sensor') %}
             {% if 'Pieter' in name or 'Rouvé' in name %}
              {{ name ~ suffix  }}
             {% else %}

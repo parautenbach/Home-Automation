@@ -1055,7 +1055,7 @@ automation:
                 after: "17:00:00"
                 before: "09:00:00"
               - condition: template
-                value_template: "{{ states('sensor.solar_angle') | float(0) >= -6 }}"
+                value_template: "{{ states('sensor.solar_angle') | float(0) >= -5 }}"
           - condition: state
             entity_id: binary_sensor.anybody_home
             state: "off"

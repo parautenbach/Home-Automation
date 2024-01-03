@@ -238,15 +238,9 @@ script:
         example: "cover.garage_door"
     mode: single
     sequence:
-      # https://www.home-assistant.io/docs/scripts/conditions/
-      - condition: template
-        value_template: "{{ states(garage_door) == 'open' }}"
       - service: cover.close_cover
         data:
           entity_id: "{{ garage_door }}"
-      - condition: state
-        entity_id: cover.main_gate
-        state: "open"
       - service: cover.close_cover
         entity_id: cover.main_gate
 

@@ -36,6 +36,8 @@ input_boolean:
     name: Gaia Audio Input In Use (Alt)
     icon: mdi:microphone
 
+# note that the behaviour of -W is different depending on the OS
+# on linux it's number of seconds (on macOS it's milliseconds)
 command_line:
   # https://github.com/home-assistant/core/issues/43188
   # https://github.com/home-assistant/core/pull/43869

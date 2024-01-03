@@ -123,3 +123,6 @@ sensor:
     update_interval: 60s
     filters:
       - lambda: if (isnan(x)) { return 99; } return x;
+  - platform: internal_temperature
+    id: ${device_name_lower}__device_temperature
+    name: "${device_name_upper} Device Temperature"

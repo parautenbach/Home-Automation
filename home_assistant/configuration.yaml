@@ -156,6 +156,15 @@ recorder:
   commit_interval: 5
   # https://community.home-assistant.io/t/how-to-reduce-your-database-size-and-extend-the-life-of-your-sd-card/205299/
   # https://community.home-assistant.io/t/find-most-frequently-updated-sensor/302102/
+  #
+  # SELECT
+  #   table_name,
+  #   pg_size_pretty(pg_total_relation_size(quote_ident(table_name))),
+  #   pg_relation_size(quote_ident(table_name))
+  # FROM information_schema.tables
+  # WHERE table_schema = 'public'
+  # ORDER BY 3 DESC;
+  #
   # SELECT
   #     s.metadata_id,
   #     m.entity_id,
@@ -167,8 +176,7 @@ recorder:
   #     s.metadata_id,
   #     m.entity_id
   # ORDER BY
-  #     COUNT(*) DESC
-  # LIMIT 100;
+  #     COUNT(*) DESC;
   #
   # SELECT
   #     (shared_data::json->>'entity_id') AS entity_id,
@@ -184,8 +192,59 @@ recorder:
   exclude:
     entities:
       - automation.update_baby_sleep_session_counter
+      - automation.foyer_motion_detected_last
+      - automation.motion_indicator_on
+      - automation.motion_indicator_off
+      - automation.see_mobile_devices
+      - button.outbuilding_power_meter_reboot
+      - camera.security_camera_last_snapshot
+      - camera.security_camera_last_clip
+      - camera.security_camera_proxy
+      - input_datetime.foyer_motion_detected_last
       - input_number.baby_current_sleep_session
+      - sensor.resource_widget
+      - sensor.garage_doors_lhs_ultrasonic_sensor
+      - sensor.garage_doors_rhs_ultrasonic_sensor
       - sensor.solarassistant_activity_counter
+      - sensor.home_power_kw
+      - sensor.grid_voltage
+      - sensor.grid_frequency
+      - sensor.ac_output_voltage
+      - sensor.ac_output_frequency
+      - sensor.solar_reserve_kw
+      - sensor.home_power_5min_average
+      - sensor.solar_reserve_percentage_5min_average
+      - sensor.pv_power_filtered
+      - sensor.pv_power_5min_average
+      - sensor.load_power_essential
+      - sensor.grid_power_ld
+      - sensor.grid_power_ct
+      - sensor.battery_current
+      - sensor.battery_time_to_shutdown_threshold
+      - sensor.battery_time_to_full
+      - sensor.time
+      - sensor.time_utc
+      - sensor.time_date
+      - sensor.date_time
+      - sensor.date_time_utc
+      - sensor.san_francisco
+      - sensor.cape_town
+      - sensor.sydney
+      - sensor.london
+      - sensor.gaia_storage
+      - sensor.ceres_storage
+      - sensor.ceres_last_update_trigger
+      - sensor.rouve_storage
+      - sensor.motion_detected_last_relative
+      - sensor.outbuilding_power_meter_channel_1_voltage
+      - sensor.outbuilding_power_meter_channel_2_voltage
+      - sensor.outbuilding_power_meter_channel_2_power
+      - sensor.outbuilding_power_meter_channel_2_power_factor
+      - sensor.outbuilding_power_meter_channel_2_energy
+      - sensor.outbuilding_power_meter_channel_2_energy_returned
+      - sensor.fair_weather_time
+      - sensor.fair_weather_time_share
+      - sensor.watchman_last_updated
 
 tts:
   - platform: google_translate

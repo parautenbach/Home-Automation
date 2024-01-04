@@ -43,7 +43,7 @@ command_line:
   # https://github.com/home-assistant/core/pull/43869
   - binary_sensor:
       name: CCTV
-      command: 'ping -n -q -W 1 -c 1 securitypi.local > /dev/null 2>&1 && echo success || echo fail'
+      command: 'ping -n -q -W 1 -c 1 securitypi > /dev/null 2>&1 && echo success || echo fail'
       device_class: connectivity
       payload_on: "success"
       payload_off: "fail"
@@ -51,7 +51,7 @@ command_line:
 
   - binary_sensor:
       name: Thor
-      command: 'ping -n -q -W 1 -c 1 thor.local > /dev/null 2>&1 && echo success || echo fail'
+      command: 'ping -n -q -W 1 -c 1 thor > /dev/null 2>&1 && echo success || echo fail'
       device_class: connectivity
       payload_on: "success"
       payload_off: "fail"
@@ -59,7 +59,7 @@ command_line:
 
   - binary_sensor:
       name: Rasplay
-      command: 'ping -n -q -W 1 -c 1 rasplay.local > /dev/null 2>&1 && echo success || echo fail'
+      command: 'ping -n -q -W 1 -c 1 rasplay > /dev/null 2>&1 && echo success || echo fail'
       device_class: connectivity
       payload_on: "success"
       payload_off: "fail"
@@ -67,7 +67,7 @@ command_line:
 
   - binary_sensor:
       name: Rasplex
-      command: 'ping -n -q -W 1 -c 1 rasplex.local > /dev/null 2>&1 && echo success || echo fail'
+      command: 'ping -n -q -W 1 -c 1 rasplex > /dev/null 2>&1 && echo success || echo fail'
       device_class: connectivity
       payload_on: "success"
       payload_off: "fail"
@@ -75,7 +75,7 @@ command_line:
 
   - binary_sensor:
       name: Main Gate
-      command: 'ping -n -q -W 1 -c 1 main-gate.local > /dev/null 2>&1 && echo success || echo fail'
+      command: 'ping -n -q -W 1 -c 1 main-gate > /dev/null 2>&1 && echo success || echo fail'
       device_class: connectivity
       payload_on: "success"
       payload_off: "fail"
@@ -83,7 +83,7 @@ command_line:
 
   - binary_sensor:
       name: Garage Doors
-      command: 'ping -n -q -W 1 -c 1 garage-doors.local > /dev/null 2>&1 && echo success || echo fail'
+      command: 'ping -n -q -W 1 -c 1 garage-doors > /dev/null 2>&1 && echo success || echo fail'
       device_class: connectivity
       payload_on: "success"
       payload_off: "fail"
@@ -91,7 +91,7 @@ command_line:
 
   - binary_sensor:
       name: Power Meter
-      command: 'ping -n -q -W 1 -c 1 electricity-pulse-counter.local > /dev/null 2>&1 && echo success || echo fail'
+      command: 'ping -n -q -W 1 -c 1 electricity-pulse-counter > /dev/null 2>&1 && echo success || echo fail'
       device_class: connectivity
       payload_on: "success"
       payload_off: "fail"
@@ -99,7 +99,7 @@ command_line:
 
   - binary_sensor:
       name: Office
-      command: 'ping -n -q -W 1 -c 1 office.local > /dev/null 2>&1 && echo success || echo fail'
+      command: 'ping -n -q -W 1 -c 1 office > /dev/null 2>&1 && echo success || echo fail'
       device_class: connectivity
       payload_on: "success"
       payload_off: "fail"
@@ -107,7 +107,7 @@ command_line:
 
   - binary_sensor:
       name: Bed Occupancy
-      command: 'ping -n -q -W 1 -c 1 bed-occupancy.local > /dev/null 2>&1 && echo success || echo fail'
+      command: 'ping -n -q -W 1 -c 1 bed-occupancy > /dev/null 2>&1 && echo success || echo fail'
       device_class: connectivity
       payload_on: "success"
       payload_off: "fail"

@@ -535,7 +535,7 @@ sensor:
   - platform: integration
     unique_id: "0e503fd7-9ae9-446b-8c73-28d8068b69eb"
     name: "Total Electricity Consumption"
-    source: sensor.current_power
+    source: sensor.electricity_pulse_counter_current_power
     unit_prefix: k
     unit_time: h
     method: left

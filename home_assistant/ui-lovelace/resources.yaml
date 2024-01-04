@@ -858,7 +858,7 @@ cards:
               - entity: sensor.grid_power
                 name: Grid
                 color: var(--custom-color-blue)
-              - entity: sensor.current_power
+              - entity: sensor.electricity_pulse_counter_current_power
                 name: Eskom
                 color: var(--custom-color-turquoise)
               - entity: sensor.pv_power

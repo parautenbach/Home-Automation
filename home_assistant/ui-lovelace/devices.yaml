@@ -699,6 +699,7 @@ cards:
           smoothing: true
           points_per_hour: 12  # every 5 min
           line_width: 2
+          lower_bound: 0
           show:
             extrema: true
             average: true

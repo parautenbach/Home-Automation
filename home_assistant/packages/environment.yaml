@@ -47,7 +47,7 @@ homeassistant:
     sensor.owm_pollution_overall_air_quality:
       unit_of_measurement: aqi
     sensor.bedroom_ht_temperature:
-      friendly_name: Bedoom Temperature
+      friendly_name: Bedroom Temperature
       state_class: measurement
     sensor.bedroom_ht_humidity:
       friendly_name: Bedroom Humidity

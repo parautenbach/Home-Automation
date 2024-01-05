@@ -195,6 +195,7 @@ template:
 
   # https://community.home-assistant.io/t/time-elapsed-counter/139907/10
   # https://community.home-assistant.io/t/timer-and-stopwatch/188524/4
+  # alternative: https://community.home-assistant.io/t/display-remaining-seconds-of-timer-in-frontend/119835/76
   - sensor:
       - name: "Baby Current Sleep Session"
         unique_id: "33230253-7dd3-4074-b4fd-d5d5406f7114"
@@ -410,6 +411,7 @@ automation:
               - condition: state
                 entity_id: binary_sensor.contractor_mode
                 state: "on"
+              # check last update of rouvé's phone
           # if guest mode is on, someone could be parked in or in front of the garage
           - condition: state
             entity_id: switch.guest_mode
@@ -878,6 +880,8 @@ automation:
       - platform: sun
         event: sunset
         offset: "-01:00:00"
+      - platform: time
+        at: "18:00:00"
     condition:
       - condition: state
         entity_id: sensor.season

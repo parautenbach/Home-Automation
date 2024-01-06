@@ -392,6 +392,8 @@ cards:
             name: Living Room
           - entity: light.dining_room
             name: Dining Room
+          - entity: light.music_room
+            name: Music Room
           - entity: light.hallway
             name: Hallway
           - entity: light.foyer

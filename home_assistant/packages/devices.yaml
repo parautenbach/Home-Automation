@@ -368,10 +368,10 @@ automation:
           data:
             group: "batteries"
             url: homeassistant://navigate/lovelace/devices
-      - service: persistent_notification.create
-        data:
-          title: "Debug: Battery Fully Charged"
-          message: "{{ trigger.event }}"
+      # - service: persistent_notification.create
+      #   data:
+      #     title: "Debug: Battery Fully Charged"
+      #     message: "{{ trigger.event }}"
 
   # https://apple.stackexchange.com/questions/363416/how-to-check-if-any-audio-is-currently-playing-via-terminal
   # $ if [[ "$(pmset -g | grep ' sleep')" == *"coreaudiod"* ]]; then echo audio is playing; else echo no audio playing; fi

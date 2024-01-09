@@ -359,16 +359,21 @@ cards:
             # https://community.home-assistant.io/t/switch-confirmation-dialog-lovelace-card/284476
             # https://github.com/home-assistant/frontend/discussions/8905
             # https://github.com/iantrich/restriction-card
+            # tl;dr: cannot have a confirmation popup on a switch using the entities card
             tap_action:
               action: toggle
               confirmation:
                 text: Are you sure?
+          - type: attribute
+            entity: sensor.irrigation_state
+            attribute: ui_state
+            name: State
           - entity: timer.irrigation_full_cycle_runtime
             name: Remainder
           - type: custom:fold-entity-row
             head:
               type: section
-              label: Zone Timers
+              label: Zones
               # not an option
               # icon: mdi:cog
             entities:

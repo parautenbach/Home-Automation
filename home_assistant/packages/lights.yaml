@@ -673,7 +673,7 @@ automation:
     trigger:
       - platform: sun
         event: sunset
-        offset: "-00:30:00"
+        offset: "-01:00:00"
         id: "sunset"
       - platform: state
         entity_id: binary_sensor.pieter_present

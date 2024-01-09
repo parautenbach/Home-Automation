@@ -270,7 +270,7 @@ sensor:
       fair_weather_time_share:
         friendly_name: "Fair Weather Time Share"
         value_template: >-
-          {{ (states('sensor.fair_weather_time') | float(0) / states('sensor.daylight') | float(0) * 100) | round(0) }}
+          {{ min((states('sensor.fair_weather_time') | float(0) / states('sensor.daylight') | float(0) * 100) | round(0), 100) }}
         unit_of_measurement: "%"
 
 template:

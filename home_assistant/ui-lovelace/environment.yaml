@@ -348,6 +348,8 @@ cards:
           - entity: automation.start_a_full_irrigation_cycle
             name: Automatic Running
             icon: mdi:auto-mode
+          - entity: input_boolean.skip_next_automatic_irrigation_cycle
+            name: Skip Next
           - entity: sensor.weather_forecast_precipitation_tomorrow
             name: Rain Forecast Tomorrow
             icon: mdi:weather-partly-rainy

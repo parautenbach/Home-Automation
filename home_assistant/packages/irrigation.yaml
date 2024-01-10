@@ -44,6 +44,61 @@ input_boolean:
   irrigation_sunday:
     name: "Sunday"
     icon: mdi:calendar
+  skip_next_automatic_irrigation_cycle:
+    name: Skip Next Automatic Irrigation Cycle
+    icon: mdi:water-off-outline
+
+group:
+  irrigation_zones:
+    name: "Irrigation Zones"
+    entities:
+      - switch.irrigation_front_beds
+      - switch.irrigation_front_lawn
+      - switch.irrigation_rear_beds
+      - switch.irrigation_rear_lawn
+
+template:
+  - trigger:
+      - platform: state
+        entity_id: switch.irrigation_main
+        variables:
+          state: >-
+            {% set durations = [
+              'number.irrigation_front_beds_run_duration',
+              'number.irrigation_front_lawn_run_duration',
+              'number.irrigation_rear_beds_run_duration',
+              'number.irrigation_rear_lawn_run_duration'] %}
+            {% set multiplier = states('number.irrigation_multiplier') | float(0) %}
+            {% set cycle_duration = durations | map('states') | map('int') | sum  * multiplier %}
+            {% set automatic_cycle_start = states('input_datetime.irrigation_start_time') | today_at %}
+            {% set automatic_cycle_end = (automatic_cycle_start | as_timestamp + cycle_duration * 60) | as_datetime | as_local %}
+            {% set is_within_watering_window = automatic_cycle_start <= now() <= automatic_cycle_end %}
+            {% set is_watering_day = is_state('input_boolean.irrigation_' ~ now().strftime('%A') | lower, 'on') %}
+            {% if is_state('switch.irrigation_main', 'off') %}
+              not_running
+            {% elif is_watering_day and is_within_watering_window %}
+              automatic_cycle
+            {% elif is_state('switch.irrigation_auto_advance', 'on') %}
+              manual_cycle
+            {% else %}
+              manual_zone
+            {% endif %}
+    sensor:
+      - name: "Irrigation State"
+        unique_id: "795ac0b2-1b4e-4bfa-91c5-b055072b1135"
+        icon: mdi:state-machine
+        state: >-
+          {{ state }}
+        attributes:
+          ui_state: >-
+            {% set mapping = {
+              'not_running': 'Not Running',
+              'automatic_cycle': 'Automatic Cycle',
+              'manual_cycle': 'Manual Cycle',
+              'manual_zone': 'Manual Zone'
+              } %}
+            {{ mapping[state] }}
+
 
 automation:
   - alias: "Start A Full Irrigation Cycle"
@@ -53,28 +108,69 @@ automation:
         at: input_datetime.irrigation_start_time
     condition: "{{ is_state('input_boolean.irrigation_' ~ now().strftime('%A') | lower, 'on') }}"
     action:
-      # https://community.home-assistant.io/t/sprinkler-automation-with-esphome-a-complete-project/565077
-      # https://www.reddit.com/r/Esphome/comments/12t5z8u/sprinkler_controller_and_esphome/?rdt=46144&onetap_auto=true
-      - service: switch.turn_on
-        target:
-          entity_id: switch.irrigation_main
+      - if:
+        - condition: state
+          entity_id: input_boolean.skip_next_automatic_irrigation_cycle
+          state: "on"
+        then:
+          - service: input_boolean.turn_off
+            target:
+              entity_id: input_boolean.skip_next_automatic_irrigation_cycle
+        else:
+          # https://community.home-assistant.io/t/sprinkler-automation-with-esphome-a-complete-project/565077
+          # https://www.reddit.com/r/Esphome/comments/12t5z8u/sprinkler_controller_and_esphome/?rdt=46144&onetap_auto=true
+          - service: switch.turn_on
+            target:
+              entity_id: switch.irrigation_main
 
-  - alias: "Notify When Irrigation Status Changed"
+  - alias: "Notify When Irrigation State Changed"
     id: "53f24f14-12a3-493a-a6d8-fcb4c552c236"
     trigger:
       - platform: state
-        entity_id: switch.irrigation_main
-        to:
-          - "on"
-          - "off"
+        entity_id: sensor.irrigation_state
         not_from: "unavailable"
     action:
       - service: notify.mobile_app_ceres
         data:
-          # yard?
           title: "Garden"
           message: >-
-            The irrigation has been turned {{ states('switch.irrigation_main') }}.
+            {# "as scheduled" implies that the irrigation was started in accordance with a plan or timetable, #}
+            {# which could include factors other than the exact timing, such as weather conditions,           #}
+            {# soil moisture levels, etc.                                                                     #}
+            {# use "finished" to indicate that a task has been brought to an end,                             #}
+            {# "completed" to indicate that all parts of the task have been done,                             #}
+            {# and "stopped" to indicate that the task has been terminated before it was completed            #}
+            {# there are some edge cases we're not covering:                                                  #}
+            {#   1. when a zone gets started by physically pressing one of the buttons, followed by switching #}
+            {#      to another zone before the first is done, you'll get a notification for the first,        #}
+            {#      nothing for the change, and a finished notification for the second.                       #}
+            {#   2. the grammar will be incorrect for any run that's interrupted, since we don't check the    #}
+            {#      time that passed when a zone or the main switch turns off.                                #}
+            {% set from = trigger.from_state.state %}
+            {% set to = trigger.to_state.state %}
+            {% if to == 'not_running' %}
+              {% if from == 'automatic_cycle' %}
+                An automatic irrigation cycle has completed as scheduled.
+              {% elif from ==  'manual_cycle' %}
+                A manual irrigation cycle has completed.
+              {# manual_zone #}
+              {% else %}
+                {% set zone = expand('group.irrigation_zones') | sort(attribute='last_updated') | list | last %}
+                {% set name = state_attr(zone.entity_id, 'friendly_name') | lower %}
+                The {{ name }} irrigation zone that was started manually has finished.
+              {% endif %}
+            {% else %}
+              {% if to == 'automatic_cycle' %}
+                An automatic irrigation cycle has started as scheduled.
+              {% elif to ==  'manual_cycle' %}
+                A manual irrigation cycle has been started.
+              {# manual_zone #}
+              {% else %}
+                {% set zone = expand('group.irrigation_zones') | selectattr('state', '==', 'on') | first %}
+                {% set name = state_attr(zone.entity_id, 'friendly_name') | lower %}
+                The {{ name }} irrigation zone has been started manually.
+              {% endif %}
+            {% endif %}
           data:
             group: "home-garden"
             url: homeassistant://navigate/lovelace/environment

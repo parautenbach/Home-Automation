@@ -293,8 +293,12 @@ script:
         data:
           title: System
           # https://community.home-assistant.io/t/work-with-triggered-by-in-automations/400352/8
+          # https://community.home-assistant.io/t/user-id-under-this-context-user-id-differs-from-context-user-id/638651/2
           message: >-
+            {# there are several context objects – be careful which one you use #}
+            {# states.context, just context and this.context... #}
             {% set user_id = states.script.shutdown_remote_host.context.user_id %}
+            {# set user_id = states.context.user_id #}
             {% set triggered_by = (states.person | selectattr('attributes.user_id','==', user_id)) | list %}
             {% set first_name = "System" if not triggered_by else state_attr((triggered_by | first).entity_id, "friendly_name").split()[0] %}
             {{ first_name }} shut down {{ name }}.

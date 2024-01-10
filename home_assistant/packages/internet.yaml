@@ -187,19 +187,19 @@ sensor:
     sensors:
       # https://github.com/home-assistant/core/blob/dev/homeassistant/const.py#L571
       internet_speed_in:
-        value_template: '{{ ((states.input_number.wan_traffic_delta_in.state  | float ) / 1000000 ) | round(3) }}'
+        value_template: '{{ ((states.input_number.wan_traffic_delta_in.state  | float(0) ) / 1000000 ) | round(3) }}'
         device_class: data_rate
         unit_of_measurement: 'Mbit/s'
       internet_speed_out:
-        value_template: '{{ ((states.input_number.wan_traffic_delta_out.state | float ) / 1000000 ) | round(3) }}'
+        value_template: '{{ ((states.input_number.wan_traffic_delta_out.state | float(0) ) / 1000000 ) | round(3) }}'
         device_class: data_rate
         unit_of_measurement: 'Mbit/s'
       internet_usage_in:
-        value_template: "{{ ((states('sensor.snmp_wan_in')  | float ) / 1000000000 ) | round(3) }}"
+        value_template: "{{ ((states('sensor.snmp_wan_in')  | float(0) ) / 1000000000 ) | round(3) }}"
         device_class: data_size
         unit_of_measurement: 'GB'
       internet_usage_out:
-        value_template: "{{ ((states('sensor.snmp_wan_out') | float ) / 1000000000 ) | round(3) }}"
+        value_template: "{{ ((states('sensor.snmp_wan_out') | float(0) ) / 1000000000 ) | round(3) }}"
         device_class: data_size
         unit_of_measurement: 'GB'
       internet_round_trip_time_avg:
@@ -256,8 +256,8 @@ automation:
           value: >-
             {# safe delta catering for wrap-around of a 32-bit unsigned int (snmp counter is 32-bit unsigned int) #}
             {# basically taking 2's complement #}
-            {% set from = trigger.from_state.state | int %}
-            {% set to = trigger.to_state.state | int %}
+            {% set from = trigger.from_state.state | int(0) %}
+            {% set to = trigger.to_state.state | int(0) %}
             {% set traffic_delta = (to - from) if (to >= from) else (4294967295 - from + to + 1) %}
             {% set time_delta = as_timestamp(trigger.to_state.last_updated) - as_timestamp(trigger.from_state.last_updated) %}
             {{ (traffic_delta * 8) / time_delta }}
@@ -274,8 +274,8 @@ automation:
           value: >-
             {# safe delta catering for wrap-around of a 32-bit unsigned int (snmp counter is 32-bit unsigned int) #}
             {# basically taking 2's complement #}
-            {% set from = trigger.from_state.state | int %}
-            {% set to = trigger.to_state.state | int %}
+            {% set from = trigger.from_state.state | int(0) %}
+            {% set to = trigger.to_state.state | int(0) %}
             {% set traffic_delta = (to - from) if (to >= from) else (4294967295 - from + to + 1) %}
             {% set time_delta = as_timestamp(trigger.to_state.last_updated) - as_timestamp(trigger.from_state.last_updated) %}
             {{ (traffic_delta * 8) / time_delta }}
@@ -300,7 +300,7 @@ automation:
           title: "⚠️ Internet"
           message: >-
             {% from 'datetime.jinja' import sec_to_hour_and_min %}
-            {% set seconds = max((as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int, 60) %}
+            {% set seconds = max((as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int(0), 60) %}
             {% set duration = sec_to_hour_and_min(seconds) %}
             The Internet {{ 'is unavailable' if trigger.to_state.state == 'off' else 'was unavailable for ' ~  duration }}.
           data:
@@ -358,7 +358,7 @@ automation:
                   {% set input_datetime_entity_id = trigger.entity_id | replace('binary_sensor', 'input_datetime') ~ '_disconnected' %}
                   {% set last_available = states(input_datetime_entity_id) | as_timestamp %}
                   {% set utc_now_ts = utcnow() | as_timestamp %}
-                  {{ (utc_now_ts - last_available) | int >= threshold }}
+                  {{ (utc_now_ts - last_available) | int(0) >= threshold }}
             sequence:
               - service: notify.mobile_app_ceres
                 data:
@@ -370,7 +370,7 @@ automation:
                     {# note that we assume here and in the next automation that the timer's duration isn't less than 1 min #}
                     {# for some reason the calculated duration for a 1 min timer will be a second or two less #}
                     {# i guess this is due to some relative frame of intertia... #}
-                    {% set minutes = ((utc_now_ts - last_available) // 60) | int or 1 %}
+                    {% set minutes = ((utc_now_ts - last_available) // 60) | int(0) or 1 %}
                     {% set extender_name = state_attr(trigger.entity_id, 'friendly_name') | lower %}
                     The {{ extender_name }} was unavailable for {{ minutes }} min.
                   data:
@@ -404,7 +404,7 @@ automation:
             {% set binary_sensor_entity_id = trigger.event.data.entity_id | replace('timer', 'binary_sensor') | replace('_disconnected', '') %}
             {% set extender_name = state_attr(binary_sensor_entity_id, 'friendly_name') | lower %}
             {% set extender_slug = binary_sensor_entity_id | replace('binary_sensor.', '') %}
-            {% set minutes = (now() - states.binary_sensor[extender_slug].last_updated).total_seconds() | multiply(1/60) | int or 1 %}
+            {% set minutes = (now() - states.binary_sensor[extender_slug].last_updated).total_seconds() | multiply(1/60) | int(0) or 1 %}
             The {{ extender_name }} became unavailable {{ minutes }} min ago.
           data:
             group: "home-internet"

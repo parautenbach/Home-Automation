@@ -99,6 +99,32 @@ template:
               } %}
             {{ mapping[state] }}
 
+  - sensor:
+      - name: "Irrigation Weekly Watering Duration"
+        unique_id: "6b106ff8-11fc-4448-ba82-45e4d8ba83c4"
+        icon: mdi:timer-cog-outline
+        device_class: duration
+        unit_of_measurement: min
+        state: >-
+          {% set days = [
+            'input_boolean.irrigation_monday',
+            'input_boolean.irrigation_tuesday',
+            'input_boolean.irrigation_wednesday',
+            'input_boolean.irrigation_thursday',
+            'input_boolean.irrigation_friday',
+            'input_boolean.irrigation_saturday',
+            'input_boolean.irrigation_sunday'] %}
+          {% set durations = [
+            'number.irrigation_front_beds_run_duration',
+            'number.irrigation_front_lawn_run_duration',
+            'number.irrigation_rear_beds_run_duration',
+            'number.irrigation_rear_lawn_run_duration']
+          %}
+          {% set watering_days = days | map('states') | select('==', 'on') | list | count %}
+          {# assuming that all zones are enabled #}
+          {% set cycle_duration = durations | map('states') | map('int') | sum %}
+          {% set multiplier = states('number.irrigation_multiplier') | float(0) %}
+          {{ (watering_days * cycle_duration * multiplier) | int(0) }}
 
 automation:
   - alias: "Start A Full Irrigation Cycle"

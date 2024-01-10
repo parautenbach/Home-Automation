@@ -353,6 +353,8 @@ cards:
           - entity: sensor.weather_forecast_precipitation_tomorrow
             name: Rain Forecast Tomorrow
             icon: mdi:weather-partly-rainy
+          - entity: sensor.irrigation_weekly_watering_duration
+            name: Weekly Watering Duration
           - entity: switch.irrigation_main
             name: Full Cycle
             icon: mdi:water-sync

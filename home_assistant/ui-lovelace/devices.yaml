@@ -182,7 +182,7 @@ cards:
             switch_entity: switch.office_restart
         - type: custom:button-card
           template: restart
-          entity: binary_sensor.bed_occupancy
+          entity: binary_sensor.bed_occupancy_status
           icon: mdi:bed
           variables:
             name: Bed Occupancy
@@ -208,7 +208,7 @@ cards:
         - entity: binary_sensor.electricity_pulse_counter_status
           name: Pwr Meter
         - entity: binary_sensor.office_status
-        - entity: binary_sensor.bed_occupancy
+        - entity: binary_sensor.bed_occupancy_status
           name: Bed Occ.
     - type: custom:battery-state-card
       title: Batteries

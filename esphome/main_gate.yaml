@@ -12,8 +12,10 @@ esphome:
 # https://esphome.io/components/binary_sensor/gpio.html
 binary_sensor:
   - platform: gpio
+    # yes, it's main_gate_gate_status (the main gate's gate status)
+    # it will also otherwise conflict with the connectivity sensor
     id: ${device_name_lower}_gate_status
-    name: "${device_name_upper} Status"
+    name: "${device_name_upper} Gate Status"
     device_class: door
     pin:
       number: 34
@@ -21,6 +23,9 @@ binary_sensor:
     filters:
       - delayed_on: 100ms
       - delayed_off: 100ms
+  - platform: status
+    id: ${device_name_lower}_status
+    name: "${device_name_upper} Status"
 
 sensor:
   - platform: internal_temperature

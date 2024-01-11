@@ -1,6 +1,6 @@
 homeassistant:
   customize:
-    binary_sensor.main_gate_status:
+    binary_sensor.main_gate_gate_status:
       icon: mdi:gate
     binary_sensor.garage_doors_lhs_occupied:
       icon: mdi:car-connected
@@ -30,14 +30,14 @@ cover:
         open_cover:
           # https://community.home-assistant.io/t/cover-template-open-close/248449
           - condition: state
-            entity_id: binary_sensor.main_gate_status
+            entity_id: binary_sensor.main_gate_gate_status
             state: "off"
           - service: switch.turn_on
             data:
               entity_id: switch.main_gate_remote
         close_cover:
           - condition: state
-            entity_id: binary_sensor.main_gate_status
+            entity_id: binary_sensor.main_gate_gate_status
             state: "on"
           - service: switch.turn_on
             data:
@@ -47,11 +47,11 @@ cover:
           data:
             entity_id: switch.main_gate_remote
         # true (on) means open
-        value_template: "{{ is_state('binary_sensor.main_gate_status', 'on') }}"
+        value_template: "{{ is_state('binary_sensor.main_gate_gate_status', 'on') }}"
         icon_template: >-
           {%- from 'security.jinja' import get_cover_icon -%}
-          {{ get_cover_icon('main_gate', 'mdi:gate') }}
-        availability_template: "{{ not is_state('binary_sensor.main_gate_status', 'unavailable') }}"
+          {{ get_cover_icon('binary_sensor.main_gate_gate_status', 'binary_sensor.main_gate_alert', 'mdi:gate') }}
+        availability_template: "{{ not is_state('binary_sensor.main_gate_gate_status', 'unavailable') }}"
 
   - platform: template
     covers:
@@ -80,7 +80,7 @@ cover:
         value_template: "{{ is_state('binary_sensor.garage_doors_lhs_status', 'on') }}"
         icon_template: >-
           {%- from 'security.jinja' import get_cover_icon -%}
-          {{ get_cover_icon('garage_doors_lhs', 'mdi:garage') }}
+          {{ get_cover_icon('binary_sensor.garage_doors_lhs_status', 'binary_sensor.garage_doors_lhs_alert', 'mdi:garage') }}
         availability_template: "{{ not is_state('binary_sensor.garage_doors_lhs_status', 'unavailable') }}"
 
   - platform: template
@@ -110,7 +110,7 @@ cover:
         value_template: "{{ is_state('binary_sensor.garage_doors_rhs_status', 'on') }}"
         icon_template: >-
           {%- from 'security.jinja' import get_cover_icon -%}
-          {{ get_cover_icon('garage_doors_rhs', 'mdi:garage') }}
+          {{ get_cover_icon('binary_sensor.garage_doors_rhs_status', 'binary_sensor.garage_doors_rhs_alert', 'mdi:garage') }}
         availability_template: "{{ not is_state('binary_sensor.garage_doors_rhs_status', 'unavailable') }}"
 
   - platform: group
@@ -200,21 +200,27 @@ template:
         unique_id: "c0519290-d5b4-4c3f-9809-906316d94b04"
         state: >-
           {%- from 'security.jinja' import get_alert_status -%}
-          {{ get_alert_status('main_gate') }}
+          {{ get_alert_status('binary_sensor.main_gate_gate_status',
+                              'timer.main_gate_timer',
+                              'input_datetime.main_gate_opened') }}
         device_class: problem
   - binary_sensor:
       - name: "Garage Doors LHS Alert"
         unique_id: "8683ff75-958e-44f0-9233-36a5a8bfe3c8"
         state: >-
           {%- from 'security.jinja' import get_alert_status -%}
-          {{ get_alert_status('garage_doors_lhs') }}
+          {{ get_alert_status('binary_sensor.garage_doors_lhs_status',
+                              'timer.garage_doors_lhs_timer',
+                              'input_datetime.garage_doors_lhs_opened') }}
         device_class: problem
   - binary_sensor:
       - name: "Garage Doors RHS Alert"
         unique_id: "74597585-0fb3-459e-b90f-3cd6ba034a1a"
         state: >-
           {%- from 'security.jinja' import get_alert_status -%}
-          {{ get_alert_status('garage_doors_rhs') }}
+          {{ get_alert_status('binary_sensor.garage_doors_rhs_status',
+                              'timer.garage_doors_rhs_timer',
+                              'input_datetime.garage_doors_rhs_opened') }}
         device_class: problem
 
 script:

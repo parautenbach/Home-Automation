@@ -23,6 +23,11 @@ i2c:
     scl: 22
     scan: true
 
+binary_sensor:
+  - platform: status
+    id: ${device_name_lower}_status
+    name: "${device_name_upper} Status"
+
 sensor:
   - platform: dht
     model: AM2302

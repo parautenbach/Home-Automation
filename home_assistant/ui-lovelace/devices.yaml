@@ -168,7 +168,7 @@ cards:
       cards:
         - type: custom:button-card
           template: restart
-          entity: binary_sensor.power_meter
+          entity: binary_sensor.electricity_pulse_counter_status
           icon: mdi:power-plug
           variables:
             name: Power Meter
@@ -205,7 +205,7 @@ cards:
           name: Garages
         - entity: binary_sensor.irrigation_status
           name: Irrigation
-        - entity: binary_sensor.power_meter
+        - entity: binary_sensor.electricity_pulse_counter_status
           name: Pwr Meter
         - entity: binary_sensor.office
         - entity: binary_sensor.bed_occupancy

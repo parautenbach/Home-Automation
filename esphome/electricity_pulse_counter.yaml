@@ -9,6 +9,11 @@ esphome:
 
 <<: !include common.yaml
 
+binary_sensor:
+  - platform: status
+    id: ${device_name_lower}_status
+    name: "${device_name_upper} Status"
+
 # https://esphome.io/components/sensor/pulse_counter.html
 sensor:
   - platform: pulse_counter

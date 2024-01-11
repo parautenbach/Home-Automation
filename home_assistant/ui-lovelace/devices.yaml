@@ -152,7 +152,7 @@ cards:
             switch_entity: switch.main_gate_restart
         - type: custom:button-card
           template: restart
-          entity: binary_sensor.garage_doors
+          entity: binary_sensor.garage_doors_status
           icon: mdi:garage-variant
           variables:
             name: Garages
@@ -200,8 +200,8 @@ cards:
         - entity: binary_sensor.thor
         - entity: binary_sensor.rasplex
         - entity: binary_sensor.rasplay
-        - entity: binary_sensor.garage_doors
         - entity: binary_sensor.main_gate_status
+        - entity: binary_sensor.garage_doors_status
           name: Garages
         - entity: binary_sensor.irrigation_status
           name: Irrigation

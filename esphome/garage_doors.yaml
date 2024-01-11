@@ -54,6 +54,9 @@ binary_sensor:
       } else {
         return false;
       }
+  - platform: status
+    id: ${device_name_lower}_status
+    name: "${device_name_upper} Status"
 
 # https://esphome.io/components/switch/gpio.html
 switch:

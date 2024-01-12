@@ -302,7 +302,7 @@ cards:
         - automation.notify_if_too_far_below_charge_point_target
         - automation.notify_pieter_going_home_from_work_in_cape_town
         - automation.notify_when_extender_disconnected
-        - automation.notify_when_irrigation_status_changed
+        - automation.notify_when_irrigation_state_changed
         - automation.notify_when_monitored_battery_fully_charged
         - automation.notify_when_motion_detected_in_the_nursery
         - automation.notify_when_server_started_after_being_shut_down_automatically

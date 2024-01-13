@@ -1,0 +1,193 @@
+path: irrigation
+title: Irrigation
+icon: mdi:sprinkler-variant
+badges: []
+cards:
+  - type: entities
+    title: Irrigation
+    icon: mdi:sprinkler-variant
+    card_mod:
+      style: |
+        .icon {
+          color: var(--paper-item-icon-color);
+        }
+    show_header_toggle: false
+    entities:
+      - type: section
+        label: Main
+      - entity: automation.start_a_full_irrigation_cycle
+        name: Automatic Running
+        icon: mdi:auto-mode
+      - entity: input_boolean.skip_next_automatic_irrigation_cycle
+        name: Skip Next
+      - entity: sensor.weather_forecast_precipitation_tomorrow
+        name: Rain Forecast Tomorrow
+        icon: mdi:weather-partly-rainy
+      - entity: sensor.irrigation_weekly_watering_duration
+        name: Weekly Watering Duration
+      - entity: switch.irrigation_main
+        name: Full Cycle
+        icon: mdi:water-sync
+        type: button
+        action_name: Start/Stop
+        # https://community.home-assistant.io/t/switch-confirmation-dialog-lovelace-card/284476
+        # https://github.com/home-assistant/frontend/discussions/8905
+        # https://github.com/iantrich/restriction-card
+        # tl;dr: cannot have a confirmation popup on a switch using the entities card
+        tap_action:
+          action: toggle
+          confirmation:
+            text: Are you sure?
+      - type: attribute
+        entity: sensor.irrigation_state
+        attribute: ui_state
+        name: State
+      - entity: timer.irrigation_full_cycle_runtime
+        name: Remainder
+      - type: custom:fold-entity-row
+        head:
+          type: section
+          label: Zones
+          # not an option
+          # icon: mdi:cog
+        entities:
+          - entity: timer.irrigation_front_lawn
+            name: Front Lawn
+            type: custom:timer-bar-card
+            bar_radius: 4px
+          - entity: timer.irrigation_front_beds
+            name: Front Beds
+            type: custom:timer-bar-card
+            bar_radius: 4px
+          - entity: timer.irrigation_rear_lawn
+            name: Rear Lawn
+            type: custom:timer-bar-card
+            bar_radius: 4px
+          - entity: timer.irrigation_rear_beds
+            name: Rear Beds
+            type: custom:timer-bar-card
+            bar_radius: 4px
+      - type: custom:fold-entity-row
+        head:
+          type: section
+          label: Settings
+          # not an option
+          # icon: mdi:cog
+        entities:
+          - type: section
+            label: Main
+          - entity: input_datetime.irrigation_start_time
+            name: Start Time
+            icon: mdi:clock-time-four-outline
+            card_mod:
+              style:
+                ha-time-input $ ha-base-time-input $:
+                  ha-textfield:
+                    $: |
+                      .mdc-text-field {
+                        height: 3em !important;
+                      }
+                  ha-select:
+                    $: |
+                      .mdc-select__anchor {
+                        height: 3em !important;
+                      }
+          - type: custom:multiple-entity-row
+            entity: input_boolean.irrigation_sunday
+            name: Days
+            state_header: Sun
+            tap_action: &tap_action
+              action: toggle
+              haptic: light
+            # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/1190
+            style: |
+              .entities-row .entity {
+                margin-right: 10px !important;
+              }
+              .entities-row div.entity:nth-child(1) {
+                color: {{ 'var(--custom-color-green)' if is_state('input_boolean.irrigation_monday', 'on') else 'var(--custom-color-red)' }};
+              }
+              .entities-row div.entity:nth-child(2) {
+                color: {{ 'var(--custom-color-green)' if is_state('input_boolean.irrigation_tuesday', 'on') else 'var(--custom-color-red)' }};
+              }
+              .entities-row div.entity:nth-child(3) {
+                color: {{ 'var(--custom-color-green)' if is_state('input_boolean.irrigation_wednesday', 'on') else 'var(--custom-color-red)' }};
+              }
+              .entities-row div.entity:nth-child(4) {
+                color: {{ 'var(--custom-color-green)' if is_state('input_boolean.irrigation_thursday', 'on') else 'var(--custom-color-red)' }};
+              }
+              .entities-row div.entity:nth-child(5) {
+                color: {{ 'var(--custom-color-green)' if is_state('input_boolean.irrigation_friday', 'on') else 'var(--custom-color-red)' }};
+              }
+              .entities-row div.entity:nth-child(6) {
+                color: {{ 'var(--custom-color-green)' if is_state('input_boolean.irrigation_saturday', 'on') else 'var(--custom-color-red)' }};
+              }
+              .state {
+                color: {{ 'var(--custom-color-green)' if is_state(config.entity, 'on') else 'var(--custom-color-red)' }};
+              }
+            entities:
+              - entity: input_boolean.irrigation_monday
+                name: Mon
+                tap_action: *tap_action
+              - entity: input_boolean.irrigation_tuesday
+                name: Tue
+                tap_action: *tap_action
+              - entity: input_boolean.irrigation_wednesday
+                name: Wed
+                tap_action: *tap_action
+              - entity: input_boolean.irrigation_thursday
+                name: Thu
+                tap_action: *tap_action
+              - entity: input_boolean.irrigation_friday
+                name: Fri
+                tap_action: *tap_action
+              - entity: input_boolean.irrigation_saturday
+                name: Sat
+                tap_action: *tap_action
+          - entity: number.irrigation_multiplier
+            name: Multiplier
+            icon: mdi:multiplication-box
+          - type: section
+            label: Runtimes
+          - entity: number.irrigation_front_lawn_run_duration
+            name: Front Lawn
+            icon: mdi:timer-edit-outline
+            card_mod: &runtime_timer_mods
+              style:
+                ha-time-input $ ha-base-time-input $:
+                  ha-textfield:
+                    $: |
+                      .mdc-text-field {
+                        height: 3em !important;
+                      }
+                  ha-select:
+                    $: |
+                      .mdc-select__anchor {
+                        height: 3em !important;
+                      }
+          - entity: number.irrigation_front_beds_run_duration
+            name: Front Beds
+            icon: mdi:timer-edit-outline
+            card_mod: *runtime_timer_mods
+          - entity: number.irrigation_rear_lawn_run_duration
+            name: Rear Lawn
+            icon: mdi:timer-edit-outline
+            card_mod: *runtime_timer_mods
+          - entity: number.irrigation_rear_beds_run_duration
+            name: Rear Beds
+            icon: mdi:timer-edit-outline
+            card_mod: *runtime_timer_mods
+  - type: history-graph
+    title: Runtime History
+    hours_to_show: 4
+    entities:
+      - entity: switch.irrigation_main
+        name: Main
+      - entity: switch.irrigation_front_lawn
+        name: F. Lawn
+      - entity: switch.irrigation_front_beds
+        name: F. Beds
+      - entity: switch.irrigation_rear_lawn
+        name: R. Lawn
+      - entity: switch.irrigation_rear_beds
+        name: R. Beds

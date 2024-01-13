@@ -191,6 +191,8 @@ cards:
       - type: history-graph
         hours_to_show: 72
         entities:
+          - entity: binary_sensor.daytime
+            name: Daytime
           - entity: sensor.thermal_comfort_inside_summer_simmer_perception
             name: Inside
           - entity: sensor.thermal_comfort_outside_summer_simmer_perception

@@ -394,7 +394,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "📵 Devices"
+          title: "⚠️ Devices"
           message: "The baby monitor is offline."
           data:
             group: "nursery"
@@ -412,7 +412,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "📵 Devices"
+          title: "⚠️ Devices"
           message: "The doorbell is offline."
           data:
             group: "doorbell"

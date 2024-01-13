@@ -208,6 +208,7 @@ automation:
       platform: state
       entity_id: media_player.main_bedroom_universal
       to: idle
+      not_from: "unavailable"
       for:
         minutes: 5
     mode: single

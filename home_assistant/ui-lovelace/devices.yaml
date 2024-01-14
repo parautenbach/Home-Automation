@@ -219,157 +219,32 @@ cards:
       sort:
         - "state"
         - "name"
-    - type: logbook
-      title: Major Automations
-      hours_to_show: 24
-      entities:
-        # run ../scripts/list_all_automations.sh
-        - automation.alert_if_garages_opened_or_closed_when_not_supposed_to
-        - automation.alert_if_gate_opened_or_closed_when_not_supposed_to
-        - automation.alert_vacation_end
-        - automation.alert_vacation_start
-        - automation.alert_when_cabinet_opened
-        - automation.alert_when_smoke_detected
-        - automation.away_mode
-        - automation.backup_home_assistant
-        - automation.backup_home_assistant_db
-        - automation.backup_power_battery_critical_alert
-        - automation.battery_event_test
-        - automation.bedlamps_auto_on_upon_sunset_or_arrival
-        - automation.bedlamps_off_after_sunrise
-        - automation.bedlamps_on_upon_low_light
-        - automation.bedlamps_on_upon_server_start
-        - automation.blink_motion_indicator_while_recording
-        - automation.change_on_air_status
-        - automation.check_disk_space_on_the_home_assistant_server
-        - automation.check_for_flat_batteries
-        - automation.check_for_low_batteries
-        - automation.clear_upcoming_loadshedding_notification
-        - automation.close_cover_from_alert_action
-        - automation.contractor_mode_disabled_alert
-        - automation.contractor_mode_enabled_alert
-        - automation.contractor_mode_still_enabled_alert
-        - automation.cover_left_open_alert
-        - automation.detect_when_extender_disconnected
-        - automation.detect_when_extender_reconnected
-        - automation.detect_when_solarassistant_mqtt_bridge_activity_ceases
-        - automation.detect_when_solarassistant_mqtt_bridge_activity_resumes
-        - automation.dim_bedside_lamp
-        - automation.disable_contractor_mode
-        - automation.disable_contractor_mode_from_alert_action
-        - automation.disable_cover_timeout_from_alert_action
-        - automation.disable_guest_mode_from_alert_action
-        - automation.disable_guest_mode_when_getting_home
-        - automation.download_dam_levels_data
-        - automation.enable_auto_on_bedlamps
-        - automation.enable_contractor_mode
-        - automation.enable_contractor_mode_from_alert_action
-        - automation.enable_guest_mode_from_alert_action
-        - automation.enable_smoke_detector_testing_reminders
-        - automation.extend_cover_timeout_from_alert_action
-        - automation.guest_mode_disabled_alert
-        - automation.guest_mode_enabled_alert
-        - automation.hallway_light_off_when_bedroom_lights_off
-        - automation.handle_doorbell_alert_action
-        - automation.high_fire_risk_notification
-        - automation.high_inverter_load_alert
-        - automation.high_uv_notification
-        - automation.inside_lights_auto_on_upon_sunset_or_arrival
-        - automation.lights_off_after_sunrise
-        - automation.lights_off_when_loadshedding
-        - automation.lights_on_upon_low_light
-        - automation.loadshedding_forecast_notification
-        - automation.low_server_battery
-        - automation.notify_if_baby_monitor_is_offline
-        - automation.notify_if_charge_point_setting_automation_state_was_changed
-        - automation.notify_if_charge_shutdown_threshold_changed
-        - automation.notify_if_cover_was_left_open
-        - automation.notify_if_doorbell_is_offline
-        - automation.notify_if_doorbell_rang
-        - automation.notify_if_driving_state_changed
-        - automation.notify_if_electricity_feed_status_changed
-        - automation.notify_if_geyser_heating_for_long
-        - automation.notify_if_grid_feed_status_changed
-        - automation.notify_if_internet_status_changed
-        - automation.notify_if_inverter_battery_temperature_high
-        - automation.notify_if_inverter_battery_temperature_recovered
-        - automation.notify_if_inverter_temperature_high
-        - automation.notify_if_inverter_temperature_recovered
-        - automation.notify_if_new_backup_found
-        - automation.notify_if_no_recent_backup
-        - automation.notify_if_server_load_high
-        - automation.notify_if_server_memory_usage_high
-        - automation.notify_if_too_far_below_charge_point_target
-        - automation.notify_pieter_going_home_from_work_in_cape_town
-        - automation.notify_when_extender_disconnected
-        - automation.notify_when_irrigation_state_changed
-        - automation.notify_when_monitored_battery_fully_charged
-        - automation.notify_when_motion_detected_in_the_nursery
-        - automation.notify_when_server_started_after_being_shut_down_automatically
-        - automation.notify_when_solarassistant_mqtt_bridge_activity_ceased
-        - automation.open_garage_door_when_arriving
-        - automation.open_the_gate_when_arriving_home
-        - automation.pollen_levels_update
-        - automation.remind_to_test_smoke_detectors
-        - automation.reset_battery_notification_governor
-        - automation.restore_smart_bulb_statuses_after_power_restored
-        - automation.revert_cleaning_day_lights
-        - automation.save_last_smart_bulb_state
-        - automation.see_mobile_devices
-        - automation.send_backup_power_battery_update
-        - automation.send_daily_solar_summary
-        - automation.set_backup_power_warning_light_brightness
-        - automation.set_charge_points
-        - automation.set_dark_theme
-        - automation.set_light_theme
-        - automation.set_pieter_s_driving_state
-        - automation.set_vacation
-        - automation.shut_down_devices_before_loadshedding
-        - automation.shut_down_gaia_notification
-        - automation.shut_down_server
-        - automation.start_a_full_irrigation_cycle
-        - automation.start_cover_timer_when_opened
-        - automation.start_loadshedding_timer
-        - automation.stop_cover_timer_when_closed
-        - automation.stop_light_timer_if_running_when_light_turned_off
-        - automation.switch_garage_light_according_to_door_status_and_light_conditions
-        - automation.switch_off_bedlamp_when_plugging_in_phone
-        - automation.switch_off_bedroom_bedlamp_when_sleep_mode_enabled
-        - automation.switch_off_bug_zapper_when_baby_goes_to_bed
-        - automation.switch_off_light_when_timer_expires
-        - automation.switch_on_front_door_light_when_any_cover_opened
-        - automation.switch_on_inside_lights_when_unplugging_phone
-        - automation.switch_on_lights_at_wake_up_time
-        - automation.switch_on_lights_if_motion_is_detected
-        - automation.switch_on_night_light_if_motion_is_detected
-        - automation.switch_on_or_extend_front_door_light_when_cover_closed
-        - automation.switch_on_the_front_door_light_when_arriving_home
-        - automation.take_foyer_motion_snapshots
-        - automation.test_trigger_context
-        - automation.toggle_dining_room_light
-        - automation.toggle_hallway_light
-        - automation.toggle_pieter_s_bedside_lamp
-        - automation.toggle_rouve_s_bedside_lamp
-        - automation.track_motion_at_doorbell
-        - automation.trim_doorbell_snapshots
-        - automation.turn_audio_on_when_apple_tv_turned_on
-        - automation.turn_off_all_lights_from_alert_action
-        - automation.turn_off_entertainment_system_when_idle_or_leaving_room
-        - automation.turn_off_main_bedroom_media_player_when_idle
-        - automation.turn_off_sleep_mode_from_alert_action
-        - automation.turn_on_bug_zapper
-        - automation.upcoming_loadshedding_notification
-        - automation.update_automations_when_power_status_changed
-        - automation.update_backup_power_warning_light_if_grid_feed_status_changed
-        - automation.update_db_size
-        - automation.update_gaia_audio_input_in_use_alt
-        - automation.update_gaia_bluetooth_audio_connection_status
-        - automation.update_irrigation_full_cycle_runtime_timer
-        - automation.update_irrigation_zone_timer
-        - automation.update_security_camera_snapshot_gallery
-        - automation.update_server_power_status
-        - automation.update_sleep_mode_based_on_bed_occupancy
-        - automation.update_timers_for_covers_on_startup
+    - type: custom:auto-entities
+      card:
+        type: logbook
+        title: Major Automations
+        hours_to_show: 2
+      filter:
+        include:
+          - domain: automation
+        exclude:
+          - entity_id: automation.automatically_start_a_full_irrigation_cycle
+          - entity_id: automation.foyer_motion_detected_last
+          - entity_id: automation.manually_start_a_full_irrigation_cycle
+          - entity_id: automation.monitor_inbound_internet_traffic
+          - entity_id: automation.monitor_outbound_internet_traffic
+          - entity_id: automation.motion_indicator_off
+          - entity_id: automation.motion_indicator
+          - entity_id: automation.proximity_updates
+          - entity_id: automation.stop_irrigating
+          - entity_id: automation.track_motion_at_doorbell
+          - entity_id: automation.update_baby_sleep_session_counter
+    # - type: logbook
+    #   title: Major Automations
+    #   hours_to_show: 2
+    #   entities:
+    #     # run ../scripts/list_all_automations.sh
+    #     - automation.foo
   - type: vertical-stack
     cards:
       - type: map

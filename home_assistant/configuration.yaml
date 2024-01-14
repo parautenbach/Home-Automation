@@ -92,8 +92,6 @@ lovelace:
     - url: /hacsfiles/lovelace-home-feed-card/lovelace-home-feed-card.js
       type: module
     # manual
-    - url: /local/floorplan/floorplan-card.js
-      type: module
     - url: /local/weather-card-chart/weather-card-chart.js
       type: module
 

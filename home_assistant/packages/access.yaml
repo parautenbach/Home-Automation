@@ -281,11 +281,11 @@ automation:
                   lazy: true
                 actions:
                   - action: "PARTLY_OPEN_AND_CLOSE_GATE"
-                    title: "Partly open and close gate"
+                    title: "Open and close for pedestrian"
                   - action: "PARTLY_OPEN_GATE"
-                    title: "Partly open gate"
+                    title: "Open partly"
                   - action: "FULLY_OPEN_GATE"
-                    title: "Fully open gate"
+                    title: "Open fully"
           # non-blocking call
           - service: script.turn_on
             target:

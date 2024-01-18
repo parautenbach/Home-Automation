@@ -276,12 +276,15 @@ sensor:
 template:
   - binary_sensor:
       # https://www.home-assistant.io/integrations/weather/#condition-mapping
+      # see day-time and night-time sensors regarding the value of -0.833
       - name: Is Fair Weather
         # only for daytime
         state: >-
+          {# technically it should be -0.833 (not -1), but due to sensor update timings we're stretching it a little bit #}
           {{ (is_state('weather.openweathermap_hourly', 'sunny') or
               is_state('weather.openweathermap_hourly', 'partlycloudy')) and
-             states('sensor.solar_angle') | float(0) >= -0.833 }}
+             states('sensor.solar_angle') | float(0) >= -1 }}
+        }
 
   - sensor:
       - name: Overall Pollen Risk for Badge

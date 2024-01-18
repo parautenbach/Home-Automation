@@ -8,6 +8,8 @@ Get the triggered by details given a context.
 :returns: A tuple where the first element is the method ([physical, system, ui, unknown]) and the second none in the case of a physical or system (script or automation) invocation or the friendly name of the user if it was via the UI.
 
 :seealso: https://community.home-assistant.io/t/work-with-triggered-by-in-automations/400352/8
+:seealso: https://community.home-assistant.io/t/is-there-documentation-on-what-context-id-parent-id-and-user-id-mean-in-an-automation/554374
+:seealso: https://community.home-assistant.io/t/state-context-to-ui-automation/427861/14
 #}
 {%- macro get_triggered_by_details(context) -%}
     {%- if context.user_id -%}

@@ -69,7 +69,7 @@ template:
               'number.irrigation_rear_beds_run_duration',
               'number.irrigation_rear_lawn_run_duration'] %}
             {% set multiplier = states('number.irrigation_multiplier') | float(0) %}
-            {% set cycle_duration = durations | map('states') | map('int') | sum  * multiplier %}
+            {% set cycle_duration = durations | map('states') | map('int', 0) | sum * multiplier %}
             {% set automatic_cycle_start = states('input_datetime.irrigation_start_time') | today_at %}
             {% set automatic_cycle_end = (automatic_cycle_start | as_timestamp + cycle_duration * 60) | as_datetime | as_local %}
             {% set is_within_watering_window = automatic_cycle_start <= now() <= automatic_cycle_end %}

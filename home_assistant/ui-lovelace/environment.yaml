@@ -349,7 +349,7 @@ cards:
               # sensor.sun_illuminance can be very unreliable (operationally); need to use my own light meter
               # - entity: sensor.sun_illuminance
               #   color: var(--custom-color-yellow)
-              - entity: sensor.illuminance
+              - entity: sensor.weather_based_sun_illuminance
                 color: var(--custom-color-yellow)
               - entity: sensor.nighttime_number
                 color: var(--custom-color-gray)
@@ -370,7 +370,7 @@ cards:
               labels_secondary: false
           - type: custom:mini-graph-card
             entities:
-              - entity: sensor.illuminance
+              - entity: sensor.weather_based_sun_illuminance
                 color: var(--custom-color-yellow)
               - entity: sensor.office_illuminance
                 color: var(--custom-color-blue)

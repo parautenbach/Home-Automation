@@ -88,22 +88,6 @@ sensor:
     name: sydney
     time_zone: Australia/Sydney
 
-  - platform: systemmonitor
-    resources:
-      - type: disk_use_percent
-        arg: /
-      - type: memory_use_percent
-      - type: processor_use
-      - type: processor_temperature
-      - type: load_1m
-      - type: load_5m
-      - type: load_15m
-      - type: throughput_network_in
-        arg: enp3s0
-      - type: throughput_network_out
-        arg: enp3s0
-      - type: last_boot
-
   # used to check backups
   - platform: folder
     folder: /mnt/nas/Backups/home_assistant/

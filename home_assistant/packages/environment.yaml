@@ -284,7 +284,6 @@ template:
           {{ (is_state('weather.openweathermap_hourly', 'sunny') or
               is_state('weather.openweathermap_hourly', 'partlycloudy')) and
              states('sensor.solar_angle') | float(0) >= -1 }}
-        }
 
   - sensor:
       - name: Overall Pollen Risk for Badge

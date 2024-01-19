@@ -267,7 +267,7 @@ script:
       - delay:
           seconds: 5
       - service: homeassistant.update_entity
-        data:
+        target:
           entity_id: "binary_sensor.{{ host }}"
       - wait_template: "{{ is_state('binary_sensor.' ~ host, 'off') }}"
         timeout:
@@ -329,7 +329,7 @@ script:
     sequence:
       - service: shell_command.make_backup
       - service: homeassistant.update_entity
-        data:
+        target:
           entity_id: sensor.home_assistant
 
   make_db_backup:
@@ -564,7 +564,8 @@ automation:
     action:
       # sensor definition: platform: linux_battery
       - service: homeassistant.update_entity
-        entity_id: sensor.home_assistant_server_battery
+        target:
+          entity_id: sensor.home_assistant_server_battery
 
   - alias: "Shut Down Server"
     id: "3fd83ac9-dc07-40d7-a9d1-c50c123b32ff"

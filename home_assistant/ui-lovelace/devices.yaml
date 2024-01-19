@@ -239,6 +239,7 @@ cards:
           - entity_id: automation.stop_irrigating
           - entity_id: automation.track_motion_at_doorbell
           - entity_id: automation.update_baby_sleep_session_counter
+          - entity_id: automation.update_ping_sensors
     # - type: logbook
     #   title: Major Automations
     #   hours_to_show: 2

@@ -1,0 +1,41 @@
+script:
+  update_entity:
+    description: "Update an entity"
+    fields:
+      entity_id:
+        description: "An entity ID"
+        example: "binary_sensor.my_sensor"
+    mode: parallel
+    sequence:
+      - service: homeassistant.update_entity
+        target:
+          entity_id: "{{ entity_id }}"
+
+automation:
+  # https://community.home-assistant.io/t/2022-12-scrape-and-scan-interval/501851/60
+  # https://community.home-assistant.io/t/2023-12-ping-integration-changes-scan-interval/652455/102
+  - alias: "Update Ping Sensors"
+    id: "9faa1fce-c700-4ec2-87e4-d46c467c91f7"
+    initial_state: true
+    trigger:
+      platform: time_pattern
+      # minimum resolution
+      seconds: '/15'
+    variables:
+      entities: >-
+        {{ integration_entities('ping') }}
+      total_seconds: "{{ now().timestamp() | int(0) }}"
+    action:
+      repeat:
+        for_each: "{{ entities }}"
+        sequence:
+          if: "{{ total_seconds % (state_attr(repeat.item, 'scan_interval') | int(0)) == 0 }}"
+          then:
+            # https://community.home-assistant.io/t/allow-sequence-of-repeat-to-be-run-in-parallel-mode/433654
+            # non-blocking call: fire these off in parallel (script also allows parallel execution)
+            - service: script.turn_on
+              target:
+                entity_id: script.update_entity
+              data:
+                variables:
+                  entity_id: "{{ repeat.item }}"

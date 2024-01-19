@@ -26,6 +26,8 @@ homeassistant:
     sensor.monthly_internet_usage_out:
       friendly_name: 'Monthly Uploads'
       icon: mdi:upload
+    binary_sensor.internet:
+      scan_interval: 60
     sensor.internet_packet_loss:
       friendly_name: Internet Packet Loss
       icon: mdi:cancel
@@ -35,6 +37,8 @@ homeassistant:
     sensor.internet_round_trip_time_mdev:
       friendly_name: Internet Mean Ping Deviation
       icon: mdi:sigma-lower
+    binary_sensor.front_extender:
+      scan_interval: 30
     sensor.front_extender_packet_loss:
       friendly_name: Front Extender Packet Loss
       icon: mdi:cancel
@@ -44,6 +48,8 @@ homeassistant:
     sensor.front_extender_round_trip_time_mdev:
       friendly_name: Front Extender Mean Ping Deviation
       icon: mdi:sigma-lower
+    binary_sensor.back_extender:
+      scan_interval: 30
     sensor.back_extender_packet_loss:
       friendly_name: Back Extender Packet Loss
       icon: mdi:cancel
@@ -147,24 +153,6 @@ binary_sensor:
           {% else %}
             mdi:server-network-off
           {% endif %}
-
-  - platform: ping
-    name: Back Extender
-    host: AccessPointWiFi6Pro
-    count: 5
-    scan_interval: 30
-
-  - platform: ping
-    name: Front Extender
-    host: front_extender
-    count: 5
-    scan_interval: 30
-
-  - platform: ping
-    name: Internet
-    host: www.google.com
-    count: 5
-    scan_interval: 60
 
 sensor:
   - platform: snmp

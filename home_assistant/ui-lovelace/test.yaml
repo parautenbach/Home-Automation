@@ -121,3 +121,43 @@ cards:
       green: 10
       yellow: -10
       red: -100
+  - type: markdown
+    # https://github.com/thomasloven/lovelace-card-mod/issues/259
+    # https://community.home-assistant.io/t/sensor-count-the-installation-mine-is-bigger-than-yours-sensor/225959/27
+    # title: Components
+    content: >
+      Domain | Count
+         :---|---:
+      {% for domain in states | groupby('domain') -%}
+        {%- set name = domain[0].replace('_', ' ') | title -%}
+        **{{ name }}** | {{ states[domain[0]] | count }}
+      {% endfor %}
+      **Total** | {{ states | count }}
+    card_mod:
+      style:
+        ha-markdown:
+          $:
+            ha-markdown-element: |
+              table {
+                border-spacing: 0;
+                width: 100%;
+                padding: 8px;
+                border-radius: var(--ha-card-border-radius);
+              }
+              th {
+                background-color: var(--state-icon-color);
+                color: white;
+                padding: 4px;
+              }
+              th:first-child {
+                border-top-left-radius: min(var(--ha-card-border-radius)/2, 5px);
+              }
+              th:last-child {
+                border-top-right-radius: min(var(--ha-card-border-radius)/2, 5px);
+              }
+              td {
+                padding: 4px;
+              }
+              tr:nth-child(even) {
+                background-color: var(--secondary-background-color);
+              }

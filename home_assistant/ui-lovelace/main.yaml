@@ -455,7 +455,7 @@ cards:
             template: clock
             variables:
               timezone: America/Los_Angeles
-            name: San Francisco
+            name: San Fran.
             entity: sensor.san_francisco
           - type: custom:button-card
             template: clock

@@ -56,9 +56,7 @@ homeassistant:
       state_class: measurement
     sensor.main_bedroom_ht_humidity:
       friendly_name: Main Bedroom Humidity
-    sensor.daylight:
-      device_class: duration
-      unit_of_measurement: h
+    sensor.home_sun_daylight:
       state_class: measurement
     sensor.outside_temperature:
       state_class: measurement
@@ -150,10 +148,6 @@ sensor:
     api_key: !secret open_weather_map_api_key
     latitude: !secret home_latitude
     longitude: !secret home_longitude
-
-  - platform: sun2
-    monitored_conditions:
-      - daylight
 
   - platform: filter
     name: ambient_temperature_filtered
@@ -263,7 +257,7 @@ sensor:
       daylight_hm:
         friendly_name: "Daylight Length"
         value_template: >-
-          {{ state_attr('sensor.daylight', 'today_hms')[:5] }}
+          {{ state_attr('sensor.home_sun_daylight', 'today_hms')[:5] }}
         icon_template: mdi:weather-sunny
       nighttime_number:
         value_template: "{{ iif(is_state('binary_sensor.nighttime', 'on'), 1, 0) }}"
@@ -276,7 +270,7 @@ sensor:
       fair_weather_time_share:
         friendly_name: "Fair Weather Time Share"
         value_template: >-
-          {{ min((states('sensor.fair_weather_time') | float(0) / states('sensor.daylight') | float(0) * 100) | round(0), 100) if has_value(states('sensor.daylight')) else 0 }}
+          {{ min((states('sensor.fair_weather_time') | float(0) / states('sensor.home_sun_daylight') | float(0) * 100) | round(0), 100) if has_value('sensor.home_sun_daylight') else 0 }}
         unit_of_measurement: "%"
 
 template:

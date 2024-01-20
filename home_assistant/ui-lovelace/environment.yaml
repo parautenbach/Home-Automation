@@ -401,7 +401,7 @@ cards:
             cards:
               - type: custom:apexcharts-card
                 series:
-                  - entity: sensor.daylight
+                  - entity: sensor.home_sun_daylight
                     color: var(--custom-color-yellow)
                     min: 0
                     max: 24
@@ -435,7 +435,7 @@ cards:
               - type: custom:apexcharts-card
                 series:
                   - entity: sensor.fair_weather_time
-                    transform: "return x / parseFloat(hass.states['sensor.daylight'].state) * 100;"
+                    transform: "return x / parseFloat(hass.states['sensor.home_sun_daylight'].state) * 100;"
                     color: var(--custom-color-yellow)
                     min: 0
                     max: 100
@@ -462,7 +462,7 @@ cards:
                             EVAL:function (percentage) {
                               // would've loved to make this snippet more readible, but getElementsByTagName returns some kind of live object
                               // which means you need to resolve the whole thing; can't make no hass object first.
-                              const daylight = parseFloat(document.getElementsByTagName('home-assistant')[0].hass.states['sensor.daylight'].state);
+                              const daylight = parseFloat(document.getElementsByTagName('home-assistant')[0].hass.states['sensor.home_sun_daylight'].state);
                               const value = percentage / 100 * parseFloat(daylight);
                               const hour = Math.floor(value);
                               const minute = Math.round((value - hour) * 60);
@@ -471,7 +471,7 @@ cards:
           - type: statistics-graph
             title: Daylight
             entities:
-              - sensor.daylight
+              - sensor.home_sun_daylight
             days_to_show: 7
             period: day
             chart_type: bar

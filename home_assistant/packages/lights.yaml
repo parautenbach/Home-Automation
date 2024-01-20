@@ -1212,7 +1212,7 @@ automation:
         id: "light.rouve_bedside"
     condition:
       - condition: time
-        after: "19:45:00"
+        after: "19:30:00"
         before: "01:00:00"
       - condition: state
         # on if either or both are on

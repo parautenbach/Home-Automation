@@ -49,13 +49,13 @@ input_boolean:
 timer:
   # format: <entity_id>_timer
   main_gate_timer:
-    duration: "00:03:00"
+    duration: "00:05:00"
     restore: true
   garage_doors_lhs_timer:
-    duration: "00:03:00"
+    duration: "00:05:00"
     restore: true
   garage_doors_rhs_timer:
-    duration: "00:03:00"
+    duration: "00:05:00"
     restore: true
 
 binary_sensor:
@@ -473,7 +473,7 @@ automation:
         target:
           entity_id: "timer.{{ trigger.entity_id | replace('cover.', '') }}_timer"
         data:
-          duration: "00:03:00"
+          duration: "00:05:00"
       - service: input_datetime.set_datetime
         target:
           entity_id: "input_datetime.{{ trigger.entity_id | replace('cover.', '') }}_opened"
@@ -547,7 +547,7 @@ automation:
                 #       target:
                 #         entity_id: "timer.{{ repeat.item | replace('cover.', '') }}_timer"
                 #       data:
-                #         duration: "00:03:00"
+                #         duration: "00:05:00"
               else:
                 # if the cover got opened while the server was running, but closed while down
                 - service: timer.cancel

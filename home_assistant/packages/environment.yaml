@@ -329,7 +329,7 @@ template:
     - platform: state
       entity_id: weather.openweathermap_hourly
     action:
-      - service: weather.get_forecast
+      - service: weather.get_forecasts
         target:
           entity_id: weather.openweathermap_hourly
         data:
@@ -343,7 +343,7 @@ template:
         # device_class: duration
         # unit_of_measurement: s
         attributes:
-          forecast: "{{ hourly.forecast[24:] }}"
+          forecast: "{{ hourly['weather.openweathermap_hourly']['forecast'][24:] }}"
           attribution: "{{ state_attr('sensor.weather_tomorrow_hourly', 'attribution') }}"
   - trigger:
     - platform: time_pattern
@@ -353,7 +353,7 @@ template:
     - platform: state
       entity_id: weather.openweathermap_daily
     action:
-      - service: weather.get_forecast
+      - service: weather.get_forecasts
         target:
           entity_id: weather.openweathermap_daily
         data:
@@ -363,11 +363,11 @@ template:
       - name: Weather Forecast Precipitation Tomorrow
         unique_id: "2f58f787-0427-462d-a5c1-c2e1b568f0c7"
         state: >-
-          {{ state_attr('weather.openweathermap_daily', 'forecast')[1]['precipitation'] }}
+          {{ daily['weather.openweathermap_daily']['forecast'][1]['precipitation'] }}
         device_class: precipitation
         unit_of_measurement: "mm"
         icon: >-
-          {% if (state_attr('weather.openweathermap_daily', 'forecast')[1])['precipitation'] > 0 %}
+          {% if daily['weather.openweathermap_daily']['forecast'][1]['precipitation'] > 0 %}
             mdi:water
           {% else %}
             mdi:water-off

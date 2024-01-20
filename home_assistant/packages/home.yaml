@@ -890,7 +890,7 @@ automation:
           - summer
           - autumn
     action:
-      - service: weather.get_forecast
+      - service: weather.get_forecasts
         target:
           entity_id: weather.openweathermap_hourly
         data:
@@ -902,7 +902,7 @@ automation:
       # - condition: "{{ states('sensor.openweathermap_rain') | float(0) < 1 }}"
       # basically no rain in the next 5 hours
       # true if at least one forecast value has a precipitation value of greater or equal to 1 mm
-      - condition: "{{ state_attr('weather.openweathermap_hourly', 'forecast')[0:5] | map(attribute='precipitation') | select('ge', 1) | list | length == 0 }}"
+      - condition: "{{ hourly['weather.openweathermap_hourly']['forecast'][0:5] | map(attribute='precipitation') | select('ge', 1) | list | length == 0 }}"
       - service: switch.turn_on
         target:
           entity_id: switch.bug_zapper

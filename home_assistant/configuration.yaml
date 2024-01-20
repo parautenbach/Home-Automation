@@ -71,8 +71,6 @@ lovelace:
       type: module
     - url: /hacsfiles/apexcharts-card/apexcharts-card.js
       type: module
-    # - url: /hacsfiles/ha-floorplan/floorplan.js
-    #   type: module
     - url: /hacsfiles/lovelace-state-switch/state-switch.js
       type: module
     - url: /hacsfiles/timer-bar-card/timer-bar-card.js
@@ -92,8 +90,7 @@ lovelace:
     - url: /hacsfiles/lovelace-auto-entities/auto-entities.js
       type: module
     # manual
-    - url: /local/weather-card-chart/weather-card-chart.js
-      type: module
+    # none
 
 frontend:
   themes: !include_dir_merge_named themes

@@ -515,68 +515,72 @@ cards:
           entities:
             - entity: sensor.charge_mode
               name: Charge Mode
-              style: &battery_charge_mode_mods
-                hui-generic-entity-row:
-                  $:
-                    .: |
-                      .state {
-                        color:
-                          {%- if 'Optimistic' in states(config.entity) -%}
-                            var(--custom-color-green);
-                          {%- else -%}
-                            var(--custom-color-red);
-                          {%- endif -%}
-                      }
+              card_mod: &battery_charge_mode_mods
+                style:
+                  hui-generic-entity-row:
+                    $:
+                      .: |
+                        .state {
+                          color:
+                            {%- if 'Optimistic' in states(config.entity) -%}
+                              var(--custom-color-green);
+                            {%- else -%}
+                              var(--custom-color-red);
+                            {%- endif -%}
+                        }
             - entity: sensor.battery_state_of_charge
               name: State of Charge
-              style: &battery_state_of_charge_mods
-                hui-generic-entity-row:
-                  $:
-                    .: |
-                      .state {
-                        color:
-                          {%- if states(config.entity) | int(0) <= 30 -%}
-                            var(--custom-color-red);
-                          {%- elif states('sensor.capacity_charge_point') | int(0) - states(config.entity) | int(0) >= 10 -%}
-                            var(--custom-color-red);
-                          {%- elif states(config.entity) | int(0) >= states('sensor.capacity_charge_point') | int(0) -%}
-                            var(--custom-color-green);
-                          {%- else -%}
-                            var(--custom-color-yellow);
-                          {%- endif -%}
-                      }
+              card_mod: &battery_state_of_charge_mods
+                style:
+                  hui-generic-entity-row:
+                    $:
+                      .: |
+                        .state {
+                          color:
+                            {%- if states(config.entity) | int(0) <= 30 -%}
+                              var(--custom-color-red);
+                            {%- elif states('sensor.capacity_charge_point') | int(0) - states(config.entity) | int(0) >= 10 -%}
+                              var(--custom-color-red);
+                            {%- elif states(config.entity) | int(0) >= states('sensor.capacity_charge_point') | int(0) -%}
+                              var(--custom-color-green);
+                            {%- else -%}
+                              var(--custom-color-yellow);
+                            {%- endif -%}
+                        }
             - entity: sensor.capacity_charge_point
               name: Charge Point Target
             - entity: binary_sensor.grid_charge_point_status
               name: Grid Charge Point Status
-              style: &grid_charge_point_status_mods
-                hui-generic-entity-row:
-                  $:
-                    .: |
-                      .state {
-                        color:
-                          {%- if is_state(config.entity, 'on') -%}
-                            var(--custom-color-green);
-                          {%- else -%}
-                            var(--custom-color-red);
-                          {%- endif -%}
-                      }
+              card_mod: &grid_charge_point_status_mods
+                style:
+                  hui-generic-entity-row:
+                    $:
+                      .: |
+                        .state {
+                          color:
+                            {%- if is_state(config.entity, 'on') -%}
+                              var(--custom-color-green);
+                            {%- else -%}
+                              var(--custom-color-red);
+                            {%- endif -%}
+                        }
             - entity: sensor.battery_status
               name: Status
-              style: &battery_status_mods
-                hui-generic-entity-row:
-                  $:
-                    .: |
-                      .state {
-                        color:
-                          {%- if is_state(config.entity, 'Charging') -%}
-                            var(--custom-color-green);
-                          {%- elif is_state(config.entity, 'Discharging') -%}
-                            var(--custom-color-red);
-                          {%- else -%}
-                            var(--custom-color-yellow);
-                          {%- endif -%}
-                      }
+              card_mod: &battery_status_mods
+                style:
+                  hui-generic-entity-row:
+                    $:
+                      .: |
+                        .state {
+                          color:
+                            {%- if is_state(config.entity, 'Charging') -%}
+                              var(--custom-color-green);
+                            {%- elif is_state(config.entity, 'Discharging') -%}
+                              var(--custom-color-red);
+                            {%- else -%}
+                              var(--custom-color-yellow);
+                            {%- endif -%}
+                        }
       - type: conditional
         conditions:
           - entity: sensor.battery_status
@@ -587,18 +591,18 @@ cards:
           entities:
             - entity: sensor.charge_mode
               name: Charge Mode
-              style: *battery_charge_mode_mods
+              card_mod: *battery_charge_mode_mods
             - entity: sensor.battery_state_of_charge
               name: State of Charge
-              style: *battery_state_of_charge_mods
+              card_mod: *battery_state_of_charge_mods
             - entity: sensor.capacity_charge_point
               name: Charge Point Target
             - entity: binary_sensor.grid_charge_point_status
               name: Grid Charge Point Status
-              style: *grid_charge_point_status_mods
+              card_mod: *grid_charge_point_status_mods
             - entity: sensor.battery_status
               name: Status
-              style: *battery_status_mods
+              card_mod: *battery_status_mods
             - entity: sensor.battery_power
               name: Power
             - entity: sensor.battery_change_of_charge
@@ -620,18 +624,18 @@ cards:
           entities:
             - entity: sensor.charge_mode
               name: Charge Mode
-              style: *battery_charge_mode_mods
+              card_mod: *battery_charge_mode_mods
             - entity: sensor.battery_state_of_charge
               name: State of Charge
-              style: *battery_state_of_charge_mods
+              card_mod: *battery_state_of_charge_mods
             - entity: sensor.capacity_charge_point
               name: Charge Point Target
             - entity: binary_sensor.grid_charge_point_status
               name: Grid Charge Point Status
-              style: *grid_charge_point_status_mods
+              card_mod: *grid_charge_point_status_mods
             - entity: sensor.battery_status
               name: Status
-              style: *battery_status_mods
+              card_mod: *battery_status_mods
             - entity: sensor.battery_power
               name: Power
             - entity: sensor.battery_change_of_charge

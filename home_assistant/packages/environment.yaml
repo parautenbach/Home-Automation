@@ -136,6 +136,7 @@ binary_sensor:
         value_template: >
           {{ states('sensor.weather_based_sun_illuminance') | int(0) < 35000 or is_state('binary_sensor.is_fair_weather', 'off') }}
       # https://github.com/pnbruckner/ha-sun2/blob/master/custom_components/sun2/const.py
+      # keep value in sync with the fair weather binary sensor
       nighttime:
         friendly_name: Night-time
         value_template: "{{  states('sensor.solar_angle') | float(0) < -0.833 }}"

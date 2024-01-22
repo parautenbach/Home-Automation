@@ -23,7 +23,7 @@ homeassistant:
     sensor.daily_grid_feed_outage_time:
       state_class: total_increasing
     sensor.average_solar_energy_forecast_today:
-      state_class: measurement
+      state_class: total
     sensor.battery_state_of_charge:
       state_class: measurement
     sensor.battery_change_of_charge:

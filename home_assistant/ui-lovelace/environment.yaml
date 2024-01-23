@@ -80,6 +80,40 @@ badges:
 cards:
   - type: vertical-stack
     cards:
+      - type: horizontal-stack
+        cards:
+          - type: thermostat
+            entity: climate.living_room_ac
+            name: Living Room
+            features:
+              - type: climate-hvac-modes
+                hvac_modes:
+                  - heat
+                  - cool
+                  - fan_only
+                  - "off"
+              - type: climate-preset-modes
+                style: icons
+                preset_modes:
+                  - eco
+                  - sleep
+                  - boost
+          - type: thermostat
+            entity: climate.main_bedroom_ac
+            name: Main Bedroom
+            features:
+              - type: climate-hvac-modes
+                hvac_modes:
+                  - heat
+                  - cool
+                  - fan_only
+                  - "off"
+              - type: climate-preset-modes
+                style: icons
+                preset_modes:
+                  - eco
+                  - sleep
+                  - boost
       - type: glance
         entities:
           - entity: sensor.office_temperature

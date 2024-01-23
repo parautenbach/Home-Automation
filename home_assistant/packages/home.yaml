@@ -253,6 +253,8 @@ automation:
         entity_id: script.entertainment_off
       - service: switch.turn_off
         entity_id: switch.tivoli_audio
+      - service: climate.turn_off
+        entity_id: all
 
   - alias: "Turn Off Entertainment System When Idle Or Leaving Room"
     description: "Assuming it's bedtime when the living room lamp is turned off after a certain time"
@@ -918,3 +920,24 @@ automation:
       - service: switch.turn_off
         target:
           entity_id: switch.bug_zapper
+
+  - alias: "Notify On AC Filter Maintenance"
+    id: "f049e41d-33ab-4ac9-82aa-a76c136c2490"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.living_room_ac_filter_alert
+          - binary_sensor.main_bedroom_ac_filter_alert
+        to: "on"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🚧 Maintenance"
+          message: >-
+            {# example: Living Room AC Filter alert -> living room AC's filter #}
+            {% set name = state_attr(trigger.entity_id, 'friendly_name') | lower | replace('alert', '') | replace("ac", "AC's") | trim %}
+            Please check the {{ name }}.
+          data:
+            group: "maintenance"
+            url: homeassistant://navigate/lovelace/main

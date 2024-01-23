@@ -48,6 +48,8 @@
       - script.open_pedestrian_gap
       # this just creates a bunch of switches, which sucks as the ux
       # - media_player.main_bedroom_universal
+      - climate.living_room_ac
+      - climate.main_bedroom_ac
   entity_config:
     binary_sensor.cabinet_door:
       linked_battery_sensor: sensor.cabinet_battery

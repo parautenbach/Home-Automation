@@ -253,6 +253,8 @@ automation:
         entity_id: script.entertainment_off
       - service: switch.turn_off
         entity_id: switch.tivoli_audio
+      - service: switch.turn_off
+        entity_id: switch.bug_zapper
       - service: climate.turn_off
         entity_id: all
 
@@ -884,13 +886,29 @@ automation:
         offset: "-01:00:00"
       - platform: time
         at: "18:00:00"
+      - platform: state
+        entity_id: binary_sensor.anybody_home
+        to: "on"
     condition:
+      # https://community.home-assistant.io/t/time-condition-inclusive-or-exclusive/205909/26
+      - condition: template
+        value_template: >-
+          {% set sunset_with_offset = state_attr('sun.sun', 'next_setting') | as_datetime - timedelta(hours=1) %}
+          {% set lower_bound = min(today_at('18:00'), sunset_with_offset) %}
+          {% set within_window = lower_bound <= now() <= today_at('20:00') %}
+          {{ within_window }}
       - condition: state
         entity_id: sensor.season
         state:
           - spring
           - summer
           - autumn
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "on"
+      - condition: state
+        entity_id: input_boolean.baby_sleep_mode
+        state: "off"
     action:
       - service: weather.get_forecasts
         target:

@@ -95,6 +95,7 @@ cards:
               - type: climate-preset-modes
                 style: icons
                 preset_modes:
+                  - none
                   - eco
                   - sleep
                   - boost
@@ -111,6 +112,7 @@ cards:
               - type: climate-preset-modes
                 style: icons
                 preset_modes:
+                  - none
                   - eco
                   - sleep
                   - boost

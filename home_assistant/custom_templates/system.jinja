@@ -1,0 +1,29 @@
+{# https://www.home-assistant.io/docs/configuration/templating/#reusing-templates #}
+
+{#
+Get a list of entity IDs given a list of states.
+
+:param state_list: A list of state values.
+
+:returns: A CSV string that can be split to get a proper list. Jinja's {{ }} outputs text and cannot output a list.
+
+:seealso: https://community.home-assistant.io/t/template-trigger-based-sensors-add-variables/657527/16
+#}
+{%- macro get_entities_by_state(state_list) -%}
+  {%- set exclusions = [
+            'sensor.unavailable_entities',
+            'number.living_room_ac_fan_speed',
+            'number.main_bedroom_ac_fan_speed',
+            'sensor.living_room_ac_outdoor_temperature',
+            'sensor.main_bedroom_ac_outdoor_temperature',
+            'sensor.solar_reserve_percentage_5min_average',
+            'sensor.pv_power_5min_average'] -%}
+  {#- buttons and event entities don't have state – we don't care about those here -#}
+  {%- set reduced_list = states
+            | rejectattr('domain','search','button|event')
+            | rejectattr('entity_id', 'in', exclusions)
+            | selectattr('state', 'in', state_list)
+            | map(attribute='entity_id')
+            | join(',') -%}
+  {{ reduced_list }}
+{%- endmacro -%}

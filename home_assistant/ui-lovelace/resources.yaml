@@ -437,6 +437,13 @@ cards:
               - entity: sensor.output_shutdown_capacity
                 name: Charge Threshold
                 color: var(--custom-color-yellow)
+              - entity: sensor.nighttime_number
+                name: Day/Night
+                color: var(--custom-color-gray)
+                show_line: false
+                show_points: false
+                show_legend: true
+                y_axis: secondary
             hours_to_show: 24
             hour24: true
             lower_bound: 0
@@ -451,6 +458,7 @@ cards:
               average: true
               state: true
               labels: hover
+              labels_secondary: false
           - type: custom:mini-graph-card
             name: Battery
             icon: mdi:home-battery-outline

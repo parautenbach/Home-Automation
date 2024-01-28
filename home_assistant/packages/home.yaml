@@ -953,9 +953,9 @@ automation:
         data:
           title: "🚧 Maintenance"
           message: >-
-            {# example: Living Room AC Filter alert -> living room AC's filter #}
-            {% set name = state_attr(trigger.entity_id, 'friendly_name') | lower | replace('alert', '') | replace("ac", "AC's") | trim %}
-            Please check the {{ name }}.
+            {# example: Living Room AC Filter alert -> living room AC #}
+            {% set name = state_attr(trigger.entity_id, 'friendly_name') | lower | replace('alert', '') | replace('filter', '') | replace('ac', 'AC') | trim %}
+            Please check the filter in the {{ name }}.
           data:
             group: "maintenance"
             url: homeassistant://navigate/lovelace/main

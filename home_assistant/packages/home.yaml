@@ -973,4 +973,4 @@ automation:
     action:
       - service: switch.turn_off
         target:
-          entity_id: switch.main_room_ac_display
+          entity_id: switch.main_bedroom_ac_display

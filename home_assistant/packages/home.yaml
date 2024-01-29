@@ -401,6 +401,7 @@ automation:
             entity_id: binary_sensor.pieter_driving
             state: "on"
           # my cover for my car
+          # what if i'm arriving by bicycle? might be useful too, but without a view of the garage it could be problematic
           - condition: state
             entity_id: binary_sensor.garage_doors_rhs_occupied
             state: "off"

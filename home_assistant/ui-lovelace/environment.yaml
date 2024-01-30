@@ -82,40 +82,118 @@ cards:
     cards:
       - type: horizontal-stack
         cards:
-          - type: thermostat
-            entity: climate.living_room_ac
-            name: Living Room
-            features:
-              - type: climate-hvac-modes
-                hvac_modes:
-                  - heat
-                  - cool
-                  - fan_only
-                  - "off"
-              - type: climate-preset-modes
-                style: icons
-                preset_modes:
-                  - none
-                  - eco
-                  - sleep
-                  - boost
-          - type: thermostat
-            entity: climate.main_bedroom_ac
-            name: Main Bedroom
-            features:
-              - type: climate-hvac-modes
-                hvac_modes:
-                  - heat
-                  - cool
-                  - fan_only
-                  - "off"
-              - type: climate-preset-modes
-                style: icons
-                preset_modes:
-                  - none
-                  - eco
-                  - sleep
-                  - boost
+          - type: vertical-stack
+            cards:
+              - type: thermostat
+                entity: climate.living_room_ac
+                name: Living Room
+                features:
+                  - type: climate-hvac-modes
+                    hvac_modes:
+                      - heat
+                      - cool
+                      - fan_only
+                      - "off"
+                  - type: climate-preset-modes
+                    style: icons
+                    preset_modes:
+                      - none
+                      - eco
+                      - sleep
+                      - boost
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template:
+                      - climate_led_display
+                    entity: switch.living_room_ac_display
+                  # fan buttons
+                  - type: custom:button-card
+                    template:
+                      - climate_fan
+                    variables:
+                      fan_mode: silent
+                    entity: climate.living_room_ac
+                  - type: custom:button-card
+                    template:
+                      - climate_fan
+                    variables:
+                      fan_mode: low
+                    entity: climate.living_room_ac
+                  - type: custom:button-card
+                    template:
+                      - climate_fan
+                    variables:
+                      fan_mode: medium
+                    entity: climate.living_room_ac
+                  - type: custom:button-card
+                    template:
+                      - climate_fan
+                    variables:
+                      fan_mode: high
+                    entity: climate.living_room_ac
+                  - type: custom:button-card
+                    template:
+                      - climate_fan
+                    variables:
+                      fan_mode: auto
+                    entity: climate.living_room_ac
+          - type: vertical-stack
+            cards:
+              - type: thermostat
+                entity: climate.main_bedroom_ac
+                name: Main Bedroom
+                features:
+                  - type: climate-hvac-modes
+                    hvac_modes:
+                      - heat
+                      - cool
+                      - fan_only
+                      - "off"
+                  - type: climate-preset-modes
+                    style: icons
+                    preset_modes:
+                      - none
+                      - eco
+                      - sleep
+                      - boost
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template:
+                      - climate_led_display
+                    entity: switch.main_bedroom_ac_display
+                  # fan buttons
+                  - type: custom:button-card
+                    template:
+                      - climate_fan
+                    variables:
+                      fan_mode: silent
+                    entity: climate.main_bedroom_ac
+                  - type: custom:button-card
+                    template:
+                      - climate_fan
+                    variables:
+                      fan_mode: low
+                    entity: climate.main_bedroom_ac
+                  - type: custom:button-card
+                    template:
+                      - climate_fan
+                    variables:
+                      fan_mode: medium
+                    entity: climate.main_bedroom_ac
+                  - type: custom:button-card
+                    template:
+                      - climate_fan
+                    variables:
+                      fan_mode: high
+                    entity: climate.main_bedroom_ac
+                  - type: custom:button-card
+                    template:
+                      - climate_fan
+                    variables:
+                      fan_mode: auto
+                    entity: climate.main_bedroom_ac
       - type: glance
         entities:
           - entity: sensor.office_temperature

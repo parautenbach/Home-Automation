@@ -535,3 +535,70 @@ button_card_templates:
         color: "#ff5800"
       - value: 5
         color: "#aa0000"
+  climate_led_display:
+    icon: mdi:television-ambient-light
+    size: 90%
+    show_name: false
+    triggers_update: all
+    styles:
+      card:
+        - padding: 15%
+    state:
+      - operator: template
+        value: >
+          [[[
+            return states[`${entity.entity_id}`.replace("switch.", "climate.").replace("_display", "")].state != 'off' && entity.state == 'on';
+          ]]]
+        color: var(--state-binary_sensor-active-color)
+      - operator: template
+        value: >
+          [[[
+            return states[`${entity.entity_id}`.replace("switch.", "climate.").replace("_display", "")].state != 'off' && entity.state == 'off';
+          ]]]
+        color: var(--paper-item-icon-color)
+      - operator: default
+        color: var(--state-unavailable-color)
+  climate_fan:
+    variables:
+      icon_map:
+        auto: mdi:fan-auto
+        high: mdi:fan-speed-3
+        medium: mdi:fan-speed-2
+        low: mdi:fan-speed-1
+        silent: mdi:fan-off
+    icon: >
+      [[[
+        if (variables.fan_mode in variables.icon_map) {
+          return variables.icon_map[variables.fan_mode];
+        }
+        else {
+          return 'mdi:fan';
+        }
+      ]]]
+    size: 90%
+    show_name: false
+    tap_action:
+      action: call-service
+      haptic: light
+      service: climate.set_fan_mode
+      service_data:
+        entity_id: entity
+        fan_mode: '[[[ return variables.fan_mode; ]]]'
+    styles:
+      card:
+        - padding: 15%
+    state:
+      - operator: template
+        value: >
+          [[[
+            return entity.state != 'off' && entity.attributes.fan_mode == variables.fan_mode;
+          ]]]
+        color: var(--state-binary_sensor-active-color)
+      - operator: template
+        value: >
+          [[[
+            return entity.state != 'off';
+          ]]]
+        color: var(--paper-item-icon-color)
+      - operator: default
+        color: var(--state-unavailable-color)

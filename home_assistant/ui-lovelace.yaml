@@ -537,12 +537,12 @@ button_card_templates:
         color: "#aa0000"
   climate_led_display:
     icon: mdi:television-ambient-light
-    size: 90%
+    size: 10%
     show_name: false
     triggers_update: all
     styles:
       card:
-        - padding: 15%
+        - padding: 3%
     state:
       - operator: template
         value: >
@@ -575,7 +575,7 @@ button_card_templates:
           return 'mdi:fan';
         }
       ]]]
-    size: 90%
+    size: 80%
     show_name: false
     tap_action:
       action: call-service

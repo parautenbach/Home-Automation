@@ -92,7 +92,6 @@ button_card_templates:
   light_with_timer:
     template:
       - old_colors
-    triggers_update: all
     size: 20%
     styles:
       name:
@@ -223,7 +222,6 @@ button_card_templates:
   rgb_light_with_timer:
     template:
       - old_colors
-    triggers_update: all
     styles:
       grid:
         - grid-template-areas: '"t s l" "i i i" "n n n"'
@@ -539,7 +537,6 @@ button_card_templates:
     icon: mdi:television-ambient-light
     size: 10%
     show_name: false
-    triggers_update: all
     styles:
       card:
         - padding: 3%

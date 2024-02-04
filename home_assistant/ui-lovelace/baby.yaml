@@ -151,6 +151,8 @@ cards:
               profile: normal
             name: Bedlamp
             entity: light.bedroom_bedlamp
+            triggers_update:
+              - timer.bedroom_bedlamp_timer
             icon: mdi:alarm-light-outline
           - type: vertical-stack
             cards:

@@ -107,6 +107,8 @@ cards:
                     template:
                       - climate_led_display
                     entity: switch.living_room_ac_display
+                    triggers_update:
+                      - climate.living_room_ac
               # fan buttons
               - type: horizontal-stack
                 cards:
@@ -165,6 +167,8 @@ cards:
                     template:
                       - climate_led_display
                     entity: switch.main_bedroom_ac_display
+                    triggers_update:
+                      - climate.main_bedroom_ac
               # fan buttons
               - type: horizontal-stack
                 cards:

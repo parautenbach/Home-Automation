@@ -15,6 +15,9 @@ binary_sensor:
     name: "${device_name_upper} Status"
 
 # https://esphome.io/components/sensor/pulse_counter.html
+# https://community.home-assistant.io/t/how-to-count-pulse-frequency-accurately-with-esphome/201635/15
+# https://community.home-assistant.io/t/pulse-counter-vs-pulse-meter/311345
+# https://github.com/esphome/issues/issues/4807
 sensor:
   - platform: pulse_counter
     id: ${device_name_lower}_current_power
@@ -22,10 +25,27 @@ sensor:
     # internal pull-up 45k
     pin: 33
     unit_of_measurement: "W"
+    accuracy_decimals: 1
+    device_class: power
     update_interval: 60s
-    accuracy_decimals: 0
     filters:
+      # cSt1000 => 1 pulse per Wh
+      # note: our meter's tech spec only goes down to 1 pulse per 10Wh,
+      #       but it can actually be set to 1 pulse per 1Wh
+      # we want W per pulse (W/p), so:
+      # (1Wh/1p)/60s, where 60s is the update interval
+      #   = 1W x 3600s/60s/p
+      #   = 1W x 60/p
+      #   = 60W/p
       - multiply: 60
+    total:
+      name: "${device_name_upper} Total"
+      unit_of_measurement: "kWh"
+      accuracy_decimals: 3
+      device_class: energy
+      filters:
+        # 1Wh = 0.001kWh
+        - multiply: 0.001
   - platform: internal_temperature
     id: ${device_name_lower}_device_temperature
     name: "${device_name_upper} Device Temperature"

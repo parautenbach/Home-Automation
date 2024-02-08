@@ -1,0 +1,3 @@
+title: Test
+views:
+  - !include ui-lovelace/test.yaml

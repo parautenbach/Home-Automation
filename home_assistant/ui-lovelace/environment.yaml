@@ -94,6 +94,14 @@ cards:
                       - cool
                       - fan_only
                       - "off"
+                  - type: "climate-fan-modes"
+                    style: "icons"
+                    fan_modes:
+                      - silent
+                      - low
+                      - medium
+                      - high
+                      - auto
                   - type: climate-preset-modes
                     style: icons
                     preset_modes:
@@ -109,39 +117,6 @@ cards:
                     entity: switch.living_room_ac_display
                     triggers_update:
                       - climate.living_room_ac
-              # fan buttons
-              - type: horizontal-stack
-                cards:
-                  - type: custom:button-card
-                    template:
-                      - climate_fan
-                    variables:
-                      fan_mode: silent
-                    entity: climate.living_room_ac
-                  - type: custom:button-card
-                    template:
-                      - climate_fan
-                    variables:
-                      fan_mode: low
-                    entity: climate.living_room_ac
-                  - type: custom:button-card
-                    template:
-                      - climate_fan
-                    variables:
-                      fan_mode: medium
-                    entity: climate.living_room_ac
-                  - type: custom:button-card
-                    template:
-                      - climate_fan
-                    variables:
-                      fan_mode: high
-                    entity: climate.living_room_ac
-                  - type: custom:button-card
-                    template:
-                      - climate_fan
-                    variables:
-                      fan_mode: auto
-                    entity: climate.living_room_ac
           - type: vertical-stack
             cards:
               - type: thermostat
@@ -154,6 +129,14 @@ cards:
                       - cool
                       - fan_only
                       - "off"
+                  - type: "climate-fan-modes"
+                    style: "icons"
+                    fan_modes:
+                      - silent
+                      - low
+                      - medium
+                      - high
+                      - auto
                   - type: climate-preset-modes
                     style: icons
                     preset_modes:
@@ -169,39 +152,6 @@ cards:
                     entity: switch.main_bedroom_ac_display
                     triggers_update:
                       - climate.main_bedroom_ac
-              # fan buttons
-              - type: horizontal-stack
-                cards:
-                  - type: custom:button-card
-                    template:
-                      - climate_fan
-                    variables:
-                      fan_mode: silent
-                    entity: climate.main_bedroom_ac
-                  - type: custom:button-card
-                    template:
-                      - climate_fan
-                    variables:
-                      fan_mode: low
-                    entity: climate.main_bedroom_ac
-                  - type: custom:button-card
-                    template:
-                      - climate_fan
-                    variables:
-                      fan_mode: medium
-                    entity: climate.main_bedroom_ac
-                  - type: custom:button-card
-                    template:
-                      - climate_fan
-                    variables:
-                      fan_mode: high
-                    entity: climate.main_bedroom_ac
-                  - type: custom:button-card
-                    template:
-                      - climate_fan
-                    variables:
-                      fan_mode: auto
-                    entity: climate.main_bedroom_ac
       - type: glance
         entities:
           - entity: sensor.office_temperature

@@ -44,6 +44,7 @@ async function createWidget() {
     // key: [label, value, unit]
     const sensor_map = {
         "battery_state_of_charge": ["Battery", "", "%"],
+        "capacity_charge_point": ["Charge Point", "", "%"],
         "pv_power": ["Solar", "", "W"],
         "solar_reserve_percentage": ["Reserve", "", "%"],
         "home_power": ["Home", "", "W"],
@@ -112,7 +113,8 @@ async function createWidget() {
 
     currentStack = rightStack;
     sensor = sensor_map["battery_state_of_charge"];
-    addItem(currentStack, sensor[0], sensor[1], sensor[2]);
+    threshold = " (" + sensor_map["capacity_charge_point"][1] + sensor_map["capacity_charge_point"][2] + ")";
+    addItem(currentStack, sensor[0], sensor[1], sensor[2], null, threshold);
     sensor = sensor_map["charge_mode"];
     addItem(currentStack, sensor[0], sensor[1], sensor[2]);
     sensor = sensor_map["home_power"];
@@ -172,7 +174,7 @@ async function createWidget() {
     return widget;
 }
 
-function addItem(widget, label, value, unit, valueColor) {
+function addItem(widget, label, value, unit, valueColor, extraText) {
     widget.addSpacer(3);
     const labelStack = widget.addStack();
     labelStack.setPadding(0, 0, 0, 0);
@@ -184,9 +186,14 @@ function addItem(widget, label, value, unit, valueColor) {
     const valueStack = widget.addStack();
     valueStack.setPadding(0, 0, 0, 0);
     valueStack.borderWidth = 0;
-    const valueStackText = labelStack.addText(value + unit);
+    var valueStackText = null;
+    if (extraText === undefined || extraText === null) {
+        valueStackText = labelStack.addText(value + unit);
+    } else {
+        valueStackText = labelStack.addText(value + unit + extraText);
+    }
     valueStackText.font = Font.regularSystemFont(12);
-    if (valueColor === undefined) {
+    if (valueColor === undefined || valueColor === null) {
         valueStackText.textColor = Color.white();
     } else {
         valueStackText.textColor = valueColor;

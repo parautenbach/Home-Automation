@@ -354,6 +354,7 @@ template:
         state: "{{ now().isoformat() }}"
         attributes:
           battery_state_of_charge: "{{ states('sensor.battery_state_of_charge') }}"
+          capacity_charge_point: "{{ states('sensor.capacity_charge_point') }}"
           pv_power: "{{ states('sensor.pv_power_5min_average') }}"
           solar_reserve_percentage: "{{ states('sensor.solar_reserve_percentage_5min_average') }}"
           home_power: "{{ states('sensor.home_power_5min_average') }}"

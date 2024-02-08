@@ -258,11 +258,12 @@ automation:
       - service: climate.turn_off
         entity_id: all
 
-  - alias: "Turn Off Entertainment System When Idle Or Leaving Room"
+  - alias: "Turn Off Devices When Bedtime"
     description: "Assuming it's bedtime when the living room lamp is turned off after a certain time"
     id: "7976aaad-a575-442d-ae00-538e5412e92f"
     trigger:
       # todo: we don't know the decoder's state so we could be turning off the tv just because the apple tv isn't playing...
+      # todo: make this a separate automation
       # - platform: state
       #   entity_id: media_player.living_room
       #   to: "idle"
@@ -295,10 +296,14 @@ automation:
             transition_duration: 60
       # todo: make a group for all lights except bedlamps?
       - service: light.turn_off
-        entity_id: light.bedroom_bedlamp
+        target:
+          entity_id: light.bedroom_bedlamp
       - service: switch.turn_off
         target:
           entity_id: switch.bug_zapper
+      - service: climate.turn_off
+        target:
+          entity_id: climate.living_room_ac
 
   - alias: "Switch On The Front Door Light When Arriving Home"
     id: "47e6883e-b9ab-4559-9603-765e80cdfa81"

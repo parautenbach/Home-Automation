@@ -91,6 +91,13 @@ lovelace:
       type: module
     # manual
     # none
+  dashboards:
+    lovelace-test:
+      mode: yaml
+      filename: ui-test.yaml
+      title: Test
+      icon: mdi:test-tube
+      require_admin: true
 
 frontend:
   themes: !include_dir_merge_named themes

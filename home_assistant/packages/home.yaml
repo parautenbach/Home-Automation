@@ -966,7 +966,7 @@ automation:
             group: "maintenance"
             url: homeassistant://navigate/lovelace/main
 
-  - alias: "Turn Off Display When Sleep Mode Enabled"
+  - alias: "Turn Off AC Display"
     id: "75417e23-4953-49e4-ae38-2e6833081120"
     initial_state: true
     trigger:

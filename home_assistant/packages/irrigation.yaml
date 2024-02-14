@@ -179,22 +179,24 @@ automation:
                 An automatic irrigation cycle has completed as scheduled.
               {% elif from ==  'manual_cycle' %}
                 A manual irrigation cycle has completed.
-              {# manual_zone #}
-              {% else %}
+              {% elif from == 'manual_zone' %}
                 {% set zone = expand('group.irrigation_zones') | sort(attribute='last_updated') | list | last %}
                 {% set name = state_attr(zone.entity_id, 'friendly_name') | lower %}
                 The {{ name }} irrigation zone that was started manually has finished.
+              {% else %}
+                {# pass #}
               {% endif %}
             {% else %}
               {% if to == 'automatic_cycle' %}
                 An automatic irrigation cycle has started as scheduled.
               {% elif to ==  'manual_cycle' %}
                 A manual irrigation cycle has been started.
-              {# manual_zone #}
-              {% else %}
+              {% elif from == 'manual_zone' %}
                 {% set zone = expand('group.irrigation_zones') | selectattr('state', '==', 'on') | first %}
                 {% set name = state_attr(zone.entity_id, 'friendly_name') | lower %}
                 The {{ name }} irrigation zone has been started manually.
+              {% else %}
+                {# pass #}
               {% endif %}
             {% endif %}
           data:

@@ -799,6 +799,9 @@ cards:
               - entity: sensor.geyser_power
                 name: Geyser
                 color: var(--custom-color-yellow)
+              - entity: sensor.outbuilding_power_meter_channel_1_power
+                name: Outbuilding
+                color: var(--custom-color-green)
               - entity: sensor.nighttime_number
                 name: Day/Night
                 color: var(--custom-color-gray)
@@ -833,6 +836,9 @@ cards:
               - entity: sensor.geyser_power
                 name: Geyser
                 color: var(--custom-color-yellow)
+              - entity: sensor.outbuilding_power_meter_channel_1_power
+                name: Outbuilding
+                color: var(--custom-color-green)
               - entity: sensor.grid_feed_outage_number
                 name: Grid Outage
                 color: var(--custom-color-gray)

@@ -318,6 +318,7 @@ automation:
              trigger.event.data.old_state.state not in ['unavailable', 'unknown'] and
              trigger.event.data.new_state.state != trigger.event.data.old_state.state and
              trigger.event.data.entity_id in state_attr('sensor.monitored_batteries', 'batteries') and
+             trigger.event.data.old_state.state | int(0) < 95 and
              trigger.event.data.new_state.state | int(0) == 100 }}
     action:
       - service: notify.mobile_app_ceres

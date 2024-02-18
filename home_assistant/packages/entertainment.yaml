@@ -103,7 +103,7 @@ script:
       - service: remote.send_command
         data:
           entity_id: remote.living_room
-          command: wakeup
+          command: turn_on
       - delay: "00:00:05"
       - service: script.turn_on
         entity_id: script.samsung_tv_hdmi2
@@ -147,17 +147,11 @@ script:
       - condition: state
         entity_id: media_player.living_room
         state: "playing"
-      # https://github.com/postlund/pyatv/blob/6018ba22851287afaf7c99dafa42de5766b97acf/pyatv/interface.py#L94
-      # the proper way to turn it off
+      # https://github.com/postlund/pyatv/blob/master/pyatv/interface.py
       - service: remote.send_command
         data:
           entity_id: remote.living_room
-          command: home_hold
-      - delay: "00:00:02"
-      - service: remote.send_command
-        data:
-          entity_id: remote.living_room
-          command: select
+          command: turn_off
 
   play_radio_paradise:
     mode: single

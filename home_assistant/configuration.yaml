@@ -216,7 +216,6 @@ recorder:
       - sensor.outbuilding_power_meter_channel_2_power_factor
       - sensor.outbuilding_power_meter_channel_2_energy
       - sensor.outbuilding_power_meter_channel_2_energy_returned
-      - sensor.fair_weather_time
       - sensor.fair_weather_time_share
       - sensor.watchman_last_updated
 

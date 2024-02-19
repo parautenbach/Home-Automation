@@ -84,10 +84,11 @@ cards:
         cards:
           - type: vertical-stack
             cards:
-              - type: thermostat
+              - type: tile
                 entity: climate.living_room_ac
                 name: Living Room
                 features:
+                  - type: "target-temperature"
                   - type: climate-hvac-modes
                     hvac_modes:
                       - heat
@@ -119,10 +120,11 @@ cards:
                       - climate.living_room_ac
           - type: vertical-stack
             cards:
-              - type: thermostat
+              - type: tile
                 entity: climate.main_bedroom_ac
                 name: Main Bedroom
                 features:
+                  - type: "target-temperature"
                   - type: climate-hvac-modes
                     hvac_modes:
                       - heat

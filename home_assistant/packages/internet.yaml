@@ -304,6 +304,7 @@ automation:
         entity_id:
           - binary_sensor.front_extender
           - binary_sensor.back_extender
+        from: "on"
         to: "off"
     mode: parallel
     action:
@@ -328,6 +329,7 @@ automation:
         entity_id:
           - binary_sensor.front_extender
           - binary_sensor.back_extender
+        from: "off"
         to: "on"
         # this automation and the one to notify an extender has disconnect can race...
         for:

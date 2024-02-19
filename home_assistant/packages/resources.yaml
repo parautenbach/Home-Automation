@@ -1292,6 +1292,10 @@ automation:
     trigger:
       - platform: state
         entity_id: number.output_shutdown_capacity
+    condition:
+      # workaround for HA start-up
+      - condition: template
+        value_template: "{{ trigger.from_state.state | int(0) != 0 }}"
     action:
       - service: notify.mobile_app_ceres
         data:

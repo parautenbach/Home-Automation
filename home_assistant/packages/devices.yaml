@@ -75,7 +75,8 @@ command_line:
 
   - binary_sensor:
       name: Tenant Mobile Phone
-      command: 'ping -n -q -W 1 -c 3 tenant_mobile_phone > /dev/null 2>&1 && echo success || echo fail'
+      # old/generic: tenant_mobile_phone (check /etc/hosts)
+      command: 'ping -n -q -W 1 -c 3 iPhone > /dev/null 2>&1 && echo success || echo fail'
       device_class: connectivity
       payload_on: "success"
       payload_off: "fail"

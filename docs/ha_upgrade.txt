@@ -31,7 +31,7 @@ download: https://www.python.org/downloads/
 deps: https://devguide.python.org/getting-started/setup-building/#build-dependencies
 ./configure --enable-optimizations
 altinstall: https://docs.python.org/3/using/unix.html
-pip install psycopg2
+pip install psycopg2 (in venv)
 
 ==========
 

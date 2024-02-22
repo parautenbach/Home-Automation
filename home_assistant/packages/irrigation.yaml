@@ -89,6 +89,7 @@ template:
         icon: mdi:state-machine
         state: >-
           {{ state }}
+        availability: "{{ has_value('switch.irrigation_main') }}"
         attributes:
           ui_state: >-
             {% set mapping = {

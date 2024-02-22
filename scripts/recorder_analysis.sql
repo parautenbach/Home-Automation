@@ -69,3 +69,47 @@ GROUP BY
   states.metadata_id 
 ORDER BY 
   cnt DESC;
+
+----------
+
+{# not sql, i know #}
+{% set entities = states | selectattr('attributes.state_class', 'defined') | list %}
+{% for e in entities -%}
+{{ e.entity_id, e.attributes.state_class }}
+{%- endfor %}
+
+----------
+
+-- https://community.home-assistant.io/t/how-to-keep-your-recorder-database-size-under-control/295795/207
+SELECT
+  COUNT(state_id) AS cnt,
+  COUNT(state_id) * 100 / (
+    SELECT
+      COUNT(state_id)
+    FROM
+      states
+  ) AS cnt_pct,
+  SUM(
+    LENGTH(state_attributes.shared_attrs)
+  ) AS bytes,
+  SUM(
+    LENGTH(state_attributes.shared_attrs)
+  ) * 100 / (
+    SELECT
+      SUM(
+        LENGTH(state_attributes.shared_attrs)
+      )
+    FROM
+      states
+      JOIN state_attributes ON states.attributes_id = state_attributes.attributes_id
+  ) AS bytes_pct,
+  states_meta.entity_id
+FROM
+  states
+LEFT JOIN state_attributes ON states.attributes_id = state_attributes.attributes_id
+LEFT JOIN states_meta ON states.metadata_id = states_meta.metadata_id
+GROUP BY
+  states.metadata_id, states_meta.entity_id
+ORDER BY
+  cnt DESC;
+

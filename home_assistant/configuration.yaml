@@ -160,7 +160,7 @@ recorder:
   # vacuum;
   auto_purge: true
   auto_repack: true
-  purge_keep_days: 10
+  purge_keep_days: 5
   commit_interval: 5
   # see scripts/recorder_analysis.sql
   exclude:
@@ -170,6 +170,7 @@ recorder:
       - automation.motion_indicator_on
       - automation.motion_indicator_off
       - automation.see_mobile_devices
+      - automation.update_ping_sensors
       - button.outbuilding_power_meter_reboot
       - camera.security_camera_last_snapshot
       - camera.security_camera_last_clip
@@ -190,6 +191,7 @@ recorder:
       - sensor.solar_reserve_percentage_5min_average
       - sensor.pv_power_filtered
       - sensor.pv_power_5min_average
+      - sensor.battery_power_filtered
       - sensor.load_power_essential
       - sensor.grid_power_ld
       - sensor.grid_power_ct
@@ -201,6 +203,7 @@ recorder:
       - sensor.time_date
       - sensor.date_time
       - sensor.date_time_utc
+      - sensor.date_time_iso
       - sensor.san_francisco
       - sensor.cape_town
       - sensor.sydney
@@ -218,6 +221,8 @@ recorder:
       - sensor.outbuilding_power_meter_channel_2_energy_returned
       - sensor.fair_weather_time_share
       - sensor.watchman_last_updated
+      - sensor.monthly_home_energy_consumption_forecast
+      - script.update_entity
 
 tts:
   - platform: google_translate

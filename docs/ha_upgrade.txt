@@ -27,11 +27,18 @@ PYTHON UPGRADE
 2023-02-05:
 https://devguide.python.org/getting-started/setup-building/
 
-download: https://www.python.org/downloads/
-deps: https://devguide.python.org/getting-started/setup-building/#build-dependencies
+https://www.python.org/downloads/
+https://devguide.python.org/getting-started/setup-building/#build-dependencies
 ./configure --enable-optimizations
 altinstall: https://docs.python.org/3/using/unix.html
+cd /srv/homeassistant/
+cp -R /srv/homeassistant /srv/homeassistant.old
+rm -fR .
+python3.xx -m venv .
+source bin/activate
 pip install psycopg2 (in venv)
+pip install wheel homeassistant
+sudo systemctl start home-assistant@homeassistant.service && sudo journalctl -f
 
 ==========
 

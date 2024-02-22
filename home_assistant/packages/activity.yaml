@@ -7,14 +7,6 @@ homeassistant:
     binary_sensor.pieter_driving:
       icon: mdi:car
 
-proximity:
-  home:  # this refers to zone.home
-    zone: home
-    devices:
-      - device_tracker.ceres
-    tolerance: 20
-    unit_of_measurement: m
-
 input_boolean:
   pieter_driving:
     name: Pieter Driving
@@ -85,16 +77,3 @@ automation:
           message: "Pieter is{{ ' not' if is_state('binary_sensor.pieter_driving', 'off') }} driving."
           data:
             url: homeassistant://navigate/lovelace/devices
-
-  - alias: "Proximity Updates"
-    id: "355d7452-0b56-468b-b434-d0f4b430078b"
-    initial_state: false
-    trigger:
-      - platform: state
-        entity_id: proximity.home
-    action:
-      - service: persistent_notification.create
-        data:
-          title: Proximity
-          message: >-
-            Distance: {{ states('proximity.home') }}{{ state_attr('proximity.home', 'unit_of_measurement') }}; Direction of travel: {{ state_attr('proximity.home', 'dir_of_travel') }}.

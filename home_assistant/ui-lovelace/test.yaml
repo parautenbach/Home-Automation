@@ -17,7 +17,6 @@ cards:
       - binary_sensor.foyer_occupancy_homebridge
       - sensor.conditions_temperature
       - sensor.conditions_humidity
-      - proximity.home
       - entity: input_datetime.main_gate_opened
         type: simple-entity
       - entity: input_datetime.garage_doors_lhs_opened

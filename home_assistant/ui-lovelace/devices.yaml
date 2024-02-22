@@ -233,7 +233,6 @@ cards:
           - entity_id: automation.monitor_outbound_internet_traffic
           - entity_id: automation.motion_indicator_off
           - entity_id: automation.motion_indicator_on
-          - entity_id: automation.proximity_updates
           - entity_id: automation.start_a_full_irrigation_cycle
           - entity_id: automation.track_motion_at_doorbell
           - entity_id: automation.update_baby_sleep_session_counter

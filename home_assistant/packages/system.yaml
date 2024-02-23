@@ -27,6 +27,10 @@ homeassistant:
       friendly_name: Missing Entities
     sensor.watchman_missing_services:
       friendly_name: Missing Services
+    sensor.network_throughput_in_enp3s0:
+      icon: mdi:download-network-outline
+    sensor.network_throughput_out_enp3s0:
+      icon: mdi:upload-network-outline
 
 input_boolean:
   server_shut_down_automatically:

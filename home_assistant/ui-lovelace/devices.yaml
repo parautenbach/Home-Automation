@@ -510,13 +510,19 @@ cards:
         show_header_toggle: false
         entities:
           - binary_sensor.remote_ui
-          - sensor.disk_use_percent
-          - sensor.memory_use_percent
-          - sensor.processor_use
-          - sensor.load_1m
+          - entity: sensor.disk_use_percent
+            name: Disk usage
+          - entity: sensor.memory_use_percent
+            name: Memory usage
+          - entity: sensor.processor_use
+            name: Processor use
+          - entity: sensor.load_1m
+            name: Load (1m)
           - sensor.server_cpu_temp
-          - sensor.network_throughput_in_enp3s0
-          - sensor.network_throughput_out_enp3s0
+          - entity: sensor.network_throughput_in_enp3s0
+            name: Network throughput in
+          - entity: sensor.network_throughput_out_enp3s0
+            name: Network throughput out
           - entity: sensor.last_backup
             card_mod:
               style:
@@ -535,13 +541,14 @@ cards:
                       .info {
                         color: {{ "var(--custom-color-red)" if not is_state('binary_sensor.no_recent_backup', 'off') }};
                       }
-          - sensor.db_size
+          - entity: sensor.db_size
+            name: DB size
           - entity: sensor.home_assistant_server_battery
             name: Server battery
           - entity: sensor.home_assistant_server_battery_status
             name: Battery status
-          # todo: - binary_sensor.rpi_power_status
-          - sensor.last_boot
+          - entity: sensor.last_boot
+            name: Last boot
       - type: history-graph
         hours_to_show: 24
         entities:

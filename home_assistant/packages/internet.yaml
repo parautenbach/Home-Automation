@@ -63,10 +63,6 @@ homeassistant:
       friendly_name: WAN Traffic Delta In
     input_number.wan_traffic_delta_out:
       friendly_name: WAN Traffic Delta Out
-    sensor.network_throughput_in_enp3s0:
-      icon: mdi:download-network-outline
-    sensor.network_throughput_out_enp3s0:
-      icon: mdi:upload-network-outline
 
 # why these when you can just look at the last_changed property?
 # because this is more resilient against restarts

@@ -164,6 +164,8 @@ recorder:
   commit_interval: 5
   # see scripts/recorder_analysis.sql
   exclude:
+    domains:
+      - scene
     entities:
       - automation.update_baby_sleep_session_counter
       - automation.foyer_motion_detected_last

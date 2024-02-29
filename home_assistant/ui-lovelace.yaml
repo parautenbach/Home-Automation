@@ -12,3 +12,6 @@ views:
   - !include ui-lovelace/gallery.yaml
 
 button_card_templates: !include button_card_templates.yaml
+
+# theme colours:
+# https://www.home-assistant.io/integrations/frontend/#defining-themes

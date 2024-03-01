@@ -327,7 +327,7 @@ automation:
           - binary_sensor.back_extender
         from: "off"
         to: "on"
-        # this automation and the one to notify an extender has disconnect can race...
+        # this automation and the one to notify an extender has disconnected can race...
         for:
           seconds: 5
     mode: parallel
@@ -382,7 +382,11 @@ automation:
           entity_id: timer.back_extender_disconnected
     mode: parallel
     action:
-      # check if sensor still off?
+      # guard: only continue if still off, otherwise we can get stuff in a timer restart loop due to race conditions
+      - condition: template
+        value_template: >-
+          {% set binary_sensor = trigger.entity_id | replace('timer', 'binary_sensor') | replace('_disconnected', '') %}
+          {{ is_state(binary_sensor, 'off') }}
       - service: notify.mobile_app_ceres
         data:
           title: "⚠️ Internet"

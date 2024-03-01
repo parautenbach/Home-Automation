@@ -972,7 +972,9 @@ automation:
         # keep in sync with "Send Backup Power Battery Update"
         below: 21
         for:
-          minutes: 5
+          # is 10 min too long?
+          # implement a governor?
+          minutes: 10
     # we don't use a condition for whether someone's home – we always want to know if this happens
     condition: []
     action:

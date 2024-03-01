@@ -969,7 +969,7 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id: sensor.battery_state_of_charge
-        # keep in sync with "Send Backup Power Battery Update"
+        # keep threshold in sync with "Send Backup Power Battery Update"
         below: 21
         for:
           # is 10 min too long?

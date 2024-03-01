@@ -993,6 +993,22 @@ automation:
                 critical: 1
                 volume: 0.5
 
+  - alias: "Turn Off Non-essential Appliances When Critical Battery Threshold Reached"
+    id: "7de9f0ac-0135-4594-9133-462fad3914fd"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.battery_state_of_charge
+        # keep threshold in sync with "Send Backup Power Battery Update"
+        below: 21
+        for:
+          # combine this automation with above alert?
+          minutes: 10
+    action:
+      - service: climate.turn_off
+        target:
+          entity_id: all
+
   - alias: "High Inverter Load Alert"
     id: "fb0e42ad-c503-4e94-92d6-e70c359c79bc"
     initial_state: true

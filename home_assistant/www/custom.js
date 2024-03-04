@@ -26,5 +26,5 @@ document.documentElement.style.setProperty('--custom-color-magenta',   '#8840a7'
 document.documentElement.style.setProperty('--custom-color-turquoise', '#62a7a0');  // slate: #xxxxxx - 62a7a0
 document.documentElement.style.setProperty('--custom-color-gray',      '#cccccc');
 
-document.documentElement.style.setProperty('--mini-media-player-background-opacity',  0.2);
-document.documentElement.style.setProperty('--mini-media-player-artwork-opacity',     0.8);
+document.documentElement.style.setProperty('--mini-media-player-background-opacity', 0.2);
+document.documentElement.style.setProperty('--mini-media-player-artwork-opacity',    0.8);

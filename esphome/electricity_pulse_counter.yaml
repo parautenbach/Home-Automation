@@ -49,6 +49,7 @@ sensor:
   - platform: internal_temperature
     id: ${device_name_lower}_device_temperature
     name: "${device_name_upper} Device Temperature"
+    update_interval: 300s
 
 switch:
   - platform: restart

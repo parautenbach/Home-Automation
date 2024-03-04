@@ -115,3 +115,4 @@ sensor:
   - platform: internal_temperature
     id: ${device_name_lower}__device_temperature
     name: "${device_name_upper} Device Temperature"
+    update_interval: 300s

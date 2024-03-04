@@ -340,6 +340,8 @@ script:
 
   # https://community.home-assistant.io/t/yaml-light-fader-for-light-entities-that-dont-support-transition/215508
   # https://community.home-assistant.io/t/how-can-i-make-automations-with-transition-while-the-device-doesnt-support-it/357035/8
+  # https://community.home-assistant.io/t/ashley-s-light-fader-2-0-fade-lights-and-or-color-temperature-with-your-choice-of-easing-curves-including-ease-in-ease-out-and-ease-in-out/584077
+  # the above supports easing curves!
   fade_light:
     fields:
       light:

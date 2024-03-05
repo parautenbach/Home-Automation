@@ -802,7 +802,7 @@ automation:
                 state: "off"
               # because we might've turned it off alltogether (via the ui)
               - condition: state
-                entity_id: automation.switch_on_lights_at_wake_up_time
+                entity_id: automation.run_morning_routine_at_wake_up_time
                 state: "on"
           - condition: and
             conditions:

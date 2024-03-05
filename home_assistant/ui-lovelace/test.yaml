@@ -26,6 +26,14 @@ cards:
       - weather.forecast_tomorrow
       - input_number.test_percentage
     show_header_toggle: true
+  - type: history-graph
+    title: Aircons
+    hours_to_show: 24
+    entities:
+      - entity: climate.living_room_ac
+        name: Living Room
+      - entity: climate.main_bedroom_ac
+        name: Main Bedroom
   # https://www.home-assistant.io/integrations/amcrest/
   # - type: picture-elements
   #   image: camera.baby_monitor_profile000

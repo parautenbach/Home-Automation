@@ -527,10 +527,10 @@ automation:
               profile: low
           - delay:
               minutes: 1
-          this call does not block/wait, so the two transitions will start at almost the same time
-          and the script runs in parallel mode
-          https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete
-          temporarily removed
+          # this call does not block/wait, so the two transitions will start at almost the same time
+          # and the script runs in parallel mode
+          # https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete
+          # temporarily removed
           - service: script.turn_on
             target:
               entity_id: script.fade_light

@@ -799,6 +799,7 @@ cards:
               - entity: sensor.geyser_power
                 name: Geyser
                 color: var(--custom-color-yellow)
+                aggregate_func: last
               - entity: sensor.outbuilding_power_meter_channel_1_power
                 name: Outbuilding
                 color: var(--custom-color-green)
@@ -836,6 +837,7 @@ cards:
               - entity: sensor.geyser_power
                 name: Geyser
                 color: var(--custom-color-yellow)
+                aggregate_func: last
               - entity: sensor.outbuilding_power_meter_channel_1_power
                 name: Outbuilding
                 color: var(--custom-color-green)

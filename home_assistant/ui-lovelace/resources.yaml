@@ -399,35 +399,6 @@ cards:
               - entity: sensor.battery_state_of_charge
                 name: Charge
                 color: var(--custom-color-blue)
-              - entity: sensor.battery_power
-                name: Power
-                color: var(--custom-color-red)
-                y_axis: secondary
-              - entity: sensor.output_shutdown_capacity
-                name: Charge Threshold
-                color: var(--custom-color-yellow)
-            hours_to_show: 24
-            hour24: true
-            lower_bound: 0
-            upper_bound: 100
-            smoothing: true
-            points_per_hour: 12
-            line_width: 2
-            show:
-              extrema: true
-              name: true
-              icon: true
-              average: true
-              state: true
-              labels: hover
-              labels_secondary: hover
-          - type: custom:mini-graph-card
-            name: Battery
-            icon: mdi:home-battery-outline
-            entities:
-              - entity: sensor.battery_state_of_charge
-                name: Charge
-                color: var(--custom-color-blue)
               - entity: sensor.capacity_charge_point
                 name: Charge Point
                 color: var(--custom-color-gray)
@@ -459,6 +430,35 @@ cards:
               state: true
               labels: hover
               labels_secondary: false
+          - type: custom:mini-graph-card
+            name: Battery
+            icon: mdi:home-battery-outline
+            entities:
+              - entity: sensor.battery_state_of_charge
+                name: Charge
+                color: var(--custom-color-blue)
+              - entity: sensor.battery_power
+                name: Power
+                color: var(--custom-color-red)
+                y_axis: secondary
+              - entity: sensor.output_shutdown_capacity
+                name: Charge Threshold
+                color: var(--custom-color-yellow)
+            hours_to_show: 24
+            hour24: true
+            lower_bound: 0
+            upper_bound: 100
+            smoothing: true
+            points_per_hour: 12
+            line_width: 2
+            show:
+              extrema: true
+              name: true
+              icon: true
+              average: true
+              state: true
+              labels: hover
+              labels_secondary: hover
           - type: custom:mini-graph-card
             name: Battery
             icon: mdi:home-battery-outline

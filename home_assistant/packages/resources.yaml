@@ -1009,6 +1009,39 @@ automation:
         target:
           entity_id: all
 
+  - alias: "Charging From Grid When Not Supposed To"
+    id: "085cfb32-deb1-4a04-af50-9dcd5bfaa9c0"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.grid_power
+        # to use this value in a template, provide an input_number here
+        above: 200
+        for:
+          minutes: 1
+    condition:
+      - condition: state
+        entity_id: binary_sensor.grid_charge_point_status
+        state: "off"
+        # prevent a false positive should we change the charge point status while high power is being drawn
+        for:
+          minutes: 5
+      - condition: template
+        value_template: "{{ states('sensor.battery_state_of_charge') | int(0) > states('sensor.capacity_charge_point') | int(0) }}"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "⚠️ Energy"
+          message: >-
+            {% set current_power = states('sensor.grid_power') | int(0) %}
+            {% set current_power_with_unit = current_power ~ 'W' if current_power < 1000 else current_power | int(0) | multiply(1/1000) | round(1) ~ 'kW' %}
+            {% set for_minutes = trigger.for.seconds // 60 %}
+            The backup power system has been continuously charging from the grid for {{ for_minutes }} min, drawing {{ current_power_with_unit }} currently.
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/resources
+            tag: "inverter-battery-temperature"
+
   - alias: "High Inverter Load Alert"
     id: "fb0e42ad-c503-4e94-92d6-e70c359c79bc"
     initial_state: true

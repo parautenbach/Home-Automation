@@ -201,7 +201,7 @@ cards:
                             }
                         -%}
                       {%- set state = states(config.entity) -%}
-                      {{ comfort_map[state] }};
+                      {{ season_map[state] }};
                   }
                   state-badge {
                     margin: 0;
@@ -237,7 +237,7 @@ cards:
                             }
                         -%}
                       {%- set state = states(config.entity) -%}
-                      {{ season_map[state] }};
+                      {{ comfort_map[state] }};
                   }
                   state-badge {
                     margin: 0;

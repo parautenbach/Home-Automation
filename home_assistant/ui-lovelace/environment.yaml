@@ -191,8 +191,7 @@ cards:
                 .: |
                   div:nth-child(3) {
                     color:
-                      {# https://www.sciencedirect.com/science/article/pii/S0378778819314070 #}
-                      {%- set comfort_map =
+                      {%- set season_map =
                             {
                               'unknown': '',
                               'spring':  '#70a03c',
@@ -238,7 +237,7 @@ cards:
                             }
                         -%}
                       {%- set state = states(config.entity) -%}
-                      {{ comfort_map[state] }};
+                      {{ season_map[state] }};
                   }
                   state-badge {
                     margin: 0;

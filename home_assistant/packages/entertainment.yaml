@@ -69,7 +69,7 @@ sensor:
     entity_id: media_player.living_room
     state: "playing"
     type: time
-    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    start: "{{ today_at() }}"
     end: "{{ now() }}"
 
   - platform: template

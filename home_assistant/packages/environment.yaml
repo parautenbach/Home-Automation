@@ -230,7 +230,7 @@ sensor:
     entity_id: binary_sensor.is_fair_weather
     state: "on"
     type: time  # duration
-    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    start: "{{ today_at() }}"
     end: "{{ now() }}"
 
   - platform: template

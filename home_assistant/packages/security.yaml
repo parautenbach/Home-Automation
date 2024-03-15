@@ -95,7 +95,7 @@ sensor:
     entity_id: binary_sensor.foyer_motion_detected
     state: "on"
     type: count
-    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    start: "{{ today_at() }}"
     end: "{{ now() }}"
 
   - platform: template

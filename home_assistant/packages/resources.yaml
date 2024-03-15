@@ -621,13 +621,13 @@ sensor:
     entity_id: binary_sensor.grid_feed
     state: "off"
     type: time  # duration
-    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    start: "{{ today_at() }}"
     end: "{{ now() }}"
   # https://github.com/Limych/ha-average
   # device class
   - platform: average
     name: Average Solar Energy Forecast Today
-    start: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    start: '{{ today_at() }}'
     end: '{{ now() }}'
     entities:
       - sensor.energy_production_today

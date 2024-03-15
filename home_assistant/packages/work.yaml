@@ -19,7 +19,7 @@ sensor:
     entity_id: person.pieter_rautenbach
     state: "Work (Takealot HQ)"
     type: time  # duration
-    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    start: "{{ today_at() }}"
     end: "{{ now() }}"
 
   - platform: history_stats
@@ -27,7 +27,7 @@ sensor:
     entity_id: person.pieter_rautenbach
     state: "Work (Takealot STB)"
     type: time  # duration
-    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    start: "{{ today_at() }}"
     end: "{{ now() }}"
 
   - platform: history_stats
@@ -35,5 +35,5 @@ sensor:
     entity_id: binary_sensor.on_air
     state: "on"
     type: time  # duration
-    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    start: "{{ today_at() }}"
     end: "{{ now() }}"

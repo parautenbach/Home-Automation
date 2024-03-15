@@ -164,7 +164,7 @@ sensor:
     entity_id: input_boolean.baby_sleep_mode
     state: "on"
     type: time
-    start: "{{ now().replace(hour=0, minute=0, second=0) }}"
+    start: "{{ today_at() }}"
     end: "{{ now() }}"
 
 template:

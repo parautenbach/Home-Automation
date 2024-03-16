@@ -81,6 +81,7 @@ homeassistant:
 shell_command:
   download_latest_dam_levels: "/home/homeassistant/scripts/download_latest_dam_levels.sh"
 
+# convert to modern format: https://www.home-assistant.io/integrations/template/
 weather:
   # https://community.home-assistant.io/t/mapping-weather-conditions-in-the-ui/289207
   - platform: template
@@ -273,6 +274,9 @@ sensor:
         value_template: >-
           {{ min((states('sensor.fair_weather_time') | float(0) / states('sensor.home_sun_daylight') | float(0) * 100) | round(0), 100) if has_value('sensor.home_sun_daylight') else 0 }}
         unit_of_measurement: "%"
+      time_of_day:
+        friendly_name: Time of Day
+        value_template: "{{ 'Day' if states('sensor.solar_angle') | float(0) >= -0.833 else 'Night' }}"
 
 template:
   - binary_sensor:

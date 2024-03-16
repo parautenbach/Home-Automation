@@ -1,38 +1,57 @@
-  -- https://community.home-assistant.io/t/how-to-reduce-your-database-size-and-extend-the-life-of-your-sd-card/205299/
-  -- https://community.home-assistant.io/t/find-most-frequently-updated-sensor/302102/
-  
-  SELECT
-    table_name,
-    pg_size_pretty(pg_total_relation_size(quote_ident(table_name))),
-    pg_relation_size(quote_ident(table_name))
-  FROM information_schema.tables
-  WHERE table_schema = 'public'
-  ORDER BY 3 DESC;
-  
-  SELECT
-      s.metadata_id,
-      m.entity_id,
-      COUNT(*) AS cnt
-  FROM states AS s
-  LEFT JOIN states_meta AS m
-  ON s.metadata_id = m.metadata_id
-  GROUP BY
-      s.metadata_id,
-      m.entity_id
-  ORDER BY
-      COUNT(*) DESC;
-  
-  SELECT
-      (shared_data::json->>'entity_id') AS entity_id,
-      COUNT(*) AS cnt
-  FROM event_data
-  WHERE
-      shared_data::json->>'entity_id' IS NOT NULL
-  GROUP BY
-      (shared_data::json->>'entity_id')
-  HAVING COUNT(*) > 1
-  ORDER BY
-      COUNT(*) DESC;
+-- List databases: \l
+-- All tables: \dt
+-- Describe table: \d events
+
+SELECT (pg_database_size('homeassistant')/1024/1024) as db_size;
+
+SELECT pg_size_pretty(pg_total_relation_size('events'));
+SELECT pg_size_pretty(pg_total_relation_size('states'));
+
+SELECT event_type, COUNT(*) AS count FROM events GROUP BY event_type ORDER BY count DESC;
+SELECT domain, COUNT(*) AS count FROM states GROUP BY domain ORDER BY count DESC;
+
+-- old
+SELECT entity_id, COUNT(*) AS count FROM states WHERE domain='sensor' GROUP BY entity_id ORDER BY count DESC;
+-- new
+SELECT m.entity_id, COUNT(*) AS count FROM states AS s LEFT JOIN states_meta AS m ON s.metadata_id = m.metadata_id GROUP BY m.entity_id ORDER BY count DESC;
+
+----------
+
+-- https://community.home-assistant.io/t/how-to-reduce-your-database-size-and-extend-the-life-of-your-sd-card/205299/
+-- https://community.home-assistant.io/t/find-most-frequently-updated-sensor/302102/
+
+SELECT
+  table_name,
+  pg_size_pretty(pg_total_relation_size(quote_ident(table_name))),
+  pg_relation_size(quote_ident(table_name))
+FROM information_schema.tables
+WHERE table_schema = 'public'
+ORDER BY 3 DESC;
+
+SELECT
+    s.metadata_id,
+    m.entity_id,
+    COUNT(*) AS cnt
+FROM states AS s
+LEFT JOIN states_meta AS m
+ON s.metadata_id = m.metadata_id
+GROUP BY
+    s.metadata_id,
+    m.entity_id
+ORDER BY
+    COUNT(*) DESC;
+
+SELECT
+    (shared_data::json->>'entity_id') AS entity_id,
+    COUNT(*) AS cnt
+FROM event_data
+WHERE
+    shared_data::json->>'entity_id' IS NOT NULL
+GROUP BY
+    (shared_data::json->>'entity_id')
+HAVING COUNT(*) > 1
+ORDER BY
+    COUNT(*) DESC;
 
 ----------
 

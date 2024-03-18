@@ -6,7 +6,7 @@ homeassistant:
       entity_picture: '/local/rouve.jpg'
     switch.guest_mode:
       friendly_name: Guest Mode
-      icon: mdi:briefcase
+      icon: mdi:briefcase-outline
     switch.contractor_mode:
       friendly_name: Contractor Mode
       icon: mdi:account-hard-hat
@@ -15,9 +15,9 @@ homeassistant:
     input_boolean.rouve_present:
       icon: mdi:account
     input_boolean.guest_mode:
-      icon: mdi:briefcase
+      icon: mdi:briefcase-outline
     input_boolean.contractor_mode:
-      icon: mdi:account-hard-hat
+      icon: mdi:account-hard-hat-outline
     sensor.google_travel_time:
       device_class: duration
     sensor.google_travel_time_filtered:
@@ -52,7 +52,7 @@ input_boolean:
     icon: mdi:account
   guest_mode:
     name: Guest Mode
-    icon: mdi:briefcase
+    icon: mdi:briefcase-outline
   contractor_mode:
     name: Contractor Mode
     icon: mdi:worker

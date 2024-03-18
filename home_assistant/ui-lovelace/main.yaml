@@ -427,7 +427,7 @@ cards:
       - type: custom:mini-graph-card
         name: Driving – Takealot HQ to Home
         # name: Current Travel Time
-        icon: mdi:briefcase-clock
+        icon: mdi:briefcase-clock-outline
         entities:
           - entity: sensor.google_travel_time
           - entity: sensor.nighttime_number

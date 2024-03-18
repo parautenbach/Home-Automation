@@ -274,9 +274,9 @@ automation:
         state: "off"
     action:
       - if:
-        - condition: state
-          entity_id: input_boolean.skip_next_wake_up_time
-          state: "on"
+          - condition: state
+            entity_id: input_boolean.skip_next_wake_up_time
+            state: "on"
         then:
           - service: input_boolean.turn_off
             target:

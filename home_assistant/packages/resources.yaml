@@ -65,6 +65,9 @@ template:
       - name: "Grid Feed Outage Number"
         unique_id: "bd43dcb2-4c3b-4fd5-952c-a4a790634a1c"
         state: "{{ 0 if is_state('binary_sensor.grid_feed', 'on') else 1 }}"
+      # want to save on state updates to the db?
+      # cannot change this to a trigger-based sensor, since there's no one sensor that will always trigger
+      # could use a time pattern trigger, but then we can just as well leave it as is
       - name: "Home Power"
         unique_id: "ec13fb72-1d08-427a-918b-e7549539a1be"
         unit_of_measurement: W

@@ -1090,7 +1090,11 @@ automation:
           title: "⚠️ Energy"
           message: >-
             {% set load_percentage = states('sensor.load_percentage') | int(0) %}
-            The backup power inverter load is critical at {{ load_percentage }}%. Please reduce consumption.
+            {# why does load_power != home_power? #}
+            {# why does the battery appear to provide more power than the load sensor shows for consumption? #}
+            {# probably due to the inverter itself needing power of a few 100 watt #}
+            {% set power = states('sensor.home_power') | float(0) | multiply(1/1000) | round(1) %}
+            The backup power system's load is critical at {{ load_percentage }}% ({{ power }}kW). Please reduce consumption immediately to avoid a power outage.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/devices

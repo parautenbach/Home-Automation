@@ -167,6 +167,7 @@ recorder:
     domains:
       - scene
     entities:
+      # high frequency updates
       - automation.update_baby_sleep_session_counter
       - automation.foyer_motion_detected_last
       - automation.motion_indicator_on

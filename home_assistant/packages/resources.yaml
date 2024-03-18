@@ -1077,7 +1077,7 @@ automation:
       # https://mybroadband.co.za/forum/threads/essential-vs-non-essential-items-on-inverter-explain-please.1185382/
       - platform: numeric_state
         entity_id: sensor.load_percentage
-        above: 79
+        above: 84
     condition:
       # we think high load is only an issue of there isn't a grid feed for non-essentials to fall back to
       # we don't use a condition for whether someone's home – we always want to know if this happens

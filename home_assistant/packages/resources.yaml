@@ -366,6 +366,14 @@ template:
           solar_energy_forecast_today: "{{ states('sensor.average_solar_energy_forecast_today') }}"
           solar_energy_forecast_tomorrow: "{{ states('sensor.energy_production_tomorrow') }}"
           charge_mode: "{{ states('sensor.charge_mode') }}"
+      - name: "Inverter Efficiency"
+        unique_id: "ee3e3151-3357-40f1-b52c-ad11b846bb82"
+        state: "{{ min(max((states('sensor.load_power') | int(0) / states('sensor.home_power') | int(0)), 0), 1) | multiply(100) | round(0) }}"
+        unit_of_measurement: "%"
+        icon: mdi:autorenew
+        attributes:
+          overhead: "{{ states('sensor.home_power') | int(0) - states('sensor.load_power') | int(0)  }}"
+
   - trigger:
     - platform: time_pattern
       hours: "*"

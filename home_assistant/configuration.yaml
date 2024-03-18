@@ -225,6 +225,7 @@ recorder:
       - sensor.fair_weather_time_share
       - sensor.watchman_last_updated
       - sensor.monthly_home_energy_consumption_forecast
+      - sensor.inverter_efficiency
       - script.update_entity
       # large attributes
       - sensor.security_camera_snapshots

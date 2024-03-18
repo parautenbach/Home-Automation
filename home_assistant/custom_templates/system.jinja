@@ -13,8 +13,12 @@ Get a list of entity IDs given a list of states.
   {%- set exclusions = [
             'sensor.unavailable_entities',
             'number.living_room_ac_fan_speed',
-            'number.main_bedroom_ac_fan_speed',
+            'select.living_room_ac_vertical_swing_angle',
+            'select.living_room_ac_horizontal_swing_angle',
             'sensor.living_room_ac_outdoor_temperature',
+            'number.main_bedroom_ac_fan_speed',
+            'select.main_bedroom_ac_vertical_swing_angle',
+            'select.main_bedroom_ac_horizontal_swing_angle',
             'sensor.main_bedroom_ac_outdoor_temperature',
             'sensor.solar_reserve_percentage_5min_average',
             'sensor.pv_power_5min_average'] -%}

@@ -225,6 +225,16 @@ recorder:
       - sensor.watchman_last_updated
       - sensor.monthly_home_energy_consumption_forecast
       - script.update_entity
+      # large attributes
+      - sensor.security_camera_snapshots
+      - sensor.home_assistant
+      - sensor.owm_pollution_forecast
+      - sensor.tmp
+      - sensor.weather_tomorrow_hourly
+      - sensor.weather_tomorrow_daily
+      - sensor.eskomsepush
+      - weather.openweathermap_hourly
+      - weather.openweathermap_daily
 
 tts:
   - platform: google_translate

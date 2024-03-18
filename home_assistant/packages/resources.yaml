@@ -981,20 +981,37 @@ automation:
     # we don't use a condition for whether someone's home – we always want to know if this happens
     condition: []
     action:
-      - service: notify.family
-        data:
-          title: "🪫 Energy"
-          message: >-
-            {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
-            The backup power battery's charge is low ({{ battery_soc }}%). Please conserve energy.
-          data:
-            group: "home-electricity"
-            url: homeassistant://navigate/lovelace/resources
-            push:
-              sound:
-                name: default
-                critical: 1
-                volume: 0.5
+      - variables:
+          battery_soc: "{{ states('sensor.battery_state_of_charge') | int(0) }}"
+          message: "The backup power battery's charge is low ({{ battery_soc }}%). Please conserve energy."
+      # only a critical sound notification if the grid is off, otherwise just a normal notification
+      # the hard limit for the inverter/battery is set to 20%, so it won't got below 20% if the grid is connected
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: binary_sensor.grid_feed
+                state: "off"
+            sequence:
+              - service: notify.family
+                data:
+                  title: "🪫 Energy"
+                  message: "{{ message }}"
+                  data:
+                    group: "home-electricity"
+                    url: homeassistant://navigate/lovelace/resources
+                    push:
+                      sound:
+                        name: default
+                        critical: 1
+                        volume: 0.5
+        default:
+          - service: notify.family
+            data:
+              title: "🪫 Energy"
+              message: "{{ message }}"
+              data:
+                group: "home-electricity"
+                url: homeassistant://navigate/lovelace/resources
 
   - alias: "Turn Off Non-essential Appliances When Critical Battery Threshold Reached"
     id: "7de9f0ac-0135-4594-9133-462fad3914fd"

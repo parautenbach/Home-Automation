@@ -1071,7 +1071,7 @@ automation:
           title: "⚠️ Energy"
           message: >-
             {% set current_power = states('sensor.grid_power') | int(0) %}
-            {% set current_power_with_unit = current_power ~ 'W' if current_power < 1000 else current_power | int(0) | multiply(1/1000) | round(1) ~ 'kW' %}
+            {% set current_power_with_unit = current_power ~ ' W' if current_power < 1000 else current_power | int(0) | multiply(1/1000) | round(1) ~ ' kW' %}
             {% set for_minutes = trigger.for.seconds // 60 %}
             The backup power system has been continuously charging from the grid for {{ for_minutes }} min, drawing {{ current_power_with_unit }} currently.
           data:
@@ -1103,7 +1103,7 @@ automation:
             {# why does the battery appear to provide more power than the load sensor shows for consumption? #}
             {# probably due to the inverter itself needing power of a few 100 watt #}
             {% set power = states('sensor.home_power') | float(0) | multiply(1/1000) | round(1) %}
-            The backup power system's load is critical at {{ load_percentage }}% ({{ power }}kW). Please reduce consumption immediately to avoid a power outage.
+            The backup power system's load is critical at {{ load_percentage }}% ({{ power }} kW). Please reduce consumption immediately to avoid a power outage.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/devices
@@ -1318,7 +1318,7 @@ automation:
       #       {% endfor %}
       #       {% if ns.success %}
       #         {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) | round(1) %}
-      #         The backup power system's charge mode has been set to {{ charge_mode }}. The solar energy production forecast for today is {{ forecast }}kWh.
+      #         The backup power system's charge mode has been set to {{ charge_mode }}. The solar energy production forecast for today is {{ forecast }} kWh.
       #       {% else %}
       #         The backup power system's charge mode couldn't be set.
       #       {% endif %}
@@ -1333,7 +1333,7 @@ automation:
             {% set last_charge_mode = states('input_text.last_charge_mode') | lower %}
             {% if is_state('input_boolean.set_charge_point_error', 'off') or charge_mode == last_charge_mode %}
               {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) | round(1) %}
-              The backup power system's charge mode has been set to {{ charge_mode }}. The solar energy production forecast for today is {{ forecast }}kWh.
+              The backup power system's charge mode has been set to {{ charge_mode }}. The solar energy production forecast for today is {{ forecast }} kWh.
             {% else %}
               The backup power system's charge mode couldn't be changed from {{ last_charge_mode }} to {{ charge_mode }}.
             {% endif %}
@@ -1372,11 +1372,11 @@ automation:
             {% set utilisation = states('sensor.solar_energy_utilisation_today') | int(0) %}
             {% set utilisation_message = "" %}
             {% if utilisation == 100 %}
-              {% set utilisation_message = "You have utilised all of the solar energy forecasted for today (" ~ consumption ~ "kWh)." %}
+              {% set utilisation_message = "You have utilised all of the solar energy forecasted for today (" ~ consumption ~ " kWh)." %}
             {%- else %}
-              {% set utilisation_message = "You have utilised " ~ utilisation ~ "% (" ~ consumption ~ "kWh) of the solar energy forecasted for today (" ~ forecast_today ~ "kWh)." %}
+              {% set utilisation_message = "You have utilised " ~ utilisation ~ "% (" ~ consumption ~ " kWh) of the solar energy forecasted for today (" ~ forecast_today ~ " kWh)." %}
             {%- endif %}
-            {{ utilisation_message }} The forecast for tomorrow is {{ forecast_tomorrow }}kWh.
+            {{ utilisation_message }} The forecast for tomorrow is {{ forecast_tomorrow }} kWh.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources

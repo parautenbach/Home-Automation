@@ -666,6 +666,15 @@ sensor:
     sampling_size: 100
     max_age:
       minutes: 5
+  - platform: statistics
+    name: 'Outbuilding Power 1min 90th Percentile'
+    entity_id: sensor.outbuilding_power_meter_channel_1_power
+    state_characteristic: percentile
+    percentile: 90
+    precision: 0
+    sampling_size: 100
+    max_age:
+      minutes: 1
 
 mqtt:
   binary_sensor:
@@ -1103,6 +1112,9 @@ automation:
                 name: default
                 critical: 1
                 volume: 0.5
+      - service: notify.tenant_sms
+        data:
+          message: "The backup power system's load is critical. Please reduce consumption immediately to avoid a power outage."
 
   - alias: "Detect When SolarAssistant MQTT Bridge Activity Ceases"
     id: "3febc063-c872-4847-8abb-0ce1a4186887"
@@ -1614,3 +1626,82 @@ automation:
                 name: default
                 critical: 1
                 volume: 0.5
+
+  - alias: "Notify Tenant Of High Energy Consumption"
+    id: "72447e10-ea6c-4bc1-abd0-b3f336eb6a17"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.outbuilding_power_meter_channel_1_power
+        # todo: some kind of average or using energy instead of power might work better
+        above: 2200
+        for:
+          minutes: 5
+      - platform: numeric_state
+        entity_id: sensor.outbuilding_power_meter_channel_1_power
+        above: 550
+        for:
+          minutes: 20
+    condition:
+      - condition: state
+        entity_id: binary_sensor.grid_feed
+        state: "off"
+    action:
+      - variables:
+          power: "{{ states('sensor.outbuilding_power_1min_90th_percentile') | float(0) | multiply(1/1000) | round(1) }}"
+          minutes: "{{ trigger.for.seconds // 60 }}"
+      - service: notify.mobile_app_ceres
+        data:
+          title: "⚠️ Energy"
+          message: "The tenant's power consumption has been {{ power }} kW for {{ minutes }} min while on backup power."
+          data:
+            group: "tenant-electricity"
+            url: homeassistant://navigate/lovelace/resources
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 0.5
+      - service: notify.tenant_sms
+        data:
+          message: "The house is running off backup power. Please mind your energy usage: You've been drawing {{ power }} kW for {{ minutes }} min."
+
+  - alias: "Notify Tenant When On Backup Power"
+    id: "9a727e25-af28-4fa0-85e0-3b4b8ebed8dd"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.grid_feed
+        to: "off"
+        not_from:
+          - "unavailable"
+          - "unknown"
+    condition:
+      - condition: time
+        after: "05:00:00"
+        before: "23:00:00"
+    action:
+      - variables:
+          message: "The house has switched to backup power. Please mind your energy usage."
+      - service: notify.tenant_sms
+        data:
+          message: "{{ message }}"
+
+  - alias: "Notify Tenant When Grid Power Restored"
+    id: "bf9fc657-6969-490e-acc8-51bb0cdf8c95"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.grid_feed
+        to: "on"
+        not_from:
+          - "unavailable"
+          - "unknown"
+    condition:
+      - condition: time
+        after: "05:00:00"
+        before: "23:00:00"
+    action:
+      - variables:
+          message: "Grid power to the house has been restored."
+      - service: notify.tenant_sms
+        data:
+          message: "{{ message }}"

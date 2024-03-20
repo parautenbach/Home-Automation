@@ -256,6 +256,14 @@ python_script:
 
 stream:
 
+notify:
+  # https://app.clickatell.com/my-workspace
+  # https://www.clickatell.com/pricing-and-coverage/message-pricing/
+  # https://docs.clickatell.com/channels/sms-channels/sms-api-reference/
+  - platform: clickatell
+    name: "Tenant SMS"
+    api_key: !secret clickatell_api_key
+    recipient: !secret tenant_mobile_number
 # debugpy:
 #   start: false
 #   # wait: false  # false if start is false

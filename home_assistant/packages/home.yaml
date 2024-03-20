@@ -62,6 +62,9 @@ input_boolean:
   baby_sleep_mode:
     name: Baby's Sleep Mode
     icon: mdi:bell-sleep-outline
+  everyday_routine:
+    name: Everyday Routine
+    icon: mdi:sun-clock-outline
 
 input_number:
   baby_current_sleep_session:
@@ -266,9 +269,15 @@ automation:
       - platform: time
         at: input_datetime.wake_up_time
     condition:
-      - condition: state
-        entity_id: binary_sensor.workday
-        state: "on"
+      - condition: or
+        conditions:
+          # because baby, every day is a workday :-D
+          - condition: state
+            entity_id: binary_sensor.workday
+            state: "on"
+          - condition: state
+            entity_id: input_boolean.everyday_routine
+            state: "on"
       - condition: state
         entity_id: light.main_bedroom_group
         state: "off"

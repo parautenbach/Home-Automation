@@ -264,6 +264,11 @@ notify:
     name: "Tenant SMS"
     api_key: !secret clickatell_api_key
     recipient: !secret tenant_mobile_number
+  - platform: clickatell
+    name: "Pieter SMS"
+    api_key: !secret clickatell_api_key
+    recipient: !secret pieter_mobile_number
+
 # debugpy:
 #   start: false
 #   # wait: false  # false if start is false

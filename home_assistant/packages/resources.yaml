@@ -1685,6 +1685,9 @@ automation:
       - service: notify.tenant_sms
         data:
           message: "{{ message }}"
+      # - service: notify.pieter_sms
+      #   data:
+      #     message: "{{ message }}"
 
   - alias: "Notify Tenant When Grid Power Restored"
     id: "bf9fc657-6969-490e-acc8-51bb0cdf8c95"
@@ -1705,3 +1708,6 @@ automation:
       - service: notify.tenant_sms
         data:
           message: "{{ message }}"
+      # - service: notify.pieter_sms
+      #   data:
+      #     message: "{{ message }}"

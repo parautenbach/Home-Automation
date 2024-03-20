@@ -35,6 +35,12 @@ input_boolean:
   gaia_audio_input_in_use_alt:
     name: Gaia Audio Input In Use (Alt)
     icon: mdi:microphone
+  baby_monitor_disconnected:
+    name: Baby Monitor Disconnected
+    icon: mdi:camera-off-outline
+  doorbell_disconnected:
+    name: Doorbell Disconnected
+    icon: mdi:bell-off-outline
 
 # note that the behaviour of -W is different depending on the OS
 # on linux it's number of seconds (on macOS it's milliseconds)
@@ -389,38 +395,138 @@ automation:
       - service: "switch.turn_{{ 'on' if is_state('binary_sensor.on_air', 'on') else 'off' }}"
         entity_id: switch.office_on_air
 
-  - alias: "Notify If Baby Monitor Is Offline"
+  - alias: "Notify If Baby Monitor Status Changed"
     id: "27664018-432b-41c4-920d-88d05115f112"
     trigger:
       - platform: state
         entity_id: camera.baby_monitor_profile000
         to: "unavailable"
+        id: "detected_off"
+      - platform: state
+        entity_id: camera.baby_monitor_profile000
+        to: "unavailable"
         for:
+          # same as for below
           minutes: 2
-    mode: single
+        id: "notify_off"
+      - platform: state
+        entity_id: camera.baby_monitor_profile000
+        from: "unavailable"
+        id: "detected_on"
+    mode: queued
+    # i've considered making this a blueprint, but the triggeres of the baby monitor and doorbell are different
+    # one can make a binary sensor for the above to make that work the same
+    # but then one still needs to pass in some parameters for the notify service for fields that aren't templatable
+    # the other option is to make it a script, but it kind of has the same issues
     action:
-      - service: notify.mobile_app_ceres
-        data:
-          title: "⚠️ Devices"
-          message: "The baby monitor is offline."
-          data:
-            group: "nursery"
-            url: homeassistant://navigate/lovelace/devices
+      - if:
+          - condition: trigger
+            id: "detected_off"
+        then:
+          - service: input_boolean.turn_on
+            target:
+              entity_id: input_boolean.baby_monitor_disconnected
+        else:
+          - if:
+              - condition: trigger
+                id: "notify_off"
+            then:
+              - service: notify.mobile_app_ceres
+                data:
+                  title: "⚠️ Devices"
+                  message: "The baby monitor is offline."
+                  data:
+                    group: "nursery"
+                    url: homeassistant://navigate/lovelace/devices
+                    tag: "nursery-status"
+            else:
+              - if:
+                  - condition: and
+                    conditions:
+                      - condition: trigger
+                        id: "detected_on"
+                      - condition: state
+                        entity_id: input_boolean.baby_monitor_disconnected
+                        state: "on"
+                        for:
+                          # same as for above
+                          minutes: 2
+                then:
+                  - service: notify.mobile_app_ceres
+                    data:
+                      title: "⚠️ Devices"
+                      message: "The baby monitor was offline."
+                      data:
+                        group: "nursery"
+                        url: homeassistant://navigate/lovelace/devices
+                        tag: "nursery-status"
+              - service: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.baby_monitor_disconnected
 
-  - alias: "Notify If Doorbell Is Offline"
+  - alias: "Notify If Doorbell Status Changed"
     id: "78f795e0-43a7-41ba-bf52-5e3cf271faa3"
+    trace:
+      stored_traces: 20
     trigger:
       - platform: state
         entity_id: binary_sensor.doorbell_online
         to: "off"
+        id: "detected_off"
+      - platform: state
+        entity_id: binary_sensor.doorbell_online
+        to: "off"
         for:
+          # same as for below
           minutes: 2
-    mode: single
+        id: "notify_off"
+      - platform: state
+        entity_id: binary_sensor.doorbell_online
+        to: "on"
+        id: "detected_on"
+    mode: queued
     action:
-      - service: notify.mobile_app_ceres
-        data:
-          title: "⚠️ Devices"
-          message: "The doorbell is offline."
-          data:
-            group: "doorbell"
-            url: homeassistant://navigate/lovelace/devices
+      - if:
+          - condition: trigger
+            id: "detected_off"
+        then:
+          - service: input_boolean.turn_on
+            target:
+              entity_id: input_boolean.doorbell_disconnected
+        else:
+          - if:
+              - condition: trigger
+                id: "notify_off"
+            then:
+              - service: notify.mobile_app_ceres
+                data:
+                  title: "⚠️ Devices"
+                  message: "The doorbell is offline."
+                  data:
+                    group: "doorbell"
+                    url: homeassistant://navigate/lovelace/devices
+                    tag: "doorbell-status"
+            else:
+              - if:
+                  - condition: and
+                    conditions:
+                      - condition: trigger
+                        id: "detected_on"
+                      - condition: state
+                        entity_id: input_boolean.doorbell_disconnected
+                        state: "on"
+                        for:
+                          # same as for above
+                          minutes: 2
+                then:
+                  - service: notify.mobile_app_ceres
+                    data:
+                      title: "⚠️ Devices"
+                      message: "The doorbell was offline."
+                      data:
+                        group: "doorbell"
+                        url: homeassistant://navigate/lovelace/devices
+                        tag: "doorbell-status"
+              - service: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.doorbell_disconnected

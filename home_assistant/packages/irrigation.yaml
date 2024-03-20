@@ -156,6 +156,7 @@ automation:
       - platform: state
         entity_id: sensor.irrigation_state
         not_from: "unavailable"
+        not_to: "unavailable"
     action:
       - service: notify.mobile_app_ceres
         data:
@@ -198,6 +199,8 @@ automation:
                 The {{ name }} irrigation zone has been started manually.
               {% else %}
                 {# pass #}
+                Debug:
+                 - State change: {{ from }} -> {{ to }}
               {% endif %}
             {% endif %}
           data:

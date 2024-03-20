@@ -1664,7 +1664,7 @@ automation:
                 volume: 0.5
       - service: notify.tenant_sms
         data:
-          message: "The house is running off backup power. Please mind your energy usage: You've been drawing {{ power }} kW for {{ minutes }} min."
+          message: "The property is running off backup power. Please mind your energy usage: You've been drawing {{ power }} kW for {{ minutes }} min."
 
   - alias: "Notify Tenant When On Backup Power"
     id: "9a727e25-af28-4fa0-85e0-3b4b8ebed8dd"
@@ -1681,7 +1681,7 @@ automation:
         before: "23:00:00"
     action:
       - variables:
-          message: "The house has switched to backup power. Please mind your energy usage."
+          message: "The property has switched to backup power. Please mind your energy usage."
       - service: notify.tenant_sms
         data:
           message: "{{ message }}"
@@ -1701,7 +1701,7 @@ automation:
         before: "23:00:00"
     action:
       - variables:
-          message: "Grid power to the house has been restored."
+          message: "Grid power to the property has been restored."
       - service: notify.tenant_sms
         data:
           message: "{{ message }}"

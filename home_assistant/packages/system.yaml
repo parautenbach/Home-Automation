@@ -180,7 +180,7 @@ mqtt:
 template:
   - trigger:
     - platform: time_pattern
-      minutes: "*"
+      minutes: "/1"
     sensor:
       # https://community.home-assistant.io/t/sensor-unavailable-offline-detection/147618
       # https://community.home-assistant.io/t/how-to-list-all-sensors-with-state-unavailable-none-or-unknown/154606
@@ -205,7 +205,7 @@ template:
 
   - trigger:
     - platform: time_pattern
-      minutes: "*"
+      minutes: "/1"
     sensor:
       - name: Disabled Automations
         icon: mdi:refresh-auto
@@ -392,9 +392,7 @@ automation:
     id: "e955e738-4162-486e-a915-d30b5952d238"
     trigger:
       - platform: time_pattern
-        hours: "*"
-        minutes: 0
-        seconds: 0
+        hours: "/1"
     condition:
       - condition: numeric_state
         entity_id: sensor.disk_use_percent

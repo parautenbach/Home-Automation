@@ -648,9 +648,7 @@ automation:
     initial_state: true
     trigger:
       - platform: time_pattern
-        hours: "*"
-        minutes: 0
-        seconds: 0
+        hours: "/1"
     condition:
       - condition: and
         conditions:
@@ -960,7 +958,8 @@ automation:
     initial_state: true
     trigger:
       - platform: time_pattern
-        seconds: "*"
+        seconds: "/15"
+    mode: single
     action:
       - service: input_number.set_value
         target:

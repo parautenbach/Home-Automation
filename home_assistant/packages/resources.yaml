@@ -375,10 +375,7 @@ template:
           overhead: "{{ states('sensor.home_power') | int(0) - states('sensor.load_power') | int(0)  }}"
 
   - trigger:
-    - platform: time_pattern
-      hours: "*"
-      minutes: "*"
-      seconds: 0
+    # note: the macro below uses now(), which will cause an automatic update every minute on the minute
     - platform: state
       entity_id:
         - number.capacity_point_1
@@ -393,18 +390,15 @@ template:
         state: >-
           {%- from 'resources.jinja' import get_current_entity_id -%}
           {{ states(get_current_entity_id('number.capacity_point_')) }}
-        # not really, but we get dynamic icons this way
         attributes:
           current_entity_id: >-
             {%- from 'resources.jinja' import get_current_entity_id -%}
             {{ get_current_entity_id('number.capacity_point_') }}
+        # not really, but we get dynamic icons this way
         device_class: battery
         unit_of_measurement: "%"
   - trigger:
-    - platform: time_pattern
-      hours: "*"
-      minutes: "*"
-      seconds: 0
+    # note: the macro below uses now(), which will cause an automatic update every minute on the minute
     - platform: state
       entity_id:
         - switch.grid_charge_point_1
@@ -424,8 +418,6 @@ template:
             {{ get_current_entity_id('switch.grid_charge_point_') }}
   - trigger:
     - platform: time_pattern
-      hours: "*"
-      minutes: "*"
       seconds: "/10"
     binary_sensor:
       - name: "SolarAssistant Activity"

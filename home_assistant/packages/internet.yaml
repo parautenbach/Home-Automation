@@ -121,7 +121,8 @@ command_line:
 
   - sensor:
       name: front_extender_packet_loss
-      command: 'ping -c 5 front_extender 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
+      # note: the ping sensor host is configured via the ui of the ping integration
+      command: 'ping -c 5 U6ProFrontAP 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
       command_timeout: 15
       unit_of_measurement: "%"
       value_template: '{{ value | int(0) }}'
@@ -129,7 +130,8 @@ command_line:
 
   - sensor:
       name: back_extender_packet_loss
-      command: 'ping -c 5 AccessPointWiFi6Pro 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
+      # note: the ping sensor host is configured via the ui of the ping integration
+      command: 'ping -c 5 U6ProRearAP 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
       command_timeout: 15
       unit_of_measurement: "%"
       value_template: '{{ value | int(0) }}'

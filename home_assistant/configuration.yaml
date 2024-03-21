@@ -234,7 +234,6 @@ recorder:
       - sensor.owm_pollution_forecast
       - sensor.tmp
       - sensor.weather_tomorrow_hourly
-      - sensor.weather_tomorrow_daily
       - sensor.eskomsepush
       - weather.openweathermap_hourly
       - weather.openweathermap_daily

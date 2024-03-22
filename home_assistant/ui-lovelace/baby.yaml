@@ -245,6 +245,34 @@ cards:
     cards:
       - type: glance
         entities:
+          - entity: sensor.time_of_day
+            name: Time of Day
+            card_mod:
+              style:
+                .: |
+                  :host {
+                    --card-mod-icon:
+                      {%- if is_state(config.entity, 'Day') -%};
+                        mdi:weather-sunny
+                      {%- else -%}
+                        mdi:weather-night
+                      {%- endif -%};
+                  }
+                  div:nth-child(3) {
+                    color:
+                      {%- set daytime_map =
+                            {
+                              'unknown': '',
+                              'Day':   '#ff9800',
+                              'Night': '#3498db'
+                            }
+                        -%}
+                      {%- set state = states(config.entity) -%}
+                      {{ daytime_map[state] }};
+                  }
+                  state-badge {
+                    margin: 0;
+                  }
           - entity: sensor.season
             card_mod:
               style:

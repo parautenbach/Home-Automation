@@ -987,8 +987,14 @@ automation:
           # is 10 min too long?
           # implement a governor?
           minutes: 10
+      - platform: state
+        entity_id: binary_sensor.grid_feed
+        to: "off"
     # we don't use a condition for whether someone's home – we always want to know if this happens
-    condition: []
+    condition:
+      - condition: numeric_state
+        entity_id: sensor.battery_state_of_charge
+        below: 21
     action:
       - variables:
           battery_soc: "{{ states('sensor.battery_state_of_charge') | int(0) }}"

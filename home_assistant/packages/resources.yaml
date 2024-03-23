@@ -1679,10 +1679,10 @@ automation:
         not_from:
           - "unavailable"
           - "unknown"
-    condition:
-      - condition: time
-        after: "05:00:00"
-        before: "23:00:00"
+    # condition:
+    #   - condition: time
+    #     after: "05:00:00"
+    #     before: "23:00:00"
     action:
       - variables:
           message: "The property has switched to backup power. Please mind your energy usage."
@@ -1702,10 +1702,10 @@ automation:
         not_from:
           - "unavailable"
           - "unknown"
-    condition:
-      - condition: time
-        after: "05:00:00"
-        before: "23:00:00"
+    # condition:
+    #   - condition: time
+    #     after: "05:00:00"
+    #     before: "23:00:00"
     action:
       - variables:
           message: "Grid power to the property has been restored."

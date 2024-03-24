@@ -312,7 +312,7 @@ automation:
         data:
           # test duration
           # if changed here, change it in "Notify When Extender Disconnected" too
-          duration: "00:01:00"
+          duration: "00:02:00"
       - service: input_datetime.set_datetime
         target:
           entity_id: "{{ trigger.entity_id | replace('binary_sensor', 'input_datetime') }}_disconnected"
@@ -410,4 +410,4 @@ automation:
         data:
           # test duration
           # if changed here, change it in "Detect When Extender Disconnected" too
-          duration: "00:01:00"
+          duration: "00:02:00"

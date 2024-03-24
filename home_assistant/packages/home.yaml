@@ -972,7 +972,7 @@ automation:
         data:
           value: >-
             {% if is_state('input_boolean.baby_sleep_mode', 'on') %}
-              {{ states('input_number.baby_current_sleep_session') | int(0) + 1 }}
+              {{ states('input_number.baby_current_sleep_session') | int(0) + 15 }}
             {% else %}
               0
             {% endif %}

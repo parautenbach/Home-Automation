@@ -373,21 +373,21 @@ template:
         icon: mdi:autorenew
         attributes:
           overhead: "{{ states('sensor.home_power') | int(0) - states('sensor.load_power') | int(0)  }}"
-
-  - trigger:
-    # note: the macro below uses now(), which will cause an automatic update every minute on the minute
-    #       as well as for the current number entity
-    - platform: time_pattern
-      minutes: "/1"
-    - platform: state
-      entity_id:
-        - number.capacity_point_1
-        - number.capacity_point_2
-        - number.capacity_point_3
-        - number.capacity_point_4
-        - number.capacity_point_5
-        - number.capacity_point_6
-    sensor:
+  # https://community.home-assistant.io/t/trigger-based-template-sensor-using-time-pattern-not-updating/706860
+  # - trigger:
+  #   # note: the macro below uses now(), which will cause an automatic update every minute on the minute
+  #   #       as well as for the current number entity
+  #   - platform: time_pattern
+  #     minutes: "/1"
+  #   - platform: state
+  #     entity_id:
+  #       - number.capacity_point_1
+  #       - number.capacity_point_2
+  #       - number.capacity_point_3
+  #       - number.capacity_point_4
+  #       - number.capacity_point_5
+  #       - number.capacity_point_6
+  - sensor:
       - name: "Capacity Charge Point"
         unique_id: "12b69471-fdbc-4f9a-9a75-960545211e3e"
         state: >-
@@ -400,20 +400,20 @@ template:
         # not really, but we get dynamic icons this way
         device_class: battery
         unit_of_measurement: "%"
-  - trigger:
-    # note: the macro below uses now(), which will cause an automatic update every minute on the minute
-    #       as well as for the current number entity
-    - platform: time_pattern
-      minutes: "/1"
-    - platform: state
-      entity_id:
-        - switch.grid_charge_point_1
-        - switch.grid_charge_point_2
-        - switch.grid_charge_point_3
-        - switch.grid_charge_point_4
-        - switch.grid_charge_point_5
-        - switch.grid_charge_point_6
-    binary_sensor:
+  # - trigger:
+  #   # note: the macro below uses now(), which will cause an automatic update every minute on the minute
+  #   #       as well as for the current number entity
+  #   - platform: time_pattern
+  #     minutes: "/1"
+  #   - platform: state
+  #     entity_id:
+  #       - switch.grid_charge_point_1
+  #       - switch.grid_charge_point_2
+  #       - switch.grid_charge_point_3
+  #       - switch.grid_charge_point_4
+  #       - switch.grid_charge_point_5
+  #       - switch.grid_charge_point_6
+  - binary_sensor:
       - name: "Grid Charge Point Status"
         state: >-
           {%- from 'resources.jinja' import get_current_entity_id -%}

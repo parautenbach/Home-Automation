@@ -368,6 +368,9 @@ template:
           charge_mode: "{{ states('sensor.charge_mode') }}"
       - name: "Inverter Efficiency"
         unique_id: "ee3e3151-3357-40f1-b52c-ad11b846bb82"
+        # alternative: https://community.home-assistant.io/t/limit-a-value-to-fall-within-a-range/222188
+        #   {% set x = -12 %}
+        #   {{ ([0, x, 100]|sort)[1] }}
         state: "{{ min(max((states('sensor.load_power') | int(0) / states('sensor.home_power') | int(0)), 0), 1) | multiply(100) | round(0) }}"
         unit_of_measurement: "%"
         icon: mdi:autorenew

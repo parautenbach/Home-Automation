@@ -1067,8 +1067,8 @@ automation:
       - platform: state
         entity_id:
           - climate.main_bedroom_ac
-        attribute: preset_mode
-        to: "sleep"
+        # attribute: preset_mode
+        # to: "sleep"
       - platform: state
         entity_id: light.main_bedroom_group
         to: "off"

@@ -580,10 +580,11 @@ automation:
         entity_id: switch.contractor_mode
       # cleaning day lights
       - service: light.turn_on
-        entity_id:
-          - light.hallway
-          - light.music_room
-          - light.dining_room
+        target:
+          entity_id:
+            - light.hallway
+            - light.music_room
+            - light.dining_room
         data:
           profile: security
       # only turn it on if it's not already on; it could be on already as the warning light due to load shedding
@@ -591,7 +592,8 @@ automation:
         entity_id: light.foyer
         state: "off"
       - service: light.turn_on
-        entity_id: light.foyer
+        target:
+          entity_id: light.foyer
         data:
           profile: security
 

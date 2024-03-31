@@ -449,6 +449,22 @@ automation:
             after: "07:00:00"
             before: "23:00:00"
     action:
+      # what if the presence sensor is slow to update, so we trigger motion before we're detected as home?
+      # i don't think it's a good idea to have a motion trigger and then choose between the wait below and one for presence
+      # rather use a recency check
+      - wait_template: >-
+          {% set last_motion_detected = (now() - states.binary_sensor.doorbell_motion_detected.last_updated).total_seconds() %}
+          {{ is_state('binary_sensor.doorbell_motion_detected', 'on') or
+             (is_state('binary_sensor.doorbell_motion_detected', 'off') and last_motion_detected <= 60) }}
+        timeout: "00:01:00"
+        continue_on_timeout: false
+      - wait_template: "{{ is_state('alarm_control_panel.home', 'disarmed') }}"
+        timeout: "00:01:00"
+        continue_on_timeout: false
+      # it was closed, but check that it still is, otherwise we might toggle it
+      - condition: state
+        entity_id: cover.main_gate
+        state: "closed"
       - if:
           - condition: state
             entity_id: binary_sensor.pieter_driving
@@ -500,23 +516,39 @@ automation:
           - condition: state
             entity_id: binary_sensor.garage_doors_rhs_occupied
             state: "off"
+          # replaced by the wait_for_triggers below
           # proxy for the alarm being off
-          - condition: or
-            conditions:
-              - condition: state
-                entity_id: binary_sensor.rouve_present
-                state: "on"
-                for:
-                  minutes: 5
-              - condition: state
-                entity_id: binary_sensor.contractor_mode
-                state: "on"
-              # check last update of rouvé's phone
+          # - condition: or
+          #   conditions:
+          #     - condition: state
+          #       entity_id: binary_sensor.rouve_present
+          #       state: "on"
+          #       for:
+          #         minutes: 5
+          #     - condition: state
+          #       entity_id: binary_sensor.contractor_mode
+          #       state: "on"
+          #     - condition: state
+          #       entity_id: alarm_control_panel.home
+          #       state: "disarmed"
           # if guest mode is on, someone could be parked in or in front of the garage
           - condition: state
             entity_id: switch.guest_mode
             state: "off"
     action:
+      - wait_template: >-
+          {% set last_motion_detected = (now() - states.binary_sensor.doorbell_motion_detected.last_updated).total_seconds() %}
+          {{ is_state('binary_sensor.doorbell_motion_detected', 'on') or
+             (is_state('binary_sensor.doorbell_motion_detected', 'off') and last_motion_detected <= 60) }}
+        timeout: "00:01:00"
+        continue_on_timeout: false
+      - wait_template: "{{ is_state('alarm_control_panel.home', 'disarmed') }}"
+        timeout: "00:01:00"
+        continue_on_timeout: false
+      # it was closed, but check that it still is, otherwise we might toggle it and close it instead
+      - condition: state
+        entity_id: cover.garage_doors_rhs
+        state: "closed"
       - service: cover.open_cover
         entity_id: cover.garage_doors_rhs
 

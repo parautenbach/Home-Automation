@@ -1110,6 +1110,9 @@ automation:
       - condition: time
         after: "19:30:00"
     action:
+      - wait_template: "{{ not is_state('climate.main_bedroom_ac', 'off') }}"
+        timeout: "00:00:15"
+        continue_on_timeout: false
       - service: switch.turn_off
         target:
           entity_id: switch.main_bedroom_ac_display

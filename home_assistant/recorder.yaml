@@ -1,0 +1,86 @@
+db_url: postgresql://@/homeassistant
+# https://community.home-assistant.io/t/home-assistant-db-size/1198/10
+# If you set it for 14 days, then it runs after 14 days of UNINTERRUPTED uptime. If you restart your HA server, then the clock restarts from zero again.
+# delete from events where time_fired < datetime('now','-30 days');
+# delete from states where created < datetime('now', '-30 days');
+# SQLite does not recover the disk space after you have done this, so it is necessary to ‘vacuum’ the database. Simply issue the following command:
+# vacuum;
+auto_purge: true
+auto_repack: true
+purge_keep_days: 5
+commit_interval: 5
+# see scripts/recorder_analysis.sql
+exclude:
+  domains:
+    - scene
+  entities:
+    # high frequency updates
+    - automation.update_baby_sleep_session_counter
+    - automation.foyer_motion_detected_last
+    - automation.motion_indicator_on
+    - automation.motion_indicator_off
+    - automation.see_mobile_devices
+    - automation.update_ping_sensors
+    - button.outbuilding_power_meter_reboot
+    - camera.security_camera_last_snapshot
+    - camera.security_camera_last_clip
+    - camera.security_camera_proxy
+    - input_datetime.foyer_motion_detected_last
+    - input_number.baby_current_sleep_session
+    - sensor.resource_widget
+    - sensor.garage_doors_lhs_ultrasonic_sensor
+    - sensor.garage_doors_rhs_ultrasonic_sensor
+    - sensor.solarassistant_activity_counter
+    - sensor.home_power_kw
+    - sensor.grid_voltage
+    - sensor.grid_frequency
+    - sensor.ac_output_voltage
+    - sensor.ac_output_frequency
+    - sensor.solar_reserve_kw
+    - sensor.home_power_5min_average
+    - sensor.solar_reserve_percentage_5min_average
+    - sensor.pv_power_filtered
+    - sensor.pv_power_5min_average
+    - sensor.battery_power_filtered
+    - sensor.load_power_essential
+    - sensor.grid_power_ld
+    - sensor.grid_power_ct
+    - sensor.battery_current
+    - sensor.battery_time_to_shutdown_threshold
+    - sensor.battery_time_to_full
+    - sensor.time
+    - sensor.time_utc
+    - sensor.time_date
+    - sensor.date_time
+    - sensor.date_time_utc
+    - sensor.date_time_iso
+    - sensor.san_francisco
+    - sensor.cape_town
+    - sensor.sydney
+    - sensor.london
+    - sensor.gaia_storage
+    - sensor.ceres_storage
+    - sensor.ceres_last_update_trigger
+    - sensor.rouve_storage
+    - sensor.motion_detected_last_relative
+    - sensor.outbuilding_power_meter_channel_1_voltage
+    - sensor.outbuilding_power_meter_channel_2_voltage
+    - sensor.outbuilding_power_meter_channel_2_power
+    - sensor.outbuilding_power_meter_channel_2_power_factor
+    - sensor.outbuilding_power_meter_channel_2_energy
+    - sensor.outbuilding_power_meter_channel_2_energy_returned
+    - sensor.fair_weather_time_share
+    - sensor.watchman_last_updated
+    - sensor.monthly_home_energy_consumption_forecast
+    - sensor.time_of_day
+    - sensor.inverter_efficiency
+    - script.update_entity
+    # large attributes
+    - sensor.security_camera_snapshots
+    - sensor.home_assistant
+    - sensor.owm_pollution_forecast
+    - sensor.tmp
+    - sensor.weather_tomorrow_hourly
+    - sensor.eskomsepush
+    - weather.openweathermap_hourly
+    - weather.openweathermap_daily

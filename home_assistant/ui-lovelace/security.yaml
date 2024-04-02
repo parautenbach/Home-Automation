@@ -75,6 +75,36 @@ cards:
               data:
                 camera_entity_id: camera.doorbell
                 subdirectory: "doorbell"
+      # https://community.home-assistant.io/t/styling-tile-cards/696907/10
+      # https://community.home-assistant.io/t/card-mod-for-tile-card-icon-tile-color/657214/52
+      - type: tile
+        entity: alarm_control_panel.home
+        name: "Home Alarm"
+        features:
+          - type: "alarm-modes"
+            modes:
+              - armed_home
+              - armed_away
+              - disarmed
+        card_mod:
+          # this works in conjunction with www/custom.js
+          style:
+            hui-card-features $ hui-alarm-modes-card-feature $ div ha-control-select $ div: |
+              #option-armed_home {
+                --control-select-color: #ffa800 !important;
+              }
+              #option-armed_away {
+                --control-select-color: #aa0000 !important;
+              }
+              #option-disarmed {
+                --control-select-color: #40b100 !important;
+              }
+      # todo: panic button (mdi:alert-outline/mdi:shield-alert-outline)
+      - type: history-graph
+        hours_to_show: 24
+        entities:
+          - entity: alarm_control_panel.home
+            name: Alarm
       - type: custom:home-feed-card
         title: Events
         show_empty: true
@@ -130,6 +160,19 @@ cards:
             state_map:
               open: "opened"
             content_template: "Pieter's garage door {{state}}"
+          - entity: alarm_control_panel.home
+            include_history: true
+            max_history: 5
+            remove_repeats: false
+            exclude_states:
+              - "unknown"
+              - "unavailable"
+            format: datetime
+            state_map:
+              disarmed: "disarmed"
+              armed_home: "armed (stay)"
+              armed_away: "armed"
+            content_template: "Alarm was {{state}}"
       - type: entities
         title: "Gates & Doors"
         show_header_toggle: false

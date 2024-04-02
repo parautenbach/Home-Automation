@@ -424,6 +424,37 @@ cards:
           - switch.guest_mode
           - switch.contractor_mode
         show_header_toggle: false
+      # https://community.home-assistant.io/t/styling-tile-cards/696907/10
+      # https://community.home-assistant.io/t/card-mod-for-tile-card-icon-tile-color/657214/52
+      - type: tile
+        entity: alarm_control_panel.home
+        name: "Home Alarm"
+        features:
+          - type: "alarm-modes"
+            modes:
+              - armed_home
+              - armed_away
+              - disarmed
+        card_mod:
+          # this works in conjunction with www/custom.js
+          style:
+            hui-card-features $ hui-alarm-modes-card-feature $ div ha-control-select $ div: |
+              #option-armed_home {
+                --control-select-color: #ffa800 !important;
+              }
+              #option-armed_away {
+                --control-select-color: #aa0000 !important;
+              }
+              #option-disarmed {
+                --control-select-color: #40b100 !important;
+              }
+      # todo: panic button (mdi:alert-outline/mdi:shield-alert-outline)
+      - type: history-graph
+        name: Alarm
+        hours_to_show: 24
+        entities:
+          - entity: alarm_control_panel.home
+            name: Alarm
       - type: custom:mini-graph-card
         name: Driving – Takealot HQ to Home
         # name: Current Travel Time

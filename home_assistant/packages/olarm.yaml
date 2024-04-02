@@ -1,0 +1,309 @@
+alarm_control_panel:
+  - platform: manual
+    name: "Home"
+    code: !secret alarm_code
+    code_arm_required: true
+    arming_time: 0
+    delay_time: 0
+    trigger_time: 120
+    disarm_after_trigger: false
+    disarmed:
+      trigger_time: 0
+    armed_home:
+      arming_time: 0
+      delay_time: 0
+    armed_away:
+      arming_time: 0
+      delay_time: 0
+
+# https://www.home-assistant.io/integrations/rest_command/
+# https://user.olarm.co/#/api
+# https://user.olarm.co/#/api/documentation
+rest_command:
+  olarm_get_state:
+    method: "GET"
+    headers:
+      Authorization: !secret olarm_bearer_token
+    url: !secret olarm_device_endpoint
+    content_type: "application/json"
+  olarm_disarmed:
+    method: "POST"
+    headers:
+      Authorization: !secret olarm_bearer_token
+    url: !secret olarm_actions_endpoint
+    # areas are 1-indexed (i.e. starts at 1 not 0)
+    payload: >-
+      {
+        "actionCmd": "area-disarm",
+        "actionNum": {{ area }}
+      }
+    content_type: "application/json"
+  olarm_armed_home:
+    method: "POST"
+    headers:
+      Authorization: !secret olarm_bearer_token
+    url: !secret olarm_actions_endpoint
+    payload: >-
+      {
+        "actionCmd": "area-stay",
+        "actionNum": {{ area }}
+      }
+    content_type: "application/json"
+  olarm_armed_away:
+    method: "POST"
+    headers:
+      Authorization: !secret olarm_bearer_token
+    url: !secret olarm_actions_endpoint
+    payload: >-
+      {
+        "actionCmd": "area-arm",
+        "actionNum": {{ area }}
+      }
+    content_type: "application/json"
+
+automation:
+  - alias: "Sync Alarm State"
+    id: "e8f36533-e1c8-40d5-b35f-3001a159ec8e"
+    initial_state: true
+    trigger:
+      - platform: homeassistant
+        event: start
+    action:
+      - variables:
+          state_map:
+            notready: "disarm"
+            disarm: "disarm"
+            stay: "arm_home"
+            arm: "arm_away"
+      - service: rest_command.olarm_get_state
+        response_variable: olarm_response
+      # index 0 is area/partition 1
+      # values are: stay, arm, disarm
+      - service: "alarm_control_panel.alarm_{{ state_map[olarm_response.content.deviceState.areas[0]] }}"
+        target:
+          entity_id: alarm_control_panel.home
+        data:
+          code: !secret alarm_code
+
+  # examples for state changes:
+  # {'deviceId': '<uuid>', 'eventTime': 1708664464105, 'eventAction': 'area', 'eventState': 'disarm', 'eventNum': 1, 'eventMsg': 'DISARMED - Area 1 - Home', 'userFullname': ''}
+  # {'deviceId': '<uuid>', 'eventTime': 1708797060201, 'eventAction': 'area', 'eventState': 'stay', 'eventNum': 1, 'eventMsg': 'STAY ARMED - Area 1 - Home', 'userFullname': ''}
+  # {'deviceId': '<uuid>', 'eventTime': 1708882676603, 'eventAction': 'area', 'eventState': 'stay', 'eventNum': 1, 'eventMsg': 'STAY ARMED - Area 1 - Home', 'userFullname': 'Pieter Rautenbach'}
+  # {'deviceId': '<uuid>', 'eventTime': 1709539839721, 'eventAction': 'area', 'eventState': 'arm', 'eventNum': 1, 'eventMsg': 'ARMED - Area 1 - Home', 'userFullname': ''}
+  #
+  # examples for emergenies
+  # these are all panics. these two events seem to say that eventNum refers to the area/partition.
+  # {'deviceId': '<uuid>', 'eventTime': 1709539853196, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 1, 'eventMsg': 'EMERGENCY! - Area 1 - Home', 'userFullname': ''}
+  # {'deviceId': '<uuid>', 'eventTime': 1709539853197, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 2, 'eventMsg': 'EMERGENCY! - Area 2 - Flatlet', 'userFullname': ''}
+  # but here eventNum seem to refer to the zone. thus, one needs to parse the eventMsg. seems like there are events for zones activated during a panic.
+  # {'deviceId': '<uuid>', 'eventTime': 1709539853200, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 5, 'eventMsg': 'EMERGENCY! - Area 5', 'userFullname': ''}
+  # {'deviceId': '<uuid>', 'eventTime': 1709539853199, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 4, 'eventMsg': 'EMERGENCY! - Area 4', 'userFullname': ''}
+  # then there's this one (note the eventAction):
+  # {'deviceId': '<uuid>', 'eventTime': 1709539853544, 'eventAction': 's_alm', 'eventState': 'panic', 'eventNum': 1, 'eventMsg': 'EMERGENCY! - Panic', 'userFullname': ''}
+  - alias: "Receive Olarm Event"
+    id: "fbf7afaa-c357-4a85-b50d-ba5d57b9e187"
+    initial_state: true
+    trigger:
+      - platform: webhook
+        webhook_id: !secret olarm_webhook_id
+        local_only: false
+        allowed_methods:
+          - POST
+    mode: queued
+    action:
+      - variables:
+          state_map:
+            disarm: "disarm"
+            stay: "arm_home"
+            arm: "arm_away"
+      - service: system_log.write
+        data:
+          message: "{{ trigger.webhook_id ~ ': ' ~ trigger.json }}"
+          level: debug
+          logger: "homeassistant.components.olarm"
+      - choose:
+          # if triggered
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.json.eventState in ['panic', 'alarm'] }}"
+            sequence:
+              - service: alarm_control_panel.alarm_trigger
+                target:
+                  entity_id: alarm_control_panel.home
+          # elif state changed
+          - conditions:
+              # compare with current state (noop it if matches; means it was actioned from HA, so don't cause a loop)
+              - condition: template
+                value_template: >-
+                  {{ trigger.json.eventState in ['disarm', 'stay', 'arm'] and
+                     not is_state('alarm_control_panel.home', state_map[trigger.json.eventState]) }}
+            sequence:
+              - service: "alarm_control_panel.alarm_{{ state_map[trigger.json.eventState] }}"
+                target:
+                  entity_id: alarm_control_panel.home
+                data:
+                  code: !secret alarm_code
+        default:
+          - service: system_log.write
+            data:
+              message: "{{ trigger.webhook_id ~ ': Unknown event received: ' ~ trigger.json.eventState }}"
+              level: warning
+              logger: "homeassistant.components.olarm"
+
+  - alias: "Notify When Alarm Triggered"
+    id: "45f0ac46-8bbb-42cb-a051-64ea1ca695e2"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.home
+        to: "triggered"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🚨 Security"
+          message: "The alarm has been triggered!"
+          data:
+            group: "home-security"
+            url: homeassistant://navigate/lovelace/security
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 0.5
+            actions:
+              - action: "DISARM_ALARM"
+                title: "Disarm now"
+                destructive: true
+
+  - alias: "Ask To Arm Alarm When Last Person Left"
+    id: "e8a63da5-4d84-40ab-9c05-dca93ba4900d"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.pieter_present
+        to: "off"
+    mode: single
+    action:
+      - wait_template: "{{ is_state('binary_sensor.anybody_home', 'off') }}"
+        timeout: "00:02:00"
+        continue_on_timeout: false
+      - condition: state
+        entity_id: alarm_control_panel.home
+        state: "disarmed"
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🔒 Security"
+          message: >-
+            The last person left home. Would you like to arm the alarm?
+          data:
+            group: "home-security"
+            url: homeassistant://navigate/lovelace/security
+            actions:
+              - action: "ARM_ALARM"
+                title: "Arm now"
+                destructive: true
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 0.5
+
+  - alias: "Ask To Disarm Alarm When Arriving"
+    id: "85753536-12f8-4a94-b292-7672ac96a4c2"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.pieter_present
+        to: "on"
+    condition:
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: alarm_control_panel.home
+            state: "disarmed"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🔒 Security"
+          message: >-
+            You arrived home. Would you like to disarm the alarm?
+          data:
+            group: "home-security"
+            url: homeassistant://navigate/lovelace/security
+            actions:
+              - action: "DISARM_ALARM"
+                title: "Disarm now"
+                destructive: true
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 0.5
+
+  - alias: "Handle Alarm Notification Event"
+    id: "c7a55b28-a909-4cf0-8f91-23f1d8a0e45a"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: ARM_ALARM
+        id: "arm_away"
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: DISARM_ALARM
+        id: "disarm"
+    action:
+      - service: "alarm_control_panel.alarm_{{ trigger.id }}"
+        target:
+          entity_id: alarm_control_panel.home
+        data:
+          code: !secret alarm_code
+
+  - alias: "Alarm State Changed"
+    id: "c217ca42-8a3f-40c6-9945-2c77bdf16239"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.home
+        to:
+          - "disarmed"
+          - "armed_home"
+          - "armed_away"
+    action:
+      - variables:
+          state_map:
+            disarmed: "disarmed"
+            armed_home: "armed (stay)"
+            armed_away: "armed"
+          state: "{{ state_map[trigger.to_state.state] }}"
+      - service: "rest_command.olarm_{{ trigger.to_state.state }}"
+        data:
+          area: 1
+        response_variable: olarm_response
+      - if: "{{ olarm_response.status == 200 and olarm_response.content.actionStatus == 'OK' }}"
+        then:
+          - service: notify.mobile_app_ceres
+            data:
+              title: "🔒 Security"
+              # todo: user (can be from olarm or HA context; tricky)
+              message: >-
+                The alarm was {{ state }} at {{ now().strftime('%H:%M') }}.
+              data:
+                group: "home-security"
+                url: homeassistant://navigate/lovelace/security
+        else:
+          - service: system_log.write
+            data:
+              message: "{{ olarm_response.status }}: {{ olarm_response.content }}"
+              level: error
+              logger: "homeassistant.components.olarm"
+          - service: notify.mobile_app_ceres
+            data:
+              title: "⛔️ Security"
+              message: >-
+                The alarm couldn't be {{ state }} at {{ now().strftime('%H:%M') }}. Check the log for errors.
+              data:
+                group: "home-security"
+                url: homeassistant://navigate/config/logs

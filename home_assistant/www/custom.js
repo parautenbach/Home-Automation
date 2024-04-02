@@ -28,3 +28,9 @@ document.documentElement.style.setProperty('--custom-color-gray',      '#cccccc'
 
 document.documentElement.style.setProperty('--mini-media-player-background-opacity', 0.2);
 document.documentElement.style.setProperty('--mini-media-player-artwork-opacity',    0.8);
+
+// setting these here means it will work for both the panel and the history graph cards
+document.documentElement.style.setProperty('--state-alarm_control_panel-armed_home-color', '#ffa800');
+document.documentElement.style.setProperty('--state-alarm_control_panel-armed_away-color', '#aa0000');
+document.documentElement.style.setProperty('--state-alarm_control_panel-disarmed-color',   '#40b100');
+// do we want to set --state-alarm_control_panel-unavailable-color too? consider light vs dark theme, and unavailable vs unknown

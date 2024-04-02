@@ -1,0 +1,135 @@
+Alarm testing (2024-03-06 10h54):
+
+==========
+
+T1:
+Trigger service call
+- Nothing
+
+==========
+
+T2:
+Button arm
+Foyer zone
+Button disarm
+
+2024-03-06 10:56:08.666 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709715367432, 'eventAction': 'area', 'eventState': 'arm', 'eventNum': 1, 'eventMsg': 'ARMED - Area 1 - Home', 'userFullname': ''}
+2024-03-06 10:56:13.055 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709715371865, 'eventAction': 'area', 'eventState': 'alarm', 'eventNum': 1, 'eventMsg': 'ALARM! - Area 1 - Home', 'userFullname': ''}
+2024-03-06 10:56:13.057 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: alarm
+2024-03-06 10:56:15.323 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709715374187, 'eventAction': 'zone_alarm', 'eventState': 'alarm', 'eventNum': 3, 'eventMsg': 'ZONE 3 IN ALARM - Zone 3 - Foyer', 'userFullname': ''}
+2024-03-06 10:56:15.327 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: alarm
+2024-03-06 10:56:20.594 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709715379430, 'eventAction': 'zone_alarm', 'eventState': 'alarm', 'eventNum': 3, 'eventMsg': 'ZONE 3 IN ALARM - Zone 3 - Foyer', 'userFullname': ''}
+2024-03-06 10:56:20.605 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: alarm
+2024-03-06 10:56:23.244 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709715382100, 'eventAction': 'area', 'eventState': 'disarm', 'eventNum': 1, 'eventMsg': 'DISARMED - Area 1 - Home', 'userFullname': ''}
+
+==========
+
+T3:
+Button arm
+Panic (remote)
+Button disarm
+
+2024-03-06 11:37:38.107 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717856989, 'eventAction': 'area', 'eventState': 'arm', 'eventNum': 1, 'eventMsg': 'ARMED - Area 1 - Home', 'userFullname': ''}
+2024-03-06 11:37:54.284 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717873192, 'eventAction': 's_alm', 'eventState': 'panic', 'eventNum': 1, 'eventMsg': 'EMERGENCY! - Panic', 'userFullname': ''}
+2024-03-06 11:37:54.286 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: panic
+2024-03-06 11:37:55.244 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717874089, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 2, 'eventMsg': 'EMERGENCY! - Area 2 - Flatlet', 'userFullname': ''}
+2024-03-06 11:37:55.253 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:37:55.262 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717874090, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 3, 'eventMsg': 'EMERGENCY! - Area 3', 'userFullname': ''}
+2024-03-06 11:37:55.266 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:37:55.281 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717874091, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 4, 'eventMsg': 'EMERGENCY! - Area 4', 'userFullname': ''}
+2024-03-06 11:37:55.296 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:37:55.307 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717874088, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 1, 'eventMsg': 'EMERGENCY! - Area 1 - Home', 'userFullname': ''}
+2024-03-06 11:37:55.311 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:37:55.317 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717874092, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 5, 'eventMsg': 'EMERGENCY! - Area 5', 'userFullname': ''}
+2024-03-06 11:37:55.321 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:37:55.563 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717874094, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 7, 'eventMsg': 'EMERGENCY! - Area 7', 'userFullname': ''}
+2024-03-06 11:37:55.569 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:37:55.577 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717874093, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 6, 'eventMsg': 'EMERGENCY! - Area 6', 'userFullname': ''}
+2024-03-06 11:37:55.585 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:37:55.594 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717874095, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 8, 'eventMsg': 'EMERGENCY! - Area 8', 'userFullname': ''}
+2024-03-06 11:37:55.599 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:38:01.864 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717880525, 'eventAction': 'area', 'eventState': 'disarm', 'eventNum': 1, 'eventMsg': 'DISARMED - Area 1 - Home', 'userFullname': ''}
+
+==========
+
+T4:
+Disarmed
+Panic (remote)
+
+2024-03-06 11:38:42.037 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717920931, 'eventAction': 's_alm', 'eventState': 'panic', 'eventNum': 1, 'eventMsg': 'EMERGENCY! - Panic', 'userFullname': ''}
+2024-03-06 11:38:42.039 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: panic
+2024-03-06 11:38:43.063 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717921905, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 1, 'eventMsg': 'EMERGENCY! - Area 1 - Home', 'userFullname': ''}
+2024-03-06 11:38:43.065 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:38:43.077 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717921908, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 4, 'eventMsg': 'EMERGENCY! - Area 4', 'userFullname': ''}
+2024-03-06 11:38:43.088 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:38:43.101 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717921906, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 2, 'eventMsg': 'EMERGENCY! - Area 2 - Flatlet', 'userFullname': ''}
+2024-03-06 11:38:43.109 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:38:43.118 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717921907, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 3, 'eventMsg': 'EMERGENCY! - Area 3', 'userFullname': ''}
+2024-03-06 11:38:43.120 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:38:43.128 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717921909, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 5, 'eventMsg': 'EMERGENCY! - Area 5', 'userFullname': ''}
+2024-03-06 11:38:43.131 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:38:43.372 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717921910, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 6, 'eventMsg': 'EMERGENCY! - Area 6', 'userFullname': ''}
+2024-03-06 11:38:43.374 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:38:43.424 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717921911, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 7, 'eventMsg': 'EMERGENCY! - Area 7', 'userFullname': ''}
+2024-03-06 11:38:43.426 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:38:43.438 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709717921912, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 8, 'eventMsg': 'EMERGENCY! - Area 8', 'userFullname': ''}
+2024-03-06 11:38:43.443 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+
+==========
+
+T5:
+Disarmed
+Panic (button)
+
+2024-03-06 11:44:48.455 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709718287333, 'eventAction': 's_alm', 'eventState': 'panic', 'eventNum': 1, 'eventMsg': 'EMERGENCY! - Panic', 'userFullname': ''}
+2024-03-06 11:44:48.457 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: panic
+2024-03-06 11:44:49.493 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709718288365, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 1, 'eventMsg': 'EMERGENCY! - Area 1 - Home', 'userFullname': ''}
+2024-03-06 11:44:49.495 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:44:49.508 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709718288367, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 3, 'eventMsg': 'EMERGENCY! - Area 3', 'userFullname': ''}
+2024-03-06 11:44:49.518 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:44:49.542 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709718288371, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 7, 'eventMsg': 'EMERGENCY! - Area 7', 'userFullname': ''}
+2024-03-06 11:44:49.553 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:44:49.571 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709718288372, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 8, 'eventMsg': 'EMERGENCY! - Area 8', 'userFullname': ''}
+2024-03-06 11:44:49.580 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:44:49.594 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709718288368, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 4, 'eventMsg': 'EMERGENCY! - Area 4', 'userFullname': ''}
+2024-03-06 11:44:49.599 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:44:49.605 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709718288369, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 5, 'eventMsg': 'EMERGENCY! - Area 5', 'userFullname': ''}
+2024-03-06 11:44:49.609 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:44:49.614 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709718288370, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 6, 'eventMsg': 'EMERGENCY! - Area 6', 'userFullname': ''}
+2024-03-06 11:44:49.618 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:44:49.623 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709718288366, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 2, 'eventMsg': 'EMERGENCY! - Area 2 - Flatlet', 'userFullname': ''}
+2024-03-06 11:44:49.627 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+
+==========
+
+T6:
+Disarmed
+Panic (keypad)
+
+2024-03-06 11:45:39.326 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709718338203, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 1, 'eventMsg': 'EMERGENCY! - Area 1 - Home', 'userFullname': ''}
+2024-03-06 11:45:39.328 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: emergency
+2024-03-06 11:45:39.482 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709718338376, 'eventAction': 's_alm', 'eventState': 'panic', 'eventNum': 1, 'eventMsg': 'EMERGENCY! - Panic', 'userFullname': ''}
+2024-03-06 11:45:39.484 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: panic
+
+
+==========
+
+T7:
+Disarmed
+Fire (keypad)
+
+2024-03-06 11:46:36.989 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709718395834, 'eventAction': 'area', 'eventState': 'fire', 'eventNum': 1, 'eventMsg': 'FIRE! - Area 1 - Home', 'userFullname': ''}
+2024-03-06 11:46:36.991 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: fire
+2024-03-06 11:46:40.973 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709718399153, 'eventAction': 's_alm_f', 'eventState': 'panic', 'eventNum': 1, 'eventMsg': 'EMERGENCY! - Fire Panic', 'userFullname': ''}
+2024-03-06 11:46:40.975 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: panic
+
+==========
+
+T8:
+Disarmed
+Medical (keypad)
+
+2024-03-06 11:47:38.087 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': '<device_id>', 'eventTime': 1709718456986, 'eventAction': 's_alm_m', 'eventState': 'panic', 'eventNum': 1, 'eventMsg': 'EMERGENCY! - Medical Panic', 'userFullname': ''}
+2024-03-06 11:47:38.091 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: panic
+
+==========

@@ -91,7 +91,7 @@ automation:
   # {'deviceId': '<uuid>', 'eventTime': 1708882676603, 'eventAction': 'area', 'eventState': 'stay', 'eventNum': 1, 'eventMsg': 'STAY ARMED - Area 1 - Home', 'userFullname': 'Pieter Rautenbach'}
   # {'deviceId': '<uuid>', 'eventTime': 1709539839721, 'eventAction': 'area', 'eventState': 'arm', 'eventNum': 1, 'eventMsg': 'ARMED - Area 1 - Home', 'userFullname': ''}
   #
-  # examples for emergenies
+  # examples for emergencies
   # these are all panics. these two events seem to say that eventNum refers to the area/partition.
   # {'deviceId': '<uuid>', 'eventTime': 1709539853196, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 1, 'eventMsg': 'EMERGENCY! - Area 1 - Home', 'userFullname': ''}
   # {'deviceId': '<uuid>', 'eventTime': 1709539853197, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 2, 'eventMsg': 'EMERGENCY! - Area 2 - Flatlet', 'userFullname': ''}

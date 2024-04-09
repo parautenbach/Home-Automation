@@ -270,9 +270,9 @@ cards:
           - entity: sensor.motion_detected_last_relative
             name: Last Motion Detected
           - entity: timer.living_room_lamp_timer
-            name: Living Room Lamp Timer
+            name: Living Room Lamp
           - entity: timer.foyer_timer
-            name: Foyer Light Timer
+            name: Foyer Light
           - entity: group.security_automations
             name: Snapshots and Lights
       - type: history-graph
@@ -282,9 +282,9 @@ cards:
           - entity: binary_sensor.doorbell_motion_detected
             name: Doorbell
           - entity: binary_sensor.foyer_occupancy_homebridge
-            name: Foyer Motion
+            name: Foyer M.
           - entity: light.foyer
-            name: Foyer Light
+            name: Foyer L.
           - entity: light.living_room_lamp
             name: Living R. Lamp
       - type: statistics-graph

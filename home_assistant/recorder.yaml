@@ -83,4 +83,5 @@ exclude:
     - sensor.weather_tomorrow_hourly
     - sensor.eskomsepush
     - weather.openweathermap_hourly
-    - weather.openweathermap_daily
+    # we need the history of this one
+    # - weather.openweathermap_daily

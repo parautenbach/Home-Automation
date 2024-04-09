@@ -1108,7 +1108,7 @@ automation:
         to: "off"
     condition:
       - condition: time
-        after: "19:30:00"
+        after: "19:00:00"
     action:
       - wait_template: "{{ not is_state('climate.main_bedroom_ac', 'off') }}"
         timeout: "00:00:15"

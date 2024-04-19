@@ -135,8 +135,11 @@ automation:
               # compare with current state (noop it if matches; means it was actioned from HA, so don't cause a loop)
               - condition: template
                 value_template: >-
-                  {{ trigger.json.eventState in ['disarm', 'stay', 'arm'] and
-                     not is_state('alarm_control_panel.home', state_map[trigger.json.eventState]) }}
+                  {# eventNum == '1' is the partition/area check #}
+                  {% set new_state = state_map[trigger.json.eventState] %}
+                  {{ trigger.json.eventNum == 1 and
+                     trigger.json.eventState in ['disarm', 'stay', 'arm'] and
+                     not is_state('alarm_control_panel.home', new_state) }}
             sequence:
               - service: "alarm_control_panel.alarm_{{ state_map[trigger.json.eventState] }}"
                 target:

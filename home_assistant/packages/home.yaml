@@ -868,7 +868,7 @@ automation:
       at: "21:00:00"
     condition:
       - condition: state
-        entity_id: binary_sensor.everyday_routine
+        entity_id: input_boolean.everyday_routine
         state: "off"
       # google calendar all-day events go up to midnight of the next day – but this is already catered for when we set the helpers
       # old: condition: "{{ (states('input_datetime.vacation_end') | as_datetime).date() == now().date() }}"

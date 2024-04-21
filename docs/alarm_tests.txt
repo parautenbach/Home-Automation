@@ -133,3 +133,6 @@ Medical (keypad)
 2024-03-06 11:47:38.091 WARNING (MainThread) [homeassistant.components.olarm] <device_id>: Unknown event received: panic
 
 ==========
+
+New
+2024-04-04 09:48:31.803 DEBUG (MainThread) [homeassistant.components.olarm] <device_id>: {'deviceId': <device_id>, 'eventTime': 1712216910289, 'eventAction': 'area', 'eventState': 'arm', 'eventNum': 2, 'eventMsg': 'ARMED - Area 2 - Flatlet', 'userFullname': ''}

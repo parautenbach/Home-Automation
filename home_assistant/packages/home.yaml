@@ -167,7 +167,8 @@ sensor:
     entity_id: input_boolean.baby_sleep_mode
     state: "on"
     type: time
-    start: "{{ today_at() }}"
+    # because we want to track across midnight; we're assuming they've woken up from the night session by 9 am
+    start: "{{ today_at('09:00') }}"
     end: "{{ now() }}"
 
 template:

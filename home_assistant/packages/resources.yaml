@@ -1060,7 +1060,7 @@ automation:
       - platform: numeric_state
         entity_id: sensor.grid_power
         # to use this value in a template, provide an input_number here
-        above: 200
+        above: 500
         for:
           minutes: 1
     condition:

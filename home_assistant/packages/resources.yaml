@@ -1258,7 +1258,7 @@ automation:
             # so, before this, we set, then we wait and set again, and only then do we
             # check whether the value took effect
             - delay:
-                seconds: 10
+                seconds: 30
             - service: number.set_value
               target:
                 entity_id: "number.capacity_point_{{ repeat.index }}"
@@ -1285,7 +1285,7 @@ automation:
               target:
                 entity_id: "switch.grid_charge_point_{{ repeat.index }}"
             - delay:
-                seconds: 10
+                seconds: 30
             - service: "switch.turn_{{ state_attr('sensor.charge_mode', 'settings')[repeat.index][1] }}"
               target:
                 entity_id: "switch.grid_charge_point_{{ repeat.index }}"

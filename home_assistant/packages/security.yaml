@@ -937,6 +937,16 @@ automation:
                 name: default
                 critical: 1
                 volume: 0.5
+            # todo: alert security company
+            # request logged with olarm to see if they can provide an http request for a panic
+            # for event automation:
+            # - service: alarm_control_panel.alarm_trigger
+            #   target:
+            #     entity_id: alarm_control_panel.home
+            # data:
+            #   actions:
+            #     - action: "ALERT_SECURITY_COMPANY"
+            #       title: "Alert security company"
       - if:
           - "{{ 'id' in trigger and 'test' in trigger.id }}"
         then:

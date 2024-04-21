@@ -1276,6 +1276,14 @@ automation:
               timeout:
                 seconds: 180
               continue_on_timeout: true
+            # - service: system_log.write
+            #   data:
+            #     message: >-
+            #       {% set entity_id = 'number.capacity_point_' ~ repeat.index %}
+            #       {% set expected_value =  state_attr('sensor.charge_mode', 'settings')[repeat.index][0] | string %}
+            #       {{ entity_id }}: {{ states(entity_id) }} (expected {{ expected_value }})
+            #     level: debug
+            #     logger: "homeassistant.components.resources_package"
             - if:
                 - "{{ not wait.completed }}"
               then:
@@ -1297,6 +1305,14 @@ automation:
               timeout:
                 seconds: 180
               continue_on_timeout: true
+            # - service: system_log.write
+            #   data:
+            #     message: >-
+            #       {% set entity_id = 'switch.grid_charge_point_' ~ repeat.index %}
+            #       {% set expected_value =  state_attr('sensor.charge_mode', 'settings')[repeat.index][1] %}
+            #       {{ entity_id }}: {{ states(entity_id) }} (expected {{ expected_value }})
+            #     level: debug
+            #     logger: "homeassistant.components.resources_package"
             - if:
                 - "{{ not wait.completed }}"
               then:

@@ -377,6 +377,7 @@ template:
         attributes:
           overhead: "{{ states('sensor.home_power') | int(0) - states('sensor.load_power') | int(0)  }}"
   # https://community.home-assistant.io/t/trigger-based-template-sensor-using-time-pattern-not-updating/706860
+  # https://github.com/home-assistant/core/issues/114195
   # - trigger:
   #   # note: the macro below uses now(), which will cause an automatic update every minute on the minute
   #   #       as well as for the current number entity

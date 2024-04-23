@@ -1,3 +1,35 @@
+# features:
+#  * real-time alarm state updates and triggers
+#  * basic alarm management: arming/disarming (advanced management via the olarm app)
+#  * presence aware: ask to arm/disarm when leaving/arriving
+#  * extensible with more custom automations and integration of one's own sensors
+#  * area/partition aware (although not set up for multiple areas/partitions; make a copy)
+#
+# unsupported:
+#  * zone monitoring (no real-time updates via webhooks or mqtt)
+#  * bypassing zones (not implemented)
+#  * alarm action history (not implemented)
+#  * managing more than one area/partition (clone the package in order to do so)
+#  * how or who armed/disarmed the alarm (complex)
+#
+# future:
+#  * distinct alerts (notifications) for breach, panic, fire and emergency (currently no distinction)
+#  * hoping for an mqtt integration with additional features (multiple requests made; apparently wip)
+#
+# known issues & bugs:
+#  * arming when a zone is active (open) will not fail when calling the api (issue reported)
+#
+# references:
+# https://community.home-assistant.io/t/olarm-integration/384560/28
+# https://community.home-assistant.io/t/olarm-integration/384560/52
+# https://github.com/rainepretorius/olarm-ha-integration
+# https://github.com/rainepretorius/olarm-ha-integration/discussions/85
+
+# https://www.home-assistant.io/integrations/alarm_control_panel/
+# https://www.home-assistant.io/integrations/manual/
+# https://www.home-assistant.io/integrations/alarm_control_panel.template/
+# might switch to this once we can properly monitor zones:
+# https://github.com/nielsfaber/alarmo
 alarm_control_panel:
   - platform: manual
     name: "Home"

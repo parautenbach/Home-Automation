@@ -310,3 +310,23 @@ automation:
               data:
                 group: "home-security"
                 url: homeassistant://navigate/config/logs
+
+  # my alarm only has a stay mode – not also a night mode
+  # the alarm frontend card used shouldn't have night mode as a valid feature
+  # also, if exposing the alarm entity to homekit, you cannot specify the features that are supported
+  # (so it will allow setting the alarm to home (stay), away, night or off)
+  # neither this package, olarm, my alarm panel or homekit supports the vacation arm mode or a custom bypass command
+  - alias: "Set To Stay If Night Mode Activated"
+    id: "651adacf-f189-48ef-814a-24a051e60bd5"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.home
+        to:
+          - "armed_night"
+    action:
+      - service: "alarm_control_panel.alarm_arm_home"
+        target:
+          entity_id: alarm_control_panel.home
+        data:
+          code: !secret alarm_code

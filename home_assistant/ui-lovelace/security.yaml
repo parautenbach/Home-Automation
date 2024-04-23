@@ -173,6 +173,16 @@ cards:
               armed_home: "armed (stay)"
               armed_away: "armed"
             content_template: "Alarm was {{state}}"
+          - entity: binary_sensor.kitchen_smoke
+            include_history: true
+            max_history: 5
+            remove_repeats: false
+            exclude_states:
+              - "off"
+              - "unknown"
+              - "unavailable"
+            format: datetime
+            content_template: "Smoke was detected in the kitchen"
       - type: entities
         title: "Gates & Doors"
         show_header_toggle: false

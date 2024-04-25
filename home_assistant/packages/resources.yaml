@@ -1,4 +1,7 @@
 # https://andrewmarsh.com/software/sunpath3d-web/
+# 
+# Frequently Asked Questions for the Home Assistant Energy Dashboard:
+# https://gist.github.com/langestefan/acbf7e42b15b302e9aacc08663039e57
 
 homeassistant:
   customize:

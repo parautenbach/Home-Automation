@@ -19,7 +19,7 @@ homeassistant:
     sensor.cabinet_battery:
       friendly_name: Cabinet Door Sensor Battery
       monitor: True
-    sensor.kitchen_battery:
+    sensor.kitchen_smoke_battery:
       friendly_name: Kitchen Smoke Detector Battery
       monitor: True
     sensor.hallway_light_button_battery:

@@ -1738,3 +1738,16 @@ automation:
       # - service: notify.pieter_sms
       #   data:
       #     message: "{{ message }}"
+
+  # polling should be turned off
+  # https://github.com/home-assistant/core/issues/71563
+  - alias: "Update Hourly Energy Forecast Aggregate"
+    id: "622aa2bb-f5a0-4f0a-83b2-ff7864587098"
+    initial_state: true
+    trigger:
+      platform: time_pattern
+      minutes: "/15"
+    action:
+      - service: homeassistant.update_entity
+        target:
+          entity_id: sensor.hourly_energy_forecast_aggregated

@@ -955,7 +955,7 @@ automation:
               The backup power battery is fully charged (threshold: {{ threshold }}%).
             {% endif %}
           data:
-            group: "home-electricity"
+            group: "home-electricity-battery"
             # https://companion.home-assistant.io/docs/notifications/notifications-basic#replacing
             url: homeassistant://navigate/lovelace/resources
             tag: "backup-power-battery-update"

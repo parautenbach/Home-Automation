@@ -289,6 +289,20 @@ cards:
         forecast: true
         hourly_forecast: false
         number_of_forecasts: 5  # days
+      # - type: weather-forecast
+      #   entity: weather.openweathermap_hourly
+      #   name: Stellenbosch
+      #   show_current: true
+      #   show_details: true
+      #   show_forecast: true
+      #   forecast_type: hourly
+      # - type: weather-forecast
+      #   entity: weather.openweathermap_daily
+      #   name: Stellenbosch
+      #   show_current: false
+      #   show_details: false
+      #   show_forecast: true
+      #   forecast_type: daily
       - type: history-graph
         hours_to_show: 72
         entities:

@@ -1124,6 +1124,7 @@ automation:
       - condition: time
         after: "19:00:00"
     action:
+      # in case the ac was just turned on, some entities become available, so make sure they are before acting on them
       - wait_template: "{{ not is_state('climate.main_bedroom_ac', 'off') }}"
         timeout: "00:00:15"
         continue_on_timeout: false

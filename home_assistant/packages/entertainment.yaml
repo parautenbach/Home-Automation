@@ -178,10 +178,12 @@ automation:
     id: "7c3646d2-8fe8-4378-a6f5-979e16cc40ff"
     initial_state: true
     trigger:
-      platform: state
-      entity_id: media_player.living_room
-      from: standby
-      not_to: "off"
+      - platform: state
+        entity_id: media_player.living_room
+        from:
+          - "standby"
+          - "paused"
+        not_to: "off"
       # seems like an apple tv can turn on and be in a paused state immediately
       # would this be the alternative?
       # to:
@@ -199,12 +201,17 @@ automation:
     id: "f1f1a138-2f7a-46e9-8beb-2265f6fd5b70"
     initial_state: true
     trigger:
-      platform: state
-      entity_id: media_player.main_bedroom_universal
-      to: idle
-      not_from: "unavailable"
-      for:
-        minutes: 5
+      - platform: state
+        entity_id: media_player.main_bedroom_universal
+        to: "idle"
+        not_from: "unavailable"
+        for:
+          minutes: 5
+      - platform: state
+        entity_id: media_player.main_bedroom_universal
+        to: "paused"
+        for:
+          minutes: 60
     mode: single
     action:
       - service: media_player.turn_off

@@ -210,15 +210,35 @@ cards:
         - entity: binary_sensor.office_status
         - entity: binary_sensor.bed_occupancy_status
           name: Bed Occ.
-    - type: custom:battery-state-card
-      title: Batteries
-      filter:
-        include:
-          - name: "attributes.monitor"
-            value: True
-      sort:
-        - "state"
-        - "name"
+    - type: custom:swipe-card
+      parameters:
+        autoHeight: true
+        pagination:
+          type: 'bullets'
+      cards:
+        - type: custom:battery-state-card
+          title: Batteries
+          filter:
+            include:
+              - name: "attributes.monitor"
+                value: True
+          sort:
+            - "state"
+            - "name"
+        - type: custom:auto-entities
+          card:
+            type: entities
+            title: Batteries
+          filter:
+            include:
+              - entity_id: "button.*_battery_replaced"
+        - type: custom:auto-entities
+          card:
+            type: entities
+            title: Batteries
+          filter:
+            include:
+              - entity_id: "sensor.*_battery_last_replaced"
     - type: custom:auto-entities
       card:
         type: logbook

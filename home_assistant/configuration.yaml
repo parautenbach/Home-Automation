@@ -183,6 +183,8 @@ notify:
     api_key: !secret clickatell_api_key
     recipient: !secret pieter_mobile_number
 
+battery_notes:
+
 # debugpy:
 #   start: false
 #   # wait: false  # false if start is false

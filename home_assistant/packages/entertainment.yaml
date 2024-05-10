@@ -192,6 +192,8 @@ automation:
     mode: single
     action:
       - service: script.turn_on
+        entity_id: script.samsung_tv_power_on
+      - service: script.turn_on
         entity_id: script.hk_3380_power_on
       - delay: "00:00:05"
       - service: script.turn_on

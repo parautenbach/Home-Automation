@@ -228,7 +228,7 @@ cards:
                 variables:
                   profile: bedroom_lilac
                 entity: light.bedroom_bedlamp
-                name: Normal
+                name: Themed
                 icon: mdi:brightness-5
               - type: custom:button-card
                 template:

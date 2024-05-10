@@ -289,6 +289,14 @@ cards:
         forecast: true
         hourly_forecast: false
         number_of_forecasts: 5  # days
+      # https://github.com/pkissling/clock-weather-card
+      - type: custom:clock-weather-card
+        entity: weather.openweathermap_daily
+        # title: Stellenbosch
+        hide_today_section: true
+        hourly_forecast: false
+        sun_entity: sun.sun
+        apparent_sensor: sensor.outside_feels_like
       # - type: weather-forecast
       #   entity: weather.openweathermap_hourly
       #   name: Stellenbosch

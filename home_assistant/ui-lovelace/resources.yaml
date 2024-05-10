@@ -168,6 +168,7 @@ cards:
         inverted_entities: battery
         watt_threshold: 1000
         dashboard_link: /energy
+      - type: energy-date-selection
       - type: energy-solar-graph
       - type: horizontal-stack
         cards:
@@ -386,6 +387,150 @@ cards:
       - type: energy-distribution
         link_dashboard: true
       - type: energy-usage-graph
+      - type: custom:sankey-chart
+        layout: horizontal
+        min_state: 0
+        height: 200
+        unit_prefix: k
+        round: 1
+        show_states: true
+        show_units: true
+        energy_date_selection: true
+        sections:
+          - entities:
+              - entity_id: sensor.pv_energy
+                type: entity
+                color: var(--custom-color-yellow)
+                children:
+                  - sensor.battery_energy_in
+                  - sensor.grid_energy_out
+                  - total
+              - entity_id: sensor.battery_energy_out
+                subtract_entities:
+                  - sensor.battery_energy_in
+                type: entity
+                color: var(--custom-color-magenta)
+                children:
+                  - sensor.battery_energy_in
+                  - sensor.grid_energy_out
+                  - total
+              - entity_id: sensor.grid_energy_in
+                subtract_entities:
+                  - sensor.grid_energy_out
+                type: entity
+                color: var(--custom-color-blue)
+                children:
+                  - sensor.battery_energy_in
+                  - sensor.grid_energy_out
+                  - total
+          - entities:
+              - entity_id: sensor.battery_energy_in
+                subtract_entities:
+                  - sensor.battery_energy_out
+                type: entity
+                color: var(--custom-color-green)
+                children: []
+              - entity_id: sensor.grid_energy_out
+                subtract_entities:
+                  - sensor.grid_energy_in
+                type: entity
+                children: []
+              - entity_id: total
+                type: remaining_parent_state
+                name: Total Consumption
+                children:
+                  - dining_room
+                  - foyer
+                  - hallway
+                  - kitchen_counter_lights
+                  - garage
+                  - living_room
+                  - music_room
+                  - non_essential
+                  - other
+          - entities:
+              - entity_id: dining_room
+                type: remaining_child_state
+                name: Dining Room
+                children:
+                  - sensor.dining_room_today_s_consumption
+              - entity_id: foyer
+                type: remaining_child_state
+                name: Foyer
+                children:
+                  - sensor.foyer_today_s_consumption
+              - entity_id: hallway
+                type: remaining_child_state
+                name: Hallway
+                children:
+                  - sensor.hallway_today_s_consumption
+              - entity_id: kitchen_counter_lights
+                type: remaining_child_state
+                name: Kitchen
+                children:
+                  - sensor.kitchen_counter_lights_energy
+                  - sensor.scullery_counter_lights_energy
+              - entity_id: garage
+                type: remaining_child_state
+                name: Garage
+                children:
+                  - sensor.outbuilding_power_meter_channel_1_energy
+              - entity_id: living_room
+                type: remaining_child_state
+                name: Living Room
+                children:
+                  - sensor.office_energy
+              - entity_id: music_room
+                type: remaining_child_state
+                name: Music Room
+                children:
+                  - sensor.music_room_energy
+              - entity_id: non_essential
+                type: remaining_child_state
+                name: Non-essentials
+                children:
+                  - sensor.geyser_energy
+              - entity_id: other
+                type: remaining_parent_state
+                name: Other
+                children: []
+          - entities:
+              - entity_id: sensor.dining_room_today_s_consumption
+                type: entity
+                name: Dining Room Light
+                children: []
+              - entity_id: sensor.foyer_today_s_consumption
+                type: entity
+                name: Foyer Light
+                children: []
+              - entity_id: sensor.hallway_today_s_consumption
+                type: entity
+                name: Hallway Light
+                children: []
+              - entity_id: sensor.kitchen_counter_lights_energy
+                type: entity
+                name: Kitchen Counter Light
+                children: []
+              - entity_id: sensor.scullery_counter_lights_energy
+                type: entity
+                name: Scullery Counter Light
+                children: []
+              - entity_id: sensor.outbuilding_power_meter_channel_1_energy
+                type: entity
+                name: Outbuilding
+                children: []
+              - entity_id: sensor.office_energy
+                type: entity
+                name: Office Light
+                children: []
+              - entity_id: sensor.music_room_energy
+                type: entity
+                name: Music Room Light
+                children: []
+              - entity_id: sensor.geyser_energy
+                type: entity
+                name: Geyser
+                children: []
       - type: custom:swipe-card
         parameters:
           autoHeight: true

@@ -168,7 +168,6 @@ cards:
         inverted_entities: battery
         watt_threshold: 1000
         dashboard_link: /energy
-      - type: energy-date-selection
       - type: energy-solar-graph
       - type: horizontal-stack
         cards:
@@ -384,6 +383,7 @@ cards:
               - state
   - type: vertical-stack
     cards:
+      - type: energy-date-selection
       - type: energy-distribution
         link_dashboard: true
       - type: energy-usage-graph

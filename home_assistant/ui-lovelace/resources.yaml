@@ -702,6 +702,9 @@ cards:
                         }
             - entity: sensor.capacity_charge_point
               name: Charge Point Target
+            - entity: sensor.output_shutdown_capacity
+              name: Charge Threshold
+              icon: mdi:close-circle-outline
             - entity: binary_sensor.grid_charge_point_status
               name: Grid Charge Point Status
               card_mod: &grid_charge_point_status_mods
@@ -750,6 +753,9 @@ cards:
               card_mod: *battery_state_of_charge_mods
             - entity: sensor.capacity_charge_point
               name: Charge Point Target
+            - entity: sensor.output_shutdown_capacity
+              name: Charge Threshold
+              icon: mdi:close-circle-outline
             - entity: binary_sensor.grid_charge_point_status
               name: Grid Charge Point Status
               card_mod: *grid_charge_point_status_mods
@@ -783,6 +789,9 @@ cards:
               card_mod: *battery_state_of_charge_mods
             - entity: sensor.capacity_charge_point
               name: Charge Point Target
+            - entity: sensor.output_shutdown_capacity
+              name: Charge Threshold
+              icon: mdi:close-circle-outline
             - entity: binary_sensor.grid_charge_point_status
               name: Grid Charge Point Status
               card_mod: *grid_charge_point_status_mods

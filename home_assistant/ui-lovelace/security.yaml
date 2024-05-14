@@ -299,6 +299,15 @@ cards:
             name: Living R. Lamp
       - type: statistics-graph
         entities:
+          - entity: sensor.doorbell_motion_detections
+            name: Doorbell
+        days_to_show: 7
+        period: day
+        chart_type: bar
+        stat_types:
+          - state
+      - type: statistics-graph
+        entities:
           - entity: sensor.foyer_motion_detections
             name: Foyer
         days_to_show: 7

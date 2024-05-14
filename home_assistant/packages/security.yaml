@@ -29,6 +29,9 @@ homeassistant:
     sensor.foyer_motion_detections:
       # unit_of_measurement: count
       state_class: total_increasing
+    sensor.doorbell_motion_detections:
+      # unit_of_measurement: count
+      state_class: total_increasing
 
 input_datetime:
   security_camera_last_snapshot:
@@ -64,7 +67,7 @@ binary_sensor:
       foyer_motion_detected:
         friendly_name: "Foyer Motion Detector"
         device_class: motion
-        # motion_sensor_3 is the occupancy sensor and not the raw motion sensor and is delayed in the homebridge config by 5 sec
+        # this is the occupancy sensor and not the raw motion sensor and is delayed in the homebridge config by 5 sec
         value_template: >-
           {{ is_state('binary_sensor.foyer_occupancy_homebridge', 'on') }}
 
@@ -93,6 +96,14 @@ sensor:
   - platform: history_stats
     name: Foyer Motion Detections
     entity_id: binary_sensor.foyer_motion_detected
+    state: "on"
+    type: count
+    start: "{{ today_at() }}"
+    end: "{{ now() }}"
+
+  - platform: history_stats
+    name: Doorbell Motion Detections
+    entity_id: binary_sensor.doorbell_motion_detected
     state: "on"
     type: count
     start: "{{ today_at() }}"

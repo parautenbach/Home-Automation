@@ -159,15 +159,48 @@ cards:
               yellow: -10
               red: -100
       # https://github.com/ulic75/power-flow-card#inverted-entities-example
-      - type: custom:power-flow-card
+      # keeping this as a reference
+      # - type: custom:power-flow-card
+      #   entities:
+      #     grid: sensor.grid_power
+      #     battery: sensor.battery_power
+      #     battery_charge: sensor.battery_state_of_charge
+      #     solar: sensor.pv_power
+      #   inverted_entities: battery
+      #   watt_threshold: 1000
+      #   dashboard_link: /energy
+      - type: custom:power-flow-card-plus
+        use_new_flow_rate_model: true
+        clickable_entities: true
         entities:
-          grid: sensor.grid_power
-          battery: sensor.battery_power
-          battery_charge: sensor.battery_state_of_charge
-          solar: sensor.pv_power
-        inverted_entities: battery
+          grid:
+            entity: sensor.grid_power
+            power_outage:
+              entity: binary_sensor.grid_feed
+              state_alert: "off"
+          battery:
+            entity: sensor.battery_power
+            state_of_charge: sensor.battery_state_of_charge
+            invert_state: true
+          solar:
+            entity: sensor.pv_power
+          home:
+            entity: sensor.home_power
+            override_state: true
+          individual:
+            - entity: sensor.geyser_power
+              name: Geyser
+              icon: mdi:water-boiler
+              display_zero: true
+              decimals: 1
+            - entity: sensor.outbuilding_power_meter_channel_1_power
+              name: Outbuilding
+              icon: mdi:garage-variant
+              display_zero: true
+              decimals: 1
         watt_threshold: 1000
         dashboard_link: /energy
+        # max_expected_power: 10000  # W
       - type: energy-solar-graph
       - type: horizontal-stack
         cards:
@@ -383,9 +416,46 @@ cards:
               - state
   - type: vertical-stack
     cards:
-      - type: energy-date-selection
+      - type: energy-date-selector-plus
       - type: energy-distribution
         link_dashboard: true
+      # this seems a bit broken
+      # - type: custom:energy-flow-card-plus
+      #   energy_date_selection: true
+      #   kwh_decimals: 1
+      #   use_new_flow_rate_model: true
+      #   clickable_entities: true
+      #   # inverted_entities: battery
+      #   display_zero_lines: true
+      #   entities:
+      #     grid:
+      #       entity: sensor.daily_grid_energy_consumption
+      #     battery:
+      #       entity:
+      #         production: sensor.battery_energy_out
+      #         consumption: sensor.battery_energy_in
+      #       state_of_charge: sensor.battery_state_of_charge
+      #     solar:
+      #       entity: sensor.daily_solar_energy_consumption
+      #     home:
+      #       entity: sensor.daily_home_energy_consumption
+      #       override_state: true
+      #     individual1:
+      #       - entity: sensor.daily_geyser_energy_consumption
+      #         name: Geyser
+      #         icon: mdi:water-boiler
+      #         display_zero: true
+      #         # decimals: 1
+      #     individual2:
+      #       - entity: sensor.outbuilding_power_meter_channel_1_energy
+      #         name: Outbuilding
+      #         icon: mdi:garage-variant
+      #         display_zero: true
+      #         # decimals: 1
+      #   inverted_entities: battery
+      #   wh_kwh_threshold: 1000
+      #   max_expected_energy: 20000
+      #   dashboard_link: /energy
       - type: energy-usage-graph
       - type: custom:sankey-chart
         layout: horizontal
@@ -531,6 +601,8 @@ cards:
                 type: entity
                 name: Geyser
                 children: []
+      # - type: energy-devices-detail-graph
+      #   max_devices: 2
       - type: custom:swipe-card
         parameters:
           autoHeight: true

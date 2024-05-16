@@ -306,13 +306,20 @@ script:
       - choose:
           - conditions:
               - condition: template
-                value_template: "{{ is_state(light, 'off') }}"
+                value_template: "{{ is_state(light, 'off') and profile is defined }}"
             sequence:
               - service: light.turn_on
                 target:
                   entity_id: "{{ light }}"
                 data:
                   profile: "{{ profile }}"
+          - conditions:
+              - condition: template
+                value_template: "{{ is_state(light, 'off') and profile is undefined }}"
+            sequence:
+              - service: light.turn_on
+                target:
+                  entity_id: "{{ light }}"
         default:
           - service: light.turn_off
             target:

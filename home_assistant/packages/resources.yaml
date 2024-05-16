@@ -1486,10 +1486,11 @@ automation:
       - service: notify.mobile_app_ceres
         data:
           title: "🌡️ Energy"
+            # The inverter has been running hot at {{ temperature }} ºC for {{ trigger.for.seconds // 60 }} min. The load is {{ load }} kW.
           message: >-
             {% set temperature = states('sensor.inverter_temperature') | int(0) %}
             {% set load = states('sensor.home_power_kw') | float(0) | round(1) %}
-            The inverter's running hot at {{ temperature }} ºC for {{ trigger.for.seconds // 60 }} min. The load is {{ load }} kW.
+            The inverter has been running hot for {{ trigger.for.seconds // 60 }} minutes: It's currently at {{ temperature }} ºC and under a load of {{ load }} kW.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
@@ -1550,10 +1551,11 @@ automation:
       - service: notify.mobile_app_ceres
         data:
           title: "🌡️ Energy"
+          # The inverter's battery has been running hot at {{ temperature }} ºC for {{ trigger.for.seconds // 60 }} min. The load is {{ load }} kW.
           message: >-
             {% set temperature = states('sensor.battery_temperature') | int(0) %}
             {% set load = states('sensor.home_power_kw') | float(0) | round(1) %}
-            The inverter's battery is running hot at {{ temperature }} ºC for {{ trigger.for.seconds // 60 }} min. The load is {{ load }} kW.
+            The inverter's battery has been running hot for {{ trigger.for.seconds // 60 }} minutes: It's currently at {{ temperature }} ºC and under a load of {{ load }} kW.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources

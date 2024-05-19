@@ -3,7 +3,7 @@
 #  * basic alarm management: arming/disarming (advanced management via the olarm app)
 #  * presence aware: ask to arm/disarm when leaving/arriving
 #  * extensible with more custom automations and integration of one's own sensors
-#  * area/partition aware (although not set up for multiple areas/partitions; make a copy if you want to manage multiple partitions)
+#  * area/partition aware, but you'll need to customise it to your needs
 #
 # unsupported:
 #  * zone monitoring (no real-time updates via webhooks or mqtt)
@@ -33,6 +33,22 @@
 alarm_control_panel:
   - platform: manual
     name: "Home"
+    code: !secret alarm_code
+    code_arm_required: true
+    arming_time: 0
+    delay_time: 0
+    trigger_time: 120
+    disarm_after_trigger: false
+    disarmed:
+      trigger_time: 0
+    armed_home:
+      arming_time: 0
+      delay_time: 0
+    armed_away:
+      arming_time: 0
+      delay_time: 0
+  - platform: manual
+    name: "Flatlet"
     code: !secret alarm_code
     code_arm_required: true
     arming_time: 0
@@ -109,11 +125,17 @@ automation:
             arm: "arm_away"
       - service: rest_command.olarm_get_state
         response_variable: olarm_response
-      # index 0 is area/partition 1
+      # index 0 is area/partition 1 in this case, because we're indexing an array
+      # it's not the olarm area/partition numbers which are 1-indexed
       # values are: stay, arm, disarm
       - service: "alarm_control_panel.alarm_{{ state_map[olarm_response.content.deviceState.areas[0]] }}"
         target:
           entity_id: alarm_control_panel.home
+        data:
+          code: !secret alarm_code
+      - service: "alarm_control_panel.alarm_{{ state_map[olarm_response.content.deviceState.areas[1]] }}"
+        target:
+          entity_id: alarm_control_panel.flatlet
         data:
           code: !secret alarm_code
 
@@ -162,12 +184,19 @@ automation:
               - service: alarm_control_panel.alarm_trigger
                 target:
                   entity_id: alarm_control_panel.home
-          # elif state changed
+                data:
+                  code: !secret alarm_code
+              - service: alarm_control_panel.alarm_trigger
+                target:
+                  entity_id: alarm_control_panel.flatlet
+                data:
+                  code: !secret alarm_code
+          # elif state changed: home
           - conditions:
               # compare with current state (noop it if matches; means it was actioned from HA, so don't cause a loop)
               - condition: template
                 value_template: >-
-                  {# eventNum == '1' is the partition/area check #}
+                  {# eventNum == 1 is the partition/area check #}
                   {% set new_state = state_map[trigger.json.eventState] %}
                   {{ trigger.json.eventNum == 1 and
                      trigger.json.eventState in ['disarm', 'stay', 'arm'] and
@@ -176,6 +205,22 @@ automation:
               - service: "alarm_control_panel.alarm_{{ state_map[trigger.json.eventState] }}"
                 target:
                   entity_id: alarm_control_panel.home
+                data:
+                  code: !secret alarm_code
+          # elif state changed: flatlet
+          - conditions:
+              # compare with current state (noop it if matches; means it was actioned from HA, so don't cause a loop)
+              - condition: template
+                value_template: >-
+                  {# eventNum == 2 is the partition/area check #}
+                  {% set new_state = state_map[trigger.json.eventState] %}
+                  {{ trigger.json.eventNum == 2 and
+                     trigger.json.eventState in ['disarm', 'arm'] and
+                     not is_state('alarm_control_panel.flatlet', new_state) }}
+            sequence:
+              - service: "alarm_control_panel.alarm_{{ state_map[trigger.json.eventState] }}"
+                target:
+                  entity_id: alarm_control_panel.flatlet
                 data:
                   code: !secret alarm_code
         default:
@@ -190,7 +235,9 @@ automation:
     initial_state: true
     trigger:
       - platform: state
-        entity_id: alarm_control_panel.home
+        entity_id:
+          - alarm_control_panel.home
+          - alarm_control_panel.flatlet
         to: "triggered"
     action:
       - service: notify.mobile_app_ceres
@@ -301,7 +348,9 @@ automation:
     initial_state: true
     trigger:
       - platform: state
-        entity_id: alarm_control_panel.home
+        entity_id:
+          - alarm_control_panel.home
+          - alarm_control_panel.flatlet
         to:
           - "disarmed"
           - "armed_home"
@@ -313,9 +362,10 @@ automation:
             armed_home: "armed (stay)"
             armed_away: "armed"
           state: "{{ state_map[trigger.to_state.state] }}"
+      # this call will not fail if e.g. arming when a zone is active when it shouldn't be
       - service: "rest_command.olarm_{{ trigger.to_state.state }}"
         data:
-          area: 1
+          area: "{{ '1' if trigger.entity_id == 'alarm_control_panel.home' else '2' }}"
         response_variable: olarm_response
       - if: "{{ olarm_response.status == 200 and olarm_response.content.actionStatus == 'OK' }}"
         then:
@@ -324,7 +374,8 @@ automation:
               title: "🔒 Security"
               # todo: user (can be from olarm or HA context; tricky)
               message: >-
-                The alarm was {{ state }} at {{ now().strftime('%H:%M') }}.
+                {% set area = trigger.entity_id | replace('alarm_control_panel.', '') %}
+                The alarm's {{ area }} partition was {{ state }} at {{ now().strftime('%H:%M') }}.
               data:
                 group: "home-security"
                 url: homeassistant://navigate/lovelace/security
@@ -338,7 +389,8 @@ automation:
             data:
               title: "⛔️ Security"
               message: >-
-                The alarm couldn't be {{ state }} at {{ now().strftime('%H:%M') }}. Check the log for errors.
+                {% set area = trigger.entity_id | replace('alarm_control_panel.', '') %}
+                The alarm's {{ area }} partition couldn't be {{ state }} at {{ now().strftime('%H:%M') }}. Check the log for errors.
               data:
                 group: "home-security"
                 url: homeassistant://navigate/config/logs
@@ -348,6 +400,7 @@ automation:
   # also, if exposing the alarm entity to homekit, you cannot specify the features that are supported
   # (so it will allow setting the alarm to home (stay), away, night or off)
   # neither this package, olarm, my alarm panel or homekit supports the vacation arm mode or a custom bypass command
+  # and i don't care about the flatlet's alarm in this case, because it's not exposed to homekit
   - alias: "Set To Stay If Night Mode Activated"
     id: "651adacf-f189-48ef-814a-24a051e60bd5"
     initial_state: true

@@ -77,34 +77,51 @@ cards:
                 subdirectory: "doorbell"
       # https://community.home-assistant.io/t/styling-tile-cards/696907/10
       # https://community.home-assistant.io/t/card-mod-for-tile-card-icon-tile-color/657214/52
-      - type: tile
-        entity: alarm_control_panel.home
-        name: "Home Alarm"
-        features:
-          - type: "alarm-modes"
-            modes:
-              - armed_home
-              - armed_away
-              - disarmed
-        card_mod:
-          # this works in conjunction with www/custom.js
-          style:
-            hui-card-features $ hui-alarm-modes-card-feature $ div ha-control-select $ div: |
-              #option-armed_home {
-                --control-select-color: #ffa800 !important;
-              }
-              #option-armed_away {
-                --control-select-color: #aa0000 !important;
-              }
-              #option-disarmed {
-                --control-select-color: #40b100 !important;
-              }
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+          - type: tile
+            entity: alarm_control_panel.home
+            name: "Home Alarm"
+            features:
+              - type: "alarm-modes"
+                modes:
+                  - armed_home
+                  - armed_away
+                  - disarmed
+            # this works in conjunction with www/custom.js
+            card_mod: &alarm_mods
+              style:
+                hui-card-features $ hui-alarm-modes-card-feature $ div ha-control-select $ div: |
+                  #option-armed_home {
+                    --control-select-color: #ffa800 !important;
+                  }
+                  #option-armed_away {
+                    --control-select-color: #aa0000 !important;
+                  }
+                  #option-disarmed {
+                    --control-select-color: #40b100 !important;
+                  }
+          - type: tile
+            entity: alarm_control_panel.flatlet
+            name: "Flatlet Alarm"
+            features:
+              - type: "alarm-modes"
+                modes:
+                  - armed_away
+                  - disarmed
+            card_mod: *alarm_mods
       # todo: panic button (mdi:alert-outline/mdi:shield-alert-outline)
       - type: history-graph
         hours_to_show: 24
         entities:
           - entity: alarm_control_panel.home
-            name: Alarm
+            name: Home
+          - entity: alarm_control_panel.flatlet
+            name: Flatlet
       - type: custom:home-feed-card
         title: Events
         show_empty: true
@@ -172,7 +189,19 @@ cards:
               disarmed: "disarmed"
               armed_home: "armed (stay)"
               armed_away: "armed"
-            content_template: "Alarm was {{state}}"
+            content_template: "Home alarm was {{state}}"
+          - entity: alarm_control_panel.flatlet
+            include_history: true
+            max_history: 5
+            remove_repeats: false
+            exclude_states:
+              - "unknown"
+              - "unavailable"
+            format: datetime
+            state_map:
+              disarmed: "disarmed"
+              armed_away: "armed"
+            content_template: "Flatlet alarm was {{state}}"
           - entity: binary_sensor.kitchen_smoke
             include_history: true
             max_history: 5

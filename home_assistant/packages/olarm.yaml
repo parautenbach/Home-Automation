@@ -9,7 +9,6 @@
 #  * zone monitoring (no real-time updates via webhooks or mqtt)
 #  * bypassing zones (not implemented; not supported by the alarm integration)
 #  * alarm action history (not implemented; not supported by the alarm integration)
-#  * managing more than one area/partition (clone the package in order to do so)
 #  * how or who armed/disarmed the alarm (complex)
 #
 # future:

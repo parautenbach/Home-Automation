@@ -182,7 +182,9 @@ automation:
         entity_id: media_player.living_room
         from:
           - "standby"
-          - "paused"
+          # sequence could go standby -> paused -> ... so the automation fires twice in quick succession,
+          # causing a warning in the logs
+          # - "paused"
         not_to: "off"
       # seems like an apple tv can turn on and be in a paused state immediately
       # would this be the alternative?

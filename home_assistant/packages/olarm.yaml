@@ -321,6 +321,63 @@ automation:
                 critical: 1
                 volume: 0.5
 
+  - alias: "Turn On Yard Lights If Alarm Triggered"
+    id: "50147e47-23b5-4ed4-973c-0c1e5243c731"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.home
+        to: "triggered"
+    condition:
+      - condition: state
+        entity_id: binary_sensor.nighttime
+        state: "on"
+    action:
+      - service: light.turn_on
+        target:
+          entity_id:
+            - light.front_door
+            - light.backyard
+
+  - alias: "Remind To Arm Alarm"
+    id: "60793526-4de9-44d9-9ed9-db95a15a071f"
+    initial_state: true
+    trigger:
+      - platform: time
+        at: "20:00:00"
+        id: "weekdays"
+      - platform: time
+        at: "22:00:00"
+        id: "weekends"
+    condition:
+      - condition: state
+        entity_id: alarm_control_panel.home
+        state: "disarmed"
+      - platform: state
+        entity_id: binary_sensor.pieter_present
+        to: "on"
+      - condition: template
+        value_template: >-
+          {{ (trigger.id == 'weekdays' and is_state('binary_sensor.workday_tomorrow', 'on')) or trigger.id == 'weekends' }}
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🔒 Security"
+          message: >-
+            You haven't yet armed the stay alarm. Would you like to arm it?
+          data:
+            group: "home-security"
+            url: homeassistant://navigate/lovelace/security
+            actions:
+              - action: "ARM_STAY_ALARM"
+                title: "Arm (stay) now"
+                destructive: true
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 0.5
+
   - alias: "Handle Alarm Notification Event"
     id: "c7a55b28-a909-4cf0-8f91-23f1d8a0e45a"
     initial_state: true
@@ -333,8 +390,18 @@ automation:
       - platform: event
         event_type: mobile_app_notification_action
         event_data:
+          action: ARM_STAY_ALARM
+        id: "arm_home"
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
           action: DISARM_ALARM
         id: "disarm"
+    condition:
+      - condition: template
+        value_template: >-
+          {% set new_state = trigger.id | replace('arm', 'armed') %}
+          {{ is_state('alarm_control_panel.home', new_state) }}
     action:
       - service: "alarm_control_panel.alarm_{{ trigger.id }}"
         target:

@@ -1133,8 +1133,8 @@ automation:
         button_device_id: ed95f30c451de3426bc63770935ebc18
         light_entity_id: light.pieter_bedside
         single_press_profile: pieter
-        double_press_profile: security
-        triple_press_profile: bedlamp_night
+        double_press_profile: bedlamp_night
+        triple_press_profile: security
 
   # i thought it might be good to have the reverse of this too:
   # restore the other lamp to normal mode when the one is turned on, but it's not that simple.
@@ -1189,8 +1189,8 @@ automation:
         button_device_id: b7cb6f66fe4f1eefbf0de8480962bd23
         light_entity_id: light.rouve_bedside
         single_press_profile: rouve
-        double_press_profile: security
-        triple_press_profile: bedlamp_night
+        double_press_profile: bedlamp_night
+        triple_press_profile: security
 
   - alias: "Toggle Dining Room Light"
     id: "3cd02beb-7a1a-440a-9507-fb555ff9bb98"
@@ -1201,8 +1201,8 @@ automation:
         button_device_id: f1a926dd450fbe85ed9bafece8b719b3
         light_entity_id: light.dining_room
         single_press_profile: dim
-        double_press_profile: security
-        triple_press_profile: night
+        double_press_profile: night
+        triple_press_profile: security
 
   - alias: "Toggle Hallway Light"
     id: "58a877b7-eed8-4fd7-897c-51eeed892ad7"
@@ -1213,8 +1213,8 @@ automation:
         button_device_id: 16bb98a28aa167819bff6fc45f178899
         light_entity_id: light.hallway
         single_press_profile: normal
-        double_press_profile: security
-        triple_press_profile: night
+        double_press_profile: night
+        triple_press_profile: security
 
   - alias: "Stop Light Timer If Running When Light Turned Off"
     id: "5878e444-72bc-4633-85c9-de0ebf5a57dd"

@@ -127,6 +127,14 @@ script:
       - delay: "00:00:05"
       - service: script.turn_on
         entity_id: script.samsung_tv_hdmi1
+      # if we're streaming music, for example, pause as to not waste internet bandwidth
+      # (however little it may be; it's the principle)
+      - condition: state
+        entity_id: media_player.living_room
+        state: "playing"
+      - service: media_player.media_pause
+        target:
+          entity_id: media_player.living_room
 
   entertainment_off:
     mode: single

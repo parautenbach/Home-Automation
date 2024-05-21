@@ -343,7 +343,7 @@ automation:
             - light.front_door
             - light.backyard
 
-  - alias: "Remind To Arm Alarm"
+  - alias: "Remind To Arm Stay Alarm"
     id: "60793526-4de9-44d9-9ed9-db95a15a071f"
     initial_state: true
     trigger:
@@ -357,9 +357,9 @@ automation:
       - condition: state
         entity_id: alarm_control_panel.home
         state: "disarmed"
-      - platform: state
+      - condition: state
         entity_id: binary_sensor.pieter_present
-        to: "on"
+        state: "on"
       - condition: template
         value_template: >-
           {{ (trigger.id == 'weekdays' and is_state('binary_sensor.workday_tomorrow', 'on')) or trigger.id == 'weekends' }}

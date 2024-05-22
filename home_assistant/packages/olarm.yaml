@@ -417,7 +417,7 @@ automation:
       - condition: template
         value_template: >-
           {% set new_state = trigger.id | replace('arm', 'armed') %}
-          {{ is_state('alarm_control_panel.home', new_state) }}
+          {{ not is_state('alarm_control_panel.home', new_state) }}
     action:
       - service: "alarm_control_panel.alarm_{{ trigger.id }}"
         target:

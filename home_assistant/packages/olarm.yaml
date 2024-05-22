@@ -180,6 +180,13 @@ automation:
               - condition: template
                 value_template: "{{ trigger.json.eventState in ['panic', 'alarm'] }}"
             sequence:
+              # todo: save panic type (mapped):
+              # if panic
+              #   'eventAction': 's_alm'   => general
+              #   'eventAction': 's_alm_f' => fire
+              #   'eventAction': 's_alm_m' => medical
+              # elif alarm & partition 1 (not 2):
+              #   ...
               - service: alarm_control_panel.alarm_trigger
                 target:
                   entity_id: alarm_control_panel.home
@@ -246,6 +253,11 @@ automation:
       - service: notify.mobile_app_ceres
         data:
           title: "🚨 Security"
+          # todo: check for active zones
+          # todo: specialise alert according to a panic, fire, medical alarm
+          #       if we have this, we can e.g. contact the fire department or call for an ambulance automatically
+          #       or maybe the security company will already triage this when receiving the panic signal
+          #       can also trigger the fire alarm here if one of the smoke sensors went off and isn't muted after a set time
           message: "The alarm has been triggered!"
           data:
             group: "home-security"
@@ -442,7 +454,7 @@ automation:
           - service: notify.mobile_app_ceres
             data:
               title: "🔒 Security"
-              # todo: user (can be from olarm or HA context; tricky)
+              # todo: user (can be from olarm or HA context; tricky to get right)
               message: >-
                 {% set area = trigger.entity_id | replace('alarm_control_panel.', '') %}
                 The alarm's {{ area }} partition was {{ state }} at {{ now().strftime('%H:%M') }}.

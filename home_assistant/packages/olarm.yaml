@@ -320,6 +320,9 @@ automation:
             entity_id: alarm_control_panel.home
             state: "disarmed"
     action:
+      # delivery of the notification can be slow
+      # so, even if this triggers immediately, it may only be delivered after the garage door has been opened
+      # the traces and history shows the order of events are correct
       - service: notify.mobile_app_ceres
         data:
           title: "🔒 Security"

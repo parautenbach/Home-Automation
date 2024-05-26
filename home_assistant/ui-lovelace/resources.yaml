@@ -438,8 +438,8 @@ cards:
               consumption: sensor.daily_grid_energy_consumption
           battery:
             entity:
-              production: sensor.battery_energy_out
-              consumption: sensor.battery_energy_in
+              production: sensor.battery_energy_in
+              consumption: sensor.battery_energy_out
             state_of_charge: sensor.battery_state_of_charge
           solar:
             entity: sensor.daily_solar_energy_consumption

@@ -223,7 +223,8 @@ sensor:
   - platform: file
     file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
     name: Dam Levels Last Update
-    value_template: "{{ strptime(value.split(',')[0], '%d-%b-%y').date() }}"
+    # default
+    value_template: "{{ strptime(value.split(',')[0], '%d-%b-%y', 0 | as_datetime).date() }}"
     scan_interval: 86400
 
   - platform: history_stats

@@ -259,7 +259,7 @@ automation:
           #       if we have this, we can e.g. contact the fire department or call for an ambulance automatically
           #       or maybe the security company will already triage this when receiving the panic signal
           #       can also trigger the fire alarm here if one of the smoke sensors went off and isn't muted after a set time
-          message: "The alarm has been triggered!"
+          message: "The alarm has been triggered at {{ now().strftime('%H:%M') }}!"
           data:
             group: "home-security"
             url: homeassistant://navigate/lovelace/security

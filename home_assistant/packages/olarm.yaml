@@ -156,6 +156,8 @@ automation:
   - alias: "Receive Olarm Event"
     id: "fbf7afaa-c357-4a85-b50d-ba5d57b9e187"
     initial_state: true
+    trace:
+      stored_traces: 20
     trigger:
       - platform: webhook
         webhook_id: !secret olarm_webhook_id

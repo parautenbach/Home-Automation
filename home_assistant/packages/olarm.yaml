@@ -27,8 +27,10 @@
 # https://www.home-assistant.io/integrations/alarm_control_panel/
 # https://www.home-assistant.io/integrations/manual/
 # https://www.home-assistant.io/integrations/alarm_control_panel.template/
+# triggering the alarm:
+#   * https://community.home-assistant.io/t/solved-alarm-control-panel-alarm-trigger-service-doesnt-trigger-the-alarm/72108
 # might switch to this once we can properly monitor zones:
-# https://github.com/nielsfaber/alarmo
+#   * https://github.com/nielsfaber/alarmo
 alarm_control_panel:
   - platform: manual
     name: "Home"
@@ -39,13 +41,15 @@ alarm_control_panel:
     trigger_time: 120
     disarm_after_trigger: false
     disarmed:
-      trigger_time: 0
+      trigger_time: 120
     armed_home:
       arming_time: 0
       delay_time: 0
+      trigger_time: 120
     armed_away:
       arming_time: 0
       delay_time: 0
+      trigger_time: 120
   - platform: manual
     name: "Flatlet"
     code: !secret alarm_code
@@ -55,13 +59,15 @@ alarm_control_panel:
     trigger_time: 120
     disarm_after_trigger: false
     disarmed:
-      trigger_time: 0
+      trigger_time: 120
     armed_home:
       arming_time: 0
       delay_time: 0
+      trigger_time: 120
     armed_away:
       arming_time: 0
       delay_time: 0
+      trigger_time: 120
 
 # https://www.home-assistant.io/integrations/rest_command/
 # https://user.olarm.co/#/api
@@ -144,6 +150,10 @@ automation:
   # {'deviceId': '<uuid>', 'eventTime': 1708882676603, 'eventAction': 'area', 'eventState': 'stay', 'eventNum': 1, 'eventMsg': 'STAY ARMED - Area 1 - Home', 'userFullname': 'Pieter Rautenbach'}
   # {'deviceId': '<uuid>', 'eventTime': 1709539839721, 'eventAction': 'area', 'eventState': 'arm', 'eventNum': 1, 'eventMsg': 'ARMED - Area 1 - Home', 'userFullname': ''}
   #
+  # examples for triggers
+  # {'deviceId': '<uuid>', 'eventTime': 1716790300370, 'eventAction': 'area', 'eventState': 'alarm', 'eventNum': 1, 'eventMsg': 'ALARM! - Area 1 - Home', 'userFullname': ''}
+  # {'deviceId': '<uuid>', 'eventTime': 1716790300457, 'eventAction': 'zone_alarm', 'eventState': 'alarm', 'eventNum': 1, 'eventMsg': 'ZONE 1 IN ALARM - Zone 1 - Front Door', 'userFullname': ''}
+  #
   # examples for emergencies
   # these are all panics. these two events seem to say that eventNum refers to the area/partition.
   # {'deviceId': '<uuid>', 'eventTime': 1709539853196, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 1, 'eventMsg': 'EMERGENCY! - Area 1 - Home', 'userFullname': ''}
@@ -194,12 +204,11 @@ automation:
                   entity_id: alarm_control_panel.home
                 data:
                   code: !secret alarm_code
-              # only need to trigger one
-              # - service: alarm_control_panel.alarm_trigger
-              #   target:
-              #     entity_id: alarm_control_panel.flatlet
-              #   data:
-              #     code: !secret alarm_code
+              - service: alarm_control_panel.alarm_trigger
+                target:
+                  entity_id: alarm_control_panel.flatlet
+                data:
+                  code: !secret alarm_code
           # elif state changed: home
           - conditions:
               # compare with current state (noop it if matches; means it was actioned from HA, so don't cause a loop)

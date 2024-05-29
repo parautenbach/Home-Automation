@@ -312,7 +312,7 @@ cards:
       #   show_forecast: true
       #   forecast_type: daily
       - type: history-graph
-        hours_to_show: 72
+        hours_to_show: 24
         entities:
           - entity: binary_sensor.daytime
             name: Daytime

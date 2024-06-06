@@ -628,14 +628,33 @@ automation:
       - condition: state
         entity_id: input_boolean.disable_auto_on_bedlamps
         state: "off"
+      # this is a kind of xor:
+      # basically, we want to avoid turning on the light if only one of us arrived home when the other was never away
+      # put differently, we must both have been away (the light would otherwise already be on), but the presence sensors
+      # will not update at the same time, and we don't want to wait on both conditions to wait for the second person to arrive
+      # (and thus wait for a timeout to abort), plus this automation triggers in single mode.
       - condition: or
         conditions:
-          - condition: state
-            entity_id: binary_sensor.pieter_present
-            state: "on"
-          - condition: state
-            entity_id: binary_sensor.rouve_present
-            state: "on"
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: binary_sensor.pieter_present
+                state: "on"
+              - condition: state
+                entity_id: binary_sensor.rouve_present
+                state: "off"
+                for:
+                  minutes: 5
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: binary_sensor.pieter_present
+                state: "off"
+                for:
+                  minutes: 5
+              - condition: state
+                entity_id: binary_sensor.rouve_present
+                state: "on"
       # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
       - condition: or
         conditions:

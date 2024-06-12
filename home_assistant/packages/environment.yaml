@@ -26,24 +26,33 @@ homeassistant:
       icon: mdi:smog
     sensor.wemmershoek_dam_level:
       icon: mdi:waves
+      scan_interval: 3600
     sensor.steenbras_lower_dam_level:
       icon: mdi:waves
+      scan_interval: 3600
     sensor.steenbras_upper_dam_level:
       icon: mdi:waves
+      scan_interval: 3600
     sensor.voelvlei_dam_level:
       icon: mdi:waves
+      scan_interval: 3600
     sensor.theewaterskloof_dam_level:
       icon: mdi:waves
+      scan_interval: 3600
     sensor.bergrivier_dam_level:
       icon: mdi:waves
+      scan_interval: 3600
     sensor.total_dam_level:
       icon: mdi:waves
       state_class: measurement
+      scan_interval: 3600
     sensor.total_dam_level_previous_year:
       icon: mdi:waves
+      scan_interval: 3600
     sensor.dam_levels_last_update:
       icon: mdi:update
       device_class: "timestamp"
+      scan_interval: 3600
     sensor.owm_pollution_overall_air_quality:
       unit_of_measurement: aqi
     sensor.bedroom_ht_temperature:
@@ -158,74 +167,6 @@ sensor:
       filter: lowpass
       time_constant: 10
       precision: 1
-
-  - platform: file
-    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
-    name: Wemmershoek Dam Level
-    unit_of_measurement: "%"
-    value_template: "{{ '%0.2f'| format(value.split(',')[3] | round(2)) }}"
-    scan_interval: 86400  # every 24 hours
-
-  # scraping example if i ever want to get data from http://www.dwa.gov.za/Hydrology/Weekly/ProvinceWeek.aspx?region=WC instead
-  # https://community.home-assistant.io/t/hours-of-daylight/59422/152
-  # fixed decimals formatting:
-  # https://stackoverflow.com/questions/12681036/is-there-a-direct-approach-to-format-numbers-in-jinja2/12681178
-  # https://support.sendwithus.com/jinja/formatting_numbers/
-  - platform: file
-    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
-    name: Steenbras Lower Dam Level
-    unit_of_measurement: "%"
-    value_template: "{{ '%0.2f'| format(value.split(',')[7] | round(2)) }}"
-    scan_interval: 86400
-
-  - platform: file
-    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
-    name: Steenbras Upper Dam Level
-    unit_of_measurement: "%"
-    value_template: "{{ '%0.2f'| format(value.split(',')[11] | round(2)) }}"
-    scan_interval: 86400
-
-  - platform: file
-    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
-    name: Voëlvlei Dam Level
-    unit_of_measurement: "%"
-    value_template: "{{ '%0.2f'| format(value.split(',')[15] | round(2)) }}"
-    scan_interval: 86400
-
-  - platform: file
-    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
-    name: Theewaterskloof Dam Level
-    unit_of_measurement: "%"
-    value_template: "{{ '%0.2f'| format(value.split(',')[47] | round(2)) }}"
-    scan_interval: 86400
-
-  - platform: file
-    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
-    name: Bergrivier Dam Level
-    unit_of_measurement: "%"
-    value_template: "{{ '%0.2f'| format(value.split(',')[51] | round(2)) }}"
-    scan_interval: 86400
-
-  - platform: file
-    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
-    name: Total Dam Level
-    unit_of_measurement: "%"
-    value_template: "{{ '%0.2f'| format(value.split(',')[54] | round(2)) }}"
-    scan_interval: 86400
-
-  - platform: file
-    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
-    name: Total Dam Level Previous Year
-    unit_of_measurement: "%"
-    value_template: "{{ '%0.2f'| format(value.split(',')[55] | round(2)) }}"
-    scan_interval: 86400
-
-  - platform: file
-    file_path: /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
-    name: Dam Levels Last Update
-    # default
-    value_template: "{{ strptime(value.split(',')[0], '%d-%b-%y', 0 | as_datetime).date() }}"
-    scan_interval: 86400
 
   - platform: history_stats
     name: Fair Weather Time

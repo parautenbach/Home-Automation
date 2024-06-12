@@ -20,7 +20,7 @@ exclude:
     - automation.motion_indicator_on
     - automation.motion_indicator_off
     - automation.see_mobile_devices
-    - automation.update_ping_sensors
+    - automation.update_polled_sensors
     - button.outbuilding_power_meter_reboot
     - camera.security_camera_last_snapshot
     - camera.security_camera_last_clip

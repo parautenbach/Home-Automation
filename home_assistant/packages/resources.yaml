@@ -1187,9 +1187,9 @@ automation:
                     {% set minutes = ((utc_now_ts - last_ceased) // 60) | int %}
                     The SolarAssistant bridge's activity has been resumed after {{ minutes }} min.
                   data:
-                    group: "home-electricity"
+                    group: "system-electricity"
                     url: homeassistant://navigate/lovelace/devices
-                    tag: "solarassistant-bridge-activity"
+                    tag: "solarassistant-activity"
 
   - alias: "Notify When SolarAssistant MQTT Bridge Activity Ceased"
     id: "86cced33-ce28-4559-ba6b-e0d0f30fa183"
@@ -1208,9 +1208,9 @@ automation:
             {% set minutes = (now() - states.binary_sensor.solarassistant_activity.last_updated).total_seconds() | multiply(1/60) | int or 1 %}
             The SolarAssistant bridge's activity has ceased {{ minutes }} min ago.
           data:
-            group: "home-electricity"
+            group: "system-electricity"
             url: homeassistant://navigate/lovelace/devices
-            tag: "solarassistant-bridge-activity"
+            tag: "solarassistant-activity"
       - service: timer.start
         target:
           entity_id: timer.solarassistant_inactivity

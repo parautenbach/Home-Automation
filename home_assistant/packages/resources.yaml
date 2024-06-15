@@ -435,7 +435,7 @@ template:
     binary_sensor:
       - name: "SolarAssistant Activity"
         state: >-
-          {{ states.sensor.solarassistant_activity_counter.last_updated >= now() - timedelta(seconds=10) }}
+          {{ states.sensor.solarassistant_activity_counter.last_updated >= now() - timedelta(seconds=15) }}
         device_class: running
   # https://docs.google.com/spreadsheets/d/1bfyoQDx-s5W7BBBhJeABa-aw1v9K8Z9-ETFwj0kDMYE/edit#gid=2129307858
   # https://en.wikipedia.org/wiki/Duck_curve
@@ -1135,10 +1135,10 @@ automation:
         entity_id:
           - binary_sensor.solarassistant_activity
         to: "off"
-        # we had this edge case where the binary sensor was off for less than a second,
-        # so the timer got canceled before it actually started
-        for:
-          seconds: 5
+        # # we had this edge case where the binary sensor was off for less than a second,
+        # # so the timer got canceled before it actually started
+        # for:
+        #   seconds: 5
     mode: single
     action:
       - service: input_datetime.set_datetime

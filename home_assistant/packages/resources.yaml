@@ -785,6 +785,30 @@ timer:
     duration: "00:1:00"
     restore: true
 
+alert:
+  solarassistant_inactivity:
+    name: "SolarAssistant Inactivity"
+    entity_id: binary_sensor.solarassistant_activity
+    state: "off"
+    repeat: 1  # every 1 min
+    skip_first: true  # but not immediately
+    can_acknowledge: false
+    title: "⚠️ [Test] System"
+    message: >-
+      {% set minutes = (now() - states.binary_sensor.solarassistant_activity.last_updated).total_seconds() | multiply(1/60) | int or 1 %}
+      The SolarAssistant bridge's activity has ceased {{ minutes }} min ago.
+    done_message: >-
+      {% set last_ceased = states('input_datetime.solarassistant_activity_ceased') | as_timestamp %}
+      {% set utc_now_ts = utcnow() | as_timestamp %}
+      {% set minutes = ((utc_now_ts - last_ceased) // 60) | int %}
+      The SolarAssistant bridge's activity has been resumed after {{ minutes }} min.
+    data:
+      group: "system-electricity"
+      url: homeassistant://navigate/lovelace/devices
+      tag: "solarassistant-activity"
+    notifiers:
+      - mobile_app_ceres
+
 automation:
   - alias: "Notify If Grid Feed Status Changed"
     id: "b233b973-cf9b-44b5-94e4-5f0813e6eefa"

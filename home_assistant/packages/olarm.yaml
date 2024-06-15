@@ -387,9 +387,10 @@ automation:
       - condition: state
         entity_id: binary_sensor.pieter_present
         state: "on"
-      - condition: template
-        value_template: >-
-          {{ (trigger.id == 'weekdays' and is_state('binary_sensor.workday_tomorrow', 'on')) or trigger.id == 'weekends' }}
+      # for now, just always ask at the earliest time (because, baby)
+      # - condition: template
+      #   value_template: >-
+      #     {{ (trigger.id == 'weekdays' and is_state('binary_sensor.workday_tomorrow', 'on')) or trigger.id == 'weekends' }}
     action:
       - service: notify.mobile_app_ceres
         data:

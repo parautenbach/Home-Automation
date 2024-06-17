@@ -18,6 +18,9 @@
 # known issues & bugs:
 #  * arming when a zone is active (open) will not fail when calling the api (issue reported)
 #
+# notes:
+#  * you cannot bypass a zone after a partition has been armed
+#
 # references:
 #  * https://community.home-assistant.io/t/olarm-integration/384560/28
 #  * https://community.home-assistant.io/t/olarm-integration/384560/52

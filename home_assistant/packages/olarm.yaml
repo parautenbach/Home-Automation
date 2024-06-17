@@ -19,10 +19,10 @@
 #  * arming when a zone is active (open) will not fail when calling the api (issue reported)
 #
 # references:
-# https://community.home-assistant.io/t/olarm-integration/384560/28
-# https://community.home-assistant.io/t/olarm-integration/384560/52
-# https://github.com/rainepretorius/olarm-ha-integration
-# https://github.com/rainepretorius/olarm-ha-integration/discussions/85
+#  * https://community.home-assistant.io/t/olarm-integration/384560/28
+#  * https://community.home-assistant.io/t/olarm-integration/384560/52
+#  * https://github.com/rainepretorius/olarm-ha-integration
+#  * https://github.com/rainepretorius/olarm-ha-integration/discussions/85
 
 # https://www.home-assistant.io/integrations/alarm_control_panel/
 # https://www.home-assistant.io/integrations/manual/

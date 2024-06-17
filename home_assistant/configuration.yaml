@@ -43,6 +43,7 @@ logger:
     # homeassistant.components.shelly: debug
     # homeassistant.components.aioshelly: debug
     # homeassistant.components.script: debug
+    # homeassistant.components.resources_package: debug
     # homeassistant.components.template.weather: debug
     # homeassistant.components.openuv: debug
     # homeassistant.components.tplink: debug

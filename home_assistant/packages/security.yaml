@@ -338,8 +338,8 @@ automation:
         state: "on"
       - service: notify.family
         data:
-          title: Security
-          message: "⚠️ Motion detected!"
+          title: "⚠️ Security"
+          message: "Motion detected!"
           data:
             group: "security-camera-snapshots"
             url: homeassistant://navigate/lovelace/security

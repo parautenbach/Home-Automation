@@ -274,11 +274,26 @@ cards:
             name: Outside
             icon: mdi:sun-thermometer-outline
             card_mod: *card_mod_comfort_style
+      # https://github.com/pkissling/clock-weather-card
+      - type: custom:clock-weather-card
+        entity: weather.openweathermap_daily
+        hide_today_section: false
+        hide_clock: true
+        hide_date: true
+        hourly_forecast: false
+        sun_entity: sun.sun
+        apparent_sensor: sensor.outside_feels_like
+        aqi_sensor: sensor.owm_pollution_overall_air_quality
+      # https://github.com/bramkragten/weather-card
       - type: custom:weather-card
-        name: Home
         entity: weather.openweathermap_hourly
-        current: true
+        current: false
         details: true
+        forecast: false
+      - type: custom:weather-card
+        entity: weather.openweathermap_hourly
+        current: false
+        details: false
         forecast: true
         hourly_forecast: true
         number_of_forecasts: 5  # hours
@@ -289,14 +304,6 @@ cards:
         forecast: true
         hourly_forecast: false
         number_of_forecasts: 5  # days
-      # https://github.com/pkissling/clock-weather-card
-      - type: custom:clock-weather-card
-        entity: weather.openweathermap_daily
-        # title: Stellenbosch
-        hide_today_section: true
-        hourly_forecast: false
-        sun_entity: sun.sun
-        apparent_sensor: sensor.outside_feels_like
       # - type: weather-forecast
       #   entity: weather.openweathermap_hourly
       #   name: Stellenbosch

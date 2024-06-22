@@ -104,17 +104,23 @@ lovelace:
     # manual
     # none
   dashboards:
-    lovelace-test:
+    lovelace-gallery:
       mode: yaml
-      filename: ui-test.yaml
-      title: Test
-      icon: mdi:test-tube
-      require_admin: true
+      filename: ui-gallery.yaml
+      title: Gallery
+      icon: mdi:cctv
+      require_admin: false
     lovelace-system:
       mode: yaml
       filename: ui-system.yaml
       title: System
       icon: mdi:devices
+      require_admin: true
+    lovelace-test:
+      mode: yaml
+      filename: ui-test.yaml
+      title: Test
+      icon: mdi:test-tube
       require_admin: true
 
 frontend:

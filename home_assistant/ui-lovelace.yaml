@@ -9,7 +9,6 @@ views:
   - !include ui-lovelace/entertainment.yaml
   - !include ui-lovelace/internet.yaml
   - !include ui-lovelace/security.yaml
-  - !include ui-lovelace/gallery.yaml
 
 button_card_templates: !include button_card_templates.yaml
 

@@ -272,6 +272,8 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.internet_connection
+        for:
+          minutes: 2
     mode: queued
     condition:
       - condition: state

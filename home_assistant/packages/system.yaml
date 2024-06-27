@@ -211,7 +211,6 @@ template:
         icon: mdi:refresh-auto
         state: "{{ states.automation | selectattr('state', 'eq', 'off') | list | length }}"
         unit_of_measurement: entities
-        state_class: measurement
         attributes:
           automations: "{{ states.automation | selectattr('state', 'eq', 'off') | map(attribute='attributes.friendly_name') | sort | list }}"
 

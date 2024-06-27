@@ -458,7 +458,8 @@ template:
             {% set mode = 'Optimistic' %}
           {% elif 5 <= forecast <= 9 %}
             {% set mode = 'Pessimistic' %}
-          {% elif forecast <= 4 %}
+          {% elif 0 < forecast <= 4 %}
+            {# note the 0 < above: if the forecast isn't available, the value will be zero. in that case, keep the current mode #}
             {% set mode = 'Very Pessimistic' %}
           {% else %}
             {% set mode = this.state %}
@@ -517,7 +518,8 @@ template:
               {% set mode = 'Optimistic' %}
             {% elif 5 <= forecast <= 9 %}
               {% set mode = 'Pessimistic' %}
-            {% elif forecast <= 4 %}
+            {% elif 0 < forecast <= 4 %}
+              {# note the 0 < above: if the forecast isn't available, the value will be zero. in that case, keep the current settings #}
               {% set mode = 'Very Pessimistic' %}
             {% else %}
               {% set mode = this.state %}

@@ -290,7 +290,8 @@ automation:
             {% from 'datetime.jinja' import sec_to_hour_and_min %}
             {% set seconds = max((as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int(0), 60) %}
             {% set duration = sec_to_hour_and_min(seconds) %}
-            The Internet {{ 'is unavailable' if trigger.to_state.state == 'off' else 'was unavailable for ' ~  duration }}.
+            {% set problem = trigger.to_state.state == 'off' %}
+            {{ 'There seems to be' if problem else 'There seems to have been' }} a problem with the Internet connection{{ '.' if problem else ' for ' ~  duration ~ '.' }}
           data:
             group: "home-internet"
             url: homeassistant://navigate/lovelace/internet

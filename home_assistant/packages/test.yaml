@@ -24,7 +24,7 @@ alert:
     message: "Test message. {{ states('input_boolean.test') }}"
     data:
       group: "test-alerts"
-      url: homeassistant://navigate/lovelace/devices
+      url: homeassistant://navigate/lovelace-system/devices
     notifiers:
       - mobile_app_ceres
 
@@ -52,7 +52,7 @@ script:
           title: "Test"
           message: "Navigate"
           data:
-            url: homeassistant://navigate/lovelace/gallery
+            url: homeassistant://navigate/lovelace-gallery/gallery
 
   test:
     description: "Test script"
@@ -123,7 +123,7 @@ automation:
       #     message: "{{ trigger.event }}"
       #     data:
       #       group: "test"
-      #       url: homeassistant://navigate/lovelace/devices
+      #       url: homeassistant://navigate/lovelace-system/devices
       - service: persistent_notification.create
         data:
           title: "Batteries Test"

@@ -806,7 +806,7 @@ alert:
       The SolarAssistant bridge's activity has been resumed after {{ minutes }} min.
     data:
       group: "system-electricity"
-      url: homeassistant://navigate/lovelace/devices
+      url: homeassistant://navigate/lovelace-system/devices
       tag: "solarassistant-activity"
     notifiers:
       - mobile_app_ceres
@@ -1143,7 +1143,7 @@ automation:
             The backup power system's load is critical at {{ load_percentage }}% ({{ power }} kW). Please reduce consumption immediately to avoid a power outage.
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/devices
+            url: homeassistant://navigate/lovelace-system/devices
             push:
               sound:
                 name: default
@@ -1214,7 +1214,7 @@ automation:
                     The SolarAssistant bridge's activity has been resumed after {{ minutes }} min.
                   data:
                     group: "system-electricity"
-                    url: homeassistant://navigate/lovelace/devices
+                    url: homeassistant://navigate/lovelace-system/devices
                     tag: "solarassistant-activity"
 
   - alias: "Notify When SolarAssistant MQTT Bridge Activity Ceased"
@@ -1235,7 +1235,7 @@ automation:
             The SolarAssistant bridge's activity has ceased {{ minutes }} min ago.
           data:
             group: "system-electricity"
-            url: homeassistant://navigate/lovelace/devices
+            url: homeassistant://navigate/lovelace-system/devices
             tag: "solarassistant-activity"
       - service: timer.start
         target:

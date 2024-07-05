@@ -162,7 +162,7 @@ automation:
           message: "Systems shutting down prior to loadshedding."
           data:
             group: "system-general"
-            url: homeassistant://navigate/lovelace/devices
+            url: homeassistant://navigate/lovelace-system/devices
       - service: script.turn_on
         target:
           entity_id: script.shutdown_all_remote_hosts
@@ -188,7 +188,7 @@ automation:
           message: "⛔️ Shut Gaia down now!"
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/devices
+            url: homeassistant://navigate/lovelace-system/devices
             push:
               sound:
                 name: default
@@ -241,7 +241,7 @@ automation:
             {%- endfor %}
           data:
             group: "batteries"
-            url: homeassistant://navigate/lovelace/devices
+            url: homeassistant://navigate/lovelace-system/devices
             # https://companion.home-assistant.io/docs/notifications/notifications-basic/#notification-icon
             # https://community.home-assistant.io/t/mobile-notification-icon-not-showing-up/408050
             # icon_url: "https://github.com/home-assistant/assets/blob/master/logo/logo-small.png?raw=true"
@@ -291,7 +291,7 @@ automation:
             {%- endfor %}
           data:
             group: "batteries"
-            url: homeassistant://navigate/lovelace/devices
+            url: homeassistant://navigate/lovelace-system/devices
 
   # todo: check if this affects server cpu
   # <Event state_changed[L]:
@@ -340,7 +340,7 @@ automation:
             {% endif %}
           data:
             group: "batteries"
-            url: homeassistant://navigate/lovelace/devices
+            url: homeassistant://navigate/lovelace-system/devices
       # - service: persistent_notification.create
       #   data:
       #     title: "Debug: Battery Fully Charged"
@@ -437,7 +437,7 @@ automation:
                   message: "The baby monitor is offline."
                   data:
                     group: "nursery"
-                    url: homeassistant://navigate/lovelace/devices
+                    url: homeassistant://navigate/lovelace-system/devices
                     tag: "nursery-status"
             else:
               - if:
@@ -458,7 +458,7 @@ automation:
                       message: "The baby monitor was offline."
                       data:
                         group: "nursery"
-                        url: homeassistant://navigate/lovelace/devices
+                        url: homeassistant://navigate/lovelace-system/devices
                         tag: "nursery-status"
               - service: input_boolean.turn_off
                 target:
@@ -504,7 +504,7 @@ automation:
                   message: "The doorbell is offline."
                   data:
                     group: "doorbell"
-                    url: homeassistant://navigate/lovelace/devices
+                    url: homeassistant://navigate/lovelace-system/devices
                     tag: "doorbell-status"
             else:
               - if:
@@ -525,7 +525,7 @@ automation:
                       message: "The doorbell was offline."
                       data:
                         group: "doorbell"
-                        url: homeassistant://navigate/lovelace/devices
+                        url: homeassistant://navigate/lovelace-system/devices
                         tag: "doorbell-status"
               - service: input_boolean.turn_off
                 target:

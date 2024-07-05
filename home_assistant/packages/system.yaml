@@ -403,7 +403,7 @@ automation:
           message: "Server disk usage is {{ states('sensor.disk_use_percent') }}%!"
           data:
             group: "system-disk-space"
-            url: homeassistant://navigate/lovelace/devices
+            url: homeassistant://navigate/lovelace-system/devices
 
   - alias: "Notify When Server Started After Being Shut Down Automatically"
     id: "cc787a25-6e55-4388-ab3c-68e9716bce50"
@@ -424,7 +424,7 @@ automation:
           message: "Server started."
           data:
             group: "system-general"
-            url: homeassistant://navigate/lovelace/devices
+            url: homeassistant://navigate/lovelace-system/devices
 
   - alias: "Notify If Server Load High"
     id: "720ef41c-589a-4b16-9223-6e49d362e721"
@@ -443,7 +443,7 @@ automation:
           message: "The server's load has been {{ states('sensor.load_15m') }} for {{ trigger.for.seconds // 60 }} min."
           data:
             group: "system-resources"
-            url: homeassistant://navigate/lovelace/devices
+            url: homeassistant://navigate/lovelace-system/devices
 
   - alias: "Notify If Server Memory Usage High"
     id: "5bc47b01-199c-4f97-bf2e-b3661380fcc6"
@@ -459,7 +459,7 @@ automation:
           message: "The server's memory usage is high ({{ states('sensor.memory_use_percent') }}%)."
           data:
             group: "system-resources"
-            url: homeassistant://navigate/lovelace/devices
+            url: homeassistant://navigate/lovelace-system/devices
 
   - alias: "Backup Home Assistant"
     id: "57461782-62af-4987-a6ce-46f602fcc417"
@@ -515,7 +515,7 @@ automation:
           message: "No recent backup found."
           data:
             group: "system-backup"
-            url: homeassistant://navigate/lovelace/devices
+            url: homeassistant://navigate/lovelace-system/devices
 
   - alias: "Notify If New Backup Found"
     id: "f5382369-7a98-4cc0-bd63-ecf1c6e6f288"
@@ -535,7 +535,7 @@ automation:
           message: "A new Home Assistant backup was made."
           data:
             group: "system-backup"
-            url: homeassistant://navigate/lovelace/devices
+            url: homeassistant://navigate/lovelace-system/devices
 
   - alias: "Low Server Battery"
     id: "cc72f00c-96e6-49eb-84f3-c72b09f49f7f"
@@ -550,7 +550,7 @@ automation:
           message: "Server battery is running low!"
           data:
             group: "system-battery"
-            url: homeassistant://navigate/lovelace/devices
+            url: homeassistant://navigate/lovelace-system/devices
 
   # udevadm monitor
   # udevadm info --path=/sys/class/power_supply/AC0
@@ -595,7 +595,7 @@ automation:
           message: "Server will shut down in {{ timeout }} seconds."
           data:
             group: "system-general"
-            url: homeassistant://navigate/lovelace/devices
+            url: homeassistant://navigate/lovelace-system/devices
       - wait_template: "{{ not is_state('sensor.home_assistant_server_battery_status', 'Discharging') }}"
         timeout:
           seconds: "{{ timeout }}"
@@ -609,7 +609,7 @@ automation:
               message: "Server shutdown cancelled: Power was restored."
               data:
                 group: "system-general"
-                url: homeassistant://navigate/lovelace/devices
+                url: homeassistant://navigate/lovelace-system/devices
         else:
           - service: input_boolean.turn_on
             entity_id: input_boolean.server_shut_down_automatically
@@ -622,7 +622,7 @@ automation:
               message: "Server shutting down."
               data:
                 group: "system-general"
-                url: homeassistant://navigate/lovelace/devices
+                url: homeassistant://navigate/lovelace-system/devices
           - delay:
               seconds: 5
           - service: shell_command.shutdown_server

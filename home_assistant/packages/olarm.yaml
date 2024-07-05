@@ -14,9 +14,13 @@
 # future:
 #  * distinct alerts (notifications) for breach, panic, fire and emergency (currently no distinction)
 #  * hoping for an mqtt integration with additional features (multiple requests made; apparently wip)
+#  * include zone that triggered the alarm
+#  * zone bypass notifications
 #
 # known issues & bugs:
 #  * arming when a zone is active (open) will not fail when calling the api (issue reported)
+#    feedback from olarm: by default, it tries to force arm, but it will only work if your alarm system is set to allow it
+#  * there's no real-time updates for zones bypassed or reset via the webhook
 #
 # notes:
 #  * you cannot bypass a zone after a partition has been armed

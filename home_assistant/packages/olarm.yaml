@@ -226,13 +226,13 @@ automation:
               - service: alarm_control_panel.alarm_trigger
                 target:
                   entity_id: alarm_control_panel.home
-                data:
-                  code: !secret alarm_code
+                # data:
+                #   code: !secret alarm_code
               - service: alarm_control_panel.alarm_trigger
                 target:
                   entity_id: alarm_control_panel.flatlet
-                data:
-                  code: !secret alarm_code
+                # data:
+                #   code: !secret alarm_code
           # elif state changed: home
           - conditions:
               # compare with current state (noop it if matches; means it was actioned from HA, so don't cause a loop)
@@ -510,6 +510,7 @@ automation:
             data:
               title: "🔒 Security"
               # todo: user (can be from olarm or HA context; tricky to get right)
+              # todo: list bypassed zones, if any
               message: >-
                 {% set area = trigger.entity_id | replace('alarm_control_panel.', '') %}
                 The alarm's {{ area }} partition was {{ state }} at {{ now().strftime('%H:%M') }}.

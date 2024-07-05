@@ -217,25 +217,27 @@ cards:
           type: 'bullets'
       cards:
         - type: custom:battery-state-card
-          title: Batteries
+          title: Battery Charge Levels
           filter:
             include:
               - name: "attributes.monitor"
                 value: True
+          bulk_rename:
+            rules:
+              - from: "Battery"
           sort:
-            - "state"
             - "name"
         - type: custom:auto-entities
           card:
             type: entities
-            title: Batteries
+            title: Battery Maintenance
           filter:
             include:
               - entity_id: "button.*_battery_replaced"
         - type: custom:auto-entities
           card:
             type: entities
-            title: Batteries
+            title: Battery Maintenance Log
           filter:
             include:
               - entity_id: "sensor.*_battery_last_replaced"

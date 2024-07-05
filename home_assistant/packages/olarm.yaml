@@ -116,6 +116,27 @@ rest_command:
         "actionNum": {{ area }}
       }
     content_type: "application/json"
+  olarm_zone_bypassed:
+    method: "POST"
+    headers:
+      Authorization: !secret olarm_bearer_token
+    url: !secret olarm_actions_endpoint
+    payload: >-
+      {
+        "actionCmd": "zone-bypass",
+        "actionNum": {{ zone }}
+      }
+    content_type: "application/json"
+  olarm_zone_reset:
+    method: "POST"
+    headers:
+      Authorization: !secret olarm_bearer_token
+    url: !secret olarm_actions_endpoint
+    payload: >-
+      {
+        "actionCmd": "zone-unbypass",
+        "actionNum": {{ zone }}
+      }
 
 automation:
   - alias: "Sync Alarm State"
@@ -314,6 +335,9 @@ automation:
               - action: "ARM_ALARM"
                 title: "Arm now"
                 destructive: true
+              - action: "ARM_ALARM_BYPASS_GARAGE"
+                title: "Arm now (bypass garage)"
+                destructive: true
             push:
               sound:
                 name: default
@@ -432,13 +456,25 @@ automation:
         event_data:
           action: DISARM_ALARM
         id: "disarm"
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: ARM_ALARM_BYPASS_GARAGE
+        id: "arm_away_bypass_garage"
     condition:
       - condition: template
         value_template: >-
           {% set new_state = trigger.id | replace('arm', 'armed') %}
           {{ not is_state('alarm_control_panel.home', new_state) }}
     action:
-      - service: "alarm_control_panel.alarm_{{ trigger.id }}"
+      - if: "{{ trigger.id == 'arm_away_bypass_garage' }}"
+        then:
+          - service: "rest_command.olarm_zone_bypassed"
+            data:
+              zone: "17"
+            response_variable: olarm_response
+          # todo: check and log error response
+      - service: "alarm_control_panel.alarm_{{ trigger.id | replace('_bypass_garage', '') }}"
         target:
           entity_id: alarm_control_panel.home
         data:

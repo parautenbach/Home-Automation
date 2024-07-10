@@ -11,7 +11,7 @@ cards:
           - type: gauge
             entity: sensor.internet_speed_in
             min: 0
-            max: 30
+            max: 60
             severity:
               green: 0
               yellow: 15
@@ -19,7 +19,7 @@ cards:
           - type: gauge
             entity: sensor.internet_speed_out
             min: 0
-            max: 30
+            max: 60
             severity:
               green: 0
               yellow: 15

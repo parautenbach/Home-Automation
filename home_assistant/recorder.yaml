@@ -75,6 +75,7 @@ exclude:
     - sensor.time_of_day
     - sensor.inverter_efficiency
     - script.update_entity
+    - sensor.faulty_automations
     # large attributes
     - sensor.security_camera_snapshots
     - sensor.home_assistant

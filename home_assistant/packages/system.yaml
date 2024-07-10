@@ -214,6 +214,17 @@ template:
         attributes:
           automations: "{{ states.automation | selectattr('state', 'eq', 'off') | map(attribute='attributes.friendly_name') | sort | list }}"
 
+  - trigger:
+    - platform: time_pattern
+      minutes: "/1"
+    sensor:
+      - name: Faulty Automations
+        icon: mdi:sync-alert
+        state: "{{ states.automation | selectattr('state', 'eq', 'unavailable') | list | length }}"
+        unit_of_measurement: entities
+        attributes:
+          automations: "{{ states.automation | selectattr('state', 'eq', 'unavailable') | map(attribute='attributes.friendly_name') | sort | list }}"
+
   - sensor:
       - name: Monitored Batteries
         icon: mdi:battery-alert
@@ -639,3 +650,21 @@ automation:
       - service: homeassistant.update_entity
         target:
           entity_id: sensor.db_size
+
+  - alias: "Notify If Some Automations Are Faulty"
+    id: "39b68747-7edd-4b32-ad9e-b15c89a5565a"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.faulty_automations
+        above: 0
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "⚠️ Automations"
+          message: >-
+            {% set n = states('sensor.faulty_automations') | int(0) %}
+            There {{ 'is' if n == 1 else 'are' }} {{ n }} faulty automation{{ '' if n == 1 else 's' }}.
+          data:
+            group: "system-general"
+            url: homeassistant://navigate/lovelace-system/devices

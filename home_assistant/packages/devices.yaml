@@ -318,13 +318,15 @@ automation:
     condition:
       - condition: template
         # https://www.home-assistant.io/docs/configuration/events/#state_changed
+        # we might want to do a duraction check too (the equivalent of a "for", to ensure the level was below the threshold for a sufficient period)
+        # the reason is that H&Ts tend to drop some charge before returning to a higher level again
         value_template: >-
           {{ 'old_state' in trigger.event.data and
              'new_state' in trigger.event.data and
              trigger.event.data.old_state.state not in ['unavailable', 'unknown'] and
              trigger.event.data.new_state.state != trigger.event.data.old_state.state and
              trigger.event.data.entity_id in state_attr('sensor.monitored_batteries', 'batteries') and
-             trigger.event.data.old_state.state | int(0) < 95 and
+             trigger.event.data.old_state.state | int(0) < 85 and
              trigger.event.data.new_state.state | int(0) == 100 }}
     action:
       - service: notify.mobile_app_ceres

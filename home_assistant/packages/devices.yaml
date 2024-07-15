@@ -95,6 +95,14 @@ command_line:
       payload_off: "fail"
       scan_interval: 30
 
+  # or use input_boolean.baby_monitor_disconnected
+  - binary_sensor:
+      name: Baby Monitor
+      command: 'ping -n -q -W 1 -c 3 nomi-ipc-a22e-d > /dev/null 2>&1 && echo success || echo fail'
+      device_class: connectivity
+      payload_on: "success"
+      payload_off: "fail"
+      scan_interval: 30
   - sensor:
       name: thor_disk_usage
       command: !secret thor_disk_usage_command

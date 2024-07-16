@@ -274,6 +274,31 @@ cards:
             name: Outside
             icon: mdi:sun-thermometer-outline
             card_mod: *card_mod_comfort_style
+      - type: conditional
+        conditions:
+          - condition: numeric_state
+            entity: sensor.weather_alert
+            above: 0
+        card:
+          type: markdown
+          title: "⚠️ Extreme Weather"
+          # put this in a macro (see packages/environment.yaml:879)
+          content: >
+            {% set event = state_attr('sensor.weather_alert', 'event') %}
+            {% set from = state_attr('sensor.weather_alert', 'effective') | as_datetime(0) | as_local %}
+            {% set from_str = from.strftime('%A %-d %B') %}
+            {% set to = state_attr('sensor.weather_alert', 'expires') | as_datetime(0) | as_local %}
+            {% set to_str = to.strftime('%A %-d %B') %}
+            {% set event_body = event | capitalize %}
+            {% set desc = state_attr('sensor.weather_alert', 'desc') %}
+            {%- if from.date() == to.date() -%}
+              {{ event_body }} on {{ from_str }}:
+            {%- else -%}
+              {{ event_body }} from {{ from_str }} until {{ to_str }}:
+            {%- endif %}
+            {%- for line in desc.split('\n') %}
+              - {{ line }}
+            {%- endfor %}
       # https://github.com/pkissling/clock-weather-card
       - type: custom:clock-weather-card
         entity: weather.openweathermap_daily

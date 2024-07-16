@@ -750,6 +750,26 @@ rest:
           {% endif %}
         device_class: temperature
         unit_of_measurement: "°C"
+  # https://www.weatherapi.com/docs/#apis-forecast
+  # https://api.weatherapi.com/v1/forecast.json?q=<lat>%2C<long>&days=1&alerts=yes&key=<key>
+  # https://www.baeldung.com/linux/jq-command-json
+  - resource: !secret weather_api_alerts_url
+    headers:
+      Accept: 'application/json'
+    method: GET
+    scan_interval: 3600  # 60 min
+    timeout: 15
+    sensor:
+      - name: Weather Alert
+        icon: mdi:alert-outline
+        value_template: "{{ value_json.alerts.alert | count }}"
+        # where assuming the alerts are ordered in time with the first entry the current alert or the next one if there are no current ones
+        json_attributes_path: "$.alerts.alert.0"
+        json_attributes:
+          - event
+          - effective
+          - expires
+          - desc
 
 automation:
   - alias: "Download Dam Levels Data"
@@ -843,3 +863,39 @@ automation:
           data:
             group: "environment"
             url: homeassistant://navigate/lovelace/environment
+
+  - alias: "Weather Alert Notification"
+    id: "c0b01006-be9e-41e9-b1b5-adafc3ecae1b"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: sensor.weather_alert
+        not_to: "0"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "⚠️ Extreme Weather"
+          message: >-
+            {% set event = state_attr('sensor.weather_alert', 'event') %}
+            {% set from = state_attr('sensor.weather_alert', 'effective') | as_datetime(0) | as_local %}
+            {% set from_str = from.strftime('%A %-d %B') %}
+            {% set to = state_attr('sensor.weather_alert', 'expires') | as_datetime(0) | as_local %}
+            {% set to_str = to.strftime('%A %-d %B') %}
+            {% set event_body = event | capitalize %}
+            {% set desc = state_attr('sensor.weather_alert', 'desc') %}
+            {%- if from.date() == to.date() -%}
+              {{ event_body }} on {{ from_str }}:
+            {%- else -%}
+              {{ event_body }} from {{ from_str }} until {{ to_str }}:
+            {%- endif %}
+            {%- for line in desc.split('\n') %}
+              - {{ line }}
+            {%- endfor %}
+          data:
+            group: "weather"
+            url: homeassistant://navigate/lovelace/environment
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 0.5

@@ -70,7 +70,7 @@ cards:
         aggregate_func: max
         line_width: 2
         lower_bound: 0
-        upper_bound: 35
+        upper_bound: 65
       - type: history-graph
         hours_to_show: 24
         entities:

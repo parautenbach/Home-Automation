@@ -51,7 +51,7 @@ homeassistant:
       scan_interval: 3600
     sensor.dam_levels_last_update:
       icon: mdi:update
-      device_class: "timestamp"
+      device_class: timestamp
       scan_interval: 3600
     sensor.owm_pollution_overall_air_quality:
       unit_of_measurement: aqi

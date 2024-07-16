@@ -201,6 +201,7 @@ cards:
         - entity: binary_sensor.rasplex
         - entity: binary_sensor.rasplay
         - entity: binary_sensor.main_gate_status
+          name: Main Gate
         - entity: binary_sensor.garage_doors_status
           name: Garages
         - entity: binary_sensor.irrigation_status

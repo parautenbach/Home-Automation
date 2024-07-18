@@ -784,7 +784,7 @@ input_datetime:
 
 timer:
   solarassistant_inactivity:
-    duration: "00:1:00"
+    duration: "00:01:00"
     restore: true
 
 alert:

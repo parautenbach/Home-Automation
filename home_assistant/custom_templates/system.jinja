@@ -21,7 +21,8 @@ Get a list of entity IDs given a list of states.
             'select.main_bedroom_ac_horizontal_swing_angle',
             'sensor.main_bedroom_ac_outdoor_temperature',
             'sensor.solar_reserve_percentage_5min_average',
-            'sensor.pv_power_5min_average'] -%}
+            'sensor.pv_power_5min_average',
+            'conversation.home_assistant'] -%}
   {#- buttons and event entities don't have state – we don't care about those here -#}
   {%- set reduced_list = states
             | rejectattr('domain','search','button|event')

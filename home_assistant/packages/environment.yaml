@@ -264,6 +264,12 @@ template:
                               5: "mdi:gauge-full" } %}
           {% set key = states('sensor.overall_pollen_risk') | int(0) %}
           {{ mapping[key] if key in mapping else "mdi:alert" }}
+      # this is just to be able to plot a simple state history,
+      # because the history graph chart will do a fancy plot if it sees a climate entity
+      - name: Living Room AC
+        state: "{{ states('climate.living_room_ac') }}"
+      - name: Main Bedroom AC
+        state: "{{ states('climate.main_bedroom_ac') }}"
 
   # https://www.home-assistant.io/integrations/template/#trigger-based-handling-of-service-response-data
   # https://community.home-assistant.io/t/petition-dont-delete-the-forecast-attribute/609298/38
@@ -763,6 +769,7 @@ rest:
       - name: Weather Alert
         icon: mdi:alert-outline
         value_template: "{{ value_json.alerts.alert | count }}"
+        unit_of_measurement: count
         # where assuming the alerts are ordered in time with the first entry the current alert or the next one if there are no current ones
         json_attributes_path: "$.alerts.alert.0"
         json_attributes:
@@ -864,6 +871,7 @@ automation:
             group: "environment"
             url: homeassistant://navigate/lovelace/environment
 
+  # time of day?
   - alias: "Weather Alert Notification"
     id: "c0b01006-be9e-41e9-b1b5-adafc3ecae1b"
     initial_state: true

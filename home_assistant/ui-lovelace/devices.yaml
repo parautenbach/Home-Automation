@@ -253,15 +253,12 @@ cards:
         include:
           - domain: automation
         exclude:
-          - entity_id: automation.foyer_motion_detected_last
           - entity_id: automation.monitor_inbound_internet_traffic
           - entity_id: automation.monitor_outbound_internet_traffic
           - entity_id: automation.motion_indicator_off
           - entity_id: automation.motion_indicator_on
-          - entity_id: automation.start_a_full_irrigation_cycle
-          - entity_id: automation.track_motion_at_doorbell
           - entity_id: automation.update_baby_sleep_session_counter
-          - entity_id: automation.update_ping_sensors
+          - entity_id: automation.update_polled_sensors
     # - type: logbook
     #   title: Major Automations
     #   hours_to_show: 2

@@ -8,7 +8,8 @@ cards:
   - type: entities
     title: Test
     entities:
-      - switch.test_shelly1_relay
+      # unused, currently
+      # - switch.test_shelly1_relay
       - input_boolean.test
       - sensor.motion_detected_last_relative
       - binary_sensor.foyer_motion_detected

@@ -1375,3 +1375,22 @@ automation:
       - service: input_boolean.turn_off
         target:
           entity_id: input_boolean.disable_auto_on_bedlamps
+
+  - alias: "Toggle Hallway Light"
+    id: "161a5d6e-6863-412d-b9a0-35856339627a"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.hallway_light_switch
+        from:
+          - "on"
+          - "off"
+        to:
+          - "on"
+          - "off"
+    action:
+      # profile?
+      - service: light.toggle
+        target:
+          entity_id: light.hallway
+

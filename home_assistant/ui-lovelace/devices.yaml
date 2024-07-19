@@ -301,6 +301,10 @@ cards:
             name: Backyard
           - entity: switch.bug_zapper
             name: Bug Zapper
+          - entity: switch.main_bathroom_light
+            name: Main Bath.
+          - entity: switch.bathroom_light
+            name: Bathroom
       - type: custom:button-card
         show_label: true
         label: >

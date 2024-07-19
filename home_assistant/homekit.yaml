@@ -38,6 +38,10 @@
       - switch.tivoli_audio
       - switch.irrigation_main
       - switch.bug_zapper
+      - switch.main_bathroom_light
+      - switch.main_bathroom_fan
+      - switch.bathroom_light
+      - switch.bathroom_fan
       # seems like ios can't show a gate (can't change it in the home app either)
       - cover.main_gate
       - cover.garage_doors_lhs

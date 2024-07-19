@@ -33,6 +33,10 @@ homeassistant:
     switch.bug_zapper:
       friendly_name: Bug Zapper
       icon: mdi:bug-outline
+    switch.main_bathroom_fan:
+      icon: mdi:fan
+    switch.bathroom_fan:
+      icon: mdi:fan
 
 input_datetime:
   wake_up_time:
@@ -79,6 +83,14 @@ notify:
     services:
       - service: mobile_app_ceres
       - service: mobile_app_rouve
+
+timer:
+  main_bathroom_fan:
+    duration: "00:15:00"
+    restore: true
+  bathroom_fan:
+    duration: "00:15:00"
+    restore: true
 
 switch:
   - platform: template
@@ -1132,3 +1144,46 @@ automation:
       - service: switch.turn_off
         target:
           entity_id: switch.main_bedroom_ac_display
+
+  - alias: "Handle Bathroom Fan Timer"
+    id: "26ce241d-177b-4491-81ee-2738b2eee582"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id:
+          - switch.main_bathroom_fan
+          - switch.bathroom_fan
+    action:
+      - variables:
+          timer_id:  "{{ trigger.entity_id | replace('switch', 'timer') }}"
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: "{{ is_state(trigger.entity_id, 'on') }}"
+            sequence:
+              - service: timer.start
+                target:
+                  entity_id: "{{ timer_id }}"
+                data:
+                  duration: "00:15:00"
+        default:
+          - service: timer.cancel
+            target:
+              entity_id: "{{ timer_id }}"
+
+  - alias: "Turn Off Bathroom Fan"
+    id: "de9d354c-912e-4683-b8df-42e9dca58425"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.main_bathroom_fan
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.bathroom_fan
+    action:
+      - service: switch.turn_off
+        target:
+          entity_id: "{{ trigger.event.data.entity_id | replace('timer', 'switch') }}"

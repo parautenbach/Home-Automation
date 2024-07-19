@@ -526,6 +526,8 @@ cards:
                   - garage
                   - living_room
                   - music_room
+                  - living_room
+                  - main_bedroom
                   - non_essential
                   - other
           - entities:
@@ -565,6 +567,16 @@ cards:
                 name: Music Room
                 children:
                   - sensor.music_room_energy
+              - entity_id: living_room
+                type: remaining_child_state
+                name: Living Room
+                children:
+                  - sensor.living_room_ac_energy
+              - entity_id: main_bedroom
+                type: remaining_child_state
+                name: Main Bedroom
+                children:
+                  - sensor.main_bedroom_ac_energy
               - entity_id: non_essential
                 type: remaining_child_state
                 name: Non-essentials
@@ -607,10 +619,19 @@ cards:
                 type: entity
                 name: Music Room Light
                 children: []
+              - entity_id: sensor.living_room_ac_energy
+                type: entity
+                name: Living Room AC
+                children: []
+              - entity_id: sensor.main_bedroom_ac_energy
+                type: entity
+                name: Main Bedroom AC
+                children: []
               - entity_id: sensor.geyser_energy
                 type: entity
                 name: Geyser
                 children: []
+
       # - type: energy-devices-detail-graph
       #   max_devices: 2
       - type: custom:swipe-card

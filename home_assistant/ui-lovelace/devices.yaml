@@ -322,6 +322,18 @@ cards:
             name: Main Bath.
           - entity: switch.bathroom_light
             name: Bathroom
+      - type: history-graph
+        title: ACs and Fans
+        hours_to_show: 48
+        entities:
+          - entity: binary_sensor.living_room_ac
+            name: Living R.
+          - entity: binary_sensor.main_bedroom_ac
+            name: Main Bed.
+          - entity: switch.main_bathroom_fan
+            name: Main Bath.
+          - entity: switch.bathroom_fan
+            name: Bath.
       - type: custom:button-card
         show_label: true
         label: >

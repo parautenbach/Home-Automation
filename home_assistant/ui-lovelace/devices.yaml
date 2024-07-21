@@ -229,6 +229,7 @@ cards:
             rules:
               - from: "Battery"
           sort:
+            - "state"
             - "name"
         - type: custom:auto-entities
           card:
@@ -257,6 +258,9 @@ cards:
           filter:
             include:
               - entity_id: "sensor.*_battery_last_replaced"
+          sort:
+            method: last_changed
+            reverse: true
     - type: custom:auto-entities
       card:
         type: logbook

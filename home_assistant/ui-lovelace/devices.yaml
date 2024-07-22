@@ -327,13 +327,13 @@ cards:
         hours_to_show: 48
         entities:
           - entity: binary_sensor.living_room_ac
-            name: Living R.
+            name: Living R. AC
           - entity: binary_sensor.main_bedroom_ac
-            name: Main Bed.
+            name: Main Bed. AC
           - entity: switch.main_bathroom_fan
-            name: Main Bath.
+            name: Main Bath. F.
           - entity: switch.bathroom_fan
-            name: Bath.
+            name: Bath. F.
       - type: custom:button-card
         show_label: true
         label: >

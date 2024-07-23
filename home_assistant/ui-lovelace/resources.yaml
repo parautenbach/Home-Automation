@@ -468,36 +468,40 @@ cards:
         dashboard_link: /energy
       - type: energy-usage-graph
       - type: custom:sankey-chart
-        layout: horizontal
+        layout: vertical
         min_state: 0
         height: 200
         unit_prefix: k
         round: 1
         show_states: true
         show_units: true
+        show_names: true
         energy_date_selection: true
         sections:
           - entities:
               - entity_id: sensor.pv_energy
                 type: entity
+                name: Solar
                 color: var(--custom-color-yellow)
                 children:
                   - sensor.battery_energy_in
                   - sensor.grid_energy_out
                   - total
               - entity_id: sensor.battery_energy_out
+                type: entity
+                name: Battery
                 subtract_entities:
                   - sensor.battery_energy_in
-                type: entity
                 color: var(--custom-color-magenta)
                 children:
                   - sensor.battery_energy_in
                   - sensor.grid_energy_out
                   - total
               - entity_id: sensor.grid_energy_in
+                type: entity
+                name: Grid In
                 subtract_entities:
                   - sensor.grid_energy_out
-                type: entity
                 color: var(--custom-color-blue)
                 children:
                   - sensor.battery_energy_in
@@ -505,15 +509,17 @@ cards:
                   - total
           - entities:
               - entity_id: sensor.battery_energy_in
+                type: entity
+                name: Battery In
                 subtract_entities:
                   - sensor.battery_energy_out
-                type: entity
                 color: var(--custom-color-green)
                 children: []
               - entity_id: sensor.grid_energy_out
+                type: entity
+                name: Grid Out
                 subtract_entities:
                   - sensor.grid_energy_in
-                type: entity
                 children: []
               - entity_id: total
                 type: remaining_parent_state
@@ -562,16 +568,12 @@ cards:
                 name: Living Room
                 children:
                   - sensor.office_energy
+                  - sensor.living_room_ac_energy
               - entity_id: music_room
                 type: remaining_child_state
                 name: Music Room
                 children:
                   - sensor.music_room_energy
-              - entity_id: living_room
-                type: remaining_child_state
-                name: Living Room
-                children:
-                  - sensor.living_room_ac_energy
               - entity_id: main_bedroom
                 type: remaining_child_state
                 name: Main Bedroom

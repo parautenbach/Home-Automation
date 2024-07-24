@@ -1189,6 +1189,7 @@ automation:
           entity_id: "{{ trigger.event.data.entity_id | replace('timer', 'switch') }}"
       # our assumption is that the fan got turned on during or after someone's left the bathroom,
       # so if the light's on, turn it off too
-      - service: switch.turn_off
-        target:
-          entity_id: "{{ trigger.event.data.entity_id | replace('timer', 'switch') | replace('_fan', '_light') }}"
+      # bad assumption, it seems (regarding the HAF); let's just pay for lights left on. :shrug:
+      # - service: switch.turn_off
+      #   target:
+      #     entity_id: "{{ trigger.event.data.entity_id | replace('timer', 'switch') | replace('_fan', '_light') }}"

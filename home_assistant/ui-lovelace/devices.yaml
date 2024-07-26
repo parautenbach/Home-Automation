@@ -324,7 +324,7 @@ cards:
             name: Bathroom
       - type: history-graph
         title: ACs and Fans
-        hours_to_show: 48
+        hours_to_show: 24
         entities:
           - entity: binary_sensor.living_room_ac
             name: Living R. AC

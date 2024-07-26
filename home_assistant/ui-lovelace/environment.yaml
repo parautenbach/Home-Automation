@@ -154,6 +154,13 @@ cards:
                     entity: switch.main_bedroom_ac_display
                     triggers_update:
                       - climate.main_bedroom_ac
+      - type: history-graph
+        hours_to_show: 24
+        entities:
+          - entity: binary_sensor.living_room_ac
+            name: Living R. AC
+          - entity: binary_sensor.main_bedroom_ac
+            name: Main Bed. AC
       - type: glance
         entities:
           - entity: sensor.office_temperature

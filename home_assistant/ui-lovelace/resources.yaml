@@ -200,15 +200,15 @@ cards:
               color_icon: false
               display_zero: true
               decimals: 1
-            - entity: sensor.living_room_ac_power
-              name: Living Room AC
+            - entity: sensor.acs_power
+              name: ACs
               icon: mdi:air-conditioner
               color_icon: false
               display_zero: true
               decimals: 1
-            - entity: sensor.main_bedroom_ac_power
-              name: Main Bedroom AC
-              icon: mdi:air-conditioner
+            - entity: sensor.home_power_other
+              name: Other
+              icon: mdi:dots-horizontal
               color_icon: false
               display_zero: true
               decimals: 1

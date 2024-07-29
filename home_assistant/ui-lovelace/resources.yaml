@@ -200,9 +200,25 @@ cards:
               color_icon: false
               display_zero: true
               decimals: 1
+            - entity: sensor.living_room_ac_power
+              name: Living Room AC
+              icon: mdi:air-conditioner
+              color_icon: false
+              display_zero: true
+              decimals: 1
+            - entity: sensor.main_bedroom_ac_power
+              name: Main Bedroom AC
+              icon: mdi:air-conditioner
+              color_icon: false
+              display_zero: true
+              decimals: 1
         watt_threshold: 1000
         dashboard_link: /energy
         max_expected_power: 3000  # W
+      # - type: entities
+      #   entities:
+      #     - sensor.living_room_ac_power
+      #     - sensor.main_bedroom_ac_power
       - type: energy-solar-graph
       - type: horizontal-stack
         cards:

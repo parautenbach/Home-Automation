@@ -382,6 +382,8 @@ template:
       - name: "ACs Power"
         unique_id: "d450b906-159f-458d-ad46-0eb8a2b131f5"
         state: "{{ states('living_room_ac_power') | float(0) + states('main_bedroom_ac_power') | float(0) }}"
+        icon: mdi:air-conditioner
+        device_class: power
   # https://community.home-assistant.io/t/trigger-based-template-sensor-using-time-pattern-not-updating/706860
   # https://github.com/home-assistant/core/issues/114195
   # - trigger:

@@ -506,6 +506,7 @@ cards:
             type: 'bullets'
         cards:
           - type: custom:mini-graph-card
+            name: Illuminance
             entities:
               # don't use this if you want to use thresholds: color overrides
               # sensor.sun_illuminance can be very unreliable (operationally); need to use my own light meter
@@ -531,6 +532,7 @@ cards:
               extrema: true
               labels_secondary: false
           - type: custom:mini-graph-card
+            name: Illuminance
             entities:
               - entity: sensor.weather_based_sun_illuminance
                 color: var(--custom-color-yellow)

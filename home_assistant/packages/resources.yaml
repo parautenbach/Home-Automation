@@ -381,7 +381,7 @@ template:
           overhead: "{{ states('sensor.home_power') | int(0) - states('sensor.load_power') | int(0)  }}"
       - name: "ACs Power"
         unique_id: "d450b906-159f-458d-ad46-0eb8a2b131f5"
-        state: "{{ states('living_room_ac_power') | float(0) + states('main_bedroom_ac_power') | float(0) }}"
+        state: "{{ states('sensor.living_room_ac_power') | float(0) + states('sensor.main_bedroom_ac_power') | float(0) }}"
         icon: mdi:air-conditioner
         device_class: power
       - name: "Home Power Other"
@@ -390,9 +390,8 @@ template:
           {% set home = states('sensor.home_power') | float(0) %}
           {% set geyser = states('sensor.geyser_power') | float(0) %}
           {% set outbuilding = states('sensor.outbuilding_power_meter_channel_1_power') | float(0) %}
-          {% set living_room_ac = states('sensor.living_room_ac_power') | float(0) %}
-          {% set main_bedroom_ac = states('sensor.main_bedroom_ac_power') | float(0) %}
-          {{ home - (geyser + outbuilding + living_room_ac + main_bedroom_ac) }}
+          {% set acs = states('sensor.acs_power') | float(0) %}
+          {{ home - (geyser + outbuilding + acs) }}
         icon: mdi:dots-horizontal
         device_class: power
 

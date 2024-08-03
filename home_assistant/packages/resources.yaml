@@ -811,7 +811,7 @@ alert:
     repeat: 1  # every 1 min
     skip_first: true  # but not immediately
     can_acknowledge: false
-    title: "⚠️ [Test] System"
+    title: "⚠️ System"
     message: >-
       {% set minutes = (now() - states.binary_sensor.solarassistant_activity.last_updated).total_seconds() | multiply(1/60) | int or 1 %}
       The SolarAssistant bridge's activity has ceased {{ minutes }} min ago.

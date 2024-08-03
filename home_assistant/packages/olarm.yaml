@@ -272,7 +272,7 @@ automation:
           # should we rather notify in the above sequence blocks? this would be a potential solution (workaround?) for the
           # api bug noted in the "Alarm State Changed" automation, because we will only execute this if the physical panel's
           # actual state changed. on the other hand, we might change the state from home assistant, and the panel's state
-          # will then be set, but the call to olarm will still silently fail, so the state's will still be out of sync.
+          # will then be set, but the call to olarm will still silently fail, so the state will still be out of sync.
         default:
           - service: system_log.write
             data:

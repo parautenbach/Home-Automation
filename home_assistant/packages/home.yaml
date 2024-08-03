@@ -1190,6 +1190,11 @@ automation:
       # our assumption is that the fan got turned on during or after someone's left the bathroom,
       # so if the light's on, turn it off too
       # bad assumption, it seems (regarding the HAF); let's just pay for lights left on. :shrug:
-      # - service: switch.turn_off
-      #   target:
-      #     entity_id: "{{ trigger.event.data.entity_id | replace('timer', 'switch') | replace('_fan', '_light') }}"
+      # although, this is only a problem if it's dark, right!?
+      - condition:
+          - condition: state
+            entity_id: binary_sensor.daytime
+            state: "on"
+      - service: switch.turn_off
+        target:
+          entity_id: "{{ trigger.event.data.entity_id | replace('timer', 'switch') | replace('_fan', '_light') }}"

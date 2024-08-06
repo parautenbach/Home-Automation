@@ -1,3 +1,26 @@
+# https://developers.home-assistant.io/docs/core/entity/light#color-modes
+# https://docs.google.com/document/d/1dKHC0RpkIaUknPdXAXND3EDOuK1YGLlVsgABEkvwz4Q/edit
+#
+# colour modes by brand/model:
+#   * tp-link lb130:
+#       color_temp, hs
+#       2500-9000 K / 400-111 mireds
+#   * shelly duo:
+#       color_temp
+#       2700-6500 K / 370-153 mireds
+#   * shelly duo rgbw:
+#       color_temp, rgb
+#       3000-6500 K / 333-153 mireds
+#   * shelly rgbw2:
+#       rgbw
+#       (no color_temp)
+#   * magic home (corner lights):
+#       rgb
+#       (no color_temp)
+#   * yeelight (xiaomi mi):
+#       color_temp, hs
+#       2000-6535 K / 500/-153 mireds
+
 homeassistant:
   customize:
     switch.living_room_lamp:

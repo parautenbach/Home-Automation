@@ -85,7 +85,13 @@ notify:
       - service: mobile_app_rouve
 
 timer:
+  main_bathroom_light:
+    duration: "00:15:00"
+    restore: true
   main_bathroom_fan:
+    duration: "00:15:00"
+    restore: true
+  bathroom_light:
     duration: "00:15:00"
     restore: true
   bathroom_fan:
@@ -1145,13 +1151,15 @@ automation:
         target:
           entity_id: switch.main_bedroom_ac_display
 
-  - alias: "Handle Bathroom Fan Timer"
+  - alias: "Handle Bathroom Timers"
     id: "26ce241d-177b-4491-81ee-2738b2eee582"
     initial_state: true
     trigger:
       - platform: state
         entity_id:
+          - switch.main_bathroom_light
           - switch.main_bathroom_fan
+          - switch.bathroom_light
           - switch.bathroom_fan
     action:
       - variables:
@@ -1187,14 +1195,24 @@ automation:
       - service: switch.turn_off
         target:
           entity_id: "{{ trigger.event.data.entity_id | replace('timer', 'switch') }}"
-      # our assumption is that the fan got turned on during or after someone's left the bathroom,
-      # so if the light's on, turn it off too
-      # bad assumption, it seems (regarding the HAF); let's just pay for lights left on. :shrug:
-      # although, this is only a problem if it's dark, right!?
-      - condition:
-          - condition: state
-            entity_id: binary_sensor.daytime
-            state: "on"
+
+  - alias: "Turn Off Bathroom Light"
+    id: "75b24d88-6e5a-4549-874c-02aec4a1d95b"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.main_bathroom_light
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.bathroom_light
+    condition:
+      - condition: state
+        entity_id: binary_sensor.daytime
+        state: "on"
+    action:
       - service: switch.turn_off
         target:
-          entity_id: "{{ trigger.event.data.entity_id | replace('timer', 'switch') | replace('_fan', '_light') }}"
+          entity_id: "{{ trigger.event.data.entity_id | replace('timer', 'switch') }}"

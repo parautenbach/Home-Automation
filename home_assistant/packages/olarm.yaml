@@ -411,7 +411,12 @@ automation:
       - platform: time
         at: "22:00:00"
         id: "weekends"
+      - platform: state
+        entity_id: sensor.ceres_battery_state
+        from: 'Not Charging'  # Can be to Charging or Full
     condition:
+      - condition: time
+        after: "20:00:00"
       - condition: state
         entity_id: alarm_control_panel.home
         state: "disarmed"

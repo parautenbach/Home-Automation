@@ -293,7 +293,6 @@ automation:
       - service: notify.mobile_app_ceres
         data:
           title: "🚨 Security"
-          # todo: check for active zones
           # todo: specialise alert according to a panic, fire, medical alarm
           #       if we have this, we can e.g. contact the fire department or call for an ambulance automatically
           #       or maybe the security company will already triage this when receiving the panic signal

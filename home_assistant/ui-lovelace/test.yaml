@@ -35,6 +35,26 @@ cards:
         name: Living Room
       - entity: climate.main_bedroom_ac
         name: Main Bedroom
+  - type: custom:mini-graph-card
+    name: Aircons
+    entities:
+      - entity: sensor.living_room_ac_indoor_temperature
+        name: Living Room (AC)
+      - entity: sensor.office_temperature
+        name: Living Room (Office)
+      - entity: sensor.main_bedroom_ac_indoor_temperature
+        name: Main Bedroom (AC)
+      - entity: sensor.main_bedroom_ht_temperature
+        name: Main Bedroom
+    hours_to_show: 24
+    hour24: true
+    smoothing: true
+    points_per_hour: 1
+    line_width: 2
+    show:
+      extrema: true
+      average: true
+      labels_secondary: false
   # https://www.home-assistant.io/integrations/amcrest/
   # - type: picture-elements
   #   image: camera.baby_monitor_profile000

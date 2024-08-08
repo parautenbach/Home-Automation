@@ -6,6 +6,7 @@ homekit: !include homekit.yaml
 # https://www.home-assistant.io/docs/configuration/basic/
 homeassistant:
   name: Home
+  # internal_url: !secret homeassistant_internal_url
   latitude: !secret home_latitude
   longitude: !secret home_longitude
   elevation: !secret home_elevation
@@ -43,6 +44,7 @@ logger:
     # homeassistant.components.shelly: debug
     # homeassistant.components.aioshelly: debug
     # homeassistant.components.script: debug
+    # homeassistant.components.olarm: debug
     # homeassistant.components.resources_package: debug
     # homeassistant.components.template.weather: debug
     # homeassistant.components.openuv: debug

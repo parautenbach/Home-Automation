@@ -384,6 +384,7 @@ template:
         state: "{{ states('sensor.living_room_ac_power') | float(0) + states('sensor.main_bedroom_ac_power') | float(0) }}"
         icon: mdi:air-conditioner
         device_class: power
+        unit_of_measurement: W
       - name: "Home Power Other"
         unique_id: "ce771aeb-49ae-4777-816a-2af98c4939d9"
         state: >-
@@ -394,6 +395,7 @@ template:
           {{ home - (geyser + outbuilding + acs) }}
         icon: mdi:dots-horizontal
         device_class: power
+        unit_of_measurement: W
 
   # https://community.home-assistant.io/t/trigger-based-template-sensor-using-time-pattern-not-updating/706860
   # https://github.com/home-assistant/core/issues/114195

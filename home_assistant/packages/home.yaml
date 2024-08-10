@@ -89,7 +89,7 @@ timer:
     duration: "00:15:00"
     restore: true
   main_bathroom_fan:
-    duration: "00:15:00"
+    duration: "00:30:00"
     restore: true
   bathroom_light:
     duration: "00:15:00"
@@ -1173,7 +1173,7 @@ automation:
                 target:
                   entity_id: "{{ timer_id }}"
                 data:
-                  duration: "00:15:00"
+                  duration: "{{ '00:30:00' if trigger.entity_id == 'switch.main_bathroom_light' else '00:15:00' }}"
         default:
           - service: timer.cancel
             target:

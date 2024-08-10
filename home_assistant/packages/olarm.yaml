@@ -364,23 +364,28 @@ automation:
       # delivery of the notification can be slow
       # so, even if this triggers immediately, it may only be delivered after the garage door has been opened
       # the traces and history shows the order of events are correct
-      - service: notify.mobile_app_ceres
-        data:
-          title: "🔒 Security"
-          message: >-
-            You arrived home. Would you like to disarm the alarm?
-          data:
-            group: "home-security"
-            url: homeassistant://navigate/lovelace/security
-            actions:
-              - action: "DISARM_ALARM"
-                title: "Disarm now"
-                destructive: true
-            push:
-              sound:
-                name: default
-                critical: 1
-                volume: 0.5
+      # this delay should prevent the false positive
+      - delay:
+          seconds: 15
+      - if: "{{ not is_state('alarm_control_panel.home', 'disarmed') }}"
+        then:
+          - service: notify.mobile_app_ceres
+            data:
+              title: "🔒 Security"
+              message: >-
+                You arrived home. Would you like to disarm the alarm?
+              data:
+                group: "home-security"
+                url: homeassistant://navigate/lovelace/security
+                actions:
+                  - action: "DISARM_ALARM"
+                    title: "Disarm now"
+                    destructive: true
+                push:
+                  sound:
+                    name: default
+                    critical: 1
+                    volume: 0.5
 
   - alias: "Turn On Yard Lights If Alarm Triggered"
     id: "50147e47-23b5-4ed4-973c-0c1e5243c731"

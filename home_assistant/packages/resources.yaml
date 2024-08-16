@@ -33,6 +33,10 @@ homeassistant:
       icon: mdi:delta
     binary_sensor.grid_charge_point_status:
       icon: mdi:transmission-tower
+    climate.living_room_ac:
+      non_essential: True
+    climate.main_bedroom_ac:
+      non_essential: True
 
 binary_sensor:
   - platform: template
@@ -1055,7 +1059,7 @@ automation:
     action:
       - variables:
           battery_soc: "{{ states('sensor.battery_state_of_charge') | int(0) }}"
-          message: "The backup power battery's charge is low ({{ battery_soc }}%). Please conserve energy."
+          message: "The backup power battery's charge is low ({{ battery_soc }}%). Please conserve energy. Non-essential appliances will be turned off."
       # only a critical sound notification if the grid is off, otherwise just a normal notification
       # the hard limit for the inverter/battery is set to 20%, so it won't got below 20% if the grid is connected
       - choose:
@@ -1088,6 +1092,16 @@ automation:
   - alias: "Turn Off Non-essential Appliances When Critical Battery Threshold Reached"
     id: "7de9f0ac-0135-4594-9133-462fad3914fd"
     initial_state: true
+    variables:
+      appliances: >-
+        {{
+          states.sensor
+            | selectattr('attributes.non_essential', 'defined')
+            | selectattr('attributes.non_essential', 'eq', True)
+            | rejectattr('state', 'in', ['unavailable', 'unknown', 'none'])
+            | map(attribute='entity_id')
+            | list
+        }}
     trigger:
       - platform: numeric_state
         entity_id: sensor.battery_state_of_charge
@@ -1097,9 +1111,22 @@ automation:
           # combine this automation with above alert?
           minutes: 10
     action:
-      - service: climate.turn_off
+      - variables:
+          message: >-
+            The following non-essential appliances have been turned off due to a low backup power battery:
+            {%- for a in appliances %}
+              - {{ state_attr(b, 'friendly_name') }}
+            {%- endfor %}
+      - service: homeassistant.turn_off
         target:
-          entity_id: all
+          entity_id: "{{ appliances }}"
+      - service: notify.family
+        data:
+          title: "🪫 Energy"
+          message: "{{ message }}"
+          data:
+            group: "home-electricity"
+            url: homeassistant://navigate/lovelace/resources
 
   - alias: "Charging From Grid When Not Supposed To"
     id: "085cfb32-deb1-4a04-af50-9dcd5bfaa9c0"

@@ -153,11 +153,13 @@ binary_sensor:
       anybody_home:
         friendly_name: "Anybody Home"
         value_template: >-
-          {{ is_state("binary_sensor.pieter_present", "on") or is_state("binary_sensor.rouve_present", "on") or
-             is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on") }}
+          {{ (is_state("binary_sensor.pieter_present", "on") or is_state("binary_sensor.rouve_present", "on") or
+              is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on")) and
+             not is_state("alarm_control_panel.home", "armed_away") }}
         icon_template: >-
-          {% if is_state("binary_sensor.pieter_present", "on") or is_state("binary_sensor.rouve_present", "on") or
-                is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on") %}
+          {% if (is_state("binary_sensor.pieter_present", "on") or is_state("binary_sensor.rouve_present", "on") or
+                 is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on")) and
+                not is_state("alarm_control_panel.home", "armed_away") %}
             mdi:home-account
           {% else %}
             mdi:home

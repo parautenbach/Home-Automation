@@ -4,20 +4,6 @@ homeassistant:
       entity_picture: '/local/pieter.jpg'
     person.rouve_rautenbach:
       entity_picture: '/local/rouve.jpg'
-    switch.guest_mode:
-      friendly_name: Guest Mode
-      icon: mdi:briefcase-outline
-    switch.contractor_mode:
-      friendly_name: Contractor Mode
-      icon: mdi:account-hard-hat
-    input_boolean.pieter_present:
-      icon: mdi:account
-    input_boolean.rouve_present:
-      icon: mdi:account
-    input_boolean.guest_mode:
-      icon: mdi:briefcase-outline
-    input_boolean.contractor_mode:
-      icon: mdi:account-hard-hat-outline
     sensor.google_travel_time:
       device_class: duration
     sensor.google_travel_time_filtered:
@@ -59,7 +45,7 @@ input_boolean:
     icon: mdi:briefcase-outline
   contractor_mode:
     name: Contractor Mode
-    icon: mdi:worker
+    icon: mdi:account-hard-hat-outline
   skip_next_wake_up_time:
     name: Skip Next Wake Up Time
     icon: mdi:alarm-off
@@ -98,26 +84,6 @@ timer:
     duration: "00:15:00"
     restore: true
 
-switch:
-  - platform: template
-    switches:
-      guest_mode:
-        value_template: "{{ is_state('input_boolean.guest_mode', 'on') }}"
-        turn_on:
-          - service: input_boolean.turn_on
-            entity_id: input_boolean.guest_mode
-        turn_off:
-          - service: input_boolean.turn_off
-            entity_id: input_boolean.guest_mode
-      contractor_mode:
-        value_template: "{{ is_state('input_boolean.contractor_mode', 'on') }}"
-        turn_on:
-          - service: input_boolean.turn_on
-            entity_id: input_boolean.contractor_mode
-        turn_off:
-          - service: input_boolean.turn_off
-            entity_id: input_boolean.contractor_mode
-
 binary_sensor:
   - platform: template
     sensors:
@@ -146,10 +112,6 @@ binary_sensor:
           minutes: 15
         value_template: >-
           {{ is_state("binary_sensor.housekeeper_mobile_phone", "on") }}
-      contractor_mode:
-        friendly_name: "Contractor Mode"
-        value_template: >-
-          {{ is_state("input_boolean.contractor_mode", "on") }}
       anybody_home:
         friendly_name: "Anybody Home"
         value_template: >-
@@ -568,14 +530,14 @@ automation:
           #       for:
           #         minutes: 5
           #     - condition: state
-          #       entity_id: binary_sensor.contractor_mode
+          #       entity_id: input_boolean.contractor_mode
           #       state: "on"
           #     - condition: state
           #       entity_id: alarm_control_panel.home
           #       state: "disarmed"
           # if guest mode is on, someone could be parked in or in front of the garage
           - condition: state
-            entity_id: switch.guest_mode
+            entity_id: input_boolean.guest_mode
             state: "off"
     action:
       - wait_template: >-
@@ -598,7 +560,7 @@ automation:
     id: "86443a8d-cc5d-4017-a7f8-190e9eccc8cc"
     trigger:
       - platform: state
-        entity_id: switch.contractor_mode
+        entity_id: input_boolean.contractor_mode
         to: "on"
     mode: queued
     action:
@@ -618,7 +580,7 @@ automation:
     id: "123e8e79-6f0e-48f5-a400-951922bf9b80"
     trigger:
       - platform: state
-        entity_id: switch.contractor_mode
+        entity_id: input_boolean.contractor_mode
         to: "off"
     mode: queued
     action:
@@ -647,11 +609,11 @@ automation:
         entity_id: calendar.housekeeping
         state: "on"
       - condition: state
-        entity_id: switch.contractor_mode
+        entity_id: input_boolean.contractor_mode
         state: "off"
     action:
-      - service: switch.turn_on
-        entity_id: switch.contractor_mode
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.contractor_mode
       # cleaning day lights
       - service: light.turn_on
         target:
@@ -711,13 +673,13 @@ automation:
         event: start
     condition:
       - condition: state
-        entity_id: switch.contractor_mode
+        entity_id: input_boolean.contractor_mode
         state: "on"
       - condition: time
         after: "16:00:00"
     action:
-      - service: switch.turn_off
-        entity_id: switch.contractor_mode
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.contractor_mode
 
   - alias: "Contractor Mode Still Enabled Alert"
     id: "f64b90bf-9234-42d1-a3b7-b34443fd3ea6"
@@ -729,7 +691,7 @@ automation:
       - condition: and
         conditions:
           - condition: state
-            entity_id: switch.contractor_mode
+            entity_id: input_boolean.contractor_mode
             state: "on"
           - condition: time
             after: "17:00:00"
@@ -754,8 +716,8 @@ automation:
         event_data:
           action: DISABLE_CONTRACTOR_MODE
     action:
-      - service: switch.turn_off
-        entity_id: switch.contractor_mode
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.contractor_mode
 
   - alias: "Enable Contractor Mode From Alert Action"
     id: "84c0360f-3154-4705-904e-ca50ffedce47"
@@ -765,8 +727,8 @@ automation:
         event_data:
           action: ENABLE_CONTRACTOR_MODE
     action:
-      - service: switch.turn_on
-        entity_id: switch.contractor_mode
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.contractor_mode
 
   - alias: "Disable Guest Mode When Getting Home"
     id: "a113f957-602f-44ca-b1a4-559bafab4835"
@@ -780,17 +742,17 @@ automation:
         to: "on"
     condition:
       - condition: state
-        entity_id: switch.guest_mode
+        entity_id: input_boolean.guest_mode
         state: "on"
     action:
-      - service: switch.turn_off
-        entity_id: switch.guest_mode
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.guest_mode
 
   - alias: "Guest Mode Enabled Alert"
     id: "6f1be18f-6a43-4512-b537-0bd8aa1581d2"
     trigger:
       - platform: state
-        entity_id: switch.guest_mode
+        entity_id: input_boolean.guest_mode
         to: "on"
     mode: queued
     action:
@@ -809,7 +771,7 @@ automation:
     id: "f0aff94c-3b99-4917-b399-6f709cdbf80b"
     trigger:
       - platform: state
-        entity_id: switch.guest_mode
+        entity_id: input_boolean.guest_mode
         to: "off"
     mode: queued
     action:
@@ -833,8 +795,8 @@ automation:
         event_data:
           action: ENABLE_GUEST_MODE
     action:
-      - service: switch.turn_on
-        entity_id: switch.guest_mode
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.guest_mode
 
   - alias: "Disable Guest Mode From Alert Action"
     id: "0ad8eed7-dbd3-412f-b1d8-99f3ee74368c"
@@ -845,8 +807,8 @@ automation:
         event_data:
           action: DISABLE_GUEST_MODE
     action:
-      - service: switch.turn_off
-        entity_id: switch.guest_mode
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.guest_mode
 
   - alias: "Set Vacation"
     id: "a5e5cc6f-f66b-458e-9b63-0a60ef5be6a9"

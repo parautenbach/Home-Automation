@@ -1752,6 +1752,9 @@ automation:
       - condition: state
         entity_id: binary_sensor.grid_feed
         state: "off"
+      - condition: state
+        entity_id: binary_sensor.tenant_present
+        state: "on"
     action:
       - variables:
           power: "{{ states('sensor.outbuilding_power_1min_90th_percentile') | float(0) | multiply(1/1000) | round(1) }}"
@@ -1784,10 +1787,13 @@ automation:
         not_from:
           - "unavailable"
           - "unknown"
-    # condition:
-    #   - condition: time
-    #     after: "05:00:00"
-    #     before: "23:00:00"
+    condition:
+      - condition: state
+        entity_id: binary_sensor.tenant_present
+        state: "on"
+      # - condition: time
+      #   after: "05:00:00"
+      #   before: "23:00:00"
     action:
       - variables:
           message: "The property has switched to backup power. Please mind your energy usage."
@@ -1810,10 +1816,13 @@ automation:
         not_from:
           - "unavailable"
           - "unknown"
-    # condition:
-    #   - condition: time
-    #     after: "05:00:00"
-    #     before: "23:00:00"
+    condition:
+      - condition: state
+        entity_id: binary_sensor.tenant_present
+        state: "on"
+      # - condition: time
+      #   after: "05:00:00"
+      #   before: "23:00:00"
     action:
       - variables:
           message: "Grid power to the property has been restored."

@@ -414,15 +414,15 @@ cards:
             name: Tenant
           - entity: binary_sensor.housekeeper_present
             name: Housekeeper
-          - entity: binary_sensor.contractor_mode
+          - entity: input_boolean.contractor_mode
             name: Contractors
-          - entity: switch.guest_mode
+          - entity: input_boolean.guest_mode
             name: Guests
       - type: entities
         title: Special Modes
         entities:
-          - switch.guest_mode
-          - switch.contractor_mode
+          - input_boolean.guest_mode
+          - input_boolean.contractor_mode
         show_header_toggle: false
       # https://community.home-assistant.io/t/styling-tile-cards/696907/10
       # https://community.home-assistant.io/t/card-mod-for-tile-card-icon-tile-color/657214/52

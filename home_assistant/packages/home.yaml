@@ -46,6 +46,9 @@ input_boolean:
   contractor_mode:
     name: Contractor Mode
     icon: mdi:account-hard-hat-outline
+  tenant_mode:
+    name: Tenant Mode
+    icon: mdi:account
   skip_next_wake_up_time:
     name: Skip Next Wake Up Time
     icon: mdi:alarm-off
@@ -218,6 +221,19 @@ script:
           entity_id: "{{ camera_entity_id }}"
         data:
           filename: '/home/homeassistant/.homeassistant/www/gallery/{{ subdirectory }}/{{ camera_entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+  notify_tenant:
+    fields:
+      message:
+        description: "A text message to send via SMS."
+        example: "Lorem ipsum dolor sit amet..."
+    mode: parallel
+    sequence:
+      - condition: state
+        entity_id: input_boolean.tenant_mode
+        state: "on"
+      - service: notify.tenant_sms
+        data:
+          message: "{{ message }}"
 
 automation:
   - alias: "Away Mode"

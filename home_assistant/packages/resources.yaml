@@ -1194,9 +1194,15 @@ automation:
                 name: default
                 critical: 1
                 volume: 0.5
-      - service: notify.tenant_sms
+      - condition: state
+        entity_id: binary_sensor.tenant_present
+        state: "on"
+      - service: script.turn_on
+        target:
+          entity_id: script.notify_tenant
         data:
-          message: "The backup power system's load is critical. Please reduce consumption immediately to avoid a power outage."
+          variables:
+            message: "The backup power system's load is critical. Please reduce consumption immediately to avoid a power outage."
 
   - alias: "Detect When SolarAssistant MQTT Bridge Activity Ceases"
     id: "3febc063-c872-4847-8abb-0ce1a4186887"
@@ -1762,9 +1768,12 @@ automation:
                 name: default
                 critical: 1
                 volume: 0.5
-      - service: notify.tenant_sms
+      - service: script.turn_on
+        target:
+          entity_id: script.notify_tenant
         data:
-          message: "The property is running off backup power. Please mind your energy usage: You've been drawing {{ power }} kW for {{ minutes }} min."
+          variables:
+            message: "The property is running off backup power. Please mind your energy usage: You've been drawing {{ power }} kW for {{ minutes }} min."
 
   - alias: "Notify Tenant When On Backup Power"
     id: "9a727e25-af28-4fa0-85e0-3b4b8ebed8dd"
@@ -1782,9 +1791,12 @@ automation:
     action:
       - variables:
           message: "The property has switched to backup power. Please mind your energy usage."
-      - service: notify.tenant_sms
+      - service: script.turn_on
+        target:
+          entity_id: script.notify_tenant
         data:
-          message: "{{ message }}"
+          variables:
+            message: "{{ message }}"
       # - service: notify.pieter_sms
       #   data:
       #     message: "{{ message }}"
@@ -1805,9 +1817,12 @@ automation:
     action:
       - variables:
           message: "Grid power to the property has been restored."
-      - service: notify.tenant_sms
+      - service: script.turn_on
+        target:
+          entity_id: script.notify_tenant
         data:
-          message: "{{ message }}"
+          variables:
+            message: "{{ message }}"
       # - service: notify.pieter_sms
       #   data:
       #     message: "{{ message }}"

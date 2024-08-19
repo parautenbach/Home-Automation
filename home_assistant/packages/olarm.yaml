@@ -519,17 +519,28 @@ automation:
         response_variable: olarm_response
       - if: "{{ olarm_response.status == 200 and olarm_response.content.actionStatus == 'OK' }}"
         then:
+          - variables:
+              area: >-
+                {{ trigger.entity_id | replace('alarm_control_panel.', '') }}
+              message: >-
+                The {{ area }}'s alarm was {{ state }} at {{ now().strftime('%H:%M') }}.
           - service: notify.mobile_app_ceres
             data:
               title: "🔒 Security"
               # todo: user (can be from olarm or HA context; tricky to get right)
               # todo: list bypassed zones, if any
-              message: >-
-                {% set area = trigger.entity_id | replace('alarm_control_panel.', '') %}
-                The alarm's {{ area }} partition was {{ state }} at {{ now().strftime('%H:%M') }}.
+              message: "{{ message }}"
               data:
                 group: "home-security"
                 url: homeassistant://navigate/lovelace/security
+          - condition: template
+            value_template: "{{ area == 'flatlet' }}"
+          - service: script.turn_on
+            target:
+              entity_id: script.notify_tenant
+            data:
+              variables:
+                message: "{{ message }}"
         else:
           - service: system_log.write
             data:

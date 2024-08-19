@@ -1110,6 +1110,15 @@ automation:
         for:
           # combine this automation with above alert?
           minutes: 10
+      - platform: state
+        entity_id: binary_sensor.grid_feed
+        to: "off"
+    condition:
+      - condition: template
+        value_template: >-
+          {{ appliances | count > 0 and
+             is_state('binary_sensor.grid_feed', 'off') and
+             states('sensor.battery_state_of_charge') | int(0) < 21 }}
     action:
       - variables:
           message: >-

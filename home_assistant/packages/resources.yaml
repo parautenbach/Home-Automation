@@ -1059,7 +1059,7 @@ automation:
     action:
       - variables:
           battery_soc: "{{ states('sensor.battery_state_of_charge') | int(0) }}"
-          message: "The backup power battery's charge is low ({{ battery_soc }}%). Please conserve energy. Non-essential appliances will be turned off."
+          message: "The backup power battery's charge is low ({{ battery_soc }}%). Please conserve energy."
       # only a critical sound notification if the grid is off, otherwise just a normal notification
       # the hard limit for the inverter/battery is set to 20%, so it won't got below 20% if the grid is connected
       - choose:
@@ -1093,6 +1093,7 @@ automation:
     id: "7de9f0ac-0135-4594-9133-462fad3914fd"
     initial_state: true
     variables:
+      battery_soc: "{{ states('sensor.battery_state_of_charge') | int(0) }}"
       appliances: >-
         {{
           states.sensor
@@ -1122,7 +1123,7 @@ automation:
     action:
       - variables:
           message: >-
-            The following non-essential appliances have been turned off due to a low backup power battery:
+            The following non-essential appliances have been turned off due to running solely on backup power and a low battery ({{ battery_soc }}%):
             {%- for a in appliances %}
               - {{ state_attr(b, 'friendly_name') }}
             {%- endfor %}

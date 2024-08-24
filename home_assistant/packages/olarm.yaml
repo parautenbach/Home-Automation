@@ -366,7 +366,7 @@ automation:
       # the traces and history shows the order of events are correct
       # this delay should prevent the false positive
       - delay:
-          seconds: 15
+          seconds: 30
       - if: "{{ not is_state('alarm_control_panel.home', 'disarmed') }}"
         then:
           - service: notify.mobile_app_ceres

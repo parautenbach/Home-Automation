@@ -763,20 +763,17 @@ rest:
     headers:
       Accept: 'application/json'
     method: GET
-    scan_interval: 3600  # 60 min
+    # an alert seems to last 6 hours, but then they'll re-issue the same alert 6 hours later
+    scan_interval: 43200  # 60*60*12
     timeout: 15
     sensor:
-      - name: Weather Alert
+      - name: Weather Alerts
         icon: mdi:alert-outline
         value_template: "{{ value_json.alerts.alert | count }}"
         unit_of_measurement: count
-        # where assuming the alerts are ordered in time with the first entry the current alert or the next one if there are no current ones
-        json_attributes_path: "$.alerts.alert.0"
+        json_attributes_path: "$.alerts"
         json_attributes:
-          - event
-          - effective
-          - expires
-          - desc
+          - alert
 
 automation:
   - alias: "Download Dam Levels Data"
@@ -876,7 +873,7 @@ automation:
     initial_state: true
     trigger:
       - platform: state
-        entity_id: sensor.weather_alert
+        entity_id: sensor.weather_alerts
     condition:
       # not to 0 is obvious: there's no alert, so nothing to notify
       # otherwise, we can go from 0 to 1, or 0 to 2, or more
@@ -888,47 +885,51 @@ automation:
           {% set to = trigger.to_state.state | int(0) %}
           {{ from == 0 and to != 0 }}
     action:
-      - variables:
-          message: >-
-            {% set event = state_attr('sensor.weather_alert', 'event') %}
-            {% set from = state_attr('sensor.weather_alert', 'effective') | as_datetime(0) | as_local %}
-            {% set from_str = from.strftime('%A %-d %B') %}
-            {% set to = state_attr('sensor.weather_alert', 'expires') | as_datetime(0) | as_local %}
-            {% set to_str = to.strftime('%A %-d %B') %}
-            {% set event_body = event | capitalize %}
-            {% set desc = state_attr('sensor.weather_alert', 'desc') %}
-            {%- if from.date() == to.date() -%}
-              {{ event_body }} on {{ from_str }}:
-            {%- else -%}
-              {{ event_body }} from {{ from_str }} until {{ to_str }}:
-            {%- endif %}
-            {%- for line in desc.split('\n') %}
-              - {{ line }}
-            {%- endfor %}
-      # only a critical sound notification when it's not night
-      - choose:
-          - conditions:
-              - condition: time
-                after: "08:00:00"
-                before: "20:00:00"
-            sequence:
-              - service: notify.family
-                data:
-                  title: "⚠️ Extreme Weather"
-                  message: "{{ message }}"
+      - repeat:
+          for_each: "{{ state_attr('sensor.weather_alerts', 'alert') | sort(attribute='effective') }}"
+          sequence:
+            - variables:
+                message: >-
+                  {%- set event = repeat.item['event'] %}
+                  {%- set from = repeat.item['effective'] | as_datetime(0) | as_local %}
+                  {%- set from_str = from.strftime('%A %-d %B') %}
+                  {%- set to = repeat.item['expires'] | as_datetime(0) | as_local %}
+                  {%- set to_str = to.strftime('%A %-d %B') %}
+                  {%- set event_body = event | capitalize %}
+                  {# api encoding bug #}
+                  {%- set desc = repeat.item['desc'] | replace('Â', '') %}
+                  {%- if from.date() == to.date() -%}
+                    {{ event_body }} for {{ from_str }}:
+                  {%- else -%}
+                    {{ event_body }} from {{ from_str }} until {{ to_str }}:
+                  {%- endif %}
+                  {%- for line in desc.split('\n') %}
+                    - {{ line }}
+                  {%- endfor %}
+            # only a critical sound notification when it's not night
+            - choose:
+                - conditions:
+                    - condition: time
+                      after: "08:00:00"
+                      before: "20:00:00"
+                  sequence:
+                    - service: notify.family
+                      data:
+                        title: "⚠️ Extreme Weather"
+                        message: "{{ message }}"
+                        data:
+                          group: "weather"
+                          url: homeassistant://navigate/lovelace/environment
+                          push:
+                            sound:
+                              name: default
+                              critical: 1
+                              volume: 0.5
+              default:
+                - service: notify.family
                   data:
-                    group: "weather"
-                    url: homeassistant://navigate/lovelace/environment
-                    push:
-                      sound:
-                        name: default
-                        critical: 1
-                        volume: 0.5
-        default:
-          - service: notify.family
-            data:
-              title: "⚠️ Extreme Weather"
-              message: "{{ message }}"
-              data:
-                group: "weather"
-                url: homeassistant://navigate/lovelace/environment
+                    title: "⚠️ Extreme Weather"
+                    message: "{{ message }}"
+                    data:
+                      group: "weather"
+                      url: homeassistant://navigate/lovelace/environment

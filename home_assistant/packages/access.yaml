@@ -264,7 +264,7 @@ automation:
           - service: notify.family
             data:
               title: "🔔 Security"
-              message: "Someone rang the doorbell."
+              message: "The doorbell rang."
               # todo: thumbnail, url
               data:
                 group: "doorbell"

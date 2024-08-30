@@ -810,7 +810,7 @@ automation:
               {%- set from = trigger.from_state.attributes[attribute] | lower -%}
               {%- set to = trigger.to_state.attributes[attribute] | lower -%}
               {%- if from != to and (from != 'unavailable' or to != 'unavailable') -%}
-                {{ name }}: changed from {{ from }} to {{ to }}
+                {{ name }}: {{ from }} → {{ to }}
               {%- else -%}
                 {{ name }}: {{ to }}
               {%- endif -%}

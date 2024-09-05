@@ -276,7 +276,7 @@ automation:
         from: "on"
         to: "off"
         for:
-          minutes: 1
+          minutes: 2
       - platform: state
         entity_id: binary_sensor.internet_connection
         from: "off"
@@ -291,6 +291,15 @@ automation:
       - condition: time
         after: "05:00:00"
         before: "23:00:00"
+      - condition: template
+        # when the state has changed to off, we want to notify when the "for" threshold has been reached,
+        # but when it changed to on, we only want to notify if we notified that it was off before,
+        # otherwise we may notify that it's on after an outage shorter than the minimum we care about.
+        # 120 seconds below matches the for: 2 min in the trigger above
+        value_template: >-
+          {{ trigger.to_state.state == "off" or
+             (trigger.to_state.state == "on" and
+              (utcnow() - trigger.from_state.last_changed).total_seconds() >= 120) }}
     action:
       - service: notify.mobile_app_ceres
         data:

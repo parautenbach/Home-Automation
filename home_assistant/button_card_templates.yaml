@@ -160,21 +160,22 @@ rgb_light:
     label:
       - color: var(--paper-item-icon-color)
       - padding-left: 1ex
+    # ditching this due to the variation in colour accuracy of different brands
     # https://community.home-assistant.io/t/lovelace-button-card/65981/4599
     # https://community.home-assistant.io/t/lovelace-button-card/65981/4788
-    icon:
-      - color: |
-          [[[
-            if (variables.above_threshold) {  // above threshold == white here
-              return "var(--paper-item-icon-active-color)";
-            } else if (entity.state === "on") {
-              return "var(--button-card-light-color)";  // already includes brightness/color support
-            } else if (entity.state === "off") {  // off
-              return "var(--paper-item-icon-color)";
-            } else { // unavailable
-              return "var(--primary-text-color)";
-            }
-          ]]]
+    # icon:
+    #   - color: |
+    #       [[[
+    #         if (variables.above_threshold) {  // above threshold == white here
+    #           return "var(--paper-item-icon-active-color)";
+    #         } else if (entity.state === "on") {
+    #           return "var(--button-card-light-color)";  // already includes brightness/color support
+    #         } else if (entity.state === "off") {  // off
+    #           return "var(--paper-item-icon-color)";
+    #         } else { // unavailable
+    #           return "var(--primary-text-color)";
+    #         }
+    #       ]]]
       - filter: "[[[ return variables.above_threshold ? `brightness(${(entity.attributes.brightness/255 + 1)/2})` : null; ]]]"
     card:
       - font-size: 12px

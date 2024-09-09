@@ -115,7 +115,7 @@ weather:
 illuminance:
     name: Weather-Based Sun Illuminance
     unique_id: "ad67d49a-4db4-49c0-81b1-1e068df41b31"
-    entity_id: weather.openweathermap_daily
+    entity_id: weather.openweathermap_hourly
     mode: normal
     fallback: 10
     scan_interval:

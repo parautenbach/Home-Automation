@@ -53,7 +53,7 @@ binary_sensor:
         friendly_name: HACS Updater
         device_class: update
         value_template: >
-         {{ states('sensor.hacs') | int(0) > 0 }}
+         {{ integration_entities('hacs') | select('match', '^update\.') | expand | selectattr('state', 'eq', 'on') | list | count }}
       ha_updater:
         friendly_name: HA Updater
         device_class: update

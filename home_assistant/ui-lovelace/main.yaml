@@ -5,8 +5,12 @@ badges:
   # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/2425
   # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/1396
   # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/1310
-  - entity: binary_sensor.ha_updater
+  - type: entity
+    entity: binary_sensor.ha_updater
     name: Update
+    show_icon: true
+    show_name: false
+    show_state: false
     card_mod:
       style:
         ha-state-label-badge:
@@ -16,8 +20,12 @@ badges:
                 .value {
                     color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
                   }
-  - entity: binary_sensor.foyer_motion_detected
+  - type: entity
+    entity: binary_sensor.foyer_motion_detected
     name: Foyer
+    show_icon: true
+    show_name: false
+    show_state: false
     card_mod:
       style:
         ha-state-label-badge:
@@ -27,11 +35,23 @@ badges:
                 .value {
                   color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
                 }
-  - entity: person.pieter_rautenbach
+  - type: entity
+    entity: person.pieter_rautenbach
     name: Pieter
-  - entity: person.rouve_rautenbach
+    show_entity_picture: true
+    show_icon: true
+    show_name: true
+  - type: entity
+    entity: person.rouve_rautenbach
     name: Rouvé
-  - entity: binary_sensor.electricity_feed
+    show_entity_picture: true
+    show_icon: true
+    show_name: true
+  - type: entity
+    entity: binary_sensor.electricity_feed
+    show_icon: true
+    show_name: false
+    show_state: false
     card_mod:
       style:
         ha-state-label-badge:
@@ -41,7 +61,11 @@ badges:
                 .value {
                   color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
                 }
-  - entity: binary_sensor.internet_connection
+  - type: entity
+    entity: binary_sensor.internet_connection
+    show_icon: true
+    show_name: false
+    show_state: false
     card_mod:
       style:
         ha-state-label-badge:

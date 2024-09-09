@@ -76,22 +76,6 @@ sensor:
       - 'time_date'
       - 'time_utc'
 
-  - platform: worldclock
-    name: cape_town
-    time_zone: Africa/Johannesburg
-
-  - platform: worldclock
-    name: san_francisco
-    time_zone: America/Los_Angeles
-
-  - platform: worldclock
-    name: london
-    time_zone: Europe/London
-
-  - platform: worldclock
-    name: sydney
-    time_zone: Australia/Sydney
-
   # used to check backups
   - platform: folder
     folder: /mnt/nas/Backups/home_assistant/

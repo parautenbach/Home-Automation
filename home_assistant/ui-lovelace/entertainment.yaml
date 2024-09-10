@@ -81,6 +81,7 @@ cards:
                 icon: mdi:set-top-box
           - type: custom:state-switch
             entity: input_select.selected_remote
+            default: Audio
             states:
               TV:
                 type: vertical-stack

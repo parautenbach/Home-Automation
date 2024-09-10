@@ -2,30 +2,22 @@ title: Resources
 path: resources
 icon: mdi:earth
 badges:
-  - entity: binary_sensor.electricity_feed
-    name: Home
-    card_mod:
-      style:
-        ha-state-label-badge:
-          $:
-            ha-label-badge:
-              $: |
-                .value {
-                  color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
-                }
-  - entity: binary_sensor.grid_feed
-    name: Grid
-    card_mod:
-      style:
-        ha-state-label-badge:
-          $:
-            ha-label-badge:
-              $: |
-                .value {
-                  color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
-                }
-  - entity: sensor.home_power_kw
-    name: Home
+  - type: entity
+    entity: binary_sensor.electricity_feed
+    show_icon: true
+    show_name: false
+    show_state: false
+  - type: entity
+    entity: binary_sensor.grid_feed
+    show_icon: true
+    show_name: false
+    show_state: false
+  - type: entity
+    entity: sensor.home_power_kw
+    icon: mdi:home
+    show_name: false
+    show_icon: true
+    show_state: true
     card_mod:
         style:
           ha-state-label-badge:
@@ -46,8 +38,12 @@ badges:
                       {{ gradient_color(state, consumption_kw_map) }}
                       !important;
                   }
-  - entity: sensor.solar_reserve_kw
-    name: Solar Reserve
+  - type: entity
+    entity: sensor.solar_reserve_kw
+    icon: mdi:solar-power
+    show_name: false
+    show_icon: true
+    show_state: true
     card_mod:
         style:
           ha-state-label-badge:

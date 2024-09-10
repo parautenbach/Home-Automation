@@ -2,8 +2,13 @@ path: environment
 title: Environment
 icon: mdi:weather-partly-snowy-rainy
 badges:
-  - entity: sensor.office_temperature
+  - type: entity
+    entity: sensor.office_temperature
     name: Living Room
+    icon: mdi:sofa
+    show_icon: true
+    show_name: false
+    show_state: true
     card_mod:
       style: |
         :host {
@@ -12,8 +17,13 @@ badges:
               {%- set state = states(config.entity) | float(0) -%}
               {{ gradient_color(state, temp_degrees_c_human_map) }}
         }
-  - entity: sensor.outside_temperature
+  - type: entity
+    entity: sensor.outside_temperature
     name: Outside
+    icon: mdi:weather-partly-cloudy
+    show_icon: true
+    show_name: false
+    show_state: true
     card_mod:
       style: |
         :host {
@@ -22,9 +32,14 @@ badges:
               {%- set state = states(config.entity) | float(0) -%}
               {{ gradient_color(state, temp_degrees_c_human_map) }}
         }
-  - entity: sensor.overall_pollen_risk
+  - type: entity
+    entity: sensor.overall_pollen_risk
     name: Pollen
     icon: mdi:flower-pollen-outline
+    show_icon: true
+    show_name: false
+    show_state: true
+    # todo: hide unit
     # maybe: https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/1310
     card_mod:
       # style: |
@@ -50,8 +65,12 @@ badges:
                       {%- set state = states(config.entity) | int(0) -%}
                       {{ mapped_color(state, discrete_5_point_map) }} !important;
                   }
-  - entity: sensor.owm_pollution_overall_air_quality
+  - type: entity
+    entity: sensor.owm_pollution_overall_air_quality
     name: Air
+    show_icon: true
+    show_name: false
+    show_state: true
     card_mod:
       style:
         .: |
@@ -73,10 +92,18 @@ badges:
           }
   # https://community.home-assistant.io/t/hours-of-daylight/59422/
   # https://community.home-assistant.io/t/enhanced-sun-component/63553
-  - entity: sensor.daylight_hm
+  - type: entity
+    entity: sensor.daylight_hm
     name: Daylight
-  - entity: sensor.moon
+    show_icon: true
+    show_name: false
+    show_state: true
+  - type: entity
+    entity: sensor.moon
     name: Moon Phase
+    show_icon: true
+    show_name: false
+    show_state: false
 cards:
   - type: vertical-stack
     cards:

@@ -2,8 +2,12 @@ title: Baby
 path: baby
 icon: mdi:teddy-bear
 badges:
-  - entity: sensor.bedroom_ht_temperature
-    name: Inside
+  - type: entity
+    entity: sensor.bedroom_ht_temperature
+    icon: mdi:bed
+    show_icon: true
+    show_name: false
+    show_state: true
     card_mod:
       style: |
         :host {
@@ -12,8 +16,13 @@ badges:
               {%- set state = states(config.entity) | float(0) -%}
               {{ gradient_color(state, temp_degrees_c_human_map) }}
         }
-  - entity: sensor.outside_temperature
+  - type: entity
+    entity: sensor.outside_temperature
     name: Outside
+    icon: mdi:weather-partly-cloudy
+    show_icon: true
+    show_name: false
+    show_state: true
     card_mod:
       style: |
         :host {
@@ -22,17 +31,12 @@ badges:
               {%- set state = states(config.entity) | float(0) -%}
               {{ gradient_color(state, temp_degrees_c_human_map) }}
         }
-  - entity: binary_sensor.baby_monitor_motion_alarm
+  - type: entity
+    entity: binary_sensor.baby_monitor_motion_alarm
     name: Motion
-    card_mod:
-      style:
-        ha-state-label-badge:
-          $:
-            ha-label-badge:
-              $: |
-                .value {
-                  color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
-                }
+    show_icon: true
+    show_name: false
+    show_state: false
   # - entity: binary_sensor.baby_monitor_sound_alarm
   #   name: Sound
   #   card_mod:
@@ -44,17 +48,12 @@ badges:
   #               .value {
   #                 color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
   #               }
-  - entity: binary_sensor.baby_sleeping
+  - type: entity
+    entity: binary_sensor.baby_sleeping
     name: Sleep
-    card_mod:
-      style:
-        ha-state-label-badge:
-          $:
-            ha-label-badge:
-              $: |
-                .value {
-                    color: {{ "var(--state-binary_sensor-active-color)" if is_state(config.entity, 'on') }} !important;
-                  }
+    show_icon: true
+    show_name: false
+    show_state: false
 cards:
   - type: vertical-stack
     cards:

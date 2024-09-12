@@ -215,7 +215,41 @@ cards:
       #   entities:
       #     - sensor.living_room_ac_power
       #     - sensor.main_bedroom_ac_power
-      - type: energy-solar-graph
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+          - type: energy-solar-graph
+          - type: custom:apexcharts-card
+            chart_type: line
+            span:
+              start: day
+              offset: +1min
+            all_series_config:
+              stroke_width: 2
+              unit: abc
+            apex_config:
+              # title:
+              #   text: Utilisation
+              legend:
+                show: true
+            series:
+              # - entity: sensor.solar_energy_utilisation_today
+              #   color: var(--custom-color-yellow)
+              #   min: 0
+              #   max: 100
+              - entity: sensor.average_solar_energy_forecast_today
+                name: Average
+              - entity: sensor.hourly_energy_forecast_aggregated
+                name: Aggregated
+              - entity: sensor.daily_solar_energy_consumption
+                name: Actual
+            yaxis:
+              - apex_config:
+                  title:
+                    text: kWh
       - type: horizontal-stack
         cards:
           - type: custom:apexcharts-card

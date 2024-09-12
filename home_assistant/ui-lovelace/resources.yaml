@@ -229,7 +229,6 @@ cards:
               offset: +1min
             all_series_config:
               stroke_width: 2
-              unit: abc
             apex_config:
               # title:
               #   text: Utilisation

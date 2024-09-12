@@ -1117,7 +1117,7 @@ cards:
             hour24: true
             lower_bound: 0
             smoothing: true
-            points_per_hour: 20  # every 5 min
+            points_per_hour: 30  # every 2 min
             line_width: 2
             show:
               extrema: true

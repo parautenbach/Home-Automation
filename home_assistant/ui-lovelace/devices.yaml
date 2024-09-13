@@ -309,11 +309,11 @@ cards:
           - entity: light.kitchen_counter
             name: Kitchen Cntr
           - entity: light.living_room_lamp
-            name: Living Room
+            name: Living R.
           - entity: light.dining_room
-            name: Dining Room
+            name: Dining R.
           - entity: light.music_room
-            name: Music Room
+            name: Music R.
           - entity: light.hallway
             name: Hallway
           - entity: light.foyer

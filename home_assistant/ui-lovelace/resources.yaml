@@ -226,9 +226,11 @@ cards:
             chart_type: line
             span:
               start: day
+              # hack due to the exact time some of these sensors reset
               offset: +1min
             all_series_config:
               stroke_width: 2
+              extend_to: now
             apex_config:
               # title:
               #   text: Utilisation

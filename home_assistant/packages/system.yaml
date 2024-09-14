@@ -23,6 +23,10 @@ homeassistant:
       icon: mdi:database
     binary_sensor.python_package_index_pypi_update_available:
       friendly_name: HA Updater
+    binary_sensor.ha_updater:
+      icon: mdi:home-assistant
+    binary_sensor.hacs_updater:
+      icon: mdi:store
     sensor.watchman_missing_entities:
       friendly_name: Missing Entities
     sensor.watchman_missing_services:
@@ -192,7 +196,7 @@ template:
       minutes: "/1"
     sensor:
       - name: Disabled Automations
-        icon: mdi:refresh-auto
+        icon: mdi:autorenew-off
         state: "{{ states.automation | selectattr('state', 'eq', 'off') | list | length }}"
         unit_of_measurement: entities
         attributes:

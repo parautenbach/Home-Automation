@@ -8,13 +8,13 @@ badges:
     entity: binary_sensor.ha_updater
     name: HA
     show_icon: true
-    show_name: true
+    show_name: false
     show_state: false
   - type: entity
     entity: binary_sensor.hacs_updater
     name: HACS
     show_icon: true
-    show_name: true
+    show_name: false
     show_state: false
   - type: entity
     entity: sensor.disabled_automations

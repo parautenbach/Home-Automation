@@ -1034,7 +1034,7 @@ automation:
 
   - alias: "Turn On Bug Zapper"
     id: "dad30264-ab99-41df-83ee-a9ff0e768146"
-    initial_state: false
+    initial_state: true
     trigger:
       - platform: sun
         event: sunset

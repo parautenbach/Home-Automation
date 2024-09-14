@@ -1028,7 +1028,13 @@ automation:
           entity_id: light.pieter_bedside
       - wait_template: "{{ is_state('light.pieter_bedside', 'off') }}"
         continue_on_timeout: false
-      - condition: "{{ states.light | selectattr('state', 'eq', 'on') | rejectattr('attributes.entity_id', 'defined') | list | length > 0 }}"
+      - condition: >-
+          {{ states.light
+              | selectattr('state', 'eq', 'on')
+              | rejectattr('attributes.entity_id', 'defined')
+              | rejectattr('attributes.entity_id', 'eq', 'light.led')
+              | list
+              | length > 0 }}
       - service: notify.mobile_app_ceres
         data:
           title: "💡 Lights"

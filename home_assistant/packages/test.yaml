@@ -151,3 +151,12 @@ automation:
       - service: automation.turn_off
         target:
           entity_id: "{{ this.entity_id }}"
+
+  # - alias: "A Faulty Automation"
+  #   id: "361d81b6-cb07-4df3-b3c8-baed2da7072d"
+  #   initial_state: false
+  #   trigger:
+  #     - platform: time_pattern
+  #       seconds: "/15"
+  #   action:
+  #     - foo: bar

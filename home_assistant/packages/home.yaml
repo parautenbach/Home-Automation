@@ -249,16 +249,17 @@ automation:
         entity_id: binary_sensor.anybody_home
         state: "off"
     action:
-      - service: light.turn_off
-        entity_id: all
-      - service: script.turn_on
-        entity_id: script.entertainment_off
-      - service: switch.turn_off
-        entity_id: switch.tivoli_audio
-      - service: switch.turn_off
-        entity_id: switch.bug_zapper
-      - service: climate.turn_off
-        entity_id: all
+      - parallel:
+          - service: light.turn_off
+            entity_id: all
+          - service: script.turn_on
+            entity_id: script.entertainment_off
+          - service: switch.turn_off
+            entity_id: switch.tivoli_audio
+          - service: switch.turn_off
+            entity_id: switch.bug_zapper
+          - service: climate.turn_off
+            entity_id: all
 
   - alias: "Run Morning Routine At Wake Up Time"
     id: "5486f6f9-da52-4cf0-8a23-e54f40a80721"

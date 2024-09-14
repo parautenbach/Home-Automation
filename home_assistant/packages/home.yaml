@@ -1094,26 +1094,27 @@ automation:
         target:
           entity_id: switch.bug_zapper
 
-  - alias: "Notify On AC Filter Maintenance"
-    id: "f049e41d-33ab-4ac9-82aa-a76c136c2490"
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id:
-          - binary_sensor.living_room_ac_filter_alert
-          - binary_sensor.main_bedroom_ac_filter_alert
-        to: "on"
-    action:
-      - service: notify.mobile_app_ceres
-        data:
-          title: "🚧 Maintenance"
-          message: >-
-            {# example: Living Room AC Filter alert -> living room AC #}
-            {% set name = state_attr(trigger.entity_id, 'friendly_name') | lower | replace('alert', '') | replace('filter', '') | replace('ac', 'AC') | trim %}
-            Please check the filter in the {{ name }}.
-          data:
-            group: "maintenance"
-            url: homeassistant://navigate/lovelace/main
+  # doesn't seem my acs support this, sadly
+  # - alias: "Notify On AC Filter Maintenance"
+  #   id: "f049e41d-33ab-4ac9-82aa-a76c136c2490"
+  #   initial_state: true
+  #   trigger:
+  #     - platform: state
+  #       entity_id:
+  #         - binary_sensor.living_room_ac_filter_alert
+  #         - binary_sensor.main_bedroom_ac_filter_alert
+  #       to: "on"
+  #   action:
+  #     - service: notify.mobile_app_ceres
+  #       data:
+  #         title: "🚧 Maintenance"
+  #         message: >-
+  #           {# example: Living Room AC Filter alert -> living room AC #}
+  #           {% set name = state_attr(trigger.entity_id, 'friendly_name') | lower | replace('alert', '') | replace('filter', '') | replace('ac', 'AC') | trim %}
+  #           Please check the filter in the {{ name }}.
+  #         data:
+  #           group: "maintenance"
+  #           url: homeassistant://navigate/lovelace/main
 
   - alias: "Turn Off AC Display"
     id: "75417e23-4953-49e4-ae38-2e6833081120"

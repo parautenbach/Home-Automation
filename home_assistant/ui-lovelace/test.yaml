@@ -5,6 +5,19 @@ visible:
   - user: 75cfafa25f36464abc9116845e53f2ca
 badges: []
 cards:
+  - type: custom:auto-entities
+    card:
+      type: entities
+      title: Updates
+    filter:
+      template: >-
+        {% set hacs = integration_entities('hacs') | select('match', '^update\.') | list %}
+        {% set update_entities = states.update | list | map(attribute='entity_id') | list %}
+        {{ (set(update_entities) - set(hacs)) | list }}
+      # include:
+      #   - entity_id: "update.*"
+    sort:
+      method: name
   - type: entities
     title: Test
     entities:

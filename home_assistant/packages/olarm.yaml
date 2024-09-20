@@ -76,6 +76,62 @@ alarm_control_panel:
       delay_time: 0
       trigger_time: 120
 
+input_boolean:
+  alarm_zone_1_bypass:
+    name: Front Door Bypass
+    icon: mdi:door
+  alarm_zone_2_bypass:
+    name: Zone 2 Bypass
+    icon: mdi:cancel
+  alarm_zone_3_bypass:
+    name: Foyer Bypass
+    icon: mdi:coat-rack
+  alarm_zone_4_bypass:
+    name: Living Area Bypass
+    icon: mdi:sofa-outline
+  alarm_zone_5_bypass:
+    name: Braai Room Bypass
+    icon: mdi:gas-burner  # fireplace/radiator/grill-outline
+  alarm_zone_6_bypass:
+    name: Kitchen Bypass
+    icon: mdi:countertop-outline
+  alarm_zone_7_bypass:
+    name: Kitchen Door Bypass
+    icon: mdi:door
+  alarm_zone_8_bypass:
+    name: Julia's Room Bypass
+    icon: mdi:teddy-bear
+  alarm_zone_9_bypass:
+    name: Guest Room Bypass
+    icon: mdi:bed-king-outline
+  alarm_zone_10_bypass:
+    name: Main Bedroom Bypass
+    icon: mdi:bed-king-outline
+  alarm_zone_11_bypass:
+    name: Partition 1 Remotes Bypass
+    icon: mdi:remote
+  alarm_zone_12_bypass:
+    name: Partition 2 Remotes Bypass
+    icon: mdi:remote
+  alarm_zone_13_bypass:
+    name: Backyard Bypass
+    icon: mdi:grass  # tree-outline
+  alarm_zone_14_bypass:
+    name: Zone 14 Bypass
+    icon: mdi:cancel
+  alarm_zone_15_bypass:
+    name: Zone 15 Bypass
+    icon: mdi:cancel
+  alarm_zone_16_bypass:
+    name: Zone 16 Bypass
+    icon: mdi:cancel
+  alarm_zone_17_bypass:
+    name: Garage Bypass
+    icon: mdi:garage-variant
+  alarm_zone_18_bypass:
+    name: Flatlet Bypass
+    icon: mdi:bed-outline
+
 # https://www.home-assistant.io/integrations/rest_command/
 # https://user.olarm.co/#/api
 # https://user.olarm.co/#/api/documentation

@@ -58,6 +58,9 @@ input_boolean:
   everyday_routine:
     name: Everyday Routine
     icon: mdi:sun-clock-outline
+  trash_reminder:
+    name: Trash Reminder
+    icon: mdi:trash-can-outline
 
 input_number:
   baby_current_sleep_session:
@@ -1206,3 +1209,66 @@ automation:
       - service: switch.turn_off
         target:
           entity_id: "{{ trigger.event.data.entity_id | replace('timer', 'switch') }}"
+
+  - alias: "Set Trash Reminder"
+    id: "0106ec38-40d7-49e5-be8f-e905c24519af"
+    initial_state: true
+    trigger:
+      - platform: time
+        at: "05:00:00"
+    action:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.trash_reminder
+
+  - alias: "Reminder To Take Out The Trash"
+    id: "6f40cf58-7a12-456d-8a42-01ca56b95872"
+    initial_state: true
+    trigger:
+      - platform: time
+        at:
+          - "06:50:00"
+          - "07:00:00"
+          - "07:10:00"
+      - platform: state
+        entity_id: binary_sensor.pieter_present
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.trash_reminder
+        state: "on"
+      - condition: state
+        entity_id: binary_sensor.pieter_present
+        state: "on"
+      - condition: time
+        after: "05:00:00"
+        before: "08:00:00"
+        weekday:
+          - tue
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "⏰ Routine"
+          message: "Remember to put out the trash."
+          data:
+            actions:
+              - action: "TRASH_PUT_OUT"
+                title: "Done"
+            group: "routine-trash"
+            url: homeassistant://navigate/lovelace/main
+            data:
+              sound:
+                critical: 1
+                volume: 0.5
+
+  - alias: "Reset Trash Reminder"
+    id: "84b06a96-a13b-46c1-b15c-41542bbcd05c"
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: TRASH_PUT_OUT
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.trash_reminder

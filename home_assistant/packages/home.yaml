@@ -1092,6 +1092,13 @@ automation:
       - platform: state
         entity_id: input_boolean.baby_sleep_mode
         to: "on"
+      - platform: state
+        entity_id:
+          - light.bedroom_bedlamp
+          - light.living_room_lamp
+          - light.rouve_bedside
+          - light.pieter_bedside
+        to: "off"
     action:
       - service: switch.turn_off
         target:

@@ -1263,7 +1263,7 @@ automation:
                 title: "Done"
             group: "routine-trash"
             url: homeassistant://navigate/lovelace/main
-            data:
+            push:
               sound:
                 critical: 1
                 volume: 0.5

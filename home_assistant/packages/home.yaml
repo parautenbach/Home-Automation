@@ -1234,9 +1234,9 @@ automation:
     trigger:
       - platform: time
         at:
-          - "06:50:00"
+          - "06:45:00"
           - "07:00:00"
-          - "07:10:00"
+          - "07:15:00"
       - platform: state
         entity_id: binary_sensor.pieter_present
         to: "on"

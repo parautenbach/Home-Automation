@@ -35,6 +35,7 @@ document.documentElement.style.setProperty('--mini-media-player-artwork-opacity'
 document.documentElement.style.setProperty('--state-alarm_control_panel-armed_home-color', '#ffa800');
 document.documentElement.style.setProperty('--state-alarm_control_panel-armed_away-color', '#aa0000');
 document.documentElement.style.setProperty('--state-alarm_control_panel-disarmed-color',   '#40b100');
+document.documentElement.style.setProperty('--state-alarm_control_panel-triggered-color',  '#135dd8');
 // do we want to set --state-alarm_control_panel-unavailable-color too? consider light vs dark theme, and unavailable vs unknown
 
 // document.documentElement.style.setProperty('--state-climate-off-color',      '#9e9e9e');

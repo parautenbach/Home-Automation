@@ -436,6 +436,13 @@ cards:
               #option-disarmed {
                 --control-select-color: #40b100 !important;
               }
+              #option-triggered {
+                --control-select-color: #135dd8 !important;
+              }
+            hui-card-features $ div hui-card-feature $ hui-alarm-modes-card-feature $ ha-control-button-group ha-control-button $ button: |
+              .button {
+                background-color: #40b100 !important;
+              }
       # todo: panic button (mdi:alert-outline/mdi:shield-alert-outline)
       - type: history-graph
         name: Alarm

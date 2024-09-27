@@ -74,17 +74,17 @@ homeassistant:
     # binary_sensor.baby_monitor_sound_alarm:
     #   device_class: sound
     sensor.overall_pollen_risk:
-      unit_of_measurement: None
+      unit_of_measurement: index
     sensor.grass_pollen:
-      unit_of_measurement: None
+      unit_of_measurement: index
     sensor.tree_pollen:
-      unit_of_measurement: None
+      unit_of_measurement: index
     sensor.weed_pollen:
-      unit_of_measurement: None
+      unit_of_measurement: index
     sensor.mould_spores:
-      unit_of_measurement: None
+      unit_of_measurement: index
     sensor.winelands_fdi:
-      unit_of_measurement: None
+      unit_of_measurement: index
     # https://github.com/Limych/ha-average/issues/193
 
 shell_command:

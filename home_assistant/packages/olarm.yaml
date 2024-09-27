@@ -45,36 +45,36 @@ alarm_control_panel:
     code_arm_required: true
     arming_time: 0
     delay_time: 0
-    trigger_time: 120
+    trigger_time: 3600
     disarm_after_trigger: false
     disarmed:
-      trigger_time: 120
+      trigger_time: 3600
     armed_home:
       arming_time: 0
       delay_time: 0
-      trigger_time: 120
+      trigger_time: 3600
     armed_away:
       arming_time: 0
       delay_time: 0
-      trigger_time: 120
+      trigger_time: 3600
   - platform: manual
     name: "Flatlet"
     code: !secret alarm_code
     code_arm_required: true
     arming_time: 0
     delay_time: 0
-    trigger_time: 120
+    trigger_time: 3600
     disarm_after_trigger: false
     disarmed:
-      trigger_time: 120
+      trigger_time: 3600
     armed_home:
       arming_time: 0
       delay_time: 0
-      trigger_time: 120
+      trigger_time: 3600
     armed_away:
       arming_time: 0
       delay_time: 0
-      trigger_time: 120
+      trigger_time: 3600
 
 input_boolean:
   alarm_zone_1_bypass:

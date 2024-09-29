@@ -93,7 +93,7 @@ light_with_timer:
       card:
         type: custom:button-card
         name: Timer
-        entity: "[[[ return entity.entity_id.replace('light.', 'timer.') + '_timer'; ]]]"
+        entity: "[[[ return entity.entity_id.replace('light.', 'timer.').replace('switch.', 'timer.') + '_timer'; ]]]"
         show_name: false
         show_icon: false
         show_state: true
@@ -107,7 +107,7 @@ light_with_timer:
             - margin-bottom: -1ex
             - color: >
                 [[[
-                  if (states[`${entity.entity_id}`.replace("light.", "timer.") + "_timer"].state == "idle")
+                  if (states[`${entity.entity_id}`.replace("light.", "timer.").replace('switch.', 'timer.') + "_timer"].state == "idle")
                     return "var(--paper-item-icon-color)";
                   else
                     return "var(--custom-color-red)";
@@ -233,7 +233,7 @@ rgb_light_with_timer:
       card:
         type: custom:button-card
         name: Timer
-        entity: "[[[ return entity.entity_id.replace('light.', 'timer.') + '_timer'; ]]]"
+        entity: "[[[ return entity.entity_id.replace('light.', 'timer.').replace('switch.', 'timer.') + '_timer'; ]]]"
         show_name: false
         show_icon: false
         show_state: true

@@ -200,7 +200,7 @@ automation:
               {% else %}
                 {# pass #}
                 Debug:
-                 - State change: {{ from }} -> {{ to }}
+                 - State change: {{ from }} → {{ to }}
               {% endif %}
             {% endif %}
           data:

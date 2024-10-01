@@ -242,7 +242,7 @@ cards:
               #   min: 0
               #   max: 100
               - entity: sensor.average_solar_energy_forecast_today
-                name: Average
+                name: Forecast
               - entity: sensor.hourly_energy_forecast_aggregated
                 name: Aggregated
               - entity: sensor.daily_solar_energy_consumption

@@ -86,6 +86,16 @@ homeassistant:
     sensor.winelands_fdi:
       unit_of_measurement: index
     # https://github.com/Limych/ha-average/issues/193
+    # not using this for now. it's very confusing. it seems like these entities are removed, but the
+    # dev tools still show a state class. more importantly, i inadvertently removed the data for my
+    # outside temperature stats.
+    # customize_glob:
+    #   "sensor.openweathermap_*":
+    #     state_class: null
+    #   "sensor.thermal_comfort_*":
+    #     state_class: null
+    #   "sensor.stellenboch_cape_winelands_south_africa_*":
+    #     state_class: null
 
 shell_command:
   download_latest_dam_levels: "/home/homeassistant/scripts/download_latest_dam_levels.sh"

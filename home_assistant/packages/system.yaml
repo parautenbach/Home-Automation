@@ -626,7 +626,7 @@ automation:
               seconds: 5
           - service: shell_command.shutdown_server
 
-  # polling should be turned off
+  # polling should be turned off for this sql sensor (via the ui)
   # https://github.com/home-assistant/core/issues/71563
   - alias: "Update DB Size"
     id: "7219415c-c1e4-40dd-a429-2f4eccc7da76"

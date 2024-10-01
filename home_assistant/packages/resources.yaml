@@ -1846,7 +1846,7 @@ automation:
       #   data:
       #     message: "{{ message }}"
 
-  # polling should be turned off
+  # polling should be turned off for this sql sensor (via the ui)
   # https://github.com/home-assistant/core/issues/71563
   - alias: "Update Hourly Energy Forecast Aggregate"
     id: "622aa2bb-f5a0-4f0a-83b2-ff7864587098"

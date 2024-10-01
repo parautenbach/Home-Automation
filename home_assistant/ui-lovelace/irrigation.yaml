@@ -20,9 +20,6 @@ cards:
         icon: mdi:auto-mode
       - entity: input_boolean.skip_next_automatic_irrigation_cycle
         name: Skip Next
-      - entity: sensor.weather_forecast_precipitation_tomorrow
-        name: Rain Forecast Tomorrow
-        icon: mdi:weather-partly-rainy
       - entity: sensor.irrigation_weekly_watering_duration
         name: Weekly Watering Duration
       - entity: switch.irrigation_main
@@ -47,7 +44,22 @@ cards:
       - type: custom:fold-entity-row
         head:
           type: section
-          label: Zones
+          label: Weather
+        entities:
+          # around today
+          - entity: sensor.weather_forecast_precipitation_yesterday
+            name: Rain Forecast Yesterday
+            icon: mdi:weather-partly-rainy
+          - entity: sensor.weather_forecast_precipitation_today
+            name: Rain Forecast Today
+            icon: mdi:weather-partly-rainy
+          - entity: sensor.weather_forecast_precipitation_tomorrow
+            name: Rain Forecast Tomorrow
+            icon: mdi:weather-partly-rainy
+      - type: custom:fold-entity-row
+        head:
+          type: section
+          label: Zones Activity
           # not an option
           # icon: mdi:cog
         entities:

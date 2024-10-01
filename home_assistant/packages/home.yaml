@@ -1067,6 +1067,10 @@ automation:
       - condition: state
         entity_id: input_boolean.baby_sleep_mode
         state: "off"
+      - condition: template
+        value_template: >-
+          {{ 'rain' not in states('weather.openweathermap_hourly') and
+             'pouring' not in states('weather.openweathermap_hourly') }}
     action:
       - service: weather.get_forecasts
         target:

@@ -313,6 +313,19 @@ template:
           type: daily
         response_variable: daily
     sensor:
+      # the sensor for yesterday is a sql sensor configured via the ui
+      - name: Weather Forecast Precipitation Today
+        unique_id: "413a950a-150d-4faf-9f93-3d35b240dd5d"
+        state: >-
+          {{ daily['weather.openweathermap_daily']['forecast'][0]['precipitation'] }}
+        device_class: precipitation
+        unit_of_measurement: "mm"
+        icon: >-
+          {% if daily['weather.openweathermap_daily']['forecast'][1]['precipitation'] > 0 %}
+            mdi:water
+          {% else %}
+            mdi:water-off
+          {% endif %}
       - name: Weather Forecast Precipitation Tomorrow
         unique_id: "2f58f787-0427-462d-a5c1-c2e1b568f0c7"
         state: >-
@@ -933,3 +946,16 @@ automation:
                     data:
                       group: "weather"
                       url: homeassistant://navigate/lovelace/environment
+
+  # polling should be turned off for this sql sensor (via the ui)
+  # https://github.com/home-assistant/core/issues/71563
+  - alias: "Update Weather Forecast Precipitation Yesterday"
+    id: "53305ed1-8c44-42dd-b6a9-4824e994ae58"
+    initial_state: true
+    trigger:
+      platform: time_pattern
+      hours: "/1"
+    action:
+      - service: homeassistant.update_entity
+        target:
+          entity_id: sensor.weather_forecast_precipitation_yesterday

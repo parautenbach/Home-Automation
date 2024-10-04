@@ -8,7 +8,7 @@ cards:
   - type: custom:auto-entities
     card:
       type: entities
-      title: Updates
+      title: Selected Updates
     filter:
       template: >-
         {% set hacs = integration_entities('hacs') | select('match', '^update\.') | list %}
@@ -16,6 +16,16 @@ cards:
         {{ (set(update_entities) - set(hacs)) | list }}
       # include:
       #   - entity_id: "update.*"
+    sort:
+      method: name
+  - type: custom:auto-entities
+    card:
+      type: entities
+      title: Shelly Updates
+    filter:
+      template: >-
+        {% set shelly_updates = integration_entities('shelly') | select('match', '^update\.') | select('is_state', 'on') | list %}
+        {{ shelly_updates }}
     sort:
       method: name
   - type: entities

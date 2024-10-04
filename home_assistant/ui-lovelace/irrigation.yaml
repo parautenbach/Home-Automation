@@ -44,7 +44,7 @@ cards:
       - type: custom:fold-entity-row
         head:
           type: section
-          label: Weather
+          label: Precipitation
         entities:
           # around today
           - entity: sensor.weather_forecast_precipitation_yesterday

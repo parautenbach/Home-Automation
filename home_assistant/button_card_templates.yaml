@@ -152,7 +152,7 @@ rgb_light:
   label: >
     [[[
       var b = entity.attributes.brightness;
-      return parseInt(b ? (b/255)*100 : "0") + "%";
+      return Math.round(parseFloat(b ? (b/255)*100 : "0")) + "%";
     ]]]
   styles:
     name:

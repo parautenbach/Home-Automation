@@ -382,7 +382,7 @@ template:
         unit_of_measurement: "%"
         icon: mdi:autorenew
         attributes:
-          overhead: "{{ states('sensor.home_power') | int(0) - states('sensor.load_power') | int(0)  }}"
+          overhead: "{{ states('sensor.home_power') | int(0) - states('sensor.load_power') | int(0) }}"
       - name: "ACs Power"
         unique_id: "d450b906-159f-458d-ad46-0eb8a2b131f5"
         state: "{{ states('sensor.living_room_ac_power') | float(0) + states('sensor.main_bedroom_ac_power') | float(0) }}"

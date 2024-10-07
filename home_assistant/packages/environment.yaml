@@ -867,7 +867,7 @@ automation:
       - service: notify.family
         data:
           title: "☀️ Health"
-          message: >
+          message: >-
             UV radiation is high. Remember to apply sunscreen.
           data:
             group: "environment"

@@ -189,24 +189,6 @@ sensor:
         value_template: "{{ ((states('sensor.snmp_wan_out') | float(0) ) / 1000000000 ) | round(3) }}"
         device_class: data_size
         unit_of_measurement: 'GB'
-      internet_round_trip_time_avg:
-        value_template: "{{ state_attr('binary_sensor.internet', 'round_trip_time_avg') }}"
-        unit_of_measurement: 'ms'
-      internet_round_trip_time_mdev:
-        value_template: "{{ state_attr('binary_sensor.internet', 'round_trip_time_mdev') }}"
-        unit_of_measurement: 'ms'
-      front_extender_round_trip_time_avg:
-        value_template: "{{ state_attr('binary_sensor.front_extender', 'round_trip_time_avg') }}"
-        unit_of_measurement: 'ms'
-      front_extender_round_trip_time_mdev:
-        value_template: "{{ state_attr('binary_sensor.front_extender', 'round_trip_time_mdev') }}"
-        unit_of_measurement: 'ms'
-      back_extender_round_trip_time_avg:
-        value_template: "{{ state_attr('binary_sensor.back_extender', 'round_trip_time_avg') }}"
-        unit_of_measurement: 'ms'
-      back_extender_round_trip_time_mdev:
-        value_template: "{{ state_attr('binary_sensor.back_extender', 'round_trip_time_mdev') }}"
-        unit_of_measurement: 'ms'
 
   # alternative: https://community.home-assistant.io/t/snmp-bandwidth-monitor-using-statistics/96684/82
   - platform: statistics

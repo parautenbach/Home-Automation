@@ -77,6 +77,7 @@ cards:
             hui-card-features $ div hui-card-feature $ hui-alarm-modes-card-feature $ ha-control-button-group ha-control-button $ button: |
               .button {
                 background-color: #40b100 !important;
+                color: white !important;
               }
       - type: tile
         entity: alarm_control_panel.flatlet

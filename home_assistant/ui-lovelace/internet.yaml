@@ -84,25 +84,19 @@ cards:
           - type: divider
           - type: custom:template-entity-row
             entity: sensor.internet_round_trip_time_avg
-            icon: "{{ state_attr('sensor.internet_round_trip_time_avg', 'icon') }}"
+            icon: "{{ state_attr(config.entity, 'icon') }}"
             name: Mean Ping Time
-            state: "{{ states('sensor.internet_round_trip_time_avg', rounded=True, with_unit=True) }}"
-            tap_action:
-              action: more-info
+            state: "{{ states(config.entity, rounded=True, with_unit=True) }}"
           - type: custom:template-entity-row
             entity: sensor.internet_round_trip_time_mdev
-            icon: "{{ state_attr('sensor.internet_round_trip_time_mdev', 'icon') }}"
+            icon: "{{ state_attr(config.entity, 'icon') }}"
             name: Mean Ping Deviation
-            state: "{{ states('sensor.internet_round_trip_time_mdev', rounded=True, with_unit=True) }}"
-            tap_action:
-              action: more-info
+            state: "{{ states(config.entity, rounded=True, with_unit=True) }}"
           - type: custom:template-entity-row
             entity: sensor.internet_packet_loss
-            icon: "{{ state_attr('sensor.internet_packet_loss', 'icon') }}"
+            icon: "{{ state_attr(config.entity, 'icon') }}"
             name: Packet Loss
-            state: "{{ states('sensor.internet_packet_loss', rounded=True, with_unit=True) }}"
-            tap_action:
-              action: more-info
+            state: "{{ states(config.entity, rounded=True, with_unit=True) }}"
         header:
           type: custom:swipe-card
           parameters:
@@ -228,25 +222,19 @@ cards:
           - type: divider
           - type: custom:template-entity-row
             entity: sensor.front_extender_round_trip_time_avg
-            icon: "{{ state_attr('sensor.front_extender_round_trip_time_avg', 'icon') }}"
+            icon: "{{ state_attr(config.entity, 'icon') }}"
             name: Mean Ping Time
-            state: "{{ states('sensor.front_extender_round_trip_time_avg', rounded=True, with_unit=True) }}"
-            tap_action:
-              action: more-info
+            state: "{{ states(config.entity, rounded=True, with_unit=True) }}"
           - type: custom:template-entity-row
             entity: sensor.front_extender_round_trip_time_mdev
-            icon: "{{ state_attr('sensor.front_extender_round_trip_time_mdev', 'icon') }}"
+            icon: "{{ state_attr(config.entity, 'icon') }}"
             name: Mean Ping Deviation
-            state: "{{ states('sensor.front_extender_round_trip_time_mdev', rounded=True, with_unit=True) }}"
-            tap_action:
-              action: more-info
+            state: "{{ states(config.entity, rounded=True, with_unit=True) }}"
           - type: custom:template-entity-row
             entity: sensor.front_extender_packet_loss
-            icon: "{{ state_attr('sensor.front_extender_packet_loss', 'icon') }}"
+            icon: "{{ state_attr(config.entity, 'icon') }}"
             name: Packet Loss
-            state: "{{ states('sensor.front_extender_packet_loss', rounded=True, with_unit=True) }}"
-            tap_action:
-              action: more-info
+            state: "{{ states(config.entity, rounded=True, with_unit=True) }}"
         header:
           type: custom:mini-graph-card
           name: Front Extender
@@ -275,25 +263,19 @@ cards:
           - type: divider
           - type: custom:template-entity-row
             entity: sensor.back_extender_round_trip_time_avg
-            icon: "{{ state_attr('sensor.back_extender_round_trip_time_avg', 'icon') }}"
+            icon: "{{ state_attr(config.entity, 'icon') }}"
             name: Mean Ping Time
             state: "{{ states('sensor.back_extender_round_trip_time_avg', rounded=True, with_unit=True) }}"
-            tap_action:
-              action: more-info
           - type: custom:template-entity-row
             entity: sensor.back_extender_round_trip_time_mdev
-            icon: "{{ state_attr('sensor.back_extender_round_trip_time_mdev', 'icon') }}"
+            icon: "{{ state_attr(config.entity, 'icon') }}"
             name: Mean Ping Deviation
-            state: "{{ states('sensor.back_extender_round_trip_time_mdev', rounded=True, with_unit=True) }}"
-            tap_action:
-              action: more-info
+            state: "{{ states(config.entity, rounded=True, with_unit=True) }}"
           - type: custom:template-entity-row
             entity: sensor.back_extender_packet_loss
-            icon: "{{ state_attr('sensor.back_extender_packet_loss', 'icon') }}"
+            icon: "{{ state_attr(config.entity, 'icon') }}"
             name: Packet Loss
-            state: "{{ states('sensor.back_extender_packet_loss', rounded=True, with_unit=True) }}"
-            tap_action:
-              action: more-info
+            state: "{{ states(config.entity, rounded=True, with_unit=True) }}"
         header:
           type: custom:mini-graph-card
           name: Back Extender

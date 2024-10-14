@@ -103,6 +103,8 @@ lovelace:
     # energy sankey chart
     - url: /hacsfiles/ha-sankey-chart/ha-sankey-chart.js
       type: module
+    - url: /hacsfiles/lovelace-template-entity-row/template-entity-row.js
+      type: module
     # manual
     # none
   dashboards:

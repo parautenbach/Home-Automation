@@ -78,81 +78,140 @@ cards:
             name: Internet
       - type: markdown
         content: "**[MANAGEMENT INTERFACE](http://192.168.0.1/)**"
-      - type: custom:swipe-card
-        parameters:
-          autoHeight: true
-          pagination:
-            type: 'bullets'
-        cards:
-          - type: custom:mini-graph-card
-            name: Round Trip
-            entities:
-              - entity: sensor.internet_round_trip_time_avg
-              - entity: sensor.nighttime_number
-                color: var(--custom-color-gray)
-                show_line: false
-                show_points: false
-                show_legend: false
-                y_axis: secondary
-            hours_to_show: 24
-            hour24: true
-            smoothing: true
-            points_per_hour: 12  # every 5 min
-            line_width: 2
-            lower_bound: 0
-            show:
-              extrema: true
-              average: true
-              labels_secondary: false
-          - type: custom:mini-graph-card
-            name: Deviation
-            entities:
-              - entity: sensor.internet_round_trip_time_mdev
-              - entity: sensor.nighttime_number
-                color: var(--custom-color-gray)
-                show_line: false
-                show_points: false
-                show_legend: false
-                y_axis: secondary
-            hours_to_show: 24
-            hour24: true
-            smoothing: true
-            points_per_hour: 12  # every 5 min
-            line_width: 2
-            lower_bound: 0
-            show:
-              extrema: true
-              average: true
-              labels_secondary: false
-          - type: custom:mini-graph-card
-            name: Packet Loss
-            entities:
-              - entity: sensor.internet_packet_loss
-              - entity: sensor.nighttime_number
-                color: var(--custom-color-gray)
-                show_line: false
-                show_points: false
-                show_legend: false
-                y_axis: secondary
-            hours_to_show: 24
-            hour24: true
-            smoothing: true
-            points_per_hour: 12  # every 5 min
-            line_width: 2
-            lower_bound: 0
-            show:
-              extrema: true
-              average: true
-              labels_secondary: false
       - type: entities
         show_header_toggle: false
         entities:
-          - entity: sensor.internet_round_trip_time_avg
+          - type: divider
+          - type: custom:template-entity-row
+            entity: sensor.internet_round_trip_time_avg
+            icon: "{{ state_attr('sensor.internet_round_trip_time_avg', 'icon') }}"
             name: Mean Ping Time
-          - entity: sensor.internet_round_trip_time_mdev
+            state: "{{ states('sensor.internet_round_trip_time_avg', rounded=True, with_unit=True) }}"
+            tap_action:
+              action: more-info
+          - type: custom:template-entity-row
+            entity: sensor.internet_round_trip_time_mdev
+            icon: "{{ state_attr('sensor.internet_round_trip_time_mdev', 'icon') }}"
             name: Mean Ping Deviation
-          - entity: sensor.internet_packet_loss
+            state: "{{ states('sensor.internet_round_trip_time_mdev', rounded=True, with_unit=True) }}"
+            tap_action:
+              action: more-info
+          - type: custom:template-entity-row
+            entity: sensor.internet_packet_loss
+            icon: "{{ state_attr('sensor.internet_packet_loss', 'icon') }}"
             name: Packet Loss
+            state: "{{ states('sensor.internet_packet_loss', rounded=True, with_unit=True) }}"
+            tap_action:
+              action: more-info
+        header:
+          type: custom:swipe-card
+          parameters:
+            autoHeight: true
+            pagination:
+              type: 'bullets'
+          cards:
+            - type: custom:mini-graph-card
+              name: Round Trip
+              entities:
+                - entity: sensor.internet_round_trip_time_avg
+                - entity: sensor.nighttime_number
+                  color: var(--custom-color-gray)
+                  show_line: false
+                  show_points: false
+                  show_legend: false
+                  y_axis: secondary
+              hours_to_show: 24
+              hour24: true
+              smoothing: true
+              points_per_hour: 12  # every 5 min
+              line_width: 2
+              lower_bound: 0
+              show:
+                extrema: true
+                average: true
+                labels_secondary: false
+              card_mod: &network_chart_mods
+                style:
+                  .: |
+                    ha-card {
+                      border: 0px;
+                    }
+            - type: custom:mini-graph-card
+              name: Deviation
+              entities:
+                - entity: sensor.internet_round_trip_time_mdev
+                - entity: sensor.nighttime_number
+                  color: var(--custom-color-gray)
+                  show_line: false
+                  show_points: false
+                  show_legend: false
+                  y_axis: secondary
+              hours_to_show: 24
+              hour24: true
+              smoothing: true
+              points_per_hour: 12  # every 5 min
+              line_width: 2
+              lower_bound: 0
+              show:
+                extrema: true
+                average: true
+                labels_secondary: false
+              card_mod: *network_chart_mods
+            - type: custom:mini-graph-card
+              name: Packet Loss
+              entities:
+                - entity: sensor.internet_packet_loss
+                - entity: sensor.nighttime_number
+                  color: var(--custom-color-gray)
+                  show_line: false
+                  show_points: false
+                  show_legend: false
+                  y_axis: secondary
+              hours_to_show: 24
+              hour24: true
+              smoothing: true
+              points_per_hour: 12  # every 5 min
+              line_width: 2
+              lower_bound: 0
+              show:
+                extrema: true
+                average: true
+                labels_secondary: false
+              card_mod: *network_chart_mods
+      # https://community.home-assistant.io/t/2024-10-heading-in-the-right-direction/777864/335
+      # - type: markdown
+      #   content: >
+      #     | &nbsp; | &nbsp; | &nbsp; |
+      #      | :--- | :--- | ---: |
+      #      | <ha-icon icon="{{ state_attr('sensor.internet_round_trip_time_avg', 'icon') }}"></ha-icon> | Mean Ping Time | {{ states('sensor.internet_round_trip_time_avg', rounded=True, with_unit=True) }} |
+      #      | <ha-icon icon="{{ state_attr('sensor.internet_round_trip_time_mdev', 'icon') }}"></ha-icon> | Mean Ping Deviation | {{ states('sensor.internet_round_trip_time_mdev', rounded=True, with_unit=True) }} |
+      #      | <ha-icon icon="{{ state_attr('sensor.internet_packet_loss', 'icon') }}"></ha-icon> | Packet Loss | {{ states('sensor.internet_packet_loss', rounded=True, with_unit=True) }} |
+      #   card_mod: &ping_sensor_mods
+      #     style:
+      #       ha-markdown:
+      #         $:
+      #           ha-markdown-element: |
+      #             table {
+      #               border-spacing: 0;
+      #               width: 100%;
+      #             }
+      #             th {
+      #               display: none;
+      #             }
+      #             td {
+      #               padding-bottom: 1em !important;
+      #             }
+      #             td:nth-child(1) {
+      #               width: 45px;
+      #               padding-left: 8px;
+      #             }
+      #             td:nth-child(2), td:nth-child(3) {
+      #               color: var(--primary-text-color);
+      #             }
+      #             ha-icon {
+      #               padding: 0px;
+      #               color: var(--paper-item-icon-color);
+      #             }
   - type: vertical-stack
     title: Home Network
     cards:
@@ -167,12 +226,27 @@ cards:
         show_header_toggle: false
         entities:
           - type: divider
-          - entity: sensor.front_extender_round_trip_time_avg
+          - type: custom:template-entity-row
+            entity: sensor.front_extender_round_trip_time_avg
+            icon: "{{ state_attr('sensor.front_extender_round_trip_time_avg', 'icon') }}"
             name: Mean Ping Time
-          - entity: sensor.front_extender_round_trip_time_mdev
+            state: "{{ states('sensor.front_extender_round_trip_time_avg', rounded=True, with_unit=True) }}"
+            tap_action:
+              action: more-info
+          - type: custom:template-entity-row
+            entity: sensor.front_extender_round_trip_time_mdev
+            icon: "{{ state_attr('sensor.front_extender_round_trip_time_mdev', 'icon') }}"
             name: Mean Ping Deviation
-          - entity: sensor.front_extender_packet_loss
+            state: "{{ states('sensor.front_extender_round_trip_time_mdev', rounded=True, with_unit=True) }}"
+            tap_action:
+              action: more-info
+          - type: custom:template-entity-row
+            entity: sensor.front_extender_packet_loss
+            icon: "{{ state_attr('sensor.front_extender_packet_loss', 'icon') }}"
             name: Packet Loss
+            state: "{{ states('sensor.front_extender_packet_loss', rounded=True, with_unit=True) }}"
+            tap_action:
+              action: more-info
         header:
           type: custom:mini-graph-card
           name: Front Extender
@@ -194,22 +268,32 @@ cards:
             extrema: true
             average: true
             labels_secondary: false
-          card_mod:
-            style:
-              .: |
-                ha-card {
-                  border: 0px;
-                }
+          card_mod: *network_chart_mods
       - type: entities
         show_header_toggle: false
         entities:
           - type: divider
-          - entity: sensor.back_extender_round_trip_time_avg
+          - type: custom:template-entity-row
+            entity: sensor.back_extender_round_trip_time_avg
+            icon: "{{ state_attr('sensor.back_extender_round_trip_time_avg', 'icon') }}"
             name: Mean Ping Time
-          - entity: sensor.back_extender_round_trip_time_mdev
+            state: "{{ states('sensor.back_extender_round_trip_time_avg', rounded=True, with_unit=True) }}"
+            tap_action:
+              action: more-info
+          - type: custom:template-entity-row
+            entity: sensor.back_extender_round_trip_time_mdev
+            icon: "{{ state_attr('sensor.back_extender_round_trip_time_mdev', 'icon') }}"
             name: Mean Ping Deviation
-          - entity: sensor.back_extender_packet_loss
+            state: "{{ states('sensor.back_extender_round_trip_time_mdev', rounded=True, with_unit=True) }}"
+            tap_action:
+              action: more-info
+          - type: custom:template-entity-row
+            entity: sensor.back_extender_packet_loss
+            icon: "{{ state_attr('sensor.back_extender_packet_loss', 'icon') }}"
             name: Packet Loss
+            state: "{{ states('sensor.back_extender_packet_loss', rounded=True, with_unit=True) }}"
+            tap_action:
+              action: more-info
         header:
           type: custom:mini-graph-card
           name: Back Extender
@@ -231,12 +315,7 @@ cards:
             extrema: true
             average: true
             labels_secondary: false
-          card_mod:
-            style:
-              .: |
-                ha-card {
-                  border: 0px;
-                }
+          card_mod: *network_chart_mods
   - type: vertical-stack
     title: Join Home Network
     cards:

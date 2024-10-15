@@ -77,7 +77,12 @@ cards:
           - entity: binary_sensor.internet_connection
             name: Internet
       - type: markdown
-        content: "**[MANAGEMENT INTERFACE](http://192.168.0.1/)**"
+        content: >-
+          **[MANAGEMENT INTERFACE](http://192.168.0.1/)**
+
+          **[MWEB STATUS PAGE](https://help.mweb.co.za/outages)**
+
+          **[FROGFOOT STATUS PAGE](https://www.frogfoot.co.za/network-status/)**
       - type: entities
         show_header_toggle: false
         entities:

@@ -373,6 +373,12 @@ template:
           solar_energy_forecast_today: "{{ states('sensor.average_solar_energy_forecast_today') }}"
           solar_energy_forecast_tomorrow: "{{ states('sensor.energy_production_tomorrow') }}"
           charge_mode: "{{ states('sensor.charge_mode') }}"
+      - name: "Inverter Power"
+        unique_id: "ec19a13f-de52-4a27-8047-b46b8744a16b"
+        state: "{{ states('sensor.home_power') | int(0) - states('sensor.load_power') | int(0) }}"
+        icon: mdi:generator-stationary
+        device_class: power
+        unit_of_measurement: "W"
       - name: "Inverter Efficiency"
         unique_id: "ee3e3151-3357-40f1-b52c-ad11b846bb82"
         # alternative: https://community.home-assistant.io/t/limit-a-value-to-fall-within-a-range/222188
@@ -594,6 +600,14 @@ sensor:
     unique_id: "9b9ba816-42f0-437d-aa7a-7014363f5ed5"
     name: "Geyser Energy"
     source: sensor.geyser_power
+    unit_prefix: k
+    unit_time: h
+    method: left
+    round: 3
+  - platform: integration
+    unique_id: "f1d3ef94-1d5c-4c6c-a7bb-7fa72b357dc5"
+    name: "Inverter Energy"
+    source: sensor.inverter_power
     unit_prefix: k
     unit_time: h
     method: left

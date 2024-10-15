@@ -1264,9 +1264,6 @@ automation:
         to: "on"
     mode: single
     action:
-      - service: timer.cancel
-        target:
-          entity_id: timer.solarassistant_inactivity
       - choose:
           - conditions:
               - condition: template
@@ -1291,6 +1288,9 @@ automation:
                     group: "system-electricity"
                     url: homeassistant://navigate/lovelace-system/devices
                     tag: "solarassistant-activity"
+      - service: timer.cancel
+        target:
+          entity_id: timer.solarassistant_inactivity
 
   - alias: "Notify When SolarAssistant MQTT Bridge Activity Ceased"
     id: "86cced33-ce28-4559-ba6b-e0d0f30fa183"
@@ -1301,6 +1301,10 @@ automation:
         event_data:
           entity_id: timer.solarassistant_inactivity
     mode: single
+    condition:
+      - condition: state
+        entity_id: binary_sensor.solarassistant_activity
+        state: "off"
     action:
       - service: notify.mobile_app_ceres
         data:

@@ -368,7 +368,7 @@ automation:
                 volume: 0.5
             actions:
               - action: "DISARM_ALARM"
-                title: "Disarm now"
+                title: "Disarm"
                 destructive: true
 
   - alias: "Ask To Arm Alarm When Last Person Left"
@@ -398,10 +398,10 @@ automation:
             url: homeassistant://navigate/lovelace/security
             actions:
               - action: "ARM_ALARM"
-                title: "Arm now"
+                title: "Arm"
                 destructive: true
               - action: "ARM_ALARM_BYPASS_GARAGE"
-                title: "Arm now (bypass garage)"
+                title: "Arm (bypass garage)"
                 destructive: true
             push:
               sound:
@@ -443,7 +443,7 @@ automation:
                 url: homeassistant://navigate/lovelace/security
                 actions:
                   - action: "DISARM_ALARM"
-                    title: "Disarm now"
+                    title: "Disarm"
                     destructive: true
                 push:
                   sound:
@@ -510,7 +510,7 @@ automation:
             url: homeassistant://navigate/lovelace/security
             actions:
               - action: "ARM_STAY_ALARM"
-                title: "Arm (stay) now"
+                title: "Arm (stay)"
                 destructive: true
             push:
               sound:

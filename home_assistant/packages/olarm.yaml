@@ -398,7 +398,7 @@ automation:
             url: homeassistant://navigate/lovelace/security
             actions:
               - action: "ARM_ALARM"
-                title: "Arm"
+                title: "Arm (full)"
                 destructive: true
               - action: "ARM_ALARM_BYPASS_GARAGE"
                 title: "Arm (bypass garage)"
@@ -596,15 +596,41 @@ automation:
                 {{ trigger.entity_id | replace('alarm_control_panel.', '') }}
               message: >-
                 The {{ area }}'s alarm was {{ state }} at {{ now().strftime('%H:%M') }}.
-          - service: notify.mobile_app_ceres
-            data:
-              title: "🔒 Security"
-              # todo: user (can be from olarm or HA context; tricky to get right)
-              # todo: list bypassed zones, if any
-              message: "{{ message }}"
-              data:
-                group: "home-security"
-                url: homeassistant://navigate/lovelace/security
+          - if: "{{ trigger.to_state.state == 'disarmed' }}"
+            then:
+              - service: notify.mobile_app_ceres
+                data:
+                  title: "🔒 Security"
+                  # todo: user (can be from olarm or HA context; tricky to get right)
+                  # todo: list bypassed zones, if any
+                  message: "{{ message }}"
+                  data:
+                    group: "home-security"
+                    url: homeassistant://navigate/lovelace/security
+                    actions:
+                      - action: "ARM_ALARM"
+                        title: "Arm (full)"
+                        destructive: true
+                      - action: "ARM_ALARM_BYPASS_GARAGE"
+                        title: "Arm (bypass garage)"
+                        destructive: true
+                      - action: "ARM_STAY_ALARM"
+                        title: "Arm (stay)"
+                        destructive: true
+            else:
+              - service: notify.mobile_app_ceres
+                data:
+                  title: "🔒 Security"
+                  # todo: user (can be from olarm or HA context; tricky to get right)
+                  # todo: list bypassed zones, if any
+                  message: "{{ message }}"
+                  data:
+                    group: "home-security"
+                    url: homeassistant://navigate/lovelace/security
+                    actions:
+                      - action: "DISARM_ALARM"
+                        title: "Disarm"
+                        destructive: true
           - condition: template
             value_template: "{{ area == 'flatlet' }}"
           - service: script.turn_on

@@ -21,18 +21,18 @@ alarm_control_panel:
     code_arm_required: true
     arming_time: 0
     delay_time: 0
-    trigger_time: 3600
+    trigger_time: 30
     disarm_after_trigger: false
     disarmed:
-      trigger_time: 3600
+      trigger_time: 30
     armed_home:
       arming_time: 0
       delay_time: 0
-      trigger_time: 3600
+      trigger_time: 30
     armed_away:
       arming_time: 0
       delay_time: 0
-      trigger_time: 3600
+      trigger_time: 30
 
 alert:
   test:
@@ -171,6 +171,20 @@ automation:
       - service: automation.turn_off
         target:
           entity_id: "{{ this.entity_id }}"
+
+  - alias: "Alarm Control Panel State Changes"
+    id: "e4a1a7ac-27d1-430a-aec4-8047b32136de"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.test
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Alarm Control Panel Test"
+          message: "{{ trigger.from_state.state }} → {{ trigger.to_state.state }}"
+          data:
+            url: homeassistant://navigate/lovelace-test/test
 
   # - alias: "A Faulty Automation"
   #   id: "361d81b6-cb07-4df3-b3c8-baed2da7072d"

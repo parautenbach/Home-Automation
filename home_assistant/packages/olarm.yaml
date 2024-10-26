@@ -25,6 +25,28 @@
 # notes:
 #  * you cannot bypass a zone after a partition has been armed
 #
+# instructions:
+#
+# visit https://user.olarm.com/#/api to get your access key and set the following up:
+#  * webhook url: this must be the ful external url to access your home assistant instance concatenated
+#    with a webhook id
+#  * home assistant cannot accept the additional secret set on olarm's side. this weakens the overall
+#    security, unfortunately, since webhook ids aren't secure in itself (security through obscurity).
+#
+# to get your device id, run this from a terminal:
+#  curl -X GET https://apiv4.olarm.co/api/v4/devices?accessToken=<ACCESS_KEY> | jq
+#
+# in secrets.yaml, define the following:
+#  * olarm_webhook_id: "<WEBHOOK_ID>"  # only the id; not the full url as above
+#  * olarm_bearer_token: "Bearer <ACCESS_KEY>"  # be sure to include the api_ prefix – do not remove this
+#  * olarm_device_endpoint: "https://apiv4.olarm.co/api/v4/devices/<DEVICE_ID>"
+#  * olarm_actions_endpoint: "https://apiv4.olarm.co/api/v4/devices/<DEVICE_ID>/actions"
+#  * alarm_code: "<CODE>"
+#
+# place this file in your home assistant's packages directory (create it if it doesn't exist) and restart home assistant.
+#
+# for debugging of the olarm api, see the official olarm docs: https://user.olarm.com/#/api/documentation.
+#
 # references:
 #  * https://community.home-assistant.io/t/olarm-integration/384560/28
 #  * https://community.home-assistant.io/t/olarm-integration/384560/52

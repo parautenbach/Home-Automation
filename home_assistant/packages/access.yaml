@@ -281,11 +281,13 @@ automation:
                   lazy: true
                 actions:
                   - action: "PARTLY_OPEN_AND_CLOSE_GATE"
-                    title: "Open and close for pedestrian"
+                    title: "Open and close (pedestrian)"
                   - action: "PARTLY_OPEN_GATE"
-                    title: "Open partly"
+                    title: "Open (pedestrian)"
                   - action: "FULLY_OPEN_GATE"
-                    title: "Open fully"
+                    title: "Open (fully)"
+                  - action: "CLOSE_GATE"
+                    title: "Close"
           # non-blocking call
           - service: script.turn_on
             target:
@@ -310,36 +312,46 @@ automation:
         event_type: mobile_app_notification_action
         event_data:
           action: FULLY_OPEN_GATE
-    condition:
-      - condition: state
-        entity_id: cover.main_gate
-        state: "closed"
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: CLOSE_GATE
     action:
       - choose:
           - conditions:
               - condition: template
-                value_template: "{{ trigger.event.data.action == 'FULLY_OPEN_GATE' }}"
+                value_template: "{{ is_state('cover.main_gate', 'closed') and trigger.event.data.action == 'FULLY_OPEN_GATE' }}"
             sequence:
               - service: cover.open_cover
                 data:
                   entity_id: cover.main_gate
           - conditions:
               - condition: template
-                value_template: "{{ trigger.event.data.action == 'PARTLY_OPEN_GATE' }}"
+                value_template: "{{ is_state('cover.main_gate', 'closed') and trigger.event.data.action == 'PARTLY_OPEN_GATE' }}"
             sequence:
               # non-blocking call
               - service: script.turn_on
                 target:
                   entity_id: script.open_pedestrian_gap
-        # PARTLY_OPEN_AND_CLOSE_GATE
-        default:
-          # non-blocking call
-          - service: script.turn_on
-            target:
-              entity_id: script.open_pedestrian_gap
-          - delay:
-              seconds: 15
-          - condition: "{{ is_state('cover.main_gate', 'open') }}"
-          - service: cover.close_cover
-            data:
-              entity_id: cover.main_gate
+          - conditions:
+              - condition: template
+                value_template: "{{ is_state('cover.main_gate', 'closed') and trigger.event.data.action == 'PARTLY_OPEN_AND_CLOSE_GATE' }}"
+            sequence:
+              # non-blocking call
+              - service: script.turn_on
+                target:
+                  entity_id: script.open_pedestrian_gap
+              - delay:
+                  seconds: 15
+              - condition: "{{ is_state('cover.main_gate', 'open') }}"
+              - service: cover.close_cover
+                data:
+                  entity_id: cover.main_gate
+          - conditions:
+              - condition: template
+                value_template: "{{ is_state('cover.main_gate', 'open') and trigger.event.data.action == 'CLOSE_GATE' }}"
+            sequence:
+              - service: cover.close_cover
+                data:
+                  entity_id: cover.main_gate
+        # default: intentionally omitted. for safety, do nothing.

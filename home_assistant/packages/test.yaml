@@ -119,7 +119,60 @@ script:
             {% set triggered_by = get_triggered_by_details(this.context) %}
             {{ triggered_by ~ '\n\n context: ' ~ (context.id, context.parent_id, context.user_id) ~ '\n\n this.context: ' ~ (this.context.id, this.context.parent_id, this.context.user_id) ~ '\n\n states.context: ' ~ (states.context.id, states.context.parent_id, states.context.user_id) }}
 
+  test_actionable_notification_action_data:
+    sequence:
+      - service: notify.mobile_app_ceres
+        data:
+          title: Test Action Data
+          message: Testing
+          data:
+            actions:
+              - action: TEST
+                title: Test
+            action_data:
+              foo: "{{ states('input_boolean.test') }}"
+      - wait_for_trigger:
+          - platform: event
+            event_type: mobile_app_notification_action
+            event_data:
+              action: TEST
+      - service: persistent_notification.create
+        data:
+          title: "Script: Action Data 1"
+          message: >-
+            {{ wait.trigger }}
+      - service: persistent_notification.create
+        data:
+          title: "Script: Action Data 2"
+          message: >-
+            {{ wait.trigger.event }}
+      - service: persistent_notification.create
+        data:
+          title: "Script: Action Data 3"
+          message: >-
+            {{ wait.trigger.event.data }}
+      - service: persistent_notification.create
+        data:
+          title: "Script: Action Data 4"
+          message: >-
+            {{ wait.trigger.event.data.action_data.foo }}
+
 automation:
+  - alias: "Handle Actionable Notification Action Data Event"
+    id: "1a3eac29-c988-4117-a768-2fb940b546f6"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: TEST
+    action:
+      - service: persistent_notification.create
+        data:
+          title: "Automation: Action Data"
+          message: >-
+            {{ trigger.event.data.action_data.foo }}
+
   - alias: "Battery Event Test"
     id: "af2a77e9-483f-4391-abe8-401c19c4baf0"
     initial_state: false

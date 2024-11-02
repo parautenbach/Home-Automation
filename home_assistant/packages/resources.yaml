@@ -1760,6 +1760,7 @@ automation:
                 name: default
                 critical: 1
                 volume: 0.5
+            # todo: actions to enable/disable
 
   - alias: "Notify Tenant Of High Energy Consumption"
     id: "72447e10-ea6c-4bc1-abd0-b3f336eb6a17"

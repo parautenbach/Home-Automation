@@ -331,7 +331,7 @@ template:
         device_class: precipitation
         unit_of_measurement: "mm"
         icon: >-
-          {% if daily['weather.openweathermap_daily']['forecast'][1]['precipitation'] > 0 %}
+          {% if daily['weather.openweathermap_daily']['forecast'][0]['precipitation'] > 0 %}
             mdi:water
           {% else %}
             mdi:water-off

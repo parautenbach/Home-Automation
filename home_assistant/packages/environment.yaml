@@ -816,10 +816,10 @@ automation:
       - platform: state
         entity_id:
           - sensor.overall_pollen_risk
-          - sensor.tree_pollen
-          - sensor.grass_pollen
-          - sensor.weed_pollen
-          - sensor.mould_spores
+        # avoid triggering on attribute changes
+        # https://www.home-assistant.io/docs/automation/trigger/#state-trigger
+        # not_from: null
+        # actually, we want to trigger on attribute changes; just not on the individual pollen sensors too
     mode: single
     action:
       - service: notify.family

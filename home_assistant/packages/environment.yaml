@@ -285,12 +285,12 @@ template:
   # https://community.home-assistant.io/t/petition-dont-delete-the-forecast-attribute/609298/38
   # https://community.home-assistant.io/t/petition-dont-delete-the-forecast-attribute/609298/240
   - trigger:
-    - platform: time_pattern
-      # every 5 minutes past the hour
-      hours: "*"
-      minutes: "5"
-    - platform: state
-      entity_id: weather.openweathermap_hourly
+      - platform: time_pattern
+        # every 5 minutes past the hour
+        hours: "*"
+        minutes: "5"
+      - platform: state
+        entity_id: weather.openweathermap_hourly
     action:
       - service: weather.get_forecasts
         target:
@@ -309,12 +309,12 @@ template:
           forecast: "{{ hourly['weather.openweathermap_hourly']['forecast'][24:] }}"
           attribution: "{{ state_attr('sensor.weather_tomorrow_hourly', 'attribution') }}"
   - trigger:
-    - platform: time_pattern
-      # every 5 minutes past the hour
-      hours: "*"
-      minutes: "5"
-    - platform: state
-      entity_id: weather.openweathermap_daily
+      - platform: time_pattern
+        # every 5 minutes past the hour
+        hours: "*"
+        minutes: "5"
+      - platform: state
+        entity_id: weather.openweathermap_daily
     action:
       - service: weather.get_forecasts
         target:

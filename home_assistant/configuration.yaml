@@ -41,6 +41,7 @@ logger:
     # to be off, it _needs_ to timeout, so why raise an error?
     homeassistant.components.ping.binary_sensor: fatal
     # for debugging
+    # homeassistant.components.recorder.migration: debug
     # homeassistant.components.shelly: debug
     # homeassistant.components.aioshelly: debug
     # homeassistant.components.script: debug

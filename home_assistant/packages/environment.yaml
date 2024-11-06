@@ -323,7 +323,6 @@ template:
           type: daily
         response_variable: daily
     sensor:
-      # the sensor for yesterday is a sql sensor configured via the ui
       - name: Weather Forecast Precipitation Today
         unique_id: "413a950a-150d-4faf-9f93-3d35b240dd5d"
         state: >-
@@ -344,6 +343,23 @@ template:
         unit_of_measurement: "mm"
         icon: >-
           {% if daily['weather.openweathermap_daily']['forecast'][1]['precipitation'] > 0 %}
+            mdi:water
+          {% else %}
+            mdi:water-off
+          {% endif %}
+  - trigger:
+      - platform: time
+        at: "23:55"
+    sensor:
+      - name: Weather Forecast Precipitation Yesterday
+        unique_id: "701c1f90-bc1c-47d4-b490-1267ec7155e4"
+        # save today's value near the end of the day
+        state: >-
+          {{ states('sensor.weather_forecast_precipitation_today') }}
+        device_class: precipitation
+        unit_of_measurement: "mm"
+        icon: >-
+          {% if states('sensor.weather_forecast_precipitation_today') | float(0) > 0 %}
             mdi:water
           {% else %}
             mdi:water-off

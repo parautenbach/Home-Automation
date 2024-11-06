@@ -621,6 +621,7 @@ automation:
             # by apple rules, critical notifications can't be grouped or replaced
             # group notifications by the timer entity
             group: "{{ trigger.event.data.entity_id }}"
+            tag: "{{ trigger.event.data.entity_id }}"
             url: homeassistant://navigate/lovelace/main
             actions:
               - action: "CLOSE_COVER"
@@ -750,6 +751,15 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
+          message: "clear_notification"
+          data:
+            tag: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
+      # we need to wait, otherwise it seems like the next notification will be cleared too
+      # could be a race condition in HA, the companion app, ios or firebase – who knows...
+      - delay:
+          seconds: 1
+      - service: notify.mobile_app_ceres
+        data:
           title: "⚠️ Security"
           # cover.garage_doors_rhs -> Pieter's garage door
           message: >-
@@ -768,6 +778,7 @@ automation:
             # the timer entity
             # cover.garage_doors_rhs -> timer.garage_doors_rhs_timer
             group: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
+            tag: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
             url: homeassistant://navigate/lovelace/main
 
   - alias: "Alert If Garages Opened Or Closed When Not Supposed To"

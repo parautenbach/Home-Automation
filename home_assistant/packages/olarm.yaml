@@ -535,6 +535,7 @@ automation:
             You haven't yet armed the stay alarm. Would you like to arm it?
           data:
             group: "home-security"
+            tag: "arm-stay-reminder"
             url: homeassistant://navigate/lovelace/security
             actions:
               - action: "ARM_STAY_ALARM"

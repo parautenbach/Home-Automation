@@ -392,6 +392,8 @@ automation:
               - action: "DISARM_ALARM"
                 title: "Disarm"
                 destructive: true
+            action_data:
+              entity_id: "{{ trigger.entity_id }}"
 
   - alias: "Ask To Arm Alarm When Last Person Left"
     id: "e8a63da5-4d84-40ab-9c05-dca93ba4900d"
@@ -425,6 +427,8 @@ automation:
               - action: "ARM_ALARM_BYPASS_GARAGE"
                 title: "Arm (bypass garage)"
                 destructive: true
+            action_data:
+              entity_id: "alarm_control_panel.home"
             push:
               sound:
                 name: default
@@ -467,6 +471,8 @@ automation:
                   - action: "DISARM_ALARM"
                     title: "Disarm"
                     destructive: true
+                action_data:
+                  entity_id: "alarm_control_panel.home"
                 push:
                   sound:
                     name: default
@@ -534,6 +540,8 @@ automation:
               - action: "ARM_STAY_ALARM"
                 title: "Arm (stay)"
                 destructive: true
+            action_data:
+              entity_id: "alarm_control_panel.home"
             push:
               sound:
                 name: default
@@ -570,7 +578,7 @@ automation:
       - condition: template
         value_template: >-
           {% set new_state = trigger.id | replace('arm', 'armed') %}
-          {{ not is_state('alarm_control_panel.home', new_state) }}
+          {{ not is_state(trigger.event.data.action_data.entity_id, new_state) }}
     action:
       - if: "{{ trigger.id == 'arm_away_bypass_garage' }}"
         then:
@@ -581,7 +589,7 @@ automation:
           # todo: check and log error response
       - service: "alarm_control_panel.alarm_{{ trigger.id | replace('_bypass_garage', '') }}"
         target:
-          entity_id: alarm_control_panel.home
+          entity_id: "{{ trigger.event.data.action_data.entity_id }}"
         data:
           code: !secret alarm_code
 
@@ -606,16 +614,16 @@ automation:
             armed_home: "armed (stay)"
             armed_away: "armed"
           state: "{{ state_map[trigger.to_state.state] }}"
+          area: >-
+            {{ trigger.entity_id | replace('alarm_control_panel.', '') }}
       # this call will not fail if e.g. arming when a zone is active when it shouldn't be
       - service: "rest_command.olarm_{{ trigger.to_state.state }}"
         data:
-          area: "{{ '1' if trigger.entity_id == 'alarm_control_panel.home' else '2' }}"
+          area: "{{ '1' if area == 'home' else '2' }}"
         response_variable: olarm_response
       - if: "{{ olarm_response.status == 200 and olarm_response.content.actionStatus == 'OK' }}"
         then:
           - variables:
-              area: >-
-                {{ trigger.entity_id | replace('alarm_control_panel.', '') }}
               message: >-
                 The {{ area }}'s alarm was {{ state }} at {{ now().strftime('%H:%M') }}.
           - if: "{{ trigger.to_state.state == 'disarmed' }}"
@@ -639,6 +647,11 @@ automation:
                       - action: "ARM_STAY_ALARM"
                         title: "Arm (stay)"
                         destructive: true
+                    # https://companion.home-assistant.io/docs/notifications/actionable-notifications/
+                    # https://community.home-assistant.io/t/custom-data-in-actionable-notification-on-ios/429748/2
+                    # https://blog.kalavala.net/homeassistant/event/2018/01/11/custom-events.html
+                    action_data:
+                      entity_id: "{{ trigger.entity_id }}"
             else:
               - service: notify.mobile_app_ceres
                 data:
@@ -653,6 +666,8 @@ automation:
                       - action: "DISARM_ALARM"
                         title: "Disarm"
                         destructive: true
+                    action_data:
+                      entity_id: "{{ trigger.entity_id }}"
           - condition: template
             value_template: "{{ area == 'flatlet' }}"
           - service: script.turn_on

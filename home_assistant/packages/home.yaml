@@ -1267,6 +1267,7 @@ automation:
                 destructive: true
                 title: "Done"
             group: "routine-trash"
+            tag: "routine-trash"
             url: homeassistant://navigate/lovelace/main
             push:
               sound:

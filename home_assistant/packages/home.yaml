@@ -559,6 +559,10 @@ automation:
           - condition: state
             entity_id: input_boolean.guest_mode
             state: "off"
+          # replaced by the wait template below
+          # - condition: state
+          #   entity_id: alarm_control_panel.home
+          #   state: "disarmed"
     action:
       - wait_template: >-
           {% set last_motion_detected = (now() - states.binary_sensor.doorbell_motion_detected.last_updated).total_seconds() %}

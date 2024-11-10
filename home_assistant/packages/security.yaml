@@ -235,9 +235,6 @@ camera:
     # why on earth doesn't this work?
     # https://github.com/home-assistant/core/issues/84576
     # stream_quality: 90
-  - platform: local_file
-    name: security_camera_last_snapshot
-    file_path: /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg
   - platform: ffmpeg
     name: security_camera_last_clip
     input: /home/homeassistant/.homeassistant/www/camera.security_camera_last.mp4

@@ -309,14 +309,9 @@ automation:
               #   ...
               - service: alarm_control_panel.alarm_trigger
                 target:
-                  entity_id: alarm_control_panel.home
-                # data:
-                #   code: !secret alarm_code
-              - service: alarm_control_panel.alarm_trigger
-                target:
-                  entity_id: alarm_control_panel.flatlet
-                # data:
-                #   code: !secret alarm_code
+                  entity_id:
+                    - alarm_control_panel.home
+                    - alarm_control_panel.flatlet
           # elif state changed: home
           - conditions:
               # compare with current state (noop it if matches; means it was actioned from HA, so don't cause a loop)

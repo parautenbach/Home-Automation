@@ -365,7 +365,7 @@ cards:
             hours_to_show: 24
             hour24: true
             lower_bound: 0
-            upper_bound: 5000
+            upper_bound: 6000
             smoothing: true
             points_per_hour: 1
             line_width: 2
@@ -426,7 +426,7 @@ cards:
             points_per_hour: 1
             line_width: 2
             lower_bound: 0
-            upped_bound: 4200
+            upped_bound: 6000
             lower_bound_secondary: 0
             # keep in sync with environment.yaml
             upper_bound_secondary: 120000

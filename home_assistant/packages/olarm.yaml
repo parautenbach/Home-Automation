@@ -351,7 +351,7 @@ automation:
         default:
           - service: system_log.write
             data:
-              message: "{{ trigger.webhook_id ~ ': Unknown event received: ' ~ trigger.json.eventState }}"
+              message: "{{ trigger.webhook_id ~ ': Unprocessable event received: ' ~ trigger.json.eventState }}"
               level: warning
               logger: "homeassistant.components.olarm"
 

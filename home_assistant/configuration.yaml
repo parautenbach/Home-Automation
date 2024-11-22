@@ -182,7 +182,7 @@ zone:
   - name: Home
     latitude: !secret home_latitude
     longitude: !secret home_longitude
-    radius: 22
+    radius: 20
     icon: mdi:home
 
 ios:

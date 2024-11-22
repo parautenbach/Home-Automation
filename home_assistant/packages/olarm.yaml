@@ -414,6 +414,7 @@ automation:
             The last person left home. Would you like to arm the alarm?
           data:
             group: "home-security"
+            tag: "arm-alarm-reminder"
             url: homeassistant://navigate/lovelace/security
             actions:
               - action: "ARM_ALARM"
@@ -530,7 +531,7 @@ automation:
             You haven't yet armed the stay alarm. Would you like to arm it?
           data:
             group: "home-security"
-            tag: "arm-stay-reminder"
+            tag: "arm-alarm-reminder"
             url: homeassistant://navigate/lovelace/security
             actions:
               - action: "ARM_STAY_ALARM"
@@ -649,6 +650,11 @@ automation:
                     action_data:
                       entity_id: "{{ trigger.entity_id }}"
             else:
+              - service: notify.mobile_app_ceres
+                data:
+                  message: "clear_notification"
+                  data:
+                    tag: "arm-alarm-reminder"
               - service: notify.mobile_app_ceres
                 data:
                   title: "🔒 Security"

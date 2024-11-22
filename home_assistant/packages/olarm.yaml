@@ -446,6 +446,17 @@ automation:
           - condition: state
             entity_id: alarm_control_panel.home
             state: "disarmed"
+      # rather use the wait template below (and we don't have the bypass functionality yet)
+      # # another check that the alarm is probably disarmed:
+      # # olarm webhooks can be a tad too slow when we disarm with the remote
+      # - condition: and
+      #   conditions:
+      #     - condition: state
+      #       entity_id: cover.garage_doors
+      #       state: "closed"
+      #     - condition: state
+      #       entity_id: input_boolean.alarm_zone_17_bypass
+      #       state: "off"
     action:
       # delivery of the notification can be slow
       # so, even if this triggers immediately, it may only be delivered after the garage door has been opened

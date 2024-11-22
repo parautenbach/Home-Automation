@@ -131,6 +131,7 @@ script:
                 title: Test
             action_data:
               foo: "{{ states('input_boolean.test') }}"
+              qux: "{{ ['foo', 'bar'] }}"
       - wait_for_trigger:
           - platform: event
             event_type: mobile_app_notification_action
@@ -156,6 +157,16 @@ script:
           title: "Script: Action Data 4"
           message: >-
             {{ wait.trigger.event.data.action_data.foo }}
+      - service: persistent_notification.create
+        data:
+          title: "Script: Action Data 5"
+          message: >-
+            {{ wait.trigger.event.data.action_data.qux | length }}
+      - service: persistent_notification.create
+        data:
+          title: "Script: Action Data 6"
+          message: >-
+            {{ wait.trigger.event.data.action_data.qux }}
 
 automation:
   - alias: "Handle Actionable Notification Action Data Event"

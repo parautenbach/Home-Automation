@@ -402,6 +402,10 @@ automation:
                 critical: 1
                 volume: 0.5
             actions:
+              - action: "GET_HELP"
+                title: "Get help!"
+                uri: "tel:+27218874777"
+                destructive: true
               - action: "DISARM_ALARM"
                 title: "Disarm"
                 destructive: true

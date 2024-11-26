@@ -63,11 +63,11 @@ template:
         entity_id: switch.irrigation_main
         variables:
           state: >-
-            {% set durations = [
-              'number.irrigation_front_beds_run_duration',
-              'number.irrigation_front_lawn_run_duration',
-              'number.irrigation_rear_beds_run_duration',
-              'number.irrigation_rear_lawn_run_duration'] %}
+            {% set durations = expand('group.irrigation_zones') |
+                               map(attribute='entity_id') |
+                               map('replace', 'switch', 'number') |
+                               map('regex_replace', '$', '_run_duration') |
+                               list %}
             {% set multiplier = states('number.irrigation_multiplier') | float(0) %}
             {% set cycle_duration = durations | map('states') | map('int', 0) | sum * multiplier %}
             {% set automatic_cycle_start = states('input_datetime.irrigation_start_time') | today_at %}
@@ -115,12 +115,11 @@ template:
             'input_boolean.irrigation_friday',
             'input_boolean.irrigation_saturday',
             'input_boolean.irrigation_sunday'] %}
-          {% set durations = [
-            'number.irrigation_front_beds_run_duration',
-            'number.irrigation_front_lawn_run_duration',
-            'number.irrigation_rear_beds_run_duration',
-            'number.irrigation_rear_lawn_run_duration']
-          %}
+          {% set durations = expand('group.irrigation_zones') |
+                             map(attribute='entity_id') |
+                             map('replace', 'switch', 'number') |
+                             map('regex_replace', '$', '_run_duration') |
+                             list %}
           {% set watering_days = days | map('states') | select('==', 'on') | list | count %}
           {# assuming that all zones are enabled #}
           {% set cycle_duration = durations | map('states') | map('int') | sum %}
@@ -152,6 +151,17 @@ automation:
 
   - alias: "Notify When Irrigation State Changed"
     id: "53f24f14-12a3-493a-a6d8-fcb4c552c236"
+    variables:
+      cycle_duration: >-
+        {% set durations = expand('group.irrigation_zones') |
+                           map(attribute='entity_id') |
+                           map('replace', 'switch', 'number') |
+                           map('regex_replace', '$', '_run_duration') |
+                           list %}
+        {# assuming that all zones are enabled #}
+        {% set cycle_duration = durations | map('states') | map('int') | sum %}
+        {% set multiplier = states('number.irrigation_multiplier') | float(0) %}
+        {{ (cycle_duration * multiplier) | int(0) }}
     trigger:
       - platform: state
         entity_id: sensor.irrigation_state
@@ -176,27 +186,32 @@ automation:
             {#      time that passed when a zone or the main switch turns off.                                #}
             {% set from = trigger.from_state.state %}
             {% set to = trigger.to_state.state %}
+            {# todo: what if interrupted? #}
             {% if to == 'not_running' %}
               {% if from == 'automatic_cycle' %}
-                An automatic irrigation cycle has completed as scheduled.
+                An automatic irrigation cycle has completed as scheduled (duration: {{ cycle_duration }} min).
               {% elif from ==  'manual_cycle' %}
-                A manual irrigation cycle has completed.
+                A manual irrigation cycle has completed (duration: {{ cycle_duration }} min).
               {% elif from == 'manual_zone' %}
                 {% set zone = expand('group.irrigation_zones') | sort(attribute='last_updated') | list | last %}
                 {% set name = state_attr(zone.entity_id, 'friendly_name') | lower %}
-                The {{ name }} irrigation zone that was started manually has finished.
+                {% set duration_entity = zone.entity_id | replace('switch', 'number') ~ '_run_duration' %}
+                {% set zone_duration = states(duration_entity) | int(0) %}
+                The {{ name }} irrigation zone that was started manually has finished (duration: {{ zone_duration }} min).
               {% else %}
                 {# pass #}
               {% endif %}
             {% else %}
               {% if to == 'automatic_cycle' %}
-                An automatic irrigation cycle has started as scheduled.
+                An automatic irrigation cycle has started as scheduled (duration: {{ cycle_duration }} min).
               {% elif to ==  'manual_cycle' %}
-                A manual irrigation cycle has been started.
+                A manual irrigation cycle has been started (duration: {{ cycle_duration }} min).
               {% elif from == 'manual_zone' %}
                 {% set zone = expand('group.irrigation_zones') | selectattr('state', '==', 'on') | first %}
                 {% set name = state_attr(zone.entity_id, 'friendly_name') | lower %}
-                The {{ name }} irrigation zone has been started manually.
+                {% set duration_entity = zone.entity_id | replace('switch', 'number') ~ '_run_duration' %}
+                {% set zone_duration = states(duration_entity) | int(0) %}
+                The {{ name }} irrigation zone has been started manually (duration: {{ zone_duration }} min).
               {% else %}
                 {# pass #}
                 Debug:

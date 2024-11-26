@@ -100,14 +100,17 @@ script:
 
   test_snapshot:
     sequence:
+      - variables:
+          camera_entity_id: camera.security_camera
       - service: camera.snapshot
-        # https://github.com/home-assistant/core/issues/40241
-        entity_id: camera.security_camera
+        target:
+          # https://github.com/home-assistant/core/issues/40241
+          entity_id: "{{ camera_entity_id }}"
         data:
           entity_id: camera.security_camera
           # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
           # https://www.home-assistant.io/integrations/camera/#service-snapshot
-          filename: '/tmp/snapshot_{{ entity_id.name }}.jpg'
+          filename: '/tmp/snapshot_{{ camera_entity_id }}.jpg'
 
   test_notification:
     sequence:

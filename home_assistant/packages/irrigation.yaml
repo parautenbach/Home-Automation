@@ -129,20 +129,57 @@ template:
 automation:
   - alias: "Start A Full Irrigation Cycle"
     id: "3e5ed8f9-9620-4890-b424-f85317d578e4"
+    variables:
+      precipitation_threshold: 5
     trigger:
       - platform: time
         at: input_datetime.irrigation_start_time
-    condition: "{{ is_state('input_boolean.irrigation_' ~ now().strftime('%A') | lower, 'on') }}"
+    condition:
+      # if the setting for today is on
+      - condition: template
+        value_template: >-
+          {{ is_state('input_boolean.irrigation_' ~ now().strftime('%A') | lower, 'on') }}
     action:
-      - if:
-        - condition: state
-          entity_id: input_boolean.skip_next_automatic_irrigation_cycle
-          state: "on"
-        then:
-          - service: input_boolean.turn_off
-            target:
-              entity_id: input_boolean.skip_next_automatic_irrigation_cycle
-        else:
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: input_boolean.skip_next_automatic_irrigation_cycle
+                state: "on"
+            sequence:
+              - service: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.skip_next_automatic_irrigation_cycle
+              - service: notify.mobile_app_ceres
+                data:
+                  title: "Garden"
+                  message: >-
+                    An automatic irrigation cycle will be skipped due to once-off deactivation.
+                  data:
+                    group: "home-garden"
+                    url: homeassistant://navigate/lovelace/irrigation
+          - conditions:
+              # the more reliable solution would be to measure the moisture in the soil
+              # extract this into a template sensor?
+              #  - proximal precipitation?
+              #  - irrigation required?
+              - condition: template
+                value_template: >-
+                  {{ states('sensor.weather_forecast_precipitation_yesterday') | int(0) >= precipitation_threshold or
+                     states('sensor.weather_forecast_precipitation_today') | int(0) >= precipitation_threshold or
+                     states('sensor.weather_forecast_precipitation_tomorrow') | int(0) >= precipitation_threshold }}
+            sequence:
+              - service: notify.mobile_app_ceres
+                data:
+                  title: "Garden"
+                  message: >-
+                    An automatic irrigation cycle has been skipped due to rain (threshold: {{ precipitation_threshold }} mm):
+                      - Yesterday: {{ states('sensor.weather_forecast_precipitation_yesterday') | int(0) }} mm
+                      - Today: {{ states('sensor.weather_forecast_precipitation_today') | int(0) }} mm
+                      - Tomorrow: {{ states('sensor.weather_forecast_precipitation_tomorrow') | int(0) }} mm
+                  data:
+                    group: "home-garden"
+                    url: homeassistant://navigate/lovelace/irrigation
+        default:
           # https://community.home-assistant.io/t/sprinkler-automation-with-esphome-a-complete-project/565077
           # https://www.reddit.com/r/Esphome/comments/12t5z8u/sprinkler_controller_and_esphome/?rdt=46144&onetap_auto=true
           - service: switch.turn_on

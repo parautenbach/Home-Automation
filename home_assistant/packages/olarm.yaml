@@ -406,7 +406,9 @@ automation:
                 title: "Disarm"
                 destructive: true
             action_data:
-              entity_id: "{{ trigger.entity_id }}"
+              # on the physical panel, when we disarm, only one disarm command matters,
+              # but for HA, we must disarm both panels (only when it was triggered)
+              entity_ids: "{{ ['alarm_control_panel.home', 'alarm_control_panel.flatlet'] }}"
 
   - alias: "Ask To Arm Alarm When Last Person Left"
     id: "e8a63da5-4d84-40ab-9c05-dca93ba4900d"
@@ -442,7 +444,7 @@ automation:
                 title: "Arm (bypass garage)"
                 destructive: true
             action_data:
-              entity_id: "alarm_control_panel.home"
+              entity_ids: "{{ ['alarm_control_panel.home'] }}"
             push:
               sound:
                 name: default
@@ -497,7 +499,7 @@ automation:
                     title: "Disarm"
                     destructive: true
                 action_data:
-                  entity_id: "alarm_control_panel.home"
+                  entity_ids: "{{ ['alarm_control_panel.home'] }}"
                 push:
                   sound:
                     name: default
@@ -567,7 +569,7 @@ automation:
                 title: "Arm (stay)"
                 destructive: true
             action_data:
-              entity_id: "alarm_control_panel.home"
+              entity_ids: "{{ ['alarm_control_panel.home'] }}"
             push:
               sound:
                 name: default
@@ -604,7 +606,13 @@ automation:
       - condition: template
         value_template: >-
           {% set new_state = trigger.id | replace('arm', 'armed') %}
-          {{ not is_state(trigger.event.data.action_data.entity_id, new_state) }}
+          {% set ns = namespace(is_mismatch=false) %}
+          {% for entity_id in trigger.event.data.action_data.entity_ids %}
+            {% if not is_state(entity_id, new_state) %}
+              {% set ns.is_mismatch = true %}
+            {% endif %}
+          {% endfor %}
+          {{ ns.is_mismatch }}
     action:
       - if: "{{ trigger.id == 'arm_away_bypass_garage' }}"
         then:
@@ -615,7 +623,7 @@ automation:
           # todo: check and log error response
       - service: "alarm_control_panel.alarm_{{ trigger.id | replace('_bypass_garage', '') }}"
         target:
-          entity_id: "{{ trigger.event.data.action_data.entity_id }}"
+          entity_id: "{{ trigger.event.data.action_data.entity_ids }}"
         data:
           code: !secret alarm_code
 
@@ -677,7 +685,7 @@ automation:
                     # https://community.home-assistant.io/t/custom-data-in-actionable-notification-on-ios/429748/2
                     # https://blog.kalavala.net/homeassistant/event/2018/01/11/custom-events.html
                     action_data:
-                      entity_id: "{{ trigger.entity_id }}"
+                      entity_ids: "{{ [trigger.entity_id] }}"
             else:
               - service: notify.mobile_app_ceres
                 data:
@@ -698,7 +706,7 @@ automation:
                         title: "Disarm"
                         destructive: true
                     action_data:
-                      entity_id: "{{ trigger.entity_id }}"
+                      entity_ids: "{{ [trigger.entity_id] }}"
           - condition: template
             value_template: "{{ area == 'flatlet' }}"
           - service: script.turn_on

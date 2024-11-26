@@ -293,6 +293,11 @@ automation:
             disarm: "disarm"
             stay: "arm_home"
             arm: "arm_away"
+            panic: "triggered"
+            alarm: "triggered"
+          area_map:
+            1: "home"
+            2: "flatlet"
       - service: system_log.write
         data:
           message: "{{ trigger.webhook_id ~ ': ' ~ trigger.json }}"
@@ -302,7 +307,16 @@ automation:
           # if triggered
           - conditions:
               - condition: template
-                value_template: "{{ trigger.json.eventState in ['panic', 'alarm'] }}"
+                # todo: test
+                # check that we're not already in a triggered state:
+                # all panels will be in the triggered state at the same time,
+                # but olarm will be sending multiple trigger events –
+                # one for each panels, and also both a panic and alarm event
+                value_template: >-
+                  {% set mapped_state = state_map[trigger.json.eventState] %}
+                  {{ mapped_state == 'triggered' and
+                     (not is_state('alarm_control_panel.home', mapped_state) or
+                      not is_state('alarm_control_panel.flatlet', mapped_state)) }}
             sequence:
               # todo: save panic type (mapped):
               # if panic
@@ -321,11 +335,11 @@ automation:
               # compare with current state (noop it if matches; means it was actioned from HA, so don't cause a loop)
               - condition: template
                 value_template: >-
-                  {# eventNum == 1 is the partition/area check #}
-                  {% set new_state = state_map[trigger.json.eventState] %}
-                  {{ trigger.json.eventNum == 1 and
-                     trigger.json.eventState in ['disarm', 'stay', 'arm'] and
-                     not is_state('alarm_control_panel.home', new_state) }}
+                  {% set mapped_state = state_map[trigger.json.eventState] %}
+                  {% set mapped_area = area_map[trigger.json.eventNum] %}
+                  {{ mapped_area == 'home' and
+                     mapped_state in ['disarm', 'arm_home', 'arm_away'] and
+                     not is_state('alarm_control_panel.home', mapped_state) }}
             sequence:
               - service: "alarm_control_panel.alarm_{{ state_map[trigger.json.eventState] }}"
                 target:
@@ -337,11 +351,11 @@ automation:
               # compare with current state (noop it if matches; means it was actioned from HA, so don't cause a loop)
               - condition: template
                 value_template: >-
-                  {# eventNum == 2 is the partition/area check #}
-                  {% set new_state = state_map[trigger.json.eventState] %}
-                  {{ trigger.json.eventNum == 2 and
-                     trigger.json.eventState in ['disarm', 'arm'] and
-                     not is_state('alarm_control_panel.flatlet', new_state) }}
+                  {% set mapped_state = state_map[trigger.json.eventState] %}
+                  {% set mapped_area = area_map[trigger.json.eventNum] %}
+                  {{ mapped_area == 'flatlet' and
+                     mapped_state in ['disarm', 'arm_away'] and
+                     not is_state('alarm_control_panel.flatlet', mapped_state) }}
             sequence:
               - service: "alarm_control_panel.alarm_{{ state_map[trigger.json.eventState] }}"
                 target:

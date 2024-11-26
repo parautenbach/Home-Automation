@@ -79,6 +79,12 @@ alarm_control_panel:
       arming_time: 0
       delay_time: 0
       trigger_time: 900
+    # https://github.com/home-assistant/core/issues/111926
+    # https://github.com/home-assistant/core/pull/119122
+    # https://github.com/home-assistant/home-assistant.io/pull/33148/files
+    arming_states:
+      - armed_away
+      - armed_home
   - platform: manual
     name: "Flatlet"
     code: !secret alarm_code
@@ -89,14 +95,12 @@ alarm_control_panel:
     disarm_after_trigger: false
     disarmed:
       trigger_time: 900
-    armed_home:
-      arming_time: 0
-      delay_time: 0
-      trigger_time: 900
     armed_away:
       arming_time: 0
       delay_time: 0
       trigger_time: 900
+    arming_states:
+      - armed_away
 
 input_boolean:
   alarm_zone_1_bypass:

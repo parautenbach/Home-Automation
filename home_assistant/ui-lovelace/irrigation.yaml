@@ -30,7 +30,7 @@ cards:
         # https://community.home-assistant.io/t/switch-confirmation-dialog-lovelace-card/284476
         # https://github.com/home-assistant/frontend/discussions/8905
         # https://github.com/iantrich/restriction-card
-        # tl;dr: cannot have a confirmation popup on a switch using the entities card
+        # tl;dr: cannot have a confirmation popup on a switch (only buttons) using the entities card
         tap_action:
           action: toggle
           confirmation:

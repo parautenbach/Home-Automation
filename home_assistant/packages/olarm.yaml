@@ -158,6 +158,14 @@ input_boolean:
     name: Flatlet Bypass
     icon: mdi:bed-outline
 
+input_datetime:
+  weekday_alarm_arm_reminder:
+    has_time: true
+    icon: mdi:calendar-week
+  weekend_alarm_arm_reminder:
+    has_time: true
+    icon: mdi:calendar-weekend
+
 # https://www.home-assistant.io/integrations/rest_command/
 # https://user.olarm.co/#/api
 # https://user.olarm.co/#/api/documentation
@@ -537,10 +545,10 @@ automation:
     initial_state: true
     trigger:
       - platform: time
-        at: "20:00:00"
+        at: input_datetime.weekday_alarm_arm_reminder
         id: "weekdays"
       - platform: time
-        at: "22:00:00"
+        at: input_datetime.weekend_alarm_arm_reminder
         id: "weekends"
       - platform: state
         entity_id: sensor.ceres_battery_state

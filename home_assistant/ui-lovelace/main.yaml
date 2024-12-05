@@ -516,7 +516,7 @@ cards:
             name: Wake-up Time
             # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/3388
             # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/3385
-            card_mod:
+            card_mod: &time_input_mods
               style:
                 ha-time-input $ ha-base-time-input $:
                   ha-textfield:
@@ -533,7 +533,7 @@ cards:
             name: Skip Next
           - entity: input_datetime.vacation_start
             name: Vacation Start
-            card_mod:
+            card_mod: &date_input_mods
               style:
                 ha-date-input $ ha-textfield $: |
                   .mdc-text-field {
@@ -541,16 +541,19 @@ cards:
                   }
           - entity: input_datetime.vacation_end
             name: Vacation End
-            card_mod:
-              style:
-                ha-date-input $ ha-textfield $: |
-                  .mdc-text-field {
-                    height: 3em !important;
-                  }
+            card_mod: *date_input_mods
           - entity: binary_sensor.workday
             name: Workday Today
           - entity: binary_sensor.workday_tomorrow
             name: Workday Tomorrow
+          - entity: input_boolean.trash_reminder
+            name: Trash Reminder
+          - entity: input_datetime.weekday_alarm_arm_reminder
+            name: Weekday Alarm Arm Reminder
+            card_mod: *time_input_mods
+          - entity: input_datetime.weekend_alarm_arm_reminder
+            name: Weekend Alarm Arm Reminder
+            card_mod: *time_input_mods
       - type: custom:atomic-calendar-revive
         name: Upcoming Events
         showLocation: false

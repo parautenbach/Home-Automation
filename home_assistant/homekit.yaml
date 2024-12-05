@@ -55,6 +55,7 @@
       - climate.living_room_ac
       - climate.main_bedroom_ac
       - alarm_control_panel.home
+      - alarm_control_panel.flatlet
   entity_config:
     binary_sensor.cabinet_door:
       linked_battery_sensor: sensor.cabinet_battery
@@ -113,6 +114,8 @@
     input_boolean.baby_sleep_mode:
       name: Sleep Mode
     alarm_control_panel.home:
+      code: !secret alarm_code
+    alarm_control_panel.flatlet:
       code: !secret alarm_code
     # media_player.main_bedroom_universal:
     #   feature_list:

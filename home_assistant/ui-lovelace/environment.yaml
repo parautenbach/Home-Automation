@@ -345,26 +345,52 @@ cards:
         sun_entity: sun.sun
         apparent_sensor: sensor.outside_feels_like
         aqi_sensor: sensor.owm_pollution_overall_air_quality
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+          - type: custom:weather-chart-card
+            entity: weather.openweathermap_hourly
+            animated_icons: true
+            show_main: false
+            forecast:
+              type: hourly
+              style: style2
+              show_probability: true
+          - type: custom:weather-chart-card
+            entity: weather.openweathermap_hourly
+            show_main: false
+            # show_wind_gust_speed: true
+            show_visibility: true
+            animated_icons: true
+            forecast:
+              type: daily
+              style: style2
+              show_probability: true
       # https://github.com/bramkragten/weather-card
-      - type: custom:weather-card
-        entity: weather.openweathermap_hourly
-        current: false
-        details: true
-        forecast: false
-      - type: custom:weather-card
-        entity: weather.openweathermap_hourly
-        current: false
-        details: false
-        forecast: true
-        hourly_forecast: true
-        number_of_forecasts: 5  # hours
-      - type: custom:weather-card
-        entity: weather.openweathermap_daily
-        current: false
-        details: false
-        forecast: true
-        hourly_forecast: false
-        number_of_forecasts: 5  # days
+      # old option 2
+      # - type: custom:weather-card
+      #   entity: weather.openweathermap_hourly
+      #   current: false
+      #   details: true
+      #   forecast: false
+      # - type: custom:weather-card
+      #   entity: weather.openweathermap_hourly
+      #   current: false
+      #   details: false
+      #   forecast: true
+      #   hourly_forecast: true
+      #   number_of_forecasts: 5  # hours
+      # - type: custom:weather-card
+      #   entity: weather.openweathermap_daily
+      #   current: false
+      #   details: false
+      #   forecast: true
+      #   hourly_forecast: false
+      #   number_of_forecasts: 5  # days
+      # old option 1
       # - type: weather-forecast
       #   entity: weather.openweathermap_hourly
       #   name: Stellenbosch

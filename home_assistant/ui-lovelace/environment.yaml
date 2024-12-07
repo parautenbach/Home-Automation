@@ -353,20 +353,20 @@ cards:
         cards:
           - type: custom:weather-chart-card
             entity: weather.openweathermap_hourly
-            animated_icons: true
-            show_main: false
-            forecast:
-              type: hourly
-              style: style2
-              show_probability: true
-          - type: custom:weather-chart-card
-            entity: weather.openweathermap_hourly
             show_main: false
             # show_wind_gust_speed: true
             show_visibility: true
             animated_icons: true
             forecast:
               type: daily
+              style: style2
+              show_probability: true
+          - type: custom:weather-chart-card
+            entity: weather.openweathermap_hourly
+            animated_icons: true
+            show_main: false
+            forecast:
+              type: hourly
               style: style2
               show_probability: true
       # https://github.com/bramkragten/weather-card

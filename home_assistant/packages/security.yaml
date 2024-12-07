@@ -940,6 +940,20 @@ automation:
           - GET
         id: "test_kitchen_smoke"
     action:
+      # clear the test notification
+      - if:
+          - condition: template
+            value_template: "{{ 'id' in trigger and 'test' in trigger.id }}"
+        then:
+          - service: notify.mobile_app_ceres
+            data:
+              message: "clear_notification"
+              data:
+                tag: "{{ trigger.id | replace('test_', '') ~ '-test' }}"
+      # we need to wait, otherwise it seems like the next notification will be cleared too
+      # could be a race condition in HA, the companion app, ios or firebase – who knows...
+      - delay:
+          seconds: 1
       - service: notify.mobile_app_ceres
         data:
           title: "🔥 Safety"
@@ -1021,6 +1035,7 @@ automation:
                       Please test the {{ area }}'s smoke detector by pressing and holding the button for 3 sec.
                     data:
                       group: "home-safety"
+                      tag: "{{ repeat.item | replace('binary_sensor.', '') ~ '-test' }}"
                       url: homeassistant://navigate/lovelace/security
 
   - alias: "Alert When Cabinet Opened"

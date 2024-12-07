@@ -368,6 +368,7 @@ cards:
             forecast:
               type: hourly
               style: style2
+              number_of_forecasts: 24
               show_probability: true
       # https://github.com/bramkragten/weather-card
       # old option 2

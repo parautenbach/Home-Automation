@@ -337,7 +337,7 @@ cards:
             {% endfor %}
       # https://github.com/pkissling/clock-weather-card
       - type: custom:clock-weather-card
-        entity: weather.openweathermap_daily
+        entity: weather.openweathermap
         hide_today_section: false
         hide_clock: true
         hide_date: true
@@ -352,7 +352,7 @@ cards:
             type: 'bullets'
         cards:
           - type: custom:weather-chart-card
-            entity: weather.openweathermap_hourly
+            entity: weather.openweathermap
             show_main: false
             # show_wind_gust_speed: true
             show_visibility: true
@@ -362,7 +362,7 @@ cards:
               style: style2
               show_probability: true
           - type: custom:weather-chart-card
-            entity: weather.openweathermap_hourly
+            entity: weather.openweathermap
             animated_icons: true
             show_main: false
             forecast:
@@ -373,19 +373,19 @@ cards:
       # https://github.com/bramkragten/weather-card
       # old option 2
       # - type: custom:weather-card
-      #   entity: weather.openweathermap_hourly
+      #   entity: weather.openweathermap
       #   current: false
       #   details: true
       #   forecast: false
       # - type: custom:weather-card
-      #   entity: weather.openweathermap_hourly
+      #   entity: weather.openweathermap
       #   current: false
       #   details: false
       #   forecast: true
       #   hourly_forecast: true
       #   number_of_forecasts: 5  # hours
       # - type: custom:weather-card
-      #   entity: weather.openweathermap_daily
+      #   entity: weather.openweathermap
       #   current: false
       #   details: false
       #   forecast: true
@@ -393,14 +393,14 @@ cards:
       #   number_of_forecasts: 5  # days
       # old option 1
       # - type: weather-forecast
-      #   entity: weather.openweathermap_hourly
+      #   entity: weather.openweathermap
       #   name: Stellenbosch
       #   show_current: true
       #   show_details: true
       #   show_forecast: true
       #   forecast_type: hourly
       # - type: weather-forecast
-      #   entity: weather.openweathermap_daily
+      #   entity: weather.openweathermap
       #   name: Stellenbosch
       #   show_current: false
       #   show_details: false
@@ -415,7 +415,7 @@ cards:
             name: Inside
           - entity: sensor.thermal_comfort_outside_summer_simmer_perception
             name: Outside
-          - entity: weather.openweathermap_daily
+          - entity: weather.openweathermap
             name: Today
           - entity: weather.forecast_tomorrow
             name: Tomorrow

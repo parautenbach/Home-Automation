@@ -52,7 +52,7 @@ cards:
     show_header_toggle: true
   - type: tile
     entity: alarm_control_panel.test
-    name: "Home Alarm"
+    name: "Test Alarm"
     features:
       - type: "alarm-modes"
         modes:

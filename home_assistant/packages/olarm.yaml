@@ -253,6 +253,7 @@ automation:
       # index 0 is area/partition 1 in this case, because we're indexing an array
       # it's not the olarm area/partition numbers which are 1-indexed
       # values are: stay, arm, disarm
+      # todo: if state doesn't match
       - service: "alarm_control_panel.alarm_{{ state_map[olarm_response.content.deviceState.areas[0]] }}"
         target:
           entity_id: alarm_control_panel.home
@@ -263,6 +264,7 @@ automation:
           entity_id: alarm_control_panel.flatlet
         data:
           code: !secret alarm_code
+      # todo: sync zones
 
   # examples for state changes:
   # {'deviceId': '<uuid>', 'eventTime': 1708664464105, 'eventAction': 'area', 'eventState': 'disarm', 'eventNum': 1, 'eventMsg': 'DISARMED - Area 1 - Home', 'userFullname': ''}
@@ -283,6 +285,10 @@ automation:
   # {'deviceId': '<uuid>', 'eventTime': 1709539853199, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 4, 'eventMsg': 'EMERGENCY! - Area 4', 'userFullname': ''}
   # then there's this one (note the eventAction):
   # {'deviceId': '<uuid>', 'eventTime': 1709539853544, 'eventAction': 's_alm', 'eventState': 'panic', 'eventNum': 1, 'eventMsg': 'EMERGENCY! - Panic', 'userFullname': ''}
+  #
+  # todo: need example for remote button press and panel
+  # real-time zone events are currently not available from olarm
+  #
   - alias: "Receive Olarm Event"
     id: "fbf7afaa-c357-4a85-b50d-ba5d57b9e187"
     initial_state: true
@@ -370,6 +376,7 @@ automation:
                   entity_id: alarm_control_panel.flatlet
                 data:
                   code: !secret alarm_code
+          # todo: handle zone bypass
           # should we rather notify in the above sequence blocks? this would be a potential solution (workaround?) for the
           # api bug noted in the "Alarm State Changed" automation, because we will only execute this if the physical panel's
           # actual state changed. on the other hand, we might change the state from home assistant, and the panel's state
@@ -396,6 +403,7 @@ automation:
       - service: notify.mobile_app_ceres
         data:
           title: "🚨 Security"
+          # todo: check for active (triggered) zones
           # todo: specialise alert according to a panic, fire, medical alarm
           #       if we have this, we can e.g. contact the fire department or call for an ambulance automatically
           #       or maybe the security company will already triage this when receiving the panic signal

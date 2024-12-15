@@ -302,6 +302,39 @@ automation:
             group: "batteries"
             url: homeassistant://navigate/lovelace-system/devices
 
+  - alias: "Check For Unavailable Battery-Operated Devices"
+    id: "72577c93-cd0e-4179-8c18-31302b07aa30"
+    initial_state: true
+    variables:
+      monitored_batteries: >-
+        {{
+          states.sensor
+            | selectattr('attributes.monitor', 'defined')
+            | selectattr('attributes.monitor', 'eq', True)
+            | selectattr('state', 'in', ['unavailable', 'unknown', 'none'])
+            | selectattr('attributes.device_class', 'eq', 'battery')
+            | map(attribute='entity_id')
+            | list
+        }}
+    trigger:
+      # what if the server is down at this time? for now, we don't care: batteries might last till the next day and there's a flat battery check
+      - platform: time
+        at: "09:00:00"
+    condition: >-
+      {{ expand(monitored_batteries) | count > 0 }}
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🪫 Batteries"
+          message: >
+            The following battery-operated devices are unavailable:
+            {%- for b in monitored_batteries %}
+              - {{ state_attr(b, 'friendly_name') | replace(' Battery', '') }}
+            {%- endfor %}
+          data:
+            group: "batteries"
+            url: homeassistant://navigate/lovelace-system/devices
+
   # todo: check if this affects server cpu
   # <Event state_changed[L]:
   # entity_id=sensor.rouve_bedside_light_button_battery,

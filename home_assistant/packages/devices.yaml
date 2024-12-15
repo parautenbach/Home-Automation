@@ -19,6 +19,8 @@ homeassistant:
     sensor.cabinet_battery:
       friendly_name: Cabinet Door Sensor Battery
       monitor: True
+      # how to exclude from LTS
+      # state_class: null
     sensor.kitchen_smoke_battery:
       friendly_name: Kitchen Smoke Detector Battery
       monitor: True
@@ -27,6 +29,10 @@ homeassistant:
       monitor: True
     binary_sensor.cabinet_door:
       device_class: door
+    # sensor.cabinet_luminosity:
+    #   state_class: null
+    # sensor.cabinet_temperature:
+    #   state_class: null
 
 input_boolean:
   gaia_bluetooth_audio_connected:

@@ -879,6 +879,11 @@ automation:
         entity_id: sensor.openweathermap_uv_index
         above: 7
     mode: single
+    condition:
+      - condition: template
+        value_template: >-
+          {{ 'rain' not in states('weather.openweathermap') and
+             'pouring' not in states('weather.openweathermap') }}
     action:
       - service: notify.family
         data:

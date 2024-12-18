@@ -543,8 +543,7 @@ automation:
       - service: light.turn_on
         target:
           entity_id:
-            - light.front_door
-            - light.backyard
+            - light.yard_group
 
   - alias: "Remind To Arm Stay Alarm"
     id: "60793526-4de9-44d9-9ed9-db95a15a071f"
@@ -646,6 +645,12 @@ automation:
           entity_id: "{{ trigger.event.data.action_data.entity_ids }}"
         data:
           code: !secret alarm_code
+      - if: "{{ trigger.id[0:3] == 'arm'}}"
+        then:
+          - service: light.turn_off
+            target:
+              entity_id:
+                - light.yard_group
 
   - alias: "Alarm State Changed"
     id: "c217ca42-8a3f-40c6-9945-2c77bdf16239"

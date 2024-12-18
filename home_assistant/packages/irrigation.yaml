@@ -164,9 +164,10 @@ automation:
               #  - irrigation required?
               - condition: template
                 value_template: >-
-                  {{ states('sensor.weather_forecast_precipitation_yesterday') | int(0) >= precipitation_threshold or
-                     states('sensor.weather_forecast_precipitation_today') | int(0) >= precipitation_threshold or
-                     states('sensor.weather_forecast_precipitation_tomorrow') | int(0) >= precipitation_threshold }}
+                  {% set yesterday = states('sensor.weather_forecast_precipitation_yesterday') | int(0) %}
+                  {% set today = states('sensor.weather_forecast_precipitation_today') | int(0) %}
+                  {% set tomorrow = states('sensor.weather_forecast_precipitation_tomorrow') | int(0) %}
+                  {{ (yesterday + today + tomorrow) >= precipitation_threshold }}
             sequence:
               - service: notify.mobile_app_ceres
                 data:

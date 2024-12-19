@@ -210,6 +210,10 @@ notify:
 
 battery_notes:
 
+# needed for core installations
+# [aiohttp_fast_zlib] zlib_ng and isal are not available, falling back to zlib, performance will be degraded.
+isal:
+
 # debugpy:
 #   start: false
 #   # wait: false  # false if start is false

@@ -634,7 +634,8 @@ cards:
               - entity_id: other
                 type: remaining_parent_state
                 name: Other
-                children: []
+                children:
+                  - sensor.inverter_energy
           - entities:
               - entity_id: sensor.dining_room_today_s_consumption
                 type: entity
@@ -680,7 +681,10 @@ cards:
                 type: entity
                 name: Geyser
                 children: []
-
+              - entity_id: sensor.inverter_energy
+                type: entity
+                name: Inverter
+                children: []
       # - type: energy-devices-detail-graph
       #   max_devices: 2
       - type: custom:swipe-card

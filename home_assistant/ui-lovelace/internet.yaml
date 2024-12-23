@@ -83,6 +83,7 @@ cards:
           **[MWEB STATUS PAGE](https://help.mweb.co.za/outages)**
 
           **[FROGFOOT STATUS PAGE](https://www.frogfoot.co.za/network-status/)**
+      # fixed: https://github.com/home-assistant/frontend/issues/21984
       - type: entities
         show_header_toggle: false
         entities:

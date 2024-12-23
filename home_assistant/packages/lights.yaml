@@ -911,7 +911,7 @@ automation:
 
   - alias: "Lights Off After Sunrise"
     id: "7f64fa82-a158-4f78-b406-2f0653f8f764"
-    initial_state: true
+    initial_state: false
     trigger:
       - platform: sun
         event: sunrise

@@ -1257,7 +1257,7 @@ automation:
         state: "on"
       - condition: time
         after: "05:00:00"
-        before: "08:00:00"
+        before: "07:30:00"
         weekday:
           - tue
     action:

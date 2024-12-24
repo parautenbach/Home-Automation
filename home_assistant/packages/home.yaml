@@ -351,7 +351,7 @@ automation:
             target:
               entity_id: climate.main_bedroom_ac
 
-  - alias: "Turn Off AC"
+  - alias: "Turn Off Morning AC"
     id: "53f73a27-8041-461f-a434-41a06c9fddbe"
     trigger:
       - platform: state

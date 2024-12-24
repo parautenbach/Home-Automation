@@ -1159,6 +1159,188 @@ automation:
         target:
           entity_id: switch.main_bedroom_ac_display
 
+  - alias: "Turn On Living Room AC"
+    id: "7c561ce0-7a57-4857-9516-ef638ce37293"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.pieter_present
+        to: "on"
+        id: "presence"
+      - platform: numeric_state
+        entity_id: sensor.office_temperature
+        # same as matching condition below
+        above: 24.4
+        id: "high_temp"
+      - platform: numeric_state
+        entity_id: sensor.office_temperature
+        # same as matching condition below
+        below: 15.1
+        id: "low_temp"
+      - platform: state
+        entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
+        # same as matching condition below
+        to:
+          - cold
+          - increasing_discomfort
+          - extremely_warm
+          - danger_of_heatstroke
+        for:
+          minutes: 15
+        id: "temp_perception"
+    condition:
+      - condition: state
+        entity_id: climate.living_room_ac
+        state: "off"
+      - condition: state
+        entity_id: binary_sensor.pieter_present
+        state: "on"
+      - condition: or
+        conditions:
+          - condition: numeric_state
+            entity_id: sensor.office_temperature
+            # same as matching trigger above
+            above: 24.4
+          - condition: numeric_state
+            entity_id: sensor.office_temperature
+            # same as matching trigger above
+            below: 15.1
+          - condition: state
+            entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
+            state:
+              - cold
+              - increasing_discomfort
+              - extremely_warm
+              - danger_of_heatstroke
+      - condition: time
+        after: "09:00:00"
+        before: "17:00"
+      - condition: state
+        entity_id: binary_sensor.loadshedding_active
+        state: "off"
+      - condition: numeric_state
+        entity_id: sensor.battery_charge_variance
+        above: 15
+    action:
+      - service: climate.turn_on
+        target:
+          entity_id: climate.living_room_ac
+      - wait_template: "{{ not is_state('climate.living_room_ac', 'off') }}"
+        timeout: "00:00:10"
+        continue_on_timeout: false
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🌡️ Climate Control"
+          message: >-
+            {% set outside_temp = states('sensor.outside_temperature', with_unit=True) %}
+            {% set outside_perception = state_translated('sensor.thermal_comfort_outside_summer_simmer_perception') | lower %}
+            {% set inside_temp = states('sensor.office_temperature', with_unit=True) %}
+            {% set inside_perception = state_translated('sensor.thermal_comfort_inside_summer_simmer_perception') | lower %}
+            {% if trigger.id == "presence" %}
+              {% set reason = "someone arrived home" %}
+            {% else %}
+              {% set reason = trigger.id | replace("_", " ") | replace("temp", "temperature") %}
+            {% endif %}
+            The living room's AC is turning on ({{ reason }}).
+
+
+            Please close all doors and windows.
+
+
+            It's {{ inside_temp }} inside ({{ inside_perception }}) and {{ outside_temp }} outside ({{ outside_perception }}).
+          data:
+            url: homeassistant://navigate/lovelace/environment
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 0.5
+      - choose:
+          - conditions:
+              - condition: or
+                conditions:
+                  - condition: numeric_state
+                    entity_id: sensor.office_temperature
+                    # same as matching trigger/condition above
+                    below: 15.1
+                  - condition: state
+                    entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
+                    # same as matching trigger/condition above
+                    state:
+                      - cold
+            sequence:
+              - service: climate.set_temperature
+                target:
+                  entity_id: climate.living_room_ac
+                data:
+                  hvac_mode: "heat"
+                  temperature: 20
+        default:
+          - service: climate.set_temperature
+            target:
+              entity_id: climate.living_room_ac
+            data:
+              hvac_mode: "cool"
+              temperature: 24
+      - service: climate.set_fan_mode
+        target:
+          entity_id: climate.living_room_ac
+        data:
+          fan_mode: "low"
+
+  - alias: "Turn Off Living Room AC"
+    id: "ce0f5e96-3b69-466c-9e47-b9e0f3f292dc"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.outside_temperature
+        # same as matching condition below
+        below: 23.6
+      - platform: numeric_state
+        entity_id: sensor.outside_temperature
+        # same as matching condition below
+        above: 19.9
+      - platform: state
+        # we use the OUTSIDE sensor here, since the house will tend to this, but delayed due to thermal mass
+        entity_id: sensor.thermal_comfort_outside_summer_simmer_perception
+        # same as matching condition below
+        to:
+          - comfortable
+        for:
+          minutes: 15
+      # time trigger @ 17h00?
+      # sensor.living_room_ac_power < x for 30 min?
+    condition:
+      - condition: or
+        conditions:
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: climate.living_room_ac
+                state: "cool"
+              - condition: numeric_state
+                entity_id: sensor.outside_temperature
+                # same as matching trigger above
+                below: 23.6
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: climate.living_room_ac
+                state: "heat"
+              - condition: numeric_state
+                entity_id: sensor.outside_temperature
+                # same as matching trigger above
+                above: 19.9
+          - condition: state
+            entity_id: sensor.thermal_comfort_outside_summer_simmer_perception
+            # same as matching trigger above
+            state:
+              - comfortable
+    action:
+      - service: climate.turn_off
+        target:
+          entity_id: climate.living_room_ac
+
   - alias: "Handle Bathroom Timers"
     id: "26ce241d-177b-4491-81ee-2738b2eee582"
     initial_state: true

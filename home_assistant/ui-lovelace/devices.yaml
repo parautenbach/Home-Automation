@@ -242,6 +242,16 @@ cards:
         - type: custom:auto-entities
           card:
             type: entities
+            title: Battery Maintenance Log
+          filter:
+            include:
+              - entity_id: "sensor.*_battery_last_replaced"
+          sort:
+            method: last_changed
+            reverse: true
+        - type: custom:auto-entities
+          card:
+            type: entities
             title: Battery Maintenance
           filter:
             include:
@@ -256,16 +266,6 @@ cards:
                     # https://community.home-assistant.io/t/auto-entities-automatically-fill-cards-with-entities/147801/1387
                     confirmation:
                       text: "Are you sure?"
-          sort:
-            method: last_changed
-            reverse: true
-        - type: custom:auto-entities
-          card:
-            type: entities
-            title: Battery Maintenance Log
-          filter:
-            include:
-              - entity_id: "sensor.*_battery_last_replaced"
           sort:
             method: last_changed
             reverse: true

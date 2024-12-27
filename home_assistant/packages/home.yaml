@@ -1167,6 +1167,11 @@ automation:
         entity_id: binary_sensor.pieter_present
         to: "on"
         id: "presence"
+      - platform: state
+        entity_id: alarm_control_panel.home
+        from: "armed_away"
+        to: "disarmed"
+        id: "presence"
       - platform: numeric_state
         entity_id: sensor.office_temperature
         # same as matching condition below
@@ -1188,10 +1193,18 @@ automation:
         for:
           minutes: 15
         id: "temp_perception"
+      - platform: time
+        at: "09:00:00"
+        id: "time_based"
     condition:
       - condition: state
         entity_id: climate.living_room_ac
-        state: "off"
+        state:
+          - "off"
+          - "fan_only"
+      - condition: state
+        entity_id: alarm_control_panel.home
+        state: "disarmed"
       - condition: state
         entity_id: binary_sensor.pieter_present
         state: "on"
@@ -1207,6 +1220,7 @@ automation:
             below: 15.1
           - condition: state
             entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
+            # same as matching trigger above
             state:
               - cold
               - increasing_discomfort
@@ -1215,12 +1229,17 @@ automation:
       - condition: time
         after: "09:00:00"
         before: "17:00"
+      # be less conservative power-wise: don't check the battery variance.
+      # just check that there's no scheduled loadshedding and that the grid is connected.
       - condition: state
-        entity_id: binary_sensor.loadshedding_active
-        state: "off"
-      - condition: numeric_state
-        entity_id: sensor.battery_charge_variance
-        above: 15
+        entity_id: sensor.loadshedding_stage
+        state: "No loadshedding"
+      - condition: state
+        entity_id: binary_sensor.grid_feed
+        state: "on"
+      # - condition: numeric_state
+      #   entity_id: sensor.battery_charge_variance
+      #   above: 15
     action:
       - service: climate.turn_on
         target:
@@ -1311,6 +1330,13 @@ automation:
       # time trigger @ 17h00?
       # sensor.living_room_ac_power < x for 30 min?
     condition:
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: climate.living_room_ac
+            state:
+              - "off"
+              - "fan_only"
       - condition: or
         conditions:
           - condition: and
@@ -1318,6 +1344,9 @@ automation:
               - condition: state
                 entity_id: climate.living_room_ac
                 state: "cool"
+              - condition: numeric_state
+                entity_id: sensor.inside_temperature
+                below: 24.1
               - condition: numeric_state
                 entity_id: sensor.outside_temperature
                 # same as matching trigger above
@@ -1328,14 +1357,19 @@ automation:
                 entity_id: climate.living_room_ac
                 state: "heat"
               - condition: numeric_state
+                entity_id: sensor.inside_temperature
+                above: 16.1
+              - condition: numeric_state
                 entity_id: sensor.outside_temperature
                 # same as matching trigger above
                 above: 19.9
+          # we trigger on "comfortable" outside, but we check the inside here
           - condition: state
-            entity_id: sensor.thermal_comfort_outside_summer_simmer_perception
-            # same as matching trigger above
+            entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
             state:
+              - slightly_cool
               - comfortable
+              - slightly_warm
     action:
       - service: climate.turn_off
         target:

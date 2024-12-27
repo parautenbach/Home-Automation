@@ -957,6 +957,8 @@ automation:
       - platform: sun
         event: sunrise
         offset: "01:30:00"
+      - platform: time
+        at: "09:30:00"
     action:
       - service: light.turn_off
         entity_id: light.main_bedroom_group

@@ -548,11 +548,11 @@ cards:
             name: Workday Tomorrow
           - entity: input_boolean.trash_reminder
             name: Trash Reminder
-          - entity: input_datetime.weekday_alarm_arm_reminder
-            name: Weekday Alarm Arm Reminder
+          - entity: input_datetime.workday_alarm_arm_reminder
+            name: Workday Alarm Arm Reminder
             card_mod: *time_input_mods
-          - entity: input_datetime.weekend_alarm_arm_reminder
-            name: Weekend Alarm Arm Reminder
+          - entity: input_datetime.non_workday_alarm_arm_reminder
+            name: Non-workday Alarm Arm Reminder
             card_mod: *time_input_mods
       - type: custom:atomic-calendar-revive
         name: Upcoming Events

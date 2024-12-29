@@ -1506,3 +1506,24 @@ automation:
       - service: input_boolean.turn_off
         target:
           entity_id: input_boolean.trash_reminder
+
+  - alias: "Reminder To Go Home"
+    id: "463a0f9e-9fc5-4e5f-b8a3-8350ed2c452e"
+    initial_state: true
+    trigger:
+      - platform: time
+        at: "18:55:00"
+    condition:
+      - condition: state
+        entity_id: person.pieter_rautenbach
+        state: "Park"
+        for:
+          minutes: 10
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "⏰ Routine"
+          message: >-
+            Time to go home!
+          data:
+            url: homeassistant://navigate/lovelace/main

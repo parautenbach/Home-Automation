@@ -922,8 +922,15 @@ cards:
               name: Power
             - entity: sensor.battery_change_of_charge
               name: Charge Rate
-            - entity: sensor.battery_time_to_full
+            - type: custom:template-entity-row
+              entity: sensor.battery_time_to_shutdown_threshold
               name: Time to Full
+              state: >-
+                {% set duration_minutes = states('sensor.battery_time_to_full') | float(0) // 60 %}
+                {% set hours_part = (duration_minutes // 60) | int(0) %}
+                {% set minutes_part = (duration_minutes - hours_part*60) // 60 | int(0) %}
+                {{ '%02i:%02i' % (hours_part, minutes_part) }}
+              icon: mdi:timer-check-outline
             - type: attribute
               entity: sensor.battery_time_to_full
               attribute: time_when_full_relative
@@ -958,8 +965,15 @@ cards:
               name: Power
             - entity: sensor.battery_change_of_charge
               name: Discharge Rate
-            - entity: sensor.battery_time_to_shutdown_threshold
+            - type: custom:template-entity-row
+              entity: sensor.battery_time_to_shutdown_threshold
               name: Time to Shutdown
+              state: >-
+                {% set duration_minutes = states('sensor.battery_time_to_shutdown_threshold') | float(0) // 60 %}
+                {% set hours_part = (duration_minutes // 60) | int(0) %}
+                {% set minutes_part = (duration_minutes - hours_part*60) // 60 | int(0) %}
+                {{ '%02i:%02i' % (hours_part, minutes_part) }}
+              icon: mdi:timer-cancel-outline
             - type: attribute
               entity: sensor.battery_time_to_shutdown_threshold
               attribute: time_when_at_shutdown_threshold_relative

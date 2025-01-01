@@ -935,7 +935,7 @@ automation:
         local_only: true
         # HTTP GET and HEAD requests are not enabled by default
         # https://www.home-assistant.io/docs/automation/trigger/#webhook-trigger
-        # WHY IS THIS A GET?
+        # why is this a GET? because shelly only supports a GET
         allowed_methods:
           - GET
         id: "test_kitchen_smoke"

@@ -1531,3 +1531,38 @@ automation:
             Time to go home!
           data:
             url: homeassistant://navigate/lovelace/main
+
+  - alias: "Turn On Living Room Fairy Lights"
+    id: "646d2364-7e74-4f89-841b-d2ccb9c1ba8b"
+    initial_state: true
+    trigger:
+      - platform: sun
+        event: sunset
+        # 1 hour before sunset
+        offset: "-01:00:00"
+    condition:
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "on"
+    actions:
+      - service: light.turn_on
+        target:
+          entity_id: light.living_room_fairy_lights
+
+  - alias: "Turn Off Living Room Fairy Lights"
+    id: "7bce466b-cfb9-4257-9bc2-bba06373ad69"
+    initial_state: true
+    trigger:
+      - platform: time
+        at: "21:30:00"
+      - platform: state
+        entity_id: light.living_room_lamp
+        to: "off"
+    condition:
+      - condition: state
+        entity_id: light.living_room_fairy_lights
+        state: "on"
+    actions:
+      - service: light.turn_off
+        target:
+          entity_id: light.living_room_fairy_lights

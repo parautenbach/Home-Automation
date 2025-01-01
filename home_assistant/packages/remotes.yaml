@@ -593,3 +593,19 @@ script:
           entity_id: remote.living_room_remote
           command:
             - b64:JgCMAI+UEzcSOBM2EhMTEhMSEhMSEhM3EjgTNxISExITEhMSExITEhMRExITNxMSEjgSEhMSEjgTNhQ2ExITNxITEjcTNxIABgOVkxM3EzYTNxMSExISEhMSExISOBI3EzcTEhMSExITERMSEhMTEhMSEzYTEhI4ExISExM3EjcTNhMSEjgSExM2EzcSAA0FAAAAAAAAAAAAAAAA"
+
+  living_room_fairy_lights_on:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBYAAABJpQVERQSFBEVERQSFBEUEhQRFDcUNxQ3FDcUNxQ3FDYVNhQ3FBIUNxQRFBIUERU2FBIUERU2FREUNxQ3FDcUEhM3FAAFHwABLEoUAAxuAAErShQADQU="
+
+  living_room_fairy_lights_off:
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.living_room_remote
+          command:
+            - b64:JgBYAAABKZUUERQSFBEUEhQRFREUEhQRFDcUNxQ3FDcUNhY1FDcUNxQ3FDcUNxQRFBIUERU2FBIUERURFBIUNhY1FTYUEhQ3FAAFHQABLEoUAAxsAAErShQADQU="

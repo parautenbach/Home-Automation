@@ -1226,6 +1226,10 @@ automation:
               - increasing_discomfort
               - extremely_warm
               - danger_of_heatstroke
+      # temperature has been rising
+      - condition: state
+        entity_id: binary_sensor.outside_temperature_trend
+        state: "on"
       - condition: time
         after: "09:00:00"
         before: "17:00"

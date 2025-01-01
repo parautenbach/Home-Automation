@@ -164,6 +164,13 @@ binary_sensor:
         friendly_name: Day-time
         value_template: "{{  states('sensor.solar_angle') | float(0) >= -0.833 }}"
 
+  - platform: trend
+    sensors:
+      outside_temperature_trend:
+        entity_id: sensor.outside_temperature
+        friendly_name: "Outside Temperature Trend"
+        sample_duration: 3600
+
 sensor:
   - platform: openweathermap_all
     api_key: !secret open_weather_map_api_key
@@ -185,6 +192,13 @@ sensor:
     type: time  # duration
     start: "{{ today_at() }}"
     end: "{{ now() }}"
+
+  - platform: statistics
+    entity_id: sensor.outside_temperature
+    name: "Outside Temperature Change"
+    state_characteristic: change
+    max_age:
+      minutes: 60
 
   - platform: template
     sensors:

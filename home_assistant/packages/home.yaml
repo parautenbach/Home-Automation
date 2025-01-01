@@ -1522,7 +1522,7 @@ automation:
         entity_id: person.pieter_rautenbach
         state: "Park"
         for:
-          minutes: 10
+          minutes: 5
     action:
       - service: notify.mobile_app_ceres
         data:

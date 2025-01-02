@@ -310,6 +310,8 @@ cards:
             name: Kitchen Cntr
           - entity: light.living_room_lamp
             name: Living R.
+          - entity: light.living_room_fairy_lights
+            name: Fairy L.
           - entity: light.dining_room
             name: Dining R.
           - entity: light.music_room

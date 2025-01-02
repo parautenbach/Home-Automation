@@ -35,6 +35,7 @@
       - light.music_room_corner_light
       - light.hallway
       - light.bedroom_bedlamp
+      - light.living_room_fairy_lights
       - switch.tivoli_audio
       - switch.irrigation_main
       - switch.bug_zapper

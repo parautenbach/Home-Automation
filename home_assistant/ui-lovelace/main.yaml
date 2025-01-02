@@ -171,22 +171,13 @@ cards:
       - type: horizontal-stack
         cards:
           - type: custom:button-card
-            template: rgb_light
-            variables:
-              profile: corner_white
-            name: Dining Room
-            entity: light.dining_room_corner_light
+            template: basic
+            name: Fairy Lights
+            entity: light.living_room_fairy_lights
           - type: custom:button-card
-            template: rgb_light
-            variables:
-              profile: corner_white
-            name: Music Room
-            entity: light.music_room_corner_light
+            color_type: blank-card
           - type: custom:button-card
-            template: rgb_light
-            name: Open Area
-            entity: light.living_area_group
-            icon: mdi:lightbulb-group-outline
+            color_type: blank-card
           # - type: custom:button-card
           #   template: rgb_light
           #   variables:

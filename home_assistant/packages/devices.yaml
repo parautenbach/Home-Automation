@@ -387,14 +387,18 @@ automation:
         data:
           title: "🔋 Batteries"
           message: >-
-            {% set suffix = ' battery is fully charged.' %}
+            {% set suffix = "'s batteries are fully charged." %}
             {% set name = state_attr(trigger.event.data.entity_id, 'friendly_name') | replace(' Battery', '') | lower | replace('pieter', 'Pieter') | replace('rouvé', 'Rouvé') | replace('h&t', 'temperature sensor') %}
             {% if 'Pieter' in name or 'Rouvé' in name %}
              {{ name ~ suffix  }}
             {% else %}
-             {{ 'The ' ~ name ~ suffix}}
+             {{ "The " ~ name ~ suffix}}
             {% endif %}
           data:
+            actions:
+              - action: "BATTERIES_REPLENISHED"
+                title: "Reset replenishment timer"
+                destructive: true
             action_data:
               entity_id: "{{ trigger.event.data.entity_id }}"
             group: "batteries"
@@ -404,9 +408,32 @@ automation:
       #     title: "Debug: Battery Fully Charged"
       #     message: "{{ trigger.event }}"
 
-  # trigger.event.data.action_data.entity_id
-  - alias: "Reset"
-    
+  - alias: "Device Batteries Replenished"
+    id: "826653ed-bf83-454f-b335-36735e91e7c5"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: BATTERIES_REPLENISHED
+    action:
+      - service: button.press
+        target:
+          entity_id: "{{ trigger.event.data.action_data.entity_id | replace('sensor.', 'button.') ~ '_replaced' }}"
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🔋 Batteries"
+          message: >-
+            {% set suffix = "'s batteries has been set as replenished." %}
+            {% set name = state_attr(trigger.event.data.action_data.entity_id, 'friendly_name') | replace(' Battery', '') | lower | replace('pieter', 'Pieter') | replace('rouvé', 'Rouvé') | replace('h&t', 'temperature sensor') %}
+            {% if 'Pieter' in name or 'Rouvé' in name %}
+             {{ name ~ suffix  }}
+            {% else %}
+             {{ "The " ~ name ~ suffix}}
+            {% endif %}
+          data:
+            group: "batteries"
+            url: homeassistant://navigate/lovelace-system/devices
 
   # https://apple.stackexchange.com/questions/363416/how-to-check-if-any-audio-is-currently-playing-via-terminal
   # $ if [[ "$(pmset -g | grep ' sleep')" == *"coreaudiod"* ]]; then echo audio is playing; else echo no audio playing; fi

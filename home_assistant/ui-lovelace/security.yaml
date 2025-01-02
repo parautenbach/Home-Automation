@@ -9,6 +9,18 @@ badges:
     show_name: true
     show_state: false
   - type: entity
+    entity: binary_sensor.braai_room_smoke
+    name: Braai
+    show_icon: true
+    show_name: true
+    show_state: false
+  - type: entity
+    entity: binary_sensor.garage_smoke
+    name: Garage
+    show_icon: true
+    show_name: true
+    show_state: false
+  - type: entity
     entity: binary_sensor.doorbell_rang
     name: Doorbell
     show_icon: true

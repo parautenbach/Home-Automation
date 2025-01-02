@@ -24,6 +24,12 @@ homeassistant:
     sensor.kitchen_smoke_battery:
       friendly_name: Kitchen Smoke Detector Battery
       monitor: True
+    sensor.braai_room_smoke_battery:
+      friendly_name: Braai Room Smoke Detector Battery
+      monitor: True
+    sensor.garage_smoke_battery:
+      friendly_name: Garage Smoke Detector Battery
+      monitor: True
     sensor.hallway_light_button_battery:
       friendly_name: Hallway Light Button Battery
       monitor: True

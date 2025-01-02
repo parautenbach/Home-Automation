@@ -48,6 +48,12 @@ input_boolean:
   kitchen_smoke_detector_reminder:
     name: Kitchen Smoke Detector Reminder
     icon: mdi:reminder
+  braai_room_smoke_detector_reminder:
+    name: Braai Room Smoke Detector Reminder
+    icon: mdi:reminder
+  garage_smoke_detector_reminder:
+    name: Garage Smoke Detector Reminder
+    icon: mdi:reminder
 
 timer:
   # format: <entity_id>_timer
@@ -925,6 +931,8 @@ automation:
       - platform: state
         entity_id:
           - binary_sensor.kitchen_smoke
+          - binary_sensor.braai_room_smoke
+          - binary_sensor.garage_smoke
         # https://www.home-assistant.io/integrations/binary_sensor/
         to: "on"
         id: "real"
@@ -939,6 +947,18 @@ automation:
         allowed_methods:
           - GET
         id: "test_kitchen_smoke"
+      - platform: webhook
+        webhook_id: braai_room_smoke_alarm_test
+        local_only: true
+        allowed_methods:
+          - GET
+        id: "test_braai_room_smoke"
+      - platform: webhook
+        webhook_id: garage_smoke_alarm_test
+        local_only: true
+        allowed_methods:
+          - GET
+        id: "test_garage_smoke"
     action:
       # clear the test notification
       - if:
@@ -1008,12 +1028,16 @@ automation:
         target:
           entity_id:
             - input_boolean.kitchen_smoke_detector_reminder
+            - input_boolean.braai_room_smoke_detector_reminder
+            - input_boolean.garage_smoke_detector_reminder
 
   - alias: "Remind To Test Smoke Detectors"
     id: "07bcfd63-e5a3-44f1-9ff1-c8240e5f8ca6"
     variables:
       smoke_detectors:
         - binary_sensor.kitchen_smoke
+        - binary_sensor.braai_room_smoke
+        - binary_sensor.garage_smoke
     trigger:
       - platform: time
         at: "09:00:00"

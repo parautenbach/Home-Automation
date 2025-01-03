@@ -1598,7 +1598,7 @@ automation:
             The inverter has been running hot for {{ trigger.for.seconds // 60 }} minutes: It's currently at {{ temperature }} ºC and under a load of {{ load }} kW.
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/resources
+            url: homeassistant://navigate/lovelace-system/devices
             tag: "inverter-temperature"
             # push:
             #   sound:
@@ -1633,7 +1633,7 @@ automation:
             The inverter's temperature recovered to {{ temperature }} ºC after {{ after }} min. The load is {{ load }} kW.
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/resources
+            url: homeassistant://navigate/lovelace-system/devices
             tag: "inverter-temperature"
             # push:
             #   sound:

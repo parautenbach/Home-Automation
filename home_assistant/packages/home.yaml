@@ -1349,7 +1349,7 @@ automation:
                 entity_id: climate.living_room_ac
                 state: "cool"
               - condition: numeric_state
-                entity_id: sensor.inside_temperature
+                entity_id: sensor.office_temperature
                 below: 24.1
               - condition: numeric_state
                 entity_id: sensor.outside_temperature
@@ -1361,7 +1361,7 @@ automation:
                 entity_id: climate.living_room_ac
                 state: "heat"
               - condition: numeric_state
-                entity_id: sensor.inside_temperature
+                entity_id: sensor.office_temperature
                 above: 16.1
               - condition: numeric_state
                 entity_id: sensor.outside_temperature

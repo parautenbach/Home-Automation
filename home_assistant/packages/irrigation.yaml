@@ -151,7 +151,7 @@ automation:
                   entity_id: input_boolean.skip_next_automatic_irrigation_cycle
               - service: notify.mobile_app_ceres
                 data:
-                  title: "Garden"
+                  title: "🌱 Garden"
                   message: >-
                     An automatic irrigation cycle will be skipped due to once-off deactivation.
                   data:
@@ -171,7 +171,7 @@ automation:
             sequence:
               - service: notify.mobile_app_ceres
                 data:
-                  title: "Garden"
+                  title: "🌱 Garden"
                   message: >-
                     An automatic irrigation cycle has been skipped due to rain (threshold: {{ precipitation_threshold }} mm):
                       - Yesterday: {{ states('sensor.weather_forecast_precipitation_yesterday') | int(0) }} mm
@@ -208,7 +208,7 @@ automation:
     action:
       - service: notify.mobile_app_ceres
         data:
-          title: "Garden"
+          title: "🌱 Garden"
           message: >-
             {# "as scheduled" implies that the irrigation was started in accordance with a plan or timetable, #}
             {# which could include factors other than the exact timing, such as weather conditions,           #}

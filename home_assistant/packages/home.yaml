@@ -479,8 +479,8 @@ automation:
       - wait_template: >-
           {% set last_motion_detected = (now() - states.binary_sensor.doorbell_motion_detected.last_updated).total_seconds() %}
           {{ is_state('binary_sensor.doorbell_motion_detected', 'on') or
-             (is_state('binary_sensor.doorbell_motion_detected', 'off') and last_motion_detected <= 60) }}
-        timeout: "00:01:00"
+             (is_state('binary_sensor.doorbell_motion_detected', 'off') and last_motion_detected <= 30) }}
+        timeout: "00:00:30"
         continue_on_timeout: false
       - wait_template: "{{ is_state('alarm_control_panel.home', 'disarmed') }}"
         timeout: "00:01:00"

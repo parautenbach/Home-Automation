@@ -1557,6 +1557,10 @@ automation:
       - condition: state
         entity_id: binary_sensor.anybody_home
         state: "on"
+      - condition: template
+        value_template: >-
+          {% set d = (now().month, now().day) %}
+          {{  (11, 25) <= d or d <= (1, 15) }}
     actions:
       - service: light.turn_on
         target:

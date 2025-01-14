@@ -1041,7 +1041,7 @@ automation:
 
   - alias: "Turn On Bug Zapper"
     id: "dad30264-ab99-41df-83ee-a9ff0e768146"
-    initial_state: true
+    initial_state: false
     trigger:
       - platform: sun
         event: sunset
@@ -1093,7 +1093,7 @@ automation:
         target:
           entity_id: switch.bug_zapper
 
-  - alias: "Switch Off Bug Zapper When Baby Goes To Bed"
+  - alias: "Switch Off Bug Zapper When We Go To Bed"
     id: "c54d5d40-a900-4013-98f5-e968be87a0b6"
     initial_state: true
     trigger:

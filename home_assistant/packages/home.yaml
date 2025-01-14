@@ -1265,7 +1265,7 @@ automation:
             {% set inside_temp = states('sensor.office_temperature', with_unit=True) %}
             {% set inside_perception = state_translated('sensor.thermal_comfort_inside_summer_simmer_perception') | lower %}
             {% if trigger.id == "presence" %}
-              {% set reason = "someone arrived home" %}
+              {% set reason = "you arrived home" %}
             {% else %}
               {% set reason = trigger.id | replace("_", " ") | replace("temp", "temperature") %}
             {% endif %}

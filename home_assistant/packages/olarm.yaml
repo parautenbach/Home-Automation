@@ -649,7 +649,15 @@ automation:
             data:
               zone: "17"
             response_variable: olarm_response
-          # todo: check and log error response
+          - service: system_log.write
+            data:
+              message: "{{ olarm_response.status }}: {{ olarm_response.content }}"
+              level: debug
+              # level: error
+              logger: "homeassistant.components.olarm"
+          # todo: rather check the response
+          - delay:
+              seconds: 5
       - service: "alarm_control_panel.alarm_{{ trigger.id | replace('_bypass_garage', '') }}"
         target:
           entity_id: "{{ trigger.event.data.action_data.entity_ids }}"

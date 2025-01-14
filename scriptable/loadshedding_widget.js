@@ -75,7 +75,7 @@ async function createWidget() {
     forecast.setPadding(0, 0, 0, 0);
     forecast.borderWidth = 0;
 
-    const forecastText = forecast.addText(forecastData);
+    const forecastText = forecast.addText("⚡️" + forecastData);
     forecastText.font = Font.regularSystemFont(12);
     forecastText.textColor = Color.white();
 
@@ -83,7 +83,7 @@ async function createWidget() {
 
     const lastUpdated = widget.addStack();
     const time = (new Date()).toLocaleTimeString().slice(0, 5);
-    const lastUpdatedText = lastUpdated.addText("Last update: " + time);
+    const lastUpdatedText = lastUpdated.addText("🕓Last update: " + time);
     lastUpdatedText.font = Font.regularSystemFont(12);
     lastUpdatedText.rightAlignText();
     lastUpdatedText.textColor = Color.white();

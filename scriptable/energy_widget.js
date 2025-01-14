@@ -43,16 +43,16 @@ async function createWidget() {
     const resource = "api/states/sensor.resource_widget";
     // key: [label, value, unit]
     const sensor_map = {
-        "battery_state_of_charge": ["Battery", "", "%"],
-        "capacity_charge_point": ["Charge Point", "", "%"],
-        "pv_power": ["Solar", "", "W"],
-        "solar_reserve_percentage": ["Reserve", "", "%"],
-        "home_power": ["Home", "", "W"],
-        "grid_feed": ["Grid", "", ""],
-        "solar_energy_utilisation_today": ["Utilisation", "", "%"],
-        "solar_energy_forecast_today": ["Today", "", "kWh"],
-        "solar_energy_forecast_tomorrow": ["Tomorrow", "", "kWh"],
-        "charge_mode": ["Mode", "", ""]
+        "battery_state_of_charge": ["🔋Battery", "", "%"],
+        "capacity_charge_point": ["⚡️Charge Point", "", "%"],
+        "pv_power": ["☀️Solar", "", "W"],
+        "solar_reserve_percentage": ["🛢️Reserve", "", "%"],
+        "home_power": ["🏠Home", "", "W"],
+        "grid_feed": ["🔌Grid", "", ""],
+        "solar_energy_utilisation_today": ["📈Utilisation", "", "%"],
+        "solar_energy_forecast_today": ["📍Today", "", "kWh"],
+        "solar_energy_forecast_tomorrow": ["📊Tomorrow", "", "kWh"],
+        "charge_mode": ["⚙️Mode", "", ""]
     };
 
     const iconUrl = serverUrl + "static/icons/favicon-192x192.png";
@@ -131,7 +131,7 @@ async function createWidget() {
     }
     addItem(currentStack, sensor[0], gridValue, sensor[2]);  //, gridValueColor);
     const time = (new Date()).toLocaleTimeString().slice(0, 5);
-    addItem(currentStack, "Last update", time, "");
+    addItem(currentStack, "🕓Last update", time, "");
 
     // for (const [key, values] of Object.entries(sensors)) {
     //     widget.addSpacer(5);

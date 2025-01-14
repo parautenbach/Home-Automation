@@ -79,9 +79,10 @@ input_boolean:
   dining_room_state:
     name: Dining Room State
     icon: mdi:lightbulb
-  music_room_state:
-    name: Music Room State
-    icon: mdi:lightbulb
+  # not a tp-link bulb anymore, but a shelly rgbw
+  # music_room_state:
+  #   name: Music Room State
+  #   icon: mdi:lightbulb
   foyer_state:
     name: Foyer State
     icon: mdi:lightbulb

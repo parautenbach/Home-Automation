@@ -1235,14 +1235,14 @@ automation:
         double_press_profile: night
         triple_press_profile: security
 
-  - alias: "Toggle Hallway Light"
+  - alias: "Toggle Music Room Light"
     id: "58a877b7-eed8-4fd7-897c-51eeed892ad7"
     initial_state: true
     use_blueprint:
       path: shelly_button.yaml
       input:
         button_device_id: 16bb98a28aa167819bff6fc45f178899
-        light_entity_id: light.hallway
+        light_entity_id: light.music_room
         single_press_profile: normal
         double_press_profile: night
         triple_press_profile: security

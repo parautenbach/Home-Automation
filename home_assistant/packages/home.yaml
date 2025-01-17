@@ -1450,7 +1450,7 @@ automation:
           - switch.bathroom_fan
     action:
       - variables:
-          timer_id:  "{{ trigger.entity_id | replace('switch', 'timer') }}"
+          timer_id: "{{ trigger.entity_id | replace('switch', 'timer') }}"
       - choose:
           - conditions:
               - condition: template

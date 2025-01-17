@@ -169,7 +169,7 @@ binary_sensor:
       outside_temperature_trend:
         entity_id: sensor.outside_temperature
         friendly_name: "Outside Temperature Trend"
-        sample_duration: 3600
+        sample_duration: 7200
 
 sensor:
   - platform: openweathermap_all
@@ -198,7 +198,7 @@ sensor:
     name: "Outside Temperature Change"
     state_characteristic: change
     max_age:
-      minutes: 60
+      minutes: 120
 
   - platform: template
     sensors:

@@ -416,6 +416,8 @@ cards:
             name: Inside
           - entity: sensor.thermal_comfort_outside_summer_simmer_perception
             name: Outside
+          - entity: binary_sensor.outside_temperature_trend
+            name: Outside Trend
           - entity: weather.openweathermap
             name: Today
           - entity: weather.forecast_tomorrow

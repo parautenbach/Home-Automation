@@ -705,30 +705,48 @@ automation:
                 The {{ area }}'s alarm was {{ state }} at {{ now().strftime('%H:%M') }}.
           - if: "{{ trigger.to_state.state == 'disarmed' }}"
             then:
-              - service: notify.mobile_app_ceres
-                data:
-                  title: "🔒 Security"
-                  # todo: user (can be from olarm or HA context; tricky to get right)
-                  # todo: list bypassed zones, if any
-                  message: "{{ message }}"
-                  data:
-                    group: "home-security"
-                    url: homeassistant://navigate/lovelace/security
-                    actions:
-                      - action: "ARM_ALARM"
-                        title: "Arm (full)"
-                        destructive: true
-                      - action: "ARM_ALARM_BYPASS_GARAGE"
-                        title: "Arm (bypass garage)"
-                        destructive: true
-                      - action: "ARM_STAY_ALARM"
-                        title: "Arm (stay)"
-                        destructive: true
-                    # https://companion.home-assistant.io/docs/notifications/actionable-notifications/
-                    # https://community.home-assistant.io/t/custom-data-in-actionable-notification-on-ios/429748/2
-                    # https://blog.kalavala.net/homeassistant/event/2018/01/11/custom-events.html
-                    action_data:
-                      entity_ids: "{{ [trigger.entity_id] }}"
+              - if: "{{ area == 'flatlet' }}"
+                then:
+                  - service: notify.mobile_app_ceres
+                    data:
+                      title: "🔒 Security"
+                      # todo: user (can be from olarm or HA context; tricky to get right)
+                      # todo: list bypassed zones, if any
+                      message: "{{ message }}"
+                      data:
+                        group: "home-security"
+                        url: homeassistant://navigate/lovelace/security
+                        actions:
+                          - action: "ARM_ALARM"
+                            title: "Arm"
+                            destructive: true
+                        action_data:
+                          entity_ids: "{{ [trigger.entity_id] }}"
+                else:
+                  - service: notify.mobile_app_ceres
+                    data:
+                      title: "🔒 Security"
+                      # todo: user (can be from olarm or HA context; tricky to get right)
+                      # todo: list bypassed zones, if any
+                      message: "{{ message }}"
+                      data:
+                        group: "home-security"
+                        url: homeassistant://navigate/lovelace/security
+                        actions:
+                          - action: "ARM_ALARM"
+                            title: "Arm (full)"
+                            destructive: true
+                          - action: "ARM_ALARM_BYPASS_GARAGE"
+                            title: "Arm (bypass garage)"
+                            destructive: true
+                          - action: "ARM_STAY_ALARM"
+                            title: "Arm (stay)"
+                            destructive: true
+                        # https://companion.home-assistant.io/docs/notifications/actionable-notifications/
+                        # https://community.home-assistant.io/t/custom-data-in-actionable-notification-on-ios/429748/2
+                        # https://blog.kalavala.net/homeassistant/event/2018/01/11/custom-events.html
+                        action_data:
+                          entity_ids: "{{ [trigger.entity_id] }}"
             else:
               - service: notify.mobile_app_ceres
                 data:

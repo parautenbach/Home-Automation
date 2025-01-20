@@ -564,6 +564,7 @@ automation:
     condition:
       - condition: template
         value_template: >-
+          {# this code only works if the workday and non-workday times differ; the trigger is ambiguous if they are the same #}
           {% set workday_reminder = states('input_datetime.workday_alarm_arm_reminder') | today_at %}
           {% set non_workday_reminder = states('input_datetime.non_workday_alarm_arm_reminder') | today_at %}
           {% set is_workday_tomorrow = is_state('binary_sensor.workday_tomorrow', 'on') %}

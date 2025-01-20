@@ -1326,7 +1326,7 @@ automation:
         data:
           title: "🌡️ Climate Control"
           message: >-
-            {% set mode = states('climate.living_room_ac') %}
+            {% set mode = states('climate.living_room_ac') ~ 'ing' %}
             {% set outside_temp = states('sensor.outside_temperature', with_unit=True) %}
             {% set outside_perception = state_translated('sensor.thermal_comfort_outside_summer_simmer_perception') | lower %}
             {% set inside_temp = states('sensor.office_temperature', with_unit=True) %}

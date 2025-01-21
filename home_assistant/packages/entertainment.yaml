@@ -96,6 +96,9 @@ script:
       - service: script.turn_on
         entity_id: script.hk_3380_power_on
       - delay: "00:00:01"
+      - service: script.turn_on
+        entity_id: script.hk_3380_vid1
+      - delay: "00:00:01"
       # this will also trigger automation "Turn Audio On When Apple TV Turned On"
       # either just call this and set the input select, while the automation does the rest,
       # or disable and re-enable the automation in this script
@@ -121,6 +124,9 @@ script:
       - delay: "00:00:01"
       - service: script.turn_on
         entity_id: script.hk_3380_power_on
+      - delay: "00:00:01"
+      - service: script.turn_on
+        entity_id: script.hk_3380_vid1
       - delay: "00:00:01"
       - service: script.turn_on
         entity_id: script.dstv_power

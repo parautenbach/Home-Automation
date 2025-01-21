@@ -1,0 +1,4 @@
+For testing:
+curl -v -X DESCRIBE "rtsp://securitypi:8554/unicast"
+
+https://umatechnology.org/how-to-play-rtsp-stream-via-command-line-interface-using-ffmpeg/

@@ -221,7 +221,7 @@ group:
 camera:
   - platform: ffmpeg
     name: security_camera
-    input: -rtsp_transport tcp -i rtsp://securitypi.local:8554/unicast
+    input: -rtsp_transport tcp -i rtsp://securitypi:8554/unicast
     # https://stackoverflow.com/questions/37427498/how-to-escape-double-and-single-quotes-in-yaml-within-the-same-string
     # https://stackoverflow.com/questions/6195872/applying-multiple-filters-at-once-with-ffmpeg
     # https://einar.slaskete.net/2011/09/05/adding-time-stamp-overlay-to-video-stream-using-ffmpeg/
@@ -351,7 +351,7 @@ automation:
             url: homeassistant://navigate/lovelace/security
             attachment:
               # url: https://geoexpressinternational.com/wp-content/plugins/webp-express/test/test-pattern-tv.jpg
-              # url: http://securitypi.local/local/camera.security_camera_last.jpg
+              # url: http://securitypi/local/camera.security_camera_last.jpg
               url: !secret security_camera_last_snapshot_url
               # content-type: jpg
               # hide-thumbnail: false

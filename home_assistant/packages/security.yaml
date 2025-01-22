@@ -649,7 +649,7 @@ automation:
                 critical: 1
                 volume: 0.5
       - service: timer.start
-        data:
+        target:
           entity_id: "{{ trigger.event.data.entity_id }}"
 
   - alias: "Close Cover From Alert Action"
@@ -685,7 +685,7 @@ automation:
           action: EXTEND_COVER_TIMEOUT_30_MIN
     action:
       - service: timer.start
-        data:
+        target:
           # {
           #   'id': '0',
           #   'idx': '0',
@@ -699,6 +699,7 @@ automation:
           #       'description': "event 'mobile_app_notification_action'"
           # }
           entity_id: "{{ trigger.event.data.action_data.timer_id }}"
+        data:
           # in seconds
           duration: "{{ trigger.event.data.action | regex_findall_index(find='\\d+', index=0, ignorecase=False) | int * 60 }}"
 

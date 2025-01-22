@@ -1383,8 +1383,9 @@ automation:
           - comfortable
         for:
           minutes: 15
-      # time trigger @ 17h00?
-      # sensor.living_room_ac_power < x for 30 min?
+      - platform: time
+        at: "17:30:00"
+      # sensor.living_room_ac_power < x for 30 min? => it's basically been running the fan only
     condition:
       - condition: state
         entity_id: input_boolean.ac_maintenance_mode

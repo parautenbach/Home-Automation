@@ -61,6 +61,9 @@ input_boolean:
   trash_reminder:
     name: Trash Reminder
     icon: mdi:trash-can-outline
+  ac_maintenance_mode:
+    name: AC Maintenance Mode
+    icon: mdi:wrench-clock
 
 input_number:
   baby_current_sleep_session:
@@ -1201,6 +1204,9 @@ automation:
         id: "time_based"
     condition:
       - condition: state
+        entity_id: input_boolean.ac_maintenance_mode
+        state: "off"
+      - condition: state
         entity_id: climate.living_room_ac
         state:
           - "off"
@@ -1380,6 +1386,9 @@ automation:
       # time trigger @ 17h00?
       # sensor.living_room_ac_power < x for 30 min?
     condition:
+      - condition: state
+        entity_id: input_boolean.ac_maintenance_mode
+        state: "off"
       - condition: not
         conditions:
           - condition: state

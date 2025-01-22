@@ -506,7 +506,7 @@ template:
               {
                 'Very Optimistic': {
                     1: (30, 'on'),
-                    2: (20, 'off'),
+                    2: (15, 'off'),
                     3: (20, 'off'),
                     4: (50, 'off'),
                     5: (60, 'on'),

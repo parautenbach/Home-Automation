@@ -536,9 +536,9 @@ automation:
                         - action: "CLOSE_COVER"
                           title: "Close now"
                         - action: "EXTEND_COVER_TIMEOUT_10_MIN"
-                          title: "Wait 10 min"
+                          title: "Snooze for 10 min"
                         - action: "EXTEND_COVER_TIMEOUT_30_MIN"
-                          title: "Wait 30 min"
+                          title: "Snooze for 30 min"
                         - action: "DISABLE_COVER_TIMEOUT"
                           title: "Disable"
                       action_data:
@@ -633,9 +633,9 @@ automation:
               - action: "CLOSE_COVER"
                 title: "Close now"
               - action: "EXTEND_COVER_TIMEOUT_10_MIN"
-                title: "Wait 10 min"
+                title: "Snooze for 10 min"
               - action: "EXTEND_COVER_TIMEOUT_30_MIN"
-                title: "Wait 30 min"
+                title: "Snooze for 30 min"
               - action: "DISABLE_COVER_TIMEOUT"
                 title: "Disable"
             action_data:

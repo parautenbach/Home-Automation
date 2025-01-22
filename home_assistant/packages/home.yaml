@@ -1241,9 +1241,9 @@ automation:
                     state:
                       - slightly_cool
                       - comfortable
-              - condition: state
-                entity_id: binary_sensor.outside_temperature_trend
-                state: "on"
+              - condition: numeric_state
+                entity_id: sensor.outside_temperature_change
+                above: 0.4
           # for heating
           - condition: and
             conditions:
@@ -1263,9 +1263,9 @@ automation:
                     state:
                       - comfortable
                       - slightly_warm
-              - condition: state
-                entity_id: binary_sensor.outside_temperature_trend
-                state: "off"
+              - condition: numeric_state
+                entity_id: sensor.outside_temperature_change
+                below: -0.4
       - condition: time
         after: "09:30:00"
         before: "17:00"
@@ -1410,6 +1410,9 @@ automation:
                 entity_id: sensor.outside_temperature
                 # same as matching trigger above
                 below: 24.1
+              - condition: numeric_state
+                entity_id: sensor.outside_temperature_change
+                below: -0.4
           - condition: and
             conditions:
               - condition: state
@@ -1422,6 +1425,9 @@ automation:
                 entity_id: sensor.outside_temperature
                 # same as matching trigger above
                 above: 19.9
+              - condition: numeric_state
+                entity_id: sensor.outside_temperature_change
+                above: 0.4
           # we trigger on "comfortable" outside, but we check the inside here
           - condition: state
             entity_id: sensor.thermal_comfort_inside_summer_simmer_perception

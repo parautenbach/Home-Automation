@@ -653,7 +653,7 @@ automation:
           message: >-
             {% set n = states('sensor.faulty_automations') | int(0) %}
             {% set automations = state_attr('sensor.faulty_automations', 'automations') %}
-            There {{ 'is' if n == 1 else 'are' }} {{ n }} faulty automation{{ '' if n == 1 else 's' }}.
+            There {{ 'is' if n == 1 else 'are' }} {{ n }} faulty or missing automation{{ '' if n == 1 else 's' }}.
             {%- for a in automations %}
               - {{ a }}
             {%- endfor %}

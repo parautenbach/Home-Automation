@@ -1167,7 +1167,9 @@ automation:
     initial_state: true
     trigger:
       - platform: state
-        entity_id: binary_sensor.pieter_present
+        entity_id:
+          - binary_sensor.pieter_present
+          - binary_sensor.rouve_present
         to: "on"
         id: "presence"
       - platform: state
@@ -1179,12 +1181,21 @@ automation:
         entity_id: sensor.office_temperature
         # same as matching condition below
         above: 24.4
-        id: "high_temp"
+        id: "rising_temp"
+      - platform: template
+        # same as matching condition below
+        value_template: "{{ states('sensor.outside_temperature') | float(0) > states('sensor.office_temperature') | float(0) }}"
+        id: "rising_temp"
       - platform: numeric_state
         entity_id: sensor.office_temperature
         # same as matching condition below
         below: 15.1
-        id: "low_temp"
+        id: "falling_temp"
+      - platform: template
+        # same as matching condition below
+        value_template: "{{ states('sensor.outside_temperature') | float(0) < states('sensor.office_temperature') | float(0) }}"
+        id: "falling_temp"
+      # outside simmer trigger? perhaps not, since we really care what it feels like inside.
       - platform: state
         entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
         # same as matching condition below
@@ -1197,8 +1208,9 @@ automation:
           - extremely_warm
           - danger_of_heatstroke
         for:
-          minutes: 15
+          minutes: 5
         id: "temp_perception"
+      # check at regular intervals? why would we need to, if our triggers are otherwise correct?
       - platform: time
         at: "09:30:00"
         id: "time_based"
@@ -1214,9 +1226,14 @@ automation:
       - condition: state
         entity_id: alarm_control_panel.home
         state: "disarmed"
-      - condition: state
-        entity_id: binary_sensor.pieter_present
-        state: "on"
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: binary_sensor.pieter_present
+            state: "on"
+          - condition: state
+            entity_id: binary_sensor.rouve_present
+            state: "on"
       - condition: or
         conditions:
           # for cooling
@@ -1243,7 +1260,10 @@ automation:
                       - comfortable
               - condition: numeric_state
                 entity_id: sensor.outside_temperature_change
-                above: 0.4
+                above: 1.0
+              - condition: template
+                # same as matching trigger above
+                value_template: "{{ states('sensor.outside_temperature') | float(0) > states('sensor.office_temperature') | float(0) }}"
           # for heating
           - condition: and
             conditions:
@@ -1265,15 +1285,18 @@ automation:
                       - slightly_warm
               - condition: numeric_state
                 entity_id: sensor.outside_temperature_change
-                below: -0.4
+                below: -1.0
+              - condition: template
+                # same as matching trigger above
+                value_template: "{{ states('sensor.outside_temperature') | float(0) < states('sensor.office_temperature') | float(0) }}"
       - condition: time
         after: "09:30:00"
         before: "17:00"
       # be less conservative power-wise: don't check the battery variance.
       # just check that there's no scheduled loadshedding and that the grid is connected.
       - condition: state
-        entity_id: sensor.loadshedding_stage
-        state: "No loadshedding"
+        entity_id: binary_sensor.loadshedding_active
+        state: "off"
       - condition: state
         entity_id: binary_sensor.grid_feed
         state: "on"
@@ -1382,7 +1405,7 @@ automation:
         to:
           - comfortable
         for:
-          minutes: 15
+          minutes: 5
       - platform: time
         at: "17:30:00"
       # sensor.living_room_ac_power < x for 30 min? => it's basically been running the fan only
@@ -1390,6 +1413,13 @@ automation:
       - condition: state
         entity_id: input_boolean.ac_maintenance_mode
         state: "off"
+      # proxy for whether it was turned on manually and prevent the ac from turning off again too quickly
+      # e.g. if it was turned on manually, but before the conditions for automatic control was met
+      - condition: state
+        entity_id: binary_sensor.living_room_ac
+        state: "on"
+        for:
+          minutes: 60
       - condition: not
         conditions:
           - condition: state

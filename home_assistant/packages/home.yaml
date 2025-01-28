@@ -1569,7 +1569,10 @@ automation:
         at:
           - "06:45:00"
           - "07:00:00"
+      - platform: time
+        at:
           - "07:15:00"
+        id: "final_reminder"
       - platform: state
         entity_id: binary_sensor.pieter_present
         to: "on"
@@ -1586,23 +1589,44 @@ automation:
         weekday:
           - tue
     action:
-      - service: notify.mobile_app_ceres
-        data:
-          title: "⏰ Routine"
-          message: "Remember to put out the trash."
-          data:
-            actions:
-              - action: "TRASH_PUT_OUT"
-                destructive: true
-                title: "Done"
-            group: "routine-trash"
-            tag: "routine-trash"
-            url: homeassistant://navigate/lovelace/main
-            push:
-              sound:
-                name: default
-                critical: 1
-                volume: 0.5
+      - if:
+          - condition: trigger
+            id: "final_reminder"
+        then:
+          - service: notify.mobile_app_ceres
+            data:
+              title: "⏰ Routine"
+              message: "Last chance to put out the trash!"
+              data:
+                group: "routine-trash"
+                tag: "routine-trash"
+                url: homeassistant://navigate/lovelace/main
+                push:
+                  sound:
+                    name: default
+                    critical: 1
+                    volume: 0.5
+          - service: input_boolean.turn_off
+            target:
+              entity_id: input_boolean.trash_reminder
+        else:
+          - service: notify.mobile_app_ceres
+            data:
+              title: "⏰ Routine"
+              message: "Remember to put out the trash."
+              data:
+                actions:
+                  - action: "TRASH_PUT_OUT"
+                    destructive: true
+                    title: "Done"
+                group: "routine-trash"
+                tag: "routine-trash"
+                url: homeassistant://navigate/lovelace/main
+                push:
+                  sound:
+                    name: default
+                    critical: 1
+                    volume: 0.5
 
   - alias: "Reset Trash Reminder"
     id: "84b06a96-a13b-46c1-b15c-41542bbcd05c"

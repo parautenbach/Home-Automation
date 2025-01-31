@@ -1341,6 +1341,9 @@ automation:
             {# this isn't available here :-( #}
             {% set current_trigger = now().replace(second=0).replace(microsecond=0) %}
             {{ current_trigger == ('03:30' | today_at) }}
+      - platform: state
+        entity_id: binary_sensor.loadshedding_active
+        to: "on"
     mode: single
     # this would ensure we only get a notification if the mode has changed
     # but do we really want to do this? perhaps it's good to know every time, so that a human can do a sanity check
@@ -1351,7 +1354,8 @@ automation:
         value_template: >-
           {% set within_window = today_at('03:30') <= now() <= today_at('11:30') %}
           {% set mode_changed = not is_state('sensor.charge_mode', states('input_text.last_charge_mode')) %}
-          {{ first_run or (within_window and mode_changed) }}
+          {% set loadshedding_active = states('binary_sensor.loadshedding_active') | bool %}
+          {{ first_run or (within_window and mode_changed) or loadshedding_active }}
     action:
       - service: input_boolean.turn_off
         entity_id: input_boolean.set_charge_point_error

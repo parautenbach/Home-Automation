@@ -1061,7 +1061,12 @@ automation:
         for:
           # is 10 min too long?
           # implement a governor?
-          minutes: 10
+          minutes: 5
+      - platform: numeric_state
+        entity_id: sensor.battery_state_of_charge
+        below: 16
+        for:
+          minutes: 5
       - platform: state
         entity_id: binary_sensor.grid_feed
         to: "off"
@@ -1075,7 +1080,7 @@ automation:
           battery_soc: "{{ states('sensor.battery_state_of_charge') | int(0) }}"
           message: "The backup power battery's charge is low ({{ battery_soc }}%). Please conserve energy."
       # only a critical sound notification if the grid is off, otherwise just a normal notification
-      # the hard limit for the inverter/battery is set to 20%, so it won't got below 20% if the grid is connected
+      # the hard limit for the inverter/battery is set to 15%, so it won't got below 15% if the grid is connected
       - choose:
           - conditions:
               - condition: state

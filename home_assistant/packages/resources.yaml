@@ -989,7 +989,7 @@ automation:
           {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
           {% set charge_point = states('sensor.capacity_charge_point') | int(0) %}
           {# we have a critical alert for very low soc – keep the condition below synced #}
-          {{ (battery_soc == battery_soc // 10 * 10 or battery_soc == charge_point) and battery_soc >= 30 }}
+          {{ (battery_soc == battery_soc // 10 * 10 or battery_soc == charge_point) and battery_soc > 20 }}
     condition:
       - condition: state
         entity_id: input_boolean.battery_notification_governor

@@ -330,6 +330,12 @@ cards:
                 - type: script
                   icon: mdi:power
                   id: script.entertainment_off
+                - type: script
+                  icon: mdi:volume-minus
+                  id: script.hk_3380_vol_down_minus_5
+                - type: script
+                  icon: mdi:volume-plus
+                  id: script.hk_3380_vol_up_plus_5
           - type: custom:mini-media-player
             name: Main Bedroom
             entity: media_player.main_bedroom_universal

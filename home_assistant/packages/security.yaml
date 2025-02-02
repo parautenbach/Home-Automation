@@ -962,9 +962,10 @@ automation:
         id: "test_garage_smoke"
     action:
       # clear the test notification
+      # we do it this way instead of replacing the notification lower down, because we don't want to replace real notifications
       - if:
           - condition: template
-            value_template: "{{ 'id' in trigger and 'test' in trigger.id }}"
+            value_template: "{{ 'test' in trigger.id }}"
         then:
           - service: notify.mobile_app_ceres
             data:
@@ -981,7 +982,7 @@ automation:
           message: >-
             {% set prefix = '' %}
             {% set entity_id = '' %}
-            {% if 'id' in trigger and 'test' in trigger.id %}
+            {% if 'test' in trigger.id %}
               {% set prefix = '[Test]' %}
               {% set entity_id = trigger.id | replace('test_', 'binary_sensor.') %}
             {% else %}
@@ -1008,7 +1009,7 @@ automation:
             #     - action: "ALERT_SECURITY_COMPANY"
             #       title: "Alert security company"
       - if:
-          - "{{ 'id' in trigger and 'test' in trigger.id }}"
+          - "{{ 'test' in trigger.id }}"
         then:
           - service: input_boolean.turn_off
             target:

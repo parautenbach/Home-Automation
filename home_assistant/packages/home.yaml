@@ -1297,9 +1297,11 @@ automation:
         before: "17:00"
       # be less conservative power-wise: don't check the battery variance.
       # just check that there's no scheduled loadshedding and that the grid is connected.
-      - condition: state
-        entity_id: binary_sensor.loadshedding_active
-        state: "off"
+      # use binary_sensor.loadshedding_scheduled instead, but we don't really need this,
+      # since ACs will be turned off when the grid drops
+      # - condition: state
+      #   entity_id: sensor.loadshedding_stage
+      #   state: "No loadshedding"
       - condition: state
         entity_id: binary_sensor.grid_feed
         state: "on"

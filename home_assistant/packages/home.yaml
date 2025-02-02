@@ -92,6 +92,9 @@ timer:
   bathroom_fan:
     duration: "00:15:00"
     restore: true
+  go_home_reminder:
+    duration: "00:05:00"
+    restore: true
 
 binary_sensor:
   - platform: template
@@ -1646,6 +1649,10 @@ automation:
     trigger:
       - platform: time
         at: "18:55:00"
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.go_home_reminder
     condition:
       - condition: state
         entity_id: person.pieter_rautenbach
@@ -1659,7 +1666,40 @@ automation:
           message: >-
             Time to go home!
           data:
+            group: "routine-go-home"
+            tag: "routine-go-home"
             url: homeassistant://navigate/lovelace/main
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 0.5
+      - service: timer.start
+        target:
+          entity_id: timer.go_home_reminder
+        data:
+          duration: "00:05:00"
+
+  - alias: "Cancel Go Home Reminder"
+    id: "e4e4b1e9-c759-476f-9816-f169b783839c"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: person.pieter_rautenbach
+        to: "home"
+    condition:
+      - condition: state
+        entity_id: timer.go_home_reminder
+        state: "active"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          message: "clear_notification"
+          data:
+            tag: "routine-go-home"
+      - service: timer.cancel
+        target:
+          entity_id: timer.go_home_reminder
 
   - alias: "Turn On Living Room Fairy Lights"
     id: "646d2364-7e74-4f89-841b-d2ccb9c1ba8b"

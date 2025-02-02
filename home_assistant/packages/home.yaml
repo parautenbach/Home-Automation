@@ -115,13 +115,13 @@ binary_sensor:
       tenant_present:
         friendly_name: "Tenant Present"
         delay_off:
-          minutes: 15
+          minutes: 20
         value_template: >-
           {{ is_state("binary_sensor.tenant_mobile_phone", "on") }}
       housekeeper_present:
         friendly_name: "Housekeeper Present"
         delay_off:
-          minutes: 15
+          minutes: 20
         value_template: >-
           {{ is_state("binary_sensor.housekeeper_mobile_phone", "on") }}
       anybody_home:

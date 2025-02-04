@@ -1225,7 +1225,6 @@ automation:
         entity_id: climate.living_room_ac
         state:
           - "off"
-          - "fan_only"
       - condition: state
         entity_id: alarm_control_panel.home
         state: "disarmed"

@@ -1,2 +1,21 @@
 custom-light-mode:
   mini-media-player-base-color: var(--paper-item-icon-color)
+  # https://community.home-assistant.io/t/card-mod-super-charge-your-themes/212176/1949
+  card-mod-theme: custom-light-mode
+  card-mod-view-yaml: |
+    :first-child $:
+      hui-view-badges $: |
+        /* mobile-specific styles */
+        @media (max-width: 768px) {
+            .badges {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch; /* Smooth scrolling */
+                scrollbar-width: none; /* For Firefox */
+                flex-wrap: nowrap !important;
+                justify-content: unset !important;
+                // justify-content: center !important;
+            }
+            .badges > * {
+                min-width: fit-content;
+            }
+        }

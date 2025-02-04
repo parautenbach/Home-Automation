@@ -165,6 +165,13 @@ binary_sensor:
             {% set end = (state_attr('sensor.eskomsepush', 'events') | first).end | as_datetime %}
             {{ start <= now() <= end }}
           {%- endif -%}
+      loadshedding_scheduled:
+        friendly_name: Loadshedding Scheduled
+        device_class: problem
+        value_template: >-
+          {{ states('sensor.loadshedding_start_time') | as_datetime != 0 | as_datetime }}
+          {# alternative; will be evaluated every minute; the above is likely more efficient #}
+          {# {{ states('sensor.loadshedding_start_time') | as_datetime >= now() }} #}
 
 timer:
   loadshedding_duration:

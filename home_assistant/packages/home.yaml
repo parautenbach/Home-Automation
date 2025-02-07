@@ -116,8 +116,9 @@ binary_sensor:
         friendly_name: "Tenant Present"
         delay_off:
           minutes: 20
+        # ping succeeded and alarm is not armed
         value_template: >-
-          {{ is_state("binary_sensor.tenant_mobile_phone", "on") }}
+          {{ is_state("binary_sensor.tenant_mobile_phone", "on") and is_state('alarm_control_panel.flatlet', 'disarmed') }}
       housekeeper_present:
         friendly_name: "Housekeeper Present"
         delay_off:

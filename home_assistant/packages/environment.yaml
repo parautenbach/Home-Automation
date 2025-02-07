@@ -96,6 +96,8 @@ homeassistant:
     #     state_class: null
     #   "sensor.stellenboch_cape_winelands_south_africa_*":
     #     state_class: null
+    sensor.outside_temperature_change:
+      device_class: temperature
 
 shell_command:
   download_latest_dam_levels: "/home/homeassistant/scripts/download_latest_dam_levels.sh"

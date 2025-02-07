@@ -344,6 +344,185 @@ cards:
             name: Main Bath. F.
           - entity: switch.bathroom_fan
             name: Bath. F.
+      - type: entities
+        title: AC Conditions
+        show_header_toggle: false
+        entities:
+          - type: section
+            label: Home
+          - type: custom:template-entity-row
+            entity: climate.living_room_ac
+            name: AC Mode
+            state: >-
+              {{ 'Met' if is_state('climate.living_room_ac', 'off') else 'Unmet' }}
+            secondary: "{{ state_translated('climate.living_room_ac') }}"
+            card_mod:
+              style: |
+                .state {
+                  color: {{ 'var(--custom-color-green)' if is_state('climate.living_room_ac', 'off') else 'var(--custom-color-red)' }}
+                }
+          - type: custom:template-entity-row
+            entity: input_boolean.ac_maintenance_mode
+            name: Maintenance Mode
+            state: >-
+              {{ 'Met' if is_state('input_boolean.ac_maintenance_mode', 'off') else 'Unmet' }}
+            secondary: "{{ state_translated('input_boolean.ac_maintenance_mode') }}"
+            card_mod:
+              style: |
+                .state {
+                  color: {{ 'var(--custom-color-green)' if is_state(config.entity, 'off') else 'var(--custom-color-red)' }};
+                  }
+                }
+          - type: custom:template-entity-row
+            entity: alarm_control_panel.home
+            name: Alarm
+            state: >-
+              {{ 'Met' if is_state('alarm_control_panel.home', 'disarmed') else 'Unmet' }}
+            secondary: "{{ state_translated('alarm_control_panel.home') }}"
+            card_mod:
+              style: |
+                .state {
+                  color: {{ 'var(--custom-color-green)' if is_state(config.entity, 'disarmed') else 'var(--custom-color-red)' }};
+                  }
+                }
+          - type: custom:template-entity-row
+            entity: binary_sensor.family_present
+            name: Family Presence
+            state: >-
+              {{ 'Met' if is_state('binary_sensor.family_present', 'on') else 'Unmet' }}
+            secondary: "{{ state_translated('binary_sensor.family_present') }}"
+            card_mod:
+              style: |
+                .state {
+                  color: {{ 'var(--custom-color-green)' if is_state(config.entity, 'on') else 'var(--custom-color-red)' }};
+                  }
+                }
+          - type: custom:template-entity-row
+            entity: sensor.time
+            name: Time of Day
+            state: >-
+              {{ 'Met' if today_at('09:30:00') <= now() <= today_at('15:00:00') else 'Unmet' }}
+            secondary: "{{ now().strftime('%H:%M') }} between 09:30 and 15:00"
+            card_mod:
+              style: |
+                .state {
+                  color: {{ 'var(--custom-color-green)' if today_at('09:30:00') <= now() <= today_at('15:00:00') else 'var(--custom-color-red)' }};
+                  }
+                }
+          - type: section
+            label: Cooling
+          - type: custom:template-entity-row
+            entity: sensor.office_temperature
+            name: Inside Temperature
+            state: >-
+              {{ 'Met' if states('sensor.office_temperature') | float(0) > 24.4 else 'Unmet' }}
+            secondary: "{{ states('sensor.office_temperature', with_unit=True) }} > 24.4 ºC"
+            card_mod:
+              style: |
+                .state {
+                  color: {{ 'var(--custom-color-green)' if states(config.entity) | float(0) > 24.4 else 'var(--custom-color-red)' }};
+                  }
+                }
+          - type: custom:template-entity-row
+            entity: sensor.thermal_comfort_inside_summer_simmer_perception
+            name: Inside Thermal Comfort
+            state: >-
+              {{ 'Met' if states('sensor.thermal_comfort_inside_summer_simmer_perception') in ['slightly_warm', 'increasing_discomfort', 'extremely_warm', 'danger_of_heatstroke'] else 'Unmet' }}
+            secondary: "{{ state_translated('sensor.thermal_comfort_inside_summer_simmer_perception') }}"
+            card_mod:
+              style: |
+                .state {
+                  color: {{ 'var(--custom-color-green)' if states(config.entity) in ['slightly_warm', 'increasing_discomfort', 'extremely_warm', 'danger_of_heatstroke'] else 'var(--custom-color-red)' }};
+                  }
+                }
+          - type: custom:template-entity-row
+            entity: sensor.thermal_comfort_outside_summer_simmer_perception
+            name: Outside Thermal Comfort
+            state: >-
+              {{ 'Met' if not states('sensor.thermal_comfort_outside_summer_simmer_perception') in ['slightly_cool', 'comfortable'] else 'Unmet' }}
+            secondary: "{{ state_translated('sensor.thermal_comfort_outside_summer_simmer_perception') }}"
+            card_mod:
+              style: |
+                .state {
+                  color: {{ 'var(--custom-color-green)' if not states(config.entity) in ['slightly_cool', 'comfortable'] else 'var(--custom-color-red)' }};
+                  }
+                }
+          - type: custom:template-entity-row
+            entity: sensor.outside_temperature_change
+            name: Outside Temperature Increasing
+            state: >-
+              {{ 'Met' if states('sensor.outside_temperature_change') | float > 1.0 else 'Unmet' }}
+            secondary: "{{ state_translated('sensor.outside_temperature_change') }} > 1.0 ºC"
+            card_mod:
+              style: |
+                .state {
+                  color: {{ 'var(--custom-color-green)' if states('sensor.outside_temperature_change') | float > 1.0 else 'var(--custom-color-red)' }};
+                  }
+                }
+          - type: section
+            label: Heating
+          - type: custom:template-entity-row
+            entity: sensor.office_temperature
+            name: Inside Temperature
+            state: >-
+              {{ 'Met' if states('sensor.office_temperature') | float(0) < 15.1 else 'Unmet' }}
+            secondary: "{{ states('sensor.office_temperature', with_unit=True) }} < 15.1 ºC"
+            card_mod:
+              style: |
+                .state {
+                  color: {{ 'var(--custom-color-green)' if states(config.entity) | float(0) < 15.1 else 'var(--custom-color-red)' }};
+                  }
+                }
+          - type: custom:template-entity-row
+            entity: sensor.thermal_comfort_inside_summer_simmer_perception
+            name: Inside Thermal Comfort
+            state: >-
+              {{ 'Met' if states('sensor.thermal_comfort_inside_summer_simmer_perception') in ['cold'] else 'Unmet' }}
+            secondary: "{{ state_translated('sensor.thermal_comfort_inside_summer_simmer_perception') }}"
+            card_mod:
+              style: |
+                .state {
+                  color: {{ 'var(--custom-color-green)' if states(config.entity) in ['cold'] else 'var(--custom-color-red)' }};
+                  }
+                }
+          - type: custom:template-entity-row
+            entity: sensor.thermal_comfort_outside_summer_simmer_perception
+            name: Outside Thermal Comfort
+            state: >-
+              {{ 'Met' if not states('sensor.thermal_comfort_outside_summer_simmer_perception') in ['comfortable', 'slightly_warm'] else 'Unmet' }}
+            secondary: "{{ state_translated('sensor.thermal_comfort_outside_summer_simmer_perception') }}"
+            card_mod:
+              style: |
+                .state {
+                  color: {{ 'var(--custom-color-green)' if not states(config.entity) in ['comfortable', 'slightly_warm'] else 'var(--custom-color-red)' }};
+                  }
+                }
+          - type: custom:template-entity-row
+            entity: sensor.outside_temperature_change
+            name: Outside Temperature Increasing
+            state: >-
+              {{ 'Met' if states('sensor.outside_temperature_change') | float < -1.0 else 'Unmet' }}
+            secondary: "{{ state_translated('sensor.outside_temperature_change') }} < -1.0 ºC"
+            card_mod:
+              style: |
+                .state {
+                  color: {{ 'var(--custom-color-green)' if states('sensor.outside_temperature_change') | float < -1.0 else 'var(--custom-color-red)' }};
+                  }
+                }
+          - type: section
+            label: Energy
+          - type: custom:template-entity-row
+            entity: binary_sensor.grid_feed
+            name: Grid Feed
+            state: >-
+              {{ 'Met' if is_state('binary_sensor.grid_feed', 'on') else 'Unmet' }}
+            secondary: "{{ 'Connected' if is_state('binary_sensor.grid_feed', 'on') else 'Disconnected' }}"
+            card_mod:
+              style: |
+                .state {
+                  color: {{ 'var(--custom-color-green)' if is_state('binary_sensor.grid_feed', 'on') else 'var(--custom-color-red)' }};
+                  }
+                }
       - type: custom:button-card
         show_label: true
         label: >

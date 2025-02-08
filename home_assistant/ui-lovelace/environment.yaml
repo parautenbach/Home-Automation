@@ -107,80 +107,287 @@ badges:
 cards:
   - type: vertical-stack
     cards:
-      - type: horizontal-stack
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
         cards:
-          - type: vertical-stack
+          - type: horizontal-stack
             cards:
-              - type: tile
-                entity: climate.living_room_ac
-                name: Living Room
-                features:
-                  - type: "target-temperature"
-                  - type: climate-hvac-modes
-                    hvac_modes:
-                      - heat
-                      - cool
-                      - fan_only
-                      - "off"
-                  - type: "climate-fan-modes"
-                    style: "icons"
-                    fan_modes:
-                      - silent
-                      - low
-                      - medium
-                      - high
-                      - auto
-                  - type: climate-preset-modes
-                    style: icons
-                    preset_modes:
-                      - none
-                      - eco
-                      - sleep
-                      - boost
-              - type: horizontal-stack
+              - type: vertical-stack
                 cards:
-                  - type: custom:button-card
-                    template:
-                      - climate_led_display
-                    entity: switch.living_room_ac_display
-                    triggers_update:
-                      - climate.living_room_ac
-          - type: vertical-stack
+                  - type: tile
+                    entity: climate.living_room_ac
+                    name: Living Room
+                    features:
+                      - type: "target-temperature"
+                      - type: climate-hvac-modes
+                        hvac_modes:
+                          - heat
+                          - cool
+                          - fan_only
+                          - "off"
+                      - type: "climate-fan-modes"
+                        style: "icons"
+                        fan_modes:
+                          - silent
+                          - low
+                          - medium
+                          - high
+                          - auto
+                      - type: climate-preset-modes
+                        style: icons
+                        preset_modes:
+                          - none
+                          - eco
+                          - sleep
+                          - boost
+                  - type: horizontal-stack
+                    cards:
+                      - type: custom:button-card
+                        template:
+                          - climate_led_display
+                        entity: switch.living_room_ac_display
+                        triggers_update:
+                          - climate.living_room_ac
+              - type: vertical-stack
+                cards:
+                  - type: tile
+                    entity: climate.main_bedroom_ac
+                    name: Main Bedroom
+                    features:
+                      - type: "target-temperature"
+                      - type: climate-hvac-modes
+                        hvac_modes:
+                          - heat
+                          - cool
+                          - fan_only
+                          - "off"
+                      - type: "climate-fan-modes"
+                        style: "icons"
+                        fan_modes:
+                          - silent
+                          - low
+                          - medium
+                          - high
+                          - auto
+                      - type: climate-preset-modes
+                        style: icons
+                        preset_modes:
+                          - none
+                          - eco
+                          - sleep
+                          - boost
+                  - type: horizontal-stack
+                    cards:
+                      - type: custom:button-card
+                        template:
+                          - climate_led_display
+                        entity: switch.main_bedroom_ac_display
+                        triggers_update:
+                          - climate.main_bedroom_ac
+          - type: horizontal-stack
             cards:
-              - type: tile
-                entity: climate.main_bedroom_ac
-                name: Main Bedroom
-                features:
-                  - type: "target-temperature"
-                  - type: climate-hvac-modes
-                    hvac_modes:
-                      - heat
-                      - cool
-                      - fan_only
-                      - "off"
-                  - type: "climate-fan-modes"
-                    style: "icons"
-                    fan_modes:
-                      - silent
-                      - low
-                      - medium
-                      - high
-                      - auto
-                  - type: climate-preset-modes
-                    style: icons
-                    preset_modes:
-                      - none
-                      - eco
-                      - sleep
-                      - boost
-              - type: horizontal-stack
-                cards:
-                  - type: custom:button-card
-                    template:
-                      - climate_led_display
-                    entity: switch.main_bedroom_ac_display
-                    triggers_update:
-                      - climate.main_bedroom_ac
+              - type: entities
+                title: AC Conditions
+                icon: mdi:air-conditioner
+                card_mod:
+                  style: |
+                    .icon {
+                      color: var(--paper-item-icon-color);
+                    }
+                show_header_toggle: false
+                entities:
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: Home
+                    entities:
+                      - type: custom:template-entity-row
+                        entity: climate.living_room_ac
+                        name: AC Mode
+                        state: >-
+                          {{ 'Met' if is_state('climate.living_room_ac', 'off') else 'Unmet' }}
+                        secondary: "{{ state_translated('climate.living_room_ac') }}"
+                        card_mod:
+                          style: |
+                            .state {
+                              color: {{ 'var(--custom-color-green)' if is_state('climate.living_room_ac', 'off') else 'var(--custom-color-red)' }}
+                            }
+                      - type: custom:template-entity-row
+                        entity: input_boolean.ac_maintenance_mode
+                        name: Maintenance Mode
+                        state: >-
+                          {{ 'Met' if is_state('input_boolean.ac_maintenance_mode', 'off') else 'Unmet' }}
+                        secondary: "{{ state_translated('input_boolean.ac_maintenance_mode') }}"
+                        card_mod:
+                          style: |
+                            .state {
+                              color: {{ 'var(--custom-color-green)' if is_state(config.entity, 'off') else 'var(--custom-color-red)' }};
+                              }
+                            }
+                      - type: custom:template-entity-row
+                        entity: alarm_control_panel.home
+                        name: Alarm
+                        state: >-
+                          {{ 'Met' if is_state('alarm_control_panel.home', 'disarmed') else 'Unmet' }}
+                        secondary: "{{ state_translated('alarm_control_panel.home') }}"
+                        card_mod:
+                          style: |
+                            .state {
+                              color: {{ 'var(--custom-color-green)' if is_state(config.entity, 'disarmed') else 'var(--custom-color-red)' }};
+                              }
+                            }
+                      - type: custom:template-entity-row
+                        entity: binary_sensor.family_present
+                        name: Family Presence
+                        state: >-
+                          {{ 'Met' if is_state('binary_sensor.family_present', 'on') else 'Unmet' }}
+                        secondary: "{{ state_translated('binary_sensor.family_present') }}"
+                        card_mod:
+                          style: |
+                            .state {
+                              color: {{ 'var(--custom-color-green)' if is_state(config.entity, 'on') else 'var(--custom-color-red)' }};
+                              }
+                            }
+                      - type: custom:template-entity-row
+                        entity: sensor.time
+                        name: Time of Day
+                        state: >-
+                          {{ 'Met' if today_at('09:30:00') <= now() <= today_at('18:00:00') else 'Unmet' }}
+                        secondary: "{{ now().strftime('%H:%M') }} is {{ 'not' if not today_at('09:30:00') <= now() <= today_at('18:00:00') else '' }} between 09:30 and 15:00"
+                        card_mod:
+                          style: |
+                            .state {
+                              color: {{ 'var(--custom-color-green)' if today_at('09:30:00') <= now() <= today_at('15:00:00') else 'var(--custom-color-red)' }};
+                              }
+                            }
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: Cooling
+                    entities:
+                      - type: custom:template-entity-row
+                        entity: sensor.office_temperature
+                        name: Inside Temperature
+                        state: >-
+                          {{ 'Met' if states('sensor.office_temperature') | float(0) > 24.4 else 'Unmet' }}
+                        secondary: "{{ states('sensor.office_temperature', with_unit=True) }} {{ '>' if states('sensor.office_temperature') | float(0) > 24.4 else '<=' }} 24.4 ºC"
+                        card_mod:
+                          style: |
+                            .state {
+                              color: {{ 'var(--custom-color-green)' if states(config.entity) | float(0) > 24.4 else 'var(--custom-color-red)' }};
+                              }
+                            }
+                      - type: custom:template-entity-row
+                        entity: sensor.thermal_comfort_inside_summer_simmer_perception
+                        name: Inside Thermal Comfort
+                        state: >-
+                          {{ 'Met' if states('sensor.thermal_comfort_inside_summer_simmer_perception') in ['slightly_warm', 'increasing_discomfort', 'extremely_warm', 'danger_of_heatstroke'] else 'Unmet' }}
+                        secondary: "{{ state_translated('sensor.thermal_comfort_inside_summer_simmer_perception') }}"
+                        card_mod:
+                          style: |
+                            .state {
+                              color: {{ 'var(--custom-color-green)' if states(config.entity) in ['slightly_warm', 'increasing_discomfort', 'extremely_warm', 'danger_of_heatstroke'] else 'var(--custom-color-red)' }};
+                              }
+                            }
+                      - type: custom:template-entity-row
+                        entity: sensor.thermal_comfort_outside_summer_simmer_perception
+                        name: Outside Thermal Comfort
+                        state: >-
+                          {{ 'Met' if not states('sensor.thermal_comfort_outside_summer_simmer_perception') in ['slightly_cool', 'comfortable'] else 'Unmet' }}
+                        secondary: "{{ state_translated('sensor.thermal_comfort_outside_summer_simmer_perception') }}"
+                        card_mod:
+                          style: |
+                            .state {
+                              color: {{ 'var(--custom-color-green)' if not states(config.entity) in ['slightly_cool', 'comfortable'] else 'var(--custom-color-red)' }};
+                              }
+                            }
+                      - type: custom:template-entity-row
+                        entity: sensor.outside_temperature_change
+                        name: Outside Temperature Rising
+                        icon: mdi:trending-up
+                        state: >-
+                          {{ 'Met' if states('sensor.outside_temperature_change') | float > 1.0 else 'Unmet' }}
+                        secondary: "{{ states('sensor.outside_temperature_change', with_unit=True) }} > 1.0 ºC"
+                        card_mod:
+                          style: |
+                            .state {
+                              color: {{ 'var(--custom-color-green)' if states('sensor.outside_temperature_change') | float > 1.0 else 'var(--custom-color-red)' }};
+                              }
+                            }
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: Heating
+                    entities:
+                      - type: custom:template-entity-row
+                        entity: sensor.office_temperature
+                        name: Inside Temperature
+                        state: >-
+                          {{ 'Met' if states('sensor.office_temperature') | float(0) < 15.1 else 'Unmet' }}
+                        secondary: "{{ states('sensor.office_temperature', with_unit=True) }} < 15.1 ºC"
+                        card_mod:
+                          style: |
+                            .state {
+                              color: {{ 'var(--custom-color-green)' if states(config.entity) | float(0) < 15.1 else 'var(--custom-color-red)' }};
+                              }
+                            }
+                      - type: custom:template-entity-row
+                        entity: sensor.thermal_comfort_inside_summer_simmer_perception
+                        name: Inside Thermal Comfort
+                        state: >-
+                          {{ 'Met' if states('sensor.thermal_comfort_inside_summer_simmer_perception') in ['cold'] else 'Unmet' }}
+                        secondary: "{{ state_translated('sensor.thermal_comfort_inside_summer_simmer_perception') }}"
+                        card_mod:
+                          style: |
+                            .state {
+                              color: {{ 'var(--custom-color-green)' if states(config.entity) in ['cold'] else 'var(--custom-color-red)' }};
+                              }
+                            }
+                      - type: custom:template-entity-row
+                        entity: sensor.thermal_comfort_outside_summer_simmer_perception
+                        name: Outside Thermal Comfort
+                        state: >-
+                          {{ 'Met' if not states('sensor.thermal_comfort_outside_summer_simmer_perception') in ['comfortable', 'slightly_warm'] else 'Unmet' }}
+                        secondary: "{{ state_translated('sensor.thermal_comfort_outside_summer_simmer_perception') }}"
+                        card_mod:
+                          style: |
+                            .state {
+                              color: {{ 'var(--custom-color-green)' if not states(config.entity) in ['comfortable', 'slightly_warm'] else 'var(--custom-color-red)' }};
+                              }
+                            }
+                      - type: custom:template-entity-row
+                        entity: sensor.outside_temperature_change
+                        name: Outside Temperature Falling
+                        icon: mdi:trending-down
+                        state: >-
+                          {{ 'Met' if states('sensor.outside_temperature_change') | float < -1.0 else 'Unmet' }}
+                        secondary: "{{ states('sensor.outside_temperature_change', with_unit=True) }} < -1.0 ºC"
+                        card_mod:
+                          style: |
+                            .state {
+                              color: {{ 'var(--custom-color-green)' if states('sensor.outside_temperature_change') | float < -1.0 else 'var(--custom-color-red)' }};
+                              }
+                            }
+                  - type: custom:fold-entity-row
+                    head:
+                      type: section
+                      label: Energy
+                    entities:
+                      - type: custom:template-entity-row
+                        entity: binary_sensor.grid_feed
+                        name: Grid Feed
+                        state: >-
+                          {{ 'Met' if is_state('binary_sensor.grid_feed', 'on') else 'Unmet' }}
+                        secondary: "{{ 'Connected' if is_state('binary_sensor.grid_feed', 'on') else 'Disconnected' }}"
+                        card_mod:
+                          style: |
+                            .state {
+                              color: {{ 'var(--custom-color-green)' if is_state('binary_sensor.grid_feed', 'on') else 'var(--custom-color-red)' }};
+                              }
+                            }   
       - type: history-graph
         hours_to_show: 24
         entities:

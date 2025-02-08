@@ -108,6 +108,36 @@ cards:
             name: Home
           - entity: alarm_control_panel.flatlet
             name: Flatlet
+      - type: horizontal-stack
+        title: Smoke Detectors
+        cards:
+          - type: custom:button-card
+            template: smoke_detector
+            name: "Kitchen"
+            entity: binary_sensor.kitchen_smoke
+            tap_action:
+              action: call-service
+              service: shell_command.mute_smoke_alarm
+              data:
+                host: shellyplussmoke-64b7080b93a4
+          - type: custom:button-card
+            template: smoke_detector
+            name: "Braai Room"
+            entity: binary_sensor.braai_room_smoke
+            tap_action:
+              action: call-service
+              service: shell_command.mute_smoke_alarm
+              data:
+                host: shellyplussmoke-a0a3b3b861d0
+          - type: custom:button-card
+            template: smoke_detector
+            name: "Garage"
+            entity: binary_sensor.garage_smoke
+            tap_action:
+              action: call-service
+              service: shell_command.mute_smoke_alarm
+              data:
+                host: shellyplussmoke-a0a3b35c5694
       - type: custom:home-feed-card
         title: Events
         show_empty: true

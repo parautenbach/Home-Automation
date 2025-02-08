@@ -518,6 +518,21 @@ pollen:
       color: "#ff5800"
     - value: 5
       color: "#aa0000"
+smoke_detector:
+  template:
+    - old_colors
+  size: 20%
+  show_label: true
+  label: Mute
+  styles:
+    name:
+      - color: var(--paper-item-icon-color)
+    label:
+      - color: var(--paper-item-icon-color)
+    grid:
+      - grid-template-areas: '"l" "i" "n"'
+    card:
+      - font-size: 12px
 climate_led_display:
   icon: mdi:television-ambient-light
   size: 10%

@@ -51,6 +51,8 @@ cards:
           name: Inverter Temperature Notification Governor
         - entity: input_boolean.inverter_battery_temperature_notification_governor
           name: Inverter Battery Temperature Notification Governor
+        - entity: input_boolean.ac_maintenance_mode
+          name: AC Maintenance Mode
     - type: glance
       entities:
         - entity: sensor.pieter_activity_type

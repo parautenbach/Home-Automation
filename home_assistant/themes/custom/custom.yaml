@@ -13,7 +13,8 @@ custom-light-mode:
                 scrollbar-width: none; /* For Firefox */
                 flex-wrap: nowrap !important;
                 justify-content: unset !important;
-                // justify-content: center !important;
+                //justify-content: center !important;
+                //justify-content: space-evenly !important;
             }
             .badges > * {
                 min-width: fit-content;

@@ -1000,6 +1000,11 @@ automation:
                 name: default
                 critical: 1
                 volume: 0.5
+            actions:
+              - action: "GET_HELP"
+                title: "Get help!"
+                uri: "tel:+27218874777"
+                destructive: true
             # todo: alert security company
             # request logged with olarm to see if they can provide an http request for a panic
             # for event automation:

@@ -171,9 +171,10 @@ binary_sensor:
       outside_temperature_trend:
         entity_id: sensor.outside_temperature
         friendly_name: "Outside Temperature Trend"
-        sample_duration: 7200
-        # 0.5 degrees / 7200 seconds
-        min_gradient: 0.00007
+        # 3 * 60 * 60
+        sample_duration: 10800
+        # 1 degree / 10800 seconds
+        min_gradient: 0.00009
 
 sensor:
   - platform: openweathermap_all
@@ -203,7 +204,7 @@ sensor:
     # the difference between the newest and the oldest measurement
     state_characteristic: change
     max_age:
-      minutes: 120
+      minutes: 180
 
   - platform: template
     sensors:

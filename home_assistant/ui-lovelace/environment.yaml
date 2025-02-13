@@ -208,7 +208,7 @@ cards:
                         entity: climate.living_room_ac
                         name: AC Mode
                         state: >-
-                          {{ 'Met' if is_state('climate.living_room_ac', 'off') else 'Unmet' }}
+                          {{ 'Met' if is_state('climate.living_room_ac', 'off') else 'Not met' }}
                         secondary: "{{ state_translated('climate.living_room_ac') }}"
                         card_mod:
                           style: |
@@ -219,7 +219,7 @@ cards:
                         entity: input_boolean.ac_maintenance_mode
                         name: Maintenance Mode
                         state: >-
-                          {{ 'Met' if is_state('input_boolean.ac_maintenance_mode', 'off') else 'Unmet' }}
+                          {{ 'Met' if is_state('input_boolean.ac_maintenance_mode', 'off') else 'Not met' }}
                         secondary: "{{ state_translated('input_boolean.ac_maintenance_mode') }}"
                         card_mod:
                           style: |
@@ -231,7 +231,7 @@ cards:
                         entity: alarm_control_panel.home
                         name: Alarm
                         state: >-
-                          {{ 'Met' if is_state('alarm_control_panel.home', 'disarmed') else 'Unmet' }}
+                          {{ 'Met' if is_state('alarm_control_panel.home', 'disarmed') else 'Not met' }}
                         secondary: "{{ state_translated('alarm_control_panel.home') }}"
                         card_mod:
                           style: |
@@ -243,7 +243,7 @@ cards:
                         entity: binary_sensor.family_present
                         name: Family Presence
                         state: >-
-                          {{ 'Met' if is_state('binary_sensor.family_present', 'on') else 'Unmet' }}
+                          {{ 'Met' if is_state('binary_sensor.family_present', 'on') else 'Not met' }}
                         secondary: "{{ state_translated('binary_sensor.family_present') }}"
                         card_mod:
                           style: |
@@ -255,7 +255,7 @@ cards:
                         entity: sensor.time
                         name: Time of Day
                         state: >-
-                          {{ 'Met' if today_at('09:30:00') <= now() <= today_at('18:00:00') else 'Unmet' }}
+                          {{ 'Met' if today_at('09:30:00') <= now() <= today_at('18:00:00') else 'Not met' }}
                         secondary: "{{ now().strftime('%H:%M') }} is {{ 'not' if not today_at('09:30:00') <= now() <= today_at('18:00:00') else '' }} between 09:30 and 15:00"
                         card_mod:
                           style: |
@@ -272,7 +272,7 @@ cards:
                         entity: sensor.office_temperature
                         name: Inside Temperature
                         state: >-
-                          {{ 'Met' if states('sensor.office_temperature') | float(0) > 24.4 else 'Unmet' }}
+                          {{ 'Met' if states('sensor.office_temperature') | float(0) > 24.4 else 'Not met' }}
                         secondary: "{{ states('sensor.office_temperature', with_unit=True) }} {{ '>' if states('sensor.office_temperature') | float(0) > 24.4 else '<=' }} 24.4 ºC"
                         card_mod:
                           style: |
@@ -284,7 +284,7 @@ cards:
                         entity: sensor.thermal_comfort_inside_summer_simmer_perception
                         name: Inside Thermal Comfort
                         state: >-
-                          {{ 'Met' if states('sensor.thermal_comfort_inside_summer_simmer_perception') in ['slightly_warm', 'increasing_discomfort', 'extremely_warm', 'danger_of_heatstroke'] else 'Unmet' }}
+                          {{ 'Met' if states('sensor.thermal_comfort_inside_summer_simmer_perception') in ['slightly_warm', 'increasing_discomfort', 'extremely_warm', 'danger_of_heatstroke'] else 'Not met' }}
                         secondary: "{{ state_translated('sensor.thermal_comfort_inside_summer_simmer_perception') }}"
                         card_mod:
                           style: |
@@ -296,7 +296,7 @@ cards:
                         entity: sensor.thermal_comfort_outside_summer_simmer_perception
                         name: Outside Thermal Comfort
                         state: >-
-                          {{ 'Met' if not states('sensor.thermal_comfort_outside_summer_simmer_perception') in ['slightly_cool', 'comfortable'] else 'Unmet' }}
+                          {{ 'Met' if not states('sensor.thermal_comfort_outside_summer_simmer_perception') in ['slightly_cool', 'comfortable'] else 'Not met' }}
                         secondary: "{{ state_translated('sensor.thermal_comfort_outside_summer_simmer_perception') }}"
                         card_mod:
                           style: |
@@ -309,7 +309,7 @@ cards:
                         name: Outside Temperature Rising
                         icon: mdi:trending-up
                         state: >-
-                          {{ 'Met' if states('sensor.outside_temperature_change') | float > 1.0 else 'Unmet' }}
+                          {{ 'Met' if states('sensor.outside_temperature_change') | float > 1.0 else 'Not met' }}
                         secondary: "{{ states('sensor.outside_temperature_change', with_unit=True) }} > 1.0 ºC"
                         card_mod:
                           style: |
@@ -326,7 +326,7 @@ cards:
                         entity: sensor.office_temperature
                         name: Inside Temperature
                         state: >-
-                          {{ 'Met' if states('sensor.office_temperature') | float(0) < 15.1 else 'Unmet' }}
+                          {{ 'Met' if states('sensor.office_temperature') | float(0) < 15.1 else 'Not met' }}
                         secondary: "{{ states('sensor.office_temperature', with_unit=True) }} < 15.1 ºC"
                         card_mod:
                           style: |
@@ -338,7 +338,7 @@ cards:
                         entity: sensor.thermal_comfort_inside_summer_simmer_perception
                         name: Inside Thermal Comfort
                         state: >-
-                          {{ 'Met' if states('sensor.thermal_comfort_inside_summer_simmer_perception') in ['cold'] else 'Unmet' }}
+                          {{ 'Met' if states('sensor.thermal_comfort_inside_summer_simmer_perception') in ['cold'] else 'Not met' }}
                         secondary: "{{ state_translated('sensor.thermal_comfort_inside_summer_simmer_perception') }}"
                         card_mod:
                           style: |
@@ -350,7 +350,7 @@ cards:
                         entity: sensor.thermal_comfort_outside_summer_simmer_perception
                         name: Outside Thermal Comfort
                         state: >-
-                          {{ 'Met' if not states('sensor.thermal_comfort_outside_summer_simmer_perception') in ['comfortable', 'slightly_warm'] else 'Unmet' }}
+                          {{ 'Met' if not states('sensor.thermal_comfort_outside_summer_simmer_perception') in ['comfortable', 'slightly_warm'] else 'Not met' }}
                         secondary: "{{ state_translated('sensor.thermal_comfort_outside_summer_simmer_perception') }}"
                         card_mod:
                           style: |
@@ -363,7 +363,7 @@ cards:
                         name: Outside Temperature Falling
                         icon: mdi:trending-down
                         state: >-
-                          {{ 'Met' if states('sensor.outside_temperature_change') | float < -1.0 else 'Unmet' }}
+                          {{ 'Met' if states('sensor.outside_temperature_change') | float < -1.0 else 'Not met' }}
                         secondary: "{{ states('sensor.outside_temperature_change', with_unit=True) }} < -1.0 ºC"
                         card_mod:
                           style: |
@@ -380,7 +380,7 @@ cards:
                         entity: binary_sensor.grid_feed
                         name: Grid Feed
                         state: >-
-                          {{ 'Met' if is_state('binary_sensor.grid_feed', 'on') else 'Unmet' }}
+                          {{ 'Met' if is_state('binary_sensor.grid_feed', 'on') else 'Not met' }}
                         secondary: "{{ 'Connected' if is_state('binary_sensor.grid_feed', 'on') else 'Disconnected' }}"
                         card_mod:
                           style: |

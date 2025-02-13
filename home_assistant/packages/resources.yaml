@@ -1062,11 +1062,12 @@ automation:
           # is 10 min too long?
           # implement a governor?
           minutes: 5
-      - platform: numeric_state
-        entity_id: sensor.battery_state_of_charge
-        below: 16
-        for:
-          minutes: 5
+      # this is actually just annoying
+      # - platform: numeric_state
+      #   entity_id: sensor.battery_state_of_charge
+      #   below: 16
+      #   for:
+      #     minutes: 5
       - platform: state
         entity_id: binary_sensor.grid_feed
         to: "off"

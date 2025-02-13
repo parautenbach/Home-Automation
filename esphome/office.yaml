@@ -4,7 +4,8 @@ substitutions:
 
 esphome:
   name: office
-  platform: ESP32
+
+esp32:
   board: nodemcu-32s
 
 <<: !include common.yaml

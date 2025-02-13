@@ -4,7 +4,8 @@ substitutions:
 
 esphome:
   name: main-gate
-  platform: ESP32
+
+esp32:
   board: esp32doit-devkit-v1
 
 <<: !include common.yaml

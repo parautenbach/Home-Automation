@@ -5,7 +5,8 @@ substitutions:
 esphome:
   # https://devices.esphome.io/devices/Sonoff-4CH-Pro-R2
   name: irrigation
-  platform: ESP8266
+
+esp8266:
   board: esp01_1m
 
 wifi:

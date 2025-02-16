@@ -134,7 +134,7 @@ script:
       - service: script.turn_on
         entity_id: script.samsung_tv_hdmi1
       # if we're streaming music, for example, pause as to not waste internet bandwidth
-      # (however little it may be; it's the principle)
+      # (however little it may be; it's the principle, and a playing atv will not turn off either)
       - condition: state
         entity_id: media_player.living_room
         state: "playing"

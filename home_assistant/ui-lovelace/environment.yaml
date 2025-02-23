@@ -256,11 +256,11 @@ cards:
                         name: Time of Day
                         state: >-
                           {{ 'Met' if today_at('09:30:00') <= now() <= today_at('18:00:00') else 'Not met' }}
-                        secondary: "{{ now().strftime('%H:%M') }} is {{ 'not' if not today_at('09:30:00') <= now() <= today_at('18:00:00') else '' }} between 09:30 and 15:00"
+                        secondary: "{{ now().strftime('%H:%M') }} is {{ 'not' if not today_at('09:30:00') <= now() <= today_at('17:00:00') else '' }} between 09:30 and 17:00"
                         card_mod:
                           style: |
                             .state {
-                              color: {{ 'var(--custom-color-green)' if today_at('09:30:00') <= now() <= today_at('15:00:00') else 'var(--custom-color-red)' }};
+                              color: {{ 'var(--custom-color-green)' if today_at('09:30:00') <= now() <= today_at('17:00:00') else 'var(--custom-color-red)' }};
                               }
                             }
                   - type: custom:fold-entity-row

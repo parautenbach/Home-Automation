@@ -1294,7 +1294,6 @@ automation:
                 value_template: "{{ states('sensor.outside_temperature') | float(0) < states('sensor.office_temperature') | float(0) }}"
       - condition: time
         after: "09:30:00"
-        before: "15:00:00"
       # be less conservative power-wise: don't check the battery variance.
       # just check that there's no scheduled loadshedding and that the grid is connected.
       # use binary_sensor.loadshedding_scheduled instead, but we don't really need this,
@@ -1415,6 +1414,9 @@ automation:
         at: "17:30:00"
       # sensor.living_room_ac_power < x for 30 min? => it's basically been running the fan only
     condition:
+      - condition: time
+        after: "09:30:00"
+        before: "17:31:00"
       - condition: state
         entity_id: input_boolean.ac_maintenance_mode
         state: "off"

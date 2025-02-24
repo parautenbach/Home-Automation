@@ -923,12 +923,12 @@ cards:
             - entity: sensor.battery_change_of_charge
               name: Charge Rate
             - type: custom:template-entity-row
-              entity: sensor.battery_time_to_shutdown_threshold
+              entity: sensor.battery_time_to_full
               name: Time to Full
               state: >-
                 {% set duration_minutes = states('sensor.battery_time_to_full') | float(0) // 60 %}
                 {% set hours_part = (duration_minutes // 60) | int(0) %}
-                {% set minutes_part = (duration_minutes - hours_part*60) // 60 | int(0) %}
+                {% set minutes_part = (duration_minutes - hours_part*60) | int(0) %}
                 {{ '%02i:%02i' % (hours_part, minutes_part) }}
               icon: mdi:timer-check-outline
             - type: attribute
@@ -971,7 +971,7 @@ cards:
               state: >-
                 {% set duration_minutes = states('sensor.battery_time_to_shutdown_threshold') | float(0) // 60 %}
                 {% set hours_part = (duration_minutes // 60) | int(0) %}
-                {% set minutes_part = (duration_minutes - hours_part*60) // 60 | int(0) %}
+                {% set minutes_part = (duration_minutes - hours_part*60) | int(0) %}
                 {{ '%02i:%02i' % (hours_part, minutes_part) }}
               icon: mdi:timer-cancel-outline
             - type: attribute

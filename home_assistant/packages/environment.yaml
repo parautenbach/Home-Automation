@@ -951,6 +951,7 @@ automation:
             UV radiation is high. Remember to apply sunscreen.
           data:
             group: "environment"
+            tag: "environment-uv"
             url: homeassistant://navigate/lovelace/environment
 
   - alias: "High Fire Risk Notification"

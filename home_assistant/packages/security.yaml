@@ -1031,7 +1031,7 @@ automation:
         at: "01:00:00"
     condition:
       - condition: template
-        value_template: "{{ now().day == 1 }}"
+        value_template: "{{ now().day == 10 }}"
     action:
       - service: input_boolean.turn_on
         target:

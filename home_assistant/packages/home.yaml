@@ -1184,7 +1184,7 @@ automation:
       - platform: numeric_state
         entity_id: sensor.office_temperature
         # same as matching condition below
-        above: 24.4
+        above: 24.9
         id: "rising_temp"
       - platform: template
         # same as matching condition below
@@ -1245,7 +1245,7 @@ automation:
               - condition: numeric_state
                 entity_id: sensor.office_temperature
                 # same as matching trigger above
-                above: 24.4
+                above: 24.9
               - condition: state
                 entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
                 # same as matching trigger above

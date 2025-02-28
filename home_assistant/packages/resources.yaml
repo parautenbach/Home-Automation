@@ -1752,6 +1752,8 @@ automation:
         entity_id: automation.set_charge_points
         # https://www.home-assistant.io/docs/automation/trigger/#state-trigger
         not_from: "unavailable"
+        for:
+          seconds: 5
     mode: single
     action:
       - service: notify.mobile_app_ceres

@@ -2,35 +2,41 @@ title: Baby
 path: baby
 icon: mdi:teddy-bear
 badges:
-  - type: entity
-    entity: sensor.bedroom_ht_temperature
-    icon: mdi:bed
-    show_icon: true
-    show_name: false
-    show_state: true
+  - type: custom:mod-card
+    card:
+      type: custom:hui-entity-badge
+      entity: sensor.bedroom_ht_temperature
+      icon: mdi:bed
+      show_icon: true
+      show_name: false
+      show_state: true
     card_mod:
-      style: |
-        :host {
-          --label-badge-text-color:
+      style:
+        hui-entity-badge:
+          $: |
+            state-display {
               {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
-              {%- set state = states(config.entity) | float(0) -%}
-              {{ gradient_color(state, temp_degrees_c_human_map) }}
-        }
-  - type: entity
-    entity: sensor.outside_temperature
-    name: Outside
-    icon: mdi:weather-partly-cloudy
-    show_icon: true
-    show_name: false
-    show_state: true
+              {%- set state = states('sensor.bedroom_ht_temperature') | float(0) -%}
+              color: {{ gradient_color(state, temp_degrees_c_human_map) }};
+            }
+  - type: custom:mod-card
+    card:
+      type: custom:hui-entity-badge
+      entity: sensor.outside_temperature
+      name: Outside
+      icon: mdi:weather-partly-cloudy
+      show_icon: true
+      show_name: false
+      show_state: true
     card_mod:
-      style: |
-        :host {
-          --label-badge-text-color:
+      style:
+        hui-entity-badge:
+          $: |
+            state-display {
               {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
-              {%- set state = states(config.entity) | float(0) -%}
-              {{ gradient_color(state, temp_degrees_c_human_map) }}
-        }
+              {%- set state = states('sensor.outside_temperature') | float(0) -%}
+              color: {{ gradient_color(state, temp_degrees_c_human_map) }};
+            }
   - type: entity
     entity: binary_sensor.baby_monitor_motion_alarm
     name: Motion

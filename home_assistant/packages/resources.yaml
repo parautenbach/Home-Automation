@@ -1130,7 +1130,7 @@ automation:
         below: 21
         for:
           # combine this automation with above alert?
-          minutes: 10
+          minutes: 5
       - platform: state
         entity_id: binary_sensor.grid_feed
         to: "off"

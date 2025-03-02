@@ -17,10 +17,15 @@ badges:
       style:
         hui-entity-badge:
           $: |
-            state-display {
+            //state-display {
+            //  {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+            //  {%- set state = states('sensor.office_temperature') | float(0) -%}
+            //  color: {{ gradient_color(state, temp_degrees_c_human_map) }};
+            //}
+            ha-state-icon {
               {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
               {%- set state = states('sensor.office_temperature') | float(0) -%}
-              color: {{ gradient_color(state, temp_degrees_c_human_map) }};
+              --card-mod-icon-color: {{ gradient_color(state, temp_degrees_c_human_map) }};
             }
   - type: custom:mod-card
     card:
@@ -35,10 +40,15 @@ badges:
       style:
         hui-entity-badge:
           $: |
-            state-display {
+            //state-display {
+            //  {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+            //  {%- set state = states('sensor.outside_temperature') | float(0) -%}
+            //  color: {{ gradient_color(state, temp_degrees_c_human_map) }};
+            //}
+            ha-state-icon {
               {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
               {%- set state = states('sensor.outside_temperature') | float(0) -%}
-              color: {{ gradient_color(state, temp_degrees_c_human_map) }};
+              --card-mod-icon-color: {{ gradient_color(state, temp_degrees_c_human_map) }};
             }
   - type: custom:mod-card
     card:
@@ -68,10 +78,15 @@ badges:
       style:
         hui-entity-badge:
           $: |
-            state-display {
-              {%- from 'dynamic_colors.jinja' import discrete_5_point_map, mapped_color -%}
-              {%- set state = states('sensor.overall_pollen_risk') | int(0) -%}
-              color: {{ mapped_color(state, discrete_5_point_map) }};
+            //state-display {
+            //  {%- from 'dynamic_colors.jinja' import discrete_5_point_map, mapped_color -%}
+            //  {%- set state = states('sensor.overall_pollen_risk') | int(0) -%}
+            //  color: {{ mapped_color(state, discrete_5_point_map) }};
+            //}
+            ha-state-icon {
+              {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+              {%- set state = states('sensor.overall_pollen_risk') | float(0) -%}
+              --card-mod-icon-color: {{ mapped_color(state, discrete_5_point_map) }};
             }
   - type: custom:mod-card
     card:
@@ -85,10 +100,15 @@ badges:
       style:
         hui-entity-badge:
           $: |
-            state-display {
-              {%- from 'dynamic_colors.jinja' import discrete_5_point_map, mapped_color -%}
-              {%- set state = states('sensor.owm_pollution_overall_air_quality') | int(0) -%}
-              color: {{ mapped_color(state, discrete_5_point_map) }};
+            //state-display {
+            //  {%- from 'dynamic_colors.jinja' import discrete_5_point_map, mapped_color -%}
+            //  {%- set state = states('sensor.owm_pollution_overall_air_quality') | int(0) -%}
+            //  color: {{ mapped_color(state, discrete_5_point_map) }};
+            //}
+            ha-state-icon {
+              {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+              {%- set state = states('sensor.owm_pollution_overall_air_quality') | float(0) -%}
+              --card-mod-icon-color: {{ mapped_color(state, discrete_5_point_map) }};
             }
     # card_mod:
     #   style:

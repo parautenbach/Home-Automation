@@ -24,7 +24,7 @@ badges:
       style:
         hui-entity-badge:
           $: |
-            state-display {
+            ha-state-icon {
               {%- from 'dynamic_colors.jinja' import gradient_color -%}
               {%- set state = states('sensor.home_power_kw') | float(0) -%}
               {%- set consumption_kw_map =
@@ -34,7 +34,7 @@ badges:
                           7.0: "#aa0000"
                         }
                 -%}
-              color: {{ gradient_color(state, consumption_kw_map) }};
+              --card-mod-icon-color: {{ gradient_color(state, consumption_kw_map) }};
             }
   - type: custom:mod-card
     card:
@@ -48,7 +48,7 @@ badges:
       style:
         hui-entity-badge:
           $: |
-            state-display {
+            ha-state-icon {
               {%- from 'dynamic_colors.jinja' import gradient_color -%}
               {%- set state = states('sensor.solar_reserve_kw') | float(0) -%}
               {%- set reserve_kw_map =
@@ -58,7 +58,7 @@ badges:
                           3.5: "#40b100"
                         }
                 -%}
-              color: {{ gradient_color(state, reserve_kw_map) }};
+              --card-mod-icon-color: {{ gradient_color(state, reserve_kw_map) }};
             }
   - type: custom:mod-card
     card:
@@ -72,10 +72,10 @@ badges:
       style:
         hui-entity-badge:
           $: |
-            state-display {
+            ha-state-icon {
               {%- from 'dynamic_colors.jinja' import reserve_percentage_map, gradient_color -%}
-              {%- set state = states('sensor.solar_reserve_percentage') | int(0) -%}
-              color: {{ gradient_color(state, reserve_percentage_map) }};
+              {%- set state = states('sensor.solar_reserve_percentage') | float(0) -%}
+              --card-mod-icon-color: {{ gradient_color(state, reserve_percentage_map) }};
             }
   - type: custom:mod-card
     card:
@@ -89,10 +89,10 @@ badges:
       style:
         hui-entity-badge:
           $: |
-            state-display {
+            ha-state-icon {
               {%- from 'dynamic_colors.jinja' import reserve_percentage_map, gradient_color -%}
-              {%- set state = states('sensor.battery_state_of_charge') | int(0) -%}
-              color: {{ gradient_color(state, reserve_percentage_map) }};
+              {%- set state = states('sensor.battery_state_of_charge') | float(0) -%}
+              --card-mod-icon-color: {{ gradient_color(state, reserve_percentage_map) }};
             }
 cards:
   - type: vertical-stack

@@ -1018,9 +1018,9 @@ automation:
             {% endif %}
           data:
             group: "home-electricity-battery"
+            tag: "backup-power-battery-update"
             # https://companion.home-assistant.io/docs/notifications/notifications-basic#replacing
             url: homeassistant://navigate/lovelace/resources
-            tag: "backup-power-battery-update"
       - service: input_boolean.turn_on
         target:
           entity_id: input_boolean.battery_notification_governor
@@ -1094,6 +1094,7 @@ automation:
                   message: "{{ message }}"
                   data:
                     group: "home-electricity"
+                    tag: "backup-power-battery-update"
                     url: homeassistant://navigate/lovelace/resources
                     push:
                       sound:
@@ -1107,6 +1108,7 @@ automation:
               message: "{{ message }}"
               data:
                 group: "home-electricity"
+                tag: "backup-power-battery-update"
                 url: homeassistant://navigate/lovelace/resources
 
   - alias: "Turn Off Non-essential Appliances When Critical Battery Threshold Reached"

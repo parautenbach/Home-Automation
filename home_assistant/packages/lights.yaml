@@ -246,7 +246,7 @@ script:
       duration:
         description: "A duration in %H:%M:%S format"
         example: "00:03:00"
-    mode: single
+    mode: parallel
     sequence:
       # https://www.home-assistant.io/docs/scripts/conditions/
       - service: light.turn_on

@@ -311,12 +311,12 @@ cards:
                         entity: sensor.office_temperature
                         name: Inside Temperature
                         state: >-
-                          {{ 'Met' if states('sensor.office_temperature') | float(0) > 24.9 else 'Not met' }}
-                        secondary: "{{ states('sensor.office_temperature', with_unit=True) }} {{ '>' if states('sensor.office_temperature') | float(0) > 24.9 else '<=' }} 24.9 ºC"
+                          {{ 'Met' if states('sensor.office_temperature') | float(0) >= 24.5 else 'Not met' }}
+                        secondary: "{{ states('sensor.office_temperature', with_unit=True) }} {{ '>=' if states('sensor.office_temperature') | float(0) >= 24.5 else '<' }} 24.5 ºC"
                         card_mod:
                           style: |
                             .state {
-                              color: {{ 'var(--custom-color-green)' if states(config.entity) | float(0) > 24.9 else 'var(--custom-color-red)' }};
+                              color: {{ 'var(--custom-color-green)' if states(config.entity) | float(0) >= 24.5 else 'var(--custom-color-red)' }};
                               }
                             }
                       - type: custom:template-entity-row
@@ -343,17 +343,18 @@ cards:
                               color: {{ 'var(--custom-color-green)' if not states(config.entity) in ['slightly_cool', 'comfortable'] else 'var(--custom-color-red)' }};
                               }
                             }
+                      # inside
                       - type: custom:template-entity-row
                         entity: sensor.outside_temperature_change
                         name: Outside Temperature Rising
                         icon: mdi:trending-up
                         state: >-
-                          {{ 'Met' if states('sensor.outside_temperature_change') | float > 1.0 else 'Not met' }}
-                        secondary: "{{ states('sensor.outside_temperature_change', with_unit=True) }} > 1.0 ºC"
+                          {{ 'Met' if states('sensor.outside_temperature_change') | float(0) >= 1.0 else 'Not met' }}
+                        secondary: "{{ states('sensor.outside_temperature_change', with_unit=True) }} {{ '>=' if states('sensor.outside_temperature_change') | float(0) >= 1.0 else '<' }} 1.0 ºC"
                         card_mod:
                           style: |
                             .state {
-                              color: {{ 'var(--custom-color-green)' if states('sensor.outside_temperature_change') | float > 1.0 else 'var(--custom-color-red)' }};
+                              color: {{ 'var(--custom-color-green)' if states('sensor.outside_temperature_change') | float(0) >= 1.0 else 'var(--custom-color-red)' }};
                               }
                             }
                   - type: custom:fold-entity-row
@@ -365,12 +366,12 @@ cards:
                         entity: sensor.office_temperature
                         name: Inside Temperature
                         state: >-
-                          {{ 'Met' if states('sensor.office_temperature') | float(0) < 15.1 else 'Not met' }}
-                        secondary: "{{ states('sensor.office_temperature', with_unit=True) }} < 15.1 ºC"
+                          {{ 'Met' if states('sensor.office_temperature') | float(0) <= 15.0 else 'Not met' }}
+                        secondary: "{{ states('sensor.office_temperature', with_unit=True) }} {{ '<=' if states('sensor.office_temperature') | float(0) <= 15.0 else '>' }} 15.0 ºC"
                         card_mod:
                           style: |
                             .state {
-                              color: {{ 'var(--custom-color-green)' if states(config.entity) | float(0) < 15.1 else 'var(--custom-color-red)' }};
+                              color: {{ 'var(--custom-color-green)' if states(config.entity) | float(0) <= 15.0 else 'var(--custom-color-red)' }};
                               }
                             }
                       - type: custom:template-entity-row
@@ -397,17 +398,18 @@ cards:
                               color: {{ 'var(--custom-color-green)' if not states(config.entity) in ['comfortable', 'slightly_warm'] else 'var(--custom-color-red)' }};
                               }
                             }
+                      # inside
                       - type: custom:template-entity-row
                         entity: sensor.outside_temperature_change
                         name: Outside Temperature Falling
                         icon: mdi:trending-down
                         state: >-
-                          {{ 'Met' if states('sensor.outside_temperature_change') | float < -1.0 else 'Not met' }}
-                        secondary: "{{ states('sensor.outside_temperature_change', with_unit=True) }} < -1.0 ºC"
+                          {{ 'Met' if states('sensor.outside_temperature_change') | float(0) <= -1.0 else 'Not met' }}
+                        secondary: "{{ states('sensor.outside_temperature_change', with_unit=True) }} {{ '<=' if states('sensor.outside_temperature_change') | float(0) <= -1.0 else '>' }} -1.0 ºC"
                         card_mod:
                           style: |
                             .state {
-                              color: {{ 'var(--custom-color-green)' if states('sensor.outside_temperature_change') | float < -1.0 else 'var(--custom-color-red)' }};
+                              color: {{ 'var(--custom-color-green)' if states('sensor.outside_temperature_change') | float(0) < -1.0 else 'var(--custom-color-red)' }};
                               }
                             }
                   - type: custom:fold-entity-row

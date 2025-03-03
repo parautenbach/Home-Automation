@@ -1184,11 +1184,14 @@ automation:
       - platform: numeric_state
         entity_id: sensor.office_temperature
         # same as matching condition below
-        above: 24.9
+        above: 24.4
         id: "rising_temp"
       - platform: template
         # same as matching condition below
-        value_template: "{{ states('sensor.outside_temperature') | float(0) > states('sensor.office_temperature') | float(0) }}"
+        value_template: >-
+          {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
+          {% set inside_temp = states('sensor.office_temperature') | float(0) %}
+          {{ outside_temp > inside_temp and inside_temp > 24.4 }}
         id: "rising_temp"
       - platform: numeric_state
         entity_id: sensor.office_temperature
@@ -1197,7 +1200,10 @@ automation:
         id: "falling_temp"
       - platform: template
         # same as matching condition below
-        value_template: "{{ states('sensor.outside_temperature') | float(0) < states('sensor.office_temperature') | float(0) }}"
+        value_template: >-
+          {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
+          {% set inside_temp = states('sensor.office_temperature') | float(0) %}
+          {{ outside_temp < inside_temp and inside_temp < 15.1 }}
         id: "falling_temp"
       # outside simmer trigger? perhaps not, since we really care what it feels like inside.
       - platform: state
@@ -1245,7 +1251,7 @@ automation:
               - condition: numeric_state
                 entity_id: sensor.office_temperature
                 # same as matching trigger above
-                above: 24.9
+                above: 24.4
               - condition: state
                 entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
                 # same as matching trigger above
@@ -1263,10 +1269,13 @@ automation:
                       - comfortable
               - condition: numeric_state
                 entity_id: sensor.outside_temperature_change
-                above: 1.0
+                above: 0.9
               - condition: template
                 # same as matching trigger above
-                value_template: "{{ states('sensor.outside_temperature') | float(0) > states('sensor.office_temperature') | float(0) }}"
+                value_template: >-
+                  {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
+                  {% set inside_temp = states('sensor.office_temperature') | float(0) %}
+                  {{ outside_temp > inside_temp }}
           # for heating
           - condition: and
             conditions:
@@ -1288,10 +1297,15 @@ automation:
                       - slightly_warm
               - condition: numeric_state
                 entity_id: sensor.outside_temperature_change
-                below: -1.0
+                below: -0.9
               - condition: template
                 # same as matching trigger above
-                value_template: "{{ states('sensor.outside_temperature') | float(0) < states('sensor.office_temperature') | float(0) }}"
+                value_template: >-
+                  {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
+                  {% set inside_temp = states('sensor.office_temperature') | float(0) %}
+                  {{ outside_temp < inside_temp }}
+      # check forecast min/max temp?
+      # get_forecasts['weather.openweathermap']['forecast'][0]['temperature']
       - condition: time
         after: "09:30:00"
       # be less conservative power-wise: don't check the battery variance.

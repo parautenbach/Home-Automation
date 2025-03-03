@@ -171,10 +171,17 @@ binary_sensor:
       outside_temperature_trend:
         entity_id: sensor.outside_temperature
         friendly_name: "Outside Temperature Trend"
-        # 3 * 60 * 60
+        # 3 hours * 60 minutes * 60 seconds
         sample_duration: 10800
-        # 1 degree / 10800 seconds
+        # 1 degree in the last 3 hours
         min_gradient: 0.00009
+      inside_temperature_trend:
+        entity_id: sensor.office_temperature
+        friendly_name: "Inside Temperature Trend"
+        # 30 minutes * 60 seconds
+        sample_duration: 1800
+        # 1 degree in the last 30 min
+        min_gradient: 0.00056
 
 sensor:
   - platform: openweathermap_all
@@ -205,6 +212,14 @@ sensor:
     state_characteristic: change
     max_age:
       minutes: 180
+
+  - platform: statistics
+    entity_id: sensor.office_temperature
+    name: "Inside Temperature Change"
+    # the difference between the newest and the oldest measurement
+    state_characteristic: change
+    max_age:
+      minutes: 30
 
   - platform: template
     sensors:

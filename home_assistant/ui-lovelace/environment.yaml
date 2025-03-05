@@ -165,6 +165,7 @@ cards:
                         hvac_modes:
                           - heat
                           - cool
+                          - dry
                           - fan_only
                           - "off"
                       - type: "climate-fan-modes"
@@ -201,6 +202,7 @@ cards:
                         hvac_modes:
                           - heat
                           - cool
+                          - dry
                           - fan_only
                           - "off"
                       - type: "climate-fan-modes"

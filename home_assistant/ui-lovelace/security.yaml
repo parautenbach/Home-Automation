@@ -228,6 +228,26 @@ cards:
               - "unavailable"
             format: datetime
             content_template: "Smoke was detected in the kitchen"
+          - entity: binary_sensor.garage_smoke
+            include_history: true
+            max_history: 5
+            remove_repeats: false
+            exclude_states:
+              - "off"
+              - "unknown"
+              - "unavailable"
+            format: datetime
+            content_template: "Smoke was detected in the garage"
+          - entity: binary_sensor.braai_room_smoke
+            include_history: true
+            max_history: 5
+            remove_repeats: false
+            exclude_states:
+              - "off"
+              - "unknown"
+              - "unavailable"
+            format: datetime
+            content_template: "Smoke was detected in the braai room"
       - type: entities
         title: "Gates & Doors"
         show_header_toggle: false

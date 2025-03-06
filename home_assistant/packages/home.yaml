@@ -1191,7 +1191,7 @@ automation:
         value_template: >-
           {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
           {% set inside_temp = states('sensor.office_temperature') | float(0) %}
-          {{ outside_temp > inside_temp and inside_temp > 24.4 }}
+          {{ outside_temp > inside_temp + 3 }}
         id: "rising_temp"
       - platform: numeric_state
         entity_id: sensor.office_temperature
@@ -1203,7 +1203,7 @@ automation:
         value_template: >-
           {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
           {% set inside_temp = states('sensor.office_temperature') | float(0) %}
-          {{ outside_temp < inside_temp and inside_temp < 15.1 }}
+          {{ outside_temp < inside_temp - 3 }}
         id: "falling_temp"
       # outside simmer trigger? perhaps not, since we really care what it feels like inside.
       - platform: state
@@ -1275,7 +1275,7 @@ automation:
                 value_template: >-
                   {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
                   {% set inside_temp = states('sensor.office_temperature') | float(0) %}
-                  {{ outside_temp > inside_temp }}
+                  {{ outside_temp > inside_temp + 3 }}
           # for heating
           - condition: and
             conditions:
@@ -1303,7 +1303,7 @@ automation:
                 value_template: >-
                   {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
                   {% set inside_temp = states('sensor.office_temperature') | float(0) %}
-                  {{ outside_temp < inside_temp }}
+                  {{ outside_temp < inside_temp - 3 }}
       # check forecast min/max temp?
       # get_forecasts['weather.openweathermap']['forecast'][0]['temperature']
       - condition: time
@@ -1358,7 +1358,7 @@ automation:
             target:
               entity_id: climate.living_room_ac
             data:
-              temperature: 24
+              temperature: 25
           - service: climate.set_hvac_mode
             target:
               entity_id: climate.living_room_ac
@@ -1450,6 +1450,7 @@ automation:
               - "fan_only"
       - condition: or
         conditions:
+          # cooling
           - condition: and
             conditions:
               - condition: state
@@ -1465,6 +1466,7 @@ automation:
               - condition: numeric_state
                 entity_id: sensor.outside_temperature_change
                 below: -0.4
+          # heating
           - condition: and
             conditions:
               - condition: state

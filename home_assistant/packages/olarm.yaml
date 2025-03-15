@@ -561,6 +561,13 @@ automation:
         entity_id: sensor.ceres_battery_state
         from: 'Not Charging'  # Can be to Charging or Full
         id: "phone_plugged_in"
+      - platform: state
+        entity_id:
+          - binary_sensor.pieter_present
+        to: "on"
+        for:
+          minutes: 15
+        id: "arrived_home"
     condition:
       - condition: template
         value_template: >-
@@ -570,8 +577,8 @@ automation:
           {% set is_workday_tomorrow = is_state('binary_sensor.workday_tomorrow', 'on') %}
           {{ (trigger.id == 'workday' and is_workday_tomorrow and workday_reminder <= now() < non_workday_reminder) or
              (trigger.id == 'non_workday' and not is_workday_tomorrow and non_workday_reminder <= now()) or
-             (trigger.id == 'phone_plugged_in' and is_workday_tomorrow and workday_reminder <= now()) or
-             (trigger.id == 'phone_plugged_in' and not is_workday_tomorrow and non_workday_reminder <= now()) }}
+             (trigger.id in ['phone_plugged_in', 'arrived_home'] and is_workday_tomorrow and workday_reminder <= now()) or
+             (trigger.id in ['phone_plugged_in', 'arrived_home'] and not is_workday_tomorrow and non_workday_reminder <= now()) }}
       - condition: time
         after: "20:00:00"
       - condition: state

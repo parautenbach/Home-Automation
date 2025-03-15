@@ -1507,7 +1507,7 @@ automation:
         event: sunset
         offset: "01:00:00"
     action:
-      - service: notify.mobile_app_ceres
+      - service: notify.family
         data:
           title: "🗒️ Energy"
           message: >-

@@ -1191,7 +1191,7 @@ automation:
         value_template: >-
           {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
           {% set inside_temp = states('sensor.office_temperature') | float(0) %}
-          {{ outside_temp > inside_temp + 3 }}
+          {{ outside_temp > inside_temp + 1 }}
         id: "rising_temp"
       - platform: numeric_state
         entity_id: sensor.office_temperature
@@ -1275,7 +1275,7 @@ automation:
                 value_template: >-
                   {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
                   {% set inside_temp = states('sensor.office_temperature') | float(0) %}
-                  {{ outside_temp > inside_temp + 3 }}
+                  {{ outside_temp >= inside_temp + 1 }}
           # for heating
           - condition: and
             conditions:
@@ -1303,7 +1303,7 @@ automation:
                 value_template: >-
                   {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
                   {% set inside_temp = states('sensor.office_temperature') | float(0) %}
-                  {{ outside_temp < inside_temp - 3 }}
+                  {{ outside_temp <= inside_temp - 3 }}
       # check forecast min/max temp?
       # get_forecasts['weather.openweathermap']['forecast'][0]['temperature']
       - condition: time

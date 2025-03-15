@@ -387,6 +387,7 @@ template:
         state: "{{ min(max((states('sensor.load_power') | int(0) / states('sensor.home_power') | int(0)), 0), 1) | multiply(100) | round(0) }}"
         unit_of_measurement: "%"
         icon: mdi:autorenew
+        availability: "{{ has_value('sensor.load_power') and has_value('sensor.home_power') and states('sensor.home_power') | int(0) > 0  }}"
         attributes:
           overhead: "{{ states('sensor.home_power') | int(0) - states('sensor.load_power') | int(0) }}"
       - name: "ACs Power"

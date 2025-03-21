@@ -1503,7 +1503,7 @@ automation:
         event_data:
           action: TURN_OFF_AC
     action:
-      - wait_template: "{{ not is_state('climate.living_room_ac', 'on') }}"
+      - wait_template: "{{ not is_state(trigger.event.data.action_data.entity_id, 'on') }}"
         timeout: "00:00:10"
         continue_on_timeout: false
       - service: climate.turn_off

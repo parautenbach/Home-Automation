@@ -1303,6 +1303,8 @@ cards:
           {{ states('sensor.loadshedding_forecast') }}
 
 
+          **[POWER ALERT](https://poweralert.co.za/)**
+
           **[UNOFFICIAL ESKOM: HEATMAP](https://unofficialeskom.com/heatmap/)**
 
           **[GARETH DWYER](https://metabase.dwyer.co.za/public/dashboard/d3b40619-d8f0-4be3-a1f2-99fe5b84e961)**

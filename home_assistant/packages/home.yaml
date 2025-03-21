@@ -1402,7 +1402,7 @@ automation:
               - action: "TURN_OFF_AC"
                 title: "Turn off"
             action_data:
-              entity_ids: "climate.living_room_ac"
+              entity_id: "climate.living_room_ac"
 
   - alias: "Turn Off Living Room AC"
     id: "ce0f5e96-3b69-466c-9e47-b9e0f3f292dc"

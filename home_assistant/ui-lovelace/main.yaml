@@ -519,12 +519,12 @@ cards:
                   ha-textfield:
                     $: |
                       .mdc-text-field {
-                        height: 3em !important;
+                        height: 2.5em !important;
                       }
                   ha-select:
                     $: |
                       .mdc-select__anchor {
-                        height: 3em !important;
+                        height: 2.5em !important;
                       }
           - entity: input_boolean.skip_next_wake_up_time
             name: Skip Next
@@ -534,7 +534,7 @@ cards:
               style:
                 ha-date-input $ ha-textfield $: |
                   .mdc-text-field {
-                    height: 3em !important;
+                    height: 2.5em !important;
                   }
           - entity: input_datetime.vacation_end
             name: Vacation End
@@ -550,6 +550,9 @@ cards:
             card_mod: *time_input_mods
           - entity: input_datetime.non_workday_alarm_arm_reminder
             name: Non-workday Alarm Arm Reminder
+            card_mod: *time_input_mods
+          - entity: input_datetime.go_home_reminder
+            name: Go Home Reminder
             card_mod: *time_input_mods
       - type: custom:atomic-calendar-revive
         name: Upcoming Events

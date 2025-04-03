@@ -32,6 +32,9 @@ input_datetime:
     has_date: true
   vacation_end:
     has_date: true
+  go_home_reminder:
+    has_time: true
+    icon: mdi:home-clock-outline
 
 input_boolean:
   pieter_present:
@@ -1671,7 +1674,10 @@ automation:
     initial_state: true
     trigger:
       - platform: time
-        at: "18:55:00"
+        at: input_datetime.go_home_reminder
+      - platform: state
+        entity_id: person.pieter_rautenbach
+        to: "Park"
       - platform: event
         event_type: timer.finished
         event_data:
@@ -1682,6 +1688,8 @@ automation:
         state: "Park"
         for:
           minutes: 5
+      - condition: time
+        after: input_datetime.go_home_reminder
     action:
       - service: notify.mobile_app_ceres
         data:

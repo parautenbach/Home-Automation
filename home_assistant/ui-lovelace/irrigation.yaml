@@ -97,12 +97,12 @@ cards:
                   ha-textfield:
                     $: |
                       .mdc-text-field {
-                        height: 3em !important;
+                        height: 2.5em !important;
                       }
                   ha-select:
                     $: |
                       .mdc-select__anchor {
-                        height: 3em !important;
+                        height: 2.5em !important;
                       }
           - type: custom:multiple-entity-row
             entity: input_boolean.irrigation_sunday

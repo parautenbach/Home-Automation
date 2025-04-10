@@ -241,6 +241,9 @@ automation:
     trigger:
       - platform: homeassistant
         event: start
+      - platform: state
+        entity_id: binary_sensor.internet_connection
+        to: "on"
     action:
       - variables:
           state_map:

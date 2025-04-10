@@ -1519,6 +1519,8 @@ automation:
             {% set utilisation_message = "" %}
             {% if utilisation == 100 %}
               {% set utilisation_message = "You have utilised all of the solar energy forecasted for today (" ~ consumption ~ " kWh)." %}
+            {% elif utilisation == 0 %}
+              {% set utilisation_message = "You have consumed " ~ consumption ~ " kWh of solar energy today." %}
             {%- else %}
               {% set utilisation_message = "You have utilised " ~ utilisation ~ "% (" ~ consumption ~ " kWh) of the solar energy forecasted for today (" ~ forecast_today ~ " kWh)." %}
             {%- endif %}

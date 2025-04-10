@@ -403,6 +403,8 @@ automation:
           - alarm_control_panel.flatlet
         to: "triggered"
     action:
+      - variables:
+          message: "The alarm has been triggered at {{ now().strftime('%H:%M') }}!"
       - service: notify.mobile_app_ceres
         data:
           title: "🚨 Security"
@@ -411,7 +413,7 @@ automation:
           #       if we have this, we can e.g. contact the fire department or call for an ambulance automatically
           #       or maybe the security company will already triage this when receiving the panic signal
           #       can also trigger the fire alarm here if one of the smoke sensors went off and isn't muted after a set time
-          message: "The alarm has been triggered at {{ now().strftime('%H:%M') }}!"
+          message: "{{ message }}"
           data:
             group: "home-security"
             url: homeassistant://navigate/lovelace/security
@@ -432,6 +434,12 @@ automation:
               # on the physical panel, when we disarm, only one disarm command matters,
               # but for HA, we must disarm both panels (only when it was triggered)
               entity_ids: "{{ ['alarm_control_panel.home', 'alarm_control_panel.flatlet'] }}"
+      - service: script.turn_on
+        target:
+          entity_id: script.notify_tenant
+        data:
+          variables:
+            message: "{{ message }}"
 
   - alias: "Ask To Arm Alarm When Last Person Left"
     id: "e8a63da5-4d84-40ab-9c05-dca93ba4900d"

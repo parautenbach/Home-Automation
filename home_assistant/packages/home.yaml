@@ -1678,6 +1678,8 @@ automation:
       - platform: state
         entity_id: person.pieter_rautenbach
         to: "Park"
+        for:
+          minutes: 5
       - platform: event
         event_type: timer.finished
         event_data:
@@ -1685,11 +1687,15 @@ automation:
     condition:
       - condition: state
         entity_id: person.pieter_rautenbach
+        # https://community.home-assistant.io/t/device-tracker-zone-name-capitalization/22138/7
         state: "Park"
         for:
           minutes: 5
       - condition: time
         after: input_datetime.go_home_reminder
+      - condition: state
+        entity_id: time.go_home_reminder
+        state: "idle"
     action:
       - service: notify.mobile_app_ceres
         data:

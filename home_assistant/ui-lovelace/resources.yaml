@@ -590,7 +590,7 @@ cards:
                 type: remaining_child_state
                 name: Dining Room
                 children:
-                  - sensor.dining_room_today_s_consumption
+                  - sensor.dining_room_light_energy
               - entity_id: foyer
                 type: remaining_child_state
                 name: Foyer
@@ -616,7 +616,7 @@ cards:
                 type: remaining_child_state
                 name: Living Room
                 children:
-                  - sensor.office_energy
+                  - sensor.office_light_energy
                   - sensor.living_room_ac_energy
               - entity_id: music_room
                 type: remaining_child_state
@@ -639,7 +639,7 @@ cards:
                 children:
                   - sensor.inverter_energy
           - entities:
-              - entity_id: sensor.dining_room_today_s_consumption
+              - entity_id: sensor.dining_room_light_energy
                 type: entity
                 name: Dining Room Light
                 children: []
@@ -663,7 +663,7 @@ cards:
                 type: entity
                 name: Outbuilding
                 children: []
-              - entity_id: sensor.office_energy
+              - entity_id: sensor.office_light_energy
                 type: entity
                 name: Office Light
                 children: []

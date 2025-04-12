@@ -79,7 +79,6 @@ exclude:
     # large attributes
     - sensor.security_camera_snapshots
     - sensor.home_assistant
-    - sensor.owm_pollution_forecast
     - sensor.tmp
     - sensor.weather_tomorrow_hourly
     - sensor.eskomsepush

@@ -20,7 +20,8 @@ wifi:
     password: !secret fallback_ap_password
 
 ota:
-  password: !secret ota_password
+  - platform: esphome
+    password: !secret ota_password
 
 # mqtt:
 #   broker: !secret mqtt_broker

@@ -1367,6 +1367,8 @@ automation:
           {% set loadshedding_active = trigger.id == "loadshedding_active" %}
           {{ first_run or (within_window and mode_changed) or loadshedding_active }}
     action:
+      # since 2025.4 it's possible to use variables for this, due to the scope changes
+      # https://github.com/home-assistant/core/pull/141114
       - service: input_boolean.turn_off
         entity_id: input_boolean.set_charge_point_error
       - repeat:

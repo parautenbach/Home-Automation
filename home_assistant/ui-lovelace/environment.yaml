@@ -402,7 +402,7 @@ cards:
                         entity: sensor.thermal_comfort_inside_summer_simmer_perception
                         name: Inside Thermal Comfort
                         state: >-
-                          {{ 'Met' if states('sensor.thermal_comfort_inside_summer_simmer_perception') in ['cold'] else 'Not met' }}
+                          {{ 'Met' if states('sensor.thermal_comfort_inside_summer_simmer_perception') in ['cool', 'cold'] else 'Not met' }}
                         secondary: "{{ state_translated('sensor.thermal_comfort_inside_summer_simmer_perception') }}"
                         card_mod:
                           style: |

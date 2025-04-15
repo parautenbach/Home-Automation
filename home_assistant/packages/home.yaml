@@ -1214,6 +1214,7 @@ automation:
         # same as matching condition below
         to:
           # cool
+          - cool
           - cold
           # warm
           - slightly_warm
@@ -1290,6 +1291,7 @@ automation:
                 entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
                 # same as matching trigger above
                 state:
+                  - cool
                   - cold
               - condition: not
                 conditions:

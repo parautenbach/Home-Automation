@@ -99,18 +99,6 @@ homeassistant:
       state_class: measurement
     # binary_sensor.baby_monitor_sound_alarm:
     #   device_class: sound
-    sensor.overall_pollen_risk:
-      unit_of_measurement: index
-    sensor.grass_pollen:
-      unit_of_measurement: index
-    sensor.tree_pollen:
-      unit_of_measurement: index
-    sensor.weed_pollen:
-      unit_of_measurement: index
-    sensor.mould_spores:
-      unit_of_measurement: index
-    sensor.winelands_fdi:
-      unit_of_measurement: index
     # https://github.com/Limych/ha-average/issues/193
     # not using this for now. it's very confusing. it seems like these entities are removed, but the
     # dev tools still show a state class. more importantly, i inadvertently removed the data for my

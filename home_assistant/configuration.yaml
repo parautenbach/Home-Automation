@@ -195,7 +195,8 @@ python_script:
 
 stream:
 
-# go2rtc:
+go2rtc:
+
 notify:
   # https://app.clickatell.com/my-workspace
   # https://www.clickatell.com/pricing-and-coverage/message-pricing/

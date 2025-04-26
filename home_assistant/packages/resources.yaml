@@ -869,6 +869,9 @@ automation:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
             tag: "grid-feed-status"
+      - service: homeassistant.update_entity
+        target:
+          entity_id: sensor.eskomsepush
 
   - alias: "Update Automations When Power Status Changed"
     id: "d322d9a2-9a74-4c10-8c31-110401a8ff31"

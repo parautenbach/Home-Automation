@@ -480,7 +480,6 @@ template:
         device_class: enum
         state: >-
           {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) %}
-          {# hysteresis #}
           {% if 17 <= forecast %}
             {% set mode = 'Very Optimistic' %}
           {% elif 9 <= forecast < 17 %}
@@ -540,7 +539,6 @@ template:
               }
             %}
             {% set forecast = states('sensor.average_solar_energy_forecast_today') | float(0) %}
-            {# hysteresis #}
             {% if 17 <= forecast %}
               {% set mode = 'Very Optimistic' %}
             {% elif 9 <= forecast < 17 %}

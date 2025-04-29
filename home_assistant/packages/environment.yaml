@@ -230,6 +230,30 @@ sensor:
     max_age:
       minutes: 30
 
+  - platform: statistics
+    name: "Bedroom Minimum Temperature (24 hours)"
+    entity_id: sensor.bedroom_ht_temperature
+    state_characteristic: value_min
+    max_age:
+      hours: 24
+    precision: 1
+
+  - platform: statistics
+    name: "Bedroom Maximum Temperature (24 hours)"
+    entity_id: sensor.bedroom_ht_temperature
+    state_characteristic: value_max
+    max_age:
+      hours: 24
+    precision: 1
+
+  - platform: statistics
+    name: "Bedroom Average Temperature (24 hours)"
+    entity_id: sensor.bedroom_ht_temperature
+    state_characteristic: average_linear
+    max_age:
+      hours: 24
+    precision: 1
+
   - platform: template
     sensors:
       solar_angle:
@@ -391,6 +415,13 @@ template:
           {% else %}
             mdi:water-off
           {% endif %}
+      - name: Minimum Temperature Tomorrow
+        unique_id: "9ee15a95-74b7-4263-a578-7347e830b68b"
+        state: >-
+          {{ daily['weather.openweathermap']['forecast'][1]['templow'] }}
+        device_class: temperature
+        unit_of_measurement: °C
+        icon: mdi:thermometer
   - trigger:
       - platform: time
         at: "23:55"

@@ -1778,3 +1778,28 @@ automation:
       - service: light.turn_off
         target:
           entity_id: light.living_room_fairy_lights
+
+  - alias: "Send Bedtime Update"
+    id: "a57345d4-eec3-42b6-970d-84e2b77fb646"
+    initial_state: true
+    trigger:
+      - platform: time
+        at: "19:30:00"
+    actions:
+      - service: notify.family
+        data:
+          title: "⏰ Bedtime Update"
+          message: >-
+            {% set current = states('sensor.bedroom_ht_temperature') | float(0) | round(1) %}
+            {% set inside_perception = states('sensor.thermal_comfort_inside_summer_simmer_perception') %}
+            {% set inside_min = states('sensor.bedroom_minimum_temperature_24_hours') | float(0) | round(1) %}
+            {% set inside_max = states('sensor.bedroom_maximum_temperature_24_hours') | float(0) | round(1) %}
+            {% set outside_min = states('sensor.minimum_temperature_tomorrow') | float(0) | round(1) %}
+            Julia's bedroom temperature update:
+             - Current: {{ current }} ºC ({{ inside_perception }}).
+             - Min since last night: {{ inside_min }} ºC.
+             - Max today: {{ inside_max }} ºC.
+             - Forecast min: {{ outside_min }} ºC.
+          data:
+            group: "routine-bedtime"
+            url: homeassistant://navigate/lovelace/main

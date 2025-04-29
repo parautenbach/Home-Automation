@@ -339,6 +339,35 @@ cards:
             name: Outside
             icon: mdi:sun-thermometer-outline
             card_mod: *card_mod_comfort_style
+      - type: glance
+        entities:
+          - entity: sensor.bedroom_ht_temperature
+            name: Current
+            icon: mdi:thermometer
+            card_mod: &card_mod_temp_style
+              style:
+                .: |
+                  div:nth-child(3) {
+                    color:
+                      {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+                      {%- set state = states(config.entity) | float(0) -%}
+                      {{ gradient_color(state, temp_degrees_c_human_map) }}
+                  }
+                  state-badge {
+                    margin: 0;
+                  }
+          - entity: sensor.bedroom_minimum_temperature_24_hours
+            name: "Min: 24h"
+            icon: mdi:thermometer-low
+            card_mod: *card_mod_temp_style
+          - entity: sensor.bedroom_maximum_temperature_24_hours
+            name: "Max: 24h"
+            icon: mdi:thermometer-high
+            card_mod: *card_mod_temp_style
+          - entity: sensor.minimum_temperature_tomorrow
+            name: "Min: tomorrow"
+            icon: mdi:thermometer-low
+            card_mod: *card_mod_temp_style
       - type: custom:swipe-card
         parameters:
           autoHeight: true

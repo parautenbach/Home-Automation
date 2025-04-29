@@ -1127,16 +1127,3 @@ automation:
                     data:
                       group: "weather"
                       url: homeassistant://navigate/lovelace/environment
-
-  # polling should be turned off for this sql sensor (via the ui)
-  # https://github.com/home-assistant/core/issues/71563
-  - alias: "Update Weather Forecast Precipitation Yesterday"
-    id: "53305ed1-8c44-42dd-b6a9-4824e994ae58"
-    initial_state: true
-    trigger:
-      platform: time_pattern
-      hours: "/1"
-    action:
-      - service: homeassistant.update_entity
-        target:
-          entity_id: sensor.weather_forecast_precipitation_yesterday

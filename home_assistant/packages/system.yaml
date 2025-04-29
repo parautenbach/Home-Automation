@@ -243,6 +243,44 @@ template:
           %}
           {{ flat_batteries | count }}
 
+  # https://community.home-assistant.io/t/how-to-automation-for-historical-log-for-all-notifications-and-dashboard-card/883156
+  - trigger:
+      - platform: event
+        event_type: call_service
+        event_data:
+          domain: notify
+        # https://community.home-assistant.io/t/why-cant-we-use-variables-in-a-template-sensor/467170
+        # https://community.home-assistant.io/t/template-trigger-based-sensors-add-variables/657527
+        # https://community.home-assistant.io/t/support-variables-in-template-sensors/249082
+        variables:
+          notification_data: "{{ trigger.event.data.service_data }}"
+          notification_service: "{{ trigger.event.data.service }}"
+          notification_title: "{{ notification_data.title | default('Notification') }}"
+          notification_message: >-
+            {{ notification_data.message | default(notification_data.title | default('No content')) | trim }}
+          notification_target: |-
+            {% if notification_service == 'notify' %}
+              All devices/recipients
+            {% elif 'mobile_app_' in notification_service %}
+              {{ notification_service.replace('mobile_app_', '') | replace('_', ' ') | title }}
+            {% else %}
+              {{ notification_service | replace('_', ' ') | title }}
+            {% endif %}
+          timestamp: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"
+          full_message: "{{ timestamp }} - {{ notification_title }}: {{ notification_message }} → {{ notification_target }}"
+    condition:
+      - condition: template
+        value_template: "{{ notification_message != 'request_location_update' }}"
+    # action:
+    #   - service: persistent_notification.create
+    #     data:
+    #       title: "Logged Notification"
+    #       message: "{{ full_message }}"
+    sensor:
+      - name: Last Notification
+        icon: mdi:email-alert-outline
+        state: "{{ full_message }}"
+
 shell_command:
   noop: ":"
   shudown_remote_host: "/home/homeassistant/scripts/shutdown_remote_host.sh {{ host }}"

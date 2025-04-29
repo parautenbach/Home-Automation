@@ -522,6 +522,22 @@ cards:
       #     icon: true
       #     average: false
       #     state: true
+      # - type: logbook
+      #   target:
+      #     entity_id:
+      #       - sensor.last_notification
+      #   hours_to_show: 24
+      - type: custom:logbook-card
+        entity: sensor.last_notification
+        show:
+          state: true
+          duration: false
+          start_date: true
+          end_date: false
+          icon: false
+          separator: false
+          entity_name: true
+        desc: true
   - type: vertical-stack
     cards:
       - type: custom:swipe-card

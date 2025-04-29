@@ -108,6 +108,8 @@ lovelace:
       type: module
     - url: /hacsfiles/weather-chart-card/weather-chart-card.js
       type: module
+    - url: /hacsfiles/logbook-card/logbook-card.js
+      type: module
     # manual
     # none
   dashboards:

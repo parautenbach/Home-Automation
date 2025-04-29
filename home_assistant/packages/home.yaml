@@ -1790,16 +1790,24 @@ automation:
         data:
           title: "⏰ Bedtime Update"
           message: >-
-            {% set current = states('sensor.bedroom_ht_temperature') | float(0) | round(1) %}
+            {% set current = states('sensor.bedroom_ht_temperature', with_unit=True) %}
+            {% set current_raw = states('sensor.bedroom_ht_temperature') | float(0) %}
+            {% set yesterday = states('sensor.bedroom_temperature_24_hours_ago', with_unit=True) %}
+            {% set yesterday_raw = states('sensor.bedroom_temperature_24_hours_ago') | float(0) %}
+            {% set difference = (current_raw - yesterday_raw) | abs | round(1) %}
+            {% set direction = 'similar' %}
+            {% if difference > 0.5 %}
+              {% set direction = 'cooler' if current_raw > yesterday_raw else 'warmer' %}
+            {% endif %}
             {% set inside_perception = states('sensor.thermal_comfort_inside_summer_simmer_perception') %}
-            {% set inside_min = states('sensor.bedroom_minimum_temperature_24_hours') | float(0) | round(1) %}
-            {% set inside_max = states('sensor.bedroom_maximum_temperature_24_hours') | float(0) | round(1) %}
-            {% set outside_min = states('sensor.minimum_temperature_tomorrow') | float(0) | round(1) %}
+            {% set inside_min = states('sensor.bedroom_minimum_temperature_24_hours', with_unit=True) %}
+            {% set inside_max = states('sensor.bedroom_maximum_temperature_24_hours', with_unit=True) %}
+            {% set outside_min = states('sensor.minimum_temperature_tomorrow', with_unit=True) %}
             Julia's bedroom temperature update:
-             - Current: {{ current }} ºC ({{ inside_perception }}).
-             - Min since last night: {{ inside_min }} ºC.
-             - Max today: {{ inside_max }} ºC.
-             - Forecast min: {{ outside_min }} ºC.
+              - Current: {{ current }} ({{ inside_perception }}).
+              - Last night: {{ yesterday }} ({{ difference ~ ' °C ' ~ direction if not direction == 'similar' else direction }}).
+              - Min/max over 24 hours: {{ inside_min }} / {{ inside_max }}.
+              - Forecasted min: {{ outside_min }}.
           data:
             group: "routine-bedtime"
             url: homeassistant://navigate/lovelace/main

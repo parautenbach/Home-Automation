@@ -314,7 +314,7 @@ cards:
                         name: Inside Temperature
                         state: >-
                           {{ 'Met' if states('sensor.office_temperature') | float(0) >= 24.5 else 'Not met' }}
-                        secondary: "{{ states('sensor.office_temperature', with_unit=True) }} {{ '>=' if states('sensor.office_temperature') | float(0) >= 24.5 else '<' }} 24.5 ºC"
+                        secondary: "{{ states('sensor.office_temperature', with_unit=True) }} {{ '>=' if states('sensor.office_temperature') | float(0) >= 24.5 else '<' }} 24.5 °C"
                         card_mod:
                           style: |
                             .state {
@@ -357,7 +357,7 @@ cards:
                           {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
                           {% set inside_temp = states('sensor.office_temperature') | float(0) %}
                           {% set diff = (outside_temp - inside_temp) | round(1) %}
-                          {{ diff }} {{ '>=' if diff >= 1 else '<' }} 1ºC (delta)
+                          {{ diff }} {{ '>=' if diff >= 1 else '<' }} 1 °C (delta)
                         card_mod:
                           style: |
                             .state {
@@ -374,7 +374,7 @@ cards:
                         icon: mdi:trending-up
                         state: >-
                           {{ 'Met' if states('sensor.outside_temperature_change') | float(0) >= 1.0 else 'Not met' }}
-                        secondary: "{{ states('sensor.outside_temperature_change', with_unit=True) }} {{ '>=' if states('sensor.outside_temperature_change') | float(0) >= 1.0 else '<' }} 1.0 ºC (over 3 hours)"
+                        secondary: "{{ states('sensor.outside_temperature_change', with_unit=True) }} {{ '>=' if states('sensor.outside_temperature_change') | float(0) >= 1.0 else '<' }} 1.0 °C (over 3 hours)"
                         card_mod:
                           style: |
                             .state {
@@ -391,7 +391,7 @@ cards:
                         name: Inside Temperature
                         state: >-
                           {{ 'Met' if states('sensor.office_temperature') | float(0) <= 15.0 else 'Not met' }}
-                        secondary: "{{ states('sensor.office_temperature', with_unit=True) }} {{ '<=' if states('sensor.office_temperature') | float(0) <= 15.0 else '>' }} 15.0 ºC"
+                        secondary: "{{ states('sensor.office_temperature', with_unit=True) }} {{ '<=' if states('sensor.office_temperature') | float(0) <= 15.0 else '>' }} 15.0 °C"
                         card_mod:
                           style: |
                             .state {
@@ -434,7 +434,7 @@ cards:
                           {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
                           {% set inside_temp = states('sensor.office_temperature') | float(0) %}
                           {% set diff = (outside_temp - inside_temp) | round(1) %}
-                          {{ diff }} {{'<=' if diff <= -3 else '>' }} -3ºC (delta)
+                          {{ diff }} {{'<=' if diff <= -3 else '>' }} -3 °C (delta)
                         card_mod:
                           style: |
                             .state {
@@ -451,7 +451,7 @@ cards:
                         icon: mdi:trending-down
                         state: >-
                           {{ 'Met' if states('sensor.outside_temperature_change') | float(0) <= -1.0 else 'Not met' }}
-                        secondary: "{{ states('sensor.outside_temperature_change', with_unit=True) }} {{ '<=' if states('sensor.outside_temperature_change') | float(0) <= -1.0 else '>' }} -1.0 ºC (over 3 hours)"
+                        secondary: "{{ states('sensor.outside_temperature_change', with_unit=True) }} {{ '<=' if states('sensor.outside_temperature_change') | float(0) <= -1.0 else '>' }} -1.0 °C (over 3 hours)"
                         card_mod:
                           style: |
                             .state {

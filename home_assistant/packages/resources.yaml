@@ -1598,7 +1598,7 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id: sensor.inverter_temperature
-        above: 60  # -45 ºC ~ 60 ºC (>45 ºC derating)
+        above: 60  # -45 °C ~ 60 °C (>45 °C derating)
         for:
           minutes: 5
     mode: single
@@ -1610,11 +1610,11 @@ automation:
       - service: notify.mobile_app_ceres
         data:
           title: "🌡️ Energy"
-            # The inverter has been running hot at {{ temperature }} ºC for {{ trigger.for.seconds // 60 }} min. The load is {{ load }} kW.
+            # The inverter has been running hot at {{ temperature }} °C for {{ trigger.for.seconds // 60 }} min. The load is {{ load }} kW.
           message: >-
             {% set temperature = states('sensor.inverter_temperature') | int(0) %}
             {% set load = states('sensor.home_power_kw') | float(0) | round(1) %}
-            The inverter has been running hot for {{ trigger.for.seconds // 60 }} minutes: It's currently at {{ temperature }} ºC and under a load of {{ load }} kW.
+            The inverter has been running hot for {{ trigger.for.seconds // 60 }} minutes: It's currently at {{ temperature }} °C and under a load of {{ load }} kW.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace-system/devices
@@ -1649,7 +1649,7 @@ automation:
             {% set last_changed = states.input_boolean.inverter_temperature_notification_governor.last_changed %}
             {# the 5 is for the for criterium at the time when the governor was set #}
             {% set after =  5 + (now() - last_changed).total_seconds() | multiply(1/60) | int(0) %}
-            The inverter's temperature recovered to {{ temperature }} ºC after {{ after }} min. The load is {{ load }} kW.
+            The inverter's temperature recovered to {{ temperature }} °C after {{ after }} min. The load is {{ load }} kW.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace-system/devices
@@ -1668,18 +1668,18 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id: sensor.battery_temperature
-        above: 40  # Charge: 0 ºC ~ +55 ºC / Discharge: -20 ºC ~ +55 ºC
+        above: 40  # Charge: 0 °C ~ +55 °C / Discharge: -20 °C ~ +55 °C
         for:
           minutes: 5
     action:
       - service: notify.mobile_app_ceres
         data:
           title: "🌡️ Energy"
-          # The inverter's battery has been running hot at {{ temperature }} ºC for {{ trigger.for.seconds // 60 }} min. The load is {{ load }} kW.
+          # The inverter's battery has been running hot at {{ temperature }} °C for {{ trigger.for.seconds // 60 }} min. The load is {{ load }} kW.
           message: >-
             {% set temperature = states('sensor.battery_temperature') | int(0) %}
             {% set load = states('sensor.home_power_kw') | float(0) | round(1) %}
-            The inverter's battery has been running hot for {{ trigger.for.seconds // 60 }} minutes: It's currently at {{ temperature }} ºC and under a load of {{ load }} kW.
+            The inverter's battery has been running hot for {{ trigger.for.seconds // 60 }} minutes: It's currently at {{ temperature }} °C and under a load of {{ load }} kW.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
@@ -1714,7 +1714,7 @@ automation:
             {% set last_changed = states.input_boolean.inverter_battery_temperature_notification_governor.last_changed %}
             {# the 5 is for the for criterium at the time when the governor was set #}
             {% set after =  5 + (now() - last_changed).total_seconds() | multiply(1/60) | int(0) %}
-            The inverter's battery temperature recovered to {{ temperature }} ºC after {{ after }} min. The load is {{ load }} kW.
+            The inverter's battery temperature recovered to {{ temperature }} °C after {{ after }} min. The load is {{ load }} kW.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources

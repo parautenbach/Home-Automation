@@ -197,7 +197,7 @@ python_script:
 
 stream:
 
-go2rtc:
+# go2rtc:
 
 notify:
   # https://app.clickatell.com/my-workspace

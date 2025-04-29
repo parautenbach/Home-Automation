@@ -270,7 +270,7 @@ template:
           full_message: "{{ timestamp }} - {{ notification_title }}: {{ notification_message }} → {{ notification_target }}"
     condition:
       - condition: template
-        value_template: "{{ notification_message != 'request_location_update' }}"
+        value_template: "{{ notification_message not in ['request_location_update', 'clear_notification'] }}"
     # action:
     #   - service: persistent_notification.create
     #     data:

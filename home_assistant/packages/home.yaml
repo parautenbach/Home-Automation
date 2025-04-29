@@ -1696,7 +1696,7 @@ automation:
       - condition: time
         after: input_datetime.go_home_reminder
       - condition: state
-        entity_id: time.go_home_reminder
+        entity_id: timer.go_home_reminder
         state: "idle"
     action:
       - service: notify.mobile_app_ceres

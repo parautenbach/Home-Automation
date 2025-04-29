@@ -356,16 +356,20 @@ cards:
                   state-badge {
                     margin: 0;
                   }
+          - entity: sensor.bedroom_temperature_24_hours_ago
+            name: "24h ago"
+            icon: mdi:thermometer
+            card_mod: *card_mod_temp_style
           - entity: sensor.bedroom_minimum_temperature_24_hours
-            name: "Min: 24h"
+            name: "Min over 24h"
             icon: mdi:thermometer-low
             card_mod: *card_mod_temp_style
           - entity: sensor.bedroom_maximum_temperature_24_hours
-            name: "Max: 24h"
+            name: "Max over 24h"
             icon: mdi:thermometer-high
             card_mod: *card_mod_temp_style
           - entity: sensor.minimum_temperature_tomorrow
-            name: "Min: tomorrow"
+            name: "Min tomorrow"
             icon: mdi:thermometer-low
             card_mod: *card_mod_temp_style
       - type: custom:swipe-card

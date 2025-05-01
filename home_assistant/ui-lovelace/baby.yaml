@@ -340,6 +340,7 @@ cards:
             icon: mdi:sun-thermometer-outline
             card_mod: *card_mod_comfort_style
       - type: glance
+        columns: 3
         entities:
           - entity: sensor.bedroom_ht_temperature
             name: Current
@@ -356,6 +357,14 @@ cards:
                   state-badge {
                     margin: 0;
                   }
+          - entity: sensor.outside_temperature
+            name: "Outside"
+            icon: mdi:thermometer
+            card_mod: *card_mod_temp_style
+          - entity: sensor.minimum_temperature_tomorrow
+            name: "Min tomorrow"
+            icon: mdi:thermometer-low
+            card_mod: *card_mod_temp_style
           - entity: sensor.bedroom_temperature_24_hours_ago
             name: "24h ago"
             icon: mdi:thermometer
@@ -367,10 +376,6 @@ cards:
           - entity: sensor.bedroom_maximum_temperature_24_hours
             name: "Max (24h)"
             icon: mdi:thermometer-high
-            card_mod: *card_mod_temp_style
-          - entity: sensor.minimum_temperature_tomorrow
-            name: "Min tomorrow"
-            icon: mdi:thermometer-low
             card_mod: *card_mod_temp_style
       - type: custom:swipe-card
         parameters:

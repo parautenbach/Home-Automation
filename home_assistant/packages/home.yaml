@@ -1784,7 +1784,7 @@ automation:
     initial_state: true
     trigger:
       - platform: time
-        at: "19:30:00"
+        at: "19:15:00"
     actions:
       - service: notify.family
         data:

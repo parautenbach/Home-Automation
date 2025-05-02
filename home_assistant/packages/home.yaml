@@ -1199,7 +1199,7 @@ automation:
       - platform: numeric_state
         entity_id: sensor.office_temperature
         # same as matching condition below
-        below: 15.1
+        below: 16.1
         id: "falling_temp"
       - platform: template
         # same as matching condition below
@@ -1286,7 +1286,7 @@ automation:
               - condition: numeric_state
                 entity_id: sensor.office_temperature
                 # same as matching trigger above
-                below: 15.1
+                below: 16.1
               - condition: state
                 entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
                 # same as matching trigger above
@@ -1340,7 +1340,7 @@ automation:
                   - condition: numeric_state
                     entity_id: sensor.office_temperature
                     # same as matching trigger/condition above
-                    below: 15.1
+                    below: 16.1
                   - condition: state
                     entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
                     # same as matching trigger/condition above

@@ -407,7 +407,7 @@ cards:
                         card_mod:
                           style: |
                             .state {
-                              color: {{ 'var(--custom-color-green)' if states(config.entity) in ['cold'] else 'var(--custom-color-red)' }};
+                              color: {{ 'var(--custom-color-green)' if states(config.entity) in ['cool', 'cold'] else 'var(--custom-color-red)' }};
                               }
                             }
                       - type: custom:template-entity-row

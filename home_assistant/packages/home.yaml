@@ -1797,7 +1797,7 @@ automation:
             {% set difference = (current_raw - yesterday_raw) | abs | round(1) %}
             {% set direction = 'similar' %}
             {% if difference > 0.5 %}
-              {% set direction = 'cooler' if current_raw > yesterday_raw else 'warmer' %}
+              {% set direction = 'warmer' if current_raw > yesterday_raw else 'cooler' %}
             {% endif %}
             {% set inside_perception = states('sensor.thermal_comfort_inside_summer_simmer_perception') %}
             {% set inside_min = states('sensor.bedroom_minimum_temperature_24_hours', with_unit=True) %}
@@ -1805,7 +1805,7 @@ automation:
             {% set outside_min = states('sensor.minimum_temperature_tomorrow', with_unit=True) %}
             Julia's bedroom temperature update:
               - Current: {{ current }} ({{ inside_perception }}).
-              - Last night: {{ yesterday }} ({{ difference ~ ' °C ' ~ direction if not direction == 'similar' else direction }}).
+              - Last night: {{ yesterday }} ({{ difference ~ ' °C ' ~ direction if not direction == 'similar' else direction }} tonight).
               - Min/max over 24 hours: {{ inside_min }} / {{ inside_max }}.
               - Forecasted min: {{ outside_min }}.
           data:

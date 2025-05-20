@@ -666,6 +666,9 @@ automation:
 
   # polling should be turned off for this sql sensor (via the ui)
   # https://github.com/home-assistant/core/issues/71563
+  #
+  # sql sensor query:
+  #   SELECT (pg_database_size('homeassistant')/1024/1024) AS db_size;
   - alias: "Update DB Size"
     id: "7219415c-c1e4-40dd-a429-2f4eccc7da76"
     initial_state: true

@@ -1130,6 +1130,35 @@ automation:
 
   # polling should be turned off for this sql sensor (via the ui)
   # https://github.com/home-assistant/core/issues/71563
+  #
+  # sql sensor query:
+  #   WITH before_point AS (
+  #     SELECT
+  #       state::NUMERIC AS state
+  #     FROM states
+  #     WHERE metadata_id = 9803
+  #       AND state != 'unavailable'
+  #       AND NOW() - TO_TIMESTAMP(last_updated_ts) >= INTERVAL '24 hours'
+  #     ORDER BY TO_TIMESTAMP(last_updated_ts) DESC
+  #     LIMIT 1
+  #   ),
+  #   after_point AS (
+  #     SELECT
+  #       state::NUMERIC AS state
+  #     FROM states
+  #     WHERE metadata_id = 9803
+  #       AND state != 'unavailable'
+  #       AND NOW() - TO_TIMESTAMP(last_updated_ts) < INTERVAL '24 hours'
+  #     ORDER BY TO_TIMESTAMP(last_updated_ts) ASC
+  #     LIMIT 1
+  #   )
+  #   SELECT
+  #     ROUND(AVG(state), 1) AS average_state
+  #   FROM (
+  #     SELECT state FROM before_point
+  #     UNION ALL
+  #     SELECT state FROM after_point
+  #   ) combined_points;
   - alias: "Update Bedroom Temperature 24 Hours Ago"
     id: "3a6fa2e6-355b-405b-b53a-5d52d8e3aa84"
     initial_state: true

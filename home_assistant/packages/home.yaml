@@ -1069,12 +1069,10 @@ automation:
           {% set lower_bound = min(today_at('18:00'), sunset_with_offset) %}
           {% set within_window = lower_bound <= now() <= today_at('20:00') %}
           {{ within_window }}
-      - condition: state
-        entity_id: sensor.season
-        state:
-          - spring
-          - summer
-          - autumn
+      - condition: template
+        value_template: >-
+          {# from sep until apr #}
+          {{ now().month >=9 or now().month <= 4 }}
       - condition: state
         entity_id: binary_sensor.anybody_home
         state: "on"

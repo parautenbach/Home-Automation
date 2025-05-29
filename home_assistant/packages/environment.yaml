@@ -95,6 +95,8 @@ homeassistant:
       state_class: measurement
     sensor.outside_temperature:
       state_class: measurement
+    sensor.outside_temperature_filtered:
+      state_class: measurement
     sensor.temperature_difference:
       state_class: measurement
     # binary_sensor.baby_monitor_sound_alarm:
@@ -183,7 +185,7 @@ binary_sensor:
   - platform: trend
     sensors:
       outside_temperature_trend:
-        entity_id: sensor.outside_temperature
+        entity_id: sensor.outside_temperature_filtered
         friendly_name: "Outside Temperature Trend"
         # 3 hours * 60 minutes * 60 seconds
         sample_duration: 10800
@@ -206,6 +208,14 @@ sensor:
       time_constant: 10
       precision: 1
 
+  - platform: filter
+    name: outside_temperature_filtered
+    entity_id: sensor.outside_temperature
+    filters:
+      filter: lowpass
+      time_constant: 3
+      precision: 1
+
   - platform: history_stats
     name: Fair Weather Time
     entity_id: binary_sensor.is_fair_weather
@@ -215,7 +225,7 @@ sensor:
     end: "{{ now() }}"
 
   - platform: statistics
-    entity_id: sensor.outside_temperature
+    entity_id: sensor.outside_temperature_filtered
     name: "Outside Temperature Change"
     # the difference between the newest and the oldest measurement
     state_characteristic: change
@@ -286,7 +296,7 @@ sensor:
       temperature_difference:
         friendly_name: "Inside vs Outside Temperature"
         value_template: >-
-          {{ (states('sensor.office_temperature') | float(0) - states('sensor.outside_temperature') | float(0)) | round(1) }}
+          {{ (states('sensor.office_temperature') | float(0) - states('sensor.outside_temperature_filtered') | float(0)) | round(1) }}
         device_class: temperature
         unit_of_measurement: "°C"
       fair_weather_time_share:
@@ -777,7 +787,7 @@ rest:
               {% set data = data_list | first %}
               {% if data.valid %}
                 {% if data.value >= 0 %}
-                  {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
+                  {% set temp_kelvin = 273.15 + states('sensor.outside_temperature_filtered') | float(0) %}
                   {% set const = 12.187 %}
                   {% set molecular_weight = 48 %}
                   {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
@@ -803,7 +813,7 @@ rest:
               {% set data = data_list | first %}
               {% if data.valid %}
                 {% if data.value >= 0 %}
-                  {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
+                  {% set temp_kelvin = 273.15 + states('sensor.outside_temperature_filtered') | float(0) %}
                   {% set const = 12.187 %}
                   {% set molecular_weight = 46.0055 %}
                   {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
@@ -829,7 +839,7 @@ rest:
               {% set data = data_list | first %}
               {% if data.valid %}
                 {% if data.value >= 0 %}
-                  {% set temp_kelvin = 273.15 + states('sensor.outside_temperature') | float(0) %}
+                  {% set temp_kelvin = 273.15 + states('sensor.outside_temperature_filtered') | float(0) %}
                   {% set const = 12.187 %}
                   {% set molecular_weight = 64.066 %}
                   {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}

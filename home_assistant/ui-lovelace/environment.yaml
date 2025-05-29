@@ -30,7 +30,7 @@ badges:
   - type: custom:mod-card
     card:
       type: custom:hui-entity-badge
-      entity: sensor.outside_temperature
+      entity: sensor.outside_temperature_filtered
       name: Outside
       icon: mdi:weather-partly-cloudy
       show_icon: true
@@ -42,12 +42,12 @@ badges:
           $: |
             //state-display {
             //  {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
-            //  {%- set state = states('sensor.outside_temperature') | float(0) -%}
+            //  {%- set state = states('sensor.outside_temperature_filtered') | float(0) -%}
             //  color: {{ gradient_color(state, temp_degrees_c_human_map) }};
             //}
             ha-state-icon {
               {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
-              {%- set state = states('sensor.outside_temperature') | float(0) -%}
+              {%- set state = states('sensor.outside_temperature_filtered') | float(0) -%}
               --card-mod-icon-color: {{ gradient_color(state, temp_degrees_c_human_map) }};
             }
   - type: custom:mod-card
@@ -344,15 +344,15 @@ cards:
                               }
                             }
                       - type: custom:template-entity-row
-                        entity: sensor.outside_temperature
+                        entity: sensor.outside_temperature_filtered
                         name: Outside vs Inside Temperature
                         icon: mdi:scale-balance
                         state: >-
-                          {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
+                          {% set outside_temp = states('sensor.outside_temperature_filtered') | float(0) %}
                           {% set inside_temp = states('sensor.office_temperature') | float(0) %}
                           {{ 'Met' if outside_temp >= inside_temp + 1 else 'Not met' }}
                         secondary: >-
-                          {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
+                          {% set outside_temp = states('sensor.outside_temperature_filtered') | float(0) %}
                           {% set inside_temp = states('sensor.office_temperature') | float(0) %}
                           {% set diff = (outside_temp - inside_temp) | round(1) %}
                           {{ diff }} {{ '>=' if diff >= 1 else '<' }} 1 °C (delta)
@@ -360,7 +360,7 @@ cards:
                           style: |
                             .state {
                               color:
-                                {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
+                                {% set outside_temp = states('sensor.outside_temperature_filtered') | float(0) %}
                                 {% set inside_temp = states('sensor.office_temperature') | float(0) %}
                                 {{ 'var(--custom-color-green)' if outside_temp >= inside_temp + 1 else 'var(--custom-color-red)' }};
                               }
@@ -421,15 +421,15 @@ cards:
                               }
                             }
                       # - type: custom:template-entity-row
-                      #   entity: sensor.outside_temperature
+                      #   entity: sensor.outside_temperature_filtered
                       #   name: Outside vs Inside Temperature
                       #   icon: mdi:scale-balance
                       #   state: >-
-                      #     {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
+                      #     {% set outside_temp = states('sensor.outside_temperature_filtered') | float(0) %}
                       #     {% set inside_temp = states('sensor.office_temperature') | float(0) %}
                       #     {{ 'Met' if outside_temp <= inside_temp - 3 else 'Not met' }}
                       #   secondary: >-
-                      #     {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
+                      #     {% set outside_temp = states('sensor.outside_temperature_filtered') | float(0) %}
                       #     {% set inside_temp = states('sensor.office_temperature') | float(0) %}
                       #     {% set diff = (outside_temp - inside_temp) | round(1) %}
                       #     {{ diff }} {{'<=' if diff <= -3 else '>' }} -3 °C (delta)
@@ -437,7 +437,7 @@ cards:
                       #     style: |
                       #       .state {
                       #         color:
-                      #           {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
+                      #           {% set outside_temp = states('sensor.outside_temperature_filtered') | float(0) %}
                       #           {% set inside_temp = states('sensor.office_temperature') | float(0) %}
                       #           {{ 'var(--custom-color-green)' if outside_temp <= inside_temp - 3 else 'var(--custom-color-red)' }};
                       #         }
@@ -505,7 +505,7 @@ cards:
             name: Bedroom
             icon: mdi:bed-single-outline
             card_mod: *card_mod_temp_style
-          - entity: sensor.outside_temperature
+          - entity: sensor.outside_temperature_filtered
             name: Outside
             icon: mdi:weather-partly-cloudy
             card_mod: *card_mod_temp_style
@@ -739,7 +739,7 @@ cards:
               - entity: sensor.bedroom_ht_temperature
                 name: Bedroom
                 color: var(--custom-color-magenta)
-              - entity: sensor.outside_temperature
+              - entity: sensor.outside_temperature_filtered
                 name: Outside
                 color: var(--custom-color-red)
               # - entity: sensor.outside_feels_like
@@ -834,7 +834,7 @@ cards:
                 name: Main Bedroom
               - entity: sensor.bedroom_ht_temperature
                 name: Bedroom
-              - entity: sensor.outside_temperature
+              - entity: sensor.outside_temperature_filtered
                 name: Outside
             days_to_show: 30
             period: day

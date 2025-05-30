@@ -52,7 +52,7 @@ For the `(state, color)` tuples, the state must be of the same unit as the first
     {% set r = max(int(start_r + s*(stop_r - start_r)), 0) %}
     {% set g = max(int(start_g + s*(stop_g - start_g)), 0) %}
     {% set b = max(int(start_b + s*(stop_b - start_b)), 0) %}
-    rgb({{ r }}, {{ g }}, {{ b }});
+    rgb({{ r }}, {{ g }}, {{ b }})
 {% endmacro %}
 
 {#

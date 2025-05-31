@@ -458,6 +458,27 @@ automation:
             light: light.front_door
             duration: "00:03:00"
 
+  - alias: "Remind To Leave A Window Open When Bedtime"
+    id: "71f8ebc4-f512-44c1-aea3-b1f5ba0ca26c"
+    trigger:
+      - platform: state
+        entity_id: light.living_room_lamp
+        to: "off"
+    condition:
+      - condition: time
+        after: "21:00:00"
+        before: "01:00:00"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "⏰ Routine Reminder"
+          message: "Remember to leave a window open for the cats."
+          data:
+            url: homeassistant://navigate/lovelace/main
+            sound:
+              critical: 1
+              volume: 0.01
+
   - alias: "Open The Gate When Arriving Home"
     id: "7dcb52a0-3ecc-4a6f-9b89-6d80a6720590"
     initial_state: true

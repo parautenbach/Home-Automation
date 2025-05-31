@@ -1062,6 +1062,9 @@ automation:
             actions:
               - action: "LIGHTS_OFF"
                 title: "Turn off all"
+            sound:
+              critical: 1
+              volume: 0.01
 
   - alias: "Turn Off All Lights From Alert Action"
     id: "d04f66b5-1ae9-4f6d-bfb2-6c204e82ba19"

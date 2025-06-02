@@ -1188,6 +1188,8 @@ automation:
         target:
           entity_id: switch.main_bedroom_ac_display
 
+  # note (future): inside temperature lags the outside temperature by about 3 hours
+  # https://docs.google.com/spreadsheets/d/1zaK87B1vGeipQYksiZTYTegJnJr0vQACHGWG4fAj0WE/edit?gid=1528212005#gid=1528212005
   - alias: "Turn On Living Room AC"
     id: "7c561ce0-7a57-4857-9516-ef638ce37293"
     initial_state: true

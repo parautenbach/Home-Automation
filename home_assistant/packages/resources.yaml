@@ -342,11 +342,11 @@ template:
         state: >-
           {% set geyser = states('sensor.daily_geyser_energy_consumption') | float(0) -%}
           {% set home = states('sensor.daily_home_energy_consumption') | float(0) -%}
-          {{ (geyser/home) | multiply(100) | round(0) }}
+          {{ (geyser/home) | multiply(100) | round(0) if home > 0 else 0 }}
         icon: >-
           {% set geyser = states('sensor.daily_geyser_energy_consumption') | float(0) -%}
           {% set home = states('sensor.daily_home_energy_consumption') | float(0) -%}
-          {% set share = (geyser/home) | multiply(100) | round(0) %}
+          {% set share = (geyser/home) | multiply(100) | round(0) if home > 0 else 0 %}
           {% set index = (share/12.5) | int(0) %}
           {% if 0 < index <= 8 %}
             mdi:circle-slice-{{ index }}

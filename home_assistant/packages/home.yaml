@@ -1211,7 +1211,7 @@ automation:
       - platform: template
         # same as matching condition below
         value_template: >-
-          {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
+          {% set outside_temp = states('sensor.outside_temperature_filtered') | float(0) %}
           {% set inside_temp = states('sensor.office_temperature') | float(0) %}
           {{ outside_temp > inside_temp + 1 }}
         id: "rising_temp"
@@ -1223,7 +1223,7 @@ automation:
       - platform: template
         # same as matching condition below
         value_template: >-
-          {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
+          {% set outside_temp = states('sensor.outside_temperature_filtered') | float(0) %}
           {% set inside_temp = states('sensor.office_temperature') | float(0) %}
           {{ outside_temp < inside_temp - 3 }}
         id: "falling_temp"
@@ -1296,7 +1296,7 @@ automation:
               - condition: template
                 # same as matching trigger above
                 value_template: >-
-                  {% set outside_temp = states('sensor.outside_temperature') | float(0) %}
+                  {% set outside_temp = states('sensor.outside_temperature_filtered') | float(0) %}
                   {% set inside_temp = states('sensor.office_temperature') | float(0) %}
                   {{ outside_temp >= inside_temp + 1 }}
           # for heating
@@ -1398,7 +1398,7 @@ automation:
           title: "🌡️ Climate Control"
           message: >-
             {% set mode = states('climate.living_room_ac') ~ 'ing' %}
-            {% set outside_temp = states('sensor.outside_temperature', with_unit=True) %}
+            {% set outside_temp = states('sensor.outside_temperature_filtered', with_unit=True) %}
             {% set outside_perception = state_translated('sensor.thermal_comfort_outside_summer_simmer_perception') | lower %}
             {% set inside_temp = states('sensor.office_temperature', with_unit=True) %}
             {% set inside_perception = state_translated('sensor.thermal_comfort_inside_summer_simmer_perception') | lower %}

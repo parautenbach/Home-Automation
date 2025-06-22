@@ -10,6 +10,9 @@ homeassistant:
     sensor.dining_room_light_button_battery:
       friendly_name: Dining Room Light Button Battery
       monitor: True
+    sensor.music_room_light_button_battery:
+      friendly_name: Music Room Light Button Battery
+      monitor: True
     sensor.bedroom_ht_battery:
       friendly_name: Bedroom H&T Battery
       monitor: True

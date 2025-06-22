@@ -388,12 +388,12 @@ cards:
                         entity: sensor.office_temperature
                         name: Inside Temperature
                         state: >-
-                          {{ 'Met' if states('sensor.office_temperature') | float(0) <= 16.5 else 'Not met' }}
-                        secondary: "{{ states('sensor.office_temperature', with_unit=True) }} {{ '<=' if states('sensor.office_temperature') | float(0) <= 16.5 else '>' }} 16.5 °C"
+                          {{ 'Met' if states('sensor.office_temperature') | float(0) <= 16.0 else 'Not met' }}
+                        secondary: "{{ states('sensor.office_temperature', with_unit=True) }} {{ '<=' if states('sensor.office_temperature') | float(0) <= 16.0 else '>' }} 16.0 °C"
                         card_mod:
                           style: |
                             .state {
-                              color: {{ 'var(--custom-color-green)' if states(config.entity) | float(0) <= 16.5 else 'var(--custom-color-red)' }};
+                              color: {{ 'var(--custom-color-green)' if states(config.entity) | float(0) <= 16.0 else 'var(--custom-color-red)' }};
                               }
                             }
                       - type: custom:template-entity-row

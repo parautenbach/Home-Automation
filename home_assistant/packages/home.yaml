@@ -1220,7 +1220,7 @@ automation:
       - platform: numeric_state
         entity_id: sensor.office_temperature
         # same as matching condition below
-        below: 16.6
+        below: 16.1
         id: "falling_temp"
       - platform: template
         # same as matching condition below
@@ -1247,7 +1247,7 @@ automation:
         id: "temp_perception"
       # check at regular intervals? why would we need to, if our triggers are otherwise correct?
       - platform: time
-        at: "09:30:00"
+        at: "09:00:00"
         id: "time_based"
     condition:
       - condition: state
@@ -1307,7 +1307,7 @@ automation:
               - condition: numeric_state
                 entity_id: sensor.office_temperature
                 # same as matching trigger above
-                below: 16.6
+                below: 16.1
               - condition: state
                 entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
                 # same as matching trigger above
@@ -1333,7 +1333,7 @@ automation:
       # check forecast min/max temp?
       # get_forecasts['weather.openweathermap']['forecast'][0]['temperature']
       - condition: time
-        after: "09:30:00"
+        after: "09:00:00"
         before: "17:00:00"
       # be less conservative power-wise: don't check the battery variance.
       # just check that there's no scheduled loadshedding and that the grid is connected.
@@ -1362,7 +1362,7 @@ automation:
                   - condition: numeric_state
                     entity_id: sensor.office_temperature
                     # same as matching trigger/condition above
-                    below: 16.6
+                    below: 16.1
                   - condition: state
                     entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
                     # same as matching trigger/condition above
@@ -1374,7 +1374,7 @@ automation:
                 target:
                   entity_id: climate.living_room_ac
                 data:
-                  temperature: 20
+                  temperature: 19
               - service: climate.set_hvac_mode
                 target:
                   entity_id: climate.living_room_ac

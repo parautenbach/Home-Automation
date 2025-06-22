@@ -1409,7 +1409,7 @@ automation:
         to: "off"
     conditions:
       - condition: time
-        after: "19:30:00"
+        after: "19:15:00"
     actions:
       - service: light.turn_off
         target:
@@ -1445,3 +1445,5 @@ automation:
         target:
           entity_id: light.hallway
 
+  # kitchen cntr button: set profile (according to TOD, and also turn scullery's on)
+  # also turn off both

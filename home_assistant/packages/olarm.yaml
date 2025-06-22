@@ -573,11 +573,14 @@ automation:
         from: 'Not Charging'  # Can be to Charging or Full
         id: "phone_plugged_in"
       - platform: state
+        entity_id: light.living_room_lamp
+        to: "off"
+      - platform: state
         entity_id:
           - binary_sensor.pieter_present
         to: "on"
         for:
-          minutes: 15
+          minutes: 5
         id: "arrived_home"
     condition:
       - condition: template

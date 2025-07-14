@@ -74,3 +74,12 @@ Step 19: had to add pip3 install mysqlclient because my Home Assistant installat
 virtualenv --python="/usr/bin/python2.6" "/path/to/new/virtualenv/"
 
 rather: python3.11 -m venv venv
+
+====================
+DIST UPGRADE
+====================
+
+Quick version: https://wiki.debian.org/DebianUpgrade
+Long version: https://www.debian.org/releases/bookworm/amd64/release-notes/ch-upgrading.en.html
+Release notes: https://www.debian.org/releases/stable/amd64/release-notes/index.en.html
+Other: https://www.debian.org/releases/bookworm/amd64/release-notes/ap-old-stuff.en.html

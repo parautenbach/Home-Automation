@@ -390,7 +390,7 @@ automation:
       # guard: only continue if still off, otherwise we can get stuff in a timer restart loop due to race conditions
       - condition: template
         value_template: >-
-          {% set binary_sensor = trigger.entity_id | replace('timer', 'binary_sensor') | replace('_disconnected', '') %}
+          {% set binary_sensor = trigger.event.data.entity_id | replace('timer', 'binary_sensor') | replace('_disconnected', '') %}
           {{ is_state(binary_sensor, 'off') }}
       - service: notify.mobile_app_ceres
         data:

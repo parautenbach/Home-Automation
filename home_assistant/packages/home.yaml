@@ -476,6 +476,7 @@ automation:
           data:
             url: homeassistant://navigate/lovelace/main
             sound:
+              name: default
               critical: 1
               volume: 0.01
 

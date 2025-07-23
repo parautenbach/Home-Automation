@@ -256,7 +256,7 @@ shell_command:
   # rsync will only copy what's new up to n and the second command will remove what's extra (can't do it with rsync's --delete unless the source is a directory)
   # this is to avoid the distination from growing indefinitely
   sync_snapshots: "rsync -a `ls /tmp/camera.security_camera_*.jpg | sort | tail -n5` /home/homeassistant/.homeassistant/www/gallery/security_camera/"
-  trim_snapshots: "find /home/homeassistant/.homeassistant/www/gallery/security_camera/ -maxdepth 1 -type f | sort -r | tail -n +6 | xargs -I {} rm -- /home/homeassistant/.homeassistant/www/gallery/security_camera/{}"
+  trim_snapshots: "find /home/homeassistant/.homeassistant/www/gallery/security_camera/ -maxdepth 1 -type f | sort -r | tail -n +6 | xargs -I {} rm -- \"{}\""
   trim_doorbell_snapshots: "find /home/homeassistant/.homeassistant/www/gallery/doorbell/*.jpg -type f -mtime +1 -delete"
   # https://community.home-assistant.io/t/shelly-plus-smoke-silence-alarm/747472
   mute_smoke_alarm: "curl -X POST -d '{\"id\": 1, \"method\": \"Smoke.Mute\", \"params\": {\"id\": 0}}' http://{{ host }}/rpc"

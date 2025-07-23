@@ -1416,6 +1416,7 @@ automation:
           entity_id:
             - light.hallway
             - light.foyer
+            - light.music_room
 
   - alias: "Enable Auto On Bedlamps"
     id: "f7b5e209-9efd-421a-a598-aa7493b7f52e"

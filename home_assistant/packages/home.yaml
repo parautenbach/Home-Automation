@@ -1831,8 +1831,8 @@ automation:
     id: "a57345d4-eec3-42b6-970d-84e2b77fb646"
     initial_state: true
     trigger:
-      - platform: time
-        at: "19:00:00"
+      - platform: template
+        value_template: "{{ now() == states('input_datetime.go_home_reminder') | today_at + timedelta(minutes=45) }}"
     actions:
       - service: notify.family
         data:

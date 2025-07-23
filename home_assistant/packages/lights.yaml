@@ -1409,7 +1409,7 @@ automation:
         to: "off"
     conditions:
       - condition: time
-        after: "19:15:00"
+        after: "18:55:00"
     actions:
       - service: light.turn_off
         target:

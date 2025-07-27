@@ -528,6 +528,7 @@ cards:
       #       - sensor.last_notification
       #   hours_to_show: 24
       - type: custom:logbook-card
+        title: Notification History
         entity: sensor.last_notification
         show:
           state: true

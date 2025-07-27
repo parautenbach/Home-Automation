@@ -67,6 +67,9 @@ input_boolean:
   ac_maintenance_mode:
     name: AC Maintenance Mode
     icon: mdi:wrench-clock
+  disable_auto_on_ac:
+    name: Disable Auto On AC
+    icon: mdi:hvac-off
 
 input_number:
   baby_current_sleep_session:
@@ -1252,6 +1255,9 @@ automation:
         id: "time_based"
     condition:
       - condition: state
+        entity_id: input_boolean.disable_auto_on_ac
+        state: "off"
+      - condition: state
         entity_id: input_boolean.ac_maintenance_mode
         state: "off"
       - condition: state
@@ -1430,6 +1436,9 @@ automation:
             actions:
               - action: "TURN_OFF_AC"
                 title: "Turn off"
+              - action: "TURN_OFF_AC_AND_DISABLE"
+                title: "Turn off"
+                destructive: true
             action_data:
               entity_id: "climate.living_room_ac"
 
@@ -1531,6 +1540,11 @@ automation:
         event_type: mobile_app_notification_action
         event_data:
           action: TURN_OFF_AC
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: TURN_OFF_AC_AND_DISABLE
+        id: "disable"
     action:
       - wait_template: "{{ not is_state(trigger.event.data.action_data.entity_id, 'on') }}"
         timeout: "00:00:10"
@@ -1538,6 +1552,22 @@ automation:
       - service: climate.turn_off
         target:
           entity_id: "{{ trigger.event.data.action_data.entity_id }}"
+      - condition: trigger
+        id: "disable"
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.disable_auto_on_ac
+
+  - alias: "Reset Auto On AC Governor"
+    id: "76301116-ecd0-493b-9afc-78411d601125"
+    initial_state: true
+    trigger:
+      - platform: time
+        at: "05:00:00"
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.disable_auto_on_ac
 
   - alias: "Handle Bathroom Timers"
     id: "26ce241d-177b-4491-81ee-2738b2eee582"

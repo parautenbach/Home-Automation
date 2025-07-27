@@ -901,7 +901,7 @@ automation:
           variables:
             light: light.rouve_bedside
             profile: rouve
-      - condition: "{{ is_state('input_boolean.baby_sleep_mode', 'off') and now() <= today_at('19:30') }}"
+      - condition: "{{ is_state('input_boolean.baby_sleep_mode', 'off') and now() <= today_at('18:45') }}"
       - service: script.turn_on
         target:
           entity_id: script.turn_on_light

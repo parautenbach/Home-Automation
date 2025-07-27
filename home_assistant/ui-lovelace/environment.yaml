@@ -279,11 +279,11 @@ cards:
                               }
                             }
                       - type: custom:template-entity-row
-                        entity: binary_sensor.family_present
+                        entity: binary_sensor.pieter_present
                         name: Family Presence
                         state: >-
-                          {{ 'Met' if is_state('binary_sensor.family_present', 'on') else 'Not met' }}
-                        secondary: "{{ state_translated('binary_sensor.family_present') }}"
+                          {{ 'Met' if is_state('binary_sensor.pieter_present', 'on') else 'Not met' }}
+                        secondary: "{{ state_translated('binary_sensor.pieter_present') }}"
                         card_mod:
                           style: |
                             .state {

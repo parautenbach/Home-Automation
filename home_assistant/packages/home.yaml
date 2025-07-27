@@ -1198,7 +1198,7 @@ automation:
       - platform: state
         entity_id:
           - binary_sensor.pieter_present
-          - binary_sensor.rouve_present
+          # - binary_sensor.rouve_present
         to: "on"
         id: "presence"
       - platform: state
@@ -1266,9 +1266,10 @@ automation:
           - condition: state
             entity_id: binary_sensor.pieter_present
             state: "on"
-          - condition: state
-            entity_id: binary_sensor.rouve_present
-            state: "on"
+          # - condition: state
+          #   entity_id: binary_sensor.rouve_present
+          #   state: "on"
+          #   enabled: false
       - condition: or
         conditions:
           # for cooling

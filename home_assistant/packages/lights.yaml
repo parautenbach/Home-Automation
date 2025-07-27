@@ -1448,3 +1448,18 @@ automation:
 
   # kitchen cntr button: set profile (according to TOD, and also turn scullery's on)
   # also turn off both
+
+  - alias: "Yard Lights Off At Sunrise"
+    id: "ba2febfd-88bf-4dd8-8e6d-8a171bc2fc18"
+    initial_state: true
+    trigger:
+      - platform: sun
+        event: sunrise
+    condition:
+      - condition: state
+        entity_id: light.yard_group
+        state: "on"
+    action:
+      - service: script.turn_off
+        target:
+          entity_id: light.yard_group

@@ -1404,6 +1404,11 @@ automation:
           entity_id: climate.living_room_ac
         data:
           fan_mode: "medium"
+      - service: climate.set_swing_mode
+        target:
+          entity_id: climate.living_room_ac
+        data:
+          swing_mode: "both"
       - service: notify.mobile_app_ceres
         data:
           title: "🌡️ Climate Control"

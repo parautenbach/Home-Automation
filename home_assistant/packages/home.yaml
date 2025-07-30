@@ -1869,7 +1869,10 @@ automation:
     initial_state: true
     trigger:
       - platform: template
-        value_template: "{{ now() == states('input_datetime.go_home_reminder') | today_at + timedelta(minutes=45) }}"
+        value_template: >-
+          {% set current = now().replace(second=0).replace(microsecond=0) %}
+          {% set target = states('input_datetime.go_home_reminder') | today_at + timedelta(minutes=45) %}
+          {{ current == target }}
     actions:
       - service: notify.family
         data:

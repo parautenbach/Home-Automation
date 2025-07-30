@@ -1,4 +1,4 @@
-db_url: postgresql://@/homeassistant
+db_url: !secret db_url
 # https://community.home-assistant.io/t/home-assistant-db-size/1198/10
 # If you set it for 14 days, then it runs after 14 days of UNINTERRUPTED uptime. If you restart your HA server, then the clock restarts from zero again.
 # delete from events where time_fired < datetime('now','-30 days');

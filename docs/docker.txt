@@ -1,0 +1,110 @@
+docker run -d \
+  --name homeassistant \
+  --privileged \
+  --network=host \
+  --restart=unless-stopped \
+  -e TZ=Africa/Johannesburg \
+  -v /home/homeassistant/.homeassistant:/config \
+  -v /mnt/nas:/mnt/nas:ro \
+  -v /tmp:/tmp \
+  -v /run/dbus:/run/dbus:ro \
+  -v /root/.ssh:/root/.ssh:ro \
+  -e DBUS_SYSTEM_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket \
+  ghcr.io/home-assistant/home-assistant:stable
+
+=====
+
+docker logs -f homeassistant
+
+=====
+
+/etc/systemd/system/home-assistant-docker.service
+
+=====
+
+[Unit]
+Description=Home Assistant (Docker)
+Requires=network-online.target postgresql@12-main.service mosquitto.service
+After=network-online.target postgresql@12-main.service mosquitto.service
+
+[Service]
+Restart=always
+RestartSec=10
+ExecStartPre=-/usr/bin/docker stop homeassistant
+ExecStartPre=-/usr/bin/docker rm homeassistant
+ExecStartPre=/usr/bin/docker pull ghcr.io/home-assistant/home-assistant:stable
+ExecStart=/usr/bin/docker run \
+  --name homeassistant \
+  --privileged \
+  --network=host \
+  --restart unless-stopped \
+  -e TZ=Africa/Johannesburg \
+  -v /home/homeassistant/.homeassistant:/config \
+  -v /mnt/nas:/mnt/nas:ro \
+  -v /tmp:/tmp \
+  -v /run/dbus:/run/dbus:ro \
+  -v /root/.ssh:/root/.ssh:ro \
+  -e DBUS_SYSTEM_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket \
+  ghcr.io/home-assistant/home-assistant:stable
+ExecStop=/usr/bin/docker stop homeassistant
+
+[Install]
+WantedBy=multi-user.target
+
+=====
+
+sudo systemctl daemon-reexec  # optional if systemd has updated
+sudo systemctl daemon-reload
+sudo systemctl enable --now home-assistant-docker.service
+
+sudo systemctl status home-assistant-docker.service
+
+journalctl -u home-assistant-docker.service -f
+
+=====
+
+~/update-home-assistant.sh
+
+#!/bin/bash
+set -e
+
+SERVICE=home-assistant-docker.service
+IMAGE=ghcr.io/home-assistant/home-assistant:stable
+
+echo "Pulling latest Home Assistant image..."
+docker pull $IMAGE
+
+echo "Restarting systemd service: $SERVICE"
+sudo systemctl restart $SERVICE
+
+echo "Waiting for container to start..."
+sleep 5
+sudo systemctl status $SERVICE --no-pager
+
+echo "Done."
+
+
+chmod +x ~/update-home-assistant.sh
+sudo systemctl disable home-assistant@homeassistant.service
+
+docker exec -it homeassistant bash
+
+=====
+
+version: "3.8"
+
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: ghcr.io/home-assistant/home-assistant:stable
+    privileged: true
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      - TZ=Africa/Johannesburg
+      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket
+    volumes:
+      - /home/homeassistant/.homeassistant:/config
+      - /tmp:/tmp
+      - /run/dbus:/run/dbus:ro
+      - /mnt/nas:/mnt/nas:ro

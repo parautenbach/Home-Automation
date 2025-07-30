@@ -120,6 +120,14 @@ command_line:
       scan_interval: 60
 
   - sensor:
+      name: internet_round_trip_time_mdev
+      command: "ping -c 5 www.google.com 2>/dev/null | grep -oP '(?<=rtt min/avg/max/mdev = )[^ ]+' | awk -F'/' '{print $4}' || echo 0"
+      command_timeout: 15
+      unit_of_measurement: "ms"
+      value_template: '{{ value | float(0) }}'
+      scan_interval: 60
+
+  - sensor:
       name: front_extender_packet_loss
       # note: the ping sensor host is configured via the ui of the ping integration
       command: 'ping -c 5 U6ProFrontAP 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
@@ -129,6 +137,14 @@ command_line:
       scan_interval: 30
 
   - sensor:
+      name: front_extender_round_trip_time_mdev
+      command: "ping -c 5 U6ProFrontAP 2>/dev/null | grep -oP '(?<=rtt min/avg/max/mdev = )[^ ]+' | awk -F'/' '{print $4}' || echo 0"
+      command_timeout: 15
+      unit_of_measurement: "ms"
+      value_template: '{{ value | float(0) }}'
+      scan_interval: 60
+
+  - sensor:
       name: back_extender_packet_loss
       # note: the ping sensor host is configured via the ui of the ping integration
       command: 'ping -c 5 U6ProRearAP 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
@@ -136,6 +152,14 @@ command_line:
       unit_of_measurement: "%"
       value_template: '{{ value | int(0) }}'
       scan_interval: 30
+
+  - sensor:
+      name: back_extender_round_trip_time_mdev
+      command: "ping -c 5 U6ProRearAP 2>/dev/null | grep -oP '(?<=rtt min/avg/max/mdev = )[^ ]+' | awk -F'/' '{print $4}' || echo 0"
+      command_timeout: 15
+      unit_of_measurement: "ms"
+      value_template: '{{ value | float(0) }}'
+      scan_interval: 60
 
 binary_sensor:
   - platform: template

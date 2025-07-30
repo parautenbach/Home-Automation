@@ -236,7 +236,7 @@ script:
         target:
           entity_id: "{{ camera_entity_id }}"
         data:
-          filename: '/home/homeassistant/.homeassistant/www/gallery/{{ subdirectory }}/{{ camera_entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+          filename: '/config/www/gallery/{{ subdirectory }}/{{ camera_entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
   notify_tenant:
     fields:
       message:

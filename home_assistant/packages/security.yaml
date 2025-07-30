@@ -86,7 +86,7 @@ binary_sensor:
 sensor:
   # used by the gallery panel
   - platform: files
-    folder: /home/homeassistant/.homeassistant/www/gallery/security_camera/
+    folder: /config/www/gallery/security_camera/
     filter: 'camera.security_camera_*.jpg'
     name: security_camera_snapshots
     sort: date
@@ -94,7 +94,7 @@ sensor:
 
   # used to sync files from tmp to the gallery
   # alt: https://www.home-assistant.io/integrations/folder_watcher/
-  # then watch /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg
+  # then watch /config/www/camera.security_camera_last.jpg
   - platform: folder
     folder: /tmp/
     filter: 'camera.security_camera_*.jpg'
@@ -247,17 +247,17 @@ camera:
     # max_image_width: 1024
   - platform: ffmpeg
     name: security_camera_last_clip
-    input: /home/homeassistant/.homeassistant/www/camera.security_camera_last.mp4
+    input: /config/www/camera.security_camera_last.mp4
 
 shell_command:
-  copy_last_snapshot_image: "cp `ls -t /tmp/camera.security_camera_*.jpg | head -n1` /home/homeassistant/.homeassistant/www/camera.security_camera_last.jpg"
-  copy_last_video_clip: "cp `ls -t /tmp/camera.security_camera_*.mp4 | head -n1` /home/homeassistant/.homeassistant/www/camera.security_camera_last.mp4"
+  copy_last_snapshot_image: "cp `ls -t /tmp/camera.security_camera_*.jpg | head -n1` /config/www/camera.security_camera_last.jpg"
+  copy_last_video_clip: "cp `ls -t /tmp/camera.security_camera_*.mp4 | head -n1` /config/www/camera.security_camera_last.mp4"
   # keep a rolling buffer of n snapshots by always copying only the latest ones and removing the oldest
   # rsync will only copy what's new up to n and the second command will remove what's extra (can't do it with rsync's --delete unless the source is a directory)
   # this is to avoid the distination from growing indefinitely
-  sync_snapshots: "rsync -a `ls /tmp/camera.security_camera_*.jpg | sort | tail -n5` /home/homeassistant/.homeassistant/www/gallery/security_camera/"
-  trim_snapshots: "find /home/homeassistant/.homeassistant/www/gallery/security_camera/ -maxdepth 1 -type f | sort -r | tail -n +6 | xargs -I {} rm -- \"{}\""
-  trim_doorbell_snapshots: "find /home/homeassistant/.homeassistant/www/gallery/doorbell/*.jpg -type f -mtime +1 -delete"
+  sync_snapshots: "rsync -a `ls /tmp/camera.security_camera_*.jpg | sort | tail -n5` /config/www/gallery/security_camera/"
+  trim_snapshots: "find /config/www/gallery/security_camera/ -maxdepth 1 -type f | sort -r | tail -n +6 | xargs -I {} rm -- \"{}\""
+  trim_doorbell_snapshots: "find /config/www/gallery/doorbell/*.jpg -type f -mtime +1 -delete"
   # https://community.home-assistant.io/t/shelly-plus-smoke-silence-alarm/747472
   mute_smoke_alarm: "curl -X POST -d '{\"id\": 1, \"method\": \"Smoke.Mute\", \"params\": {\"id\": 0}}' http://{{ host }}/rpc"
 

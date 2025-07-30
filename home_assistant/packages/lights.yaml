@@ -3,22 +3,22 @@
 #
 # colour modes by brand/model:
 #   * tp-link lb130:
-#       color_temp, hs
+#       color_temp_kelvin, hs
 #       2500-9000 K / 400-111 mireds
 #   * shelly duo:
-#       color_temp
+#       color_temp_kelvin
 #       2700-6500 K / 370-153 mireds
 #   * shelly duo rgbw:
-#       color_temp, rgb
+#       color_temp_kelvin, rgb
 #       3000-6500 K / 333-153 mireds
 #   * shelly rgbw2:
 #       rgbw
-#       (no color_temp)
+#       (no color_temp_kelvin)
 #   * magic home (corner lights):
 #       rgb
-#       (no color_temp)
+#       (no color_temp_kelvin)
 #   * yeelight (xiaomi mi):
-#       color_temp, hs
+#       color_temp_kelvin, hs
 #       2000-6535 K / 500/-153 mireds
 
 homeassistant:

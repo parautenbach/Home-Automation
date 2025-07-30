@@ -1442,7 +1442,7 @@ automation:
               - action: "TURN_OFF_AC"
                 title: "Turn off"
               - action: "TURN_OFF_AC_AND_DISABLE"
-                title: "Turn off"
+                title: "Turn off and disable"
                 destructive: true
             action_data:
               entity_id: "climate.living_room_ac"

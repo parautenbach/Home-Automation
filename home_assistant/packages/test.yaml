@@ -48,6 +48,9 @@ alert:
     notifiers:
       - mobile_app_ceres
 
+shell_command:
+  test_json: '/home/homeassistant/scripts/test_json.sh "{{ data }}"'
+
 script:
   test_foyer_light:
     fields:

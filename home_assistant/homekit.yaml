@@ -92,8 +92,6 @@
       name: Backyard
     light.garage:
       name: Garage
-    light.led:
-      name: Motion LED
     switch.tivoli_audio:
       name: Tivoli Audio
     switch.irrigation_main:

@@ -19,6 +19,8 @@ homeassistant:
       friendly_name: MQTT broker messages in
     sensor.last_backup:
       friendly_name: "Most recent backup"
+    sensor.last_db_backup:
+      friendly_name: "Most recent DB backup"
     sensor.db_size:
       icon: mdi:database
     binary_sensor.python_package_index_pypi_update_available:
@@ -61,7 +63,7 @@ binary_sensor:
           {% set last_db_backup = (0 if states('sensor.last_db_backup') == "unknown" else states('sensor.last_db_backup')) | as_datetime %}
           {{ 'on' if ((utcnow() - last_db_backup).days > 7) else 'off' }}
         icon_template: >-
-          {{ state_attr('sensor.last_db_backup', 'icon') or "mdi:database-alert-outline" }}
+          {{ state_attr('sensor.last_db_backup', 'icon') or "mdi:database-alert" }}
       hacs_updater:
         friendly_name: HACS Updater
         device_class: update
@@ -147,17 +149,17 @@ sensor:
             {{ 0 | as_datetime }}
           {% endif %}
         icon_template: >-
-          {% set file_list = state_attr('sensor.home_assistant', 'file_list') | sort %}
+          {% set file_list = state_attr('sensor.home_assistant_db', 'file_list') | sort %}
           {% if file_list != [] %}
             {% set last_backup_file = file_list | last %}
             {% set last_backup_dt = strptime(last_backup_file[-23:-8] ~ '+0000', '%Y%m%d_%H%M%S%z', 0 | as_datetime) %}
             {% if (utcnow() - last_backup_dt).days > 7 %}
-              mdi:database-alert-outline
+              mdi:database-alert
             {% else %}
-              mdi:database-outline
+              mdi:database
             {% endif %}
           {% else %}
-            mdi:database-alert-outline
+            mdi:database-alert
           {% endif %}
       home_assistant_server_battery_status:
         friendly_name: "Home Assistant Server Battery Status"

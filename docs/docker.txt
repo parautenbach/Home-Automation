@@ -5,7 +5,8 @@ docker run -d \
   --restart=unless-stopped \
   -e TZ=Africa/Johannesburg \
   -v /root/.homeassistant:/config \
-  -v /mnt/nas:/mnt/nas:ro \
+  -v /mnt/nas:/mnt/nas \
+  -v /root/scripts:/root/scripts:ro \
   -v /tmp:/tmp \
   -v /run/dbus:/run/dbus:ro \
   -v /root/.ssh:/root/.ssh:ro \
@@ -14,7 +15,9 @@ docker run -d \
 
 =====
 
+docker rm homeassistant
 docker logs -f homeassistant
+docker exec -it homeassistant bash
 
 =====
 
@@ -40,7 +43,8 @@ ExecStart=/usr/bin/docker run \
   --restart unless-stopped \
   -e TZ=Africa/Johannesburg \
   -v /root/.homeassistant:/config \
-  -v /mnt/nas:/mnt/nas:ro \
+  -v /mnt/nas:/mnt/nas \
+  -v /root/scripts:/root/scripts:ro \
   -v /tmp:/tmp \
   -v /run/dbus:/run/dbus:ro \
   -v /root/.ssh:/root/.ssh:ro \

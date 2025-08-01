@@ -53,6 +53,15 @@ binary_sensor:
           {{ 'on' if ((utcnow() - last_backup).days > 4) else 'off' }}
         icon_template: >-
           {{ state_attr('sensor.last_backup', 'icon') or "mdi:file-alert-outline" }}
+      no_recent_db_backup:
+        friendly_name: "Recent DB Backup Problem"
+        device_class: problem
+        # get the last file, extract the date and compare
+        value_template: >-
+          {% set last_db_backup = (0 if states('sensor.last_db_backup') == "unknown" else states('sensor.last_db_backup')) | as_datetime %}
+          {{ 'on' if ((utcnow() - last_db_backup).days > 7) else 'off' }}
+        icon_template: >-
+          {{ state_attr('sensor.last_db_backup', 'icon') or "mdi:database-alert-outline" }}
       hacs_updater:
         friendly_name: HACS Updater
         device_class: update
@@ -86,6 +95,11 @@ sensor:
     filter: 'hass-config_*.zip'
     scan_interval: 3600
 
+  - platform: folder
+    folder: /mnt/nas/Backups/home_assistant_db/
+    filter: 'homeassistant_*.dump.gz'
+    scan_interval: 3600
+
   - platform: linux_battery
     name: Home Assistant Server Battery
     battery: 0
@@ -95,7 +109,7 @@ sensor:
   - platform: template
     sensors:
       last_backup:
-        # relies on cronjob running on a sunday and a wednedsay
+        # relies on an automation running on a sunday and a wednedsay
         device_class: timestamp
         # https://community.home-assistant.io/t/what-to-return-in-timestamp-template-sensor-when-state-is-unknown/377152/
         value_template: >-
@@ -118,6 +132,30 @@ sensor:
             {% endif %}
           {% else %}
             mdi:file-alert-outline
+          {% endif %}
+      last_db_backup:
+        # relies on cronjob running on a sunday
+        device_class: timestamp
+        value_template: >-
+          {% set file_list = state_attr('sensor.home_assistant_db', 'file_list') | sort %}
+          {% if file_list != [] %}
+            {% set last_backup_file = file_list | last %}
+            {{ strptime(last_backup_file[-19:-4] ~ '+0000', '%Y%m%d_%H%M%S%z', None).isoformat() }}
+          {% else %}
+            {{ 0 | as_datetime }}
+          {% endif %}
+        icon_template: >-
+          {% set file_list = state_attr('sensor.home_assistant', 'file_list') | sort %}
+          {% if file_list != [] %}
+            {% set last_backup_file = file_list | last %}
+            {% set last_backup_dt = strptime(last_backup_file[-19:-4] ~ '+0000', '%Y%m%d_%H%M%S%z', 0 | as_datetime) %}
+            {% if (utcnow() - last_backup_dt).days > 7 %}
+              mdi:database-alert-outline
+            {% else %}
+              mdi:database-outline
+            {% endif %}
+          {% else %}
+            mdi:database-alert-outline
           {% endif %}
       home_assistant_server_battery_status:
         friendly_name: "Home Assistant Server Battery Status"
@@ -283,12 +321,11 @@ template:
 
 shell_command:
   noop: ":"
-  shudown_remote_host: "/home/homeassistant/scripts/shutdown_remote_host.sh {{ host }}"
+  shudown_remote_host: "/root/scripts/shutdown_remote_host.sh {{ host }}"
   # https://www.debian.org/releases/stretch/amd64/ch08s01.html.en
   # https://www.computernetworkingnotes.com/linux-tutorials/shutdown-reboot-suspend-and-hibernate-a-linux-system.html
   shutdown_server: "sudo /usr/sbin/shutdown -h now"
-  make_backup: "/home/homeassistant/scripts/backup.sh"
-  make_db_backup: "/home/homeassistant/scripts/backup_db.sh"
+  make_backup: "/root/scripts/backup.sh"
 
 script:
   noop:
@@ -379,13 +416,6 @@ script:
       - service: homeassistant.update_entity
         target:
           entity_id: sensor.home_assistant
-
-  make_db_backup:
-    description: "Backup Home Assistant DB"
-    mode: single
-    sequence:
-      - service: shell_command.make_db_backup
-
 
 automation:
   - alias: "Set Light Theme"
@@ -514,21 +544,6 @@ automation:
       - service: script.turn_on
         entity_id: script.make_backup
 
-  - alias: "Backup Home Assistant DB"
-    id: "23ad9089-b7de-495e-b525-0730fd007c6d"
-    trigger:
-      platform: time
-      at:
-        - "03:05:00"
-    condition:
-      - condition: time
-        weekday:
-          - sun
-    action:
-      # https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete
-      - service: script.turn_on
-        entity_id: script.make_db_backup
-
   # backup script: https://gist.github.com/riemers/041c6a386a2eab95c55ba3ccaa10e7b0
   - alias: "Notify If No Recent Backup"
     id: "1069834c-2087-48a9-9015-e9a4a86262d9"
@@ -550,6 +565,29 @@ automation:
           title: "⚠️ System"
           # https://community.home-assistant.io/t/duplicate-ios-companion-app-notifications/406161
           message: "No recent backup found."
+          data:
+            group: "system-backup"
+            url: homeassistant://navigate/lovelace-system/devices
+
+  - alias: "Notify If No Recent DB Backup"
+    id: "17381020-8a14-4c08-a4d9-9022864619f3"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.no_recent_db_backup
+        to: "on"
+      # backup check in case there was a restart and the state didn't change
+      - platform: time
+        at: "09:00:00"
+    mode: single
+    condition:
+      - condition: state
+        entity_id: binary_sensor.no_recent_db_backup
+        state: "on"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "⚠️ System"
+          message: "No recent DB backup found."
           data:
             group: "system-backup"
             url: homeassistant://navigate/lovelace-system/devices

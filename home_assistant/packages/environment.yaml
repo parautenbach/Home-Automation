@@ -116,7 +116,7 @@ homeassistant:
       device_class: temperature
 
 shell_command:
-  download_latest_dam_levels: "/home/homeassistant/scripts/download_latest_dam_levels.sh"
+  download_latest_dam_levels: "/root/scripts/download_latest_dam_levels.sh"
 
 # convert to modern format: https://www.home-assistant.io/integrations/template/
 weather:

@@ -626,6 +626,24 @@ cards:
                       .info {
                         color: {{ "var(--custom-color-red)" if not is_state('binary_sensor.no_recent_backup', 'off') }};
                       }
+          - entity: sensor.last_db_backup
+            card_mod:
+              style:
+                hui-generic-entity-row:
+                  $:
+                    state-badge:
+                      $:
+                        ha-state-icon:
+                          $:
+                            ha-icon:
+                              $: |
+                                ha-svg-icon {
+                                  color: {{ "var(--custom-color-red)" if not is_state('binary_sensor.no_recent_db_backup', 'off') }};
+                                }
+                    .: |
+                      .info {
+                        color: {{ "var(--custom-color-red)" if not is_state('binary_sensor.no_recent_db_backup', 'off') }};
+                      }
           - entity: sensor.db_size
             name: DB size
           - entity: sensor.home_assistant_server_battery

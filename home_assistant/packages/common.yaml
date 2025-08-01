@@ -6,6 +6,8 @@ script:
         description: "An entity ID"
         example: "binary_sensor.my_sensor"
     mode: parallel
+    # list as on 2025-08-01 is 12
+    max: 20
     sequence:
       - service: homeassistant.update_entity
         target:

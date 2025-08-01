@@ -17,6 +17,7 @@ homeassistant:
   allowlist_external_dirs:
     - /tmp
     - /mnt/nas/Backups/home_assistant/
+    - /mnt/nas/Backups/home_assistant_db/
     - /sys/class/power_supply/
     - /config/downloads/
     - /config/www/

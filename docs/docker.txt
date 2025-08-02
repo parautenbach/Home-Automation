@@ -10,6 +10,7 @@ docker run -d \
   -v /tmp:/tmp \
   -v /run/dbus:/run/dbus:ro \
   -v /root/.ssh:/root/.ssh:ro \
+  -v /usr/share/fonts/truetype/dejavu:/usr/share/fonts/truetype/dejavu:ro \
   -e DBUS_SYSTEM_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket \
   ghcr.io/home-assistant/home-assistant:stable
 
@@ -48,6 +49,7 @@ ExecStart=/usr/bin/docker run \
   -v /tmp:/tmp \
   -v /run/dbus:/run/dbus:ro \
   -v /root/.ssh:/root/.ssh:ro \
+  -v /usr/share/fonts/truetype/dejavu:/usr/share/fonts/truetype/dejavu:ro \
   -e DBUS_SYSTEM_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket \
   ghcr.io/home-assistant/home-assistant:stable
 ExecStop=/usr/bin/docker stop homeassistant

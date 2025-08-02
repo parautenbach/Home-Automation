@@ -231,17 +231,19 @@ camera:
     # the ha docs state the -pred 1 is the default, but that option is nowhere to be found in the ffmpeg docs
     extra_arguments: >-
       -vf "hue=s=0, drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='%{localtime\:%Y-%m-%d %T}':fontcolor=white@0.8:x=10:y=10"
+      -frames:v 1 -update 1
   # the proxy camera will contain the overlaid timestamp on the video stream (but you cannot record this stream):
   # https://community.home-assistant.io/t/camera-using-ffmpeg-platform-and-drawtext-overlay-showing-on-snapshot-but-not-recording/372129
   # can one configure an overlay in v4l2? yes, but it's hacky (for a dynamic piece of text)
   # https://www.linux-projects.org/uv4l/tutorials/text-overlay/
+  # issue: https://github.com/home-assistant/core/issues/149849
   - platform: proxy
     name: security_camera_proxy
     entity_id: camera.security_camera
     # why on earth doesn't this work?
     # https://github.com/home-assistant/core/issues/84576
     # https://github.com/home-assistant/core/pull/141676
-    # stream_quality: 90
+    stream_quality: 90
     # workaround
     # max_stream_width: 1024
     # max_image_width: 1024
@@ -255,35 +257,42 @@ shell_command:
   # keep a rolling buffer of n snapshots by always copying only the latest ones and removing the oldest
   # rsync will only copy what's new up to n and the second command will remove what's extra (can't do it with rsync's --delete unless the source is a directory)
   # this is to avoid the distination from growing indefinitely
-  sync_snapshots: "rsync -a `ls /tmp/camera.security_camera_*.jpg | sort | tail -n5` /config/www/gallery/security_camera/"
-  trim_snapshots: "find /config/www/gallery/security_camera/ -maxdepth 1 -type f | sort -r | tail -n +6 | xargs -I {} rm -- \"{}\""
+  sync_snapshots: "cp -a $(ls /tmp/camera.security_camera_*.jpg | sort | tail -n5) /config/www/gallery/security_camera/"
+  trim_snapshots: "find /config/www/gallery/security_camera/ -maxdepth 1 -type f | sort -r | tail -n +51 | xargs -I {} rm -- \"{}\""
   trim_doorbell_snapshots: "find /config/www/gallery/doorbell/*.jpg -type f -mtime +1 -delete"
   # https://community.home-assistant.io/t/shelly-plus-smoke-silence-alarm/747472
   mute_smoke_alarm: "curl -X POST -d '{\"id\": 1, \"method\": \"Smoke.Mute\", \"params\": {\"id\": 0}}' http://{{ host }}/rpc"
+  record_security_camera_clip: "/root/scripts/record_security_camera_clip_with_overlay_and_audio.sh"
 
 script:
   security_camera_record_clip:
     # todo: fire a custom event to catch in another automation and turn on the light (if dark and not already on, etc.)
     mode: queued
     sequence:
-      - service: camera.record
-        # https://github.com/home-assistant/core/issues/40241
-        # https://github.com/home-assistant/core/issues/40241#issuecomment-1220046988
-        # entity_id: camera.security_camera
-        data:
-          entity_id: camera.security_camera
-          # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
-          # filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
-          # filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
-          filename: '/tmp/{{ "{{ entity_id.entity_id }}" }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
-          duration: 10
-      # would love to get rid of this. maybe watch for an updated timestamp on the file?
-      - delay: "00:00:15"
-      - service: shell_command.copy_last_video_clip
+      # - variables:
+      #     camera_entity_id: camera.security_camera
       - service: input_datetime.set_datetime
-        entity_id: input_datetime.security_camera_last_clip
+        target:
+          entity_id: input_datetime.security_camera_last_clip
         data:
           datetime: "{{ now() }}"
+      # - service: camera.record
+      #   target:
+      #     entity_id: "{{ camera_entity_id }}"
+      #   # https://github.com/home-assistant/core/issues/40241
+      #   # https://github.com/home-assistant/core/issues/40241#issuecomment-1220046988
+      #   # entity_id: camera.security_camera
+      #   data:
+      #     # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
+      #     # filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+      #     # filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+      #     filename: '/tmp/{{ camera_entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+      #     duration: 10
+      # blocking call: ha will time out after 60 seconds!
+      - service: shell_command.record_security_camera_clip
+      # would love to get rid of this. maybe watch for an updated timestamp on the file?
+      - delay: "00:00:05"
+      - service: shell_command.copy_last_video_clip
 
   security_camera_create_snapshot:
     # https://www.reddit.com/r/homeassistant/comments/9fz5e4/show_the_x_most_recent_pictures_in_a_directory/e69alpc/
@@ -309,20 +318,22 @@ script:
             - wait_template: "{{ is_state('light.foyer', 'on') }}"
               timeout:
                 seconds: 1
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.security_camera_last_snapshot
+        data:
+          datetime: "{{ now() }}"
       - service: camera.snapshot
         # https://github.com/home-assistant/core/issues/40241
         # entity_id: camera.security_camera
         target:
+          # cannot use the proxy service, unfortunately (so no timestamp overlay)
           entity_id: "{{ camera_entity_id }}"
         data:
           # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
           # filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
           # filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
           filename: '/tmp/{{ camera_entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
-      - service: input_datetime.set_datetime
-        entity_id: input_datetime.security_camera_last_snapshot
-        data:
-          datetime: "{{ now() }}"
       - service: shell_command.copy_last_snapshot_image
 
 automation:

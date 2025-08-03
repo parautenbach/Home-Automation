@@ -1,51 +1,55 @@
-#!/bin/bash
+#!/bin/sh
 
-# Set your paths below. Script can be run from any folder as long as your the right user and the drive is mounted.
-# You can either include or exclude the database, incase you have mysql or simply don't want to backup a big file.
-# Do check the storage on your drive.
-
-# Source: https://gist.github.com/riemers/041c6a386a2eab95c55ba3ccaa10e7b0
-
+# Paths
 BACKUP_FOLDER=/mnt/nas/Backups/home_assistant/
-BACKUP_FILE=${BACKUP_FOLDER}hass-config_$(date +"%Y%m%d_%H%M%S").zip
-BACKUP_LOCATION=/home/homeassistant/.homeassistant
-DAYSTOKEEP=0  # set to 0 to keep it forever.
+#BACKUP_FILE="${BACKUP_FOLDER}hass-config_$(date -u +"%Y%m%d_%H%M%S").zip"
+BACKUP_FILE="${BACKUP_FOLDER}hass-config_$(date -u +"%Y%m%d_%H%M%S").tar.gz"
+BACKUP_LOCATION=/config  # Adjusted for the Docker mount
+DAYSTOKEEP=0  # Set to 0 to keep backups forever
 
+# Logging function
 log() {
-        if [ "${DEBUG}" == "true" ] || [ "${1}" != "d" ]; then
-                echo "[${1}] ${2}"
-                if [ "${3}" != "" ]; then
-                        exit ${3}
-                fi
+    LEVEL=$1
+    MESSAGE=$2
+    EXITCODE=$3
+
+    if [ "$DEBUG" = "true" ] || [ "$LEVEL" != "d" ]; then
+        echo "[$LEVEL] $MESSAGE"
+        if [ -n "$EXITCODE" ]; then
+            exit "$EXITCODE"
         fi
+    fi
 }
 
-# guard conditions
-# not a mounted file system
-if [[ "$(stat --file-system --format=%T $BACKUP_FOLDER)" != 'smb2' ]]; then
-        log e "Backup folder not found. Is your drive mounted and does the path exist?" 1
-fi
-# no location to backup
-if [ ! -d "${BACKUP_LOCATION}" ]; then
-        log e "Home Assistant folder to back up not found. Is it correct?" 1
+# Guard: backup folder exists and is writable
+if [ ! -d "$BACKUP_FOLDER" ] || [ ! -w "$BACKUP_FOLDER" ]; then
+    log e "Backup folder not found or not writable. Is your drive mounted and path correct?" 1
 fi
 
-# backup
-pushd ${BACKUP_LOCATION} >/dev/null
-log i "Creating backup"
-zip -9 -q -r ${BACKUP_FILE} . -x"home-assistant.db" -x"home-assistant_v2.db" -x"home-assistant.log"
-popd >/dev/null
-log i "Backup complete: ${BACKUP_FILE}"
+# Guard: backup source exists
+if [ ! -d "$BACKUP_LOCATION" ]; then
+    log e "Home Assistant folder to back up not found. Is the path correct?" 1
+fi
 
-# purge
-if [ "${DAYSTOKEEP}" = 0 ] ; then
-        log i "Keeping all files no prunning set"
+# Backup process
+cd "$BACKUP_LOCATION" || log e "Failed to enter backup location." 1
+log i "Creating backup..."
+#zip -9 -q -r "$BACKUP_FILE" . -x "home-assistant.db" -x "home-assistant_v2.db" -x "home-assistant.log"
+tar --exclude="home-assistant.db" \
+    --exclude="home-assistant_v2.db" \
+    --exclude="home-assistant.log" \
+    -czf "$BACKUP_FILE" .
+log i "Backup complete: $BACKUP_FILE"
+
+# Purge old backups
+if [ "$DAYSTOKEEP" -eq 0 ]; then
+    log i "Keeping all files; no pruning set."
 else
-        log i "Deleting backups older then ${DAYSTOKEEP} day(s)"
-        OLDFILES=$(find ${BACKUP_FOLDER} -mindepth 1 -mtime +${DAYSTOKEEP} -delete -print)
-        if [ ! -z "${OLDFILES}" ] ; then
-                log i "Found the following old files:"
-                echo "${OLDFILES}"
-        fi
+    log i "Deleting backups older than $DAYSTOKEEP day(s)..."
+    OLDFILES=$(find "$BACKUP_FOLDER" -mindepth 1 -mtime +"$DAYSTOKEEP" -delete -print)
+    if [ -n "$OLDFILES" ]; then
+        log i "Deleted the following old files:"
+        echo "$OLDFILES"
+    fi
 fi
 

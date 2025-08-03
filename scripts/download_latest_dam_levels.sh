@@ -10,6 +10,17 @@
 # 8. a new tab should open and take you here: # https://www.arcgis.com/home/item.html?id=afddd5afd6f948edb35b9be669343fca
 # 9. click the image icon that says download.
 # /usr/bin/wget https://www.arcgis.com/sharing/rest/content/items/fc2bbde9663d4a18a1b9fc3c6a38a0da/data -O /home/homeassistant/.homeassistant/downloads/latest_dam_levels.zip
+
+# old
 # /usr/bin/unzip -o -d /home/homeassistant/.homeassistant/downloads/ /home/homeassistant/.homeassistant/downloads/latest_dam_levels.zip
 # /usr/bin/cat "/home/homeassistant/.homeassistant/downloads/Dam levels 2012 to 2024.csv" | /usr/bin/tail -n 10 | /usr/bin/awk '!/,,,/{line=$0} END{print line}' - > /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
-/usr/bin/curl -sL https://www.arcgis.com/sharing/rest/content/items/fc2bbde9663d4a18a1b9fc3c6a38a0da/data | /usr/bin/funzip | /usr/bin/tail -n 10 | /usr/bin/awk '!/,,,/{line=$0} END{print line}' > /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
+#/usr/bin/curl -sL https://www.arcgis.com/sharing/rest/content/items/fc2bbde9663d4a18a1b9fc3c6a38a0da/data | /usr/bin/funzip | /usr/bin/tail -n 10 | /usr/bin/awk '!/,,,/{line=$0} END{print line}' > /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
+#/usr/bin/curl -sL https://www.arcgis.com/sharing/rest/content/items/2fdf5e9ae54044f387002a70b1328971/data | /usr/bin/tail -n 10 | /usr/bin/awk -F, 'NF > 1 && $1 != "" {line=$0} END{print line}' > /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
+
+#/usr/bin/curl -sL https://www.arcgis.com/sharing/rest/content/items/96a8ba830f7d46cf81cdc9169c5eef08/data | /usr/bin/tail -n 10 | /usr/bin/awk '!/,,,/{line=$0} END{print line}' > /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
+
+#/usr/bin/curl -sL https://www.arcgis.com/sharing/rest/content/items/96a8ba830f7d46cf81cdc9169c5eef08/data | /usr/bin/tail -n 1 > /home/homeassistant/.homeassistant/downloads/latest_dam_levels.csv
+
+# this will only work from within the docker container
+/usr/bin/curl -sL https://www.arcgis.com/sharing/rest/content/items/96a8ba830f7d46cf81cdc9169c5eef08/data | /usr/bin/tail -n 1 > /config/downloads/latest_dam_levels.csv
+

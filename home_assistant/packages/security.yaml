@@ -230,8 +230,17 @@ camera:
     # https://github.com/umlaeute/v4l2loopback
     # the ha docs state the -pred 1 is the default, but that option is nowhere to be found in the ffmpeg docs
     extra_arguments: >-
-      -vf "hue=s=0, drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:text='%{localtime\:%Y-%m-%d %T}':fontcolor=white@0.8:x=10:y=10"
-      -frames:v 1 -update 1
+      -vf "hue=s=0,
+           drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:
+             text='%{localtime\:%Y-%m-%d %T}':
+             fontcolor=white@0.8:
+             x=w-text_w-10:
+             y=10:
+             box=0:
+             borderw=2:
+             bordercolor=black@1"
+      -frames:v 1
+      -update 1
   # the proxy camera will contain the overlaid timestamp on the video stream (but you cannot record this stream):
   # https://community.home-assistant.io/t/camera-using-ffmpeg-platform-and-drawtext-overlay-showing-on-snapshot-but-not-recording/372129
   # can one configure an overlay in v4l2? yes, but it's hacky (for a dynamic piece of text)

@@ -118,7 +118,7 @@ sensor:
           {% set file_list = state_attr('sensor.home_assistant', 'file_list') | sort %}
           {% if file_list != [] %}
             {% set last_backup_file = file_list | last %}
-            {{ strptime(last_backup_file[-19:-4] ~ '+0000', '%Y%m%d_%H%M%S%z', None).isoformat() }}
+            {{ strptime(last_backup_file[-22:-7] ~ '+0000', '%Y%m%d_%H%M%S%z', None).isoformat() }}
           {% else %}
             {{ 0 | as_datetime }}
           {% endif %}
@@ -127,7 +127,7 @@ sensor:
           {% if file_list != [] %}
             {% set last_backup_file = file_list | last %}
             {# /mnt/nas/Backups/home_assistant/hass-config_20250801_123524.zip #}
-            {% set last_backup_dt = strptime(last_backup_file[-19:-4] ~ '+0000', '%Y%m%d_%H%M%S%z', 0 | as_datetime) %}
+            {% set last_backup_dt = strptime(last_backup_file[-22:-7] ~ '+0000', '%Y%m%d_%H%M%S%z', 0 | as_datetime) %}
             {% if (utcnow() - last_backup_dt).days > 4 %}
               mdi:file-alert-outline
             {% else %}

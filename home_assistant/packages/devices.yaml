@@ -136,12 +136,12 @@ binary_sensor:
         value_template: >
           {{ is_state('binary_sensor.gaia_audio_input_in_use', 'on') or
              is_state('input_boolean.gaia_audio_input_in_use_alt', 'on') }}
-  # for future use
-  # - binary_sensor:
-  #     - name: ""
-  #       unique_id: ""
-  #       state: "{{ has_value('switch.') }}"
-  #       device_class: connectivity
+
+template:
+  - binary_sensor:
+      - name: Doorbell Online
+        state: "{{ has_value('binary_sensor.doorbell_motion_detected') }}"
+        device_class: connectivity
 
 automation:
   - alias: "See Mobile Devices"

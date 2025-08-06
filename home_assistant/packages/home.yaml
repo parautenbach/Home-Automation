@@ -1868,10 +1868,12 @@ automation:
     id: "a57345d4-eec3-42b6-970d-84e2b77fb646"
     initial_state: true
     trigger:
+      # note: we cannot use this, since we're using a positive offset
+      # https://www.home-assistant.io/docs/automation/trigger/#sensors-of-datetime-device-class-with-offsets
       - platform: template
         value_template: >-
           {% set current = now().replace(second=0).replace(microsecond=0) %}
-          {% set target = states('input_datetime.go_home_reminder') | today_at + timedelta(minutes=45) %}
+          {% set target = states('input_datetime.go_home_reminder') | today_at + timedelta(minutes=30) %}
           {{ current == target }}
     actions:
       - service: notify.family

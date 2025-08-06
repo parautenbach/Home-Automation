@@ -94,7 +94,7 @@ sensor:
   # used to check backups
   - platform: folder
     folder: /mnt/nas/Backups/home_assistant/
-    filter: 'hass-config_*.zip'
+    filter: 'hass-config_*.tar.gz'
     scan_interval: 3600
 
   - platform: folder

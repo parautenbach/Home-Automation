@@ -369,9 +369,7 @@ template:
           solar_reserve_percentage: "{{ states('sensor.solar_reserve_percentage_5min_average') }}"
           home_power: "{{ states('sensor.home_power_5min_average') }}"
           grid_feed: "{{ states('binary_sensor.grid_feed') }}"
-          solar_energy_utilisation_today: >-
-            {{ [states('sensor.average_solar_energy_forecast_today') | float(0),
-                states('sensor.daily_solar_energy_consumption') | float(0)] | max | round(1) }}
+          solar_energy_utilisation_today: "{{ states('sensor.solar_energy_utilisation_today') }}"
           solar_energy_forecast_today: "{{ states('sensor.average_solar_energy_forecast_today') }}"
           solar_energy_forecast_tomorrow: "{{ states('sensor.energy_production_tomorrow') }}"
           charge_mode: "{{ states('sensor.charge_mode') }}"

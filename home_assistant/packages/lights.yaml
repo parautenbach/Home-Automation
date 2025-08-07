@@ -1035,7 +1035,7 @@ automation:
           {{ states.light
               | selectattr('state', 'eq', 'on')
               | rejectattr('attributes.entity_id', 'defined')
-              | rejectattr('attributes.entity_id', 'in', ['light.led', 'light.doorbell_ring_light', 'light.doorbell_infrared'])
+              | rejectattr('entity_id', 'in', ['light.led', 'light.doorbell_ring_light', 'light.doorbell_infrared'])
               | list
               | length > 0 }}
       - service: notify.mobile_app_ceres

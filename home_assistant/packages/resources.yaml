@@ -1584,7 +1584,7 @@ automation:
           message: >-
             {% set charge = states('sensor.battery_state_of_charge') | int(0) %}
             {% set target = states('sensor.capacity_charge_point') | int(0) %}
-            The backup power battery has discharged to {{ charge }}%, which is 15% below the charge point target ({{ target }}%). Please conserve energy.
+            The backup power battery's charge is at {{ charge }}%, which is 15% below the charge point target ({{ target }}%). Please conserve energy.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources

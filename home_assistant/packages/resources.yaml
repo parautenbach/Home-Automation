@@ -371,7 +371,7 @@ template:
           grid_feed: "{{ states('binary_sensor.grid_feed') }}"
           solar_energy_utilisation_today: >-
             {{ [states('sensor.average_solar_energy_forecast_today') | float(0),
-                states('sensor.daily_solar_energy_consumption') | float(0)] | max }}
+                states('sensor.daily_solar_energy_consumption') | float(0)] | max | round(1) }}
           solar_energy_forecast_today: "{{ states('sensor.average_solar_energy_forecast_today') }}"
           solar_energy_forecast_tomorrow: "{{ states('sensor.energy_production_tomorrow') }}"
           charge_mode: "{{ states('sensor.charge_mode') }}"

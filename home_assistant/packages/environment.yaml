@@ -944,6 +944,34 @@ automation:
     action:
       - service: shell_command.download_latest_dam_levels
 
+  - alias: "Send Dam Level Update"
+    id: "40f9506b-f35b-43ca-903b-7c7b3f006510"
+    trigger:
+      - platform: state
+        entity_id: sensor.total_dam_level
+        not_from: "unavailable"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "💧 Dam Levels"
+          message: >-
+            {% set previous_dam_levels = trigger.from_state.state | float(0) | round(1) %}
+            {% set new_dam_levels = trigger.to_state.state | float(0) | round(1) %}
+            {% set change = (new_dam_levels - previous_dam_levels) | abs | round(1) %}
+            {% set previous_year_dam_levels = states('sensor.total_dam_level_previous_year') | float(0) | round(1) %}
+            {% set update = '' %}
+            {% if new_dam_levels > previous_dam_levels %}
+              {% set update = 'rose by ' ~ change ~ '% to ' ~ new_dam_levels ~ '%' %}
+            {% elif new_dam_levels < previous_dam_levels %}
+              {% set update = 'dropped by ' ~ change ~ '% to ' ~ new_dam_levels ~ '%' %}
+            {% else %}
+              {% set update = 'is stable at ' ~ new_dam_levels ~ '%' %}
+            {% endif %}
+            Dam levels {{ update }}. Last year it was at {{ previous_year_dam_levels }}%.
+          data:
+            url: homeassistant://navigate/lovelace/environment
+            group: "environment"
+
   - alias: "Pollen Levels Update"
     id: "eeb7f4a7-367d-4aee-b4d5-cf84da3b1323"
     initial_state: true

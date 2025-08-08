@@ -1178,10 +1178,13 @@ automation:
     trigger:
       - platform: state
         entity_id: sensor.bedroom_ht_temperature
+        # trigger on any state change, but not attribute changes
+        to: null
       - platform: time_pattern
         minutes: "/30"
       - platform: homeassistant
         event: start
+    mode: single
     action:
       - service: homeassistant.update_entity
         target:

@@ -174,27 +174,32 @@ template:
   # time, one must prevent an infinite loop, because even if the state doesn't get
   # updated, there will still be an event emitted. this is why the state template needs
   # to update only when the first trigger gets triggered.
-  - trigger:
-    - platform: event
-      event_type: amcrest
-      event_data:
-        event: CallNoAnswered
-        payload:
-          action: Start
-    - platform: state
-      entity_id: binary_sensor.doorbell_rang
-      to: "off"
-    binary_sensor:
+  # - trigger:
+  #   - platform: event
+  #     event_type: amcrest
+  #     event_data:
+  #       event: CallNoAnswered
+  #       payload:
+  #         action: Start
+  #   - platform: state
+  #     entity_id: binary_sensor.doorbell_rang
+  #     to: "off"
+  #   binary_sensor:
+  #     - name: Doorbell Rang
+  #       # https://github.com/home-assistant/core/issues/39932
+  #       # https://github.com/home-assistant/core/issues/58056
+  #       # https://github.com/home-assistant/core/issues/66459
+  #       # https://github.com/home-assistant/home-assistant.io/pull/22021
+  #       icon: "{{ (trigger.platform == 'event') | iif('mdi:bell-ring-outline', 'mdi:bell-outline') }}"
+  #       state: "{{ trigger.platform == 'event' }}"
+  #       # https://github.com/home-assistant/core/issues/67397
+  #       auto_off:
+  #         seconds: 5
+  - binary_sensor:
       - name: Doorbell Rang
-        # https://github.com/home-assistant/core/issues/39932
-        # https://github.com/home-assistant/core/issues/58056
-        # https://github.com/home-assistant/core/issues/66459
-        # https://github.com/home-assistant/home-assistant.io/pull/22021
-        icon: "{{ (trigger.platform == 'event') | iif('mdi:bell-ring-outline', 'mdi:bell-outline') }}"
-        state: "{{ trigger.platform == 'event' }}"
-        # https://github.com/home-assistant/core/issues/67397
-        auto_off:
-          seconds: 5
+        icon: "{{ state_attr('binary_sensor.doorbell_button_pressed', 'icon') }}"
+        state: "{{ states('binary_sensor.doorbell_button_pressed') }}"
+
   - binary_sensor:
       - name: "Main Gate Alert"
         unique_id: "c0519290-d5b4-4c3f-9809-906316d94b04"

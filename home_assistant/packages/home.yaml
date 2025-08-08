@@ -1174,6 +1174,8 @@ automation:
       - platform: state
         entity_id:
           - climate.main_bedroom_ac
+        # trigger only on state changes
+        to: null
         # attribute: preset_mode
         # to: "sleep"
       - platform: state

@@ -935,6 +935,7 @@ rest:
           {{ value_json["list"][0]["components"]["so2"] }}
 
 automation:
+  # note: the individual dam levels and other meta data is parsed via the file integration (set up via the ui)
   - alias: "Download Dam Levels Data"
     id: "0cb4d6ba-5a63-45f7-8adc-efb98724a44e"
     trigger:

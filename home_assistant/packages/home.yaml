@@ -943,6 +943,22 @@ automation:
             group: "routine-change"
             url: homeassistant://navigate/lovelace/main
 
+  # https://developers.google.com/maps/documentation/routes/reference/rest/v2/TopLevel/computeRoutes#request-body
+  #
+  # curl -X POST -d '{
+  #  "origin":{
+  #    "address": "Stellenbosch, South Africa"
+  #  },
+  #  "destination":{
+  #    "address": "Cape Town, South Africa"
+  #  },
+  #  "travelMode": "DRIVE",
+  #  "languageCode": "en-US",
+  #  "units": "METRIC"
+  # }' \
+  # -H 'Content-Type: application/json' -H 'X-Goog-Api-Key: <API_KEY>' \
+  # -H 'X-Goog-FieldMask: routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline' \
+  # 'https://routes.googleapis.com/directions/v2:computeRoutes'
   - alias: "Notify Pieter Going Home from Work in Cape Town"
     id: "5515c06c-6c69-443d-9549-eb00999e8b95"
     trigger:

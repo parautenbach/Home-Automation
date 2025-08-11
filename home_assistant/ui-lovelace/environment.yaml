@@ -497,6 +497,10 @@ cards:
                   state-badge {
                     margin: 0;
                   }
+          - entity: sensor.outside_temperature_filtered
+            name: Outside
+            icon: mdi:weather-partly-cloudy
+            card_mod: *card_mod_temp_style
           - entity: sensor.main_bedroom_ht_temperature
             name: Main Bedroom
             icon: mdi:bed-king-outline
@@ -505,9 +509,9 @@ cards:
             name: Bedroom
             icon: mdi:bed-single-outline
             card_mod: *card_mod_temp_style
-          - entity: sensor.outside_temperature_filtered
-            name: Outside
-            icon: mdi:weather-partly-cloudy
+          - entity: sensor.guest_bedroom_ht_temperature
+            name: Guest Room
+            icon: mdi:bed-single-outline
             card_mod: *card_mod_temp_style
       - type: glance
         entities:
@@ -739,6 +743,9 @@ cards:
               - entity: sensor.bedroom_ht_temperature
                 name: Bedroom
                 color: var(--custom-color-magenta)
+              - entity: sensor.guest_bedroom_ht_temperature
+                name: Guest Bedroom
+                color: var(--custom-color-blue)
               - entity: sensor.outside_temperature_filtered
                 name: Outside
                 color: var(--custom-color-red)
@@ -772,6 +779,9 @@ cards:
               - entity: sensor.bedroom_ht_humidity
                 name: Bedroom
                 color: var(--custom-color-magenta)
+              - entity: sensor.guest_bedroom_ht_humidity
+                name: Guest Bedroom
+                color: var(--custom-color-blue)
               - entity: sensor.openweathermap_humidity
                 name: Outside
                 color: var(--custom-color-red)

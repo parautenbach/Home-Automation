@@ -197,8 +197,9 @@ template:
   #         seconds: 5
   - binary_sensor:
       - name: Doorbell Rang
-        icon: "{{ state_attr('binary_sensor.doorbell_button_pressed', 'icon') }}"
-        state: "{{ states('binary_sensor.doorbell_button_pressed') }}"
+        icon: "{{ state_attr('binary_sensor.doorbell_call_no_answered', 'icon') }}"
+        # sensor remains on for 10 s
+        state: "{{ states('binary_sensor.doorbell_call_no_answered') }}"
 
   - binary_sensor:
       - name: "Main Gate Alert"

@@ -957,7 +957,8 @@ automation:
           message: >-
             {% set previous_dam_levels = trigger.from_state.state | float(0) | round(1) %}
             {% set new_dam_levels = trigger.to_state.state | float(0) | round(1) %}
-            {% set change = (new_dam_levels - previous_dam_levels) | abs | round(1) %}
+            {# the other option is to use percentage points for a pure delta #}
+            {% set change = ((new_dam_levels - previous_dam_levels)/previous_dam_levels*100) | abs | round(1) %}
             {% set previous_year_dam_levels = states('sensor.total_dam_level_previous_year') | float(0) | round(1) %}
             {% set update = '' %}
             {% if new_dam_levels > previous_dam_levels %}

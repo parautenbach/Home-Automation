@@ -201,7 +201,7 @@ cards:
       #             }
       #             ha-icon {
       #               padding: 0px;
-      #               color: var(--paper-item-icon-color);
+      #               color: var(--state-icon-color);
       #             }
   - type: vertical-stack
     title: Home Network

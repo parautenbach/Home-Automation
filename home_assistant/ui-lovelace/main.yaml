@@ -66,17 +66,17 @@ cards:
                 - grid-template-columns: 1fr min-content 1fr
               custom_fields:
                 s:
-                  - color: var(--paper-item-icon-color)
+                  - color: var(--state-icon-color)
                 p:
                   - align-self: middle
                   - justify-self: end
                   - padding-right: 1ex
-                  - color: var(--paper-item-icon-color)
+                  - color: var(--state-icon-color)
                 r:
                   - align-self: middle
                   - justify-self: start
                   - padding-left: 1ex
-                  - color: var(--paper-item-icon-color)
+                  - color: var(--state-icon-color)
             custom_fields:
               s: >
                 [[[ return '/'; ]]]

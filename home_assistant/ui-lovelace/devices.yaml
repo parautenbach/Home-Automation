@@ -71,7 +71,7 @@ cards:
       card_mod:
         style: |
           .icon {
-            color: var(--paper-item-icon-color);
+            color: var(--state-icon-color);
           }
       show_header_toggle: false
     - type: entities
@@ -84,7 +84,7 @@ cards:
       card_mod:
         style: |
           .icon {
-            color: var(--paper-item-icon-color);
+            color: var(--state-icon-color);
           }
       show_header_toggle: false
     - type: entities
@@ -93,7 +93,7 @@ cards:
       card_mod:
         style: |
           .icon {
-            color: var(--paper-item-icon-color);
+            color: var(--state-icon-color);
           }
       entities:
         - sensor.thor_disk_usage
@@ -116,7 +116,7 @@ cards:
           - padding-right: 5px
           - padding-left: 85%
         name:
-          - color: var(--paper-item-icon-color)
+          - color: var(--state-icon-color)
           - justify-self: start
         card:
           - padding: 1%
@@ -310,6 +310,8 @@ cards:
             name: Baby's
           - entity: light.kitchen_counter
             name: Kitchen Cntr
+          - entity: light.scullery_counter
+            name: Scullery Cntr
           - entity: light.living_room_lamp
             name: Living R.
           - entity: light.living_room_fairy_lights
@@ -318,6 +320,8 @@ cards:
             name: Dining R.
           - entity: light.music_room
             name: Music R.
+          - entity: light.office
+            name: Office
           - entity: light.hallway
             name: Hallway
           - entity: light.foyer

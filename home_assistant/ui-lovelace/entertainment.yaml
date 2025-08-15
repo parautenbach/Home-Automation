@@ -124,6 +124,7 @@ cards:
                         aspect_ratio: 3.2
                         show_name: false
                         icon: mdi:apple
+                        color_type: icon
                         tap_action:
                           action: call-service
                           service: script.turn_on
@@ -195,7 +196,7 @@ cards:
                               - width: 20px
                         custom_fields:
                           source: >
-                            [[[ return `<ha-icon icon="mdi:numeric-1" style="color: var(--paper-item-icon-color);"></ha-icon>` ]]]
+                            [[[ return `<ha-icon icon="mdi:numeric-1" style="color: var(--state-icon-color);"></ha-icon>` ]]]
                         tap_action:
                           action: call-service
                           haptic: light
@@ -224,7 +225,7 @@ cards:
                               - width: 20px
                         custom_fields:
                           source: >
-                            [[[ return `<ha-icon icon="mdi:numeric-2" style="color: var(--paper-item-icon-color);"></ha-icon>` ]]]
+                            [[[ return `<ha-icon icon="mdi:numeric-2" style="color: var(--state-icon-color);"></ha-icon>` ]]]
                       - type: entity-button
                         entity: script.hk_3380_dimmer
                         show_name: false

@@ -987,7 +987,7 @@ cards:
         card_mod:
           style: |
             .icon {
-              color: var(--paper-item-icon-color);
+              color: var(--state-icon-color);
             }
         show_header_toggle: false
         entities:

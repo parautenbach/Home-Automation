@@ -124,7 +124,7 @@ badges:
     #     ha-state-label-badge $ ha-label-badge $: |
     #       .badge-container .label-badge .value::after {
     #         content: "{{ states(config.entity) | float(0) | round(0) }}";
-    #         font-size: var(--paper-font-body1_-_font-size);
+    #         font-size: var(--ha-font-size-m);
     #       }
     #       .badge-container .label-badge .value {
     #         font-size: 0px;
@@ -234,7 +234,7 @@ cards:
                 card_mod:
                   style: |
                     .icon {
-                      color: var(--paper-item-icon-color);
+                      color: var(--state-icon-color);
                     }
                 show_header_toggle: false
                 entities:

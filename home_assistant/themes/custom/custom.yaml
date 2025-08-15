@@ -1,5 +1,5 @@
 custom-light-mode:
-  mini-media-player-base-color: var(--paper-item-icon-color)
+  mini-media-player-base-color: var(--state-icon-color)
   # https://community.home-assistant.io/t/card-mod-super-charge-your-themes/212176/1949
   card-mod-theme: custom-light-mode
   card-mod-view-yaml: |

@@ -124,7 +124,6 @@ cards:
                         aspect_ratio: 3.2
                         show_name: false
                         icon: mdi:apple
-                        color_type: icon
                         tap_action:
                           action: call-service
                           service: script.turn_on

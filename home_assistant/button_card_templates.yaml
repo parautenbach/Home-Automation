@@ -385,6 +385,27 @@ cover:
     - operator: template
       value: >
         [[[
+          return variables.occupancy_entity !== undefined && states[`${variables.occupancy_entity}`].state == "on";
+        ]]]
+      color: var(--state-binary_sensor-active-color)
+    - operator: template
+      value: >
+        [[[
+          return variables.occupancy_entity !== undefined && states[`${variables.occupancy_entity}`].state == "off";
+        ]]]
+      color: var(--state-icon-color)
+    - operator: template
+      # id: my_id
+      value: >
+        [[[
+          //var alert_entity_id = entity.entity_id.replace("cover.", "binary_sensor.") + "_alert";
+          //return states[alert_entity_id].state == "on";
+          return true;
+        ]]]
+      color: var(--state-icon-color)
+    - operator: template
+      value: >
+        [[[
           var alert_entity_id = entity.entity_id.replace("cover.", "binary_sensor.") + "_alert";
           return states[alert_entity_id].state == "on";
         ]]]
@@ -403,33 +424,6 @@ cover:
     service_data:
       entity_id: "[[[ return entity.entity_id.replace('cover.', 'timer.') + '_timer'; ]]]"
       duration: "00:10:00"
-cover_with_occupancy:
-  template:
-    - old_colors
-  triggers_update: all
-  state:
-    - operator: template
-      value: >
-        [[[
-          return states[`${variables.occupancy_entity}`].state == "on";
-        ]]]
-      color: var(--state-binary_sensor-active-color)
-    - operator: template
-      value: >
-        [[[
-          return states[`${variables.occupancy_entity}`].state == "off";
-        ]]]
-      color: var(--paper-item-icon-color)
-    - value: 'unavailable'
-      styles:
-        icon:
-          - color: var(--state-unavailable-color)
-  double_tap_action:
-    action: call-service
-    haptic: medium
-    service: script.close_garage_door_and_main_gate
-    service_data:
-      garage_door: "[[[ return entity.entity_id; ]]]"
 devices_common:
   state:
     - operator: template

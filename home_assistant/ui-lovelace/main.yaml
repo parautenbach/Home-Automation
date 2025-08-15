@@ -360,15 +360,20 @@ cards:
         cards:
           - type: custom:button-card
             template:
-              - cover_with_timer
-              - cover_with_occupancy
+              - cover
             variables:
               occupancy_entity: binary_sensor.garage_doors_lhs_occupied
             name: Rouvé
             entity: cover.garage_doors_lhs
+            double_tap_action:
+              action: call-service
+              haptic: medium
+              service: script.close_garage_door_and_main_gate
+              service_data:
+                garage_door: "[[[ return entity.entity_id; ]]]"
           - type: custom:button-card
             template:
-              - cover_with_timer
+              - cover
             name: Gate
             entity: cover.main_gate
             double_tap_action:
@@ -379,12 +384,17 @@ cards:
                 entity_id: script.open_pedestrian_gap
           - type: custom:button-card
             template:
-              - cover_with_timer
-              - cover_with_occupancy
+              - cover
             variables:
               occupancy_entity: binary_sensor.garage_doors_rhs_occupied
             name: Pieter
             entity: cover.garage_doors_rhs
+            double_tap_action:
+              action: call-service
+              haptic: medium
+              service: script.close_garage_door_and_main_gate
+              service_data:
+                garage_door: "[[[ return entity.entity_id; ]]]"
       - type: history-graph
         title: Who's Home?
         hours_to_show: 24

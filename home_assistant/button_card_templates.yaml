@@ -38,9 +38,21 @@ clock:
 old_colors:
   styles:
     card:
+      # map ha’s theme vars into cbc's shadow dom
       - '--state-icon-active-color': var(--state-active-color)
-      # --paper-item-icon-color still works for off (but not the icon-active one below)
+      - '--state-unavailable-color': var(--state-icon-unavailable-color)
+      # legacy (polymer) vars
+      - '--paper-item-icon-color': var(--state-icon-color)
       - '--paper-item-icon-active-color': var(--state-icon-active-color)
+  state:
+    - value: 'on'
+      color: var(--state-icon-active-color)
+    - value: 'off'
+      color: var(--state-icon-color)
+    - value: 'unavailable'
+      styles:
+        icon:
+          - color: var(--state-unavailable-color)
 basic:
   template:
     - old_colors
@@ -63,15 +75,6 @@ basic:
       - grid-template-areas: '"l" "i" "n"'
       - grid-template-rows: min-content 1fr min-content
       - grid-template-columns: 1fr
-  state:
-    - value: 'on'
-      color: var(--state-icon-active-color)
-    - value: 'off'
-      color: var(--state-icon-color)
-    - value: 'unavailable'
-      styles:
-        icon:
-          - color: var(--state-unavailable-color)
   tap_action:
     action: toggle
     haptic: light
@@ -82,11 +85,12 @@ light_with_timer:
   template:
     - old_colors
   size: 20%
+  color_type: icon
   styles:
     name:
       - color: var(--state-icon-color)
     label:
-      - color: var(--primary-background-color)
+      - color: var(--state-icon-color)
     card:
       - font-size: 12px
     grid:
@@ -121,15 +125,6 @@ light_with_timer:
           action: none
         hold_action:
           action: none
-  state:
-    - value: 'on'
-      color: var(--state-icon-active-color)
-    - value: 'off'
-      color: var(--state-icon-color)
-    - value: 'unavailable'
-      styles:
-        icon:
-          - color: var(--state-unavailable-color)
   tap_action:
     action: toggle
     haptic: light
@@ -144,8 +139,6 @@ light_with_timer:
     action: more-info
     haptic: selection
 rgb_light:
-  template:
-    - old_colors
   variables:
     above_threshold: |
       [[[
@@ -234,10 +227,7 @@ rgb_light:
   hold_action:
     action: more-info
     haptic: selection
-
 rgb_light_with_timer:
-  template:
-    - old_colors
   styles:
     grid:
       - grid-template-areas: '"t s l" "i i i" "n n n"'
@@ -337,8 +327,6 @@ light_preset:
       entity_id: entity
       profile: "[[[ return variables.profile; ]]]"
 cover:
-  template:
-    - old_colors
   triggers_update: all
   size: 20%
   show_name: true

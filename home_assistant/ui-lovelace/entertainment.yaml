@@ -120,6 +120,7 @@ cards:
                   - type: horizontal-stack
                     cards:
                       - type: custom:button-card
+                        template: old_colors
                         entity: script.samsung_tv_hdmi2
                         aspect_ratio: 3.2
                         show_name: false
@@ -130,6 +131,7 @@ cards:
                           service_data:
                             entity_id: script.samsung_tv_hdmi2
                       - type: custom:button-card
+                        template: old_colors
                         entity: script.samsung_tv_hdmi1
                         aspect_ratio: 3.2
                         show_name: false
@@ -168,6 +170,7 @@ cards:
                           service_data:
                             entity_id: script.hk_3380_power_on
                       - type: custom:button-card
+                        template: old_colors
                         entity: script.hk_3380_power_off
                         aspect_ratio: 3.2
                         show_name: false
@@ -180,6 +183,7 @@ cards:
                   - type: horizontal-stack
                     cards:
                       - type: custom:button-card
+                        template: old_colors
                         entity: script.hk_3380_vid1
                         show_name: false
                         size: 45%
@@ -203,6 +207,7 @@ cards:
                           service_data:
                             entity_id: script.hk_3380_vid1
                       - type: custom:button-card
+                        template: old_colors
                         entity: script.hk_3380_vid2
                         show_name: false
                         size: 45%
@@ -237,6 +242,7 @@ cards:
                   - type: horizontal-stack
                     cards:
                       - type: custom:button-card
+                        template: old_colors
                         entity: script.hk_3380_vol_down
                         show_name: false
                         tap_action:
@@ -259,6 +265,7 @@ cards:
                           service_data:
                             entity_id: script.hk_3380_vol_down_minus_5
                       - type: custom:button-card
+                        template: old_colors
                         entity: script.hk_3380_vol_up
                         show_name: false
                         tap_action:
@@ -303,6 +310,7 @@ cards:
                   - type: horizontal-stack
                     cards:
                       - type: custom:button-card
+                        template: old_colors
                         entity: script.apple_tv_menu
                         aspect_ratio: 3.2
                         show_name: false
@@ -313,6 +321,7 @@ cards:
                           service_data:
                             entity_id: script.apple_tv_menu
                       - type: custom:button-card
+                        template: old_colors
                         entity: script.apple_tv_home
                         aspect_ratio: 3.2
                         show_name: false

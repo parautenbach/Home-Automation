@@ -101,6 +101,7 @@ cards:
       title: Devices
       content: "Double tap will restart; hold will shut down (where supported)."
     - type: custom:button-card
+      template: old_colors
       entity: script.shutdown_all_remote_hosts
       name: Shutdown All
       icon: mdi:server

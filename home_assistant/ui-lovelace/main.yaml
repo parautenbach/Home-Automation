@@ -536,6 +536,18 @@ cards:
                       .mdc-select__anchor {
                         height: 2.5em !important;
                       }
+                # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/8844
+                hui-generic-entity-row ha-time-input $:
+                  ha-base-time-input $ ha-textfield $: |
+                    span#label {
+                      display: none;
+                    }
+                    label {
+                      align-items: center !important;
+                    }
+                    .mdc-text-field__affix--suffix {
+                      align-content: center;
+                    }
           - entity: input_boolean.skip_next_wake_up_time
             name: Skip Next
           - entity: input_datetime.vacation_start

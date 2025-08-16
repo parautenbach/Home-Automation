@@ -960,6 +960,8 @@ automation:
             {# the other option is to use percentage points for a pure delta #}
             {% set change = ((new_dam_levels - previous_dam_levels)/previous_dam_levels*100) | abs | round(1) %}
             {% set previous_year_dam_levels = states('sensor.total_dam_level_previous_year') | float(0) | round(1) %}
+            {% set time_delta = (trigger.to_state.last_changed - trigger.from_state.last_changed).total_seconds() %}
+            {% set days_since = (time_delta / 86400) | round(0) %}
             {% set update = '' %}
             {% if new_dam_levels > previous_dam_levels %}
               {% set update = 'rose by ' ~ change ~ '% to ' ~ new_dam_levels ~ '%' %}
@@ -968,7 +970,8 @@ automation:
             {% else %}
               {% set update = 'is stable at ' ~ new_dam_levels ~ '%' %}
             {% endif %}
-            Dam levels {{ update }}. Last year it was at {{ previous_year_dam_levels }}%.
+            {# updates are never just 1 day apart; ignoring the singular case #}
+            Dam levels {{ update }} over the past {{ days_since }} days. Last year it was at {{ previous_year_dam_levels }}%.
           data:
             url: homeassistant://navigate/lovelace/environment
             group: "environment"

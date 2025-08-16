@@ -39,6 +39,12 @@ badges:
     show_name: true
     show_state: false
   - type: entity
+    entity: binary_sensor.kitchen_motion_detector_motion
+    name: Kitchen
+    show_icon: true
+    show_name: true
+    show_state: false
+  - type: entity
     entity: binary_sensor.cabinet_door
     name: Cabinet
     show_icon: true

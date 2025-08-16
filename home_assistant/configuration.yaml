@@ -36,8 +36,8 @@ logger:
   default: warning
   logs:
     # the warnings from this component is too verbose
-    amcrest.http: error
-    homeassistant.components.amcrest: error
+    # amcrest.http: error
+    # homeassistant.components.amcrest: error
     # why the ping sensor needs to error on timeout, beats me.
     # to be off, it _needs_ to timeout, so why raise an error?
     homeassistant.components.ping.binary_sensor: fatal

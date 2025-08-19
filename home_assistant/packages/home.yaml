@@ -1918,4 +1918,4 @@ automation:
               - Forecasted min: {{ outside_min }}.
           data:
             group: "routine-bedtime"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace/baby

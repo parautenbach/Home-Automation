@@ -1751,8 +1751,8 @@ automation:
               data:
                 actions:
                   - action: "TRASH_PUT_OUT"
-                    destructive: true
                     title: "Done"
+                    destructive: true
                 group: "routine-trash"
                 tag: "routine-trash"
                 url: homeassistant://navigate/lovelace/main

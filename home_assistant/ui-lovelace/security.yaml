@@ -79,24 +79,14 @@ cards:
               - armed_home
               - armed_away
               - disarmed
-        # this works in conjunction with www/custom.js
         card_mod: &alarm_mods
-          style:
-            hui-card-features $ hui-alarm-modes-card-feature $ div ha-control-select $ div: |
-              #option-armed_home {
-                --control-select-color: #ffa800 !important;
-              }
-              #option-armed_away {
-                --control-select-color: #aa0000 !important;
-              }
-              #option-disarmed {
-                --control-select-color: #40b100 !important;
-              }
-            hui-card-features $ div hui-card-feature $ hui-alarm-modes-card-feature $ ha-control-button-group ha-control-button $ button: |
-              .button {
-                background-color: #40b100 !important;
-                color: white !important;
-              }
+          style: |
+            :host {
+              --state-alarm_control_panel-armed_home-color: #ffa800 !important;
+              --state-alarm_control_panel-armed_away-color: #aa0000 !important;
+              --state-alarm_control_panel-disarmed-color: #40b100 !important;
+              --state-alarm_control_panel-triggered-color: #135dd8 !important;
+            }
       - type: tile
         entity: alarm_control_panel.flatlet
         name: "Flatlet Alarm"
@@ -114,6 +104,15 @@ cards:
             name: Home
           - entity: alarm_control_panel.flatlet
             name: Flatlet
+        card_mod:
+          style: |
+            :host {
+              --state-alarm_control_panel-armed_home-color: #ffa800;
+              --state-alarm_control_panel-armed_away-color: #aa0000;
+              --state-alarm_control_panel-armed_custom_bypass-color: #aa0000;
+              --state-alarm_control_panel-disarmed-color: #40b100;
+              --state-alarm_control_panel-triggered-color: #135dd8;
+            }
       - type: horizontal-stack
         title: Smoke Detectors
         cards:
@@ -364,6 +363,8 @@ cards:
             name: Doorbell
           - entity: binary_sensor.foyer_occupancy_homebridge
             name: Foyer M.
+          - entity: binary_sensor.kitchen_motion_detector_motion
+            name: Kitchen
           - entity: light.foyer
             name: Foyer L.
           - entity: light.living_room_lamp

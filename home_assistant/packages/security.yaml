@@ -576,7 +576,7 @@ automation:
                         sound:
                           name: default
                           critical: 1
-                          volume: 0.5
+                          volume: 0.3
                 # saving for later:
                 # if e.g. the gate is open, but the timer was disabled, don't start it now, since it was intentional
                 # if the timer wasn't disabled, it will be restored, so the normal mechanism will notify
@@ -673,7 +673,7 @@ automation:
               sound:
                 name: default
                 critical: 1
-                volume: 0.5
+                volume: 0.3
       - service: timer.start
         target:
           entity_id: "{{ trigger.event.data.entity_id }}"
@@ -1023,7 +1023,7 @@ automation:
               sound:
                 name: default
                 critical: 1
-                volume: 0.5
+                volume: 0.3
             actions:
               - action: "GET_HELP"
                 title: "Get help!"
@@ -1129,7 +1129,7 @@ automation:
                       sound:
                         name: default
                         critical: 1
-                        volume: 0.5
+                        volume: 0.3
         default:
           - service: notify.mobile_app_ceres
             data:

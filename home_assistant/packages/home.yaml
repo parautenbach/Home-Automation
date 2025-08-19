@@ -1025,7 +1025,7 @@ automation:
                   # https://stackoverflow.com/questions/72671060/ios-custom-notification-sound-unnotificationsound-doesnt-play-when-iphone-is
                   name: "go_to_sleep_alert.caf"
                   critical: 1
-                  volume: 0.5
+                  volume: 0.3
                 # https://companion.home-assistant.io/docs/notifications/notification-attachments#configuration
                 attachment:
                   hide-thumbnail: true
@@ -1455,7 +1455,7 @@ automation:
               sound:
                 name: default
                 critical: 1
-                volume: 0.5
+                volume: 0.3
             actions:
               - action: "TURN_OFF_AC"
                 title: "Turn off"
@@ -1739,7 +1739,7 @@ automation:
                   sound:
                     name: default
                     critical: 1
-                    volume: 0.5
+                    volume: 0.3
           - service: input_boolean.turn_off
             target:
               entity_id: input_boolean.trash_reminder
@@ -1760,7 +1760,7 @@ automation:
                   sound:
                     name: default
                     critical: 1
-                    volume: 0.5
+                    volume: 0.3
 
   - alias: "Reset Trash Reminder"
     id: "84b06a96-a13b-46c1-b15c-41542bbcd05c"
@@ -1815,7 +1815,7 @@ automation:
               sound:
                 name: default
                 critical: 1
-                volume: 0.5
+                volume: 0.3
       - service: timer.start
         target:
           entity_id: timer.go_home_reminder

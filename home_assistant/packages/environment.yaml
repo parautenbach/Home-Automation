@@ -1161,7 +1161,7 @@ automation:
                             sound:
                               name: default
                               critical: 1
-                              volume: 0.5
+                              volume: 0.3
               default:
                 - service: notify.family
                   data:

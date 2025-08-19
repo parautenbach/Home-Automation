@@ -219,7 +219,7 @@ automation:
               sound:
                 name: default
                 critical: 1
-                volume: 0.5
+                volume: 0.3
 
   - alias: "Check For Low Batteries"
     id: "5ff59069-6f3c-4f9d-bc66-b50bea8e184e"

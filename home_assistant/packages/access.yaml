@@ -280,7 +280,7 @@ automation:
                 sound:
                   name: "Doorbell.caf"
                   critical: 1
-                  volume: 0.5
+                  volume: 0.3
                 attachment:
                   # url: !secret doorbell_camera_last_snapshot_url
                   hide-thumbnail: true

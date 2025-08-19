@@ -1104,7 +1104,7 @@ automation:
                       sound:
                         name: default
                         critical: 1
-                        volume: 0.5
+                        volume: 0.3
         default:
           - service: notify.family
             data:
@@ -1229,7 +1229,7 @@ automation:
               sound:
                 name: default
                 critical: 1
-                volume: 0.5
+                volume: 0.3
       - condition: state
         entity_id: binary_sensor.tenant_present
         state: "on"
@@ -1562,7 +1562,7 @@ automation:
               sound:
                 name: default
                 critical: 1
-                volume: 0.5
+                volume: 0.3
 
   - alias: "Notify If Too Far Below Charge Point Target"
     id: "77692f4f-04fb-4bf3-9c67-69cffb0a4c27"
@@ -1592,7 +1592,7 @@ automation:
               sound:
                 name: default
                 critical: 1
-                volume: 0.5
+                volume: 0.3
 
   - alias: "Notify If Inverter Temperature High"
     id: "fed52f97-a6ca-4e86-8d2b-f9b01fab40bf"
@@ -1625,7 +1625,7 @@ automation:
             #   sound:
             #     name: default
             #     critical: 1
-            #     volume: 0.5
+            #     volume: 0.3
       - service: input_boolean.turn_on
         entity_id: input_boolean.inverter_temperature_notification_governor
 
@@ -1660,7 +1660,7 @@ automation:
             #   sound:
             #     name: default
             #     critical: 1
-            #     volume: 0.5
+            #     volume: 0.3
       - service: input_boolean.turn_off
         entity_id: input_boolean.inverter_temperature_notification_governor
 
@@ -1690,7 +1690,7 @@ automation:
             #   sound:
             #     name: default
             #     critical: 1
-            #     volume: 0.5
+            #     volume: 0.3
       - service: input_boolean.turn_on
         entity_id: input_boolean.inverter_battery_temperature_notification_governor
 
@@ -1725,7 +1725,7 @@ automation:
             #   sound:
             #     name: default
             #     critical: 1
-            #     volume: 0.5
+            #     volume: 0.3
       - service: input_boolean.turn_off
         entity_id: input_boolean.inverter_temperature_notification_governor
 
@@ -1752,7 +1752,7 @@ automation:
             #   sound:
             #     name: default
             #     critical: 1
-            #     volume: 0.5
+            #     volume: 0.3
 
   - alias: "Notify If Charge Point Setting Automation State Was Changed"
     id: "0a36f9de-1f1d-4a4d-8079-1cf7d75d2dc8"
@@ -1782,7 +1782,7 @@ automation:
               sound:
                 name: default
                 critical: 1
-                volume: 0.5
+                volume: 0.3
             # todo: actions to enable/disable
 
   - alias: "Notify Tenant Of High Energy Consumption"
@@ -1822,7 +1822,7 @@ automation:
               sound:
                 name: default
                 critical: 1
-                volume: 0.5
+                volume: 0.3
       - service: script.turn_on
         target:
           entity_id: script.notify_tenant

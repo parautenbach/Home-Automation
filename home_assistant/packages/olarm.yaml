@@ -421,7 +421,7 @@ automation:
               sound:
                 name: default
                 critical: 1
-                volume: 0.5
+                volume: 0.3
             actions:
               - action: "GET_HELP"
                 title: "Get help!"
@@ -480,7 +480,7 @@ automation:
               sound:
                 name: default
                 critical: 1
-                volume: 0.5
+                volume: 0.3
 
   - alias: "Ask To Disarm Alarm When Arriving"
     id: "85753536-12f8-4a94-b292-7672ac96a4c2"
@@ -535,7 +535,7 @@ automation:
                   sound:
                     name: default
                     critical: 1
-                    volume: 0.5
+                    volume: 0.3
 
   - alias: "Turn On Yard Lights If Alarm Triggered"
     id: "50147e47-23b5-4ed4-973c-0c1e5243c731"
@@ -625,7 +625,7 @@ automation:
               sound:
                 name: default
                 critical: 1
-                volume: 0.5
+                volume: 0.3
 
   - alias: "Handle Alarm Notification Event"
     id: "c7a55b28-a909-4cf0-8f91-23f1d8a0e45a"

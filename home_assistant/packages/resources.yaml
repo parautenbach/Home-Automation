@@ -1892,12 +1892,12 @@ automation:
   # https://github.com/home-assistant/core/issues/71563
   #
   # sql sensor query:
-  #   SELECT COALESCE(SUM(state::FLOAT), 0) AS total
-  #   FROM states
-  #   WHERE metadata_id = 584
-  #     AND DATE(TO_TIMESTAMP(last_updated_ts)) = CURRENT_DATE
-  #     AND state ~ '^[0-9]+(\.[0-9]+)?$'
-  #   LIMIT 1;
+    # SELECT COALESCE(SUM(state::FLOAT), 0) AS total
+    # FROM states
+    # WHERE metadata_id = 584
+    #   AND DATE(TO_TIMESTAMP(last_updated_ts)) = CURRENT_DATE
+    #   AND state ~ '^[0-9]+(\.[0-9]+)?$'
+    # LIMIT 1;
   - alias: "Update Hourly Energy Forecast Aggregate"
     id: "622aa2bb-f5a0-4f0a-83b2-ff7864587098"
     initial_state: true

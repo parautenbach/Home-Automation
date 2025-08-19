@@ -445,6 +445,15 @@ cards:
         entities:
           - entity: alarm_control_panel.home
             name: Alarm
+        card_mod:
+          style: |
+            :host {
+              --state-alarm_control_panel-armed_home-color: #ffa800;
+              --state-alarm_control_panel-armed_away-color: #aa0000;
+              --state-alarm_control_panel-armed_custom_bypass-color: #aa0000;
+              --state-alarm_control_panel-disarmed-color: #40b100;
+              --state-alarm_control_panel-triggered-color: #135dd8;
+            }
       - type: custom:mini-graph-card
         name: Driving – Takealot HQ to Home
         # name: Current Travel Time

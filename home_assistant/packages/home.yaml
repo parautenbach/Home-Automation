@@ -1000,13 +1000,21 @@ automation:
         state: "on"
         for:
           minutes: 2
+      - condition: or
+        conditions:
+          - condition: time
+            after: "19:00:00"
+            before: "22:30:00"
+          - condition: time
+            after: "05:45:00"
+            before: "08:00:00"
     mode: single
     action:
       # only during night => critical?
       # example to split: "Alert If Garages Opened Or Closed When Not Supposed To"
       # todo: family (check who's home?)
       - parallel:
-          - service: notify.family
+          - service: notify.mobile_app_ceres
             data:
               title: "👶 Nursery"
               message: "Motion detected!"
@@ -1015,9 +1023,10 @@ automation:
                 url: homeassistant://navigate/lovelace/baby
                 # https://companion.home-assistant.io/docs/notifications/dynamic-content
                 entity_id: camera.baby_monitor_profile000
-                # actions:
-                #   - action: "SLEEP_OFF"
-                #     title: "Sleep off"
+                actions:
+                  - action: "SLEEP_OFF"
+                    title: "Sleep off"
+                    destructive: true
                 sound:
                   # apple watch doesn't support custom sounds:
                   # https://community.home-assistant.io/t/custom-notification-sounds-on-not-playing-on-apple-watch/540387
@@ -1038,7 +1047,7 @@ automation:
               variables:
                 camera_entity_id: camera.baby_monitor_profile000
                 subdirectory: "baby_monitor"
-  
+
   - alias: "Update Sleep Mode Based On Bed Occupancy"
     id: "106574a8-11b2-4679-aff1-f5b25b8e0b74"
     initial_state: true

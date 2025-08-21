@@ -421,6 +421,7 @@ cards:
         show_header_toggle: false
       # https://community.home-assistant.io/t/styling-tile-cards/696907/10
       # https://community.home-assistant.io/t/card-mod-for-tile-card-icon-tile-color/657214/52
+      # https://community.home-assistant.io/t/olarm-integration/384560/106 (includes css customisations)
       - type: tile
         entity: alarm_control_panel.home
         name: "Home Alarm"
@@ -431,13 +432,29 @@ cards:
               - armed_away
               - disarmed
         card_mod:
-          style: |
-            :host {
-              --state-alarm_control_panel-armed_home-color: #ffa800 !important;
-              --state-alarm_control_panel-armed_away-color: #aa0000 !important;
-              --state-alarm_control_panel-disarmed-color: #40b100 !important;
-              --state-alarm_control_panel-triggered-color: #135dd8 !important;
-            }
+          style:
+            # button hover colours
+            hui-card-features $ hui-card-feature $ hui-alarm-modes-card-feature $ ha-control-select $ div: |
+              #option-armed_home {
+                --control-select-color: #ffa800 !important;
+              }
+              #option-armed_away {
+                --control-select-color: #aa0000 !important;
+              }
+              #option-disarmed {
+                --control-select-color: #40b100 !important;
+              }
+            # button and card hover colours
+            .: |
+              :host {
+                --state-alarm_control_panel-armed_home-color: #ffa800 !important;
+                --state-alarm_control_panel-armed_away-color: #aa0000 !important;
+                --state-alarm_control_panel-disarmed-color: #40b100 !important;
+                --state-alarm_control_panel-triggered-color: #135dd8 !important;
+              }
+              .type-tile {
+                --ha-ripple-hover-opacity: 0;
+              }
       # todo: panic button (mdi:alert-outline/mdi:shield-alert-outline)
       - type: history-graph
         name: Alarm

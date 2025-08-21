@@ -80,13 +80,29 @@ cards:
               - armed_away
               - disarmed
         card_mod: &alarm_mods
-          style: |
-            :host {
-              --state-alarm_control_panel-armed_home-color: #ffa800 !important;
-              --state-alarm_control_panel-armed_away-color: #aa0000 !important;
-              --state-alarm_control_panel-disarmed-color: #40b100 !important;
-              --state-alarm_control_panel-triggered-color: #135dd8 !important;
-            }
+          style:
+            # button hover colours
+            hui-card-features $ hui-card-feature $ hui-alarm-modes-card-feature $ ha-control-select $ div: |
+              #option-armed_home {
+                --control-select-color: #ffa800 !important;
+              }
+              #option-armed_away {
+                --control-select-color: #aa0000 !important;
+              }
+              #option-disarmed {
+                --control-select-color: #40b100 !important;
+              }
+            # button and card hover colours
+            .: |
+              :host {
+                --state-alarm_control_panel-armed_home-color: #ffa800 !important;
+                --state-alarm_control_panel-armed_away-color: #aa0000 !important;
+                --state-alarm_control_panel-disarmed-color: #40b100 !important;
+                --state-alarm_control_panel-triggered-color: #135dd8 !important;
+              }
+              .type-tile {
+                --ha-ripple-hover-opacity: 0;
+              }
       - type: tile
         entity: alarm_control_panel.flatlet
         name: "Flatlet Alarm"

@@ -1069,7 +1069,7 @@ automation:
 
   - alias: "Turn Off Sleep Mode From Alert Action"
     id: "7a1711ca-b9c7-4e2b-b5ba-1dce04aca077"
-    initial_state: false
+    initial_state: true
     trigger:
       - platform: event
         event_type: mobile_app_notification_action

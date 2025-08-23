@@ -1003,11 +1003,17 @@ automation:
       - condition: or
         conditions:
           - condition: time
+            after: "12:15:00"
+            before: "15:00:00"
+          - condition: time
             after: "19:00:00"
             before: "22:30:00"
           - condition: time
             after: "05:45:00"
             before: "08:00:00"
+      - condition: state
+        entity_id: sensor.ceres_battery_state
+        state: 'Not Charging'  # Can be to Charging or Full
     mode: single
     action:
       # only during night => critical?

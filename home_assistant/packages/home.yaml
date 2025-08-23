@@ -1037,8 +1037,8 @@ automation:
                   volume: 0.3
                 # https://companion.home-assistant.io/docs/notifications/notification-attachments#configuration
                 attachment:
-                  hide-thumbnail: true
-                  lazy: true
+                  hide-thumbnail: false
+                  lazy: false
           # non-blocking call
           - service: script.turn_on
             target:

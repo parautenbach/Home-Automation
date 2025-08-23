@@ -283,8 +283,8 @@ automation:
                   volume: 0.3
                 attachment:
                   # url: !secret doorbell_camera_last_snapshot_url
-                  hide-thumbnail: true
-                  lazy: true
+                  hide-thumbnail: false
+                  lazy: false
                 actions:
                   - action: "PARTLY_OPEN_AND_CLOSE_GATE"
                     title: "Open and close (pedestrian)"

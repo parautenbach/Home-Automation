@@ -377,10 +377,10 @@ automation:
             url: homeassistant://navigate/lovelace/security
             attachment:
               # url: https://geoexpressinternational.com/wp-content/plugins/webp-express/test/test-pattern-tv.jpg
-              # url: http://securitypi/local/camera.security_camera_last.jpg
               url: !secret security_camera_last_snapshot_url
               # content-type: jpg
-              # hide-thumbnail: false
+              hide-thumbnail: false
+              lazy: false
 
   - alias: "Foyer Motion Detected Last"
     id: "ef364d58-2cb7-4d5b-8e96-8724c132365a"

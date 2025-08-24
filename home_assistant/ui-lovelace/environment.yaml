@@ -497,6 +497,10 @@ cards:
                   state-badge {
                     margin: 0;
                   }
+          - entity: sensor.braai_room_ht_temperature
+            name: Braai Room
+            icon: mdi:gas-burner
+            card_mod: *card_mod_temp_style
           - entity: sensor.outside_temperature_filtered
             name: Outside
             icon: mdi:weather-partly-cloudy
@@ -746,6 +750,9 @@ cards:
               - entity: sensor.guest_bedroom_ht_temperature
                 name: Guest Bedroom
                 color: var(--custom-color-blue)
+              - entity: sensor.braai_room_ht_temperature
+                name: Braai Room
+                color: var(--custom-color-turquoise)
               - entity: sensor.outside_temperature_filtered
                 name: Outside
                 color: var(--custom-color-red)
@@ -782,6 +789,9 @@ cards:
               - entity: sensor.guest_bedroom_ht_humidity
                 name: Guest Bedroom
                 color: var(--custom-color-blue)
+              - entity: sensor.braai_room_ht_humidity
+                name: Braai Room
+                color: var(--custom-color-turquoise)
               - entity: sensor.openweathermap_humidity
                 name: Outside
                 color: var(--custom-color-red)
@@ -844,6 +854,10 @@ cards:
                 name: Main Bedroom
               - entity: sensor.bedroom_ht_temperature
                 name: Bedroom
+              - entity: sensor.bedroom_ht_temperature
+                name: Guest Bedroom
+              - entity: sensor.braai_room_ht_temperature
+                name: Braai Room
               - entity: sensor.outside_temperature_filtered
                 name: Outside
             days_to_show: 30

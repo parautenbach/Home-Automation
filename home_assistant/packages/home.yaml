@@ -294,9 +294,14 @@ automation:
           - condition: state
             entity_id: input_boolean.everyday_routine
             state: "on"
-      - condition: state
-        entity_id: light.main_bedroom_group
-        state: "off"
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: light.pieter_bedside
+            state: "off"
+          - condition: state
+            entity_id: light.rouve_bedside
+            state: "off"
     action:
       - if:
           - condition: state
@@ -314,44 +319,72 @@ automation:
           - delay:
               seconds: 10
           # add a condition for only if we are home – but if it's a workday, why wouldn't we?
-          - service: light.turn_on
-            target:
-              entity_id:
-                - light.pieter_bedside
-                - light.rouve_bedside
-                - light.hallway
-            data:
-              profile: low
-          - delay:
-              minutes: 1
-          # this call does not block/wait, so the two transitions will start at almost the same time
-          # and the script runs in parallel mode
-          # https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete
-          # temporarily removed
-          - service: script.turn_on
-            target:
-              entity_id: script.fade_light
-            data:
-              variables:
-                light: light.pieter_bedside
-                target_brightness_pct: 20
-                transition_duration: 120
-          - service: script.turn_on
-            target:
-              entity_id: script.fade_light
-            data:
-              variables:
-                light: light.rouve_bedside
-                target_brightness_pct: 40
-                transition_duration: 120
-          - service: script.turn_on
-            target:
-              entity_id: script.fade_light
-            data:
-              variables:
-                light: light.hallway
-                target_brightness_pct: 60
-                transition_duration: 120
+          # only run the fade-in if all lights are off for a soft awakening
+          - if:
+              - condition: and
+                conditions:
+                  - condition: state
+                    entity_id:
+                      - light.pieter_bedside
+                      - light.rouve_bedside
+                      - light.hallway
+                    state: "off"
+            then:
+              - service: light.turn_on
+                target:
+                  entity_id:
+                    - light.pieter_bedside
+                    - light.rouve_bedside
+                    - light.hallway
+                data:
+                  profile: low
+              - delay:
+                  minutes: 1
+              # this call does not block/wait, so the two transitions will start at almost the same time
+              # and the script runs in parallel mode
+              # https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete
+              # temporarily removed
+              - parallel:
+                  - service: script.turn_on
+                    target:
+                      entity_id: script.fade_light
+                    data:
+                      variables:
+                        light: light.pieter_bedside
+                        target_brightness_pct: 20
+                        transition_duration: 120
+                  - service: script.turn_on
+                    target:
+                      entity_id: script.fade_light
+                    data:
+                      variables:
+                        light: light.rouve_bedside
+                        target_brightness_pct: 40
+                        transition_duration: 120
+                  - service: script.turn_on
+                    target:
+                      entity_id: script.fade_light
+                    data:
+                      variables:
+                        light: light.hallway
+                        target_brightness_pct: 60
+                        transition_duration: 120
+            else:
+              - service: light.turn_on
+                target:
+                  entity_id: light.pieter_bedside
+                data:
+                  profile: pieter
+              - service: light.turn_on
+                target:
+                  entity_id: light.rouve_bedside
+                data:
+                  profile: rouve
+              - service: light.turn_on
+                target:
+                  entity_id: light.hallway
+                data:
+                  profile: normal
           - condition: template
             value_template: >-
               {% set entity_id = 'climate.main_bedroom_ac' %}

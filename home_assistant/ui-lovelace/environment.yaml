@@ -1449,62 +1449,60 @@ cards:
               green: 0
               yellow: 400
               red: 800
-      - type: entities
-        show_header_toggle: true
-        entities:
-          - entity: sensor.owm_pollution_fine_particles_pm2_5
-            format: precision1
-            type: custom:multiple-entity-row
-            name: PM2.5
-            state_header: OWM
-            # entities:
-            #   - entity: sensor.saaqis_pm_2_5
-            #     name: SAAQIS
-          - entity: sensor.owm_pollution_coarse_particles_pm10
-            format: precision1
-            type: custom:multiple-entity-row
-            name: PM10
-            state_header: OWM
-            # entities:
-            #   - entity: sensor.saaqis_pm_10
-            #     name: SAAQIS
-          - entity: sensor.owm_pollution_sulphur_dioxide_so2
-            format: precision1
-            type: custom:multiple-entity-row
-            name: SO₂
-            state_header: OWM
-            entities:
-              # - entity: sensor.stellenboch_cape_winelands_south_africa_sulphur_dioxide
-              #   attribute: sulfur_dioxide
-              #   format: precision1
-              #   unit: ppb
-              #   name: WAQI
-              - entity: sensor.saaqis_so2
-                format: precision1
-                name: SAAQIS
-          - entity: sensor.owm_pollution_nitrogen_dioxide_no2
-            format: precision1
-            type: custom:multiple-entity-row
-            name: NO₂
-            state_header: OWM
-            entities:
-              # - entity: sensor.stellenboch_cape_winelands_south_africa_nitrogen_dioxide
-              #   format: precision1
-              #   unit: ppb
-              #   name: WAQI
-              - entity: sensor.saaqis_no2
-                format: precision1
-                name: SAAQIS
-          - entity: sensor.owm_pollution_ozone_o3
-            format: precision1
-            type: custom:multiple-entity-row
-            name: O₃
-            state_header: OWM
-            entities:
-              - entity: sensor.stellenboch_cape_winelands_south_africa_ozone
-                format: precision1
-                unit: ppb
-                name: WAQI
-              - entity: sensor.saaqis_o3
-                format: precision1
-                name: SAAQIS
+      # - type: entities
+      #   show_header_toggle: true
+      #   entities:
+      #     - entity: sensor.owm_pollution_fine_particles_pm2_5
+      #       format: precision1
+      #       type: custom:multiple-entity-row
+      #       name: PM2.5
+      #       state_header: OWM
+      #       # entities:
+      #       #   - entity: sensor.saaqis_pm_2_5
+      #       #     name: SAAQIS
+      #     - entity: sensor.owm_pollution_coarse_particles_pm10
+      #       format: precision1
+      #       type: custom:multiple-entity-row
+      #       name: PM10
+      #       state_header: OWM
+      #       # entities:
+      #       #   - entity: sensor.saaqis_pm_10
+      #       #     name: SAAQIS
+      #     - entity: sensor.owm_pollution_sulphur_dioxide_so2
+      #       format: precision1
+      #       type: custom:multiple-entity-row
+      #       name: SO₂
+      #       state_header: OWM
+      #       entities:
+      #         # - entity: sensor.stellenboch_cape_winelands_south_africa_sulphur_dioxide
+      #         #   attribute: sulfur_dioxide
+      #         #   format: precision1
+      #         #   unit: ppb
+      #         #   name: WAQI
+      #         - entity: sensor.saaqis_so2
+      #           format: precision1
+      #           name: SAAQIS
+      #     - entity: sensor.owm_pollution_nitrogen_dioxide_no2
+      #       format: precision1
+      #       type: custom:multiple-entity-row
+      #       name: NO₂
+      #       state_header: OWM
+      #       entities:
+      #         # - entity: sensor.stellenboch_cape_winelands_south_africa_nitrogen_dioxide
+      #         #   format: precision1
+      #         #   unit: ppb
+      #         #   name: WAQI
+      #         - entity: sensor.saaqis_no2
+      #           format: precision1
+      #           name: SAAQIS
+      #     - entity: sensor.owm_pollution_ozone_o3
+      #       format: precision1
+      #       type: custom:multiple-entity-row
+      #       name: O₃
+      #       state_header: OWM
+      #       entities:
+      #         - entity: sensor.stellenboch_cape_winelands_south_africa_ozone
+      #           format: precision1
+      #           unit: ppb
+      #           name: WAQI
+      #         - entity: sensor.saaqis_o3

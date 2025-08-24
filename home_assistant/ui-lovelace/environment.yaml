@@ -1488,10 +1488,10 @@ cards:
             name: NO₂
             state_header: OWM
             entities:
-              - entity: sensor.stellenboch_cape_winelands_south_africa_nitrogen_dioxide
-                format: precision1
-                unit: ppb
-                name: WAQI
+              # - entity: sensor.stellenboch_cape_winelands_south_africa_nitrogen_dioxide
+              #   format: precision1
+              #   unit: ppb
+              #   name: WAQI
               - entity: sensor.saaqis_no2
                 format: precision1
                 name: SAAQIS

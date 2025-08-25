@@ -985,16 +985,22 @@ automation:
             entity_id: light.living_room_lamp
             state: "off"
     action:
+      # gotcha:
+      # when calling the script in a non-blocking way (i.e. using script.turn_on)
+      # you need to include the variables key under data,
+      # but when called in a blocking way, you must drop the variables key.
+      - service: script.action_light_group_timers
+        data:
+          light_group: light.night_group
+          timer_action: cancel
+      - service: light.turn_off
+        target:
+          entity_id: light.night_group
+      - delay:
+          seconds: 1
       - service: scene.turn_on
         target:
           entity_id: scene.normal_lights
-      - service: script.turn_on
-        target:
-          entity_id: script.action_light_group_timers
-        data:
-          variables:
-            light_group: light.night_group
-            timer_action: cancel
 
   # set up automation on device to immediately update the sensors
   # todo: switch off all lights except rouvé's (if on), or at least notify of lights still on

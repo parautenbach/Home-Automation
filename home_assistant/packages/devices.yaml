@@ -33,9 +33,6 @@ homeassistant:
     sensor.garage_smoke_battery:
       friendly_name: Garage Smoke Detector Battery
       monitor: True
-    sensor.hallway_light_button_battery:
-      friendly_name: Hallway Light Button Battery
-      monitor: True
     sensor.kitchen_motion_detector_battery:
       monitor: True
     binary_sensor.cabinet_door:

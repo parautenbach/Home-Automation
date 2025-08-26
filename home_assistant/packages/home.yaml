@@ -169,8 +169,8 @@ sensor:
     state: "on"
     type: time
     # because we want to track across midnight; we're assuming they've woken up from the night session by 9 am
-    start: "{{ today_at('09:00') }}"
-    end: "{{ now() }}"
+    start: "{{ today_at('17:00') - timedelta(days=1) }}"
+    end: "{{ today_at('17:00') }}"
 
 template:
   - binary_sensor:

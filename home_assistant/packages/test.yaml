@@ -264,3 +264,49 @@ automation:
   #       seconds: "/15"
   #   action:
   #     - foo: bar
+
+  - alias: "Test Shelly BLU Button Double Press"
+    id: "63c6b6ad-03fd-42b1-a4e1-2173993f714d"
+    trigger:
+      - platform: state
+        entity_id: event.button_1_new_button
+        # only trigger on the state
+        to: null
+        # this doesn't change if you keep double pressing
+        # attribute: event_type
+        # to: 'double_press'
+      # i hate device ids...
+      # - platform: event
+      #   event_type: bthome_ble_event
+      #   event_data:
+      #     device_id: 07ff6c37223aa846f993a0f60d0ca246
+      #     event_class: button
+      #     event_type: double_press
+    condition:
+      # - condition: state
+      #   # templating not supported here
+      #   entity_id: event.button_1_new_button
+      #   attribute: event_type
+      #   state: double_press
+      - condition: template
+        value_template: "{{ state_attr(trigger.entity_id, 'event_type') == 'double_press' }}"
+    action:
+      # - service: persistent_notification.create
+      #   data:
+      #     title: "Shelly BLU Button"
+      #     message: "Double press detected!"
+      - service: light.toggle
+        target:
+          entity_id: light.dining_room
+
+  - alias: "Test Shelly BLU Button Toggle"
+    id: "cca5b81c-e80a-475f-8436-bbea3e93c4ec"
+    initial_state: true
+    use_blueprint:
+      path: shelly_bt_button.yaml
+      input:
+        event_entity_id: event.button_1_new_button
+        light_entity_id: light.dining_room
+        single_press_profile: normal
+        double_press_profile: night
+        triple_press_profile: security

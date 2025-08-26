@@ -14,14 +14,19 @@
       - binary_sensor.internet_connection
       - binary_sensor.foyer_motion_detected
       - binary_sensor.doorbell_motion_detected
+      - binary_sensor.baby_monitor_motion_alarm
+      - binary_sensor.kitchen_motion_detector_motion
       - binary_sensor.cabinet_door
       - sensor.main_bedroom_ht_temperature
       - sensor.main_bedroom_ht_humidity
       - sensor.bedroom_ht_temperature
       - sensor.bedroom_ht_humidity
+      - sensor.guest_bedroom_ht_temperature
+      - sensor.guest_bedroom_ht_humidity
       - sensor.office_temperature
       - sensor.office_humidity
-      - sensor.cabinet_temperature
+      - sensor.braai_room_ht_temperature
+      - sensor.braai_room_ht_humidity
       - light.living_room_lamp
       - light.pieter_bedside
       - light.rouve_bedside
@@ -127,6 +132,7 @@
   mode: accessory
   filter:
     include_entities:
+      # no need to use the proxy, since we already have the overlay
       - camera.security_camera
   entity_config:
     camera.security_camera:

@@ -5,6 +5,17 @@ visible:
   - user: 75cfafa25f36464abc9116845e53f2ca
 badges: []
 cards:
+  - type: horizontal-stack
+    cards:
+      - type: tile
+        entity: light.living_room_lamp
+        name: Living Room
+      - type: tile
+        entity: light.dining_room
+        name: Dining Room
+        features:
+          - type: "light-brightness"
+          - type: "light-color-temp"
   - type: custom:auto-entities
     card:
       type: entities

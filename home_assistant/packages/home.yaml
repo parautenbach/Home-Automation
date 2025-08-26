@@ -1099,7 +1099,6 @@ automation:
                 actions:
                   - action: "SLEEP_OFF"
                     title: "Sleep off"
-                    destructive: true
                 sound:
                   # apple watch doesn't support custom sounds:
                   # https://community.home-assistant.io/t/custom-notification-sounds-on-not-playing-on-apple-watch/540387

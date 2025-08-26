@@ -359,6 +359,8 @@ automation:
                     target:
                       entity_id:
                         - light.hallway
+                    data:
+                      profile: low
               - delay:
                   minutes: 1
               # this call does not block/wait, so the two transitions will start at almost the same time

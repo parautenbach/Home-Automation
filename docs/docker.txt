@@ -17,7 +17,7 @@ docker run -d \
 =====
 
 docker rm homeassistant
-docker logs -f homeassistant
+docker logs -n 10 -f homeassistant
 docker exec -it homeassistant bash
 
 =====
@@ -66,6 +66,15 @@ sudo systemctl enable --now home-assistant-docker.service
 sudo systemctl status home-assistant-docker.service
 
 journalctl -u home-assistant-docker.service -f
+
+=====
+
+manual update
+
+docker pull ghcr.io/home-assistant/home-assistant:stable
+docker stop homeassistant
+docker rm homeassistant
+docker run ...
 
 =====
 

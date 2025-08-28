@@ -1188,6 +1188,11 @@ automation:
                   #   wanted_state: "foo"
                   group: "routine-bedtime"
                   url: homeassistant://navigate/lovelace/baby
+                  push:
+                    sound:
+                      name: default
+                      critical: 1
+                      volume: 0.1
           else:
             - service: notify.mobile_app_ceres
               data:
@@ -1200,6 +1205,11 @@ automation:
                       title: "Disable"
                   group: "routine-bedtime"
                   url: homeassistant://navigate/lovelace/baby
+                  push:
+                    sound:
+                      name: default
+                      critical: 1
+                      volume: 0.1
 
   - alias: "Handle Sleep Mode From Alert Action"
     id: "7a1711ca-b9c7-4e2b-b5ba-1dce04aca077"

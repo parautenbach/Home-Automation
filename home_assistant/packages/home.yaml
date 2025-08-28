@@ -1163,6 +1163,9 @@ automation:
             after: "05:45:00"
             before: "08:00:00"
     actions:
+        # cannot template this, because the actions section's action and title isn't templateable
+        # - variables:
+        #     wanted_state: "{{ '' if states() and states() else '' }}"
         - if:
             - condition:
                 - condition: state
@@ -1181,7 +1184,8 @@ automation:
                   actions:
                     - action: "SLEEP_ON"
                       title: "Enable"
-                      event_data:
+                  # action_data:
+                  #   wanted_state: "foo"
                   group: "routine-bedtime"
                   url: homeassistant://navigate/lovelace/baby
           else:

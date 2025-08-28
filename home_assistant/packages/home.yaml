@@ -1147,6 +1147,8 @@ automation:
         to:
           - "on"
           - "off"
+        for:
+          minutes: 1
     condition:
       # keep in sync with nursery motion detection automation
       - condition: or

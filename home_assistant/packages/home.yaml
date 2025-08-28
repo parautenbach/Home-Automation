@@ -1065,7 +1065,7 @@ automation:
         entity_id: input_boolean.baby_sleep_mode
         state: "on"
         for:
-          minutes: 2
+          minutes: 5
       # keep in sync with bedlamp on/off automation
       - condition: or
         conditions:

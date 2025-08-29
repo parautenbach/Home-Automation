@@ -132,8 +132,8 @@
   mode: accessory
   filter:
     include_entities:
-      # no need to use the proxy, since we already have the overlay
-      - camera.security_camera
+      # this one has the overlay
+      - camera.security_camera_proxy
   entity_config:
     camera.security_camera:
       # https://www.home-assistant.io/integrations/homekit/#linked_motion_sensor

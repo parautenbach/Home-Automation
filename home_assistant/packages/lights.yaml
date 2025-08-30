@@ -74,6 +74,10 @@ homeassistant:
       icon: mdi:axis
     light.corner_lights:
       icon: mdi:axis
+    switch.main_bathroom_light:
+      icon: mdi:dome-light
+    switch.bathroom_light:
+      icon: mdi:dome-light
 
 input_boolean:
   foyer_state:

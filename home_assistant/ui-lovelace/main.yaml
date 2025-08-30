@@ -127,7 +127,8 @@ cards:
               - timer.foyer_timer
             icon: mdi:dome-light
           - type: custom:button-card
-            template: light_with_timer
+            template:
+              - light_with_timer
             name: Living Room
             entity: light.living_room_lamp
             triggers_update:
@@ -170,6 +171,14 @@ cards:
               - timer.hallway_timer
       - type: horizontal-stack
         cards:
+          - type: custom:button-card
+            template: light_with_timer
+            name: Main Bathroom
+            entity: switch.main_bathroom_light
+          - type: custom:button-card
+            template: light_with_timer
+            name: Bathroom
+            entity: switch.bathroom_light
           - type: custom:button-card
             template: basic
             name: Fairy Lights

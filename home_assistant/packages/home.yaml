@@ -86,13 +86,13 @@ notify:
       - service: mobile_app_rouve
 
 timer:
-  main_bathroom_light:
+  main_bathroom_light_timer:
     duration: "00:15:00"
     restore: true
   main_bathroom_fan:
     duration: "00:30:00"
     restore: true
-  bathroom_light:
+  bathroom_light_timer:
     duration: "00:15:00"
     restore: true
   bathroom_fan:
@@ -1763,7 +1763,7 @@ automation:
           - switch.bathroom_fan
     action:
       - variables:
-          timer_id: "{{ trigger.entity_id | replace('switch', 'timer') }}"
+          timer_id: "{{ trigger.entity_id | replace('switch', 'timer') ~ '_timer' }}"
       - choose:
           - conditions:
               - condition: template
@@ -1829,11 +1829,11 @@ automation:
       - platform: event
         event_type: timer.finished
         event_data:
-          entity_id: timer.main_bathroom_light
+          entity_id: timer.main_bathroom_light_timer
       - platform: event
         event_type: timer.finished
         event_data:
-          entity_id: timer.bathroom_light
+          entity_id: timer.bathroom_light_timer
     condition:
       - condition: state
         entity_id: binary_sensor.daytime

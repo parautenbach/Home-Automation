@@ -515,7 +515,19 @@ cards:
         wh_kwh_threshold: 0
         max_expected_energy: 20000
         dashboard_link: /energy
-      - type: energy-usage-graph
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+          - type: energy-usage-graph
+          - type: energy-devices-detail-graph
+            max_devices: 5
+      - type: energy-sankey
+        layout: vertical
+        group_by_area: false
+        group_by_floor: false
       - type: custom:sankey-chart
         layout: vertical
         min_state: 0
@@ -687,8 +699,6 @@ cards:
                 type: entity
                 name: Inverter
                 children: []
-      # - type: energy-devices-detail-graph
-      #   max_devices: 2
       - type: custom:swipe-card
         parameters:
           autoHeight: true

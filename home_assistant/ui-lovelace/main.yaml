@@ -111,88 +111,6 @@ cards:
             name: Rouvé's Side
             entity: light.rouve_bedside
             icon: mdi:lamp
-      # scenes: low, default, bright
-      - type: horizontal-stack
-        title: Inside Lights
-        cards:
-          - type: custom:button-card
-            template:
-              - rgb_light
-              - rgb_light_with_timer
-            variables:
-              profile: normal
-            name: Foyer
-            entity: light.foyer
-            triggers_update:
-              - timer.foyer_timer
-            icon: mdi:dome-light
-          - type: custom:button-card
-            template:
-              - light_with_timer
-            name: Living Room
-            entity: light.living_room_lamp
-            triggers_update:
-              - timer.living_room_lamp_timer
-          - type: custom:button-card
-            template:
-              - rgb_light
-              - rgb_light_with_timer
-            variables:
-              profile: kitchen
-            name: Kitchen Counter
-            entity: light.kitchen_counter
-            triggers_update:
-              - timer.kitchen_counter_timer
-      - type: horizontal-stack
-        cards:
-          - type: custom:button-card
-            template: rgb_light
-            variables:
-              profile: dim
-            name: Dining Room
-            entity: light.dining_room
-            icon: mdi:dome-light
-          - type: custom:button-card
-            template: rgb_light
-            variables:
-              profile: normal
-            name: Music Room
-            entity: light.music_room
-            icon: mdi:dome-light
-          - type: custom:button-card
-            template:
-              - rgb_light
-              - rgb_light_with_timer
-            variables:
-              profile: normal
-            name: Hallway
-            entity: light.hallway
-            triggers_update:
-              - timer.hallway_timer
-      - type: horizontal-stack
-        cards:
-          - type: custom:button-card
-            template: light_with_timer
-            name: Main Bathroom
-            entity: switch.main_bathroom_light
-          - type: custom:button-card
-            template: light_with_timer
-            name: Bathroom
-            entity: switch.bathroom_light
-          - type: custom:button-card
-            template: basic
-            name: Fairy Lights
-            entity: light.living_room_fairy_lights
-          - type: custom:button-card
-            color_type: blank-card
-          - type: custom:button-card
-            color_type: blank-card
-          # - type: custom:button-card
-          #   template: rgb_light
-          #   variables:
-          #     profile: corner_white
-          #   name: Corner Lights
-          #   entity: light.corner_lights
       - type: horizontal-stack
         title: Bedroom Lights
         cards:
@@ -280,6 +198,115 @@ cards:
                   # timer can be cancelled here
                   action: more-info
                   haptic: heavy
+      # scenes: low, default, bright
+      - type: horizontal-stack
+        title: Other Areas
+        cards:
+          - type: custom:button-card
+            template:
+              - rgb_light
+              - rgb_light_with_timer
+            variables:
+              profile: normal
+            name: Foyer
+            entity: light.foyer
+            triggers_update:
+              - timer.foyer_timer
+            icon: mdi:dome-light
+          - type: custom:button-card
+            template:
+              - light_with_timer
+            name: Living Room
+            entity: light.living_room_lamp
+            triggers_update:
+              - timer.living_room_lamp_timer
+          - type: custom:button-card
+            template:
+              - rgb_light
+              - rgb_light_with_timer
+            variables:
+              profile: kitchen
+            name: Kitchen Counter
+            entity: light.kitchen_counter
+            triggers_update:
+              - timer.kitchen_counter_timer
+      - type: horizontal-stack
+        cards:
+          - type: custom:button-card
+            template: rgb_light
+            variables:
+              profile: dim
+            name: Dining Room
+            entity: light.dining_room
+            icon: mdi:dome-light
+          - type: custom:button-card
+            template: rgb_light
+            name: Music Room
+            entity: light.music_room
+            icon: mdi:dome-light
+          - type: custom:button-card
+            template: rgb_light
+            variables:
+              profile: corner_white
+            name: Corner Lights
+            entity: light.corner_lights
+      - type: horizontal-stack
+        cards:
+          - type: custom:button-card
+            template: rgb_light
+            name: Ceiling Lights
+            entity: light.living_areas_ceiling_lights_group
+            icon: mdi:lightbulb-group-outline
+          - type: custom:button-card
+            template:
+              - rgb_light
+              - rgb_light_with_timer
+            variables:
+              profile: normal
+            name: Hallway
+            entity: light.hallway
+            triggers_update:
+              - timer.hallway_timer
+          - type: custom:button-card
+            template: rgb_light
+            name: Office
+            entity: light.office
+            icon: mdi:dome-light
+      - type: horizontal-stack
+        cards:
+          - type: custom:button-card
+            template: light_with_timer
+            name: Main Bathroom
+            entity: switch.main_bathroom_light
+          - type: custom:button-card
+            template: light_with_timer
+            name: Bathroom
+            entity: switch.bathroom_light
+          - type: custom:button-card
+            template: basic
+            name: Fairy Lights
+            entity: light.living_room_fairy_lights
+          # - type: custom:button-card
+          #   color_type: blank-card
+          # - type: custom:button-card
+          #   color_type: blank-card
+          # - type: custom:button-card
+          #   template: rgb_light
+          #   variables:
+          #     profile: corner_white
+          #   name: Dining Room
+          #   entity: light.dining_room_corner_light
+          # - type: custom:button-card
+          #   template: rgb_light
+          #   variables:
+          #     profile: corner_white
+          #   name: Music Room
+          #   entity: light.music_room_corner_light
+          # - type: custom:button-card
+          #   template: rgb_light
+          #   name: Open Area
+          #   entity: light.living_area_group
+          #   icon: mdi:lightbulb-group-outline
       - type: horizontal-stack
         title: Yard
         cards:

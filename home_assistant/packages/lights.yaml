@@ -40,6 +40,9 @@ homeassistant:
     light.music_room:
       friendly_name: Music Room Light
       icon: mdi:dome-light
+    light.office:
+      friendly_name: Office Light
+      icon: mdi:dome-light
     light.foyer:
       friendly_name: Foyer Light
       icon: mdi:dome-light

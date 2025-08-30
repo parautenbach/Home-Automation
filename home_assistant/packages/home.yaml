@@ -1651,7 +1651,7 @@ automation:
       - platform: numeric_state
         entity_id: sensor.outside_temperature
         # same as matching condition below
-        above: 19.9
+        above: 17.9
       - platform: state
         # we use the OUTSIDE sensor here, since the house will tend to this, but delayed due to thermal mass
         entity_id: sensor.thermal_comfort_outside_summer_simmer_perception
@@ -1684,40 +1684,42 @@ automation:
             state:
               - "off"
               - "fan_only"
-      - condition: or
+      - condition: and
         conditions:
-          # cooling
-          - condition: and
+          - condition: or
             conditions:
-              - condition: state
-                entity_id: climate.living_room_ac
-                state: "cool"
-              - condition: numeric_state
-                entity_id: sensor.office_temperature
-                below: 24.1
-              - condition: numeric_state
-                entity_id: sensor.outside_temperature
-                # same as matching trigger above
-                below: 24.1
-              - condition: numeric_state
-                entity_id: sensor.outside_temperature_change
-                below: -0.4
-          # heating
-          - condition: and
-            conditions:
-              - condition: state
-                entity_id: climate.living_room_ac
-                state: "heat"
-              - condition: numeric_state
-                entity_id: sensor.office_temperature
-                above: 16.1
-              - condition: numeric_state
-                entity_id: sensor.outside_temperature
-                # same as matching trigger above
-                above: 19.9
-              - condition: numeric_state
-                entity_id: sensor.outside_temperature_change
-                above: 0.4
+              # cooling
+              - condition: and
+                conditions:
+                  - condition: state
+                    entity_id: climate.living_room_ac
+                    state: "cool"
+                  - condition: numeric_state
+                    entity_id: sensor.office_temperature
+                    below: 24.1
+                  - condition: numeric_state
+                    entity_id: sensor.outside_temperature
+                    # same as matching trigger above
+                    below: 24.1
+                  - condition: numeric_state
+                    entity_id: sensor.outside_temperature_change
+                    below: -0.9
+              # heating
+              - condition: and
+                conditions:
+                  - condition: state
+                    entity_id: climate.living_room_ac
+                    state: "heat"
+                  - condition: numeric_state
+                    entity_id: sensor.office_temperature
+                    above: 16.1
+                  - condition: numeric_state
+                    entity_id: sensor.outside_temperature
+                    # same as matching trigger above
+                    above: 17.9
+                  - condition: numeric_state
+                    entity_id: sensor.outside_temperature_change
+                    above: 0.9
           # we trigger on "comfortable" outside, but we check the inside here
           - condition: state
             entity_id: sensor.thermal_comfort_inside_summer_simmer_perception

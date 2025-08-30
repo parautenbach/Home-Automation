@@ -62,13 +62,15 @@ basic:
   # this is just to create a phantom space to have it align better with other buttons on the same row
   label: >
     [[[
-      return 'M';
+      return '_';
     ]]]
   styles:
     name:
       - color: var(--state-icon-color)
     label:
       - color: var(--primary-background-color)
+      - line-height: 1.2em
+      - margin-bottom: 0.2em
     card:
       - font-size: 12px
     grid:
@@ -93,38 +95,22 @@ light_with_timer:
       - color: var(--state-icon-color)
     card:
       - font-size: 12px
+    custom_fields:
+      t:
+        - justify-self: center
+        - font-size: 12px
+        - margin-bottom: 2px
+        - color: var(--state-icon-color)
     grid:
       - grid-template-areas: '"t" "i" "n"'
       - grid-template-rows: min-content 1fr min-content
       - grid-template-columns: 1fr
   custom_fields:
-    t:
-      card:
-        type: custom:button-card
-        name: Timer
-        entity: "[[[ return entity.entity_id.replace('light.', 'timer.').replace('switch.', 'timer.') + '_timer'; ]]]"
-        show_name: false
-        show_icon: false
-        show_state: true
-        styles:
-          card:
-            - font-size: 12px
-            - box-shadow: none
-            - border: none
-          state:
-            - margin-top: -1ex
-            - margin-bottom: -1ex
-            - color: >
-                [[[
-                  if (states[`${entity.entity_id}`.replace("light.", "timer.").replace('switch.', 'timer.') + "_timer"].state == "idle")
-                    return "var(--state-icon-color)";
-                  else
-                    return "var(--custom-color-red)";
-                ]]]
-        tap_action:
-          action: none
-        hold_action:
-          action: none
+    t: >
+      [[[
+        const timer = states[entity.entity_id.replace("light.","timer.").replace("switch.","timer.") + "_timer"];
+        return timer ? timer.state : "";
+      ]]]
   tap_action:
     action: toggle
     haptic: light

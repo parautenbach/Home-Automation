@@ -1166,50 +1166,66 @@ automation:
         # cannot template this, because the actions section's action and title isn't templateable
         # - variables:
         #     wanted_state: "{{ '' if states() and states() else '' }}"
-        - if:
-            - condition:
+        #
+        # truth table:
+        #
+        # lamp | mode | e/d
+        # -----------------
+        # off  | off  | e
+        # off  | on   | -
+        # on   | off  | -
+        # on   | on   | d
+        - choose:
+            - conditions:
                 - condition: state
                   entity_id: light.bedroom_bedlamp
                   state: "off"
                 - condition: state
                   entity_id: input_boolean.baby_sleep_mode
                   state: "off"
-          then:
-            - service: notify.mobile_app_ceres
-              data:
-                title: "🛌 Sleep Mode"
-                message: >-
-                  Would you like to enable sleep mode?
-                data:
-                  actions:
-                    - action: "SLEEP_ON"
-                      title: "Enable"
-                  # action_data:
-                  #   wanted_state: "foo"
-                  group: "routine-bedtime"
-                  url: homeassistant://navigate/lovelace/baby
-                  push:
-                    sound:
-                      name: default
-                      critical: 1
-                      volume: 0.1
-          else:
-            - service: notify.mobile_app_ceres
-              data:
-                title: "🛌 Sleep Mode"
-                message: >-
-                  Would you like to disable sleep mode?
-                data:
-                  actions:
-                    - action: "SLEEP_OFF"
-                      title: "Disable"
-                  group: "routine-bedtime"
-                  url: homeassistant://navigate/lovelace/baby
-                  push:
-                    sound:
-                      name: default
-                      critical: 1
-                      volume: 0.1
+              sequence:
+                - service: notify.mobile_app_ceres
+                  data:
+                    title: "🛌 Sleep Mode"
+                    message: >-
+                      Would you like to enable sleep mode?
+                    data:
+                      actions:
+                        - action: "SLEEP_ON"
+                          title: "Enable"
+                      # action_data:
+                      #   wanted_state: "foo"
+                      group: "routine-bedtime"
+                      url: homeassistant://navigate/lovelace/baby
+                      push:
+                        sound:
+                          name: default
+                          critical: 1
+                          volume: 0.1
+            - conditions:
+                - condition: state
+                  entity_id: light.bedroom_bedlamp
+                  state: "on"
+                - condition: state
+                  entity_id: input_boolean.baby_sleep_mode
+                  state: "on"
+              sequence:
+                - service: notify.mobile_app_ceres
+                  data:
+                    title: "🛌 Sleep Mode"
+                    message: >-
+                      Would you like to disable sleep mode?
+                    data:
+                      actions:
+                        - action: "SLEEP_OFF"
+                          title: "Disable"
+                      group: "routine-bedtime"
+                      url: homeassistant://navigate/lovelace/baby
+                      push:
+                        sound:
+                          name: default
+                          critical: 1
+                          volume: 0.1
 
   - alias: "Handle Sleep Mode From Alert Action"
     id: "7a1711ca-b9c7-4e2b-b5ba-1dce04aca077"

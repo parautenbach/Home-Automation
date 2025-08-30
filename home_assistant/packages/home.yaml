@@ -89,13 +89,13 @@ timer:
   main_bathroom_light_timer:
     duration: "00:15:00"
     restore: true
-  main_bathroom_fan:
+  main_bathroom_fan_timer:
     duration: "00:30:00"
     restore: true
   bathroom_light_timer:
     duration: "00:15:00"
     restore: true
-  bathroom_fan:
+  bathroom_fan_timer:
     duration: "00:15:00"
     restore: true
   go_home_reminder:

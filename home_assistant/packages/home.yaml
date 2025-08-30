@@ -1764,16 +1764,27 @@ automation:
     action:
       - variables:
           timer_id: "{{ trigger.entity_id | replace('switch', 'timer') ~ '_timer' }}"
+          is_light: "{{ 'bathroom_light' in trigger.entity_id }}"
+          is_daytime: "{{ is_state('binary_sensor.daytime', 'on') }}"
       - choose:
           - conditions:
               - condition: template
-                value_template: "{{ is_state(trigger.entity_id, 'on') }}"
+                value_template: "{{ is_state(trigger.entity_id, 'on') and is_light and is_daytime }}"
             sequence:
               - service: timer.start
                 target:
                   entity_id: "{{ timer_id }}"
                 data:
-                  duration: "{{ '00:30:00' if 'bathroom_light' in trigger.entity_id else '00:15:00' }}"
+                  duration: "00:30:00"
+          - conditions:
+              - condition: template
+                value_template: "{{ is_state(trigger.entity_id, 'on') and not is_light }}"
+            sequence:
+              - service: timer.start
+                target:
+                  entity_id: "{{ timer_id }}"
+                data:
+                  duration: "00:15:00"
         default:
           - service: timer.cancel
             target:
@@ -1797,13 +1808,14 @@ automation:
             - variables:
                 switch_id: "{{ repeat.item }}"
                 timer_id: "{{ repeat.item | replace('switch', 'timer') }}"
+                is_light: "{{ 'bathroom_light' in timer_id }}"
             - condition: template
               value_template: "{{ is_state(switch_id, 'on') and is_state(timer_id, 'idle') }}"
             - service: timer.start
               target:
                 entity_id: "{{ timer_id }}"
               data:
-                duration: "{{ '00:30:00' if 'bathroom_light' in timer_id else '00:15:00' }}"
+                duration: "{{ '00:30:00' if is_light else '00:15:00' }}"
 
   - alias: "Turn Off Bathroom Fan"
     id: "de9d354c-912e-4683-b8df-42e9dca58425"

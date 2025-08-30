@@ -278,10 +278,14 @@ cards:
             template: light_with_timer
             name: Main Bathroom
             entity: switch.main_bathroom_light
+            triggers_update:
+              - timer.main_bathroom_light_timer
           - type: custom:button-card
             template: light_with_timer
             name: Bathroom
             entity: switch.bathroom_light
+            triggers_update:
+              - timer.bathroom_light_timer
           - type: custom:button-card
             template: basic
             name: Fairy Lights

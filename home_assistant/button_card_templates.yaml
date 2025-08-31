@@ -62,7 +62,7 @@ basic:
   # this is just to create a phantom space to have it align better with other buttons on the same row
   label: >
     [[[
-      return '_';
+      return '';
     ]]]
   styles:
     name:
@@ -75,7 +75,7 @@ basic:
       - font-size: 12px
     grid:
       - grid-template-areas: '"l" "i" "n"'
-      - grid-template-rows: min-content 1fr min-content
+      - grid-template-rows: 1.2em 1fr min-content
       - grid-template-columns: 1fr
   tap_action:
     action: toggle
@@ -95,22 +95,34 @@ light_with_timer:
       - color: var(--state-icon-color)
     card:
       - font-size: 12px
-    custom_fields:
-      t:
-        - justify-self: center
-        - font-size: 12px
-        - margin-bottom: 2px
-        - color: var(--state-icon-color)
     grid:
       - grid-template-areas: '"t" "i" "n"'
-      - grid-template-rows: min-content 1fr min-content
+      - grid-template-rows: 1.2em 1fr min-content
       - grid-template-columns: 1fr
   custom_fields:
-    t: >
-      [[[
-        const timer = states[entity.entity_id.replace("light.","timer.").replace("switch.","timer.") + "_timer"];
-        return timer ? timer.state : "";
-      ]]]
+    t:
+      card:
+        type: custom:button-card
+        entity: "[[[ return entity.entity_id.replace('light.', 'timer.').replace('switch.', 'timer.') + '_timer'; ]]]"
+        show_name: false
+        show_icon: false
+        show_state: true
+        styles:
+          card:
+            - font-size: 12px
+            - box-shadow: none
+            - border: none
+            - padding: 0
+            - margin: 0
+          state:
+            - line-height: 1.2em
+            - color: >
+                [[[
+                  if (states[`${entity.entity_id}`.replace("light.", "timer.").replace("switch.", "timer.") + "_timer"].state == "idle")
+                    return "var(--state-icon-color)";
+                  else
+                    return "var(--custom-color-red)";
+                ]]]
   tap_action:
     action: toggle
     haptic: light

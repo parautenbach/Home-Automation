@@ -610,3 +610,89 @@ climate_fan:
       color: var(--state-icon-color)
     - operator: default
       color: var(--state-unavailable-color)
+fan_with_timer:
+  variables:
+    timer_entity: >
+      [[[ return entity.entity_id
+            .replace('light.', 'timer.')
+            .replace('switch.', 'timer.')
+            .replace('cover.', 'timer.') + '_timer';
+      ]]]
+  triggers_update:
+    - '[[[ return variables.timer_entity ]]]'
+  size: 20%
+  color_type: icon
+  styles:
+    card:
+      # map ha’s theme vars into cbc's shadow dom
+      - '--state-icon-active-color': var(--state-active-color)
+      - '--state-unavailable-color': var(--state-icon-unavailable-color)
+      # legacy (polymer) vars
+      - '--paper-item-icon-color': var(--state-icon-color)
+      - '--paper-item-icon-active-color': var(--state-icon-active-color)
+      - font-size: 12px
+    name:
+      - color: var(--state-icon-color)
+    label:
+      - color: var(--state-icon-color)
+    grid:
+      - grid-template-areas: '"t" "i" "n"'
+      - grid-template-rows: 1.2em 1fr min-content
+      - grid-template-columns: 1fr
+  custom_fields:
+    t:
+      card:
+        type: custom:button-card
+        entity: '[[[ return variables.timer_entity ]]]'
+        show_name: false
+        show_icon: false
+        show_state: true
+        styles:
+          card:
+            - font-size: 12px
+            - box-shadow: none
+            - border: none
+            - padding: 0
+            - margin: 0
+          state:
+            - line-height: 1.2em
+            - color: >
+                [[[
+                  if (states[variables.timer_entity]
+                      && states[variables.timer_entity].state !== "idle")
+                    return "var(--custom-color-red)";
+                  else
+                    return "var(--state-icon-color)";
+                ]]]
+  state:
+    - value: 'on'
+      color: var(--state-icon-active-color)
+      styles:
+        icon:
+          - animation: spin 2s linear infinite
+    - value: 'off'
+      color: var(--state-icon-color)
+      styles:
+        icon:
+          - animation: none
+    - value: 'unavailable'
+      color: var(--state-unavailable-color)
+      styles:
+        icon:
+          - animation: none
+    - value: 'unknown'
+      color: var(--state-unavailable-color)
+      styles:
+        icon:
+          - animation: none
+  extra_styles: |
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  tap_action:
+    action: toggle
+    haptic: light
+  hold_action:
+    action: more-info
+    haptic: selection

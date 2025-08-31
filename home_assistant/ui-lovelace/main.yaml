@@ -332,6 +332,21 @@ cards:
             template: basic
             name: Bug Zapper
             entity: switch.bug_zapper
+      - type: horizontal-stack
+        title: Fans
+        cards:
+          - type: custom:button-card
+            template:
+              - fan_with_timer
+            name: Main Bathroom
+            entity: switch.main_bathroom_fan
+          - type: custom:button-card
+            template:
+              - fan_with_timer
+            name: Bathroom
+            entity: switch.bathroom_fan
+          - type: custom:button-card
+            color_type: blank-card
       - type: vertical-stack
         title: Entertainment
         cards:

@@ -404,7 +404,7 @@ cover:
     haptic: heavy
     service: timer.start
     service_data:
-      entity_id: "[[[ return entity.entity_id.replace('cover.', 'timer.') + '_timer'; ]]]"
+      entity_id: "[[[ return variables.timer_entity; ]]]"
       duration: "00:10:00"
 devices_common:
   state:

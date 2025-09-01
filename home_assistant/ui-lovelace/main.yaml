@@ -122,8 +122,6 @@ cards:
               profile: normal
             name: Bedlamp
             entity: light.bedroom_bedlamp
-            triggers_update:
-              - timer.bedroom_bedlamp_timer
             icon: mdi:alarm-light-outline
           - type: vertical-stack
             cards:
@@ -210,16 +208,12 @@ cards:
               profile: normal
             name: Foyer
             entity: light.foyer
-            triggers_update:
-              - timer.foyer_timer
             icon: mdi:dome-light
           - type: custom:button-card
             template:
               - light_with_timer
             name: Living Room
             entity: light.living_room_lamp
-            triggers_update:
-              - timer.living_room_lamp_timer
           - type: custom:button-card
             template:
               - rgb_light
@@ -228,8 +222,6 @@ cards:
               profile: kitchen
             name: Kitchen Counter
             entity: light.kitchen_counter
-            triggers_update:
-              - timer.kitchen_counter_timer
       - type: horizontal-stack
         cards:
           - type: custom:button-card
@@ -265,8 +257,6 @@ cards:
               profile: normal
             name: Hallway
             entity: light.hallway
-            triggers_update:
-              - timer.hallway_timer
           - type: custom:button-card
             template: rgb_light
             name: Office
@@ -278,14 +268,10 @@ cards:
             template: light_with_timer
             name: Main Bathroom
             entity: switch.main_bathroom_light
-            triggers_update:
-              - timer.main_bathroom_light_timer
           - type: custom:button-card
             template: light_with_timer
             name: Bathroom
             entity: switch.bathroom_light
-            triggers_update:
-              - timer.bathroom_light_timer
           - type: custom:button-card
             template: basic
             name: Fairy Lights
@@ -318,8 +304,6 @@ cards:
             template: light_with_timer
             name: Front Door
             entity: light.front_door
-            triggers_update:
-              - timer.front_door_timer
           - type: custom:button-card
             template: basic
             name: Garage

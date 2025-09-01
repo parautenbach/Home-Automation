@@ -83,9 +83,43 @@ basic:
   hold_action:
     action: more-info
     haptic: selection
+embedded_timer:
+  show_name: false
+  show_icon: false
+  show_state: true
+  styles:
+    card:
+      - font-size: 12px
+      - box-shadow: none
+      - border: none
+      - padding: 0
+      - margin: 0
+    state:
+      - line-height: 1.2em
+      - color: >
+          [[[
+            if (states[entity.entity_id]
+                && states[entity.entity_id].state === "idle")
+              return "var(--state-icon-color)";
+            else
+              return "var(--custom-color-red)";
+          ]]]
+  tap_action:
+    action: none
+  hold_action:
+    action: none
 light_with_timer:
   template:
     - old_colors
+  variables:
+    timer_entity: >
+      [[[ return entity.entity_id
+            .replace('light.', 'timer.')
+            .replace('switch.', 'timer.')
+            .replace('cover.', 'timer.') + '_timer';
+      ]]]
+  triggers_update:
+    - "[[[ return variables.timer_entity; ]]]"
   size: 20%
   color_type: icon
   styles:
@@ -103,26 +137,9 @@ light_with_timer:
     t:
       card:
         type: custom:button-card
-        entity: "[[[ return entity.entity_id.replace('light.', 'timer.').replace('switch.', 'timer.') + '_timer'; ]]]"
-        show_name: false
-        show_icon: false
-        show_state: true
-        styles:
-          card:
-            - font-size: 12px
-            - box-shadow: none
-            - border: none
-            - padding: 0
-            - margin: 0
-          state:
-            - line-height: 1.2em
-            - color: >
-                [[[
-                  if (states[`${entity.entity_id}`.replace("light.", "timer.").replace("switch.", "timer.") + "_timer"].state == "idle")
-                    return "var(--state-icon-color)";
-                  else
-                    return "var(--custom-color-red)";
-                ]]]
+        template:
+          - embedded_timer
+        entity: "[[[ return variables.timer_entity; ]]]"
   tap_action:
     action: toggle
     haptic: light
@@ -226,6 +243,15 @@ rgb_light:
     action: more-info
     haptic: selection
 rgb_light_with_timer:
+  variables:
+    timer_entity: >
+      [[[ return entity.entity_id
+            .replace('light.', 'timer.')
+            .replace('switch.', 'timer.')
+            .replace('cover.', 'timer.') + '_timer';
+      ]]]
+  triggers_update:
+    - "[[[ return variables.timer_entity; ]]]"
   styles:
     grid:
       - grid-template-areas: '"t s l" "i i i" "n n n"'
@@ -251,29 +277,9 @@ rgb_light_with_timer:
     t:
       card:
         type: custom:button-card
-        name: Timer
-        entity: "[[[ return entity.entity_id.replace('light.', 'timer.').replace('switch.', 'timer.') + '_timer'; ]]]"
-        show_name: false
-        show_icon: false
-        show_state: true
-        styles:
-          card:
-            - margin-bottom: -1px
-            - font-size: 12px
-            - box-shadow: none
-            - border: none
-          state:
-            - color: >
-                [[[
-                  if (states[`${entity.entity_id}`.replace("light.", "timer.") + "_timer"].state == "idle")
-                    return "var(--state-icon-color)";
-                  else
-                    return "var(--custom-color-red)";
-                ]]]
-        tap_action:
-          action: none
-        hold_action:
-          action: none
+        template:
+          - embedded_timer
+        entity: "[[[ return variables.timer_entity; ]]]"
   state:
     - value: 'unavailable'
       styles:
@@ -325,7 +331,15 @@ light_preset:
       entity_id: entity
       profile: "[[[ return variables.profile; ]]]"
 cover:
-  triggers_update: all
+  variables:
+    timer_entity: >
+      [[[ return entity.entity_id
+            .replace('light.', 'timer.')
+            .replace('switch.', 'timer.')
+            .replace('cover.', 'timer.') + '_timer';
+      ]]]
+  triggers_update:
+    - "[[[ return variables.timer_entity; ]]]"
   size: 20%
   show_name: true
   color_type: icon
@@ -334,30 +348,9 @@ cover:
     t:
       card:
         type: custom:button-card
-        name: Timer
-        entity: "[[[ return entity.entity_id.replace('cover.', 'timer.') + '_timer'; ]]]"
-        show_name: false
-        show_icon: false
-        show_state: true
-        styles:
-          card:
-            - font-size: 12px
-            - box-shadow: none
-            - border: none
-          state:
-            - margin-top: -1ex
-            - margin-bottom: -1ex
-            - color: >
-                [[[
-                  if (states[`${entity.entity_id}`.replace("cover.", "timer.") + "_timer"].state == "idle")
-                    return "var(--state-icon-color)";
-                  else
-                    return "var(--custom-color-red)";
-                ]]]
-        tap_action:
-          action: none
-        hold_action:
-          action: none
+        template:
+          - embedded_timer
+        entity: "[[[ return variables.timer_entity; ]]]"
   styles:
     name:
       - color: var(--state-icon-color)
@@ -643,27 +636,9 @@ fan_with_timer:
     t:
       card:
         type: custom:button-card
-        entity: '[[[ return variables.timer_entity ]]]'
-        show_name: false
-        show_icon: false
-        show_state: true
-        styles:
-          card:
-            - font-size: 12px
-            - box-shadow: none
-            - border: none
-            - padding: 0
-            - margin: 0
-          state:
-            - line-height: 1.2em
-            - color: >
-                [[[
-                  if (states[variables.timer_entity]
-                      && states[variables.timer_entity].state !== "idle")
-                    return "var(--custom-color-red)";
-                  else
-                    return "var(--state-icon-color)";
-                ]]]
+        template:
+          - embedded_timer
+        entity: "[[[ return variables.timer_entity; ]]]"
   state:
     - value: 'on'
       color: var(--state-icon-active-color)

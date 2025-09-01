@@ -544,6 +544,8 @@ climate_led_display:
   icon: mdi:television-ambient-light
   size: 20%
   show_name: false
+  triggers_update:
+    - "[[[ return entity.entity_id.replace('switch.', 'climate.').replace('_display', '') ]]]"
   styles:
     card:
       - padding: 3%

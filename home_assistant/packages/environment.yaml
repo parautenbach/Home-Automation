@@ -187,10 +187,10 @@ binary_sensor:
       outside_temperature_trend:
         entity_id: sensor.outside_temperature_filtered
         friendly_name: "Outside Temperature Trend"
-        # 3 hours * 60 minutes * 60 seconds
-        sample_duration: 10800
+        # 1 hours * 60 minutes * 60 seconds
+        sample_duration: 3600
         # 1 degree in the last 3 hours
-        min_gradient: 0.00009
+        min_gradient: 0.000278
       inside_temperature_trend:
         entity_id: sensor.office_temperature
         friendly_name: "Inside Temperature Trend"
@@ -213,7 +213,7 @@ sensor:
     entity_id: sensor.outside_temperature
     filters:
       filter: lowpass
-      time_constant: 3
+      time_constant: 4
       precision: 1
 
   - platform: history_stats
@@ -230,7 +230,7 @@ sensor:
     # the difference between the newest and the oldest measurement
     state_characteristic: change
     max_age:
-      minutes: 180
+      minutes: 60
 
   - platform: statistics
     entity_id: sensor.office_temperature

@@ -748,12 +748,12 @@ cards:
               - entity: sensor.main_bedroom_ht_temperature
                 name: Main Bedroom
                 color: var(--custom-color-green)
-              - entity: sensor.bedroom_ht_temperature
-                name: Bedroom
-                color: var(--custom-color-magenta)
               - entity: sensor.guest_bedroom_ht_temperature
                 name: Guest Bedroom
                 color: var(--custom-color-blue)
+              - entity: sensor.bedroom_ht_temperature
+                name: Bedroom
+                color: var(--custom-color-magenta)
               - entity: sensor.braai_room_ht_temperature
                 name: Braai Room
                 color: var(--custom-color-turquoise)
@@ -787,12 +787,12 @@ cards:
               - entity: sensor.main_bedroom_ht_humidity
                 name: Main Bedroom
                 color: var(--custom-color-green)
-              - entity: sensor.bedroom_ht_humidity
-                name: Bedroom
-                color: var(--custom-color-magenta)
               - entity: sensor.guest_bedroom_ht_humidity
                 name: Guest Bedroom
                 color: var(--custom-color-blue)
+              - entity: sensor.bedroom_ht_humidity
+                name: Bedroom
+                color: var(--custom-color-magenta)
               - entity: sensor.braai_room_ht_humidity
                 name: Braai Room
                 color: var(--custom-color-turquoise)
@@ -857,9 +857,9 @@ cards:
               - entity: sensor.main_bedroom_ht_temperature
                 name: Main Bedroom
               - entity: sensor.bedroom_ht_temperature
-                name: Bedroom
-              - entity: sensor.bedroom_ht_temperature
                 name: Guest Bedroom
+              - entity: sensor.bedroom_ht_temperature
+                name: Bedroom
               - entity: sensor.braai_room_ht_temperature
                 name: Braai Room
               - entity: sensor.outside_temperature_filtered

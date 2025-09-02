@@ -101,6 +101,12 @@ timer:
   go_home_reminder:
     duration: "00:05:00"
     restore: true
+  living_room_ac_timer:
+    duration: "00:30:00"
+    restore: true
+  main_bedroom_ac_timer:
+    duration: "00:30:00"
+    restore: true
 
 binary_sensor:
   - platform: template

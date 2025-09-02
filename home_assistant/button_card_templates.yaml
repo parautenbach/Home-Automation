@@ -608,6 +608,79 @@ climate_fan:
       color: var(--state-icon-color)
     - operator: default
       color: var(--state-unavailable-color)
+climate_timer:
+  variables:
+    climate_entity: "[[[ return `${entity.entity_id}`.replace('timer.', 'climate.').replace('_timer', ''); ]]]"
+    climate_entity_state: "[[[ return states[variables.climate_entity].state ]]]"
+  triggers_update:
+    - "[[[ return variables.climate_entity ]]]"
+  layout: icon_state
+  show_name: false
+  show_state: true
+  icon: mdi:camera-timer
+  size: 40%
+  styles:
+    card:
+      - height: 100%
+      - font-size: 12px
+      - pointer-events: all
+    state:
+      - justify-self: start
+      - color: |
+          [[[
+            if (variables.climate_entity_state != 'off' && entity.state === 'active') {
+              return 'var(--state-binary_sensor-active-color)';
+            }
+            if (variables.climate_entity_state != 'off' && entity.state === 'idle') {
+              return 'var(--state-icon-color)';
+            }
+            return 'var(--state-unavailable-color)';
+          ]]]
+    icon:
+      - justify-self: end
+    grid:
+      - grid-template-areas: '"i s"'
+      - grid-template-rows: 1fr
+      - grid-template-columns: 1fr 1fr
+  state:
+    - operator: template
+      value: >
+        [[[
+          return variables.climate_entity_state != 'off' && entity.state === 'active';
+        ]]]
+      color: var(--state-binary_sensor-active-color)
+    - operator: template
+      value: >
+        [[[
+          return variables.climate_entity_state != 'off' && entity.state === 'idle';
+        ]]]
+      color: var(--state-icon-color)
+    - operator: default
+      color: var(--state-unavailable-color)
+  tap_action:
+    action: call-service
+    haptic: light
+    service: >
+      [[[
+        if (variables.climate_entity_state !== "off")
+          return "timer.start";
+      ]]]
+    service_data:
+      entity_id: entity
+      duration: "00:30:00"
+  double_tap_action:
+    action: call-service
+    haptic: medium
+    service: >
+      [[[
+        if (entity.state !== "idle")
+          return "timer.cancel";
+      ]]]
+    service_data:
+      entity_id: entity
+  hold_action:
+    action: more-info
+    haptic: heavy
 fan_with_timer:
   variables:
     timer_entity: >

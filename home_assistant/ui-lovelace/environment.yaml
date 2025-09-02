@@ -189,6 +189,10 @@ cards:
                           - climate_led_display
                         entity: switch.living_room_ac_display
                         triggers_update:
+                      - type: custom:button-card
+                        template:
+                          - climate_timer
+                        entity: timer.living_room_ac_timer
               - type: vertical-stack
                 cards:
                   - type: tile
@@ -223,6 +227,10 @@ cards:
                         template:
                           - climate_led_display
                         entity: switch.main_bedroom_ac_display
+                      - type: custom:button-card
+                        template:
+                          - climate_timer
+                        entity: timer.main_bedroom_ac_timer
           - type: horizontal-stack
             cards:
               - type: entities

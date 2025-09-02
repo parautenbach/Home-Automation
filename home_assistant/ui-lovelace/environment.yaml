@@ -513,12 +513,12 @@ cards:
             name: Main Bedroom
             icon: mdi:bed-king-outline
             card_mod: *card_mod_temp_style
-          - entity: sensor.bedroom_ht_temperature
-            name: Bedroom
-            icon: mdi:bed-single-outline
-            card_mod: *card_mod_temp_style
           - entity: sensor.guest_bedroom_ht_temperature
             name: Guest Bedroom
+            icon: mdi:bed-single-outline
+            card_mod: *card_mod_temp_style
+          - entity: sensor.bedroom_ht_temperature
+            name: Bedroom
             icon: mdi:bed-single-outline
             card_mod: *card_mod_temp_style
       - type: glance

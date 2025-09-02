@@ -1831,7 +1831,7 @@ automation:
           sequence:
             - variables:
                 switch_id: "{{ repeat.item }}"
-                timer_id: "{{ repeat.item | replace('switch', 'timer') }}"
+                timer_id: "{{ repeat.item | replace('switch', 'timer') ~ '_timer' }}"
                 is_light: "{{ 'bathroom_light' in timer_id }}"
             - condition: template
               value_template: "{{ is_state(switch_id, 'on') and is_state(timer_id, 'idle') }}"
@@ -1848,15 +1848,15 @@ automation:
       - platform: event
         event_type: timer.finished
         event_data:
-          entity_id: timer.main_bathroom_fan
+          entity_id: timer.main_bathroom_fan_timer
       - platform: event
         event_type: timer.finished
         event_data:
-          entity_id: timer.bathroom_fan
+          entity_id: timer.bathroom_fan_timer
     action:
       - service: switch.turn_off
         target:
-          entity_id: "{{ trigger.event.data.entity_id | replace('timer', 'switch') }}"
+          entity_id: "{{ trigger.event.data.entity_id | replace('timer.', 'switch.') | replace('_timer', '') }}"
 
   - alias: "Turn Off Bathroom Light"
     id: "75b24d88-6e5a-4549-874c-02aec4a1d95b"
@@ -1877,7 +1877,7 @@ automation:
     action:
       - service: switch.turn_off
         target:
-          entity_id: "{{ trigger.event.data.entity_id | replace('timer', 'switch') }}"
+          entity_id: "{{ trigger.event.data.entity_id | replace('timer.', 'switch.') | replace('_timer', '') }}"
 
   - alias: "Set Trash Reminder"
     id: "0106ec38-40d7-49e5-be8f-e905c24519af"

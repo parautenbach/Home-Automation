@@ -1510,3 +1510,5 @@ cards:
       #           unit: ppb
       #           name: WAQI
       #         - entity: sensor.saaqis_o3
+      #           format: precision1
+      #           name: SAAQIS

@@ -188,7 +188,6 @@ cards:
                         template:
                           - climate_led_display
                         entity: switch.living_room_ac_display
-                        triggers_update:
                       - type: custom:button-card
                         template:
                           - climate_timer

@@ -485,6 +485,7 @@ cards:
           - entity: binary_sensor.main_bedroom_ac
             name: Main Bed. AC
       - type: glance
+        columns: 3
         entities:
           - entity: sensor.office_temperature
             name: Living Room

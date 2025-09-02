@@ -434,24 +434,41 @@ cards:
               service: script.close_garage_door_and_main_gate
               service_data:
                 garage_door: "[[[ return entity.entity_id; ]]]"
-      - type: history-graph
-        title: Who's Home?
-        hours_to_show: 24
-        entities:
-          - entity: binary_sensor.anybody_home
-            name: Anybody
-          - entity: binary_sensor.pieter_present
-            name: Pieter
-          - entity: binary_sensor.rouve_present
-            name: Rouvé
-          - entity: binary_sensor.tenant_present
-            name: Tenant
-          - entity: binary_sensor.housekeeper_present
-            name: Housekeeper
-          - entity: input_boolean.contractor_mode
-            name: Contractors
-          - entity: input_boolean.guest_mode
-            name: Guests
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+          - type: history-graph
+            title: Who's Home?
+            hours_to_show: 24
+            entities:
+              - entity: binary_sensor.anybody_home
+                name: Anybody
+              - entity: binary_sensor.pieter_present
+                name: Pieter
+              - entity: binary_sensor.rouve_present
+                name: Rouvé
+              - entity: binary_sensor.tenant_present
+                name: Tenant
+              - entity: binary_sensor.housekeeper_present
+                name: Housekeeper
+              - entity: input_boolean.contractor_mode
+                name: Contractors
+              - entity: input_boolean.guest_mode
+                name: Guests
+          - type: logbook
+            target:
+              entity_id:
+                - binary_sensor.anybody_home
+                - binary_sensor.pieter_present
+                - binary_sensor.rouve_present
+                - binary_sensor.tenant_present
+                - binary_sensor.housekeeper_present
+                - input_boolean.contractor_mode
+                - input_boolean.guest_mode
+            hours_to_show: 1
       - type: entities
         title: Special Modes
         entities:

@@ -474,6 +474,8 @@ automation:
               - action: "ARM_ALARM_BYPASS_GARAGE"
                 title: "Arm (bypass garage)"
                 destructive: true
+              - action: "ENABLE_GUEST_MODE"
+                title: "Enable guest mode"
             action_data:
               entity_ids: "{{ ['alarm_control_panel.home'] }}"
             push:

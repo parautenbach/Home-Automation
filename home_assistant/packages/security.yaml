@@ -381,6 +381,9 @@ automation:
               # content-type: jpg
               hide-thumbnail: false
               lazy: false
+            actions:
+              - action: "ENABLE_GUEST_MODE"
+                title: "Enable guest mode"
 
   - alias: "Foyer Motion Detected Last"
     id: "ef364d58-2cb7-4d5b-8e96-8724c132365a"

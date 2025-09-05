@@ -261,7 +261,8 @@ camera:
     input: /config/www/camera.security_camera_last.mp4
 
 shell_command:
-  copy_last_snapshot_image: "cp `ls -t /tmp/camera.security_camera_*.jpg | head -n1` /config/www/camera.security_camera_last.jpg"
+  copy_last_security_camera_snapshot_image: "cp `ls -t /tmp/camera.security_camera_*.jpg | head -1` /config/www/camera.security_camera_last.jpg"
+  copy_last_snapshot_image: "/root/scripts/copy_last_snapshot_image.sh {{ subdirectory }} {{ camera_entity }}"
   copy_last_video_clip: "cp `ls -t /tmp/camera.security_camera_*.mp4 | head -n1` /config/www/camera.security_camera_last.mp4"
   # keep a rolling buffer of n snapshots by always copying only the latest ones and removing the oldest
   # rsync will only copy what's new up to n and the second command will remove what's extra (can't do it with rsync's --delete unless the source is a directory)
@@ -343,7 +344,7 @@ script:
           # filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
           # filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
           filename: '/tmp/{{ camera_entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
-      - service: shell_command.copy_last_snapshot_image
+      - service: shell_command.copy_last_security_camera_snapshot_image
 
 automation:
   - alias: "Take Foyer Motion Snapshots"
@@ -1176,7 +1177,7 @@ automation:
           entity_id: script.take_snapshot
         data:
           variables:
-            camera_entity_id: camera.doorbell
+            camera_entity: camera.doorbell
             subdirectory: "doorbell"
 
   - alias: "Trim Doorbell Snapshots"

@@ -227,10 +227,9 @@ script:
           data:
             group: "travel-eta"
             url: homeassistant://navigate/lovelace/main
-
   take_snapshot:
     fields:
-      camera_entity_id:
+      camera_entity:
         description: "A camera entity"
         example: "camera.my_camera"
       subdirectory:
@@ -238,11 +237,17 @@ script:
         example: "my_subdirectory"
     mode: parallel
     sequence:
+      - variables:
+          timestamp: "{{ now().strftime('%Y%m%d-%H%M%S') }}"
+          filename: "/config/www/gallery/{{ subdirectory }}/{{ camera_entity }}_{{ timestamp }}.jpg"
       - service: camera.snapshot
         target:
           entity_id: "{{ camera_entity_id }}"
         data:
-          filename: '/config/www/gallery/{{ subdirectory }}/{{ camera_entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+          filename: "{{ filename }}"
+      - service: shell_command.copy_last_snapshot_image
+        data:
+          subdirectory: "{{ subdirectory }}"
   notify_tenant:
     fields:
       message:
@@ -1123,7 +1128,7 @@ automation:
               entity_id: script.take_snapshot
             data:
               variables:
-                camera_entity_id: camera.baby_monitor_profile000
+                camera_entity: camera.baby_monitor_profile000
                 subdirectory: "baby_monitor"
 
   - alias: "Update Sleep Mode Based On Bed Occupancy"

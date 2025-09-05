@@ -266,42 +266,38 @@ automation:
         to: "on"
     mode: queued
     action:
-      - parallel:
-          - service: notify.family
-            data:
-              title: "🔔 Security"
-              message: "The doorbell rang."
-              # todo: thumbnail, url
-              data:
-                group: "doorbell"
-                # or open the amcrest app? (seems like it doesn't register a schema handler, so can't do it, unfortunately)
-                url: homeassistant://navigate/lovelace/security
-                entity_id: camera.doorbell
-                sound:
-                  name: "Doorbell.caf"
-                  critical: 1
-                  volume: 0.3
-                attachment:
-                  # url: !secret doorbell_camera_last_snapshot_url
-                  hide-thumbnail: false
-                  lazy: false
-                actions:
-                  - action: "PARTLY_OPEN_AND_CLOSE_GATE"
-                    title: "Open and close (pedestrian)"
-                  - action: "PARTLY_OPEN_GATE"
-                    title: "Open (pedestrian)"
-                  - action: "FULLY_OPEN_GATE"
-                    title: "Open (fully)"
-                  - action: "CLOSE_GATE"
-                    title: "Close"
-          # non-blocking call
-          - service: script.turn_on
-            target:
-              entity_id: script.take_snapshot
-            data:
-              variables:
-                camera_entity_id: camera.doorbell
-                subdirectory: "doorbell"
+      # blocking call
+      - service: script.take_snapshot
+        data:
+          camera_entity: camera.doorbell
+          subdirectory: "doorbell"
+      - service: notify.family
+        data:
+          title: "🔔 Security"
+          message: "The doorbell rang."
+          data:
+            group: "doorbell"
+            # or open the amcrest app? (seems like it doesn't register a schema handler, so can't do it, unfortunately)
+            url: homeassistant://navigate/lovelace/security
+            # use thumbnail image only
+            # entity_id: camera.doorbell
+            sound:
+              name: "Doorbell.caf"
+              critical: 1
+              volume: 0.3
+            attachment:
+              url: !secret doorbell_camera_last_snapshot_url
+              hide-thumbnail: false
+              lazy: false
+            actions:
+              - action: "PARTLY_OPEN_AND_CLOSE_GATE"
+                title: "Open and close (pedestrian)"
+              - action: "PARTLY_OPEN_GATE"
+                title: "Open (pedestrian)"
+              - action: "FULLY_OPEN_GATE"
+                title: "Open (fully)"
+              - action: "CLOSE_GATE"
+                title: "Close"
 
   - alias: "Handle Doorbell Alert Action"
     id: "c39b4bb0-9a1d-475c-ac7d-ee93fbee8e69"

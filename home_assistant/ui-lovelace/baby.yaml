@@ -369,12 +369,12 @@ cards:
             name: "24h ago"
             icon: mdi:thermometer
             card_mod: *card_mod_temp_style
-          - entity: sensor.bedroom_minimum_temperature_24_hours
-            name: "Min (24h)"
+          - entity: sensor.bedroom_minimum_temperature_12_hours
+            name: "Min (12h)"
             icon: mdi:thermometer-low
             card_mod: *card_mod_temp_style
-          - entity: sensor.bedroom_maximum_temperature_24_hours
-            name: "Max (24h)"
+          - entity: sensor.bedroom_maximum_temperature_12_hours
+            name: "Max (12h)"
             icon: mdi:thermometer-high
             card_mod: *card_mod_temp_style
       - type: custom:swipe-card

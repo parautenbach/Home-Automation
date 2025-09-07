@@ -241,27 +241,27 @@ sensor:
       minutes: 30
 
   - platform: statistics
-    name: "Bedroom Minimum Temperature (24 hours)"
+    name: "Bedroom Minimum Temperature (12 hours)"
     entity_id: sensor.bedroom_ht_temperature
     state_characteristic: value_min
     max_age:
-      hours: 24
+      hours: 12
     precision: 1
 
   - platform: statistics
-    name: "Bedroom Maximum Temperature (24 hours)"
+    name: "Bedroom Maximum Temperature (12 hours)"
     entity_id: sensor.bedroom_ht_temperature
     state_characteristic: value_max
     max_age:
-      hours: 24
+      hours: 12
     precision: 1
 
   - platform: statistics
-    name: "Bedroom Average Temperature (24 hours)"
+    name: "Bedroom Average Temperature (12 hours)"
     entity_id: sensor.bedroom_ht_temperature
     state_characteristic: average_linear
     max_age:
-      hours: 24
+      hours: 12
     precision: 1
 
   - platform: template

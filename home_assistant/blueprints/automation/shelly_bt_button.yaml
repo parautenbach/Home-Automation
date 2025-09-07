@@ -1,0 +1,83 @@
+# https://www.home-assistant.io/docs/blueprint/tutorial/
+# https://www.home-assistant.io/docs/blueprint/
+# https://community.home-assistant.io/t/shelly-device-switch-template-for-each-click-type/296528
+# https://community.home-assistant.io/t/automation-created-using-a-blueprint-not-showing-up-in-ui-after-creating/256753
+blueprint:
+  name: Shelly BT Button Events
+  description: Perform actions using Shelly BT Buttons.
+  domain: automation
+  input:
+    event_entity_id:
+      name: Button event entity
+      description: Button event entity to trigger on
+      selector:
+        entity:
+          filter:
+            - domain: event
+    light_entity_id:
+      name: Light entity
+      description: Light to act on
+      selector:
+        entity:
+          domain: light
+    single_press_profile:
+      name: Single press profile
+      description: A light profile
+      selector:
+        text:
+    double_press_profile:
+      name: Double click profile
+      description: A light profile
+      selector:
+        text:
+    # if we want to make this optional:
+    # https://community.home-assistant.io/t/blueprint-optional-input/278810/8
+    triple_press_profile:
+      name: Triple click profile
+      description: A light profile
+      selector:
+        text:
+
+trigger:
+  - platform: state
+    entity_id: !input event_entity_id
+    # only trigger on the state
+    to: null
+    # this doesn't change if you keep double pressing
+    # attribute: event_type
+    # to: 'double_press'
+mode: queued
+action:
+  - variables:
+      event: "{{ state_attr(trigger.entity_id, 'event_type') }}"
+  - choose:
+    - conditions:
+        - "{{ event == 'press' }}"
+      sequence:
+        - service: script.turn_on
+          target:
+            entity_id: script.toggle_light
+          data:
+            variables:
+              light: !input light_entity_id
+              profile: !input single_press_profile
+    - conditions:
+        - "{{ event == 'double_press' }}"
+      sequence:
+        - service: script.turn_on
+          target:
+            entity_id: script.turn_on_light
+          data:
+            variables:
+              light: !input light_entity_id
+              profile: !input double_press_profile
+    - conditions:
+        - "{{ event == 'triple_press' }}"
+      sequence:
+        - service: script.turn_on
+          target:
+            entity_id: script.turn_on_light
+          data:
+            variables:
+              light: !input light_entity_id
+              profile: !input triple_press_profile

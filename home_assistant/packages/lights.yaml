@@ -1174,11 +1174,10 @@ automation:
   - alias: "Toggle Pieter's Bedside Lamp"
     id: "8f52a6f5-0ce5-4024-948d-bb641166bc00"
     initial_state: true
-    # https://community.home-assistant.io/t/automation-created-using-a-blueprint-not-showing-up-in-ui-after-creating/256753
     use_blueprint:
-      path: shelly_button.yaml
+      path: shelly_bt_button.yaml
       input:
-        button_device_id: ed95f30c451de3426bc63770935ebc18
+        event_entity_id: event.pieter_bedside_light_button
         light_entity_id: light.pieter_bedside
         single_press_profile: pieter
         double_press_profile: bedlamp_night
@@ -1232,11 +1231,11 @@ automation:
     id: "6bb6fa7a-3385-4d78-9a30-6f49c90adbf9"
     initial_state: true
     use_blueprint:
-      path: shelly_button.yaml
+      path: shelly_bt_button.yaml
       input:
-        button_device_id: b7cb6f66fe4f1eefbf0de8480962bd23
+        event_entity_id: event.rouve_bedside_light_button
         light_entity_id: light.rouve_bedside
-        single_press_profile: rouve
+        single_press_profile: pieter
         double_press_profile: bedlamp_night
         triple_press_profile: security
 
@@ -1483,3 +1482,28 @@ automation:
       - service: script.turn_off
         target:
           entity_id: light.yard_group
+
+  - alias: "Toggle Office Light (1)"
+    id: "8b279a54-33f4-4214-9bce-6c9f068c85dd"
+    initial_state: true
+    # https://community.home-assistant.io/t/automation-created-using-a-blueprint-not-showing-up-in-ui-after-creating/256753
+    use_blueprint:
+      path: shelly_button.yaml
+      input:
+        button_device_id: ed95f30c451de3426bc63770935ebc18
+        light_entity_id: light.office
+        single_press_profile: pieter
+        double_press_profile: bedlamp_night
+        triple_press_profile: security
+
+  - alias: "Toggle Office Light (2)"
+    id: "6cea5173-0279-4ee5-80e6-922791c874a9"
+    initial_state: true
+    use_blueprint:
+      path: shelly_button.yaml
+      input:
+        button_device_id: b7cb6f66fe4f1eefbf0de8480962bd23
+        light_entity_id: light.office
+        single_press_profile: rouve
+        double_press_profile: bedlamp_night
+        triple_press_profile: security

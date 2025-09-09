@@ -756,7 +756,7 @@ automation:
         data:
           variables:
             light: light.bedroom_bedlamp
-            profile: normal
+            profile: bedlamp_normal
 
   # might need to specialise this a bit more in future:
   # e.g. switch on from 6 am when arriving home and light is low
@@ -921,7 +921,7 @@ automation:
         data:
           variables:
             light: light.bedroom_bedlamp
-            profile: normal
+            profile: bedlamp_normal
 
   - alias: "Lights Off After Sunrise"
     id: "7f64fa82-a158-4f78-b406-2f0653f8f764"

@@ -153,7 +153,7 @@ cards:
               - rgb_light
               - rgb_light_with_timer
             variables:
-              profile: normal
+              profile: bedlamp_normal
             name: Bedlamp
             entity: light.bedroom_bedlamp
             triggers_update:
@@ -175,7 +175,7 @@ cards:
                   - basic_small
                   - light_preset
                 variables:
-                  profile: low
+                  profile: bedlamp_low
                 entity: light.bedroom_bedlamp
                 name: Low
                 icon: mdi:brightness-6
@@ -186,7 +186,7 @@ cards:
                   - basic_small
                   - light_preset
                 variables:
-                  profile: night
+                  profile: bedlamp_night
                 entity: light.bedroom_bedlamp
                 name: Night
                 icon: mdi:weather-night

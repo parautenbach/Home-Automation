@@ -983,7 +983,8 @@ automation:
         at: "09:30:00"
     action:
       - service: light.turn_off
-        entity_id: light.main_bedroom_group
+        target:
+          entity_id: light.main_bedroom_group
 
   - alias: "Switch On Inside Lights When Unplugging Phone"
     id: "ca60418c-1870-4c55-845d-4d5eba9aea52"

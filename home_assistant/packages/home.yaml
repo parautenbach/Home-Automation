@@ -789,6 +789,7 @@ automation:
         entity_id:
           - light.music_room
           - light.dining_room
+          - light.office
       - service: light.turn_on
         entity_id: light.hallway
         data:

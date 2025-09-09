@@ -298,12 +298,28 @@ cards:
                         entity: sensor.time
                         name: Time of Day
                         state: >-
-                          {{ 'Met' if today_at('09:00:00') <= now() <= today_at('17:00:00') else 'Not met' }}
-                        secondary: "{{ now().strftime('%H:%M') }} is {{ 'not' if not today_at('09:00:00') <= now() <= today_at('17:00:00') else '' }} between 09:00 and 17:00"
+                          {% set is_workday = states('binary_sensor.workday') %}
+                          {% set in_workday_range = today_at('09:00:00') <= now() <= today_at('17:00:00') %}
+                          {% set in_non_workday_range = today_at('10:00:00') <= now() <= today_at('17:00:00') %}
+                          {% set conditions_met = (is_workday and in_workday_range) or (not is_workday and in_non_workday_range) %}
+                          {{ 'Met' if conditions_met else 'Not met' }}
+                        secondary: >-
+                          {% set is_workday = states('binary_sensor.workday') %}
+                          {% set workday_str = 'workday' if is_workday else 'non-workday' %}
+                          {% set in_workday_range = today_at('09:00:00') <= now() <= today_at('17:00:00') %}
+                          {% set in_non_workday_range = today_at('10:00:00') <= now() <= today_at('17:00:00') %}
+                          {% set conditions_met = (is_workday and in_workday_range) or (not is_workday and in_non_workday_range) %}
+                          {% set hh_mm = now().strftime('%H:%M') %}
+                          {{ hh_mm }} is {{ 'not' if not in_workday_range else '' }} between 09:00 and 17:00 ({{ workday_str }})
                         card_mod:
                           style: |
                             .state {
-                              color: {{ 'var(--custom-color-green)' if today_at('09:30:00') <= now() <= today_at('17:00:00') else 'var(--custom-color-red)' }};
+                              color:
+                                {% set is_workday = states('binary_sensor.workday') %}
+                                {% set in_workday_range = today_at('09:00:00') <= now() <= today_at('17:00:00') %}
+                                {% set in_non_workday_range = today_at('10:00:00') <= now() <= today_at('17:00:00') %}
+                                {% set conditions_met = (is_workday and in_workday_range) or (not is_workday and in_non_workday_range) %}
+                                {{ 'var(--custom-color-green)' if conditions_met else 'var(--custom-color-red)' }};
                               }
                             }
                   - type: custom:fold-entity-row

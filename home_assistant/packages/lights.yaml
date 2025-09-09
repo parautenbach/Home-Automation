@@ -114,6 +114,7 @@ light:
       - light.dining_room
       - light.music_room
       - light.corner_lights
+      - light.office
   - platform: group
     name: Living Areas Ceiling Lights Group
     entities:

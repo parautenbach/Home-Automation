@@ -115,6 +115,13 @@ light:
       - light.music_room
       - light.corner_lights
   - platform: group
+    name: Living Areas Ceiling Lights Group
+    entities:
+      - light.dining_room
+      - light.music_room
+      - light.office
+      - light.foyer
+  - platform: group
     # keep in sync with scene.normal_lights in scenes.yaml
     name: Normal Light Group
     entities:

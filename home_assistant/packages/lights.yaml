@@ -1124,8 +1124,6 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - light.dining_room
-          - light.music_room
           - light.foyer
           - light.hallway
     mode: parallel
@@ -1150,8 +1148,6 @@ automation:
       # this will thus trigger the moment the smart bulb reconnects to the network and hass
       - platform: state
         entity_id:
-          - light.dining_room
-          - light.music_room
           - light.foyer
           - light.hallway
         to: "on"

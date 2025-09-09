@@ -1504,9 +1504,9 @@ automation:
                     state:
                       - slightly_cool
                       - comfortable
-              - condition: numeric_state
-                entity_id: sensor.outside_temperature_change
-                above: 0.9
+              # - condition: numeric_state
+              #   entity_id: sensor.outside_temperature_change
+              #   above: 0.9
               - condition: template
                 # same as matching trigger above
                 value_template: >-

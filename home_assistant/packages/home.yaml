@@ -1860,6 +1860,31 @@ automation:
               data:
                 duration: "{{ '00:30:00' if is_light else '00:15:00' }}"
 
+  - alias: "Handle Bathroom Timers At Sunset"
+    id: "fde4eaca-5648-4eca-bfab-7f3d79552dfe"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.daytime
+        to: "off"
+    action:
+      - repeat:
+          for_each:
+            - switch.main_bathroom_light
+            - switch.main_bathroom_fan
+            - switch.bathroom_light
+            - switch.bathroom_fan
+          sequence:
+            - variables:
+                switch_id: "{{ repeat.item }}"
+                timer_id: "{{ repeat.item | replace('switch', 'timer') ~ '_timer' }}"
+                is_light: "{{ 'bathroom_light' in timer_id }}"
+            - condition: template
+              value_template: "{{ is_light and not is_state(timer_id, 'idle') }}"
+            - service: timer.cancel
+              target:
+                entity_id: "{{ timer_id }}"
+
   - alias: "Turn Off Bathroom Fan"
     id: "de9d354c-912e-4683-b8df-42e9dca58425"
     initial_state: true

@@ -987,6 +987,22 @@ automation:
           entity_id: light.main_bedroom_group
 
   - alias: "Switch On Inside Lights When Unplugging Phone"
+  - alias: "Foyer Light Off After Sunrise"
+    id: "03a3b790-c37f-4d51-906e-540afe1fe5cd"
+    initial_state: true
+    trigger:
+      - platform: sun
+        event: sunrise
+        offset: "00:30:00"
+    condition:
+      - condition: state
+        entity_id: input_boolean.contractor_mode
+        state: "off"
+    action:
+      - service: light.turn_off
+        target:
+          entity_id: light.foyer
+
     id: "ca60418c-1870-4c55-845d-4d5eba9aea52"
     trigger:
       platform: state

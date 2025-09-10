@@ -1689,6 +1689,7 @@ automation:
       - platform: time
         at: "17:30:00"
       # sensor.living_room_ac_power < x for 30 min? => it's basically been running the fan only
+      # unless temp diff more than 10 degrees
     condition:
       - condition: time
         after: "09:30:00"
@@ -1754,6 +1755,7 @@ automation:
               - comfortable
               - slightly_warm
     action:
+      # or notify with actions to turn off or extend for 1 hour
       - service: climate.turn_off
         target:
           entity_id: climate.living_room_ac

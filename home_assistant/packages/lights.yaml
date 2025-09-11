@@ -1267,7 +1267,7 @@ automation:
       input:
         event_entity_id: event.rouve_bedside_light_button
         light_entity_id: light.rouve_bedside
-        single_press_profile: pieter
+        single_press_profile: rouve
         double_press_profile: bedlamp_night
         triple_press_profile: security
 

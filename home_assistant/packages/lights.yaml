@@ -1002,7 +1002,7 @@ automation:
         target:
           entity_id: light.foyer
 
-  - alias: "Switch On Inside Lights When Unplugging Phone Or Sleep Mode Turned Off"
+  - alias: "Wake-up Lights"
     id: "ca60418c-1870-4c55-845d-4d5eba9aea52"
     trigger:
       - platform: state

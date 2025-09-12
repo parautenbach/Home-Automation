@@ -866,7 +866,9 @@ automation:
             {% from 'datetime.jinja' import sec_to_hour_and_min %}
             {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
             {% set after = sec_to_hour_and_min(seconds) %}
-            The grid feed has been {{ 'restored after ' ~ after ~ '.' if is_state('binary_sensor.grid_feed', 'on') else 'cut. Please mind energy usage.' }}
+            {% set loadshedding = states('sensor.loadshedding_start_time') | as_datetime <= now() <= states('sensor.loadshedding_end_time') | as_datetime %}
+            {% set reason = ' due to loadshedding' if loadshedding else '' %}
+            The grid feed has been {{ 'restored after ' ~ after ~ '.' if is_state('binary_sensor.grid_feed', 'on') else 'cut' ~ reason ~ '. Please mind energy usage.' }}
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace/resources
@@ -1355,10 +1357,6 @@ automation:
             {# this isn't available here :-( #}
             {% set current_trigger = now().replace(second=0).replace(microsecond=0) %}
             {{ current_trigger == ('03:30' | today_at) }}
-      - platform: state
-        entity_id: binary_sensor.loadshedding_active
-        to: "on"
-        id: "loadshedding_active"
     mode: single
     # this would ensure we only get a notification if the mode has changed
     # but do we really want to do this? perhaps it's good to know every time, so that a human can do a sanity check
@@ -1504,6 +1502,111 @@ automation:
               entity_id: input_text.last_charge_mode
             data:
               value: "{{ states('sensor.charge_mode') }}"
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.set_charge_point_error
+
+  # when it's 15 min before scheduled load shedding starts
+  # and if it's between 05h00 and 08h00 (this will cover the 06h00 and 08h00 slots)
+  # then set charge point to at least 20% and grid on
+  # so that we charge the battery a little bit to prevent running out
+  # until there's sufficient solar generation
+  # this is mostly for when the current the capacity point is quite low
+  - alias: "Override Charge Point"
+    id: "61be26c3-b9ba-44cb-9a68-48e7e9e9bf3d"
+    initial_state: true
+    trigger:
+      - platform: time
+        at:
+          entity_id: sensor.loadshedding_start_time
+          # don't let this coincide with the 30 min interval with which we update the charge map
+          offset: -00:15:00
+    condition:
+      - condition: time
+        after: "05:00:00"
+        before: "08:00:00"
+    action:
+      - variables:
+          capacity_charge_point_entity: number.capacity_point_2
+          new_threshold: "{{ max(20, states('number.capacity_point_2') | int(0)) }}"
+          grid_charge_point_entity: switch.grid_charge_point_2
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.set_charge_point_error
+      # set battery threshold
+      - service: number.set_value
+        target:
+          entity_id: "{{ capacity_charge_point_entity }}"
+        data:
+          value: "{{ new_threshold }}"
+      - delay:
+          seconds: 30
+      - if:
+          - "{{ not is_state(capacity_charge_point_entity, new_threshold) }}"
+        then:
+          - service: number.set_value
+            target:
+              entity_id: "{{ capacity_charge_point_entity }}"
+            data:
+              value: "{{ new_threshold }}"
+          - wait_template: >-
+              {{ is_state(capacity_charge_point_entity, new_threshold) }}
+            timeout:
+              seconds: 30
+            continue_on_timeout: true
+          - if:
+              - "{{ not wait.completed }}"
+            then:
+              - service: input_boolean.turn_on
+                entity_id: input_boolean.set_charge_point_error
+      # enable grid charging
+      - service: switch.turn_on
+        target:
+          entity_id: "{{ grid_charge_point_entity }}"
+      - delay:
+          seconds: 30
+      - if:
+          - "{{ not is_state(grid_charge_point_entity, 'on') }}"
+        then:
+          - service: switch.turn_on
+            target:
+              entity_id: "{{ grid_charge_point_entity }}"
+          - wait_template: >-
+              {{ is_state(grid_charge_point_entity, 'on') }}
+            timeout:
+              seconds: 30
+            continue_on_timeout: true
+          - if:
+              - "{{ not wait.completed }}"
+            then:
+              - service: input_boolean.turn_on
+                entity_id: input_boolean.set_charge_point_error
+      # notify
+      - if:
+          - condition: state
+            entity_id: input_boolean.set_charge_point_error
+            state: "off"
+        then:
+          - service: notify.mobile_app_ceres
+            data:
+              title: "⚙️ Energy"
+              message: >-
+                The backup power system's current battery charge threshold has been changed to {{ new_threshold }}% with grid charging allowed to protect against loadshedding.
+              data:
+                group: "home-electricity"
+                url: homeassistant://navigate/lovelace/resources
+        else:
+          - service: notify.mobile_app_ceres
+            data:
+              title: "⚙️ Energy"
+              message: >-
+                The backup power system's current battery charge threshold and grid charge setting couldn't be changed to protect against loadshedding.
+              data:
+                group: "home-electricity"
+                url: homeassistant://navigate/lovelace/resources
+                push:
+                  sound:
+                    name: default
+                    critical: 1
+                    volume: 0.3
       - service: input_boolean.turn_off
         entity_id: input_boolean.set_charge_point_error
 

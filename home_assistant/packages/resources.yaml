@@ -1850,7 +1850,11 @@ automation:
       #   before: "23:00:00"
     action:
       - variables:
-          message: "The property has switched to backup power. Please mind your energy usage."
+          message: >-
+            {% set loadshedding = states('sensor.loadshedding_start_time') | as_datetime <= now() <= states('sensor.loadshedding_end_time') | as_datetime %}
+            {% set reason = ' due to loadshedding' if loadshedding else '' %}
+            {{ 'The property has switched to backup power' ~ reason ~ '. Please mind your energy usage.' }}
+            {# The property has switched to backup power{{ reason }}. Please mind your energy usage. #}
       - service: script.turn_on
         target:
           entity_id: script.notify_tenant

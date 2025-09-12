@@ -2,6 +2,8 @@
 # 
 # Frequently Asked Questions for the Home Assistant Energy Dashboard:
 # https://gist.github.com/langestefan/acbf7e42b15b302e9aacc08663039e57
+#
+# https://re.jrc.ec.europa.eu/pvg_tools/en/tools.html
 
 homeassistant:
   customize:

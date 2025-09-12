@@ -1102,7 +1102,6 @@ automation:
                   message: "{{ message }}"
                   data:
                     group: "home-electricity"
-                    tag: "backup-power-battery-update"
                     url: homeassistant://navigate/lovelace/resources
                     push:
                       sound:

@@ -371,6 +371,7 @@ automation:
                     target:
                       entity_id:
                         - light.hallway
+                        - light.foyer
                     data:
                       profile: low
               - delay:
@@ -409,6 +410,14 @@ automation:
                             light: light.hallway
                             target_brightness_pct: 60
                             transition_duration: 120
+                      - service: script.turn_on
+                        target:
+                          entity_id: script.fade_light
+                        data:
+                          variables:
+                            light: light.foyer
+                            target_brightness_pct: 60
+                            transition_duration: 120
             else:
               - service: light.turn_on
                 target:
@@ -427,7 +436,9 @@ automation:
                 then:
                   - service: light.turn_on
                     target:
-                      entity_id: light.hallway
+                      entity_id:
+                        - light.hallway
+                        - light.foyer
                     data:
                       profile: normal
           - condition: template

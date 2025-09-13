@@ -71,6 +71,9 @@ homeassistant:
     light.kitchen_counter:
       friendly_name: Kitchen Counter Lights
       icon: mdi:led-strip-variant
+    light.scullery_counter:
+      friendly_name: Scullery Counter Lights
+      icon: mdi:led-strip-variant
     light.dining_room_corner_light:
       icon: mdi:axis
     light.music_room_corner_light:
@@ -128,12 +131,14 @@ light:
     entities:
       - light.living_room_lamp
       - light.kitchen_counter
+      - light.scullery_counter
       - light.corner_lights
   - platform: group
     name: Night Group
     entities:
       - light.foyer
       - light.kitchen_counter
+      - light.scullery_counter
       - light.hallway
   - platform: group
     name: Yard Group
@@ -177,6 +182,11 @@ scene:
         brightness: 255
         color_mode: "xy"
         xy_color: [0.544, 0.394]
+      light.scullery_counter:
+        state: "on"
+        brightness: 255
+        color_mode: "xy"
+        xy_color: [0.598, 0.383]
       light.corner_lights:
         state: "on"
         brightness: 255
@@ -200,6 +210,11 @@ scene:
         color_mode: "xy"
         xy_color: [0.701, 0.299]
       light.kitchen_counter:
+        state: "on"
+        brightness: 5
+        color_mode: "xy"
+        xy_color: [0.701, 0.299]
+      light.scullery_counter:
         state: "on"
         brightness: 5
         color_mode: "xy"
@@ -233,6 +248,9 @@ timer:
     duration: "00:03:00"
     restore: true
   kitchen_counter_timer:
+    duration: "00:03:00"
+    restore: true
+  scullery_counter_timer:
     duration: "00:03:00"
     restore: true
   # this is not a typo: 30s, because we don't want the hallway light to wake up people even though it's dim and red
@@ -597,6 +615,10 @@ automation:
         event_type: timer.finished
         event_data:
           entity_id: timer.kitchen_counter_timer
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.scullery_counter_timer
       - platform: event
         event_type: timer.finished
         event_data:
@@ -1514,6 +1536,17 @@ automation:
       - service: script.turn_off
         target:
           entity_id: light.yard_group
+
+  - alias: "Toggle Scullery Counter Lights"
+    id: "e3e98123-f5b1-4d60-87ed-4d44c51957c9"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: event.kitchen_counter_lights
+    action:
+      - service: light.toggle
+        target:
+          entity_id: light.scullery_counter
 
   - alias: "Toggle Office Light (1)"
     id: "8b279a54-33f4-4214-9bce-6c9f068c85dd"

@@ -37,6 +37,7 @@
       - light.backyard
       - light.garage
       - light.kitchen_counter
+      - light.scullery_counter
       - light.dining_room_corner_light
       - light.music_room_corner_light
       - light.hallway

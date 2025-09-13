@@ -218,10 +218,16 @@ cards:
             template:
               - rgb_light
               - rgb_light_with_timer
-            variables:
-              profile: kitchen
-            name: Kitchen Counter
+            name: Kitchen Counters
             entity: light.kitchen_counter
+            tap_action:
+              haptic: light
+              action: call-service
+              service: light.toggle
+              data:
+                entity_id:
+                  - light.kitchen_counter
+                  - light.scullery_counter
       - type: horizontal-stack
         cards:
           - type: custom:button-card

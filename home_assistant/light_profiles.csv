@@ -3,6 +3,8 @@ group.all_lights.default,0.3620,0.3708,153
 light.corner_lights.default,0.657,0.333,255
 bedlamp_night,0.526,0.387,5
 bedlamp_normal,0.456,0.373,153
+light.kitchen_counter.default,0.545,0.395,255
+light.scullery_counter.default,0.598,0.383,255
 bedroom_lilac,0.309,0.163,153
 corner_white,0.657,0.333,255
 dim,0.3620,0.3708,71,5
@@ -12,4 +14,5 @@ kitchen,0.545,0.395,255
 low,0.3620,0.3708,3,5
 night,0.701,0.299,5
 normal,0.3620,0.3708,153
+scullery,0.598,0.383,255
 security,0.323,0.329,255

@@ -84,6 +84,8 @@ homeassistant:
       icon: mdi:dome-light
     switch.bathroom_light:
       icon: mdi:dome-light
+    light.living_areas_ceiling_lights_group:
+      icon: mdi:dome-light
 
 input_boolean:
   foyer_state:

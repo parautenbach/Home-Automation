@@ -1346,6 +1346,8 @@ automation:
       - platform: state
         entity_id: input_boolean.baby_sleep_mode
         to: "on"
+      - platform: time
+        at: "19:00:00"
       - platform: state
         entity_id:
           - light.bedroom_bedlamp

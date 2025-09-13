@@ -772,6 +772,7 @@ automation:
             - light.hallway
             - light.music_room
             - light.dining_room
+            - light.office
         data:
           profile: security
       # only turn it on if it's not already on; it could be on already as the warning light due to load shedding

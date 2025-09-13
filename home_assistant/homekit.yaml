@@ -32,6 +32,7 @@
       - light.rouve_bedside
       - light.dining_room
       - light.music_room
+      - light.office
       - light.foyer
       - light.front_door
       - light.backyard

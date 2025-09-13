@@ -671,6 +671,24 @@ automation:
           entity_id: light.hallway
         data:
           profile: normal
+      # todo: stop timers, foyer light off (but only if on and not load shedding)
+      # for now, the real annoyance is if the living room lamp turns off
+      # just leave the foyer light
+      - repeat:
+          for_each:
+            - timer.living_room_lamp_timer
+            # might be on if alarm was triggered, or might be turned on as we get home while load shedding is active
+            # - timer.foyer_timer
+            # why would these timers be active?
+            # - timer.kitchen_counter_timer
+            # - timer.scullery_counter_timer
+            # - timer.hallway_timer
+          sequence:
+            - condition: template
+              value_template: "{{ is_state(repeat.item, 'active') }}"
+            - service: timer.cancel
+              target:
+                entity_id: "{{ repeat.item }}"
 
   - alias: "Bedlamps Auto On Upon Sunset or Arrival"
     id: "21b972ef-1e21-42b5-a137-9b160f601310"

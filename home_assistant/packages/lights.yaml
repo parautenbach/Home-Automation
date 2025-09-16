@@ -1087,6 +1087,9 @@ automation:
       - condition: state
         entity_id: binary_sensor.daytime
         state: "off"
+      - condition: state
+        entity_id: input_boolean.baby_sleep_mode
+        state: "off"
       - service: light.turn_on
         target:
           entity_id: light.foyer

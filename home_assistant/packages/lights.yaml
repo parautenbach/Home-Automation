@@ -1092,7 +1092,9 @@ automation:
         state: "off"
       - service: light.turn_on
         target:
-          entity_id: light.foyer
+          entity_id:
+            - light.hallway
+            - light.foyer
         data:
           profile: normal
 

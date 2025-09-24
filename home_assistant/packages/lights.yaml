@@ -162,6 +162,8 @@ light:
     entities:
       - light.dining_room_corner_light
       - light.music_room_corner_light
+  - platform: template
+    lights:
       living_room_fairy_lights:
         friendly_name: Living Room Fairy Lights
         icon_template: mdi:string-lights

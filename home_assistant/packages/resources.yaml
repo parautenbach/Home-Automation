@@ -975,17 +975,17 @@ automation:
         target:
           entity_id: light.foyer
         data:
-          profile: night
-          # the function maps the state of charge range [100,30] of the battery to the brightness range [2,100] of the light
+          hs_color: [0, 100]
+          # the function maps the state of charge range [100%,30%] of the battery to the brightness range [2%,100%] ([5,255]) of the light
           # it's a linear function with a negative gradient
-          brightness_pct: >-
+          brightness: >-
             {% set state = states('sensor.battery_state_of_charge') | int(0) %}
             {# make the light changes more pronounced #}
             {% set state_bracketed = (state | int(0) + 5) // 10 * 10 %}
             {# this formula sets 30% charge to 100% brightness and 100% charge to 1% brightness #}
             {# https://docs.google.com/spreadsheets/d/1ndnxCt_XyBRBwG9zdRIUBITEb4C2H2VHPHGBMj3uGic/edit#gid=0 #}
-            {% set brightness = (-98/70*state_bracketed + 142) | round(0) %}
-            {{ min(brightness, 100) }}
+            {% set brightness = (-98/70*state_bracketed + 142) | multiply(255/100) | round(0) %}
+            {{ min(brightness, 255) }}
 
   - alias: "Send Backup Power Battery Update"
     id: "0c451149-cda2-4b52-b714-f866034568d4"

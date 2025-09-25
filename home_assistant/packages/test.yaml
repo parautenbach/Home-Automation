@@ -51,6 +51,13 @@ alert:
 shell_command:
   test_json: '/root/scripts/test_json.sh "{{ data }}"'
 
+light:
+  - platform: group
+    name: Test Group
+    entities:
+      - light.dining_room
+      - light.office
+
 script:
   test_foyer_light:
     fields:

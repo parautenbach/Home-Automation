@@ -351,7 +351,7 @@ automation:
                     target:
                       entity_id: light.pieter_bedside
                     data:
-                      profile: low
+                      profile: low_shelly_duo
               - if:
                   - condition: state
                     entity_id: light.rouve_bedside
@@ -361,7 +361,7 @@ automation:
                     target:
                       entity_id: light.rouve_bedside
                     data:
-                      profile: low
+                      profile: low_shelly_duo
               - if:
                   - condition: state
                     entity_id: input_boolean.baby_sleep_mode
@@ -371,9 +371,11 @@ automation:
                     target:
                       entity_id:
                         - light.hallway
+                    data:
+                      profile: low_tp_link_rgb
                         - light.foyer
                     data:
-                      profile: low
+                      profile: low_tp_link_rgb
               - delay:
                   minutes: 1
               # this call does not block/wait, so the two transitions will start at almost the same time
@@ -386,16 +388,16 @@ automation:
                       entity_id: script.fade_light
                     data:
                       variables:
-                        light: light.pieter_bedside
-                        target_brightness_pct: 20
+                        light: light.hallway
+                        target_brightness_pct: 60
                         transition_duration: 120
                   - service: script.turn_on
                     target:
                       entity_id: script.fade_light
                     data:
                       variables:
-                        light: light.rouve_bedside
-                        target_brightness_pct: 40
+                        light: light.foyer
+                        target_brightness_pct: 60
                         transition_duration: 120
                   - if:
                       - condition: state
@@ -423,12 +425,12 @@ automation:
                 target:
                   entity_id: light.pieter_bedside
                 data:
-                  profile: pieter
+                  profile: normal_main_bedroom_bedlamps
               - service: light.turn_on
                 target:
                   entity_id: light.rouve_bedside
                 data:
-                  profile: rouve
+                  profile: normal_main_bedroom_bedlamps
               - if:
                   - condition: state
                     entity_id: input_boolean.baby_sleep_mode
@@ -440,7 +442,7 @@ automation:
                         - light.hallway
                         - light.foyer
                     data:
-                      profile: normal
+                      profile: normal_tp_link_rgb
           - condition: template
             value_template: >-
               {% set entity_id = 'climate.main_bedroom_ac' %}
@@ -774,7 +776,7 @@ automation:
             - light.dining_room
             - light.office
         data:
-          profile: security
+          profile: bright_shelly_duo
       # only turn it on if it's not already on; it could be on already as the warning light due to load shedding
       - condition: state
         entity_id: light.foyer
@@ -783,7 +785,7 @@ automation:
         target:
           entity_id: light.foyer
         data:
-          profile: security
+          profile: bright_tp_link_rgb
 
   - alias: "Revert Cleaning Day Lights"
     id: "9b73e13c-449e-4b9c-82c3-2652156cd7e5"
@@ -808,7 +810,7 @@ automation:
       - service: light.turn_on
         entity_id: light.hallway
         data:
-          profile: normal
+          profile: normal_tp_link_rgb
       # don't turn it off while being load shed, because this is the warning light and will be red
       - condition: state
         entity_id: binary_sensor.grid_feed

@@ -335,7 +335,7 @@ cards:
               service: script.toggle_light
               service_data:
                 light: light.foyer
-                profile: security
+                profile: bright_tp_link_rgb
           - group.security_automations
       - type: custom:swipe-card
         parameters:

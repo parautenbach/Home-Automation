@@ -49,7 +49,7 @@ cards:
           - type: custom:button-card
             template: rgb_light
             variables:
-              profile: pieter
+              profile: normal_main_bedroom_bedlamps
             name: Pieter's Side
             entity: light.pieter_bedside
             icon: mdi:lamp
@@ -99,7 +99,7 @@ cards:
               service: script.toggle_light
               service_data:
                 light: "[[[ return entity.entity_id; ]]]"
-                profile: security
+                profile: bright_shelly_duo
           # - type: custom:button-card
           #   template: basic
           #   name: Tivoli
@@ -107,7 +107,7 @@ cards:
           - type: custom:button-card
             template: rgb_light
             variables:
-              profile: rouve
+              profile: normal_main_bedroom_bedlamps
             name: Rouvé's Side
             entity: light.rouve_bedside
             icon: mdi:lamp
@@ -130,7 +130,7 @@ cards:
                   - basic_small
                   - light_preset
                 variables:
-                  profile: bedroom_lilac
+                  profile: lilac_bedroom
                 entity: light.bedroom_bedlamp
                 name: Themed
                 icon: mdi:brightness-5
@@ -205,7 +205,7 @@ cards:
               - rgb_light
               - rgb_light_with_timer
             variables:
-              profile: normal
+              profile: normal_tp_link_rgb
             name: Foyer
             entity: light.foyer
             icon: mdi:dome-light
@@ -233,7 +233,7 @@ cards:
           - type: custom:button-card
             template: rgb_light
             variables:
-              profile: dim
+              profile: dim_shelly_duo
             name: Dining Room
             entity: light.dining_room
             icon: mdi:dome-light
@@ -245,7 +245,7 @@ cards:
           - type: custom:button-card
             template: rgb_light
             variables:
-              profile: corner_white
+              profile: normal_corner_lights_rgb
             name: Corner Lights
             entity: light.corner_lights
       - type: horizontal-stack
@@ -260,7 +260,7 @@ cards:
               - rgb_light
               - rgb_light_with_timer
             variables:
-              profile: normal
+              profile: normal_tp_link_rgb
             name: Hallway
             entity: light.hallway
           - type: custom:button-card
@@ -289,13 +289,13 @@ cards:
           # - type: custom:button-card
           #   template: rgb_light
           #   variables:
-          #     profile: corner_white
+          #     profile: normal_corner_lights_rgb
           #   name: Dining Room
           #   entity: light.dining_room_corner_light
           # - type: custom:button-card
           #   template: rgb_light
           #   variables:
-          #     profile: corner_white
+          #     profile: normal_corner_lights_rgb
           #   name: Music Room
           #   entity: light.music_room_corner_light
           # - type: custom:button-card

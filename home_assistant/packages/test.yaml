@@ -307,6 +307,6 @@ automation:
       input:
         event_entity_id: event.button_1_new_button
         light_entity_id: light.dining_room
-        single_press_profile: normal
-        double_press_profile: night
-        triple_press_profile: security
+        single_press_profile: normal_shelly_duo
+        double_press_profile: night_shelly_duo_rgb
+        triple_press_profile: bright_shelly_duo

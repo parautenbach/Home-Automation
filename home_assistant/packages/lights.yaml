@@ -1,26 +1,3 @@
-# https://developers.home-assistant.io/docs/core/entity/light#color-modes
-# https://docs.google.com/document/d/1dKHC0RpkIaUknPdXAXND3EDOuK1YGLlVsgABEkvwz4Q/edit
-#
-# colour modes by brand/model:
-#   * tp-link lb130:
-#       color_temp_kelvin, hs
-#       2500-9000 K / 400-111 mireds
-#   * shelly duo:
-#       color_temp_kelvin
-#       2700-6500 K / 370-153 mireds
-#   * shelly duo rgbw:
-#       color_temp_kelvin, rgb
-#       3000-6500 K / 333-153 mireds
-#   * shelly rgbw2:
-#       rgbw
-#       (no color_temp_kelvin)
-#   * magic home (corner lights):
-#       rgb
-#       (no color_temp_kelvin)
-#   * yeelight (xiaomi mi):
-#       color_temp_kelvin, hs
-#       2000-6535 K / 500/-153 mireds
-
 homeassistant:
   customize:
     switch.living_room_lamp:
@@ -128,7 +105,7 @@ light:
       - light.office
       - light.foyer
   - platform: group
-    # keep in sync with scene.normal_lights in scenes.yaml
+    # keep in sync with scene.normal_lights
     name: Normal Light Group
     entities:
       - light.living_room_lamp
@@ -172,73 +149,196 @@ light:
         turn_off:
           service: script.living_room_fairy_lights_off
 
-scene:
-  # https://company235.com/tools/colour/cie.html
-  # https://hslpicker.com/#ff4d00
-  - name: Normal Lights
-    # keep in sync with light.normal_light_group in lights.yaml and light_profiles.csv
-    icon: mdi:brightness-5
-    entities:
-      light.living_room_lamp:
-        state: "on"
-      light.kitchen_counter:
-        state: "on"
-        brightness: 255
-        color_mode: "xy"
-        xy_color: [0.544, 0.394]
-      light.scullery_counter:
-        state: "on"
-        brightness: 255
-        color_mode: "xy"
-        xy_color: [0.598, 0.383]
-      light.corner_lights:
-        state: "on"
-        brightness: 255
-        color_mode: "xy"
-        xy_color: [0.657, 0.333]
-  - name: Corner Lights
-    icon: mdi:brightness-6
-    entities:
-      light.corner_lights:
-        state: "on"
-        brightness: 255
-        color_mode: "xy"
-        xy_color: [0.657, 0.333]
-  - name: Night Lights
-    # keep in sync with light.night_group and light_profiles.csv
-    icon: mdi:brightness-4
-    entities:
-      light.foyer:
-        state: "on"
-        brightness: 5
-        color_mode: "xy"
-        xy_color: [0.701, 0.299]
-      light.kitchen_counter:
-        state: "on"
-        brightness: 5
-        color_mode: "xy"
-        xy_color: [0.701, 0.299]
-      light.scullery_counter:
-        state: "on"
-        brightness: 5
-        color_mode: "xy"
-        xy_color: [0.701, 0.299]
-      light.hallway:
-        state: "on"
-        brightness: 5
-        color_mode: "xy"
-        xy_color: [0.701, 0.299]
-  - name: Inside Security Lights
-    # keep in sync with light.inside_security_group and light_profiles.csv
-    icon: mdi:brightness-7
-    entities:
-      light.foyer:
-        state: "on"
-        brightness: 255
-        color_mode: "xy"
-        xy_color: [0.323, 0.329]
-      light.living_room_lamp:
-        state: "on"
+# https://developers.home-assistant.io/docs/core/entity/light#color-modes
+# https://docs.google.com/document/d/1dKHC0RpkIaUknPdXAXND3EDOuK1YGLlVsgABEkvwz4Q/edit
+#
+# colour modes by brand/model:
+#   * tp-link lb130:
+#       color_temp, hs
+#       400-111 mireds (2500-9000 K)
+#   * shelly duo:
+#       color_temp
+#       370-153 mireds (2700-6500 K)
+#   * shelly duo rgbw:
+#       color_temp, rgb
+#       333-153 mireds (3000-6500 K)
+#   * shelly rgbw2:
+#       rgbw
+#       (no color_temp_kelvin)
+#   * magic home (corner lights):
+#       rgb
+#       (no color_temp_kelvin)
+#   * yeelight (xiaomi mi):
+#       color_temp, hs
+#       500-153 mireds (2000-6535 K)
+
+# https://company235.com/tools/colour/cie.html
+# https://hslpicker.com/#ff4d00
+
+# https://github.com/j9brown/scenery
+# mired = 1,000,000/K
+scenery:
+  profiles:
+    - name: normal_shelly_duo
+      color_temp_kelvin: 4000
+      brightness: 153  # 153/255 = 60%
+      transition: 2
+    - name: normal_kitchen_shelly_rgbw
+      rgbw_color: [255, 128, 0, 96]
+      brightness: 255
+      transition: 2
+    - name: normal_scullery_shelly_rgbw
+      rgbw_color: [255, 128, 0, 18]
+      brightness: 255
+      transition: 2
+    - name: normal_corner_lights_rgb
+      rgb_color: [255, 86, 16]
+      brightness: 255
+      transition: 2
+    - name: normal_tp_link_rgb
+      color_temp_kelvin: 3333
+      brightness: 153
+      transition: 2
+    - name: normal_main_bedroom_bedlamps
+      color_temp_kelvin: 4000
+      brightness: 77  # 102/255 ~= 40%
+      transition: 2
+    - name: normal_bedlamp
+      color_temp_kelvin: 3333
+      brightness: 153  # 153/255 = 60%
+      transition: 2
+    - name: dim_shelly_duo
+      color_temp_kelvin: 4000
+      brightness: 76  # 76/255 = 30%
+      transition: 2
+    - name: low_shelly_duo
+      color_temp_kelvin: 4000
+      brightness: 3  # 3/255 ~= 1%
+      transition: 2
+    - name: low_tp_link_rgb
+      color_temp_kelvin: 3333
+      brightness: 3  # 3/255 ~= 1%
+      transition: 2
+    - name: low_bedlamp
+      color_temp_kelvin: 3333
+      brightness: 3  # 3/255 ~= 1%
+      transition: 2
+    - name: night_shelly_duo
+      color_temp_kelvin: 4000
+      brightness: 3  # 3/255 ~= 1%
+      transition: 2
+    - name: night_shelly_duo_rgb
+      rgb_color: [255, 0, 0]
+      brightness: 3
+      transition: 2
+    - name: night_shelly_rgbw
+      rgbw_color: [255, 0, 0, 0]
+      brightness: 3
+      transition: 2
+    - name: night_tp_link_rgb
+      hs_color: [0, 100]  # red
+      brightness: 3  # 3/255 ~= 1%
+      transition: 2
+    - name: night_bedlamp
+      hs_color: [0, 100]  # red
+      brightness: 3  # 3/255 ~= 1%
+      transition: 2
+    # test and compare
+    - name: bright_shelly_duo
+      color_temp_kelvin: 4000
+      brightness: 255  # 100%
+      transition: 0
+    # test me
+    # - name: bright_shelly_rgbw
+    #   color_temp: 250
+    #   brightness: 255  # 100%
+    #   transition: 0
+    - name: bright_tp_link_rgb
+      color_temp_kelvin: 3333
+      brightness: 255  # 100%
+      transition: 0
+    - name: lilac_bedlamp
+      hs_color: [300, 100]  # purple
+      brightness: 153  # 153/255 = 60%
+      transition: 2
+  lights:
+    - entity_id:
+        - light.dining_room
+        - light.music_room
+        - light.office
+      profiles:
+        - normal_shelly_duo
+        - night_shelly_duo_rgb
+        - bright_shelly_duo
+    - entity_id:
+        - light.pieter_bedside
+        - light.rouve_bedside
+      profiles:
+        - normal_main_bedroom_bedlamps
+        - night_shelly_duo
+        - bright_shelly_duo
+    - entity_id:
+        - light.hallway
+        - light.foyer
+      profiles:
+        - normal_tp_link_rgb
+        - night_tp_link_rgb
+        - bright_tp_link_rgb
+    - entity_id:
+        - light.bedroom_bedlamp
+      profiles:
+        # check
+        - normal_shelly_duo
+  scene_groups:
+    - name: inside_lights_group
+      scenes:
+        - name: normal_lights
+          unique_id: normal_lights
+          icon: mdi:brightness-5
+          entities:
+            light.living_room_lamp:
+              state: "on"
+            light.kitchen_counter:
+              state: "on"
+              profile: normal_kitchen_shelly_rgbw
+            light.scullery_counter:
+              state: "on"
+              profile: normal_scullery_shelly_rgbw
+            light.corner_lights:
+              state: "on"
+              profile: normal_corner_lights_rgb
+        - name: corner_lights
+          unique_id: corner_lights
+          icon: mdi:brightness-6
+          entities:
+            light.corner_lights:
+              state: "on"
+              profile: normal_corner_lights_rgb
+        - name: night_lights
+          unique_id: night_lights
+          icon: mdi:brightness-4
+          entities:
+            light.foyer:
+              state: "on"
+              profile: night_tp_link_rgb
+            light.kitchen_counter:
+              state: "on"
+              profile: night_shelly_rgbw
+            light.scullery_counter:
+              state: "on"
+              profile: night_shelly_rgbw
+            light.hallway:
+              state: "on"
+              profile: night_tp_link_rgb
+        - name: inside_security_lights
+          unique_id: inside_security_lights
+          icon: mdi:brightness-7
+          entities:
+            light.living_room_lamp:
+              state: "on"
+            light.foyer:
+              state: "on"
+              profile: normal_tp_link_rgb
 
 timer:
   # format: <entity_id>_timer
@@ -333,12 +433,12 @@ script:
                 target:
                   entity_id: light.pieter_bedside
                 data:
-                  profile: pieter
+                  profile: normal_main_bedroom_bedlamps
               - service: light.turn_on
                 target:
                   entity_id: light.rouve_bedside
                 data:
-                  profile: rouve
+                  profile: normal_main_bedroom_bedlamps
         default:
           - service: automation.turn_off
             target:
@@ -672,7 +772,7 @@ automation:
         target:
           entity_id: light.hallway
         data:
-          profile: normal
+          profile: normal_tp_link_rgb
       # todo: stop timers, foyer light off (but only if on and not load shedding)
       # for now, the real annoyance is if the living room lamp turns off
       # just leave the foyer light
@@ -727,14 +827,14 @@ automation:
         data:
           variables:
             light: light.pieter_bedside
-            profile: pieter
+            profile: normal_main_bedroom_bedlamps
       - service: script.turn_on
         target:
           entity_id: script.turn_on_light
         data:
           variables:
             light: light.rouve_bedside
-            profile: rouve
+            profile: normal_main_bedroom_bedlamps
       # if one of us stepped out and baby's asleep in her room, then her light will turn on upon arrival, waking her.
       # even if we changed it to turn on if we (the parents) were out together, baby might not have been with us,
       # e.g. if we had a babysitter.
@@ -745,7 +845,7 @@ automation:
         data:
           variables:
             light: light.bedroom_bedlamp
-            profile: bedlamp_normal
+            profile: normal_bedlamp
 
   - alias: "Bedlamps On Upon Server Start"
     id: "1e8cf815-a52a-4fe6-a536-e25e234381bc"
@@ -793,14 +893,14 @@ automation:
         data:
           variables:
             light: light.pieter_bedside
-            profile: pieter
+            profile: normal_main_bedroom_bedlamps
       - service: script.turn_on
         target:
           entity_id: script.turn_on_light
         data:
           variables:
             light: light.rouve_bedside
-            profile: rouve
+            profile: normal_main_bedroom_bedlamps
       - condition: "{{ is_state('input_boolean.baby_sleep_mode', 'off') and now() <= today_at('19:30') }}"
       - service: script.turn_on
         target:
@@ -808,7 +908,7 @@ automation:
         data:
           variables:
             light: light.bedroom_bedlamp
-            profile: bedlamp_normal
+            profile: normal_bedlamp
 
   # might need to specialise this a bit more in future:
   # e.g. switch on from 6 am when arriving home and light is low
@@ -907,7 +1007,7 @@ automation:
       - service: light.turn_on
         entity_id: light.hallway
         data:
-          profile: normal
+          profile: normal_tp_link_rgb
 
   - alias: "Lights Off When Loadshedding"
     id: "e4867511-07e3-4873-bd78-ecaec953adb4"
@@ -958,14 +1058,14 @@ automation:
         data:
           variables:
             light: light.pieter_bedside
-            profile: pieter
+            profile: normal_main_bedroom_bedlamps
       - service: script.turn_on
         target:
           entity_id: script.turn_on_light
         data:
           variables:
             light: light.rouve_bedside
-            profile: rouve
+            profile: normal_main_bedroom_bedlamps
       - condition: "{{ is_state('input_boolean.baby_sleep_mode', 'off') and now() <= today_at('18:45') }}"
       - service: script.turn_on
         target:
@@ -973,7 +1073,7 @@ automation:
         data:
           variables:
             light: light.bedroom_bedlamp
-            profile: bedlamp_normal
+            profile: normal_bedlamp
 
   - alias: "Lights Off After Sunrise"
     id: "7f64fa82-a158-4f78-b406-2f0653f8f764"
@@ -1098,7 +1198,7 @@ automation:
             - light.hallway
             - light.foyer
         data:
-          profile: normal
+          profile: normal_tp_link_rgb
 
   # set up automation on device to immediately update the sensors
   # todo: switch off all lights except rouvé's (if on), or at least notify of lights still on
@@ -1260,9 +1360,9 @@ automation:
       input:
         event_entity_id: event.pieter_bedside_light_button
         light_entity_id: light.pieter_bedside
-        single_press_profile: pieter
-        double_press_profile: bedlamp_night
-        triple_press_profile: security
+        single_press_profile: normal_main_bedroom_bedlamps
+        double_press_profile: low_shelly_duo
+        triple_press_profile: bright_shelly_duo
 
   # i thought it might be good to have the reverse of this too:
   # restore the other lamp to normal mode when the one is turned on, but it's not that simple.
@@ -1295,7 +1395,7 @@ automation:
         target:
           entity_id: "{{ trigger.id }}"
         data:
-          profile: low
+          profile: low_tp_link_rgb
       - condition: state
         entity_id: light.hallway
         state: "on"
@@ -1303,7 +1403,7 @@ automation:
         target:
           entity_id: light.hallway
         data:
-          profile: low
+          profile: low_tp_link_rgb
       - service: switch.turn_off
         target:
           entity_id: switch.bug_zapper
@@ -1316,9 +1416,9 @@ automation:
       input:
         event_entity_id: event.rouve_bedside_light_button
         light_entity_id: light.rouve_bedside
-        single_press_profile: rouve
-        double_press_profile: bedlamp_night
-        triple_press_profile: security
+        single_press_profile: normal_main_bedroom_bedlamps
+        double_press_profile: low_shelly_duo
+        triple_press_profile: bright_shelly_duo
 
   - alias: "Toggle Dining Room Light"
     id: "3cd02beb-7a1a-440a-9507-fb555ff9bb98"
@@ -1328,9 +1428,9 @@ automation:
       input:
         button_device_id: f1a926dd450fbe85ed9bafece8b719b3
         light_entity_id: light.dining_room
-        single_press_profile: dim
-        double_press_profile: night
-        triple_press_profile: security
+        single_press_profile: dim_shelly_duo
+        double_press_profile: night_shelly_duo_rgb
+        triple_press_profile: bright_shelly_duo
 
   - alias: "Toggle Music Room Light"
     id: "58a877b7-eed8-4fd7-897c-51eeed892ad7"
@@ -1340,9 +1440,9 @@ automation:
       input:
         button_device_id: 16bb98a28aa167819bff6fc45f178899
         light_entity_id: light.music_room
-        single_press_profile: normal
-        double_press_profile: night
-        triple_press_profile: security
+        single_press_profile: normal_shelly_duo
+        double_press_profile: night_shelly_duo_rgb
+        triple_press_profile: bright_shelly_duo
 
   - alias: "Stop Light Timer If Running When Light Turned Off"
     id: "5878e444-72bc-4633-85c9-de0ebf5a57dd"
@@ -1546,9 +1646,6 @@ automation:
         target:
           entity_id: light.hallway
 
-  # kitchen cntr button: set profile (according to TOD, and also turn scullery's on)
-  # also turn off both
-
   - alias: "Yard Lights Off At Sunrise"
     id: "ba2febfd-88bf-4dd8-8e6d-8a171bc2fc18"
     initial_state: true
@@ -1584,9 +1681,9 @@ automation:
       input:
         button_device_id: ed95f30c451de3426bc63770935ebc18
         light_entity_id: light.office
-        single_press_profile: pieter
-        double_press_profile: bedlamp_night
-        triple_press_profile: security
+        single_press_profile: normal_main_bedroom_bedlamps
+        double_press_profile: low_shelly_duo
+        triple_press_profile: bright_shelly_duo
 
   - alias: "Toggle Office Light (2)"
     id: "6cea5173-0279-4ee5-80e6-922791c874a9"
@@ -1596,6 +1693,6 @@ automation:
       input:
         button_device_id: b7cb6f66fe4f1eefbf0de8480962bd23
         light_entity_id: light.office
-        single_press_profile: rouve
-        double_press_profile: bedlamp_night
-        triple_press_profile: security
+        single_press_profile: normal_main_bedroom_bedlamps
+        double_press_profile: low_shelly_duo
+        triple_press_profile: bright_shelly_duo

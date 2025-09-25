@@ -444,11 +444,29 @@ automation:
                       profile: low_tp_link_rgb
               - delay:
                   minutes: 1
-              # this call does not block/wait, so the two transitions will start at almost the same time
-              # and the script runs in parallel mode
+              # these script calls don't block/wait, so the transitions will start at almost the same time
               # https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete
-              # temporarily removed
-              - parallel:
+              - service: script.turn_on
+                target:
+                  entity_id: script.fade_light
+                data:
+                  variables:
+                    light: light.pieter_bedside
+                    target_brightness_pct: 30
+                    transition_duration: 120
+              - service: script.turn_on
+                target:
+                  entity_id: script.fade_light
+                data:
+                  variables:
+                    light: light.rouve_bedside
+                    target_brightness_pct: 30
+                    transition_duration: 120
+              - if:
+                  - condition: state
+                    entity_id: input_boolean.baby_sleep_mode
+                    state: "off"
+                then:
                   - service: script.turn_on
                     target:
                       entity_id: script.fade_light
@@ -465,27 +483,6 @@ automation:
                         light: light.foyer
                         target_brightness_pct: 60
                         transition_duration: 120
-                  - if:
-                      - condition: state
-                        entity_id: input_boolean.baby_sleep_mode
-                        state: "off"
-                    then:
-                      - service: script.turn_on
-                        target:
-                          entity_id: script.fade_light
-                        data:
-                          variables:
-                            light: light.hallway
-                            target_brightness_pct: 60
-                            transition_duration: 120
-                      - service: script.turn_on
-                        target:
-                          entity_id: script.fade_light
-                        data:
-                          variables:
-                            light: light.foyer
-                            target_brightness_pct: 60
-                            transition_duration: 120
             else:
               - service: light.turn_on
                 target:

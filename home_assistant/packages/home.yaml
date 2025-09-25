@@ -335,17 +335,48 @@ automation:
           - if:
               - condition: and
                 conditions:
-                  - condition: state
-                    entity_id:
-                      - light.pieter_bedside
-                      - light.rouve_bedside
-                      - light.hallway
-                    state: "off"
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity_id:
+                          - light.pieter_bedside
+                        state: "off"
+                      - condition: numeric_state
+                        entity_id: light.pieter_bedside
+                        attribute: brightness
+                        below: 13  # 13/255 ~= 5%
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity_id:
+                          - light.rouve_bedside
+                        state: "off"
+                      - condition: numeric_state
+                        entity_id: light.rouve_bedside
+                        attribute: brightness
+                        below: 13  # 13/255 ~= 5%
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity_id:
+                          - light.hallway
+                        state: "off"
+                      - condition: numeric_state
+                        entity_id: light.hallway
+                        attribute: brightness
+                        below: 13  # 13/255 ~= 5%
             then:
               - if:
-                  - condition: state
-                    entity_id: light.pieter_bedside
-                    state: "off"
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity_id:
+                          - light.pieter_bedside
+                        state: "off"
+                      - condition: numeric_state
+                        entity_id: light.pieter_bedside
+                        attribute: brightness
+                        below: 13  # 13/255 ~= 5%
                 then:
                   - service: light.turn_on
                     target:
@@ -353,9 +384,16 @@ automation:
                     data:
                       profile: low_shelly_duo
               - if:
-                  - condition: state
-                    entity_id: light.rouve_bedside
-                    state: "off"
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity_id:
+                          - light.rouve_bedside
+                        state: "off"
+                      - condition: numeric_state
+                        entity_id: light.rouve_bedside
+                        attribute: brightness
+                        below: 13  # 13/255 ~= 5%
                 then:
                   - service: light.turn_on
                     target:
@@ -366,6 +404,16 @@ automation:
                   - condition: state
                     entity_id: input_boolean.baby_sleep_mode
                     state: "off"
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity_id:
+                          - light.hallway
+                        state: "off"
+                      - condition: numeric_state
+                        entity_id: light.hallway
+                        attribute: brightness
+                        below: 13  # 13/255 ~= 5%
                 then:
                   - service: light.turn_on
                     target:
@@ -373,6 +421,24 @@ automation:
                         - light.hallway
                     data:
                       profile: low_tp_link_rgb
+              - if:
+                  - condition: state
+                    entity_id: input_boolean.baby_sleep_mode
+                    state: "off"
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity_id:
+                          - light.foyer
+                        state: "off"
+                      - condition: numeric_state
+                        entity_id: light.foyer
+                        attribute: brightness
+                        below: 13  # 13/255 ~= 5%
+                then:
+                  - service: light.turn_on
+                    target:
+                      entity_id:
                         - light.foyer
                     data:
                       profile: low_tp_link_rgb

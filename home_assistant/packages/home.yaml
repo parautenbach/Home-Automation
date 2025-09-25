@@ -1296,6 +1296,17 @@ automation:
       - service: "input_boolean.turn_{{ trigger.id }}"
         target:
           entity_id: input_boolean.baby_sleep_mode
+      - if:
+          - "{{ trigger.id == 'off' and is_state('timer.bedroom_bedlamp_timer', 'active') }}"
+        then:
+          - service: timer.cancel
+            target:
+              entity_id: timer.bedroom_bedlamp_timer
+      - service: light.turn_on
+        target:
+          entity_id: light.bedroom_bedlamp
+        data:
+          profile: normal_bedlamp
 
   - alias: "Update Baby Sleep Session Counter"
     id: "3d9714c9-dc53-4114-8df8-49a6efc98cc6"

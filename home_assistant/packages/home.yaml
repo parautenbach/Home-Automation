@@ -772,6 +772,11 @@ automation:
         target:
           entity_id:
             - light.hallway
+        data:
+          profile: bright_tp_link_rgb
+      - service: light.turn_on
+        target:
+          entity_id:
             - light.music_room
             - light.dining_room
             - light.office

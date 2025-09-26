@@ -1238,6 +1238,40 @@ automation:
         target:
           entity_id: input_boolean.baby_sleep_mode
 
+  - alias: "Force To Night Light If Bedlamp Turned On During Bedtime"
+    id: "712eabae-eb11-4b0e-95c0-ffa645113ac7"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: light.bedroom_bedlamp
+        to: "on"
+    mode: single
+    condition:
+      - condition: state
+        entity_id: input_boolean.baby_sleep_mode
+        state: "on"
+      - condition: or
+        conditions:
+          - condition: time
+            after: "12:15:00"
+            before: "13:30:00"
+          - condition: time
+            after: "18:50:00"
+            before: "05:15:00"
+    actions:
+      - service: script.turn_on
+        target:
+          entity_id: script.turn_on_light
+        data:
+          variables:
+            light: light.bedroom_bedlamp
+            profile: night_bedlamp
+      - service: timer.start
+        target:
+          entity_id: timer.bedroom_bedlamp_timer
+        data:
+          duration: "00:00:30"
+
   - alias: "Offer To Toggle Sleep Mode"
     id: "9cfa00dd-077d-48b2-842b-3cd7fb2d0133"
     trigger:

@@ -314,6 +314,9 @@ automation:
           - condition: state
             entity_id: light.rouve_bedside
             state: "off"
+          - condition: state
+            entity_id: light.hallway
+            state: "off"
     action:
       - if:
           - condition: state

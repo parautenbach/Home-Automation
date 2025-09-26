@@ -33,6 +33,8 @@ homeassistant:
       state_class: measurement
     sensor.battery_change_of_charge:
       icon: mdi:delta
+    sensor.battery_change_of_charge_average:
+      icon: mdi:delta
     binary_sensor.grid_charge_point_status:
       icon: mdi:transmission-tower
     climate.living_room_ac:
@@ -179,7 +181,7 @@ template:
         unit_of_measurement: s
         state: >
           {% set battery_status = states('sensor.battery_status') %}
-          {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
+          {% set rate = states('sensor.battery_change_of_charge_average') | float(0) | abs %}
           {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
           {% if battery_status == 'Charging' and rate != 0 %}
             {{ (100 - current_charge) * 60 * 60 / rate }}
@@ -189,7 +191,7 @@ template:
         attributes:
           time_when_full: >-
             {% set battery_status = states('sensor.battery_status') %}
-            {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
+            {% set rate = states('sensor.battery_change_of_charge_average') | float(0) | abs %}
             {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
             {% if battery_status == 'Charging' and rate != 0 -%}
               {% set seconds_to_full = (100 - current_charge) * 60 * 60 / rate %}
@@ -199,7 +201,7 @@ template:
             {% endif %}
           time_when_full_relative: >-
             {% set battery_status = states('sensor.battery_status') %}
-            {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
+            {% set rate = states('sensor.battery_change_of_charge_average') | float(0) | abs %}
             {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
             {% set time_when_full = 0 | as_datetime %}
             {% if battery_status == 'Charging' and rate != 0 -%}
@@ -220,7 +222,7 @@ template:
         state: >
           {% set threshold = states('number.output_shutdown_capacity') | int(0) %}
           {% set battery_status = states('sensor.battery_status') %}
-          {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
+          {% set rate = states('sensor.battery_change_of_charge_average') | float(0) | abs %}
           {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
           {% if battery_status == 'Discharging' -%}
             {{ (current_charge - threshold) * 60 * 60 / rate }}
@@ -231,7 +233,7 @@ template:
           time_when_at_shutdown_threshold: >-
             {% set threshold = states('number.output_shutdown_capacity') | int(0) %}
             {% set battery_status = states('sensor.battery_status') %}
-            {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
+            {% set rate = states('sensor.battery_change_of_charge_average') | float(0) | abs %}
             {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
             {% if battery_status == 'Discharging' -%}
               {% set seconds_to_threshold = (current_charge - threshold) * 60 * 60 / rate %}
@@ -242,7 +244,7 @@ template:
           time_when_at_shutdown_threshold_relative: >-
             {% set threshold = states('number.output_shutdown_capacity') | int(0) %}
             {% set battery_status = states('sensor.battery_status') %}
-            {% set rate = states('sensor.battery_change_of_charge') | float(0) | abs %}
+            {% set rate = states('sensor.battery_change_of_charge_average') | float(0) | abs %}
             {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
             {% set time_when_at_threshold = 0 | as_datetime %}
             {% if battery_status == 'Discharging' -%}
@@ -721,6 +723,14 @@ sensor:
     sampling_size: 100
     max_age:
       minutes: 1
+  - platform: statistics
+    name: 'Battery Change Of Charge Average'
+    entity_id: sensor.battery_change_of_charge
+    state_characteristic: mean
+    precision: 0
+    sampling_size: 1000
+    max_age:
+      minutes: 15
 
 mqtt:
   binary_sensor:

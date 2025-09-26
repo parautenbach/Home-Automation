@@ -130,7 +130,7 @@ cards:
                   - basic_small
                   - light_preset
                 variables:
-                  profile: lilac_bedroom
+                  profile: lilac_bedlamp
                 entity: light.bedroom_bedlamp
                 name: Themed
                 icon: mdi:brightness-5

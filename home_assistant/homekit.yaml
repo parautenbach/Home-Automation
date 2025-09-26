@@ -43,6 +43,8 @@
       - light.music_room_corner_light
       - light.hallway
       - light.bedroom_bedlamp
+      - light.living_areas_ceiling_lights_group
+      - light.yard_group
       - light.living_room_fairy_lights
       - switch.tivoli_audio
       - switch.irrigation_main

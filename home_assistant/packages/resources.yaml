@@ -224,7 +224,7 @@ template:
           {% set battery_status = states('sensor.battery_status') %}
           {% set rate = states('sensor.battery_change_of_charge_average') | float(0) | abs %}
           {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
-          {% if battery_status == 'Discharging' -%}
+          {% if battery_status == 'Discharging' and rate != 0 -%}
             {{ (current_charge - threshold) * 60 * 60 / rate }}
           {% else %}
             0
@@ -235,7 +235,7 @@ template:
             {% set battery_status = states('sensor.battery_status') %}
             {% set rate = states('sensor.battery_change_of_charge_average') | float(0) | abs %}
             {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
-            {% if battery_status == 'Discharging' -%}
+            {% if battery_status == 'Discharging' and rate != 0 -%}
               {% set seconds_to_threshold = (current_charge - threshold) * 60 * 60 / rate %}
               {{ now() + timedelta(seconds=seconds_to_threshold) }}
             {% else %}
@@ -247,7 +247,7 @@ template:
             {% set rate = states('sensor.battery_change_of_charge_average') | float(0) | abs %}
             {% set current_charge = states('sensor.battery_state_of_charge') | float(0) %}
             {% set time_when_at_threshold = 0 | as_datetime %}
-            {% if battery_status == 'Discharging' -%}
+            {% if battery_status == 'Discharging' and rate != 0 -%}
               {% set seconds_to_threshold = (current_charge - threshold) * 60 * 60 / rate %}
               {% set time_when_at_threshold = now() + timedelta(seconds=seconds_to_threshold) %}
             {% endif %}

@@ -24,7 +24,7 @@ cards:
       template: >-
         {% set hacs = integration_entities('hacs') | select('match', '^update\.') | list %}
         {% set update_entities = states.update | list | map(attribute='entity_id') | list %}
-        {{ (set(update_entities) - set(hacs)) | list }}
+        {{ (set(update_entities) - set(hacs)) | sort | list }}
       # include:
       #   - entity_id: "update.*"
     sort:
@@ -35,7 +35,7 @@ cards:
       title: Shelly Updates
     filter:
       template: >-
-        {% set shelly_updates = integration_entities('shelly') | select('match', '^update\.') | select('is_state', 'on') | list %}
+        {% set shelly_updates = integration_entities('shelly') | select('match', '^update\.') | select('is_state', 'on') | sort | list %}
         {{ shelly_updates }}
     sort:
       method: name

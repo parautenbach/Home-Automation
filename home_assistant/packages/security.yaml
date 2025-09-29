@@ -1167,6 +1167,8 @@ automation:
                 before: "09:00:00"
               - condition: template
                 value_template: "{{ states('sensor.solar_angle') | float(0) >= -5 }}"
+                # temporarily disabled for the neighbour, but seems like it's not adding many more images, so keeping it
+                enabled: false
           - condition: state
             entity_id: binary_sensor.anybody_home
             state: "off"

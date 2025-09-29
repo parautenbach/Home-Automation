@@ -723,12 +723,13 @@ sensor:
     sampling_size: 100
     max_age:
       minutes: 1
+  # we've tried median and a lowpass filter, but average seems to work best
   - platform: statistics
     name: 'Battery Change Of Charge Average'
     entity_id: sensor.battery_change_of_charge
     state_characteristic: mean
     precision: 0
-    sampling_size: 1000
+    sampling_size: 2000
     max_age:
       minutes: 15
 

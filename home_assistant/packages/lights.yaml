@@ -180,7 +180,7 @@ light:
 scenery:
   profiles:
     - name: normal_shelly_duo
-      color_temp_kelvin: 4000
+      color_temp_kelvin: 4200
       brightness: 153  # 153/255 = 60%
       transition: 2
     - name: normal_kitchen_shelly_rgbw
@@ -208,11 +208,11 @@ scenery:
       brightness: 153  # 153/255 = 60%
       transition: 2
     - name: dim_shelly_duo
-      color_temp_kelvin: 4000
+      color_temp_kelvin: 4200
       brightness: 76  # 76/255 = 30%
       transition: 2
     - name: low_shelly_duo
-      color_temp_kelvin: 4000
+      color_temp_kelvin: 4200
       brightness: 3  # 3/255 ~= 1%
       transition: 2
     - name: low_tp_link_rgb
@@ -224,7 +224,7 @@ scenery:
       brightness: 3  # 3/255 ~= 1%
       transition: 2
     - name: night_shelly_duo
-      color_temp_kelvin: 4000
+      color_temp_kelvin: 4200
       brightness: 3  # 3/255 ~= 1%
       transition: 2
     - name: night_shelly_duo_rgb
@@ -245,7 +245,7 @@ scenery:
       transition: 2
     # test and compare
     - name: bright_shelly_duo
-      color_temp_kelvin: 4000
+      color_temp_kelvin: 4200
       brightness: 255  # 100%
       transition: 0
     # test me

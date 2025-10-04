@@ -289,6 +289,10 @@ scenery:
       profiles:
         # check
         - normal_shelly_duo
+  # i know... we don't use the select, hence we just define one group
+  #   Tip: It's a good idea to ensure that every scene belonging to a scene group
+  #   provides a state for the same set of entities. That way there's no ambiguity
+  #   when switching scenes: all of the related entities will have a defined state.
   scene_groups:
     - name: inside_lights_group
       scenes:

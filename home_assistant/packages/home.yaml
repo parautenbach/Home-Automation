@@ -2335,7 +2335,7 @@ automation:
             Julia's bedroom temperature update:
               - Current: {{ current }} ({{ inside_perception }}).
               - Last night: {{ yesterday }} ({{ difference ~ ' °C ' ~ direction if not direction == 'similar' else direction }} now).
-              - Min/max over 24 hours: {{ inside_min }} / {{ inside_max }}.
+              - Min/max past 12 hours: {{ inside_min }} / {{ inside_max }}.
               - Forecasted min: {{ outside_min }}.
           data:
             group: "routine-bedtime"

@@ -227,28 +227,6 @@ script:
           data:
             group: "travel-eta"
             url: homeassistant://navigate/lovelace/main
-  take_snapshot:
-    fields:
-      camera_entity:
-        description: "A camera entity"
-        example: "camera.my_camera"
-      subdirectory:
-        description: "The subdirectory under www/gallery/ to write the snapshot to."
-        example: "my_subdirectory"
-    mode: parallel
-    sequence:
-      - variables:
-          timestamp: "{{ now().strftime('%Y%m%d-%H%M%S') }}"
-          filename: "/config/www/gallery/{{ subdirectory }}/{{ camera_entity }}_{{ timestamp }}.jpg"
-      - service: camera.snapshot
-        target:
-          entity_id: "{{ camera_entity }}"
-        data:
-          filename: "{{ filename }}"
-      - service: shell_command.copy_last_snapshot_image
-        data:
-          subdirectory: "{{ subdirectory }}"
-          camera_entity: "{{ camera_entity }}"
   notify_tenant:
     fields:
       message:

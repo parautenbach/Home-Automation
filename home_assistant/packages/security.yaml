@@ -303,7 +303,6 @@ script:
       # would love to get rid of this. maybe watch for an updated timestamp on the file?
       - delay: "00:00:05"
       - service: shell_command.copy_last_video_clip
-
   security_camera_create_snapshot:
     # https://www.reddit.com/r/homeassistant/comments/9fz5e4/show_the_x_most_recent_pictures_in_a_directory/e69alpc/
     mode: queued
@@ -345,6 +344,28 @@ script:
           # filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
           filename: '/tmp/{{ camera_entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
       - service: shell_command.copy_last_security_camera_snapshot_image
+  take_snapshot:
+    fields:
+      camera_entity:
+        description: "A camera entity"
+        example: "camera.my_camera"
+      subdirectory:
+        description: "The subdirectory under www/gallery/ to write the snapshot to."
+        example: "my_subdirectory"
+    mode: parallel
+    sequence:
+      - variables:
+          timestamp: "{{ now().strftime('%Y%m%d-%H%M%S') }}"
+          filename: "/config/www/gallery/{{ subdirectory }}/{{ camera_entity }}_{{ timestamp }}.jpg"
+      - service: camera.snapshot
+        target:
+          entity_id: "{{ camera_entity }}"
+        data:
+          filename: "{{ filename }}"
+      - service: shell_command.copy_last_snapshot_image
+        data:
+          subdirectory: "{{ subdirectory }}"
+          camera_entity: "{{ camera_entity }}"
 
 automation:
   - alias: "Take Foyer Motion Snapshots"

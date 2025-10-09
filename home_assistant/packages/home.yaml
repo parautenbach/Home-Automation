@@ -1807,7 +1807,7 @@ automation:
             {% if trigger.id == "presence" %}
               {% set reason = "you arrived home" %}
             {% else %}
-              {% set reason = trigger.id | replace("_", " ") | replace("temp", "temperature") | replace("based", "-based")%}
+              {% set reason = trigger.id | replace("_", " ") | replace("temp", "temperature") | replace(" based", "-based")%}
             {% endif %}
             The living room's AC is {{ mode }} ({{ reason }}).
 

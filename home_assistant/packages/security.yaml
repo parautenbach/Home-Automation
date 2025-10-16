@@ -273,6 +273,7 @@ shell_command:
   # https://community.home-assistant.io/t/shelly-plus-smoke-silence-alarm/747472
   mute_smoke_alarm: "curl -X POST -d '{\"id\": 1, \"method\": \"Smoke.Mute\", \"params\": {\"id\": 0}}' http://{{ host }}/rpc"
   record_security_camera_clip: "/root/scripts/record_security_camera_clip_with_overlay_and_audio.sh"
+  get_doorbell_snapshot_mtime: "stat -c %Y /config/www/camera.doorbell_last.jpg || echo 0"
 
 script:
   security_camera_record_clip:

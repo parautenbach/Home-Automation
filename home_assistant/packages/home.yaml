@@ -2316,7 +2316,7 @@ automation:
             {% if difference > 0.5 %}
               {% set direction = 'warmer' if current_raw > yesterday_raw else 'cooler' %}
             {% endif %}
-            {% set inside_perception = state_translated('sensor.thermal_comfort_inside_summer_simmer_perception') | lower %}
+            {% set inside_perception = state_translated('sensor.thermal_comfort_bedroom_summer_simmer_perception') | lower %}
             {% set inside_min = states('sensor.bedroom_minimum_temperature_12_hours', with_unit=True) %}
             {% set inside_max = states('sensor.bedroom_maximum_temperature_12_hours', with_unit=True) %}
             {% set outside_min = states('sensor.minimum_temperature_tomorrow', with_unit=True) %}

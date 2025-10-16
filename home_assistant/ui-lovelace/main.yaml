@@ -83,12 +83,12 @@ cards:
               p: >
                 [[[
                   var b = states['light.pieter_bedside'].attributes.brightness;
-                  return parseInt(b ? (b/255)*100 : "0") + "%";
+                  return Math.round(b ? (b/255)* 100 : 0) + "%";
                 ]]]
               r: >
                 [[[
                   var b = states['light.rouve_bedside'].attributes.brightness;
-                  return parseInt(b ? (b/255)*100 : "0") + "%";
+                  return Math.round(b ? (b/255)* 100 : 0) + "%";
                 ]]]
             tap_action:
               action: call-service

@@ -197,7 +197,8 @@ template:
   #         seconds: 5
   - binary_sensor:
       - name: Doorbell Rang
-        icon: "{{ state_attr('binary_sensor.doorbell_call_no_answered', 'icon') }}"
+        # icon: "{{ is_state('binary_sensor.doorbell_call_no_answered', 'on') | iif('mdi:bell-ring-outline', 'mdi:bell-outline') }}"
+        icon: "{{ 'mdi:bell-ring-outline' if is_state('binary_sensor.doorbell_call_no_answered', 'on') else 'mdi:bell-outline' }}"
         # sensor remains on for 10 s
         state: "{{ states('binary_sensor.doorbell_call_no_answered') }}"
 

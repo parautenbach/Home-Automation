@@ -374,6 +374,8 @@ cover:
     - operator: template
       value: >
         [[[
+          // shorthand, but in case i forget or someone else reads this
+          // return states[variables.occupancy_entity]?.state === "on";
           return variables.occupancy_entity !== undefined && states[`${variables.occupancy_entity}`].state == "on";
         ]]]
       color: var(--state-binary_sensor-active-color)
@@ -383,19 +385,16 @@ cover:
           return variables.occupancy_entity !== undefined && states[`${variables.occupancy_entity}`].state == "off";
         ]]]
       color: var(--state-icon-color)
-    - operator: template
-      # id: my_id
-      value: >
-        [[[
-          //var alert_entity_id = entity.entity_id.replace("cover.", "binary_sensor.") + "_alert";
-          //return states[alert_entity_id].state == "on";
-          return true;
-        ]]]
-      color: var(--state-icon-color)
     - value: "unavailable"
       styles:
         icon:
           - color: var(--state-unavailable-color)
+    - operator: template
+      value: >
+        [[[
+          return true;
+        ]]]
+      color: var(--state-icon-color)
   tap_action:
     action: toggle
     haptic: light

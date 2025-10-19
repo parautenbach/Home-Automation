@@ -1459,6 +1459,7 @@ automation:
         - light.front_door
         - light.foyer
         - light.kitchen_counter
+        - light.scullery_counter
         - light.hallway
         - light.bedroom_bedlamp
       to: "off"

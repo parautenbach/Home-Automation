@@ -367,6 +367,13 @@ cover:
     - operator: template
       value: >
         [[[
+          var alert_entity_id = entity.entity_id.replace("cover.", "binary_sensor.") + "_alert";
+          return states[alert_entity_id].state == "on";
+        ]]]
+      color: var(--custom-color-red)
+    - operator: template
+      value: >
+        [[[
           return variables.occupancy_entity !== undefined && states[`${variables.occupancy_entity}`].state == "on";
         ]]]
       color: var(--state-binary_sensor-active-color)
@@ -385,13 +392,6 @@ cover:
           return true;
         ]]]
       color: var(--state-icon-color)
-    - operator: template
-      value: >
-        [[[
-          var alert_entity_id = entity.entity_id.replace("cover.", "binary_sensor.") + "_alert";
-          return states[alert_entity_id].state == "on";
-        ]]]
-      color: var(--custom-color-red)
     - value: "unavailable"
       styles:
         icon:

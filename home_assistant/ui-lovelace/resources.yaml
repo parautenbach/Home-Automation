@@ -524,10 +524,10 @@ cards:
           - type: energy-usage-graph
           - type: energy-devices-detail-graph
             max_devices: 5
-      - type: energy-sankey
-        layout: vertical
-        group_by_area: false
-        group_by_floor: false
+      # - type: energy-sankey
+      #   layout: vertical
+      #   group_by_area: true
+      #   group_by_floor: false
       - type: custom:sankey-chart
         layout: vertical
         min_state: 0
@@ -537,6 +537,8 @@ cards:
         show_states: true
         show_units: true
         show_names: true
+        sort_by: state
+        sort_dir: asc
         energy_date_selection: true
         sections:
           - entities:
@@ -619,6 +621,9 @@ cards:
                 children:
                   - sensor.kitchen_counter_lights_energy
                   - sensor.scullery_counter_lights_energy
+                  - sensor.dishwasher_energy
+                  - sensor.washing_machine_energy
+                  - sensor.tumble_dryer_energy
               - entity_id: garage
                 type: remaining_child_state
                 name: Garage
@@ -698,6 +703,18 @@ cards:
               - entity_id: sensor.inverter_energy
                 type: entity
                 name: Inverter
+                children: []
+              - entity_id: sensor.dishwasher_energy
+                type: entity
+                name: Dishwasher
+                children: []
+              - entity_id: sensor.washing_machine_energy
+                type: entity
+                name: Washing Machine
+                children: []
+              - entity_id: sensor.tumble_dryer_energy
+                type: entity
+                name: Tumble Dryer
                 children: []
       - type: custom:swipe-card
         parameters:

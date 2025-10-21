@@ -1591,38 +1591,6 @@ automation:
               {# todo/add: or is_state('light.garage', 'unavailable') or is_state('cover.garage_doors', 'unavailable') #}
               {{ is_state('light.garage', covers_state) }}
 
-  - alias: "Switch Off Bedroom Bedlamp When Sleep Mode Enabled"
-    id: "8991ff53-d2c5-47f2-a6e5-7e196978400a"
-    trigger:
-      - platform: state
-        entity_id: input_boolean.baby_sleep_mode
-        to: "on"
-    condition:
-      - condition: state
-        entity_id: light.bedroom_bedlamp
-        state: "on"
-    action:
-      - service: light.turn_off
-        target:
-          entity_id: light.bedroom_bedlamp
-
-  - alias: "Turn Off Nearby Lights When Bedroom Lamp Off"
-    id: "120789be-ab7f-47d2-9690-1ff096db0490"
-    trigger:
-      - platform: state
-        entity_id: light.bedroom_bedlamp
-        to: "off"
-    conditions:
-      - condition: time
-        after: "18:55:00"
-    actions:
-      - service: light.turn_off
-        target:
-          entity_id:
-            - light.hallway
-            - light.foyer
-            - light.music_room
-
   - alias: "Enable Auto On Bedlamps"
     id: "f7b5e209-9efd-421a-a598-aa7493b7f52e"
     trigger:

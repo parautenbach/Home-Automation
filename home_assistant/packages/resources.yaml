@@ -402,14 +402,25 @@ template:
         icon: mdi:air-conditioner
         device_class: power
         unit_of_measurement: W
+      - name: "Home Power Large Appliances"
+        unique_id: "90ade1f3-887b-42a9-9c87-e0c92df40395"
+        state: >-
+          {% set acs = states('sensor.acs_power') | float(0) %}
+          {% set washing_machine = states('sensor.washing_machine_power') | float(0) %}
+          {% set tumble_dryer = states('sensor.tumble_dryer_power') | float(0) %}
+          {% set dishwasher = states('sensor.dishwasher_power') | float(0) %}
+          {{ acs + washing_machine + tumble_dryer + dishwasher }}
+        icon: mdi:lightning-bolt
+        device_class: power
+        unit_of_measurement: W
       - name: "Home Power Other"
         unique_id: "ce771aeb-49ae-4777-816a-2af98c4939d9"
         state: >-
           {% set home = states('sensor.home_power') | float(0) %}
           {% set geyser = states('sensor.geyser_power') | float(0) %}
           {% set outbuilding = states('sensor.outbuilding_power_meter_channel_1_power') | float(0) %}
-          {% set acs = states('sensor.acs_power') | float(0) %}
-          {{ home - (geyser + outbuilding + acs) }}
+          {% set large_appliances = states('sensor.home_power_large_appliances') | float(0) %}
+          {{ home - (geyser + outbuilding + large_appliances) }}
         icon: mdi:dots-horizontal
         device_class: power
         unit_of_measurement: W

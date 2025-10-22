@@ -196,15 +196,15 @@ cards:
               color_icon: false
               display_zero: true
               decimals: 1
-            - entity: sensor.acs_power
-              name: ACs
-              icon: mdi:air-conditioner
+            - entity: sensor.home_power_large_appliances
+              name: Large Appliances
+              icon: mdi:home-lightning-bolt
               color_icon: false
               display_zero: true
               decimals: 1
             - entity: sensor.home_power_other
               name: Other
-              icon: mdi:dots-horizontal
+              icon: mdi:home-lightbulb
               color_icon: false
               display_zero: true
               decimals: 1

@@ -1454,6 +1454,52 @@ automation:
                 light: light.bedroom_bedlamp
                 profile: normal_bedlamp
 
+  # the purpose of this automation is to stop sleep tracking automatically
+  # when the light is turned on, but we forget to disable sleep mode
+  - alias: "Turn Off Sleep Mode When Bedroom Bedlamp Remains On"
+    id: "11eea35f-6477-4ac3-930e-9e688f3c697e"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: light.bedroom_bedlamp
+        to: "on"
+        for:
+          # this must be longer than the force night light automation (30 sec)
+          # and the offer to toggle sleep mode (1 min)
+          # otherwise this will never be true
+          # it also means that if those automations function normally,
+          # we won't accidentally disable sleep mode
+          minutes: 2
+    conditions:
+      - condition: state
+        entity_id: input_boolean.baby_sleep_mode
+        state: "on"
+      # correlate with the night light automation
+      # this is just for safety, in case there's an issue during night/nap time
+      # to prevent incorrectly turning off sleep mode
+      - condition: or
+        conditions:
+          - condition: time
+            after: "13:30:00"
+            before: "15:00:00"
+          - condition: time
+            after: "05:15:00"
+            before: "19:00:00"
+    action:
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.baby_sleep_mode
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🛌 Sleep Mode"
+          message: >-
+            Sleep mode has been disabled automatically.
+          data:
+            actions:
+              - action: "SLEEP_ON"
+                title: "Enable"
+            group: "routine-bedtime"
+            url: homeassistant://navigate/lovelace/baby
+
   - alias: "Update Baby Sleep Session Counter"
     id: "3d9714c9-dc53-4114-8df8-49a6efc98cc6"
     initial_state: true

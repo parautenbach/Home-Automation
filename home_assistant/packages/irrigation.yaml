@@ -285,13 +285,15 @@ automation:
                 The {{ name }} irrigation zone that was started manually has finished (duration: {{ zone_duration }} min).
               {% else %}
                 {# pass #}
+                Debug:
+                 - State change: {{ from }} → {{ to }}.
               {% endif %}
             {% else %}
               {% if to == 'automatic_cycle' %}
                 An automatic irrigation cycle has started as scheduled (duration: {{ cycle_duration }} min).
               {% elif to ==  'manual_cycle' %}
                 A manual irrigation cycle has been started (duration: {{ cycle_duration }} min).
-              {% elif from == 'manual_zone' %}
+              {% elif to == 'manual_zone' %}
                 {% set zone = expand('group.irrigation_zones') | selectattr('state', '==', 'on') | first %}
                 {% set name = state_attr(zone.entity_id, 'friendly_name') | lower %}
                 {% set duration_entity = zone.entity_id | replace('switch', 'number') ~ '_run_duration' %}
@@ -300,7 +302,7 @@ automation:
               {% else %}
                 {# pass #}
                 Debug:
-                 - State change: {{ from }} → {{ to }}
+                 - State change: {{ from }} → {{ to }}.
               {% endif %}
             {% endif %}
           data:

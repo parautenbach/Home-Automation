@@ -873,6 +873,8 @@ cards:
                 name: Living Room
               - entity: sensor.main_bedroom_ht_temperature
                 name: Main Bedroom
+              - entity: sensor.guest_bedroom_ht_temperature
+                name: Guest Bedroom
               - entity: sensor.bedroom_ht_temperature
                 name: Guest Bedroom
               - entity: sensor.bedroom_ht_temperature

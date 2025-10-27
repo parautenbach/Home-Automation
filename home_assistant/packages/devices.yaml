@@ -139,6 +139,15 @@ template:
       - name: Doorbell Online
         state: "{{ has_value('binary_sensor.doorbell_motion_detected') }}"
         device_class: connectivity
+      - name: Dishwasher
+        state: "{{ has_value('sensor.dishwasher_power') }}"
+        device_class: connectivity
+      - name: Washing Machine
+        state: "{{ has_value('sensor.washing_machine_power') }}"
+        device_class: connectivity
+      - name: Tumble Dryer
+        state: "{{ has_value('sensor.tumble_dryer_power') }}"
+        device_class: connectivity
 
 automation:
   - alias: "See Mobile Devices"

@@ -713,6 +713,10 @@ automation:
           - condition: state
             entity_id: binary_sensor.garage_doors_rhs_occupied
             state: "off"
+          # shouldn't open if both garages are empty, as we are then unsure which to open
+          - condition: state
+            entity_id: binary_sensor.garage_doors_lhs_occupied
+            state: "on"
           # replaced by the wait_for_triggers below
           # proxy for the alarm being off
           # - condition: or

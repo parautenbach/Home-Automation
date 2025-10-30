@@ -613,7 +613,7 @@ automation:
       - service: notify.mobile_app_ceres
         data:
           title: "⏰ Routine Reminder"
-          message: "Remember to leave a window open for the cats."
+          message: "Remember to check the cats’ food and leave a window open."
           data:
             url: homeassistant://navigate/lovelace/main
             sound:

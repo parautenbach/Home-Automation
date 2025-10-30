@@ -455,10 +455,11 @@ multiscrape:
   - resource: https://pollencount.co.za/
     scan_interval: 21600  # 60*60*6 or 4 updates per day
     timeout: 30
+    log_response: true
     sensor:
       - name: Overall Pollen Risk
         icon: mdi:flower-pollen-outline
-        select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(2) > div"
+        select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(2) > div"
         attribute: "class"
         value_template: >-
           {# set value = ["pollen-darkorange"] #}
@@ -469,7 +470,7 @@ multiscrape:
           value: last
         attributes:
           - name: Label
-            select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(2) > div"
+            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(2) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}
@@ -482,7 +483,7 @@ multiscrape:
           # so that we can set a name and an icon for use on dashboards. granted, we can make these normal
           # template sensors that extracts the attributes from here.
           - name: Tree Pollen
-            select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(3) > div"
+            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(3) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}
@@ -491,7 +492,7 @@ multiscrape:
             on_error:
               value: last
           - name: Grass Pollen
-            select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(4) > div"
+            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(4) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}
@@ -500,7 +501,7 @@ multiscrape:
             on_error:
               value: last
           - name: Weed Pollen
-            select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(5) > div"
+            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(5) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}
@@ -509,7 +510,7 @@ multiscrape:
             on_error:
               value: last
           - name: Mould Spores
-            select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(6) > div"
+            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(6) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}
@@ -519,7 +520,7 @@ multiscrape:
               value: last
       - name: Tree Pollen
         icon: mdi:pine-tree
-        select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(3) > div"
+        select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(3) > div"
         attribute: "class"
         value_template: >-
           {%- from 'pollen.jinja' import color_level_map -%}
@@ -529,7 +530,7 @@ multiscrape:
           value: last
         attributes:
           - name: Label
-            select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(3) > div"
+            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(3) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}
@@ -539,7 +540,7 @@ multiscrape:
               value: last
       - name: Grass Pollen
         icon: mdi:grass
-        select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(4) > div"
+        select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(4) > div"
         attribute: "class"
         value_template: >-
           {%- from 'pollen.jinja' import color_level_map -%}
@@ -549,7 +550,7 @@ multiscrape:
           value: last
         attributes:
           - name: Label
-            select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(4) > div"
+            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(4) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}
@@ -559,7 +560,7 @@ multiscrape:
               value: last
       - name: Weed Pollen
         icon: mdi:sprout
-        select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(5) > div"
+        select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(5) > div"
         attribute: "class"
         value_template: >-
           {%- from 'pollen.jinja' import color_level_map -%}
@@ -569,7 +570,7 @@ multiscrape:
           value: last
         attributes:
           - name: Label
-            select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(5) > div"
+            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(5) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}
@@ -579,7 +580,7 @@ multiscrape:
               value: last
       - name: Mould Spores
         icon: mdi:grain
-        select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(6) > div"
+        select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(6) > div"
         attribute: "class"
         value_template: >-
           {%- from 'pollen.jinja' import color_level_map -%}
@@ -589,7 +590,7 @@ multiscrape:
           value: last
         attributes:
           - name: Label
-            select: "#wpv-view-layout-300 > div > div > div.image-resize > div:nth-child(2) > div:nth-child(6) > div"
+            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(6) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}

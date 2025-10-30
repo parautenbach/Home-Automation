@@ -615,6 +615,7 @@ automation:
           message: >-
             You haven't yet armed the stay alarm. Would you like to arm it?
 
+
             Remember to lock all doors and gates first.
           data:
             group: "home-security"

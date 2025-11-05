@@ -519,6 +519,11 @@ automation:
       - condition: state
         entity_id: binary_sensor.pieter_present
         state: "on"
+      - condition: not
+        conditions:
+          - condition: state
+            entity_id: alarm_control_panel.home
+            state: "disarmed"
     actions:
       - action: alarm_control_panel.alarm_disarm
         target:

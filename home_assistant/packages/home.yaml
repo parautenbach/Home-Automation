@@ -1221,7 +1221,7 @@ automation:
               # https://stackoverflow.com/questions/72671060/ios-custom-notification-sound-unnotificationsound-doesnt-play-when-iphone-is
               name: "go_to_sleep_alert.caf"
               critical: 1
-              volume: 0.3
+              volume: 0.1
             # https://companion.home-assistant.io/docs/notifications/notification-attachments#configuration
             attachment:
               url: !secret baby_monitor_last_snapshot_url

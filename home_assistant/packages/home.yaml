@@ -177,6 +177,15 @@ sensor:
     # because we want to track across midnight; we're assuming they've woken up from the night session by 9 am
     start: "{{ today_at('17:00') - timedelta(days=1) }}"
     end: "{{ today_at('17:00') }}"
+  - platform: statistics
+    name: 'Washing Machine Power 1min 90th Percentile'
+    entity_id: sensor.washing_machine_power
+    state_characteristic: percentile
+    percentile: 90
+    precision: 0
+    sampling_size: 100
+    max_age:
+      minutes: 1
 
 template:
   - binary_sensor:
@@ -2428,3 +2437,76 @@ automation:
           data:
             group: "routine-bedtime"
             url: homeassistant://navigate/lovelace/baby
+
+  # icon options and combos for the 3 automations below: 🍽️✨ / 🧺💧 / 👕☀️ / 🧺♨️ / ☀️💨
+  - alias: "Notify When Washing Machine Is Done"
+    id: "0abd30f1-6eac-40d1-ae56-24a8afab7def"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.washing_machine_power_1min_90th_percentile
+        below: 10
+        # the above sensor already lags by a minute
+        # for:
+        #   minutes: 1
+    conditions:
+      - condition: template
+        value_template: "{{ trigger.from_state.state not in ['unknown', 'unavailable'] }}"
+    actions:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🧺 Washing Machine"
+          message: >-
+            A cycle has finished.
+          data:
+            group: "chores"
+            tag: "chores-washing-machine"
+            url: homeassistant://navigate/lovelace/main
+
+  - alias: "Notify When Tumble Dryer Is Done"
+    id: "4adc04b0-cbac-43cf-ae0f-aa9a224204d5"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.tumble_dryer_power
+        below: 100
+        for:
+          minutes: 1
+    # https://community.home-assistant.io/t/wth-does-unavailable-to-0-0-trigger-the-numeric-state/471458/
+    # https://github.com/orgs/home-assistant/discussions/359
+    conditions:
+      - condition: template
+        value_template: "{{ trigger.from_state.state not in ['unknown', 'unavailable'] }}"
+    actions:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "♨️ Tumble Dryer"
+          message: >-
+            A cycle has finished.
+          data:
+            group: "chores"
+            tag: "chores-tumble-dryer"
+            url: homeassistant://navigate/lovelace/main
+
+  - alias: "Notify When Dishwasher Is Done"
+    id: "b3c48682-caec-480e-a417-9138703de430"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.dishwasher_power
+        below: 10
+        for:
+          minutes: 5
+    conditions:
+      - condition: template
+        value_template: "{{ trigger.from_state.state not in ['unknown', 'unavailable'] }}"
+    actions:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🍽️ Dishwasher"
+          message: >-
+            A cycle has finished.
+          data:
+            group: "chores"
+            tag: "chores-dishwasher"
+            url: homeassistant://navigate/lovelace/main

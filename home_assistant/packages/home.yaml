@@ -13,9 +13,6 @@ homeassistant:
       unit_of_measurement: h
       icon: mdi:bed-clock
       state_class: total_increasing
-    script.take_snapshot:
-      friendly_name: Take Camera Snapshot
-      icon: mdi:camera
     switch.bug_zapper:
       friendly_name: Bug Zapper
       icon: mdi:bug-outline

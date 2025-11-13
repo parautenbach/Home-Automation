@@ -16,6 +16,9 @@ homeassistant:
     script.security_camera_create_snapshot:
       friendly_name: Take Security Camera Snapshot
       icon: mdi:camera
+    script.take_snapshot:
+      friendly_name: Take Camera Snapshot
+      icon: mdi:camera
     sensor.security_camera_last_snapshot:
       icon: mdi:clock-outline
     sensor.security_camera_last_snapshot_relative:

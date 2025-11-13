@@ -1408,6 +1408,7 @@ automation:
       - service: timer.cancel
         target:
           entity_id: timer.bedroom_bedlamp_timer
+      # but not during certain times?
       - service: light.turn_on
         target:
           entity_id: light.bedroom_bedlamp
@@ -1524,6 +1525,8 @@ automation:
     action:
       - service: input_boolean.turn_off
         entity_id: input_boolean.baby_sleep_mode
+        data:
+          message: "clear_notification"
       - service: notify.mobile_app_ceres
         data:
           title: "🛌 Sleep Mode"
@@ -2458,7 +2461,7 @@ automation:
       - condition: template
         value_template: "{{ trigger.from_state.state not in ['unknown', 'unavailable'] }}"
     actions:
-      - service: notify.mobile_app_ceres
+      - service: notify.family
         data:
           title: "🧺 Washing Machine"
           message: >-
@@ -2483,7 +2486,7 @@ automation:
       - condition: template
         value_template: "{{ trigger.from_state.state not in ['unknown', 'unavailable'] }}"
     actions:
-      - service: notify.mobile_app_ceres
+      - service: notify.family
         data:
           title: "♨️ Tumble Dryer"
           message: >-
@@ -2506,7 +2509,7 @@ automation:
       - condition: template
         value_template: "{{ trigger.from_state.state not in ['unknown', 'unavailable'] }}"
     actions:
-      - service: notify.mobile_app_ceres
+      - service: notify.family
         data:
           title: "🍽️ Dishwasher"
           message: >-

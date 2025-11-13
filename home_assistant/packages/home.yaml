@@ -2455,8 +2455,9 @@ automation:
         entity_id: sensor.washing_machine_power_1min_90th_percentile
         below: 10
         # the above sensor already lags by a minute
-        # for:
-        #   minutes: 1
+        # for fun, we're trying to conincide this with the exact moment the machine beeps to say it's done
+        for:
+          seconds: 20
     conditions:
       - condition: template
         value_template: "{{ trigger.from_state.state not in ['unknown', 'unavailable'] }}"

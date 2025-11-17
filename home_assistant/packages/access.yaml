@@ -267,55 +267,66 @@ automation:
         to: "on"
     mode: queued
     action:
+      # taking a snapshot here, while there's also an automation for taking snapshots in general
+      # when motion is detected could be problematic (too many calls in quick succession). let's
+      # see how this goes without taking a snapshot here. otherwise, we'll let that automation
+      # do its thing and check the mtime to see if it's sufficiently recent for us in the
+      # notification, and if not, we'll take a new one and use that.
       - service: shell_command.get_doorbell_snapshot_mtime
-        response_variable: result_before
+        response_variable: result_current
       - variables:
-          mtime_before: "{{ result_before.stdout | int(0) }}"
-      # blocking call
-      - service: script.take_snapshot
-        data:
-          camera_entity: camera.doorbell
-          subdirectory: "doorbell"
-        continue_on_error: true
-      # - delay:
-      #     seconds: 1
-      - service: shell_command.get_doorbell_snapshot_mtime
-        response_variable: result_after
-      - variables:
-          mtime_after: "{{ result_after.stdout | int(0) }}"
-      - choose:
-          - conditions:
-              - condition: template
-                value_template: "{{ mtime_after > mtime_before }}"
-            sequence:
-              - service: notify.family
+          mtime_current: "{{ result_current.stdout | int(0) }}"
+          ts_now: "{{ as_timestamp(now()) }}"
+          snapshot_age: "{{ ts_now - mtime_current }}"
+      - if:
+          - condition: template
+            value_template: "{{ snapshot_age > 2 or snapshot_age < 0 }}"
+        then:
+          # this is a hack!
+          # this block will complete even if there's an unhandled snapshot error
+          # https://github.com/rroller/dahua/issues/290
+          - parallel:
+              - service: script.take_snapshot
                 data:
-                  title: "🔔 Security"
-                  message: "The doorbell rang."
-                  data:
-                    group: "doorbell"
-                    # or open the amcrest app? (seems like it doesn't register a schema handler, so can't do it, unfortunately)
-                    url: homeassistant://navigate/lovelace/security
-                    # use thumbnail image only
-                    # entity_id: camera.doorbell
-                    sound:
-                      name: "Doorbell.caf"
-                      critical: 1
-                      volume: 0.3
-                    attachment:
-                      url: !secret doorbell_camera_last_snapshot_url
-                      hide-thumbnail: false
-                      lazy: false
-                    actions:
-                      - action: "PARTLY_OPEN_AND_CLOSE_GATE"
-                        title: "Open and close (pedestrian)"
-                      - action: "PARTLY_OPEN_GATE"
-                        title: "Open (pedestrian)"
-                      - action: "FULLY_OPEN_GATE"
-                        title: "Open (fully)"
-                      - action: "CLOSE_GATE"
-                        title: "Close"
-        default:
+                  camera_entity: camera.doorbell
+                  subdirectory: "doorbell"
+                continue_on_error: true
+          - delay:
+              seconds: 1
+      - service: shell_command.get_doorbell_snapshot_mtime
+        response_variable: result_new
+      - variables:
+          mtime_new: "{{ result_new.stdout | int(0) }}"
+          snapshot_valid: "{{ (mtime_new > mtime_current) or (snapshot_age <= 2 and snapshot_age >= 0) }}"
+      - if:
+          - condition: template
+            value_template: "{{ snapshot_valid }}"
+        then:
+          - service: notify.family
+            data:
+              title: "🔔 Security"
+              message: "The doorbell rang."
+              data:
+                group: "doorbell"
+                url: homeassistant://navigate/lovelace/security
+                sound:
+                  name: "Doorbell.caf"
+                  critical: 1
+                  volume: 0.3
+                attachment:
+                  url: !secret doorbell_camera_last_snapshot_url
+                  hide-thumbnail: false
+                  lazy: false
+                actions:
+                  - action: "PARTLY_OPEN_AND_CLOSE_GATE"
+                    title: "Open and close (pedestrian)"
+                  - action: "PARTLY_OPEN_GATE"
+                    title: "Open (pedestrian)"
+                  - action: "FULLY_OPEN_GATE"
+                    title: "Open (fully)"
+                  - action: "CLOSE_GATE"
+                    title: "Close"
+        else:
           - service: notify.family
             data:
               title: "🔔 Security"

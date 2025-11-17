@@ -356,7 +356,7 @@ script:
       subdirectory:
         description: "The subdirectory under www/gallery/ to write the snapshot to."
         example: "my_subdirectory"
-    mode: parallel
+    mode: queued
     sequence:
       - variables:
           timestamp: "{{ now().strftime('%Y%m%d-%H%M%S') }}"

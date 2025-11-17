@@ -2450,7 +2450,7 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id: sensor.washing_machine_power_1min_90th_percentile
-        below: 10
+        below: 80
         # the above sensor already lags by a minute
         # for fun, we're trying to conincide this with the exact moment the machine beeps to say it's done
         for:

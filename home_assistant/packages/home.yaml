@@ -511,7 +511,7 @@ automation:
       - trigger: time
         at:
           entity_id: input_datetime.wake_up_time
-          offset: 00:15:00
+          offset: 00:05:00
     conditions:
       - condition: state
         entity_id: binary_sensor.pieter_present

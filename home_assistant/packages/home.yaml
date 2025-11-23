@@ -540,10 +540,17 @@ automation:
         # either start a timer or set an input_datetime helper
         for:
           minutes: 60
+      - platform: time
+        at: "07:00:00"
     condition:
       - condition: time
         after: "06:00:00"
         before: "09:00:00"
+      - condition: state
+        entity_id: climate.main_bedroom_ac
+        state: "on"
+        for:
+          minutes: 30
     action:
       - service: climate.turn_off
         target:

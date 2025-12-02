@@ -15,7 +15,13 @@
 # test stuff
 # curl -s -X GET -H "Token: XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX" --url "https://developer.sepush.co.za/business/2.0/api_allowance"
 
+# v3 api
+# 🚨 We have no plans to deprecate v2 right now. We might consider it if loadshedding starts again.
+# https://zatech.slack.com/archives/C043YCM6BRS/p1764598351314599
+# https://documenter.getpostman.com/view/1296288/2sB3dLVY6h
+
 rest:
+  # new: https://developer.sepush.co.za/business/3.0/schedule?id=eskme-2
   - resource: "https://developer.sepush.co.za/business/2.0/area"
     # maybe give this and the sensor below a scheduled update interval in future
     # https://community.home-assistant.io/t/rest-sensor-can-i-schedule-when-the-update-happens/408500
@@ -37,6 +43,7 @@ sensor:
   # Eskom se Push sensor
   - platform: rest
     name: EskomSePush Allowance
+    # new: https://developer.sepush.co.za/business/3.0/api_allowance
     resource: "https://developer.sepush.co.za/business/2.0/api_allowance"
     headers:
       Token: !secret eskomsepush

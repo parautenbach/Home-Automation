@@ -2488,7 +2488,7 @@ automation:
       - condition: template
         value_template: >-
           {% set d = (now().month, now().day) %}
-          {{  (11, 25) <= d or d <= (1, 15) }}
+          {{  (11, 15) <= d or d <= (1, 15) }}
     actions:
       - service: light.turn_on
         target:

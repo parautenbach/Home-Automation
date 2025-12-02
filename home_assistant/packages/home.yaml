@@ -61,6 +61,9 @@ input_boolean:
   trash_reminder:
     name: Trash Reminder
     icon: mdi:trash-can-outline
+  recycling_reminder:
+    name: Recycling Reminder
+    icon: mdi:recycle
   ac_maintenance_mode:
     name: AC Maintenance Mode
     icon: mdi:wrench-clock
@@ -2235,7 +2238,7 @@ automation:
         target:
           entity_id: "{{ trigger.event.data.entity_id | replace('timer.', 'switch.') | replace('_timer', '') }}"
 
-  - alias: "Set Trash Reminder"
+  - alias: "Set Trash and Recycling Reminders"
     id: "0106ec38-40d7-49e5-be8f-e905c24519af"
     initial_state: true
     trigger:
@@ -2244,7 +2247,9 @@ automation:
     action:
       - service: input_boolean.turn_on
         target:
-          entity_id: input_boolean.trash_reminder
+          entity_id:
+            - input_boolean.trash_reminder
+            - input_boolean.recycling_reminder
 
   - alias: "Reminder To Take Out The Trash"
     id: "6f40cf58-7a12-456d-8a42-01ca56b95872"
@@ -2313,17 +2318,91 @@ automation:
                     critical: 1
                     volume: 0.3
 
-  - alias: "Reset Trash Reminder"
+  - alias: "Reminder To Take Out The Recycling"
+    id: "539ca799-69ea-4727-8929-8bb481298af7"
+    initial_state: true
+    trigger:
+      - platform: time
+        at:
+          - "12:00:00"
+          - "12:15:00"
+          - "12:30:00"
+      - platform: time
+        at:
+          - "12:45:00"
+        id: "final_reminder"
+      - platform: state
+        entity_id: binary_sensor.pieter_present
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.recycling_reminder
+        state: "on"
+      - condition: state
+        entity_id: binary_sensor.pieter_present
+        state: "on"
+      - condition: time
+        after: "12:00:00"
+        before: "13:00:00"
+        weekday:
+          - tue
+    action:
+      - if:
+          - condition: trigger
+            id: "final_reminder"
+        then:
+          - service: notify.mobile_app_ceres
+            data:
+              title: "⏰ Routine"
+              message: "Last chance to put out the recycling!"
+              data:
+                group: "routine-recycling"
+                tag: "routine-recycling"
+                url: homeassistant://navigate/lovelace/main
+                push:
+                  sound:
+                    name: default
+                    critical: 1
+                    volume: 0.3
+          - service: input_boolean.turn_off
+            target:
+              entity_id: input_boolean.recycling_reminder
+        else:
+          - service: notify.mobile_app_ceres
+            data:
+              title: "⏰ Routine"
+              message: "Remember to put out the recycling."
+              data:
+                actions:
+                  - action: "RECYCLING_PUT_OUT"
+                    title: "Done"
+                    destructive: true
+                group: "routine-recycling"
+                tag: "routine-recycling"
+                url: homeassistant://navigate/lovelace/main
+                push:
+                  sound:
+                    name: default
+                    critical: 1
+                    volume: 0.3
+
+  - alias: "Reset Trash and Recycling Reminders"
     id: "84b06a96-a13b-46c1-b15c-41542bbcd05c"
     trigger:
       - platform: event
         event_type: mobile_app_notification_action
         event_data:
           action: TRASH_PUT_OUT
+        id: "trash"
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: RECYCLING_PUT_OUT
+        id: "recycling"
     action:
       - service: input_boolean.turn_off
         target:
-          entity_id: input_boolean.trash_reminder
+          entity_id: "input_boolean.{{ trigger.id }}_reminder"
 
   - alias: "Reminder To Go Home"
     id: "463a0f9e-9fc5-4e5f-b8a3-8350ed2c452e"

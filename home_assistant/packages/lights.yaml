@@ -201,7 +201,7 @@ scenery:
       transition: 2
     - name: normal_main_bedroom_bedlamps
       color_temp_kelvin: 4000
-      brightness: 77  # 102/255 ~= 40%
+      brightness: 102  # 102/255 ~= 40%
       transition: 2
     - name: normal_bedlamp
       color_temp_kelvin: 3333
@@ -209,7 +209,7 @@ scenery:
       transition: 2
     - name: dim_shelly_duo
       color_temp_kelvin: 4200
-      brightness: 76  # 76/255 = 30%
+      brightness: 77  # 77/255 = 30%
       transition: 2
     - name: low_shelly_duo
       color_temp_kelvin: 4200

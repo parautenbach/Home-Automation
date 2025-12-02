@@ -463,7 +463,7 @@ automation:
                 data:
                   variables:
                     light: light.pieter_bedside
-                    target_brightness_pct: 30
+                    target_brightness_pct: 40
                     transition_duration: 120
               - service: script.turn_on
                 target:
@@ -471,7 +471,7 @@ automation:
                 data:
                   variables:
                     light: light.rouve_bedside
-                    target_brightness_pct: 30
+                    target_brightness_pct: 40
                     transition_duration: 120
               - if:
                   - condition: state

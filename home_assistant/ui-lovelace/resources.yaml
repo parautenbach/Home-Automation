@@ -716,6 +716,19 @@ cards:
                 type: entity
                 name: Tumble Dryer
                 children: []
+      - type: history-graph
+        hours_to_show: 24
+        entities:
+          - entity: binary_sensor.living_room_ac
+            name: Living R. AC
+          - entity: binary_sensor.main_bedroom_ac
+            name: Main Bed. AC
+          - entity: binary_sensor.washing_machine_running
+            name: Washing M.
+          - entity: binary_sensor.tumble_dryer_running
+            name: Tumble D.
+          - entity: binary_sensor.dishwasher_running
+            name: Dishwasher
       - type: custom:swipe-card
         parameters:
           autoHeight: true

@@ -195,6 +195,27 @@ template:
           {% else %}
             mdi:sleep-off
           {% endif %}
+  - binary_sensor:
+      - name: "Washing Machine Running"
+        unique_id: "05b97764-d263-4719-8101-7410c6cdb775"
+        device_class: running
+        delay_on: "00:00:30"
+        delay_off: "00:01:00"
+        state: "{{ states('sensor.washing_machine_power_1min_90th_percentile') | float(0) > 10 }}"
+  - binary_sensor:
+      - name: "Tumble Dryer Running"
+        unique_id: "a957a399-7e18-4f67-b2a4-4bc9979971c8"
+        device_class: running
+        delay_on: "00:00:30"
+        delay_off: "00:01:00"
+        state: "{{ states('sensor.tumble_dryer_power') | float(0) > 100 }}"
+  - binary_sensor:
+      - name: "Dishwasher Running"
+        unique_id: "be486bbd-008c-48a5-aada-463121b6b7c9"
+        device_class: running
+        delay_on: "00:00:30"
+        delay_off: "00:05:00"
+        state: "{{ states('sensor.dishwasher_power') | float(0) > 10 }}"
 
   # https://community.home-assistant.io/t/template-sensor-to-tell-me-how-long-a-door-remained-open-for-the-last-time/419416/8?u=parautenbach
   - trigger:
@@ -2455,16 +2476,10 @@ automation:
     id: "0abd30f1-6eac-40d1-ae56-24a8afab7def"
     initial_state: true
     trigger:
-      - platform: numeric_state
-        entity_id: sensor.washing_machine_power_1min_90th_percentile
-        below: 80
-        # the above sensor already lags by a minute
-        # for fun, we're trying to conincide this with the exact moment the machine beeps to say it's done
-        for:
-          seconds: 20
-    conditions:
-      - condition: template
-        value_template: "{{ trigger.from_state.state not in ['unknown', 'unavailable'] }}"
+      - platform: state
+        entity_id: binary_sensor.washing_machine_running
+        from: "on"
+        to: "off"
     actions:
       - service: notify.family
         data:
@@ -2480,16 +2495,15 @@ automation:
     id: "4adc04b0-cbac-43cf-ae0f-aa9a224204d5"
     initial_state: true
     trigger:
-      - platform: numeric_state
-        entity_id: sensor.tumble_dryer_power
-        below: 100
-        for:
-          minutes: 1
+      - platform: state
+        entity_id: binary_sensor.tumble_dryer_running
+        from: "on"
+        to: "off"
     # https://community.home-assistant.io/t/wth-does-unavailable-to-0-0-trigger-the-numeric-state/471458/
     # https://github.com/orgs/home-assistant/discussions/359
-    conditions:
-      - condition: template
-        value_template: "{{ trigger.from_state.state not in ['unknown', 'unavailable'] }}"
+    # conditions:
+    #   - condition: template
+    #     value_template: "{{ trigger.from_state.state not in ['unknown', 'unavailable'] }}"
     actions:
       - service: notify.family
         data:
@@ -2505,14 +2519,10 @@ automation:
     id: "b3c48682-caec-480e-a417-9138703de430"
     initial_state: true
     trigger:
-      - platform: numeric_state
-        entity_id: sensor.dishwasher_power
-        below: 10
-        for:
-          minutes: 5
-    conditions:
-      - condition: template
-        value_template: "{{ trigger.from_state.state not in ['unknown', 'unavailable'] }}"
+      - platform: state
+        entity_id: binary_sensor.dishwasher_running
+        from: "on"
+        to: "off"
     actions:
       - service: notify.family
         data:

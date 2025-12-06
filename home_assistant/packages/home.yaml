@@ -185,7 +185,7 @@ sensor:
     precision: 0
     sampling_size: 100
     max_age:
-      minutes: 1
+      seconds: 30
 
 template:
   - binary_sensor:
@@ -203,14 +203,14 @@ template:
         unique_id: "05b97764-d263-4719-8101-7410c6cdb775"
         device_class: running
         delay_on: "00:00:30"
-        delay_off: "00:01:00"
         state: "{{ states('sensor.washing_machine_power_1min_90th_percentile') | float(0) > 10 }}"
+        delay_off: "00:00:30"
   - binary_sensor:
       - name: "Tumble Dryer Running"
         unique_id: "a957a399-7e18-4f67-b2a4-4bc9979971c8"
         device_class: running
         delay_on: "00:00:30"
-        delay_off: "00:01:00"
+        delay_off: "00:00:30"
         state: "{{ states('sensor.tumble_dryer_power') | float(0) > 100 }}"
   - binary_sensor:
       - name: "Dishwasher Running"

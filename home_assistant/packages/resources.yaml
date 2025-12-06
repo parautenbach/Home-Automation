@@ -72,6 +72,11 @@ template:
             mdi:transmission-tower-off
           {% endif %}
   - sensor:
+      - name: "Zero Power"
+        unique_id: "0f6c0a2f-8063-4944-a43c-bb0b1a6c1164"
+        unit_of_measurement: W
+        device_class: power
+        state: "0"
       # for charting purposes
       - name: "Grid Feed Outage Number"
         unique_id: "bd43dcb2-4c3b-4fd5-952c-a4a790634a1c"
@@ -84,7 +89,7 @@ template:
         unit_of_measurement: W
         device_class: power
         # battery power goes positive and negative (postive power means the battery is charging)
-        state: "{{ states('sensor.grid_power') | int(0) + states('sensor.pv_power') | int(0) - states('sensor.battery_power') | int(0) }}"
+        state: "{{ states('sensor.electricity_pulse_counter_current_power') | int(0) + states('sensor.pv_power') | int(0) - states('sensor.battery_power') | int(0) }}"
       - name: "Home Power kW"
         unique_id: "0d70dd0f-a7e4-416b-a293-cb1d518bdfcf"
         unit_of_measurement: kW
@@ -596,6 +601,7 @@ template:
 
 sensor:
   # digital power meter in db - measures only grid
+  # the pulse counter exports a cumulative sensor too, so these should match
   - platform: integration
     unique_id: "0e503fd7-9ae9-446b-8c73-28d8068b69eb"
     name: "Total Electricity Consumption"
@@ -774,11 +780,11 @@ group:
 utility_meter:
   daily_grid_energy_consumption:
     unique_id: "cb11e11e-259d-43dc-bc65-a9752b0bd31a"
-    source: sensor.grid_energy_in
+    source: sensor.electricity_pulse_counter_total
     cycle: daily
   monthly_grid_energy_consumption:
     unique_id: "be9b3cac-80e0-4d59-8557-403d17100b22"
-    source: sensor.grid_energy_in
+    source: sensor.electricity_pulse_counter_total
     cycle: monthly
   daily_home_energy_consumption:
     unique_id: "765e119e-60ef-4e0b-87f0-e7d64adad81a"
@@ -1194,7 +1200,7 @@ automation:
     initial_state: true
     trigger:
       - platform: numeric_state
-        entity_id: sensor.grid_power
+        entity_id: sensor.electricity_pulse_counter_current_power
         # to use this value in a template, provide an input_number here
         above: 500
         for:
@@ -1213,7 +1219,7 @@ automation:
         data:
           title: "⚠️ Energy"
           message: >-
-            {% set current_power = states('sensor.grid_power') | int(0) %}
+            {% set current_power = states('sensor.electricity_pulse_counter_current_power') | int(0) %}
             {% set current_power_with_unit = current_power ~ ' W' if current_power < 1000 else current_power | int(0) | multiply(1/1000) | round(1) ~ ' kW' %}
             {% set for_minutes = trigger.for.seconds // 60 %}
             The backup power system has been continuously charging from the grid for {{ for_minutes }} min, drawing {{ current_power_with_unit }} currently.

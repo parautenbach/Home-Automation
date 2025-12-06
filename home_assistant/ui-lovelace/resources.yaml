@@ -170,7 +170,7 @@ cards:
         clickable_entities: true
         entities:
           grid:
-            entity: sensor.grid_power
+            entity: sensor.electricity_pulse_counter_current_power
             power_outage:
               entity: binary_sensor.grid_feed
               state_alert: "off"
@@ -548,7 +548,7 @@ cards:
                 color: var(--custom-color-yellow)
                 children:
                   - sensor.battery_energy_in
-                  - sensor.grid_energy_out
+                  - sensor.zero_power
                   - total
               - entity_id: sensor.battery_energy_out
                 type: entity
@@ -558,17 +558,17 @@ cards:
                 color: var(--custom-color-magenta)
                 children:
                   - sensor.battery_energy_in
-                  - sensor.grid_energy_out
+                  # - sensor.grid_energy_out
                   - total
-              - entity_id: sensor.grid_energy_in
+              - entity_id: sensor.electricity_pulse_counter_total
                 type: entity
                 name: Grid In
-                subtract_entities:
-                  - sensor.grid_energy_out
+                # subtract_entities:
+                #   - sensor.grid_energy_out
                 color: var(--custom-color-blue)
                 children:
                   - sensor.battery_energy_in
-                  - sensor.grid_energy_out
+                  # - sensor.grid_energy_out
                   - total
           - entities:
               - entity_id: sensor.battery_energy_in
@@ -578,12 +578,12 @@ cards:
                   - sensor.battery_energy_out
                 color: var(--custom-color-green)
                 children: []
-              - entity_id: sensor.grid_energy_out
-                type: entity
-                name: Grid Out
-                subtract_entities:
-                  - sensor.grid_energy_in
-                children: []
+              # - entity_id: sensor.grid_energy_out
+              #   type: entity
+              #   name: Grid Out
+              #   subtract_entities:
+              #     - sensor.electricity_pulse_counter_total
+              #   children: []
               - entity_id: total
                 type: remaining_parent_state
                 name: Total Consumption
@@ -1159,7 +1159,7 @@ cards:
               - entity: sensor.home_power
                 name: Home
                 color: var(--custom-color-red)
-              - entity: sensor.grid_power
+              - entity: sensor.electricity_pulse_counter_current_power
                 name: Grid
                 color: var(--custom-color-blue)
               - entity: sensor.geyser_power
@@ -1196,7 +1196,7 @@ cards:
               - entity: sensor.home_power
                 name: Home
                 color: var(--custom-color-red)
-              - entity: sensor.grid_power
+              - entity: sensor.electricity_pulse_counter_current_power
                 name: Grid
                 color: var(--custom-color-blue)
               - entity: sensor.geyser_power
@@ -1241,7 +1241,7 @@ cards:
                 name: Home
                 color: var(--custom-color-red)
               - entity: sensor.grid_power
-                name: Grid
+                name: Inverter
                 color: var(--custom-color-blue)
               - entity: sensor.electricity_pulse_counter_current_power
                 name: Eskom

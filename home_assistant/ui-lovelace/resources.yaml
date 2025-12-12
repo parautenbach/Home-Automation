@@ -548,7 +548,7 @@ cards:
                 color: var(--custom-color-yellow)
                 children:
                   - sensor.battery_energy_in
-                  - sensor.zero_power
+                  - sensor.zero_energy
                   - total
               - entity_id: sensor.battery_energy_out
                 type: entity
@@ -584,6 +584,12 @@ cards:
               #   subtract_entities:
               #     - sensor.electricity_pulse_counter_total
               #   children: []
+              - entity_id: sensor.zero_energy
+                type: entity
+                name: Grid Out
+                subtract_entities:
+                  - sensor.electricity_pulse_counter_total
+                children: []
               - entity_id: total
                 type: remaining_parent_state
                 name: Total Consumption

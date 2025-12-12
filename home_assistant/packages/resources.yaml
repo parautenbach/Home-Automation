@@ -71,12 +71,21 @@ template:
           {% else %}
             mdi:transmission-tower-off
           {% endif %}
-  - sensor:
+  - trigger:
+      - platform: homeassistant
+        event: start
+    sensor:
       - name: "Zero Power"
         unique_id: "0f6c0a2f-8063-4944-a43c-bb0b1a6c1164"
         unit_of_measurement: W
         device_class: power
         state: "0"
+      - name: "Zero Energy"
+        unique_id: "78bf10a7-2dd8-45e3-a3bb-a1aabae77f33"
+        unit_of_measurement: Wh
+        device_class: energy
+        state: "0"
+  - sensor:
       # for charting purposes
       - name: "Grid Feed Outage Number"
         unique_id: "bd43dcb2-4c3b-4fd5-952c-a4a790634a1c"

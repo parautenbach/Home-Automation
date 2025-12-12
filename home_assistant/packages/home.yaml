@@ -203,20 +203,23 @@ template:
         unique_id: "05b97764-d263-4719-8101-7410c6cdb775"
         device_class: running
         delay_on: "00:00:30"
-        state: "{{ states('sensor.washing_machine_power_1min_90th_percentile') | float(0) > 10 }}"
-        delay_off: "00:00:30"
+        # works in conjunction with the power filter sensor to coincide with the machine's own cycle end beep
+        delay_off: "00:01:00"
+        state: "{{ states('sensor.washing_machine_power_1min_90th_percentile') | float(0) > 70 }}"
   - binary_sensor:
       - name: "Tumble Dryer Running"
         unique_id: "a957a399-7e18-4f67-b2a4-4bc9979971c8"
         device_class: running
         delay_on: "00:00:30"
-        delay_off: "00:00:30"
+        # to coincide with the device's own end message
+        delay_off: "00:01:00"
         state: "{{ states('sensor.tumble_dryer_power') | float(0) > 100 }}"
   - binary_sensor:
       - name: "Dishwasher Running"
         unique_id: "be486bbd-008c-48a5-aada-463121b6b7c9"
         device_class: running
         delay_on: "00:00:30"
+        # giving the inside to cool somewhat and minimise the steam risk
         delay_off: "00:05:00"
         state: "{{ states('sensor.dishwasher_power') | float(0) > 10 }}"
 

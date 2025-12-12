@@ -324,8 +324,10 @@ template:
       # because the history graph chart will do a fancy plot if it sees a climate entity
       - name: Living Room AC
         state: "{{ has_value('climate.living_room_ac') and not is_state('climate.living_room_ac', 'off') }}"
+        device_class: running
       - name: Main Bedroom AC
         state: "{{ has_value('climate.main_bedroom_ac') and not is_state('climate.main_bedroom_ac', 'off') }}"
+        device_class: running
 
   - sensor:
       - name: Overall Pollen Risk for Badge

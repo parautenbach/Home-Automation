@@ -589,24 +589,24 @@ template:
   - trigger:
       - platform: state
         entity_id: number.output_shutdown_capacity
-      sensor:
-        - name: "Output Shutdown Capacity"
-          icon: mdi:ray-vertex
-          unit_of_measurement: "%"
-          state: "{{ states('number.output_shutdown_capacity') }}"
+    sensor:
+      - name: "Output Shutdown Capacity"
+        icon: mdi:ray-vertex
+        unit_of_measurement: "%"
+        state: "{{ states('number.output_shutdown_capacity') }}"
   - trigger:
       - platform: state
         entity_id: sensor.load_power_non_essential
-      sensor:
-        - name: "Geyser Power"
-          icon: mdi:water-boiler
-          unit_of_measurement: W
-          device_class: power
-          state: >-
-            {# the geyser is the only device on the non-essential circuit #}
-            {# for some reason this sensor reports small negative values when the grid is connected #}
-            {% set geyser = states('sensor.load_power_non_essential') | int(0) %}
-            {{ geyser if geyser > 0 else 0 }}
+    sensor:
+      - name: "Geyser Power"
+        icon: mdi:water-boiler
+        unit_of_measurement: W
+        device_class: power
+        state: >-
+          {# the geyser is the only device on the non-essential circuit #}
+          {# for some reason this sensor reports small negative values when the grid is connected #}
+          {% set geyser = states('sensor.load_power_non_essential') | int(0) %}
+          {{ geyser if geyser > 0 else 0 }}
 
 sensor:
   # digital power meter in db - measures only grid

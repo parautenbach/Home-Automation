@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # this WILL NOT work from within the container (no pg_dump)
-# scheduled with a root cronjob
+# scheduled with a cronjob
 
 BACKUP_FOLDER=/mnt/nas/Backups/home_assistant_db/
 BACKUP_FILE=${BACKUP_FOLDER}homeassistant_$(/usr/bin/date -u +"%Y%m%d_%H%M%S").dump.gz
@@ -39,3 +39,4 @@ else
         /usr/bin/echo "${OLDFILES}"
     fi
 fi
+

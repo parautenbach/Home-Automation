@@ -20,4 +20,4 @@ ffmpeg \
   -c:a aac -b:a 128k \
   -t "$DURATION" \
   -y "$OUTPUT_FILE"
-  
+

@@ -2,7 +2,6 @@
 
 # Paths
 BACKUP_FOLDER=/mnt/nas/Backups/home_assistant/
-#BACKUP_FILE="${BACKUP_FOLDER}hass-config_$(date -u +"%Y%m%d_%H%M%S").zip"
 BACKUP_FILE="${BACKUP_FOLDER}hass-config_$(date -u +"%Y%m%d_%H%M%S").tar.gz"
 BACKUP_LOCATION=/config  # Adjusted for the Docker mount
 DAYSTOKEEP=0  # Set to 0 to keep backups forever
@@ -34,7 +33,6 @@ fi
 # Backup process
 cd "$BACKUP_LOCATION" || log e "Failed to enter backup location." 1
 log i "Creating backup..."
-#zip -9 -q -r "$BACKUP_FILE" . -x "home-assistant.db" -x "home-assistant_v2.db" -x "home-assistant.log"
 tar --exclude="home-assistant.db" \
     --exclude="home-assistant_v2.db" \
     --exclude="home-assistant.log" \

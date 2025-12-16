@@ -4,21 +4,42 @@ docker run -d \
   --network=host \
   --restart=unless-stopped \
   -e TZ=Africa/Johannesburg \
-  -v /root/.homeassistant:/config \
+  -v /home/homeassistant/.homeassistant:/config \
   -v /mnt/nas:/mnt/nas \
-  -v /root/scripts:/root/scripts:ro \
+  -v /home/homeassistant/scripts:/home/homeassistant/scripts:ro \
   -v /tmp:/tmp \
   -v /run/dbus:/run/dbus:ro \
-  -v /root/.ssh:/root/.ssh:ro \
+  -v /home/homeassistant/.ssh:/home/homeassistant/.ssh:ro \
   -v /usr/share/fonts/truetype/dejavu:/usr/share/fonts/truetype/dejavu:ro \
   -e DBUS_SYSTEM_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket \
   ghcr.io/home-assistant/home-assistant:stable
 
 =====
 
+# runtime commands
 docker rm homeassistant
 docker logs -n 10 -f homeassistant
 docker exec -it homeassistant bash
+docker restart homeassistant && docker logs -n 10 -f homeassistant
+
+=====
+
+# https://www.home-assistant.io/common-tasks/container/#to-update-home-assistant-core
+# https://chatgpt.com/s/t_69371e6bcd408191a582a722a6d7274e
+# manual update
+
+docker pull ghcr.io/home-assistant/home-assistant:stable
+docker stop homeassistant
+docker rm homeassistant
+docker run ...
+
+=====
+
+maintenance
+docker images | grep home-assistant
+docker rmi ghcr.io/home-assistant/home-assistant:2024.11.2
+docker image prune  # aggressively prune unused images (not containers)
+docker system prune -a  # DANGER: prune everything not in use
 
 =====
 
@@ -50,12 +71,12 @@ ExecStart=/usr/bin/docker run \
   --network=host \
   --restart unless-stopped \
   -e TZ=Africa/Johannesburg \
-  -v /root/.homeassistant:/config \
+  -v /home/homeassistant/.homeassistant:/config \
   -v /mnt/nas:/mnt/nas \
-  -v /root/scripts:/root/scripts:ro \
+  -v /home/homeassistant/scripts:/home/homeassistant/scripts:ro \
   -v /tmp:/tmp \
   -v /run/dbus:/run/dbus:ro \
-  -v /root/.ssh:/root/.ssh:ro \
+  -v /home/homeassistant/.ssh:/home/homeassistant/.ssh:ro \
   -v /usr/share/fonts/truetype/dejavu:/usr/share/fonts/truetype/dejavu:ro \
   -e DBUS_SYSTEM_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket \
   ghcr.io/home-assistant/home-assistant:stable
@@ -73,15 +94,6 @@ sudo systemctl enable --now home-assistant-docker.service
 sudo systemctl status home-assistant-docker.service
 
 journalctl -u home-assistant-docker.service -f
-
-=====
-
-manual update
-
-docker pull ghcr.io/home-assistant/home-assistant:stable
-docker stop homeassistant
-docker rm homeassistant
-docker run ...
 
 =====
 

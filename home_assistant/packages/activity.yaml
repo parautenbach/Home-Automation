@@ -30,15 +30,17 @@ sensor:
       time_constant: 10
       precision: 0
 
-  - platform: template
-    sensors:
+template:
+  - sensor:
       # https://companion.home-assistant.io/docs/core/sensors/
-      pieter_activity_type:
-        value_template: "{{ state_attr('sensor.ceres_activity', 'Types') | first }}"
-        icon_template: "{{ state_attr('sensor.ceres_activity', 'icon') }}"
-      pieter_activity_confidence:
-        value_template: "{{ state_attr('sensor.ceres_activity', 'Confidence') }}"
-        icon_template: >-
+      - name: Pieter Activity Type
+        unique_id: "d7b7e8aa-ea5c-4e66-a2b5-59df16258407"
+        icon: '{{ state_attr(''sensor.ceres_activity'', ''icon'') }}'
+        state: '{{ state_attr(''sensor.ceres_activity'', ''Types'') | first }}'
+  - sensor:
+      - name: Pieter Activity Confidence
+        unique_id: "6cf23bbb-3455-47b2-b6b3-e2224c71870a"
+        icon: >-
           {% if is_state_attr('sensor.ceres_activity', 'Confidence', 'High') %}
             mdi:speedometer
           {% elif is_state_attr('sensor.ceres_activity', 'Confidence', 'Medium') %}
@@ -48,6 +50,7 @@ sensor:
           {% else %}
             unknown
           {% endif %}
+        state: "{{ state_attr('sensor.ceres_activity', 'Confidence') }}"
 
 automation:
   - alias: "Set Pieter's Driving State"

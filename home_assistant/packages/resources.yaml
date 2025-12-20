@@ -438,6 +438,13 @@ template:
         icon: mdi:dots-horizontal
         device_class: power
         unit_of_measurement: W
+      # for the energy dashboard's now view
+      - name: "Battery Power (Inverted)"
+        unique_id: "05853cd9-18a8-42e2-9f93-476042cd1490"
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        state: "{{ -(states('sensor.battery_power') | int(0)) }}"
 
   # https://community.home-assistant.io/t/trigger-based-template-sensor-using-time-pattern-not-updating/706860
   # https://github.com/home-assistant/core/issues/114195

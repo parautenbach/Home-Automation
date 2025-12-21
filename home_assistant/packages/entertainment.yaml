@@ -72,10 +72,11 @@ sensor:
     start: "{{ today_at() }}"
     end: "{{ now() }}"
 
-  - platform: template
-    sensors:
-      apple_tv_playing_hours_minutes:
-        value_template: >-
+template:
+  - sensor:
+      - name: Apple TV Playing Hours Minutes
+        unique_id: "312b050e-bd51-4a8e-87ad-aa2295a1d2b9"
+        state: >-
           {% set decimal_hours = states('sensor.apple_tv_playing') | float(0) %}
           {% set hours = (decimal_hours - (decimal_hours % 1)) | int(0) %}
           {% set minutes = ((decimal_hours % 1) * 60) | int(0) %}

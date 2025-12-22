@@ -101,6 +101,9 @@ alarm_control_panel:
       trigger_time: 900
     arming_states:
       - armed_away
+      # armed_home (stay) doesn't make sense for this panel, but not having this causes a HomeKit error upon startup:
+      # ERROR (MainThread) [pyhap.characteristic] SecuritySystemCurrentState: value=0 is an invalid value.
+      # ERROR (MainThread) [pyhap.characteristic] SecuritySystemTargetState: value=0 is an invalid value.
 
 input_boolean:
   alarm_zone_1_bypass:

@@ -25,7 +25,7 @@ fi
 
 # backup
 log i "Creating backup"
-PGPASSWORD=homeassistant /usr/bin/pg_dump -U homeassistant -h localhost homeassistant | /usr/bin/gzip -9 > "${BACKUP_FILE}"
+PGPASSWORD=homeassistant nice -n 19 ionice -c3 /usr/bin/pg_dump -U homeassistant -h localhost homeassistant | /usr/bin/gzip -9 > "${BACKUP_FILE}"
 log i "Backup complete: ${BACKUP_FILE}"
 
 # purge

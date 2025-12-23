@@ -118,7 +118,6 @@ homeassistant:
 shell_command:
   download_latest_dam_levels: "/root/scripts/download_latest_dam_levels.sh"
 
-# convert to modern format: https://www.home-assistant.io/integrations/template/
 weather:
   # https://community.home-assistant.io/t/mapping-weather-conditions-in-the-ui/289207
   - platform: template
@@ -264,52 +263,20 @@ sensor:
       hours: 12
     precision: 1
 
-  - platform: template
-    sensors:
-      solar_angle:
-        friendly_name: "Sun Angle"
-        unit_of_measurement: '°'
-        value_template: "{{ '%+.1f' | format(state_attr('sun.sun', 'elevation')) }}"
-        icon_template: mdi:sun-angle-outline
-      outside_temperature:
-        friendly_name: "Outside Temperature"
-        value_template: >-
-          {{ state_attr('weather.openweathermap', 'temperature') | float(None) }}
-          {# states('sensor.saaqis_ambient_temperature') | float(None) #}
-        device_class: temperature
-        unit_of_measurement: "°C"
-        icon_template: mdi:thermometer
-      outside_feels_like:
-        friendly_name: "Outside Temperature Feels Like"
-        availability_template: "{{ has_value('sensor.openweathermap_feels_like_temperature') }}"
-        value_template: >-
-          {{ states('sensor.openweathermap_feels_like_temperature') | round(1)  }}
-        device_class: temperature
-        unit_of_measurement: "°C"
-        icon_template: mdi:thermometer
-      daylight_hm:
-        friendly_name: "Daylight Length"
-        value_template: >-
-          {{ state_attr('sensor.home_sun_daylight', 'today_hms')[:5] }}
-        icon_template: mdi:weather-sunny
-      nighttime_number:
-        value_template: "{{ iif(is_state('binary_sensor.nighttime', 'on'), 1, 0) }}"
-      temperature_difference:
-        friendly_name: "Inside vs Outside Temperature"
-        value_template: >-
-          {{ (states('sensor.office_temperature') | float(0) - states('sensor.outside_temperature_filtered') | float(0)) | round(1) }}
-        device_class: temperature
-        unit_of_measurement: "°C"
-      fair_weather_time_share:
-        friendly_name: "Fair Weather Time Share"
-        value_template: >-
-          {{ min((states('sensor.fair_weather_time') | float(0) / states('sensor.home_sun_daylight') | float(0) * 100) | round(0), 100) if has_value('sensor.home_sun_daylight') else 0 }}
-        unit_of_measurement: "%"
-      time_of_day:
-        friendly_name: Time of Day
-        value_template: "{{ 'Day' if states('sensor.solar_angle') | float(0) >= -0.833 else 'Night' }}"
-
 template:
+  - weather:
+      - name: "Forecast Tomorrow"
+        condition_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['condition'] }}"
+        temperature_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['temperature'] }}"
+        temperature_unit: °C
+        humidity_template: "{{ 0.0 | float(0) }}"
+        pressure_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['pressure'] }}"
+        pressure_unit: hPa
+        wind_speed_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['wind_speed'] }}"
+        wind_speed_unit: km/h
+        wind_bearing_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['wind_bearing'] }}"
+        precipitation_unit: mm
+        attribution_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'attribution') }}"
   - binary_sensor:
       # https://www.home-assistant.io/integrations/weather/#condition-mapping
       # see day-time and night-time sensors regarding the value of -0.833
@@ -361,6 +328,63 @@ template:
                               5: "mdi:gauge-full" } %}
           {% set key = states('sensor.overall_pollen_risk') | int(0) %}
           {{ mapping[key] if key in mapping else "mdi:alert" }}
+  - sensor:
+      - name: "Sun Angle"
+        unique_id: "87e4fff1-5099-41a6-9c1a-6c95e0f491ab"
+        default_entity_id: sensor.solar_angle
+        unit_of_measurement: '°'
+        state: "{{ '%+.1f' | format(state_attr('sun.sun', 'elevation')) }}"
+        icon: mdi:sun-angle-outline
+  - sensor:
+      - name: "Outside Temperature"
+        unique_id: "17306e70-7ffe-49a1-a448-9c99df8f7690"
+        state: >-
+          {{ state_attr('weather.openweathermap', 'temperature') | float(None) }}
+          {# states('sensor.saaqis_ambient_temperature') | float(None) #}
+        device_class: temperature
+        unit_of_measurement: "°C"
+        icon: mdi:thermometer
+  - sensor:
+      - name: "Outside Temperature Feels Like"
+        unique_id: "95a1d418-6c6c-4df2-bda2-30d575612488"
+        default_entity_id: sensor.outside_feels_like
+        variables:
+          temperature_entity: sensor.openweathermap_feels_like_temperature
+        availability: "{{ temperature_entity | has_value }}"
+        state: >-
+          {{ states(temperature_entity) | round(1)  }}
+        device_class: temperature
+        unit_of_measurement: "°C"
+        icon: mdi:thermometer
+  - sensor:
+      - name: "Daylight Length"
+        unique_id: "561ee1b3-fcf4-4477-9f93-d7c402b9283b"
+        default_entity_id: sensor.daylight_hm
+        state: >-
+          {{ state_attr('sensor.home_sun_daylight', 'today_hms')[:5] }}
+        icon: mdi:weather-sunny
+  - sensor:
+      - name: "Nighttime Number"
+        unique_id: "4afecc94-25fc-41a3-a11d-162044c1dda8"
+        state: "{{ iif(is_state('binary_sensor.nighttime', 'on'), 1, 0) }}"
+  - sensor:
+      - name: "Inside vs Outside Temperature"
+        unique_id: "77c739d7-87b1-47f7-bcf5-a26f2a484335"
+        default_entity_id: sensor.temperature_difference
+        state: >-
+          {{ (states('sensor.office_temperature') | float(0) - states('sensor.outside_temperature_filtered') | float(0)) | round(1) }}
+        device_class: temperature
+        unit_of_measurement: "°C"
+  - sensor:
+      - name: "Fair Weather Time Share"
+        unique_id: "7564e4b6-c7c6-4536-bd02-efa115f6e6c1"
+        state: >-
+          {{ min((states('sensor.fair_weather_time') | float(0) / states('sensor.home_sun_daylight') | float(0) * 100) | round(0), 100) if has_value('sensor.home_sun_daylight') else 0 }}
+        unit_of_measurement: "%"
+  - sensor:
+      - name: Time of Day
+        unique_id: "9c81145a-3e30-4850-8e4a-3b8873be4333"
+        state: "{{ 'Day' if states('sensor.solar_angle') | float(0) >= -0.833 else 'Night' }}"
 
   # https://www.home-assistant.io/integrations/template/#trigger-based-handling-of-service-response-data
   # https://community.home-assistant.io/t/petition-dont-delete-the-forecast-attribute/609298/38

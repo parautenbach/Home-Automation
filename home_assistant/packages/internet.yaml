@@ -195,26 +195,6 @@ sensor:
     baseoid: 1.3.6.1.2.1.2.2.1.16.13  # ifOutOctets.13 / eth4 (interface 12, zero-indexed)
     unit_of_measurement: octets
 
-  - platform: template
-    sensors:
-      # https://github.com/home-assistant/core/blob/dev/homeassistant/const.py#L571
-      internet_speed_in:
-        value_template: '{{ ((states.input_number.wan_traffic_delta_in.state  | float(0) ) / 1000000 ) | round(3) }}'
-        device_class: data_rate
-        unit_of_measurement: 'Mbit/s'
-      internet_speed_out:
-        value_template: '{{ ((states.input_number.wan_traffic_delta_out.state | float(0) ) / 1000000 ) | round(3) }}'
-        device_class: data_rate
-        unit_of_measurement: 'Mbit/s'
-      internet_usage_in:
-        value_template: "{{ ((states('sensor.snmp_wan_in')  | float(0) ) / 1000000000 ) | round(3) }}"
-        device_class: data_size
-        unit_of_measurement: 'GB'
-      internet_usage_out:
-        value_template: "{{ ((states('sensor.snmp_wan_out') | float(0) ) / 1000000000 ) | round(3) }}"
-        device_class: data_size
-        unit_of_measurement: 'GB'
-
   # alternative: https://community.home-assistant.io/t/snmp-bandwidth-monitor-using-statistics/96684/82
   - platform: statistics
     name: 'Internet Traffic In'
@@ -234,6 +214,33 @@ sensor:
     sampling_size: 100
     max_age:
       minutes: 1
+
+template:
+  # https://github.com/home-assistant/core/blob/dev/homeassistant/const.py#L571
+  - sensor:
+      - name: "Internet Speed In"
+        unique_id: "cb6da88f-f6b0-46ba-a003-6dcce4999e18"
+        state: '{{ ((states.input_number.wan_traffic_delta_in.state  | float(0) ) / 1000000 ) | round(3) }}'
+        device_class: data_rate
+        unit_of_measurement: 'Mbit/s'
+  - sensor:
+      - name: "Internet Speed Out"
+        unique_id: "da1b796f-2e23-4ca3-88e6-d39fdde983bc"
+        state: '{{ ((states.input_number.wan_traffic_delta_out.state | float(0) ) / 1000000 ) | round(3) }}'
+        device_class: data_rate
+        unit_of_measurement: 'Mbit/s'
+  - sensor:
+      - name: "Internet Usage In"
+        unique_id: "09c36e4d-7db9-4499-8dbf-99e43452adfd"
+        state: "{{ ((states('sensor.snmp_wan_in')  | float(0) ) / 1000000000 ) | round(3) }}"
+        device_class: data_size
+        unit_of_measurement: 'GB'
+  - sensor:
+      - name: "Internet Usage Out"
+        unique_id: "09ec3858-8705-4503-a162-afebb2808d27"
+        state: "{{ ((states('sensor.snmp_wan_out') | float(0) ) / 1000000000 ) | round(3) }}"
+        device_class: data_size
+        unit_of_measurement: 'GB'
 
 automation:
   # https://community.home-assistant.io/t/snmp-bandwidth-monitor/7122

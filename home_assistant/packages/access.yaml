@@ -291,6 +291,8 @@ automation:
                   camera_entity: camera.doorbell
                   subdirectory: "doorbell"
                 continue_on_error: true
+              - delay:
+                  seconds: 1
           - delay:
               seconds: 1
       - service: shell_command.get_doorbell_snapshot_mtime

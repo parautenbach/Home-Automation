@@ -2591,7 +2591,7 @@ automation:
         data:
           title: "♨️ Tumble Dryer"
           message: >-
-            A cycle has finished.
+            A cycle has finished. Remember to clean the door filter.
           data:
             group: "chores"
             tag: "chores-tumble-dryer"

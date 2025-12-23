@@ -21,6 +21,12 @@ badges:
     show_name: true
     show_state: false
   - type: entity
+    entity: binary_sensor.scullery_flooding
+    name: Scullery
+    show_icon: true
+    show_name: true
+    show_state: false
+  - type: entity
     entity: binary_sensor.doorbell_rang
     name: Doorbell
     show_icon: true

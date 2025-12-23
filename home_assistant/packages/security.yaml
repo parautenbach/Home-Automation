@@ -118,16 +118,19 @@ sensor:
     start: "{{ today_at() }}"
     end: "{{ now() }}"
 
-  - platform: template
-    sensors:
-      security_camera_last_snapshot:
+template:
+  - sensor:
+      - name: "Security Camera Last Snapshot"
+        unique_id: "979c1c9e-12bb-4a39-a870-87d87f3f6af5"
         device_class: timestamp
-        value_template: "{{ states('input_datetime.security_camera_last_snapshot') | as_datetime | as_local }}"
-      security_camera_last_snapshot_relative:
+        state: "{{ states('input_datetime.security_camera_last_snapshot') | as_datetime | as_local }}"
+  - sensor:
+      - name: "Security Camera Last Snapshot Relative"
+        unique_id: "39606520-c76f-4639-8f14-113f011f1692"
         # the first line is a hack to avoid having to write an automation
         # - https://www.home-assistant.io/integrations/template/#working-without-entities
         # - https://community.home-assistant.io/t/heads-up-upcoming-breaking-change-in-the-template-integration/223715
-        value_template: >
+        state: >
           {%- set _ = states('sensor.time') %}
           {%- set t = state_attr('input_datetime.security_camera_last_snapshot', 'timestamp') %}
           {%- if t != None %}
@@ -154,8 +157,10 @@ sensor:
           {% else %}
             unknown
           {% endif %}
-      motion_detected_last_relative:
-        value_template: >
+  - sensor:
+      - name: "Motion Detected Last Relative"
+        unique_id: "2570fe8c-b9d0-4cf5-96d0-ce30bbcc31cc"
+        state: >
           {%- set _ = states('sensor.time') %}
           {%- set t = state_attr('input_datetime.foyer_motion_detected_last', 'timestamp') %}
           {%- if t != None %}
@@ -182,11 +187,15 @@ sensor:
           {% else %}
             unknown
           {% endif %}
-      security_camera_last_clip:
+  - sensor:
+      - name: "Security Camera Last Clip"
+        unique_id: "071ab27c-e873-44c4-850a-37621b26d3cc"
         device_class: timestamp
-        value_template: "{{ states('input_datetime.security_camera_last_clip') | as_datetime | as_local }}"
-      security_camera_last_clip_relative:
-        value_template: >
+        state: "{{ states('input_datetime.security_camera_last_clip') | as_datetime | as_local }}"
+  - sensor:
+      - name: "Security Camera Last Clip Relative"
+        unique_id: "43495b89-3417-4915-a34a-7bbfd941fe50"
+        state: >
           {%- set _ = states('sensor.time') %}
           {%- set t = state_attr('input_datetime.security_camera_last_clip', 'timestamp') %}
           {%- if t != None %}

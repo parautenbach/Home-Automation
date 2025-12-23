@@ -330,7 +330,7 @@ automation:
           - service: notify.family
             data:
               title: "🔔 Security"
-              message: "The doorbell rang."
+              message: "The doorbell rang. (No image available.)"
               data:
                 group: "doorbell"
                 url: homeassistant://navigate/lovelace/security

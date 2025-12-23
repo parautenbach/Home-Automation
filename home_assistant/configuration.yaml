@@ -213,8 +213,6 @@ notify:
     api_key: !secret clickatell_api_key
     recipient: !secret pieter_mobile_number
 
-battery_notes:
-
 # needed for core installations
 # [aiohttp_fast_zlib] zlib_ng and isal are not available, falling back to zlib, performance will be degraded.
 isal:

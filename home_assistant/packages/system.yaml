@@ -23,7 +23,7 @@ homeassistant:
       friendly_name: "Most recent DB backup"
     sensor.db_size:
       icon: mdi:database
-    binary_sensor.python_package_index_pypi_update_available:
+    binary_sensor.home_assistant_versions_update_available:
       friendly_name: HA Updater
     binary_sensor.ha_updater:
       icon: mdi:home-assistant
@@ -73,10 +73,10 @@ binary_sensor:
         friendly_name: HA Updater
         device_class: update
         value_template: >-
-          {{ is_state('binary_sensor.python_package_index_pypi_update_available', 'on') }}
+          {{ is_state('binary_sensor.home_assistant_versions_update_available', 'on') }}
         attribute_templates:
           latest_version: >-
-            {{ states('sensor.python_package_index_pypi') }}
+            {{ states('sensor.home_assistant_versions') }}
           current_version: >-
             {{ states('sensor.current_version') }}
 

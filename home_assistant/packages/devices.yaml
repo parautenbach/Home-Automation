@@ -128,29 +128,29 @@ command_line:
       value_template: '{{ value | int(0) }}'
       scan_interval: 3600
 
-binary_sensor:
-  - platform: template
-    sensors:
-      on_air:
-        # https://github.com/home-assistant/iOS/issues/1903
-        value_template: >
-          {{ is_state('binary_sensor.gaia_audio_input_in_use', 'on') or
-             is_state('input_boolean.gaia_audio_input_in_use_alt', 'on') }}
-
 template:
   - binary_sensor:
       - name: Doorbell Online
         state: "{{ has_value('binary_sensor.doorbell_motion_detected') }}"
         device_class: connectivity
+  - binary_sensor:
       - name: Dishwasher
         state: "{{ has_value('sensor.dishwasher_power') }}"
         device_class: connectivity
+  - binary_sensor:
       - name: Washing Machine
         state: "{{ has_value('sensor.washing_machine_power') }}"
         device_class: connectivity
+  - binary_sensor:
       - name: Tumble Dryer
         state: "{{ has_value('sensor.tumble_dryer_power') }}"
         device_class: connectivity
+  - binary_sensor:
+      - name: "On Air"
+        # https://github.com/home-assistant/iOS/issues/1903
+        state: >
+          {{ is_state('binary_sensor.gaia_audio_input_in_use', 'on') or
+             is_state('input_boolean.gaia_audio_input_in_use_alt', 'on') }}
 
 automation:
   - alias: "See Mobile Devices"

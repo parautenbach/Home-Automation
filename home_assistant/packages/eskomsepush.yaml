@@ -55,15 +55,14 @@ sensor:
     value_template: "OK"
     scan_interval: 3600
 
-  # template sensors abased on ESP above
-  - platform: template
-    sensors:
-      loadshedding_start_time:
+# template sensors abased on ESP above
+template:
+  - sensor:
+      - name: "Loadshedding Start Time"
         unique_id: "7c572fed-f4e0-4889-83ea-8995932c1464"
-        friendly_name: Loadshedding Start Time
         device_class: timestamp
-        icon_template: mdi:clock-outline
-        value_template: >-
+        icon: mdi:clock-outline
+        state: >-
           {% if states('sensor.eskomsepush')
                 and not state_attr('sensor.eskomsepush', 'events') is none
                 and state_attr('sensor.eskomsepush', 'events') != []
@@ -72,12 +71,12 @@ sensor:
           {% else %}
             {{ 0 | as_datetime }}
           {% endif %}
-      loadshedding_end_time:
+  - sensor:
+      - name: "Loadshedding End Time"
         unique_id: "c6e3c440-e930-434f-95fc-a9d68dd42fe4"
-        friendly_name: Loadshedding End Time
         device_class: timestamp
-        icon_template: mdi:clock-outline
-        value_template: >-
+        icon: mdi:clock-outline
+        state: >-
           {% if states('sensor.eskomsepush')
                 and not state_attr('sensor.eskomsepush', 'events') is none
                 and state_attr('sensor.eskomsepush', 'events') != []
@@ -86,10 +85,10 @@ sensor:
           {% else %}
             {{ 0 | as_datetime }}
           {% endif %}
-      loadshedding_stage:
+  - sensor:
+      - name: "Loadshedding Stage"
         unique_id: "a7314ceb-7afa-4a71-ae9e-deb6b9d956d9"
-        friendly_name: Loadshedding Stage
-        icon_template: >-
+        icon: >-
           {% if states('sensor.eskomsepush')
                 and not state_attr('sensor.eskomsepush', 'events') is none
                 and state_attr('sensor.eskomsepush', 'events') != []
@@ -107,7 +106,7 @@ sensor:
           {% else %}
             mdi:checkbox-marked-circle
           {% endif %}
-        value_template: >-
+        state: >-
           {% if states('sensor.eskomsepush')
                 and not state_attr('sensor.eskomsepush', 'events') is none
                 and state_attr('sensor.eskomsepush', 'events') != []
@@ -116,12 +115,12 @@ sensor:
           {% else %}
             No loadshedding
           {% endif %}
-      loadshedding_duration:
-        friendly_name: Loadshedding Duration
+  - sensor:
+      - name: "Loadshedding Duration"
         unique_id: "03a725e4-77ce-4fbe-9a3e-5b15b064d14f"
         device_class: duration
         unit_of_measurement: h
-        value_template: >-
+        state: >-
           {%- if states('sensor.eskomsepush')
                  and not state_attr('sensor.eskomsepush', 'events') is none
                  and state_attr('sensor.eskomsepush', 'events') != [] -%}
@@ -129,15 +128,15 @@ sensor:
           {%- else -%}
             {{ 0 }}
           {%- endif -%}
-      eskomsepush_calls_remaining:
+  - sensor:
+      - name: "Eskomsepush Calls Remaining"
         unique_id: "c0a18142-5518-4274-b34d-4f7ab017a43d"
-        friendly_name: EskomSePush API Calls Remaining
-        icon_template: mdi:api
-        value_template: "{{ state_attr('sensor.eskomsepush_allowance', 'limit') | int(0) - state_attr('sensor.eskomsepush_allowance', 'count') | int(0) }}"
-      loadshedding_forecast:
+        icon: mdi:api
+        state: "{{ state_attr('sensor.eskomsepush_allowance', 'limit') | int(0) - state_attr('sensor.eskomsepush_allowance', 'count') | int(0) }}"
+  - sensor:
+      - name: "Loadshedding Forecast"
         unique_id: "4ac805d7-5b15-400d-b3c7-402df2324ca5"
-        friendly_name: Loadshedding Forecast
-        value_template: >
+        state: >
           Your latest forecast:
           {% if state_attr('sensor.eskomsepush', 'events') != []
                 and not state_attr('sensor.eskomsepush', 'events') is none -%}
@@ -156,14 +155,11 @@ sensor:
           {%- else -%}
             No loadshedding.
           {%- endif -%}
-
-binary_sensor:
-  - platform: template
-    sensors:
-      loadshedding_active:
-        friendly_name: Loadshedding Active
+  - binary_sensor:
+      - name: "Loadshedding Active"
+        unique_id: "9a79d7b4-1fb3-4892-8d21-4d93bfc67012"
         device_class: problem
-        value_template: >-
+        state: >-
           {%- if state_attr('sensor.eskomsepush', 'events') == []
                  or state_attr('sensor.eskomsepush', 'events') is none -%}
             False
@@ -172,10 +168,11 @@ binary_sensor:
             {% set end = (state_attr('sensor.eskomsepush', 'events') | first).end | as_datetime %}
             {{ start <= now() <= end }}
           {%- endif -%}
-      loadshedding_scheduled:
-        friendly_name: Loadshedding Scheduled
+  - binary_sensor:
+      - name: "Loadshedding Scheduled"
+        unique_id: "98af1b24-2aaf-460d-b519-7dc98658bbc3"
         device_class: problem
-        value_template: >-
+        state: >-
           {{ states('sensor.loadshedding_start_time') | as_datetime != 0 | as_datetime }}
           {# alternative; will be evaluated every minute; the above is likely more efficient #}
           {# {{ states('sensor.loadshedding_start_time') | as_datetime >= now() }} #}

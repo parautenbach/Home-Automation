@@ -109,49 +109,6 @@ timer:
     restore: true
 
 binary_sensor:
-  - platform: template
-    sensors:
-      # https://www.home-assistant.io/integrations/bayesian/
-      pieter_present:
-        friendly_name: "Pieter Present"
-        # DO NOT change this to an or condition
-        # false positives for not being home will trigger automations when it changes to home
-        value_template: >-
-          {{ is_state("input_boolean.pieter_present", "on") or
-             is_state("person.pieter_rautenbach", "home") }}
-      rouve_present:
-        friendly_name: "Rouvé Present"
-        value_template: >-
-          {{ is_state("input_boolean.rouve_present", "on") or
-             is_state("person.rouve_rautenbach", "home") }}
-      tenant_present:
-        friendly_name: "Tenant Present"
-        delay_off:
-          minutes: 20
-        # ping succeeded and alarm is not armed
-        value_template: >-
-          {{ is_state("binary_sensor.tenant_mobile_phone", "on") and is_state('alarm_control_panel.flatlet', 'disarmed') }}
-      housekeeper_present:
-        friendly_name: "Housekeeper Present"
-        delay_off:
-          minutes: 20
-        value_template: >-
-          {{ is_state("binary_sensor.housekeeper_mobile_phone", "on") }}
-      anybody_home:
-        friendly_name: "Anybody Home"
-        value_template: >-
-          {{ (is_state("binary_sensor.pieter_present", "on") or is_state("binary_sensor.rouve_present", "on") or
-              is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on")) and
-             not is_state("alarm_control_panel.home", "armed_away") }}
-        icon_template: >-
-          {% if (is_state("binary_sensor.pieter_present", "on") or is_state("binary_sensor.rouve_present", "on") or
-                 is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on")) and
-                not is_state("alarm_control_panel.home", "armed_away") %}
-            mdi:home-account
-          {% else %}
-            mdi:home
-          {% endif %}
-
   # - platform: ffmpeg_noise
   #   name: Baby Monitor Sound Alarm
   #   input: !secret baby_monitor_stream
@@ -188,6 +145,46 @@ sensor:
       seconds: 30
 
 template:
+  - binary_sensor:
+      # https://www.home-assistant.io/integrations/bayesian/
+      - name: "Pieter Present"
+        # DO NOT change this to an or condition
+        # false positives for not being home will trigger automations when it changes to home
+        state: >-
+          {{ is_state("input_boolean.pieter_present", "on") or
+             is_state("person.pieter_rautenbach", "home") }}
+  - binary_sensor:
+      - name: "Rouvé Present"
+        state: >-
+          {{ is_state("input_boolean.rouve_present", "on") or
+             is_state("person.rouve_rautenbach", "home") }}
+  - binary_sensor:
+      - name: "Tenant Present"
+        delay_off:
+          minutes: 20
+        # ping succeeded and alarm is not armed
+        state: >-
+          {{ is_state("binary_sensor.tenant_mobile_phone", "on") and is_state('alarm_control_panel.flatlet', 'disarmed') }}
+  - binary_sensor:
+      - name: "Housekeeper Present"
+        delay_off:
+          minutes: 20
+        state: >-
+          {{ is_state("binary_sensor.housekeeper_mobile_phone", "on") }}
+  - binary_sensor:
+      - name: "Anybody Home"
+        state: >-
+          {{ (is_state("binary_sensor.pieter_present", "on") or is_state("binary_sensor.rouve_present", "on") or
+              is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on")) and
+             not is_state("alarm_control_panel.home", "armed_away") }}
+        icon: >-
+          {% if (is_state("binary_sensor.pieter_present", "on") or is_state("binary_sensor.rouve_present", "on") or
+                 is_state("input_boolean.guest_mode", "on") or is_state("input_boolean.contractor_mode", "on")) and
+                not is_state("alarm_control_panel.home", "armed_away") %}
+            mdi:home-account
+          {% else %}
+            mdi:home
+          {% endif %}
   - binary_sensor:
       - name: "Baby Sleeping"
         unique_id: "8543fff9-562e-47e7-9d12-0a8f9349168d"

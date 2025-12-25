@@ -118,24 +118,6 @@ homeassistant:
 shell_command:
   download_latest_dam_levels: "/root/scripts/download_latest_dam_levels.sh"
 
-weather:
-  # https://community.home-assistant.io/t/mapping-weather-conditions-in-the-ui/289207
-  - platform: template
-    name: "Forecast Tomorrow"
-    condition_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['condition'] }}"
-    temperature_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['temperature'] }}"
-    temperature_unit: "°C"
-    # workaround: https://github.com/home-assistant/core/issues/91620
-    humidity_template: "{{ 0.0 | float(0) }}"
-    pressure_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['pressure'] }}"
-    pressure_unit: "hPa"
-    wind_speed_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['wind_speed'] }}"
-    wind_speed_unit: "km/h"
-    wind_bearing_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['wind_bearing'] }}"
-    precipitation_unit: "mm"
-    # forecast_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0:] }}"
-    attribution_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'attribution') }}"
-
 # https://community.home-assistant.io/t/outdoor-illuminance-template-sensor/228581
 # https://community.home-assistant.io/t/automations-to-turn-on-lights-based-on-actual-season/252830/19
 # https://www.engineeringtoolbox.com/light-level-rooms-d_708.html
@@ -149,38 +131,6 @@ illuminance:
       minutes: 5
 
 binary_sensor:
-  - platform: template
-    sensors:
-      golden_hour:
-        # https://community.home-assistant.io/t/wth-is-there-no-golden-hour-data-available-to-trigger-light-automations/220359/3
-        friendly_name: Golden Hour
-        value_template: >
-          {{ -4 <  states('sensor.solar_angle') | float(0) < 6 }}
-        icon_template: mdi:weather-sunset
-      low_light:
-        friendly_name: Low Light
-        # alternatives:
-        # value_template: "{{ states('sensor.sun_illuminance') != 'unknown' and (states('sensor.sun_illuminance') | int < 15320) }}"
-        # value_template: >
-        #   {{ states('sensor.sun_illuminance') | int(0) < 7500 or
-        #      states('sensor.solar_angle') | int(0) < 5 or
-        #      'fog' in states('weather.openweathermap') or
-        #      'cloudy' in states('weather.openweathermap') or
-        #      'rain' in states('weather.openweathermap') or
-        #      'pouring' in states('weather.openweathermap') }}
-        # don't use office illuminance, because we might turn on the desk lamp, which will then trigger a low light condition
-        # value_template: "{{ states('sensor.office_illuminance') | int(0) <= 25 }}"
-        value_template: >
-          {{ states('sensor.weather_based_sun_illuminance') | int(0) < 35000 or is_state('binary_sensor.is_fair_weather', 'off') }}
-      # https://github.com/pnbruckner/ha-sun2/blob/master/custom_components/sun2/const.py
-      # keep value in sync with the fair weather binary sensor
-      nighttime:
-        friendly_name: Night-time
-        value_template: "{{  states('sensor.solar_angle') | float(0) < -0.833 }}"
-      daytime:
-        friendly_name: Day-time
-        value_template: "{{  states('sensor.solar_angle') | float(0) >= -0.833 }}"
-
   - platform: trend
     sensors:
       outside_temperature_trend:
@@ -295,7 +245,35 @@ template:
       - name: Main Bedroom AC
         state: "{{ has_value('climate.main_bedroom_ac') and not is_state('climate.main_bedroom_ac', 'off') }}"
         device_class: running
-
+  - binary_sensor:
+      - name: "Golden Hour"
+        # https://community.home-assistant.io/t/wth-is-there-no-golden-hour-data-available-to-trigger-light-automations/220359/3
+        state: >
+          {{ -4 <  states('sensor.solar_angle') | float(0) < 6 }}
+        icon: mdi:weather-sunset
+  - binary_sensor:
+      - name: "Low Light"
+        # alternatives:
+        # value_template: "{{ states('sensor.sun_illuminance') != 'unknown' and (states('sensor.sun_illuminance') | int < 15320) }}"
+        # value_template: >
+        #   {{ states('sensor.sun_illuminance') | int(0) < 7500 or
+        #      states('sensor.solar_angle') | int(0) < 5 or
+        #      'fog' in states('weather.openweathermap') or
+        #      'cloudy' in states('weather.openweathermap') or
+        #      'rain' in states('weather.openweathermap') or
+        #      'pouring' in states('weather.openweathermap') }}
+        # don't use office illuminance, because we might turn on the desk lamp, which will then trigger a low light condition
+        # value_template: "{{ states('sensor.office_illuminance') | int(0) <= 25 }}"
+        state: >
+          {{ states('sensor.weather_based_sun_illuminance') | int(0) < 35000 or is_state('binary_sensor.is_fair_weather', 'off') }}
+      # https://github.com/pnbruckner/ha-sun2/blob/master/custom_components/sun2/const.py
+      # keep value in sync with the fair weather binary sensor
+  - binary_sensor:
+      - name: "Nighttime"
+        state: "{{  states('sensor.solar_angle') | float(0) < -0.833 }}"
+  - binary_sensor:
+      - name: "Daytime"
+        state: "{{  states('sensor.solar_angle') | float(0) >= -0.833 }}"
   - sensor:
       - name: Overall Pollen Risk for Badge
         state: >-

@@ -162,21 +162,6 @@ command_line:
       value_template: '{{ value | float(0) }}'
       scan_interval: 60
 
-binary_sensor:
-  - platform: template
-    sensors:
-      internet_connection:
-        friendly_name: "Internet"
-        device_class: connectivity
-        value_template: >-
-          {{ is_state('binary_sensor.internet', 'on') }}
-        icon_template: >-
-          {% if is_state('binary_sensor.internet', 'on') %}
-            mdi:server-network
-          {% else %}
-            mdi:server-network-off
-          {% endif %}
-
 sensor:
   # https://community.ui.com/releases/UniFi-OS-Dream-Router-4-0-6/305296c8-c5ed-4dbf-b79e-cb259945d9fb
   - platform: snmp
@@ -216,6 +201,18 @@ sensor:
       minutes: 1
 
 template:
+  - binary_sensor:
+      - name: "Internet"
+        default_entity_id: binary_sensor.internet_connection
+        device_class: connectivity
+        state: >-
+          {{ is_state('binary_sensor.internet', 'on') }}
+        icon: >-
+          {% if is_state('binary_sensor.internet', 'on') %}
+            mdi:server-network
+          {% else %}
+            mdi:server-network-off
+          {% endif %}
   # https://github.com/home-assistant/core/blob/dev/homeassistant/const.py#L571
   - sensor:
       - name: "Internet Speed In"

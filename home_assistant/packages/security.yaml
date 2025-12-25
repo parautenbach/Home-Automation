@@ -70,16 +70,6 @@ timer:
     duration: "00:05:00"
     restore: true
 
-binary_sensor:
-  - platform: template
-    sensors:
-      foyer_motion_detected:
-        friendly_name: "Foyer Motion Detector"
-        device_class: motion
-        # this is the occupancy sensor and not the raw motion sensor and is delayed in the homebridge config by 5 sec
-        value_template: >-
-          {{ is_state('binary_sensor.foyer_occupancy_homebridge', 'on') }}
-
 # https://community.home-assistant.io/t/control-recursion-in-the-folder-watcher-integration/200110
 # folder_watcher:
 #   - folder: /tmp/
@@ -119,6 +109,13 @@ sensor:
     end: "{{ now() }}"
 
 template:
+  - binary_sensor:
+      - name: Foyer Motion Detector
+        default_entity_id: binary_sensor.foyer_motion_detected
+        device_class: motion
+        # this is the occupancy sensor and not the raw motion sensor and is delayed in the homebridge config by 5 sec
+        state: >-
+          {{ is_state('binary_sensor.foyer_occupancy_homebridge', 'on') }}
   - sensor:
       - name: "Security Camera Last Snapshot"
         unique_id: "979c1c9e-12bb-4a39-a870-87d87f3f6af5"

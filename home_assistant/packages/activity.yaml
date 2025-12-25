@@ -12,14 +12,6 @@ input_boolean:
     name: Pieter Driving
     icon: mdi:car
 
-binary_sensor:
-  - platform: template
-    sensors:
-      pieter_driving:
-        friendly_name: "Pieter Driving"
-        value_template: >-
-          {{ is_state("input_boolean.pieter_driving", "on") }}
-
 sensor:
   # https://github.com/home-assistant/core/issues/87941: fixed
   - platform: filter
@@ -31,6 +23,10 @@ sensor:
       precision: 0
 
 template:
+  - binary_sensor:
+      - name: "Pieter Driving"
+        unique_id: "a3f29d8b-6c59-4f0a-9be7-4a4264d99127"
+        state: "{{ is_state('input_boolean.pieter_driving', 'on') }}"
   - sensor:
       # https://companion.home-assistant.io/docs/core/sensors/
       - name: Pieter Activity Type

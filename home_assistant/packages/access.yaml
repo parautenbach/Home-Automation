@@ -22,97 +22,6 @@ input_datetime:
     has_time: true
 
 cover:
-  - platform: template
-    covers:
-      main_gate:
-        friendly_name: "Main Gate"
-        device_class: gate
-        open_cover:
-          # https://community.home-assistant.io/t/cover-template-open-close/248449
-          - condition: state
-            entity_id: binary_sensor.main_gate_gate_status
-            state: "off"
-          - service: switch.turn_on
-            data:
-              entity_id: switch.main_gate_remote
-        close_cover:
-          - condition: state
-            entity_id: binary_sensor.main_gate_gate_status
-            state: "on"
-          - service: switch.turn_on
-            data:
-              entity_id: switch.main_gate_remote
-        stop_cover:
-          service: switch.turn_on
-          data:
-            entity_id: switch.main_gate_remote
-        # true (on) means open
-        value_template: "{{ is_state('binary_sensor.main_gate_gate_status', 'on') }}"
-        icon_template: >-
-          {%- from 'security.jinja' import get_cover_icon -%}
-          {{ get_cover_icon('binary_sensor.main_gate_gate_status', 'binary_sensor.main_gate_alert', 'mdi:gate') }}
-        availability_template: "{{ not is_state('binary_sensor.main_gate_gate_status', 'unavailable') }}"
-
-  - platform: template
-    covers:
-      garage_doors_lhs:
-        friendly_name: "Garage Doors LHS"
-        device_class: garage
-        open_cover:
-          - condition: state
-            entity_id: binary_sensor.garage_doors_lhs_status
-            state: "off"
-          - service: switch.turn_on
-            data:
-              entity_id: switch.garage_doors_lhs_remote
-        close_cover:
-          - condition: state
-            entity_id: binary_sensor.garage_doors_lhs_status
-            state: "on"
-          - service: switch.turn_on
-            data:
-              entity_id: switch.garage_doors_lhs_remote
-        stop_cover:
-          service: switch.turn_on
-          data:
-            entity_id: switch.garage_doors_lhs_remote
-        # true (on) means open
-        value_template: "{{ is_state('binary_sensor.garage_doors_lhs_status', 'on') }}"
-        icon_template: >-
-          {%- from 'security.jinja' import get_cover_icon -%}
-          {{ get_cover_icon('binary_sensor.garage_doors_lhs_status', 'binary_sensor.garage_doors_lhs_alert', 'mdi:garage') }}
-        availability_template: "{{ not is_state('binary_sensor.garage_doors_lhs_status', 'unavailable') }}"
-
-  - platform: template
-    covers:
-      garage_doors_rhs:
-        friendly_name: "Garage Doors RHS"
-        device_class: garage
-        open_cover:
-          - condition: state
-            entity_id: binary_sensor.garage_doors_rhs_status
-            state: "off"
-          - service: switch.turn_on
-            data:
-              entity_id: switch.garage_doors_rhs_remote
-        close_cover:
-          - condition: state
-            entity_id: binary_sensor.garage_doors_rhs_status
-            state: "on"
-          - service: switch.turn_on
-            data:
-              entity_id: switch.garage_doors_rhs_remote
-        stop_cover:
-          service: switch.turn_on
-          data:
-            entity_id: switch.garage_doors_rhs_remote
-        # true (on) means open
-        value_template: "{{ is_state('binary_sensor.garage_doors_rhs_status', 'on') }}"
-        icon_template: >-
-          {%- from 'security.jinja' import get_cover_icon -%}
-          {{ get_cover_icon('binary_sensor.garage_doors_rhs_status', 'binary_sensor.garage_doors_rhs_alert', 'mdi:garage') }}
-        availability_template: "{{ not is_state('binary_sensor.garage_doors_rhs_status', 'unavailable') }}"
-
   - platform: group
     name: "Garage Doors"
     entities:
@@ -143,6 +52,88 @@ group:
 #       - motion_detected
 
 template:
+  - cover:
+      - name: "Main Gate"
+        device_class: gate
+        open_cover:
+          # https://community.home-assistant.io/t/cover-template-open-close/248449
+          - condition: state
+            entity_id: binary_sensor.main_gate_gate_status
+            state: "off"
+          - service: switch.turn_on
+            data:
+              entity_id: switch.main_gate_remote
+        close_cover:
+          - condition: state
+            entity_id: binary_sensor.main_gate_gate_status
+            state: "on"
+          - service: switch.turn_on
+            data:
+              entity_id: switch.main_gate_remote
+        stop_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.main_gate_remote
+        # true (on) means open
+        state: "{{ is_state('binary_sensor.main_gate_gate_status', 'on') }}"
+        icon: >-
+          {%- from 'security.jinja' import get_cover_icon -%}
+          {{ get_cover_icon('binary_sensor.main_gate_gate_status', 'binary_sensor.main_gate_alert', 'mdi:gate') }}
+        availability: "{{ not is_state('binary_sensor.main_gate_gate_status', 'unavailable') }}"
+  - cover:
+      - name: "Garage Doors LHS"
+        device_class: garage
+        open_cover:
+          - condition: state
+            entity_id: binary_sensor.garage_doors_lhs_status
+            state: "off"
+          - service: switch.turn_on
+            data:
+              entity_id: switch.garage_doors_lhs_remote
+        close_cover:
+          - condition: state
+            entity_id: binary_sensor.garage_doors_lhs_status
+            state: "on"
+          - service: switch.turn_on
+            data:
+              entity_id: switch.garage_doors_lhs_remote
+        stop_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.garage_doors_lhs_remote
+        # true (on) means open
+        state: "{{ is_state('binary_sensor.garage_doors_lhs_status', 'on') }}"
+        icon: >-
+          {%- from 'security.jinja' import get_cover_icon -%}
+          {{ get_cover_icon('binary_sensor.garage_doors_lhs_status', 'binary_sensor.garage_doors_lhs_alert', 'mdi:garage') }}
+        availability: "{{ not is_state('binary_sensor.garage_doors_lhs_status', 'unavailable') }}"
+  - cover:
+      - name: "Garage Doors RHS"
+        device_class: garage
+        open_cover:
+          - condition: state
+            entity_id: binary_sensor.garage_doors_rhs_status
+            state: "off"
+          - service: switch.turn_on
+            data:
+              entity_id: switch.garage_doors_rhs_remote
+        close_cover:
+          - condition: state
+            entity_id: binary_sensor.garage_doors_rhs_status
+            state: "on"
+          - service: switch.turn_on
+            data:
+              entity_id: switch.garage_doors_rhs_remote
+        stop_cover:
+          service: switch.turn_on
+          data:
+            entity_id: switch.garage_doors_rhs_remote
+        # true (on) means open
+        state: "{{ is_state('binary_sensor.garage_doors_rhs_status', 'on') }}"
+        icon: >-
+          {%- from 'security.jinja' import get_cover_icon -%}
+          {{ get_cover_icon('binary_sensor.garage_doors_rhs_status', 'binary_sensor.garage_doors_rhs_alert', 'mdi:garage') }}
+        availability: "{{ not is_state('binary_sensor.garage_doors_rhs_status', 'unavailable') }}"
   # example:
   # {
   #     "event_type": "amcrest",

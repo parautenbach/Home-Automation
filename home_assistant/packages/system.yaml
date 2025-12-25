@@ -43,43 +43,6 @@ input_boolean:
     name: Server Shut Down Automatically
     icon: mdi:server
 
-binary_sensor:
-  - platform: template
-    sensors:
-      no_recent_backup:
-        friendly_name: "Recent Backup Problem"
-        device_class: problem
-        # get the last file, extract the date and compare
-        value_template: >-
-          {% set last_backup = (0 if states('sensor.last_backup') == "unknown" else states('sensor.last_backup')) | as_datetime %}
-          {{ 'on' if ((utcnow() - last_backup).days > 4) else 'off' }}
-        icon_template: >-
-          {{ state_attr('sensor.last_backup', 'icon') or "mdi:file-alert-outline" }}
-      no_recent_db_backup:
-        friendly_name: "Recent DB Backup Problem"
-        device_class: problem
-        # get the last file, extract the date and compare
-        value_template: >-
-          {% set last_db_backup = (0 if states('sensor.last_db_backup') == "unknown" else states('sensor.last_db_backup')) | as_datetime %}
-          {{ 'on' if ((utcnow() - last_db_backup).days > 7) else 'off' }}
-        icon_template: >-
-          {{ state_attr('sensor.last_db_backup', 'icon') or "mdi:database-alert" }}
-      hacs_updater:
-        friendly_name: HACS Updater
-        device_class: update
-        value_template: >
-         {{ integration_entities('hacs') | select('match', '^update\.') | expand | selectattr('state', 'eq', 'on') | list | count }}
-      ha_updater:
-        friendly_name: HA Updater
-        device_class: update
-        value_template: >-
-          {{ is_state('binary_sensor.home_assistant_versions_update_available', 'on') }}
-        attribute_templates:
-          latest_version: >-
-            {{ states('sensor.home_assistant_versions') }}
-          current_version: >-
-            {{ states('sensor.current_version') }}
-
 sensor:
   - platform: time_date
     display_options:
@@ -131,6 +94,47 @@ mqtt:
       icon: mdi:email-arrow-right-outline
 
 template:
+  - binary_sensor:
+      - name: "Recent Backup Problem"
+        default_entity_id: binary_sensor.no_recent_backup
+        device_class: problem
+        # get the last file, extract the date and compare
+        state: >-
+          {% set last_backup = (0 if states('sensor.last_backup') == "unknown" else states('sensor.last_backup')) | as_datetime %}
+          {{ 'on' if ((utcnow() - last_backup).days > 4) else 'off' }}
+        icon: >-
+          {{ state_attr('sensor.last_backup', 'icon') or "mdi:file-alert-outline" }}
+
+  - binary_sensor:
+      - name: "Recent DB Backup Problem"
+        default_entity_id: binary_sensor.no_recent_db_backup
+        device_class: problem
+        # get the last file, extract the date and compare
+        state: >-
+          {% set last_db_backup = (0 if states('sensor.last_db_backup') == "unknown" else states('sensor.last_db_backup')) | as_datetime %}
+          {{ 'on' if ((utcnow() - last_db_backup).days > 7) else 'off' }}
+        icon: >-
+          {{ state_attr('sensor.last_db_backup', 'icon') or "mdi:database-alert" }}
+
+  - binary_sensor:
+      - name: "HACS Updater"
+        default_entity_id: binary_sensor.hacs_updater
+        device_class: update
+        state: >
+         {{ integration_entities('hacs') | select('match', '^update\.') | expand | selectattr('state', 'eq', 'on') | list | count }}
+
+  - binary_sensor:
+      - name: "HA Updater"
+        default_entity_id: binary_sensor.ha_updater
+        device_class: update
+        state: >-
+          {{ is_state('binary_sensor.home_assistant_versions_update_available', 'on') }}
+        attributes:
+          latest_version: >-
+            {{ states('sensor.home_assistant_versions') }}
+          current_version: >-
+            {{ states('sensor.current_version') }}
+
   - trigger:
     - platform: time_pattern
       minutes: "/1"

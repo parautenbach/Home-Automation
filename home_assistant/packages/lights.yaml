@@ -139,11 +139,11 @@ light:
     entities:
       - light.dining_room_corner_light
       - light.music_room_corner_light
-  - platform: template
-    lights:
-      living_room_fairy_lights:
-        friendly_name: Living Room Fairy Lights
-        icon_template: mdi:string-lights
+
+template:
+  - light:
+      - name: Living Room Fairy Lights
+        icon: mdi:string-lights
         turn_on:
           service: script.living_room_fairy_lights_on
         turn_off:

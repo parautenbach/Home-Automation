@@ -1,14 +1,14 @@
-binary_sensor:
-  - platform: template
-    sensors:
-      workday:
-        friendly_name: Workday Today
-        value_template: >
+template:
+  - binary_sensor:
+      - name: "Workday Today"
+        default_entity_id: binary_sensor.workday
+        state: >
           {% set on_vacation = as_timestamp(states('input_datetime.vacation_start')) <= as_timestamp(now().date()) <= as_timestamp(states('input_datetime.vacation_end')) %}
           {{ is_state('binary_sensor.workday_sensor', 'on') and not on_vacation }}
-      workday_tomorrow:
-        friendly_name: Workday Tomorrow
-        value_template: >
+  - binary_sensor:
+      - name: "Workday Tomorrow"
+        default_entity_id: binary_sensor.workday_tomorrow
+        state: >
           {% set on_vacation_tomorrow = as_timestamp(states('input_datetime.vacation_start')) <= as_timestamp((now() + timedelta(days=1)).date()) <= as_timestamp(states('input_datetime.vacation_end')) %}
           {{ is_state('binary_sensor.workday_sensor_tomorrow', 'on') and not on_vacation_tomorrow }}
 

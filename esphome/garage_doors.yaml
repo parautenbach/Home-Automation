@@ -10,6 +10,8 @@ esphome:
 
 esp32:
   board: esp32doit-devkit-v1
+  framework:
+    type: esp-idf
 
 <<: !include common.yaml
 

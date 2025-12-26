@@ -9,6 +9,7 @@ captive_portal:
 # esp32_ble_tracker:
 
 wifi:
+  min_auth_mode: WPA2
   power_save_mode: none
   domain: .home
   networks:

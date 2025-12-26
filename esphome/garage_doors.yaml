@@ -43,6 +43,7 @@ binary_sensor:
   # true => occupied; false => empty
   - platform: template
     name: "${device_name_upper} LHS Occupied"
+    device_class: occupancy
     lambda: |-
       if (id(${device_name_lower}_lhs_ultrasonic_sensor).state < 1) {
         return true;
@@ -51,6 +52,7 @@ binary_sensor:
       }
   - platform: template
     name: "${device_name_upper} RHS Occupied"
+    device_class: occupancy
     lambda: |-
       if (id(${device_name_lower}_rhs_ultrasonic_sensor).state < 1) {
         return true;

@@ -230,8 +230,8 @@ cards:
           name: Washing M.
         - entity: binary_sensor.tumble_dryer
           name: Tumble D.
-        - entity: remote.living_room_remote
-          name: IR RC
+        - entity: binary_sensor.broadlink_online
+          name: IR Remote
     - type: custom:swipe-card
       parameters:
         autoHeight: true

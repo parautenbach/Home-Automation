@@ -130,8 +130,12 @@ command_line:
 
 template:
   - binary_sensor:
+      - name:  Broadlink Online
+        state: "{{ has_value('remote.living_room_remote') }}"
+        device_class: connectivity
+  - binary_sensor:
       - name: Doorbell Online
-        state: "{{ has_value('binary_sensor.doorbell_motion_detected') }}"
+        state: "{{ has_value('camera.doorbell') }}"
         device_class: connectivity
   - binary_sensor:
       - name: Dishwasher

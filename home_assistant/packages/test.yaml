@@ -317,3 +317,16 @@ automation:
         single_press_profile: normal_shelly_duo
         double_press_profile: night_shelly_duo_rgb
         triple_press_profile: bright_shelly_duo
+
+  - alias: "Handle Config Entry Discovered Event"
+    id: "8d645365-8043-4edf-a2e8-cb89c8c2dbb0"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: config_entry_discovery
+    action:
+      - service: persistent_notification.create
+        data:
+          title: "Config Entry Discovered"
+          message: >-
+            {{ trigger.event }}

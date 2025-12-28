@@ -1874,7 +1874,7 @@ automation:
             #     critical: 1
             #     volume: 0.3
       - service: input_boolean.turn_off
-        entity_id: input_boolean.inverter_temperature_notification_governor
+        entity_id: input_boolean.inverter_battery_temperature_notification_governor
 
   - alias: "Notify If Geyser Heating For Long"
     id: "3851f3fa-988e-4c2b-9b65-896c82db78ad"

@@ -603,6 +603,7 @@ template:
         entity_id: sensor.load_power_non_essential
     sensor:
       - name: "Geyser Power"
+        unique_id: "278bfc36-951f-43ad-bd5f-b211c628a417"
         icon: mdi:water-boiler
         unit_of_measurement: W
         device_class: power

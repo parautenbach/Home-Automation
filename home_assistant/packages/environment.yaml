@@ -454,6 +454,45 @@ template:
           {% else %}
             mdi:water-off
           {% endif %}
+  - sensor:
+      - name: Stormglass Simon's Town Tide Horizontal Movement
+        unique_id: "52fe7672-4756-48a7-ab96-31d5e65af582"
+        variables:
+          next_low: "{{ states('sensor.stormglass_simon_s_town_next_low_tide') | as_timestamp(0) }}"
+          next_high: "{{ states('sensor.stormglass_simon_s_town_next_high_tide') | as_timestamp(0) }}"
+        icon: >-
+          {% if next_low < next_high %}
+            mdi:waves-arrow-left
+          {% elif next_low > next_high %}
+            mdi:waves-arrow-right
+          {% else %}
+            {# default sensor icon #}
+          {% endif %}
+        state: >-
+          {% if next_low < next_high %}
+            outgoing
+          {% elif next_low > next_high %}
+            incoming
+          {% else %}
+            unknown
+          {% endif %}
+        attributes:
+          next_tide: >-
+            {% if next_low < next_high %}
+              low
+            {% elif next_low > next_high %}
+              high
+            {% else %}
+              unknown
+            {% endif %}
+          following_tide: >-
+            {% if next_low < next_high %}
+              high
+            {% elif next_low > next_high %}
+              low
+            {% else %}
+              unknown
+            {% endif %}
 
 multiscrape:
   - resource: https://pollencount.co.za/
@@ -939,6 +978,115 @@ rest:
       - name: OWM Pollution Sulphur dioxide (SO2)
         value_template: >-
           {{ value_json["list"][0]["components"]["so2"] }}
+  - resource: "https://api.stormglass.io/v2/weather/point"
+    headers:
+      Authorization: !secret stormglass_api_key
+    params:
+      lat: -34.1102659
+      lng: 18.8228665
+      start: "{{ utcnow() | as_timestamp | int(0) }}"
+      end: "{{ utcnow() | as_timestamp | int(0) }}"
+      params: "currentDirection,currentSpeed,swellDirection,swellHeight,swellPeriod,waterTemperature,waveDirection,waveHeight,wavePeriod"
+    method: GET
+    # check 4 times per day
+    scan_interval: 14400  # 60*60*4
+    timeout: 15
+    sensor:
+      - name: Stormglass Simon's Town Current Direction
+        unique_id: "48f4928e-df4d-4c31-b10e-96e6054da89d"
+        icon: mdi:compass-outline
+        value_template: "{{ value_json.hours.0.currentDirection.sg | int(0) }}"
+        unit_of_measurement: "°"
+      - name: Stormglass Simon's Town Current Speed
+        unique_id: "47334c18-dcb8-4a48-b859-30bc795401e7"
+        icon: mdi:speedometer
+        value_template: "{{ value_json.hours.0.currentSpeed.sg | float(0) }}"
+        unit_of_measurement: "m/s"
+        device_class: speed
+      - name: Stormglass Simon's Town Swell Direction
+        unique_id: "bb12a878-7437-4f5d-81e5-ff519db15fa4"
+        icon: mdi:compass-outline
+        value_template: "{{ value_json.hours.0.swellDirection.sg | float(0) }}"
+        unit_of_measurement: "°"
+      - name: Stormglass Simon's Town Swell Height
+        unique_id: "f42009dd-141c-41e1-94b4-4af626a71992"
+        icon: mdi:arrow-up-down
+        value_template: "{{ value_json.hours.0.swellHeight.sg | float(0) }}"
+        unit_of_measurement: "m"
+      - name: Stormglass Simon's Town Swell Period
+        unique_id: "0de68764-b4e7-4541-89d7-aa3185c6ec14"
+        # icon: mdi:timer-outline
+        icon: mdi:arrow-left-right
+        value_template: "{{ value_json.hours.0.swellPeriod.sg | float(0) }}"
+        unit_of_measurement: "s"
+        device_class: duration
+      - name: Stormglass Simon's Town Water Temperature
+        unique_id: "b0f1ce76-9cdf-47f9-b256-b3a60d5665ee"
+        icon: mdi:water-thermometer-outline
+        value_template: "{{ value_json.hours.0.waterTemperature.sg | float(0) }}"
+        unit_of_measurement: "°C"
+        device_class: temperature
+      - name: Stormglass Simon's Town Wave Direction
+        unique_id: "606b1c15-cacd-4c2c-bd84-adacdfba3a0f"
+        icon: mdi:compass-outline
+        value_template: "{{ value_json.hours.0.waveDirection.sg | float(0) }}"
+        unit_of_measurement: "°"
+      - name: Stormglass Simon's Town Wave Height
+        unique_id: "5089ff5f-2781-46fc-b76b-acb53e57a41e"
+        icon: mdi:arrow-up-down
+        value_template: "{{ value_json.hours.0.waveHeight.sg | float(0) }}"
+        unit_of_measurement: "m"
+      - name: Stormglass Simon's Town Wave Period
+        unique_id: "9ef143be-739d-4891-801d-eb3f9605a44c"
+        icon: mdi:arrow-left-right
+        value_template: "{{ value_json.hours.0.wavePeriod.sg | float(0) }}"
+        unit_of_measurement: "s"
+        device_class: duration
+  - resource: "https://api.stormglass.io/v2/tide/extremes/point"
+    headers:
+      Authorization: !secret stormglass_api_key
+    params:
+      lat: -34.1102659
+      lng: 18.8228665
+      start: "{{ utcnow().date() }}"
+      end: "{{ (utcnow() + timedelta(hours=48)).date() }}"
+    method: GET
+    # check 4 times per day
+    scan_interval: 14400  # 60*60*4
+    timeout: 15
+    sensor:
+      - name: Stormglass Simon's Town Next Low Tide
+        unique_id: "a6216372-5645-4653-a4ee-32646296b0b2"
+        icon: mdi:waves-arrow-left
+        value_template: >-
+          {% set current = now() %}
+          {% set phase = 'low' %}
+          {{ value_json.data
+            | selectattr('type', 'eq', phase)
+            | map(attribute='time')
+            | map('as_datetime')
+            | map('as_local')
+            | select('>=', current)
+            | sort
+            | first
+          }}
+        device_class: timestamp
+      - name: Stormglass Simon's Town Next High Tide
+        unique_id: "a62c01e5-b90c-423e-b8f7-efc24a162383"
+        icon: mdi:waves-arrow-right
+        value_template: >-
+          {% set current = now() %}
+          {% set phase = 'high' %}
+          {{ value_json.data
+            | selectattr('type', 'eq', phase)
+            | map(attribute='time')
+            | map('as_datetime')
+            | map('as_local')
+            | select('>=', current)
+            | sort
+            | first
+          }}
+        device_class: timestamp
 
 automation:
   # note: the individual dam levels and other meta data is parsed via the file integration (set up via the ui)

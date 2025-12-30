@@ -1,0 +1,147 @@
+curl -H "Authorization: <REDACTED>" "https://api.stormglass.io/v2/weather/point?lat=-34.1102659&lng=18.8228665&start=2025-12-28T19%3A10%3A00Z&end=2025-12-28T19%3A10%3A00Z&params=currentDirection,currentSpeed,seaLevel,swellDirection,swellHeight,swellPeriod,waterTemperature,waveDirection,waveHeight,wavePeriod" | jq
+
+{
+  "hours": [
+    {
+      "currentDirection": {
+        "ecmwf": 194.56,
+        "meto": 95.48,
+        "sg": 194.56
+      },
+      "currentSpeed": {
+        "ecmwf": 0.0,
+        "meto": 0.17,
+        "sg": 0.0
+      },
+      "seaLevel": {
+        "meto": -0.3,
+        "sg": -0.3
+      },
+      "swellDirection": {
+        "meteo": 175.74,
+        "noaa": 224.36,
+        "sg": 175.74
+      },
+      "swellHeight": {
+        "meteo": 0.48,
+        "noaa": 0.42,
+        "sg": 0.48
+      },
+      "swellPeriod": {
+        "meteo": 5.58,
+        "noaa": 9.73,
+        "sg": 5.58
+      },
+      "time": "2025-12-28T19:00:00+00:00",
+      "waterTemperature": {
+        "meto": 14.69,
+        "noaa": 17.83,
+        "sg": 14.69
+      },
+      "waveDirection": {
+        "ecmwf": 153.82,
+        "meteo": 143.54,
+        "noaa": 147.41,
+        "sg": 153.82
+      },
+      "waveHeight": {
+        "ecmwf": 1.27,
+        "meteo": 1.62,
+        "noaa": 1.61,
+        "sg": 1.27
+      },
+      "wavePeriod": {
+        "ecmwf": 3.6,
+        "meteo": 4.38,
+        "noaa": 5.8,
+        "sg": 3.6
+      }
+    }
+  ],
+  "meta": {
+    "cost": 1,
+    "dailyQuota": 10,
+    "end": "2025-12-28 19:00",
+    "lat": -34.1102659,
+    "lng": 18.8228665,
+    "params": [
+      "currentDirection",
+      "currentSpeed",
+      "seaLevel",
+      "swellDirection",
+      "swellHeight",
+      "swellPeriod",
+      "waterTemperature",
+      "waveDirection",
+      "waveHeight",
+      "wavePeriod"
+    ],
+    "requestCount": 9,
+    "start": "2025-12-28 19:00"
+  }
+}
+
+curl -H "Authorization: <REDACTED>" "https://api.stormglass.io/v2/tide/extremes/point?lat=-34.1102659&lng=18.8228665&start=2025-12-29&end=2025-12-31" | jq
+
+{
+  "data": [
+    {
+      "height": -0.3080505510631122,
+      "time": "2025-12-29T01:43:00+00:00",
+      "type": "low"
+    },
+    {
+      "height": 0.5410239581534804,
+      "time": "2025-12-29T08:20:00+00:00",
+      "type": "high"
+    },
+    {
+      "height": -0.4336170044610508,
+      "time": "2025-12-29T15:07:00+00:00",
+      "type": "low"
+    },
+    {
+      "height": 0.3350326245045123,
+      "time": "2025-12-29T21:11:00+00:00",
+      "type": "high"
+    },
+    {
+      "height": -0.3280290004599208,
+      "time": "2025-12-30T03:15:00+00:00",
+      "type": "low"
+    },
+    {
+      "height": 0.5817192973545307,
+      "time": "2025-12-30T09:33:00+00:00",
+      "type": "high"
+    },
+    {
+      "height": -0.5253317331795887,
+      "time": "2025-12-30T16:12:00+00:00",
+      "type": "low"
+    },
+    {
+      "height": 0.4244969242083658,
+      "time": "2025-12-30T22:23:00+00:00",
+      "type": "high"
+    }
+  ],
+  "meta": {
+    "cost": 1,
+    "dailyQuota": 10,
+    "datum": "MSL",
+    "end": "2025-12-31 00:00",
+    "lat": -34.1102659,
+    "lng": 18.8228665,
+    "offset": 0,
+    "requestCount": 3,
+    "start": "2025-12-29 00:00",
+    "station": {
+      "distance": 37,
+      "lat": -34.183,
+      "lng": 18.433,
+      "name": "simon's town",
+      "source": "uhslc"
+    }
+  }
+}

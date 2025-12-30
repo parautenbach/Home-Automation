@@ -1124,6 +1124,119 @@ cards:
 
           **[WESTERN CAPE DAM LEVELS](https://www.dws.gov.za/Hydrology/Weekly/ProvinceWeek.aspx?region=WC)**
   - type: vertical-stack
+    title: Strand Beach
+    cards:
+      - type: picture-entity
+        entity: camera.strand_beach_webcam
+        camera_view: live
+        show_name: false
+        show_state: false
+      - type: custom:weather-chart-card
+        entity: weather.openweathermapstrand
+        animated_icons: true
+        show_main: false
+        forecast:
+          type: hourly
+          style: style2
+          # labels_font_size: 8
+          number_of_forecasts: 6
+          show_probability: true
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - type: custom:template-entity-row
+            entity: sensor.stormglass_simon_s_town_tide_horizontal_movement
+            name: Tidal Flow
+            state: >-
+              {{ states(config.entity) | title }}
+          - type: custom:template-entity-row
+            entity: >-
+              {% set phase = state_attr('sensor.stormglass_simon_s_town_tide_horizontal_movement', 'next_tide') %}
+              sensor.stormglass_simon_s_town_next_{{ phase }}_tide
+            name: >-
+              {% set phase = state_attr('sensor.stormglass_simon_s_town_tide_horizontal_movement', 'next_tide') %}
+              {% if phase == None %}
+                Next Tide
+              {% else %}
+                Next {{ phase | title }} Tide
+              {% endif %}
+            icon: >-
+              {% set phase = state_attr('sensor.stormglass_simon_s_town_tide_horizontal_movement', 'next_tide') %}
+              {% if phase == 'low' %}
+                mdi:waves-arrow-left
+              {% elif phase == 'high' %}
+                mdi:waves-arrow-right
+              {% else %}
+                mdi:eye
+              {% endif %}
+            state: >-
+              {% set phase = state_attr('sensor.stormglass_simon_s_town_tide_horizontal_movement', 'next_tide') %}
+              {% set entity = 'sensor.stormglass_simon_s_town_next_' ~ phase ~ '_tide' %}
+              {% set ts = states(entity) | as_timestamp(0) %}
+              {% set today = now().date() %}
+              {% set date = (ts | as_datetime | as_local).date() %}
+              {% if date == today %}
+                Today at {{ ts | timestamp_custom('%H:%M') }}
+              {% elif date == today + timedelta(days=1) %}
+                Tomorrow at {{ ts | timestamp_custom('%H:%M') }}
+              {% elif date < now().date() %}
+                Unknown
+              {% else %}
+                {{ ts | timestamp_custom('%a %d %b at %H:%M') }}
+              {% endif %}
+          - type: custom:template-entity-row
+            entity: >-
+              {% set phase = state_attr('sensor.stormglass_simon_s_town_tide_horizontal_movement', 'following_tide') %}
+              sensor.stormglass_simon_s_town_next_{{ phase }}_tide
+            name: >-
+              {% set phase = state_attr('sensor.stormglass_simon_s_town_tide_horizontal_movement', 'following_tide') %}
+              {% if phase == None %}
+                Next Tide
+              {% else %}
+                Next {{ phase | title }} Tide
+              {% endif %}
+            icon: >-
+              {% set phase = state_attr('sensor.stormglass_simon_s_town_tide_horizontal_movement', 'following_tide') %}
+              {% if phase == 'low' %}
+                mdi:waves-arrow-left
+              {% elif phase == 'high' %}
+                mdi:waves-arrow-right
+              {% else %}
+                mdi:eye
+              {% endif %}
+            state: >-
+              {% set phase = state_attr('sensor.stormglass_simon_s_town_tide_horizontal_movement', 'following_tide') %}
+              {% set entity = 'sensor.stormglass_simon_s_town_next_' ~ phase ~ '_tide' %}
+              {% set ts = states(entity) | as_timestamp(0) %}
+              {% set today = now().date() %}
+              {% set date = (ts | as_datetime | as_local).date() %}
+              {% if date == today %}
+                Today at {{ ts | timestamp_custom('%H:%M') }}
+              {% elif date == today + timedelta(days=1) %}
+                Tomorrow at {{ ts | timestamp_custom('%H:%M') }}
+              {% elif date < now().date() %}
+                Unknown
+              {% else %}
+                {{ ts | timestamp_custom('%a %d %b at %H:%M') }}
+              {% endif %}
+          - type: custom:fold-entity-row
+            head:
+              type: section
+              label: Conditions
+            entities:
+              - sensor.stormglass_simon_s_town_water_temperature
+              - sensor.stormglass_simon_s_town_swell_direction
+              - sensor.stormglass_simon_s_town_swell_height
+              - sensor.stormglass_simon_s_town_swell_period
+              - sensor.stormglass_simon_s_town_wave_direction
+              - sensor.stormglass_simon_s_town_wave_height
+              - sensor.stormglass_simon_s_town_wave_period
+              - sensor.stormglass_simon_s_town_current_direction
+              - sensor.stormglass_simon_s_town_current_speed
+      - type: markdown
+        content: >
+          **[WINDY.COM](https://www.windy.com/-34.180/18.479/ecmwfWaves/waves?-34.275,18.649,11)**
+  - type: vertical-stack
     title: Fire
     cards:
       # http://envirowildfire.co.za/the-fire-danger-index/

@@ -554,7 +554,7 @@ multiscrape:
         attribute: "class"
         value_template: >-
           {# set value = ["pollen-darkorange"] #}
-          {%- from 'pollen.jinja' import color_level_map -%}
+          {%- from 'environment.jinja' import color_level_map -%}
           {%- set key = value | first -%}
           {{ color_level_map[key] if key in color_level_map else "unknown" }}
         on_error:
@@ -564,7 +564,7 @@ multiscrape:
             select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(2) > div"
             attribute: "class"
             value_template: >-
-              {%- from 'pollen.jinja' import color_label_map -%}
+              {%- from 'environment.jinja' import color_label_map -%}
               {%- set key = value | first -%}
               {{ color_label_map[key] if key in color_label_map else "Unavailable" }}
             on_error:
@@ -577,7 +577,7 @@ multiscrape:
             select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(3) > div"
             attribute: "class"
             value_template: >-
-              {%- from 'pollen.jinja' import color_label_map -%}
+              {%- from 'environment.jinja' import color_label_map -%}
               {%- set key = value | first -%}
               {{ color_label_map[key] if key in color_label_map else "unknown" }}
             on_error:
@@ -586,7 +586,7 @@ multiscrape:
             select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(4) > div"
             attribute: "class"
             value_template: >-
-              {%- from 'pollen.jinja' import color_label_map -%}
+              {%- from 'environment.jinja' import color_label_map -%}
               {%- set key = value | first -%}
               {{ color_label_map[key] if key in color_label_map else "unknown" }}
             on_error:
@@ -595,7 +595,7 @@ multiscrape:
             select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(5) > div"
             attribute: "class"
             value_template: >-
-              {%- from 'pollen.jinja' import color_label_map -%}
+              {%- from 'environment.jinja' import color_label_map -%}
               {%- set key = value | first -%}
               {{ color_label_map[key] if key in color_label_map else "unknown" }}
             on_error:
@@ -604,7 +604,7 @@ multiscrape:
             select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(6) > div"
             attribute: "class"
             value_template: >-
-              {%- from 'pollen.jinja' import color_label_map -%}
+              {%- from 'environment.jinja' import color_label_map -%}
               {%- set key = value | first -%}
               {{ color_label_map[key] if key in color_label_map else "unknown" }}
             on_error:
@@ -614,7 +614,7 @@ multiscrape:
         select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(3) > div"
         attribute: "class"
         value_template: >-
-          {%- from 'pollen.jinja' import color_level_map -%}
+          {%- from 'environment.jinja' import color_level_map -%}
           {%- set key = value | first -%}
           {{ color_level_map[key] if key in color_level_map else "unknown" }}
         on_error:
@@ -624,7 +624,7 @@ multiscrape:
             select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(3) > div"
             attribute: "class"
             value_template: >-
-              {%- from 'pollen.jinja' import color_label_map -%}
+              {%- from 'environment.jinja' import color_label_map -%}
               {%- set key = value | first -%}
               {{ color_label_map[key] if key in color_label_map else "Unavailable" }}
             on_error:
@@ -634,7 +634,7 @@ multiscrape:
         select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(4) > div"
         attribute: "class"
         value_template: >-
-          {%- from 'pollen.jinja' import color_level_map -%}
+          {%- from 'environment.jinja' import color_level_map -%}
           {%- set key = value | first -%}
           {{ color_level_map[key] if key in color_level_map else "unknown" }}
         on_error:
@@ -644,7 +644,7 @@ multiscrape:
             select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(4) > div"
             attribute: "class"
             value_template: >-
-              {%- from 'pollen.jinja' import color_label_map -%}
+              {%- from 'environment.jinja' import color_label_map -%}
               {%- set key = value | first -%}
               {{ color_label_map[key] if key in color_label_map else "Unavailable" }}
             on_error:
@@ -654,7 +654,7 @@ multiscrape:
         select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(5) > div"
         attribute: "class"
         value_template: >-
-          {%- from 'pollen.jinja' import color_level_map -%}
+          {%- from 'environment.jinja' import color_level_map -%}
           {%- set key = value | first -%}
           {{ color_level_map[key] if key in color_level_map else "unknown" }}
         on_error:
@@ -664,7 +664,7 @@ multiscrape:
             select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(5) > div"
             attribute: "class"
             value_template: >-
-              {%- from 'pollen.jinja' import color_label_map -%}
+              {%- from 'environment.jinja' import color_label_map -%}
               {%- set key = value | first -%}
               {{ color_label_map[key] if key in color_label_map else "Unavailable" }}
             on_error:
@@ -674,7 +674,7 @@ multiscrape:
         select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(6) > div"
         attribute: "class"
         value_template: >-
-          {%- from 'pollen.jinja' import color_level_map -%}
+          {%- from 'environment.jinja' import color_level_map -%}
           {%- set key = value | first -%}
           {{ color_level_map[key] if key in color_level_map else "unknown" }}
         on_error:
@@ -684,7 +684,7 @@ multiscrape:
             select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(6) > div"
             attribute: "class"
             value_template: >-
-              {%- from 'pollen.jinja' import color_label_map -%}
+              {%- from 'environment.jinja' import color_label_map -%}
               {%- set key = value | first -%}
               {{ color_label_map[key] if key in color_label_map else "Unavailable" }}
             on_error:

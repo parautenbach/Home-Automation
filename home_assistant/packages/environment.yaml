@@ -493,6 +493,54 @@ template:
             {% else %}
               unknown
             {% endif %}
+  - trigger:
+      - platform: state
+        entity_id: sensor.stormglass_simon_s_town_swell_direction
+    sensor:
+      - name: "Stormglass Simon's Town Swell Direction Named"
+        unique_id: "f10b62e6-7884-4850-b0d6-81b5db962f31"
+        variables:
+          bearing: "{{ trigger.to_state.state | float(0) }}"
+        state: >
+          {% from 'environment.jinja' import get_direction_8 %}
+          {{ get_direction_8(bearing) }}
+        icon: >
+          {% from 'environment.jinja' import get_icon_direction_8 %}
+          {{ get_icon_direction_8(bearing) }}
+        attributes:
+          bearing: "{{ bearing }}"
+  - trigger:
+      - platform: state
+        entity_id: sensor.stormglass_simon_s_town_wave_direction
+    sensor:
+      - name: "Stormglass Simon's Town Wave Direction Named"
+        unique_id: "1393bbe3-3503-4ea4-99d6-a6a98c645864"
+        variables:
+          bearing: "{{ trigger.to_state.state | float(0) }}"
+        state: >
+          {% from 'environment.jinja' import get_direction_8 %}
+          {{ get_direction_8(bearing) }}
+        icon: >
+          {% from 'environment.jinja' import get_icon_direction_8 %}
+          {{ get_icon_direction_8(bearing) }}
+        attributes:
+          bearing: "{{ bearing }}"
+  - trigger:
+      - platform: state
+        entity_id: sensor.stormglass_simon_s_town_current_direction
+    sensor:
+      - name: "Stormglass Simon's Town Current Direction Named"
+        unique_id: "1f378862-f1db-46d6-a188-2dd7914fe2a3"
+        variables:
+          bearing: "{{ trigger.to_state.state | float(0) }}"
+        state: >
+          {% from 'environment.jinja' import get_direction_8 %}
+          {{ get_direction_8(bearing, flip=true) }}
+        icon: >
+          {% from 'environment.jinja' import get_icon_direction_8 %}
+          {{ get_icon_direction_8(bearing) }}
+        attributes:
+          bearing: "{{ bearing }}"
 
 multiscrape:
   - resource: https://pollencount.co.za/

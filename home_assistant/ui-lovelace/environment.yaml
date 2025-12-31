@@ -1224,17 +1224,28 @@ cards:
               type: section
               label: Conditions
             entities:
-              - sensor.stormglass_simon_s_town_water_temperature
-              - sensor.stormglass_simon_s_town_swell_direction
-              - sensor.stormglass_simon_s_town_swell_height
-              - sensor.stormglass_simon_s_town_swell_period
-              - sensor.stormglass_simon_s_town_wave_direction
-              - sensor.stormglass_simon_s_town_wave_height
-              - sensor.stormglass_simon_s_town_wave_period
-              - sensor.stormglass_simon_s_town_current_direction
-              - sensor.stormglass_simon_s_town_current_speed
+              - entity: sensor.stormglass_simon_s_town_water_temperature
+                name: Water Temperature
+              - entity: sensor.stormglass_simon_s_town_swell_direction_named
+                name: Swell Direction
+              - entity: sensor.stormglass_simon_s_town_swell_height
+                name: Swell Height
+              - entity: sensor.stormglass_simon_s_town_swell_period
+                name: Swell Period
+              - entity: sensor.stormglass_simon_s_town_wave_direction_named
+                name: Wave Direction
+              - entity: sensor.stormglass_simon_s_town_wave_height
+                name: Wave Height
+              - entity: sensor.stormglass_simon_s_town_wave_period
+                name: Wave Period
+              - entity: sensor.stormglass_simon_s_town_current_direction_named
+                name: Current Direction
+              - entity: sensor.stormglass_simon_s_town_current_speed
+                name: Current Speed
       - type: markdown
         content: >
+          **[BEACH WEBCAM](https://www.youtube.com/watch?v=TJKgvQKVz1I)**
+
           **[WINDY.COM](https://www.windy.com/-34.180/18.479/ecmwfWaves/waves?-34.275,18.649,11)**
   - type: vertical-stack
     title: Fire

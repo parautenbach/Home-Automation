@@ -1037,7 +1037,7 @@ rest:
       params: "currentDirection,currentSpeed,swellDirection,swellHeight,swellPeriod,waterTemperature,waveDirection,waveHeight,wavePeriod"
     method: GET
     # check 4 times per day
-    scan_interval: 14400  # 60*60*4
+    scan_interval: 21600  # 60*60*6
     timeout: 15
     sensor:
       - name: Stormglass Simon's Town Current Direction
@@ -1100,7 +1100,7 @@ rest:
       end: "{{ (utcnow() + timedelta(hours=48)).date() }}"
     method: GET
     # check 4 times per day
-    scan_interval: 14400  # 60*60*4
+    scan_interval: 21600  # 60*60*6
     timeout: 15
     sensor:
       - name: Stormglass Simon's Town Next Low Tide

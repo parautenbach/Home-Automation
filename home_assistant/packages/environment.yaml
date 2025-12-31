@@ -550,7 +550,7 @@ multiscrape:
     sensor:
       - name: Overall Pollen Risk
         icon: mdi:flower-pollen-outline
-        select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(2) > div"
+        select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(2) > div"
         attribute: "class"
         value_template: >-
           {# set value = ["pollen-darkorange"] #}
@@ -561,7 +561,7 @@ multiscrape:
           value: last
         attributes:
           - name: Label
-            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(2) > div"
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(2) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}
@@ -574,7 +574,7 @@ multiscrape:
           # so that we can set a name and an icon for use on dashboards. granted, we can make these normal
           # template sensors that extracts the attributes from here.
           - name: Tree Pollen
-            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(3) > div"
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(3) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}
@@ -583,7 +583,7 @@ multiscrape:
             on_error:
               value: last
           - name: Grass Pollen
-            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(4) > div"
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(4) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}
@@ -592,7 +592,7 @@ multiscrape:
             on_error:
               value: last
           - name: Weed Pollen
-            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(5) > div"
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(5) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}
@@ -601,7 +601,7 @@ multiscrape:
             on_error:
               value: last
           - name: Mould Spores
-            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(6) > div"
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(6) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}
@@ -611,7 +611,7 @@ multiscrape:
               value: last
       - name: Tree Pollen
         icon: mdi:pine-tree
-        select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(3) > div"
+        select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(3) > div"
         attribute: "class"
         value_template: >-
           {%- from 'pollen.jinja' import color_level_map -%}
@@ -621,7 +621,7 @@ multiscrape:
           value: last
         attributes:
           - name: Label
-            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(3) > div"
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(3) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}
@@ -631,7 +631,7 @@ multiscrape:
               value: last
       - name: Grass Pollen
         icon: mdi:grass
-        select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(4) > div"
+        select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(4) > div"
         attribute: "class"
         value_template: >-
           {%- from 'pollen.jinja' import color_level_map -%}
@@ -641,7 +641,7 @@ multiscrape:
           value: last
         attributes:
           - name: Label
-            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(4) > div"
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(4) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}
@@ -651,7 +651,7 @@ multiscrape:
               value: last
       - name: Weed Pollen
         icon: mdi:sprout
-        select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(5) > div"
+        select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(5) > div"
         attribute: "class"
         value_template: >-
           {%- from 'pollen.jinja' import color_level_map -%}
@@ -661,7 +661,7 @@ multiscrape:
           value: last
         attributes:
           - name: Label
-            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(5) > div"
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(5) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}
@@ -671,7 +671,7 @@ multiscrape:
               value: last
       - name: Mould Spores
         icon: mdi:grain
-        select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(6) > div"
+        select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(6) > div"
         attribute: "class"
         value_template: >-
           {%- from 'pollen.jinja' import color_level_map -%}
@@ -681,7 +681,7 @@ multiscrape:
           value: last
         attributes:
           - name: Label
-            select: "#wpv-view-layout-300 > div > div > div > div:nth-child(4) > div:nth-child(6) > div"
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(6) > div"
             attribute: "class"
             value_template: >-
               {%- from 'pollen.jinja' import color_label_map -%}
@@ -719,7 +719,7 @@ multiscrape:
         # copy selector
         # test selector with:
         # soup.select_one("...")
-        select: "main > div.page-content > div.elementor-8676 > section.elementor-element-b51f73d > div > div.elementor-element-72d9bb2 > div > div.elementor-element-b529cf5 > div > div > div.postie-post > table:nth-of-type(12) > tr:nth-child(10) > td:nth-child(3) > font"
+        select: ".postie-post tr:has(td:-soup-contains('Winelands')) td:nth-of-type(3) font"
         value_template: >-
           {{ value | int(0) }}
         on_error:

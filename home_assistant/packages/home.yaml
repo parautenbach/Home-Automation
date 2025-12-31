@@ -70,6 +70,12 @@ input_boolean:
   disable_auto_on_ac:
     name: Disable Auto On AC
     icon: mdi:hvac-off
+  tumble_dryer_cleaning_reminder:
+    name: Tumble Dryer Cleaning Reminder
+    icon: mdi:reminder
+  dishwasher_cleaning_reminder:
+    name: Dishwasher Cleaning Reminder
+    icon: mdi:reminder
 
 input_number:
   baby_current_sleep_session:
@@ -2377,7 +2383,7 @@ automation:
                     critical: 1
                     volume: 0.3
 
-  - alias: "Reset Trash and Recycling Reminders"
+  - alias: "Reset Routine Reminders"
     id: "84b06a96-a13b-46c1-b15c-41542bbcd05c"
     trigger:
       - platform: event
@@ -2390,6 +2396,16 @@ automation:
         event_data:
           action: RECYCLING_PUT_OUT
         id: "recycling"
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: TUMBLE_DRYER_CLEANED
+        id: "tumble_dryer_cleaning"
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: DISHWASHER_CLEANED
+        id: "dishwasher_cleaning"
     action:
       - service: input_boolean.turn_off
         target:
@@ -2602,4 +2618,70 @@ automation:
           data:
             group: "chores"
             tag: "chores-dishwasher"
+            url: homeassistant://navigate/lovelace/main
+
+  - alias: "Enable Large Appliance Cleaning Reminders"
+    id: "90b46a3f-f909-4208-a65c-02b3daf5b3ca"
+    initial_state: true
+    trigger:
+      - platform: time
+        at: "08:00:00"
+    condition:
+      - condition: template
+        value_template: "{{ now().day == 15 }}"
+    action:
+      - service: input_boolean.turn_on
+        target:
+          entity_id:
+            - input_boolean.tumble_dryer_cleaning_reminder
+            - input_boolean.dishwasher_cleaning_reminder
+
+  - alias: "Check And Clean Tumble Dryer Heat Exchanger"
+    id: "9af047f9-49fa-4518-a7bb-350b437ca9f3"
+    initial_state: true
+    trigger:
+      - platform: time
+        at: "12:00:00"
+    condition:
+      - condition: state
+        entity_id: input_boolean.tumble_dryer_cleaning_reminder
+        state: "on"
+    actions:
+      - service: notify.family
+        data:
+          title: "♨️ Tumble Dryer"
+          message: >-
+            Time to check the heat exchanger and clean it carefully if necessary.
+          data:
+            actions:
+              - action: "TUMBLE_DRYER_CLEANED"
+                title: "Done"
+                destructive: true
+            group: "routine-tumble-dryer"
+            tag: "routine-tumble-dryer"
+            url: homeassistant://navigate/lovelace/main
+
+  - alias: "Clean Dishwasher Filter"
+    id: "08f2c851-8775-498e-b2ff-ee570c00cf9d"
+    initial_state: true
+    trigger:
+      - platform: time
+        at: "19:00:00"
+    condition:
+      - condition: state
+        entity_id: input_boolean.dishwasher_cleaning_reminder
+        state: "on"
+    actions:
+      - service: notify.family
+        data:
+          title: "🍽️ Dishwasher"
+          message: >-
+            Time to clean the dishwasher's filter.
+          data:
+            actions:
+              - action: "DISHWASHER_CLEANED"
+                title: "Done"
+                destructive: true
+            group: "routine-dishwasher"
+            tag: "routine-dishwasher"
             url: homeassistant://navigate/lovelace/main

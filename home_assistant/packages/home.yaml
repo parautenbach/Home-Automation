@@ -1358,6 +1358,7 @@ automation:
                       # action_data:
                       #   wanted_state: "foo"
                       group: "routine-bedtime"
+                      tag: "routine-bedtime"
                       url: homeassistant://navigate/lovelace/baby
                       push:
                         sound:
@@ -1390,6 +1391,7 @@ automation:
                         - action: "SLEEP_OFF"
                           title: "Disable"
                       group: "routine-bedtime"
+                      tag: "routine-bedtime"
                       url: homeassistant://navigate/lovelace/baby
                       push:
                         sound:
@@ -1550,8 +1552,15 @@ automation:
     action:
       - service: input_boolean.turn_off
         entity_id: input_boolean.baby_sleep_mode
+      # ios will only clear the most recent critical notification from a given tag
+      # https://companion.home-assistant.io/docs/notifications/notifications-basic
+      - service: notify.mobile_app_ceres
         data:
           message: "clear_notification"
+          data:
+            tag: "routine-bedtime"
+      - delay:
+          seconds: 5
       - service: notify.mobile_app_ceres
         data:
           title: "🛌 Sleep Mode"
@@ -1562,6 +1571,7 @@ automation:
               - action: "SLEEP_ON"
                 title: "Enable"
             group: "routine-bedtime"
+            tag: "routine-bedtime"
             url: homeassistant://navigate/lovelace/baby
 
   - alias: "Update Baby Sleep Session Counter"
@@ -2555,6 +2565,7 @@ automation:
               - Forecasted min: {{ outside_min }}.
           data:
             group: "routine-bedtime"
+            tag: "routine-bedtime"
             url: homeassistant://navigate/lovelace/baby
 
   # icon options and combos for the 3 automations below: 🍽️✨ / 🧺💧 / 👕☀️ / 🧺♨️ / ☀️💨

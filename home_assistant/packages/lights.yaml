@@ -1641,7 +1641,8 @@ automation:
       - platform: state
         entity_id: event.kitchen_counter_lights
     action:
-      - service: light.toggle
+      # mirror the state
+      - service: "light.turn_{{ states('light.kitchen_counter') }}"
         target:
           entity_id: light.scullery_counter
 

@@ -255,6 +255,7 @@ cards:
         cards:
           - type: custom:apexcharts-card
             chart_type: radialBar
+            section_mode: true
             apex_config:
               title:
                 text: Utilisation
@@ -278,6 +279,7 @@ cards:
                 max: 100
           - type: custom:apexcharts-card
             chart_type: radialBar
+            section_mode: true
             apex_config:
               title:
                 text: Production
@@ -291,6 +293,7 @@ cards:
                 max: 100
           - type: custom:apexcharts-card
             chart_type: radialBar
+            section_mode: true
             apex_config:
               title:
                 text: Consumption

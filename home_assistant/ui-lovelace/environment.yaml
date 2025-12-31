@@ -970,6 +970,7 @@ cards:
                     min: 0
                     max: 24
                 chart_type: radialBar
+                section_mode: true
                 apex_config:
                   title:
                     text: Daylight
@@ -1004,6 +1005,7 @@ cards:
                     min: 0
                     max: 100
                 chart_type: radialBar
+                section_mode: true
                 apex_config:
                   title:
                     text: Fair Weather

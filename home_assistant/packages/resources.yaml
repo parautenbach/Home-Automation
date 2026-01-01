@@ -660,6 +660,7 @@ template:
 sensor:
   # digital power meter in db - measures only grid
   # the pulse counter exports a cumulative sensor too, so these should match
+  # this is unused; it's just a control
   - platform: integration
     unique_id: "0e503fd7-9ae9-446b-8c73-28d8068b69eb"
     name: "Total Electricity Consumption"
@@ -674,7 +675,14 @@ sensor:
     source: sensor.home_power
     unit_prefix: k
     unit_time: h
-    method: left
+    # the inverter terms are continuous and well-sampled
+    # the pulse term is piecewise-constant but irregular
+    # trapezoidal smooths the composite signal without corrupting the pulse energy
+    # left-point biases low when the pulse component ramps between pulses
+    # we are not integrating the pulse power directly
+    # we are integrating the sum
+    # the pulse quantisation error is already factored in
+    method: trapezoidal
     round: 3
   - platform: integration
     unique_id: "9b9ba816-42f0-437d-aa7a-7014363f5ed5"

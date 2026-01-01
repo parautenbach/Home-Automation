@@ -1154,25 +1154,22 @@ cards:
           - type: custom:template-entity-row
             entity: >-
               {% set phase = state_attr('sensor.stormglass_simon_s_town_tide_horizontal_movement', 'next_tide') %}
-              sensor.stormglass_simon_s_town_next_{{ phase }}_tide
+              sensor.stormglass_simon_s_town_next_{{ phase if phase != 'unknown' else 'low' }}_tide
             name: >-
               {% set phase = state_attr('sensor.stormglass_simon_s_town_tide_horizontal_movement', 'next_tide') %}
-              {% if phase == None %}
-                Next Tide
-              {% else %}
-                Next {{ phase | title }} Tide
-              {% endif %}
+              {% set phase = phase if phase != 'unknown' else 'low'%}
+              Next {{ phase | title }} Tide
             icon: >-
               {% set phase = state_attr('sensor.stormglass_simon_s_town_tide_horizontal_movement', 'next_tide') %}
+              {% set phase = phase if phase != 'unknown' else 'low'%}
               {% if phase == 'low' %}
                 mdi:waves-arrow-left
-              {% elif phase == 'high' %}
-                mdi:waves-arrow-right
               {% else %}
-                mdi:eye
+                mdi:waves-arrow-right
               {% endif %}
             state: >-
               {% set phase = state_attr('sensor.stormglass_simon_s_town_tide_horizontal_movement', 'next_tide') %}
+              {% set phase = phase if phase != 'unknown' else 'low'%}
               {% set entity = 'sensor.stormglass_simon_s_town_next_' ~ phase ~ '_tide' %}
               {% set ts = states(entity) | as_timestamp(0) %}
               {% set today = now().date() %}
@@ -1189,25 +1186,22 @@ cards:
           - type: custom:template-entity-row
             entity: >-
               {% set phase = state_attr('sensor.stormglass_simon_s_town_tide_horizontal_movement', 'following_tide') %}
-              sensor.stormglass_simon_s_town_next_{{ phase }}_tide
+              sensor.stormglass_simon_s_town_next_{{ phase if phase != 'unknown' else 'high' }}_tide
             name: >-
               {% set phase = state_attr('sensor.stormglass_simon_s_town_tide_horizontal_movement', 'following_tide') %}
-              {% if phase == None %}
-                Next Tide
-              {% else %}
-                Next {{ phase | title }} Tide
-              {% endif %}
+              {% set phase = phase if phase != 'unknown' else 'high'%}
+              Next {{ phase | title }} Tide
             icon: >-
               {% set phase = state_attr('sensor.stormglass_simon_s_town_tide_horizontal_movement', 'following_tide') %}
+              {% set phase = phase if phase != 'unknown' else 'high'%}
               {% if phase == 'low' %}
                 mdi:waves-arrow-left
-              {% elif phase == 'high' %}
-                mdi:waves-arrow-right
               {% else %}
-                mdi:eye
+                mdi:waves-arrow-right
               {% endif %}
             state: >-
               {% set phase = state_attr('sensor.stormglass_simon_s_town_tide_horizontal_movement', 'following_tide') %}
+              {% set phase = phase if phase != 'unknown' else 'high'%}
               {% set entity = 'sensor.stormglass_simon_s_town_next_' ~ phase ~ '_tide' %}
               {% set ts = states(entity) | as_timestamp(0) %}
               {% set today = now().date() %}

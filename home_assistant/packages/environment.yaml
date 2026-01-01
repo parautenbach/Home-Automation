@@ -454,7 +454,12 @@ template:
           {% else %}
             mdi:water-off
           {% endif %}
-  - sensor:
+  - trigger:
+      - platform: state
+        entity_id:
+          - sensor.stormglass_simon_s_town_next_low_tide
+          - sensor.stormglass_simon_s_town_next_high_tide
+    sensor:
       - name: Stormglass Simon's Town Tide Horizontal Movement
         unique_id: "52fe7672-4756-48a7-ab96-31d5e65af582"
         variables:

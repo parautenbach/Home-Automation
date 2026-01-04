@@ -705,7 +705,7 @@ fan_with_timer:
       color: var(--state-icon-active-color)
       styles:
         icon:
-          - animation: spin 2s linear infinite
+          - animation: rotate 2s linear infinite
     - value: "off"
       color: var(--state-icon-color)
       styles:
@@ -722,7 +722,7 @@ fan_with_timer:
         icon:
           - animation: none
   extra_styles: |
-    @keyframes spin {
+    @keyframes rotate {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }

@@ -351,7 +351,7 @@ automation:
       - platform: time
         at: "09:00:00"
     condition: >-
-      {{ expand(monitored_batteries) | count > 0 }}
+      {{ monitored_batteries | count > 0 }}
     action:
       - service: notify.mobile_app_ceres
         data:
@@ -363,6 +363,46 @@ automation:
             {%- endfor %}
           data:
             group: "batteries"
+            url: homeassistant://navigate/lovelace-system/devices
+
+  - alias: "Unavailable Devices"
+    id: "6372b0f0-3a0b-4d16-9009-da03da974eb4"
+    initial_state: true
+    variables:
+      unavailable_devices: >-
+        {{
+          state_attr('sensor.unavailable_entities', 'unavailable')
+            | reject('match', '.*test_.*')
+            | reject('match', '.*water_pulse_counter.*')
+            | reject('match', '.*sonoff_basic.*')
+            | map('device_name')
+            | unique
+            | sort
+            | list
+        }}
+    trigger:
+      - platform: time
+        at:
+          - "06:30"
+          - "09:30"
+          - "12:30"
+          - "18:30"
+          - "21:30"
+    condition:
+      - condition: template
+        value_template: "{{ unavailable_devices | count > 0 }}"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "⚠️ Unavailable Devices"
+          message: >-
+            The following devices are unavailable:
+            {%- for d in unavailable_devices %}
+              - {{ d }}
+            {%- endfor %}
+          data:
+            group: "devices"
+            tag: "unavailable-devices"
             url: homeassistant://navigate/lovelace-system/devices
 
   # todo: check if this affects server cpu

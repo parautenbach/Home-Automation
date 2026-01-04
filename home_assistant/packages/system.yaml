@@ -112,7 +112,7 @@ template:
         # get the last file, extract the date and compare
         state: >-
           {% set last_db_backup = (0 if states('sensor.last_db_backup') == "unknown" else states('sensor.last_db_backup')) | as_datetime %}
-          {{ 'on' if ((utcnow() - last_db_backup).days > 7) else 'off' }}
+          {{ 'on' if ((utcnow() - last_db_backup).days > 4) else 'off' }}
         icon: >-
           {{ state_attr('sensor.last_db_backup', 'icon') or "mdi:database-alert" }}
 

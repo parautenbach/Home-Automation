@@ -179,6 +179,9 @@ script:
           # blocking call
           - service: script.entertainment_apple_tv_on
           - delay: "00:00:05"
+          # select a user profile
+          - service: script.turn_on
+            entity_id: script.apple_tv_ok
       - service: media_player.select_source
         target:
           entity_id: media_player.living_room

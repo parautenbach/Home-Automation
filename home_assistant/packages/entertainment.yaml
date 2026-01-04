@@ -174,7 +174,7 @@ script:
       - if:
           - condition: state
             entity_id: media_player.living_room
-            state: "standby"
+            state: "off"
         then:
           # blocking call
           - service: script.entertainment_apple_tv_on
@@ -196,16 +196,7 @@ automation:
       - platform: state
         entity_id: media_player.living_room
         from:
-          - "standby"
-          # sequence could go standby -> paused -> ... so the automation fires twice in quick succession,
-          # causing a warning in the logs
-          # - "paused"
-        not_to: "off"
-      # seems like an apple tv can turn on and be in a paused state immediately
-      # would this be the alternative?
-      # to:
-      #   - "idle"
-      #   - "paused"
+          - "off"
     mode: single
     action:
       - service: script.turn_on

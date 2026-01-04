@@ -644,26 +644,28 @@ climate_timer:
     - operator: default
       color: var(--state-unavailable-color)
   tap_action:
-    action: call-service
+    action: javascript
     haptic: light
-    service: >
+    javascript: |
       [[[
-        if (variables.climate_entity_state !== "off")
-          return "timer.start";
+        if (variables.climate_entity_state !== "off") {
+          hass.callService("timer", "start", {
+            entity_id: entity.entity_id,
+            duration: "00:30:00"
+          });
+        }
       ]]]
-    service_data:
-      entity_id: entity
-      duration: "00:30:00"
   double_tap_action:
-    action: call-service
+    action: javascript
     haptic: medium
-    service: >
+    javascript: |
       [[[
-        if (entity.state !== "idle")
-          return "timer.cancel";
+        if (entity.state !== "idle") {
+          hass.callService("timer", "cancel", {
+            entity_id: entity.entity_id
+          });
+        }
       ]]]
-    service_data:
-      entity_id: entity
   hold_action:
     action: more-info
     haptic: heavy

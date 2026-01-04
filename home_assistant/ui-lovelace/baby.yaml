@@ -195,37 +195,29 @@ cards:
                 name: Timer
                 icon: mdi:camera-timer
                 tap_action:
-                  action: call-service
+                  action: javascript
                   haptic: light
-                  # damn, we can't do pass the duration if we are cancelling the time
-                  # we are providing the duration, because we have to provide it here
-                  # and in the double tap action, otherwise the service call just uses
-                  # whatever the last value was
-                  # [[[
-                  #   if (entity.state == "idle")
-                  #     return "timer.start";
-                  #   else
-                  #     return "timer.cancel";
-                  # ]]]
-                  service: >
+                  javascript: |
                     [[[
-                      if (states['light.bedroom_bedlamp'].state == "on")
-                        return "timer.start";
+                      if (states['light.bedroom_bedlamp'].state == "on") {
+                        hass.callService("timer", "start", {
+                          entity_id: entity.entity_id,
+                          duration: "00:03:00"
+                        });
+                      }
                     ]]]
-                  service_data:
-                    entity_id: entity
-                    duration: "00:03:00"
                 double_tap_action:
-                  action: call-service
+                  action: javascript
                   haptic: light
-                  service: >
+                  javascript: |
                     [[[
-                      if (states['light.bedroom_bedlamp'].state == "on")
-                        return "timer.start";
+                      if (states['light.bedroom_bedlamp'].state == "on") {
+                        hass.callService("timer", "start", {
+                          entity_id: entity.entity_id,
+                          duration: "00:15:00"
+                        });
+                      }
                     ]]]
-                  service_data:
-                    entity_id: entity
-                    duration: "00:15:00"
                 hold_action:
                   # timer can be cancelled here
                   action: more-info

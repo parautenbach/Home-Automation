@@ -41,9 +41,6 @@ old_colors:
       # map ha’s theme vars into cbc's shadow dom
       - '--state-icon-active-color': var(--state-active-color)
       - '--state-unavailable-color': var(--state-icon-unavailable-color)
-      # legacy (polymer) vars
-      - '--paper-item-icon-color': var(--state-icon-color)
-      - '--paper-item-icon-active-color': var(--state-icon-active-color)
   state:
     - id: "on"
       value: "on"
@@ -697,9 +694,6 @@ fan_with_timer:
       # map ha’s theme vars into cbc's shadow dom
       - '--state-icon-active-color': var(--state-active-color)
       - '--state-unavailable-color': var(--state-icon-unavailable-color)
-      # legacy (polymer) vars
-      - '--paper-item-icon-color': var(--state-icon-color)
-      - '--paper-item-icon-active-color': var(--state-icon-active-color)
       - font-size: 12px
     name:
       - color: var(--state-icon-color)

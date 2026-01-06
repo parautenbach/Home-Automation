@@ -455,6 +455,8 @@ template:
             mdi:water-off
           {% endif %}
   - trigger:
+      - platform: homeassistant
+        event: start
       - platform: state
         entity_id:
           - sensor.stormglass_simon_s_town_next_low_tide

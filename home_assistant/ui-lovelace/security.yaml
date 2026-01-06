@@ -106,7 +106,7 @@ cards:
                 --state-alarm_control_panel-disarmed-color: #40b100 !important;
                 --state-alarm_control_panel-triggered-color: #135dd8 !important;
               }
-              .type-tile {
+              ha-card {
                 --ha-ripple-hover-opacity: 0;
               }
       - type: tile

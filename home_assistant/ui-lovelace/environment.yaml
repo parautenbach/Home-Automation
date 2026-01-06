@@ -4,131 +4,66 @@ icon: mdi:weather-partly-snowy-rainy
 badges:
   # https://community.home-assistant.io/t/card-mod-super-charge-your-themes/212176/1765
   # https://github.com/thomasloven/lovelace-card-mod/issues/391#issuecomment-2565939899
-  - type: custom:mod-card
-    card:
-      type: custom:hui-entity-badge
-      entity: sensor.office_temperature
-      name: Living Room
-      icon: mdi:sofa
-      show_icon: true
-      show_name: false
-      show_state: true
+  - type: entity
+    entity: sensor.office_temperature
+    name: Living Room
+    icon: mdi:sofa
+    show_icon: true
+    show_name: false
+    show_state: true
     card_mod:
-      style:
-        hui-entity-badge:
-          $: |
-            //state-display {
-            //  {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
-            //  {%- set state = states('sensor.office_temperature') | float(0) -%}
-            //  color: {{ gradient_color(state, temp_degrees_c_human_map) }};
-            //}
-            ha-state-icon {
-              {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
-              {%- set state = states('sensor.office_temperature') | float(0) -%}
-              --card-mod-icon-color: {{ gradient_color(state, temp_degrees_c_human_map) }};
-            }
-  - type: custom:mod-card
-    card:
-      type: custom:hui-entity-badge
-      entity: sensor.outside_temperature_filtered
-      name: Outside
-      icon: mdi:weather-partly-cloudy
-      show_icon: true
-      show_name: false
-      show_state: true
+      style: |
+        :host {
+          {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+          {%- set state = states(config.entity) | float(0) -%}
+          --card-mod-icon-color: {{ gradient_color(state, temp_degrees_c_human_map) }};
+        }
+        // state-display {
+        //   {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+        //   {%- set state = states(config.entity) | float(0) -%}
+        //   color: {{ gradient_color(state, temp_degrees_c_human_map) }};
+        // }
+  - type: entity
+    entity: sensor.outside_temperature_filtered
+    name: Outside
+    icon: mdi:weather-partly-cloudy
+    show_icon: true
+    show_name: false
+    show_state: true
     card_mod:
-      style:
-        hui-entity-badge:
-          $: |
-            //state-display {
-            //  {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
-            //  {%- set state = states('sensor.outside_temperature_filtered') | float(0) -%}
-            //  color: {{ gradient_color(state, temp_degrees_c_human_map) }};
-            //}
-            ha-state-icon {
-              {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
-              {%- set state = states('sensor.outside_temperature_filtered') | float(0) -%}
-              --card-mod-icon-color: {{ gradient_color(state, temp_degrees_c_human_map) }};
-            }
-  - type: custom:mod-card
-    card:
-      type: custom:hui-entity-badge
-      entity: sensor.overall_pollen_risk
-      name: Pollen
-      icon: mdi:flower-pollen-outline
-      show_icon: true
-      show_name: false
-      show_state: true
-    # todo: hide unit
-    # maybe: https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/1310
-    # card_mod:
-    #   style: |
-    #     :host {
-    #       --label-badge-background-color:
-    #           {%- set mapping = {
-    #                               1: "#40b100",
-    #                               2: "#ffe500",
-    #                               3: "#ffa800",
-    #                               4: "#ff5800",
-    #                               5: "#aa0000" } -%}
-    #           {%- set key = states('sensor.overall_pollen_risk') | int(0) -%}
-    #           {{ mapping[key] if key in mapping else "" }};
-    #     }
+      style: |
+        :host {
+          {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+          {%- set state = states(config.entity) | float(0) -%}
+          --card-mod-icon-color: {{ gradient_color(state, temp_degrees_c_human_map) }};
+        }
+  - type: entity
+    entity: sensor.overall_pollen_risk
+    name: Pollen
+    icon: mdi:flower-pollen-outline
+    show_icon: true
+    show_name: false
+    show_state: true
     card_mod:
-      style:
-        hui-entity-badge:
-          $: |
-            //state-display {
-            //  {%- from 'dynamic_colors.jinja' import discrete_5_point_map, mapped_color -%}
-            //  {%- set state = states('sensor.overall_pollen_risk') | int(0) -%}
-            //  color: {{ mapped_color(state, discrete_5_point_map) }};
-            //}
-            ha-state-icon {
-              {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
-              {%- set state = states('sensor.overall_pollen_risk') | float(0) -%}
-              --card-mod-icon-color: {{ mapped_color(state, discrete_5_point_map) }};
-            }
-  - type: custom:mod-card
-    card:
-      type: custom:hui-entity-badge
-      entity: sensor.owm_pollution_overall_air_quality
-      name: Air
-      show_icon: true
-      show_name: false
-      show_state: true
+      style: |
+        :host {
+          {%- from 'dynamic_colors.jinja' import discrete_5_point_map, mapped_color -%}
+          {%- set state = states(config.entity) | float(0) -%}
+          --card-mod-icon-color: {{ mapped_color(state, discrete_5_point_map) }};
+        }
+  - type: entity
+    entity: sensor.owm_pollution_overall_air_quality
+    name: Air
+    show_icon: true
+    show_name: false
+    show_state: true
     card_mod:
-      style:
-        hui-entity-badge:
-          $: |
-            //state-display {
-            //  {%- from 'dynamic_colors.jinja' import discrete_5_point_map, mapped_color -%}
-            //  {%- set state = states('sensor.owm_pollution_overall_air_quality') | int(0) -%}
-            //  color: {{ mapped_color(state, discrete_5_point_map) }};
-            //}
-            ha-state-icon {
-              {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
-              {%- set state = states('sensor.owm_pollution_overall_air_quality') | float(0) -%}
-              --card-mod-icon-color: {{ mapped_color(state, discrete_5_point_map) }};
-            }
-    # card_mod:
-    #   style:
-    #     .: |
-    #       :host {
-    #         --label-badge-text-color:
-    #                   {%- from 'dynamic_colors.jinja' import discrete_5_point_map, mapped_color -%}
-    #                   {%- set state = states(config.entity) | int(0) -%}
-    #                   {{ mapped_color(state, discrete_5_point_map) }} !important;
-    #       }
-    #     # https://community.home-assistant.io/t/card-mod-add-css-styles-to-any-lovelace-card/120744/3319
-    #     # var(--ha-label-badge-font-size);
-    #     ha-state-label-badge $ ha-label-badge $: |
-    #       .badge-container .label-badge .value::after {
-    #         content: "{{ states(config.entity) | float(0) | round(0) }}";
-    #         font-size: var(--ha-font-size-m);
-    #       }
-    #       .badge-container .label-badge .value {
-    #         font-size: 0px;
-    #       }
+      style: |
+        :host {
+          {%- from 'dynamic_colors.jinja' import discrete_5_point_map, mapped_color -%}
+          {%- set state = states(config.entity) | float(0) -%}
+          --card-mod-icon-color: {{ mapped_color(state, discrete_5_point_map) }};
+        }
   # https://community.home-assistant.io/t/hours-of-daylight/59422/
   # https://community.home-assistant.io/t/enhanced-sun-component/63553
   - type: entity
@@ -492,7 +427,7 @@ cards:
                             .state {
                               color: {{ 'var(--custom-color-green)' if is_state('binary_sensor.grid_feed', 'on') else 'var(--custom-color-red)' }};
                               }
-                            }   
+                            }
       - type: history-graph
         hours_to_show: 24
         entities:

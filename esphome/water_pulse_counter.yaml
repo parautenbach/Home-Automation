@@ -1,0 +1,58 @@
+substitutions:
+  device_name_upper: "Water Pulse Counter"
+  device_name_lower: "water_pulse_counter"
+
+esphome:
+  name: water-pulse-counter
+
+esp8266:
+  board: d1_mini
+  framework:
+    version: recommended
+
+<<: !include common.yaml
+
+binary_sensor:
+  - platform: status
+    id: ${device_name_lower}_status
+    name: "${device_name_upper} Status"
+
+sensor:
+  - platform: pulse_counter
+    id: ${device_name_lower}_current_power
+    name: "${device_name_upper} Flow Rate"
+    # internal pull-up 45k?
+    pin:
+      number: D1
+      mode: INPUT_PULLUP
+      inverted: true
+    unit_of_measurement: "L/min"  # todo: mˆ3/min? what's the standard?
+    accuracy_decimals: 3
+    # device_class: volume_flow_rate  # new in 2024.2
+    update_interval: 40s
+    filters:
+      # 1 pulse per 0.5l
+      # we want l/min per pulse ((l/min)/p), so:
+      # ((0.5l/1p)/40s, where 40s is the update interval
+      #   = (0.5l/40s)/p
+      #   = 0.0125l/p
+      # for mˆ3/hour or kl/h:
+      # kl/h = (l/1000)/(min/60)
+      #      = 0.06 * l/min
+      #      = 0.06 * 0.0125
+      #      = 0.00075
+      - multiply: 0.0125
+    total:
+      name: "${device_name_upper} Total"
+      # why is kL not an option if L/min exists?
+      unit_of_measurement: "m³"
+      accuracy_decimals: 3
+      device_class: water
+      filters:
+        # 0.5l = 0.0005kl
+        - multiply: 0.0005
+
+switch:
+  - platform: restart
+    id: ${device_name_lower}_restart
+    name: "${device_name_upper} Restart"

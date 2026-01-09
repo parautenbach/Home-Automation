@@ -165,6 +165,18 @@ cards:
               service: shell_command.mute_smoke_alarm
               data:
                 host: shellyplussmoke-a0a3b35c5694
+          # todo: mute flood detector
+          # not possible today: https://shelly-api-docs.shelly.cloud/gen2/ComponentsAndServices/Flood
+          # - type: custom:button-card
+          #   template: smoke_detector
+          #   name: "Scullery"
+          #   icon: mdi:water  # or another icon
+          #   entity: binary_sensor.scullery_flooding
+          #   tap_action:
+          #     action: call-service
+          #     service: shell_command.mute_smoke_alarm  # or another script
+          #     data:
+          #       host: shellyflood...
       - type: custom:home-feed-card
         title: Events
         show_empty: true

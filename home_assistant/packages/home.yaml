@@ -1115,7 +1115,12 @@ automation:
     trigger:
       platform: time
       at: "21:00:00"
-    condition: "{{ (states('input_datetime.vacation_start') | as_datetime - timedelta(days=1)).date() == now().date() }}"
+    condition:
+      - condition: state
+        entity_id: input_boolean.everyday_routine
+        state: "off"
+      - condition: template
+        value_template: "{{ (states('input_datetime.vacation_start') | as_datetime - timedelta(days=1)).date() == now().date() }}"
     action:
       - service: notify.mobile_app_ceres
         data:

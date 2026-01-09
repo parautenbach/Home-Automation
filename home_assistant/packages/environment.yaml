@@ -438,6 +438,38 @@ template:
         unit_of_measurement: °C
         icon: mdi:thermometer
   - trigger:
+      - platform: time_pattern
+        # every 5 minutes past the hour
+        hours: "*"
+        minutes: "5"
+      - platform: state
+        entity_id: weather.openweathermap
+    action:
+      - service: weather.get_forecasts
+        target:
+          entity_id: weather.openweathermap
+        data:
+          type: hourly
+        response_variable: hourly
+    binary_sensor:
+      - name: "Weather Forecast Precipitation Soon"
+        unique_id: "949dd25e-35cf-4000-a3f9-f38ab20e112f"
+        device_class: moisture
+        state: >-
+          {% set threshold = 5 %}
+          {% set forecast = hourly['weather.openweathermap']['forecast'] %}
+          {% set start = utcnow() %}
+          {% set end = start + timedelta(hours=12) %}
+          {% set precipitation_soon = forecast
+             | selectattr('datetime', '>=', start.isoformat())
+             | selectattr('datetime', '<=', end.isoformat())
+             | map(attribute='precipitation')
+             | map('int')
+             | select('>=', threshold)
+             | list
+             | count > 0 %}
+          {{ precipitation_soon }}
+  - trigger:
       - platform: time
         at: "23:55"
     sensor:
@@ -1431,3 +1463,37 @@ automation:
       - service: homeassistant.update_entity
         target:
           entity_id: sensor.bedroom_temperature_24_hours_ago
+
+  - alias: "Notify When Significant Rain Is Expected"
+    id: "aff421a7-d99a-45c2-baa5-710b11d010b9"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.weather_forecast_precipitation_soon
+        from: "off"
+        to: "on"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🌧️ Rain Expected"
+          message: >-
+            {# must match the sensor's definition #}
+            {% set rain_time = now() + timedelta(hours=12) %}
+            {# later today → tonight → overnight → early morning → early tomorrow → later tomorrow #}
+            {% if rain_time.date() == now().date() %}
+              {% set time_phrase = "later today" %}
+            {% elif rain_time.hour < 4 %}
+              {% set time_phrase = "overnight" %}
+            {% elif rain_time.hour < 7 %}
+              {% set time_phrase = "early morning" %}
+            {% elif rain_time.hour < 10 %}
+              {% set time_phrase = "early tomorrow" %}
+            {% elif rain_time.hour < 18 %}
+              {% set time_phrase = "later tomorrow" %}
+            {% else %}
+              {% set time_phrase = "tonight" %}
+            {% endif %}
+            Rain is expected {{ time_phrase }}. Plan accordingly.
+          data:
+            url: homeassistant://navigate/lovelace/environment
+            group: "environment"

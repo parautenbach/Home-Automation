@@ -646,7 +646,7 @@ cards:
                 type: remaining_parent_state
                 name: Other
                 children:
-                  - sensor.inverter_energy
+                  - sensor.backup_power_system_overhead_energy
           - entities:
               - entity_id: sensor.dining_room_light_energy
                 type: entity
@@ -692,9 +692,9 @@ cards:
                 type: entity
                 name: Geyser
                 children: []
-              - entity_id: sensor.inverter_energy
+              - entity_id: sensor.backup_power_system_overhead_energy
                 type: entity
-                name: Inverter
+                name: Backup Power System
                 children: []
               - entity_id: sensor.dishwasher_energy
                 type: entity

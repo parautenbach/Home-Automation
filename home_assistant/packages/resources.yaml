@@ -390,12 +390,12 @@ template:
                 states('sensor.daily_solar_energy_consumption') | float(0)] | max | round(1) }}
           solar_energy_forecast_tomorrow: "{{ states('sensor.energy_production_tomorrow') }}"
           charge_mode: "{{ states('sensor.charge_mode') }}"
-      - name: "Inverter Power"
-        unique_id: "ec19a13f-de52-4a27-8047-b46b8744a16b"
-        state: "{{ states('sensor.home_power') | int(0) - states('sensor.load_power') | int(0) }}"
-        icon: mdi:generator-stationary
-        device_class: power
-        unit_of_measurement: "W"
+      # - name: "Inverter Power"
+      #   unique_id: "ec19a13f-de52-4a27-8047-b46b8744a16b"
+      #   state: "{{ states('sensor.home_power') | int(0) - states('sensor.load_power') | int(0) }}"
+      #   icon: mdi:generator-stationary
+      #   device_class: power
+      #   unit_of_measurement: "W"
       - name: "Inverter Efficiency"
         unique_id: "ee3e3151-3357-40f1-b52c-ad11b846bb82"
         # alternative: https://community.home-assistant.io/t/limit-a-value-to-fall-within-a-range/222188
@@ -656,6 +656,13 @@ template:
           {% set capacity = 10240 %}
           {% set power = states('sensor.battery_power_filtered') | int(0) %}
           {{ (power/capacity*100) | round(2) }}
+  - sensor:
+      - name: "Backup Power System Overhead Energy"
+        unique_id: "e69d456c-0f60-467b-80de-625ac6309471"
+        unit_of_measurement: "kWh"
+        device_class: energy
+        state_class: total_increasing
+        state: "{{ states('input_number.backup_power_system_overhead_energy') | float(0) }}"
 
 sensor:
   # digital power meter in db - measures only grid
@@ -692,14 +699,14 @@ sensor:
     unit_time: h
     method: left
     round: 3
-  - platform: integration
-    unique_id: "f1d3ef94-1d5c-4c6c-a7bb-7fa72b357dc5"
-    name: "Inverter Energy"
-    source: sensor.inverter_power
-    unit_prefix: k
-    unit_time: h
-    method: left
-    round: 3
+  # - platform: integration
+  #   unique_id: "f1d3ef94-1d5c-4c6c-a7bb-7fa72b357dc5"
+  #   name: "Inverter Energy"
+  #   source: sensor.inverter_power
+  #   unit_prefix: k
+  #   unit_time: h
+  #   method: left
+  #   round: 3
   - platform: filter
     unique_id: "a6c6e405-2939-43ae-a8fc-e63f5390eda6"
     name: "PV Power Filtered"
@@ -862,6 +869,32 @@ input_number:
     min: 0
     max: 100
     unit_of_measurement: "%"
+    mode: box
+  # for overhead power and energy calculations
+  solar_energy_prev:
+    min: 0
+    max: 100
+    unit_of_measurement: "kWh"
+  grid_energy_prev:
+    min: 0
+    max: 100
+    unit_of_measurement: "kWh"
+  home_energy_prev:
+    min: 0
+    max: 100
+    unit_of_measurement: "kWh"
+  battery_energy_in_prev:
+    min: 0
+    max: 100
+    unit_of_measurement: "kWh"
+  battery_energy_out_prev:
+    min: 0
+    max: 100
+    unit_of_measurement: "kWh"
+  backup_power_system_overhead_energy:
+    min: 0
+    max: 100
+    unit_of_measurement: "kWh"
 
 input_text:
   last_charge_mode:
@@ -2068,3 +2101,64 @@ automation:
       - service: homeassistant.update_entity
         target:
           entity_id: sensor.hourly_energy_forecast_aggregated
+
+  - alias: "Compute Backup Power System Overheads"
+    id: "bcf32743-4323-4c68-b397-ef646098d3db"
+    trigger:
+      - platform: time_pattern
+        minutes: "/5"
+    variables:
+      # current values
+      solar_energy_now: "{{ states('sensor.daily_solar_energy_consumption') | float(0) }}"
+      grid_energy_now: "{{ states('sensor.daily_grid_energy_consumption') | float(0) }}"
+      home_energy_now: "{{ states('sensor.daily_home_energy_consumption') | float(0) }}"
+      battery_energy_in_now: "{{ states('sensor.daily_battery_energy_in') | float(0) }}"
+      battery_energy_out_now: "{{ states('sensor.daily_battery_energy_out') | float(0) }}"
+      # previous values
+      solar_energy_prev: "{{ states('input_number.solar_energy_prev') | float(0) }}"
+      grid_energy_prev: "{{ states('input_number.grid_energy_prev') | float(0) }}"
+      home_energy_prev: "{{ states('input_number.home_energy_prev') | float(0) }}"
+      battery_energy_in_prev: "{{ states('input_number.battery_energy_in_prev') | float(0) }}"
+      battery_energy_out_prev: "{{ states('input_number.battery_energy_out_prev') | float(0) }}"
+      # deltas
+      delta_solar_energy: "{{ max(solar_energy_now - solar_energy_prev, 0) }}"
+      delta_grid_energy: "{{ max(grid_energy_now - grid_energy_prev, 0) }}"
+      delta_home_energy: "{{ max(home_energy_now - home_energy_prev, 0) }}"
+      delta_battery_energy: >
+        {{ max((battery_energy_in_now - battery_energy_out_now) -
+          (battery_energy_in_prev - battery_energy_out_prev), 0) }}
+      # overheads
+      overhead_energy_kwh: >
+        {{ max(delta_solar_energy + delta_grid_energy - delta_home_energy - delta_battery_energy, 0) }}
+    action:
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.backup_power_system_overhead_energy
+        data:
+          value: >-
+            {{ states('input_number.backup_power_system_overhead_energy') | float(0) + overhead_energy_kwh }}
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.solar_energy_prev
+        data:
+          value: "{{ solar_energy_now }}"
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.grid_energy_prev
+        data:
+          value: "{{ grid_energy_now }}"
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.home_energy_prev
+        data:
+          value: "{{ home_energy_now }}"
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.battery_energy_in_prev
+        data:
+          value: "{{ battery_energy_in_now }}"
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.battery_energy_out_prev
+        data:
+          value: "{{ battery_energy_out_now }}"

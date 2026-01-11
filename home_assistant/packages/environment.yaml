@@ -1472,6 +1472,10 @@ automation:
         entity_id: binary_sensor.weather_forecast_precipitation_soon
         from: "off"
         to: "on"
+    condition:
+      - condition: state
+        entity_id: binary_sensor.pieter_present
+        state: "on"
     action:
       - service: notify.mobile_app_ceres
         data:

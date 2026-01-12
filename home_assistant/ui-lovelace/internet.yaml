@@ -90,8 +90,8 @@ cards:
           - type: divider
           - entity: sensor.internet_round_trip_time_avg
             name: Mean Ping Time
-          - entity: sensor.internet_round_trip_time_mdev
-            name: Mean Ping Deviation
+          - entity: sensor.internet_jitter
+            name: Jitter
           - entity: sensor.internet_packet_loss
             name: Packet Loss
         header:
@@ -128,9 +128,9 @@ cards:
                       border: 0px;
                     }
             - type: custom:mini-graph-card
-              name: Deviation
+              name: Jitter
               entities:
-                - entity: sensor.internet_round_trip_time_mdev
+                - entity: sensor.internet_jitter
                 - entity: sensor.nighttime_number
                   color: var(--custom-color-gray)
                   show_line: false
@@ -219,8 +219,8 @@ cards:
           - type: divider
           - entity: sensor.front_extender_round_trip_time_avg
             name: Mean Ping Time
-          - entity: sensor.front_extender_round_trip_time_mdev
-            name: Mean Ping Deviation
+          - entity: sensor.front_extender_jitter
+            name: Jitter
           - entity: sensor.front_extender_packet_loss
             name: Packet Loss
         header:
@@ -251,8 +251,8 @@ cards:
           - type: divider
           - entity: sensor.back_extender_round_trip_time_avg
             name: Mean Ping Time
-          - entity: sensor.back_extender_round_trip_time_mdev
-            name: Mean Ping Deviation
+          - entity: sensor.back_extender_jitter
+            name: Jitter
           - entity: sensor.back_extender_packet_loss
             name: Packet Loss
         header:

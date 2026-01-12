@@ -34,8 +34,8 @@ homeassistant:
     sensor.internet_round_trip_time_avg:
       friendly_name: Internet Mean Ping Time
       icon: mdi:timer-outline
-    sensor.internet_round_trip_time_mdev:
-      friendly_name: Internet Mean Ping Deviation
+    sensor.internet_jitter:
+      friendly_name: Internet Jitter
       icon: mdi:sigma-lower
     binary_sensor.front_extender:
       scan_interval: 30
@@ -45,8 +45,8 @@ homeassistant:
     sensor.front_extender_round_trip_time_avg:
       friendly_name: Front Extender Mean Ping Time
       icon: mdi:timer-outline
-    sensor.front_extender_round_trip_time_mdev:
-      friendly_name: Front Extender Mean Ping Deviation
+    sensor.front_extender_jitter:
+      friendly_name: Front Extender Jitter
       icon: mdi:sigma-lower
     binary_sensor.back_extender:
       scan_interval: 30
@@ -56,8 +56,8 @@ homeassistant:
     sensor.back_extender_round_trip_time_avg:
       friendly_name: Back Extender Mean Ping Time
       icon: mdi:timer-outline
-    sensor.back_extender_round_trip_time_mdev:
-      friendly_name: Back Extender Mean Ping Deviation
+    sensor.back_extender_jitter:
+      friendly_name: Back Extender Jitter
       icon: mdi:sigma-lower
     input_number.wan_traffic_delta_in:
       friendly_name: WAN Traffic Delta In
@@ -109,58 +109,6 @@ utility_meter:
     unique_id: "00f46f8f-f570-4e3f-a883-7b747d36d47f"
     source: sensor.internet_usage_out
     cycle: monthly
-
-command_line:
-  - sensor:
-      name: internet_packet_loss
-      command: 'ping -c 5 www.google.com 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
-      command_timeout: 15
-      unit_of_measurement: "%"
-      value_template: '{{ value | int(0) }}'
-      scan_interval: 60
-
-  - sensor:
-      name: internet_round_trip_time_mdev
-      # command: "ping -c 5 www.google.com 2>/dev/null | grep -oP '(?<=rtt min/avg/max/mdev = )[^ ]+' | awk -F'/' '{print $4}' || echo 0"
-      command: "ping -c 5 www.google.com 2>/dev/null | awk -F' = ' '/round-trip/{print $2}' | awk -F'/' '{print $3 - $2}' || echo 0"
-      command_timeout: 15
-      unit_of_measurement: "ms"
-      value_template: '{{ value | float(0) }}'
-      scan_interval: 60
-
-  - sensor:
-      name: front_extender_packet_loss
-      # note: the ping sensor host is configured via the ui of the ping integration
-      command: 'ping -c 5 U6ProFrontAP 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
-      command_timeout: 15
-      unit_of_measurement: "%"
-      value_template: '{{ value | int(0) }}'
-      scan_interval: 30
-
-  - sensor:
-      name: front_extender_round_trip_time_mdev
-      command: "ping -c 5 U6ProFrontAP 2>/dev/null | awk -F' = ' '/round-trip/{print $2}' | awk -F'/' '{print $3 - $2}' || echo 0"
-      command_timeout: 15
-      unit_of_measurement: "ms"
-      value_template: '{{ value | float(0) }}'
-      scan_interval: 60
-
-  - sensor:
-      name: back_extender_packet_loss
-      # note: the ping sensor host is configured via the ui of the ping integration
-      command: 'ping -c 5 U6ProRearAP 2> /dev/null | grep -o -P "(?<= )(\d+)(?=%)" || echo 100'
-      command_timeout: 15
-      unit_of_measurement: "%"
-      value_template: '{{ value | int(0) }}'
-      scan_interval: 30
-
-  - sensor:
-      name: back_extender_round_trip_time_mdev
-      command: "ping -c 5 U6ProRearAP 2>/dev/null | awk -F' = ' '/round-trip/{print $2}' | awk -F'/' '{print $3 - $2}' || echo 0"
-      command_timeout: 15
-      unit_of_measurement: "ms"
-      value_template: '{{ value | float(0) }}'
-      scan_interval: 60
 
 sensor:
   # https://community.ui.com/releases/UniFi-OS-Dream-Router-4-0-6/305296c8-c5ed-4dbf-b79e-cb259945d9fb

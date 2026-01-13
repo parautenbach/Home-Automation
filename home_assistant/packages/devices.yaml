@@ -368,9 +368,14 @@ automation:
     id: "6372b0f0-3a0b-4d16-9009-da03da974eb4"
     initial_state: true
     variables:
+      # excluding update entities, because for some reason that can be unavailable for longer/more frequently
+      # compared to other entities of the same devies. perhaps it has to do with how frequent the checks are,
+      # so it remains unavailable until the next check and not when the device has become available again.
+      # todo: once the water pulse counter has been installed it must be removed here.
       unavailable_devices: >-
         {{
           state_attr('sensor.unavailable_entities', 'unavailable')
+            | reject('match', 'update.*')
             | reject('match', '.*test_.*')
             | reject('match', '.*water_pulse_counter.*')
             | reject('match', '.*sonoff_basic.*')

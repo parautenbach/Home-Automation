@@ -96,7 +96,8 @@ cards:
             color: var(--state-icon-color);
           }
       entities:
-        - sensor.thor_disk_usage
+        - entity: sensor.thor_disk_usage
+          name: "Usage"
     - type: markdown
       title: Devices
       content: "Double tap will restart; hold will shut down (where supported)."

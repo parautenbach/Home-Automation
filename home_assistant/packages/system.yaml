@@ -10,9 +10,6 @@ homeassistant:
       friendly_name: San Francisco
     sensor.london:
       friendly_name: London
-    sensor.thor_disk_usage:
-      friendly_name: Disk use (percent)
-      icon: mdi:harddisk
     sensor.mqtt_broker_sent_messages_1min_load:
       friendly_name: MQTT broker messages out
     sensor.mqtt_broker_received_messages_1min_load:

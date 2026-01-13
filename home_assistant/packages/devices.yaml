@@ -121,13 +121,6 @@ command_line:
       payload_off: "fail"
       scan_interval: 30
 
-  - sensor:
-      name: thor_disk_usage
-      command: !secret thor_disk_usage_command
-      unit_of_measurement: "%"
-      value_template: '{{ value | int(0) }}'
-      scan_interval: 3600
-
 template:
   - binary_sensor:
       - name:  Broadlink Online
@@ -155,6 +148,12 @@ template:
         state: >
           {{ is_state('binary_sensor.gaia_audio_input_in_use', 'on') or
              is_state('input_boolean.gaia_audio_input_in_use_alt', 'on') }}
+  - sensor:
+      - name: Thor Disk Usage
+        unique_id: "82c2f688-e42d-4b7e-9947-bbb88a66b48c"
+        state: "{{ states('sensor.system_monitor_disk_usage_mnt_nas') }}"
+        icon: mdi:harddisk
+        unit_of_measurement: "%"
 
 automation:
   - alias: "See Mobile Devices"

@@ -2528,10 +2528,12 @@ automation:
       - platform: state
         entity_id: light.living_room_lamp
         to: "off"
-    condition:
-      - condition: state
-        entity_id: light.living_room_fairy_lights
-        state: "on"
+    # not a good idea due to assumed state of a light controlled by infrared
+    # automations like these are cheap to run, so just run it regardless
+    # condition:
+    #   - condition: state
+    #     entity_id: light.living_room_fairy_lights
+    #     state: "on"
     actions:
       - service: light.turn_off
         target:

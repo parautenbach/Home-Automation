@@ -1201,8 +1201,12 @@ automation:
             {# the other option is to use percentage points for a pure delta #}
             {% set change = ((new_dam_levels - previous_dam_levels)/previous_dam_levels*100) | abs | round(1) %}
             {% set previous_year_dam_levels = states('sensor.total_dam_level_previous_year') | float(0) | round(1) %}
-            {% set time_delta = (trigger.to_state.last_changed - trigger.from_state.last_changed).total_seconds() %}
-            {% set days_since = (time_delta / 86400) | round(0) %}
+            {# we don't want to go through the effort of storing the previous update in a template sensor, #}
+            {# because there can still be a race condition (will it have updated when this runs?). #}
+            {# this just needs to be approximately accurate, so we'll just use the last time we got notified #}
+            {% set last_update = state_attr('automation.send_dam_level_update', 'last_triggered') %}
+            {% set time_delta = (now() - last_update).total_seconds() %}
+            {% set days_since = (time_delta / 86400) | int(0) %}
             {% set update = '' %}
             {% if new_dam_levels > previous_dam_levels %}
               {% set update = 'rose by ' ~ change ~ '% to ' ~ new_dam_levels ~ '%' %}

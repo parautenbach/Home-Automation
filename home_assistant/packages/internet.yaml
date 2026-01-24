@@ -177,13 +177,13 @@ template:
   - sensor:
       - name: "Internet Usage In"
         unique_id: "09c36e4d-7db9-4499-8dbf-99e43452adfd"
-        state: "{{ ((states('sensor.snmp_wan_in')  | float(0) ) / 1000000000 ) | round(3) }}"
+        state: "{{ ((states('sensor.snmp_wan_in')  | float(0) ) / 1000000000 ) }}"
         device_class: data_size
         unit_of_measurement: 'GB'
   - sensor:
       - name: "Internet Usage Out"
         unique_id: "09ec3858-8705-4503-a162-afebb2808d27"
-        state: "{{ ((states('sensor.snmp_wan_out') | float(0) ) / 1000000000 ) | round(3) }}"
+        state: "{{ ((states('sensor.snmp_wan_out') | float(0) ) / 1000000000 ) }}"
         device_class: data_size
         unit_of_measurement: 'GB'
 

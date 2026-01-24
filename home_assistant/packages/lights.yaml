@@ -1640,6 +1640,15 @@ automation:
     trigger:
       - platform: state
         entity_id: event.kitchen_counter_lights
+    conditions:
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: light.kitchen_counter
+            state: "on"
+          - condition: state
+            entity_id: light.kitchen_counter
+            state: "off"
     action:
       # mirror the state
       - service: "light.turn_{{ states('light.kitchen_counter') }}"

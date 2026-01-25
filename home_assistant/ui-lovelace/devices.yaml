@@ -17,6 +17,24 @@ badges:
     show_name: false
     show_state: false
   - type: entity
+    entity: sensor.load_1m
+    name: Load
+    show_icon: false
+    show_name: true
+    show_state: true
+  - type: entity
+    entity: sensor.processor_use
+    name: CPU
+    show_icon: false
+    show_name: true
+    show_state: true
+  - type: entity
+    entity: sensor.memory_use_percent
+    name: Mem
+    show_icon: false
+    show_name: true
+    show_state: true
+  - type: entity
     entity: sensor.disabled_automations
     show_icon: true
     show_name: false

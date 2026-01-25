@@ -957,6 +957,8 @@ automation:
           entity_id: binary_sensor.tenant_mobile_phone
       - delay:
           seconds: 15
+      - condition: template
+        value_template: "{{ not is_state('alarm_control_panel.home', 'disarmed') }}"
       - choose:
           - conditions:
               - condition: template

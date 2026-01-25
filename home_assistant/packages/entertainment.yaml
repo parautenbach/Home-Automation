@@ -159,9 +159,9 @@ script:
       # state is idle when not playing or off (suspended)
       # in that case, just let it turn off automatically
       # we just want to stop anything currently playing (e.g. streaming music) to stop
-      - condition: state
-        entity_id: media_player.living_room
-        state: "playing"
+      - condition: template
+        value_template: >-
+          {{ states("media_player.living_room") in ["playing", "paused"] }}
       # https://github.com/postlund/pyatv/blob/master/pyatv/interface.py
       - service: remote.send_command
         data:
@@ -172,9 +172,9 @@ script:
     mode: single
     sequence:
       - if:
-          - condition: state
-            entity_id: media_player.living_room
-            state: "off"
+          - condition: template
+            value_template: >-
+              {{ states("media_player.living_room") in ["off", "paused"] }}
         then:
           # blocking call
           - service: script.entertainment_apple_tv_on
@@ -200,6 +200,7 @@ automation:
         entity_id: media_player.living_room
         from:
           - "off"
+          - "paused"
     mode: single
     action:
       - service: script.turn_on

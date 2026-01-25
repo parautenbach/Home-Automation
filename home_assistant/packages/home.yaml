@@ -2550,6 +2550,10 @@ automation:
           {% set current = now().replace(second=0).replace(microsecond=0) %}
           {% set target = states('input_datetime.go_home_reminder') | today_at + timedelta(minutes=30) %}
           {{ current == target }}
+    condition:
+      - condition: state
+        entity_id: input_boolean.guest_mode
+        state: "off"
     actions:
       - service: notify.family
         data:
@@ -2587,6 +2591,10 @@ automation:
         entity_id: binary_sensor.washing_machine_running
         from: "on"
         to: "off"
+    condition:
+      - condition: state
+        entity_id: input_boolean.guest_mode
+        state: "off"
     actions:
       - service: notify.family
         data:
@@ -2611,6 +2619,10 @@ automation:
     # conditions:
     #   - condition: template
     #     value_template: "{{ trigger.from_state.state not in ['unknown', 'unavailable'] }}"
+    condition:
+      - condition: state
+        entity_id: input_boolean.guest_mode
+        state: "off"
     actions:
       - service: notify.family
         data:
@@ -2630,6 +2642,10 @@ automation:
         entity_id: binary_sensor.dishwasher_running
         from: "on"
         to: "off"
+    condition:
+      - condition: state
+        entity_id: input_boolean.guest_mode
+        state: "off"
     actions:
       - service: notify.family
         data:
@@ -2667,6 +2683,9 @@ automation:
       - condition: state
         entity_id: input_boolean.tumble_dryer_cleaning_reminder
         state: "on"
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "on"
     actions:
       - service: notify.family
         data:
@@ -2691,6 +2710,9 @@ automation:
     condition:
       - condition: state
         entity_id: input_boolean.dishwasher_cleaning_reminder
+        state: "on"
+      - condition: state
+        entity_id: binary_sensor.anybody_home
         state: "on"
     actions:
       - service: notify.family

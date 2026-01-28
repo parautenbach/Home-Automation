@@ -1255,7 +1255,13 @@ automation:
             {% set lights = states.light | selectattr('state', 'eq', 'on') | rejectattr('attributes.entity_id', 'defined') | sort(attribute='attributes.friendly_name') | list %}
             The following lights are still on:
             {%- for light in lights %}
+              {# if a light has a timer running, don't include it; it will turn off #}
+              {%- set timer = light.entity_id | replace('light.', 'timer.') ~ '_timer' -%}
+              {%- set has_timer =  timer | has_value -%}
+              {%- set is_timer_idle = is_state(timer, 'idle') -%}
+              {%- if not has_timer or (has_timer and is_timer_idle) -%}
               - {{ state_attr(light.entity_id, 'friendly_name') | replace(' Lights', '') | replace(' Light', '') }}
+              {%- endif %}
             {%- endfor %}
           data:
             group: "lights"

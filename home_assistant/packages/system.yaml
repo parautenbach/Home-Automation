@@ -141,20 +141,20 @@ template:
       - name: Unavailable Entities
         icon: mdi:help-circle-outline
         state: >-
-          {%- from 'system.jinja' import get_entities_by_state -%}
+          {%- from 'utilities.jinja' import get_entities_by_state -%}
           {{ get_entities_by_state(['unavailable', 'unknown', 'none']).split(',') | length }}
         unit_of_measurement: entities
         state_class: measurement
         attributes:
           # buttons don't have state – we don't care about buttons here
           unavailable: >-
-            {%- from 'system.jinja' import get_entities_by_state -%}
+            {%- from 'utilities.jinja' import get_entities_by_state -%}
             {{ get_entities_by_state(['unavailable']).split(',') }}
           unknown: >-
-            {%- from 'system.jinja' import get_entities_by_state -%}
+            {%- from 'utilities.jinja' import get_entities_by_state -%}
             {{ get_entities_by_state(['unknown']).split(',') }}
           none: >-
-            {%- from 'system.jinja' import get_entities_by_state -%}
+            {%- from 'utilities.jinja' import get_entities_by_state -%}
             {{ get_entities_by_state(['none']).split(',') }}
 
   - trigger:

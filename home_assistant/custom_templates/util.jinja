@@ -22,3 +22,92 @@ Get the triggered by details given a context.
         {{ ('physical', none) }}
     {%- endif -%}
 {%- endmacro -%}
+
+{# https://www.home-assistant.io/docs/configuration/templating/#reusing-templates #}
+
+{#
+Get a list of entity IDs given a list of states.
+
+:param state_list: A list of state values.
+
+:returns: A CSV string that can be split to get a proper list. Jinja's {{ }} outputs text and cannot output a list.
+
+:seealso: https://community.home-assistant.io/t/template-trigger-based-sensors-add-variables/657527/16
+#}
+{%- macro get_entities_by_state(state_list) -%}
+  {%- set exclusions = [
+            'sensor.unavailable_entities',
+            'number.living_room_ac_fan_speed',
+            'select.living_room_ac_vertical_swing_angle',
+            'select.living_room_ac_horizontal_swing_angle',
+            'sensor.living_room_ac_outdoor_temperature',
+            'number.main_bedroom_ac_fan_speed',
+            'select.main_bedroom_ac_vertical_swing_angle',
+            'select.main_bedroom_ac_horizontal_swing_angle',
+            'sensor.main_bedroom_ac_outdoor_temperature',
+            'sensor.solar_reserve_percentage_5min_average',
+            'sensor.pv_power_5min_average',
+            'conversation.home_assistant'] -%}
+  {#- buttons and event entities don't have state – we don't care about those here -#}
+  {%- set reduced_list = states
+            | rejectattr('domain','search','button|event')
+            | rejectattr('entity_id', 'in', exclusions)
+            | selectattr('state', 'in', state_list)
+            | map(attribute='entity_id')
+            | join(',') -%}
+  {{ reduced_list }}
+{%- endmacro -%}
+
+{# Constant map of integrations. #}
+{%- set _INTEGRATION_LABELS = {
+  'hacs': 'HACS',
+  'mqtt': 'MQTT',
+  'sql': 'SQL',
+  'tplink': 'TP-Link',
+  'mobile_app': 'Mobile App',
+  'openweathermap': 'OpenWeatherMap',
+  'thermal_comfort': 'Thermal Comfort',
+  'systemmonitor': 'System Monitor',
+  'homekit_controller': 'HomeKit Controller',
+  'bluetooth': 'Bluetooth',
+  'bthome': 'BTHome',
+  'sun2': 'Sun2',
+  'waqi': 'WAQI',
+  'plex': 'Plex',
+  'ping': 'Ping',
+  'worldclock': 'World Clock',
+  'google_travel_time': 'Google Travel Time',
+  'shelly': 'Shelly',
+  'hacs': 'HACS'
+} -%}
+
+{#
+Return the first integration associated with an entity or device.
+
+:param device_or_entity_id: A device or entity ID.
+
+:returns: The integration as a string (lowercase).
+
+:seealso: https://community.home-assistant.io/t/is-there-a-way-to-determine-what-integration-an-entity-belongs-to/247069/8
+#}
+{%- macro get_integration(device_or_entity_id) -%}
+
+    {%- set raw_integration =
+        [device_or_entity_id]
+        | map('device_attr', 'identifiers')
+        | reject('none')
+        | map('list')
+        | reject('eq', [])
+        | map('first')
+        | map('first')
+        | first
+    -%}
+
+    {%- if not raw_integration -%}
+        Derived / Helper
+    {%- elif ':' in raw_integration -%}
+        {{ labels.get(raw_integration.split(':')[0], raw_integration.split(':')[0] | replace('_', ' ') | title) }}
+    {%- else -%}
+        {{ _INTEGRATION_LABELS.get(raw_integration, raw_integration | replace('_', ' ') | title) }}
+    {%- endif -%}
+{%- endmacro -%}

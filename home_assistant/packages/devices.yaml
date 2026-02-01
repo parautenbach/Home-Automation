@@ -379,7 +379,8 @@ automation:
             | reject('match', '.*test_.*')
             | reject('match', '.*water_pulse_counter.*')
             | reject('match', '.*sonoff_basic.*')
-            | map('device_name')
+            | map('device_id')
+            | reject('none')
             | unique
             | sort
             | list
@@ -400,9 +401,11 @@ automation:
         data:
           title: "⚠️ Unavailable Devices"
           message: >-
+            {%- from 'util.jinja' import get_integration -%}
             The following devices are unavailable:
-            {%- for d in unavailable_devices %}
-              - {{ d }}
+            {%- for device_id in unavailable_devices %}
+              {%- set integration = get_integration(device_id) %}
+              - {{ device_attr(device_id, 'name') }}{% if integration %} ({{ integration }}){% endif %}
             {%- endfor %}
           data:
             group: "devices"

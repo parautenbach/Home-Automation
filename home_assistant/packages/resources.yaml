@@ -948,7 +948,7 @@ automation:
         data:
           title: "🔌 Energy"
           message: >-
-            {% from 'datetime.jinja' import sec_to_hour_and_min %}
+            {% from 'util.jinja' import sec_to_hour_and_min %}
             {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
             {% set after = sec_to_hour_and_min(seconds) %}
             {% set loadshedding = states('sensor.loadshedding_start_time') | as_datetime <= now() <= states('sensor.loadshedding_end_time') | as_datetime %}
@@ -995,7 +995,7 @@ automation:
         data:
           title: "🔌 Energy"
           message: >-
-            {% from 'datetime.jinja' import sec_to_hour_and_min %}
+            {% from 'util.jinja' import sec_to_hour_and_min %}
             {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
             {% set after = sec_to_hour_and_min(seconds) %}
             The electricity feed has been {{ 'restored after ' ~ after ~ '.' if is_state('binary_sensor.electricity_feed', 'on') else 'cut.' }}

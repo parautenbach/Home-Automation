@@ -401,7 +401,7 @@ automation:
         data:
           title: "⚠️ Unavailable Devices"
           message: >-
-            {%- from 'util.jinja' import get_integration -%}
+            {%- from 'utilities.jinja' import get_integration -%}
             The following devices are unavailable:
             {%- for device_id in unavailable_devices %}
               {%- set integration = get_integration(device_id) %}

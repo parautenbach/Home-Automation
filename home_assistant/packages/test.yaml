@@ -128,7 +128,7 @@ script:
         data:
           title: "Script Context Test"
           message: >-
-            {% from 'util.jinja' import get_triggered_by_details %}
+            {% from 'utilities.jinja' import get_triggered_by_details %}
             {% set triggered_by = get_triggered_by_details(this.context) %}
             {{ triggered_by ~ '\n\n context: ' ~ (context.id, context.parent_id, context.user_id) ~ '\n\n this.context: ' ~ (this.context.id, this.context.parent_id, this.context.user_id) ~ '\n\n states.context: ' ~ (states.context.id, states.context.parent_id, states.context.user_id) }}
 
@@ -241,7 +241,7 @@ automation:
           title: "Automation Context Test"
           # one can look at this under the automation trace, actually... (one needs a unique id for the automation)
           message: >-
-            {% from 'util.jinja' import get_triggered_by_details %}
+            {% from 'utilities.jinja' import get_triggered_by_details %}
             {% set triggered_by = get_triggered_by_details(this.context) %}
             {{ triggered_by ~ '\n\n context: ' ~ (context.id, context.parent_id, context.user_id) ~ '\n\n this.context: ' ~ (this.context.id, this.context.parent_id, this.context.user_id) ~ '\n\n states.context: ' ~ (states.context.id, states.context.parent_id, states.context.user_id) }}
       - service: script.test_notification

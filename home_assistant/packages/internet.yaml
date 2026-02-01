@@ -264,7 +264,7 @@ automation:
         data:
           title: "⚠️ Internet"
           message: >-
-            {% from 'util.jinja' import sec_to_hour_and_min %}
+            {% from 'utilities.jinja' import sec_to_hour_and_min %}
             {% set seconds = max((as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int(0), 60) %}
             {% set duration = sec_to_hour_and_min(seconds) %}
             {% set problem = trigger.to_state.state == 'off' %}

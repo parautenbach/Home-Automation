@@ -201,6 +201,8 @@ automation:
         from:
           - "off"
           - "paused"
+        for:
+          minutes: 5
     mode: single
     action:
       - service: script.turn_on

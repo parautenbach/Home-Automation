@@ -1191,6 +1191,7 @@ automation:
       - platform: state
         entity_id: sensor.total_dam_level
         not_from: "unavailable"
+        not_to: "0"
     action:
       - service: notify.mobile_app_ceres
         data:

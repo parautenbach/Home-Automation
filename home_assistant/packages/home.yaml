@@ -526,7 +526,7 @@ automation:
           - condition: template
             value_template: >-
               {% set entity_id = 'climate.main_bedroom_ac' %}
-              {% set current_temperature = state_attr(entity_id, 'current_temperature') | float(0) %}
+              {% set current_temperature = states('sensor.main_bedroom_ht_temperature') | float(0) %}
               {% set target_temperature = state_attr(entity_id, 'temperature') | float(0) %}
               {{ is_state(entity_id, 'fan_only') or
                  (is_state(entity_id, 'cool') and current_temperature <= target_temperature) or

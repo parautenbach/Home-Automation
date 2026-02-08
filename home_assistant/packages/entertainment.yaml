@@ -174,7 +174,7 @@ script:
       - if:
           - condition: template
             value_template: >-
-              {{ states("media_player.living_room") in ["off", "paused"] }}
+              {{ states("media_player.living_room") in ["off"] }}
         then:
           # blocking call
           - service: script.entertainment_apple_tv_on
@@ -200,9 +200,6 @@ automation:
         entity_id: media_player.living_room
         from:
           - "off"
-          - "paused"
-        for:
-          minutes: 5
     mode: single
     action:
       - service: script.turn_on

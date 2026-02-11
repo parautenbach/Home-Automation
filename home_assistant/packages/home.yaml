@@ -417,48 +417,48 @@ automation:
                       entity_id: light.rouve_bedside
                     data:
                       profile: low_shelly_duo
-              - if:
-                  - condition: state
-                    entity_id: input_boolean.baby_sleep_mode
-                    state: "off"
-                  - condition: or
-                    conditions:
-                      - condition: state
-                        entity_id:
-                          - light.hallway
-                        state: "off"
-                      - condition: numeric_state
-                        entity_id: light.hallway
-                        attribute: brightness
-                        below: 13  # 13/255 ~= 5%
-                then:
-                  - service: light.turn_on
-                    target:
-                      entity_id:
-                        - light.hallway
-                    data:
-                      profile: low_tp_link_rgb
-              - if:
-                  - condition: state
-                    entity_id: input_boolean.baby_sleep_mode
-                    state: "off"
-                  - condition: or
-                    conditions:
-                      - condition: state
-                        entity_id:
-                          - light.foyer
-                        state: "off"
-                      - condition: numeric_state
-                        entity_id: light.foyer
-                        attribute: brightness
-                        below: 13  # 13/255 ~= 5%
-                then:
-                  - service: light.turn_on
-                    target:
-                      entity_id:
-                        - light.foyer
-                    data:
-                      profile: low_tp_link_rgb
+              # - if:
+              #     - condition: state
+              #       entity_id: input_boolean.baby_sleep_mode
+              #       state: "off"
+              #     - condition: or
+              #       conditions:
+              #         - condition: state
+              #           entity_id:
+              #             - light.hallway
+              #           state: "off"
+              #         - condition: numeric_state
+              #           entity_id: light.hallway
+              #           attribute: brightness
+              #           below: 13  # 13/255 ~= 5%
+              #   then:
+              - service: light.turn_on
+                target:
+                  entity_id:
+                    - light.hallway
+                data:
+                  profile: low_tp_link_rgb
+              # - if:
+              #     - condition: state
+              #       entity_id: input_boolean.baby_sleep_mode
+              #       state: "off"
+              #     - condition: or
+              #       conditions:
+              #         - condition: state
+              #           entity_id:
+              #             - light.foyer
+              #           state: "off"
+              #         - condition: numeric_state
+              #           entity_id: light.foyer
+              #           attribute: brightness
+              #           below: 13  # 13/255 ~= 5%
+              #   then:
+              - service: light.turn_on
+                target:
+                  entity_id:
+                    - light.foyer
+                data:
+                  profile: low_tp_link_rgb
               - delay:
                   minutes: 1
               # these script calls don't block/wait, so the transitions will start at almost the same time
@@ -479,27 +479,27 @@ automation:
                     light: light.rouve_bedside
                     target_brightness_pct: 40
                     transition_duration: 120
-              - if:
-                  - condition: state
-                    entity_id: input_boolean.baby_sleep_mode
-                    state: "off"
-                then:
-                  - service: script.turn_on
-                    target:
-                      entity_id: script.fade_light
-                    data:
-                      variables:
-                        light: light.hallway
-                        target_brightness_pct: 60
-                        transition_duration: 120
-                  - service: script.turn_on
-                    target:
-                      entity_id: script.fade_light
-                    data:
-                      variables:
-                        light: light.foyer
-                        target_brightness_pct: 60
-                        transition_duration: 120
+              # - if:
+              #     - condition: state
+              #       entity_id: input_boolean.baby_sleep_mode
+              #       state: "off"
+              #   then:
+              - service: script.turn_on
+                target:
+                  entity_id: script.fade_light
+                data:
+                  variables:
+                    light: light.hallway
+                    target_brightness_pct: 60
+                    transition_duration: 120
+              - service: script.turn_on
+                target:
+                  entity_id: script.fade_light
+                data:
+                  variables:
+                    light: light.foyer
+                    target_brightness_pct: 60
+                    transition_duration: 120
             else:
               - service: light.turn_on
                 target:
@@ -511,18 +511,20 @@ automation:
                   entity_id: light.rouve_bedside
                 data:
                   profile: normal_main_bedroom_bedlamps
-              - if:
-                  - condition: state
-                    entity_id: input_boolean.baby_sleep_mode
-                    state: "off"
-                then:
-                  - service: light.turn_on
-                    target:
-                      entity_id:
-                        - light.hallway
-                        - light.foyer
-                    data:
-                      profile: normal_tp_link_rgb
+              # - if:
+              #     - condition: state
+              #       entity_id: input_boolean.baby_sleep_mode
+              #       state: "off"
+              #   then:
+              - service: light.turn_on
+                target:
+                  entity_id:
+                    - light.hallway
+                    - light.foyer
+                data:
+                  profile: normal_tp_link_rgb
+          - delay:
+              minutes: 5
           - condition: template
             value_template: >-
               {% set entity_id = 'climate.main_bedroom_ac' %}

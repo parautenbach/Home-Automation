@@ -1472,12 +1472,30 @@ automation:
   - alias: "Notify When Significant Rain Is Expected"
     id: "aff421a7-d99a-45c2-baa5-710b11d010b9"
     initial_state: true
+    variables:
+      last_changed: "{{ states.binary_sensor.weather_forecast_precipitation_soon.last_changed }}"
     trigger:
-      - platform: state
-        entity_id: binary_sensor.weather_forecast_precipitation_soon
-        from: "off"
-        to: "on"
+      # id is the number of seconds from the previous time slot
+      - platform: time
+        at: "06:30:00"
+        id: "41400"
+      - platform: time
+        at: "12:00:00"
+        id: "19800"
+      - platform: time
+        at: "17:30:00"
+        id: "19800"
+      - platform: time
+        at: "19:00:00"
+        id: "5400"
     condition:
+      - condition: state
+        entity_id: binary_sensor.weather_forecast_precipitation_soon
+        state: "on"
+      # if the sensor changed to on during the last interval
+      - condition: template
+        value_template: >
+          {{ (now() - last_changed | as_datetime).total_seconds() < trigger.id | int(0) }}
       - condition: state
         entity_id: binary_sensor.pieter_present
         state: "on"
@@ -1487,7 +1505,7 @@ automation:
           title: "🌧️ Rain Expected"
           message: >-
             {# must match the sensor's definition #}
-            {% set rain_time = now() + timedelta(hours=12) %}
+            {% set rain_time = last_changed | as_datetime + timedelta(hours=12) %}
             {# later today → tonight → overnight → early morning → early tomorrow → later tomorrow #}
             {% if rain_time.date() == now().date() %}
               {% set time_phrase = "later today" %}

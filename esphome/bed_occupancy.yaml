@@ -17,7 +17,7 @@ esp8266:
 binary_sensor:
   - platform: gpio
     pin:
-      number: D2
+      number: D5
       mode: INPUT_PULLUP
       # pressed => low
       inverted: true

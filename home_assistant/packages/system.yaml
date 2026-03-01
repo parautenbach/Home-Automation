@@ -305,6 +305,7 @@ template:
           {% endif %}
 
   - sensor:
+      # the system monitor integration has a battery status since 2025.12
       - name: "Home Assistant Server Battery Status"
         unique_id: "3159d102-7d9c-4e0c-b3e0-ad2f13eeec3b"
         state: >-

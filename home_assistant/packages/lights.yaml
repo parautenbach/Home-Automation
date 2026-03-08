@@ -154,13 +154,13 @@ template:
 #
 # colour modes by brand/model:
 #   * tp-link lb130:
-#       color_temp, hs
+#       color_temp_kelvin, hs
 #       400-111 mireds (2500-9000 K)
 #   * shelly duo:
-#       color_temp
+#       color_temp_kelvin
 #       370-153 mireds (2700-6500 K)
 #   * shelly duo rgbw:
-#       color_temp, rgb
+#       color_temp_kelvin, rgb
 #       333-153 mireds (3000-6500 K)
 #   * shelly rgbw2:
 #       rgbw
@@ -169,7 +169,7 @@ template:
 #       rgb
 #       (no color_temp_kelvin)
 #   * yeelight (xiaomi mi):
-#       color_temp, hs
+#       color_temp_kelvin, hs
 #       500-153 mireds (2000-6535 K)
 
 # https://company235.com/tools/colour/cie.html
@@ -250,7 +250,7 @@ scenery:
       transition: 0
     # test me
     # - name: bright_shelly_rgbw
-    #   color_temp: 250
+    #   color_temp_kelvin: 4000
     #   brightness: 255  # 100%
     #   transition: 0
     - name: bright_tp_link_rgb

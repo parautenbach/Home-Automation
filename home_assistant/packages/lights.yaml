@@ -1645,7 +1645,7 @@ automation:
         entity_id: light.yard_group
         state: "on"
     action:
-      - service: script.turn_off
+      - service: light.turn_off
         target:
           entity_id: light.yard_group
 

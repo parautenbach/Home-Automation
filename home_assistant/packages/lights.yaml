@@ -270,6 +270,7 @@ scenery:
         - normal_shelly_duo
         - night_shelly_duo_rgb
         - bright_shelly_duo
+      profile_default: normal_shelly_duo
     - entity_id:
         - light.pieter_bedside
         - light.rouve_bedside
@@ -277,6 +278,7 @@ scenery:
         - normal_main_bedroom_bedlamps
         - night_shelly_duo
         - bright_shelly_duo
+      profile_default: normal_main_bedroom_bedlamps
     - entity_id:
         - light.hallway
         - light.foyer
@@ -284,11 +286,13 @@ scenery:
         - normal_tp_link_rgb
         - night_tp_link_rgb
         - bright_tp_link_rgb
+      profile_default: normal_tp_link_rgb
     - entity_id:
         - light.bedroom_bedlamp
       profiles:
         # check
         - normal_shelly_duo
+      profile_default: normal_shelly_duo
   # i know... we don't use the select, hence we just define one group
   #   Tip: It's a good idea to ensure that every scene belonging to a scene group
   #   provides a state for the same set of entities. That way there's no ambiguity

@@ -183,6 +183,13 @@ panel_custom:
     module_url: /local/panel-redirect.js
     config:
       target: /config/automation/dashboard
+  - name: panel-redirect
+    url_path: redirect-entities
+    sidebar_title: Tools
+    sidebar_icon: mdi:hammer-wrench
+    module_url: /local/panel-redirect.js
+    config:
+      target: /config/developer-tools
 
 recorder: !include recorder.yaml
 

@@ -184,7 +184,7 @@ panel_custom:
     config:
       target: /config/automation/dashboard
   - name: panel-redirect
-    url_path: redirect-entities
+    url_path: redirect-tools
     sidebar_title: Tools
     sidebar_icon: mdi:hammer-wrench
     module_url: /local/panel-redirect.js

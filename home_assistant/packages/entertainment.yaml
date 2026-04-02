@@ -174,7 +174,9 @@ script:
       - if:
           - condition: template
             value_template: >-
-              {{ states("media_player.living_room") in ["off"] }}
+              {% set state = states("media_player.living_room") %}
+              {% set last_changed = states.media_player.living_room.last_changed %}
+              {{ state == "off" or (state == "paused" and (now() - last_changed).total_seconds() >= 600) }}
         then:
           # blocking call
           - service: script.entertainment_apple_tv_on
@@ -198,9 +200,22 @@ automation:
     trigger:
       - platform: state
         entity_id: media_player.living_room
-        from:
-          - "off"
+        from: "off"
+      - platform: state
+        entity_id: media_player.living_room
+        from: "paused"
     mode: single
+    condition:
+      - condition: or
+        conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.from_state.state == 'off' }}
+          # annoyingly, even then turning off, the apple tv is sometimes stuck in a paused state
+          - condition: template
+            value_template: >
+              {{ trigger.from_state.state == 'paused' and
+                 (now() - trigger.from_state.last_changed).total_seconds() >= 600 }}
     action:
       - service: script.turn_on
         entity_id: script.samsung_tv_power_on

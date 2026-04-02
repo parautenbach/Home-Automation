@@ -59,7 +59,7 @@ logger:
     # custom_components.multiscrape: debug
 
 lovelace:
-  mode: yaml
+  resource_mode: yaml
   resources:
     # hacs
     - url: /hacsfiles/button-card/button-card.js
@@ -114,6 +114,12 @@ lovelace:
     # manual
     # none
   dashboards:
+    lovelace:
+      mode: yaml
+      filename: ui-lovelace.yaml
+      title: Overview
+      icon: mdi:view-dashboard
+      show_in_sidebar: true
     lovelace-gallery:
       mode: yaml
       filename: ui-gallery.yaml

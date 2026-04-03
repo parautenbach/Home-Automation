@@ -553,6 +553,9 @@ automation:
           - condition: state
             entity_id: alarm_control_panel.home
             state: "disarmed"
+      - condition: state
+        entity_id: input_boolean.skip_next_wake_up_time
+        state: "off"
     actions:
       - action: alarm_control_panel.alarm_disarm
         target:
@@ -583,6 +586,9 @@ automation:
         state: "on"
         for:
           minutes: 30
+      - condition: state
+        entity_id: input_boolean.skip_next_wake_up_time
+        state: "off"
     action:
       - service: climate.turn_off
         target:

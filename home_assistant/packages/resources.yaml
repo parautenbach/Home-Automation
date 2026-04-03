@@ -956,7 +956,7 @@ automation:
             The grid feed has been {{ 'restored after ' ~ after ~ '.' if is_state('binary_sensor.grid_feed', 'on') else 'cut' ~ reason ~ '. Please mind energy usage.' }}
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/resources
+            url: homeassistant://navigate/lovelace-main/resources
             tag: "grid-feed-status"
       - service: homeassistant.update_entity
         target:
@@ -1001,7 +1001,7 @@ automation:
             The electricity feed has been {{ 'restored after ' ~ after ~ '.' if is_state('binary_sensor.electricity_feed', 'on') else 'cut.' }}
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/resources
+            url: homeassistant://navigate/lovelace-main/resources
             tag: "electricity-feed-status"
 
   - alias: "Update Backup Power Warning Light If Grid Feed Status Changed"
@@ -1113,7 +1113,7 @@ automation:
             group: "home-electricity-battery"
             tag: "backup-power-battery-update"
             # https://companion.home-assistant.io/docs/notifications/notifications-basic#replacing
-            url: homeassistant://navigate/lovelace/resources
+            url: homeassistant://navigate/lovelace-main/resources
       - service: input_boolean.turn_on
         target:
           entity_id: input_boolean.battery_notification_governor
@@ -1187,7 +1187,7 @@ automation:
                   message: "{{ message }}"
                   data:
                     group: "home-electricity"
-                    url: homeassistant://navigate/lovelace/resources
+                    url: homeassistant://navigate/lovelace-main/resources
                     push:
                       sound:
                         name: default
@@ -1201,7 +1201,7 @@ automation:
               data:
                 group: "home-electricity"
                 tag: "backup-power-battery-update"
-                url: homeassistant://navigate/lovelace/resources
+                url: homeassistant://navigate/lovelace-main/resources
 
   - alias: "Turn Off Non-essential Appliances When Critical Battery Threshold Reached"
     id: "7de9f0ac-0135-4594-9133-462fad3914fd"
@@ -1250,7 +1250,7 @@ automation:
           message: "{{ message }}"
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/resources
+            url: homeassistant://navigate/lovelace-main/resources
 
   - alias: "Charging From Grid When Not Supposed To"
     id: "085cfb32-deb1-4a04-af50-9dcd5bfaa9c0"
@@ -1282,7 +1282,7 @@ automation:
             The backup power system has been continuously charging from the grid for {{ for_minutes }} min, drawing {{ current_power_with_unit }} currently.
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/resources
+            url: homeassistant://navigate/lovelace-main/resources
             tag: "inverter-battery-temperature"
 
   - alias: "High Inverter Load Alert"
@@ -1559,7 +1559,7 @@ automation:
       #       {% endif %}
       #     data:
       #       group: "home-electricity"
-      #       url: homeassistant://navigate/lovelace/resources
+      #       url: homeassistant://navigate/lovelace-main/resources
       - service: notify.mobile_app_ceres
         data:
           title: "⚙️ Energy"
@@ -1574,7 +1574,7 @@ automation:
             {% endif %}
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/resources
+            url: homeassistant://navigate/lovelace-main/resources
             tag: "charge-mode-update"
       - if:
           - condition: state
@@ -1676,7 +1676,7 @@ automation:
                 The backup power system's current battery charge threshold has been changed to {{ new_threshold }}% with grid charging allowed to protect against loadshedding.
               data:
                 group: "home-electricity"
-                url: homeassistant://navigate/lovelace/resources
+                url: homeassistant://navigate/lovelace-main/resources
         else:
           - service: notify.mobile_app_ceres
             data:
@@ -1685,7 +1685,7 @@ automation:
                 The backup power system's current battery charge threshold and grid charge setting couldn't be changed to protect against loadshedding.
               data:
                 group: "home-electricity"
-                url: homeassistant://navigate/lovelace/resources
+                url: homeassistant://navigate/lovelace-main/resources
                 push:
                   sound:
                     name: default
@@ -1721,7 +1721,7 @@ automation:
             {{ utilisation_message }} The forecast for tomorrow is {{ forecast_tomorrow }} kWh.
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/resources
+            url: homeassistant://navigate/lovelace-main/resources
 
   - alias: "Notify If Charge Shutdown Threshold Changed"
     id: "cc6edc71-cbb9-44e7-972b-a1e6e7589aef"
@@ -1746,7 +1746,7 @@ automation:
             The backup power battery's charge shutdown threshold has been changed from {{ from }}% to {{ to }}% by {{ name }}.
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/resources
+            url: homeassistant://navigate/lovelace-main/resources
             push:
               sound:
                 name: default
@@ -1776,7 +1776,7 @@ automation:
             The backup power battery's charge is at {{ charge }}%, which is 15% below the charge point target ({{ target }}%). Please conserve energy.
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/resources
+            url: homeassistant://navigate/lovelace-main/resources
             push:
               sound:
                 name: default
@@ -1873,7 +1873,7 @@ automation:
             The inverter's battery has been running hot for {{ trigger.for.seconds // 60 }} minutes: It's currently at {{ temperature }} °C and under a load of {{ load }} kW.
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/resources
+            url: homeassistant://navigate/lovelace-main/resources
             tag: "inverter-battery-temperature"
             # push:
             #   sound:
@@ -1908,7 +1908,7 @@ automation:
             The inverter's battery temperature recovered to {{ temperature }} °C after {{ after }} min. The load is {{ load }} kW.
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/resources
+            url: homeassistant://navigate/lovelace-main/resources
             tag: "inverter-battery-temperature"
             # push:
             #   sound:
@@ -1936,7 +1936,7 @@ automation:
             The geyser has been heating for {{ trigger.for.seconds // 60 }} min.
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/resources
+            url: homeassistant://navigate/lovelace-main/resources
             # push:
             #   sound:
             #     name: default
@@ -1966,7 +1966,7 @@ automation:
             The automation for setting charge points has been {{ 'enabled' if is_enabled else 'disabled' }} by {{ name }}.
           data:
             group: "home-electricity"
-            url: homeassistant://navigate/lovelace/resources
+            url: homeassistant://navigate/lovelace-main/resources
             push:
               sound:
                 name: default
@@ -2006,7 +2006,7 @@ automation:
           message: "The tenant's power consumption has been {{ power }} kW for {{ minutes }} min while on backup power."
           data:
             group: "tenant-electricity"
-            url: homeassistant://navigate/lovelace/resources
+            url: homeassistant://navigate/lovelace-main/resources
             push:
               sound:
                 name: default

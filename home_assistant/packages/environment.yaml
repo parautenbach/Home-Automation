@@ -1219,7 +1219,7 @@ automation:
             {# updates are never just 1 day apart; ignoring the singular case #}
             Dam levels {{ update }} over the past {{ days_since }} days. Last year it was at {{ previous_year_dam_levels }}%.
           data:
-            url: homeassistant://navigate/lovelace/environment
+            url: homeassistant://navigate/lovelace-main/environment
             group: "environment"
 
   - alias: "Pollen Levels Update"
@@ -1307,7 +1307,7 @@ automation:
             {%- endfor %}
           data:
             group: "environment"
-            url: homeassistant://navigate/lovelace/environment
+            url: homeassistant://navigate/lovelace-main/environment
 
   - alias: "High UV Notification"
     id: "101c7f2d-6839-4a8c-be1a-0de46ed70477"
@@ -1331,7 +1331,7 @@ automation:
           data:
             group: "environment"
             tag: "environment-uv"
-            url: homeassistant://navigate/lovelace/environment
+            url: homeassistant://navigate/lovelace-main/environment
 
   - alias: "High Fire Risk Notification"
     id: "657e1700-f69f-416e-9b62-269d702e8a38"
@@ -1349,7 +1349,7 @@ automation:
             The risk of fires is high. FDI: {{ states('sensor.winelands_fdi') }}.
           data:
             group: "environment"
-            url: homeassistant://navigate/lovelace/environment
+            url: homeassistant://navigate/lovelace-main/environment
 
   - alias: "Weather Alert Notification"
     id: "c0b01006-be9e-41e9-b1b5-adafc3ecae1b"
@@ -1402,7 +1402,7 @@ automation:
                         message: "{{ message }}"
                         data:
                           group: "weather"
-                          url: homeassistant://navigate/lovelace/environment
+                          url: homeassistant://navigate/lovelace-main/environment
                           push:
                             sound:
                               name: default
@@ -1415,7 +1415,7 @@ automation:
                     message: "{{ message }}"
                     data:
                       group: "weather"
-                      url: homeassistant://navigate/lovelace/environment
+                      url: homeassistant://navigate/lovelace-main/environment
 
   # polling should be turned off for this sql sensor (via the ui)
   # https://github.com/home-assistant/core/issues/71563
@@ -1522,5 +1522,5 @@ automation:
             {% endif %}
             Rain is expected {{ time_phrase }}. Plan accordingly.
           data:
-            url: homeassistant://navigate/lovelace/environment
+            url: homeassistant://navigate/lovelace-main/environment
             group: "environment"

@@ -271,7 +271,7 @@ automation:
             {{ 'There seems to be' if problem else 'There seems to have been' }} a problem with the Internet connection{{ '.' if problem else ' for ' ~  duration ~ '.' }}
           data:
             group: "home-internet"
-            url: homeassistant://navigate/lovelace/internet
+            url: homeassistant://navigate/lovelace-main/internet
             tag: "internet-status"
 
   - alias: "Detect When Extender Disconnected"
@@ -343,7 +343,7 @@ automation:
                     The {{ extender_name }} was unavailable for {{ minutes }} min.
                   data:
                     group: "home-internet"
-                    url: homeassistant://navigate/lovelace/internet
+                    url: homeassistant://navigate/lovelace-main/internet
                     tag: "{{ trigger.entity_id }}"
       # add a wait for here?
       - service: timer.cancel
@@ -380,7 +380,7 @@ automation:
             The {{ extender_name }} became unavailable {{ minutes }} min ago.
           data:
             group: "home-internet"
-            url: homeassistant://navigate/lovelace/internet
+            url: homeassistant://navigate/lovelace-main/internet
             tag: >-
               {% set binary_sensor_entity_id = trigger.event.data.entity_id | replace('timer', 'binary_sensor') | replace('_disconnected', '') %}
               {{ binary_sensor_entity_id }}

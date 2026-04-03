@@ -419,7 +419,7 @@ automation:
           message: "{{ message }}"
           data:
             group: "home-security"
-            url: homeassistant://navigate/lovelace/security
+            url: homeassistant://navigate/lovelace-main/security
             push:
               sound:
                 name: default
@@ -469,7 +469,7 @@ automation:
           data:
             group: "home-security"
             tag: "arm-alarm-reminder"
-            url: homeassistant://navigate/lovelace/security
+            url: homeassistant://navigate/lovelace-main/security
             actions:
               - action: "ARM_ALARM"
                 title: "Arm (full)"
@@ -530,7 +530,7 @@ automation:
               data:
                 group: "home-security"
                 tag: "arm-alarm-reminder"
-                url: homeassistant://navigate/lovelace/security
+                url: homeassistant://navigate/lovelace-main/security
                 actions:
                   - action: "DISARM_ALARM"
                     title: "Disarm"
@@ -623,7 +623,7 @@ automation:
           data:
             group: "home-security"
             tag: "arm-alarm-reminder"
-            url: homeassistant://navigate/lovelace/security
+            url: homeassistant://navigate/lovelace-main/security
             actions:
               - action: "ARM_STAY_ALARM"
                 title: "Arm (stay)"
@@ -746,7 +746,7 @@ automation:
                       message: "{{ message }}"
                       data:
                         group: "home-security"
-                        url: homeassistant://navigate/lovelace/security
+                        url: homeassistant://navigate/lovelace-main/security
                         actions:
                           - action: "ARM_ALARM"
                             title: "Arm"
@@ -762,7 +762,7 @@ automation:
                       message: "{{ message }}"
                       data:
                         group: "home-security"
-                        url: homeassistant://navigate/lovelace/security
+                        url: homeassistant://navigate/lovelace-main/security
                         actions:
                           - action: "ARM_ALARM"
                             title: "Arm (full)"
@@ -792,7 +792,7 @@ automation:
                   message: "{{ message }}"
                   data:
                     group: "home-security"
-                    url: homeassistant://navigate/lovelace/security
+                    url: homeassistant://navigate/lovelace-main/security
                     actions:
                       - action: "DISARM_ALARM"
                         title: "Disarm"

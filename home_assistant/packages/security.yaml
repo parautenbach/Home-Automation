@@ -406,7 +406,7 @@ automation:
           message: "Motion detected!"
           data:
             group: "security-camera-snapshots"
-            url: homeassistant://navigate/lovelace/security
+            url: homeassistant://navigate/lovelace-main/security
             attachment:
               # url: https://geoexpressinternational.com/wp-content/plugins/webp-express/test/test-pattern-tv.jpg
               url: !secret security_camera_last_snapshot_url
@@ -592,7 +592,7 @@ automation:
                     data:
                       # group notifications by the timer entity
                       group: "timer.{{ repeat.item | replace('cover.', '') }}_timer"
-                      url: homeassistant://navigate/lovelace/main
+                      url: homeassistant://navigate/lovelace-main/main
                       actions:
                         - action: "CLOSE_COVER"
                           title: "Close now"
@@ -689,7 +689,7 @@ automation:
             # group notifications by the timer entity
             group: "{{ trigger.event.data.entity_id }}"
             tag: "{{ trigger.event.data.entity_id }}"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main
             actions:
               - action: "CLOSE_COVER"
                 title: "Close now"
@@ -847,7 +847,7 @@ automation:
             # cover.garage_doors_rhs -> timer.garage_doors_rhs_timer
             group: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
             tag: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main
 
   - alias: "Alert If Garages Opened Or Closed When Not Supposed To"
     id: "ad4db54e-fbb3-4377-9711-4731d58da0f5"
@@ -898,7 +898,7 @@ automation:
                   message: "{{ message }}"
                   data:
                     group: "{{ trigger.entity_id }}"
-                    url: homeassistant://navigate/lovelace/security
+                    url: homeassistant://navigate/lovelace-main/security
                     actions:
                       - action: "CLOSE_COVER"
                         title: "Close now"
@@ -914,7 +914,7 @@ automation:
               message: "{{ message }}"
               data:
                 group: "{{ trigger.entity_id }}"
-                url: homeassistant://navigate/lovelace/security
+                url: homeassistant://navigate/lovelace-main/security
 
   - alias: "Alert If Gate Opened Or Closed When Not Supposed To"
     id: "62a52103-4d0d-429e-a59a-fc674d72f3ee"
@@ -970,7 +970,7 @@ automation:
                   message: "{{ message }}"
                   data:
                     group: "{{ trigger.entity_id }}"
-                    url: homeassistant://navigate/lovelace/security
+                    url: homeassistant://navigate/lovelace-main/security
                     # https://companion.home-assistant.io/docs/notifications/actionable-notifications#building-notification-action-scripts
                     actions:
                       - action: "CLOSE_COVER"
@@ -987,7 +987,7 @@ automation:
               message: "{{ message }}"
               data:
                 group: "{{ trigger.entity_id }}"
-                url: homeassistant://navigate/lovelace/main
+                url: homeassistant://navigate/lovelace-main/main
 
   - alias: "Alert When Smoke Detected"
     id: "3f2d5457-34db-464f-88d2-515fbb3e202a"
@@ -1055,7 +1055,7 @@ automation:
             {{ prefix }} Smoke has been detected in the {{ area }}!
           data:
             group: "home-safety"
-            url: homeassistant://navigate/lovelace/security
+            url: homeassistant://navigate/lovelace-main/security
             push:
               sound:
                 name: default
@@ -1130,7 +1130,7 @@ automation:
                     data:
                       group: "home-safety"
                       tag: "{{ repeat.item | replace('binary_sensor.', '') ~ '-test' }}"
-                      url: homeassistant://navigate/lovelace/security
+                      url: homeassistant://navigate/lovelace-main/security
 
   - alias: "Alert When Cabinet Opened"
     id: "f9a95e6c-e0bf-45a4-bf5c-3b774ff3fd47"
@@ -1161,7 +1161,7 @@ automation:
                     The backup power system's cabinet has been opened unexpectedly!
                   data:
                     group: "home-security"
-                    url: homeassistant://navigate/lovelace/security
+                    url: homeassistant://navigate/lovelace-main/security
                     push:
                       sound:
                         name: default
@@ -1175,7 +1175,7 @@ automation:
                 The backup power system's cabinet has been opened.
               data:
                 group: "home-security"
-                url: homeassistant://navigate/lovelace/security
+                url: homeassistant://navigate/lovelace-main/security
 
   - alias: "Track Motion At Doorbell"
     id: "bec7c2b6-265a-41b1-80c8-48a999f65d35"

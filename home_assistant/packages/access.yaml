@@ -301,7 +301,7 @@ automation:
               message: "The doorbell rang."
               data:
                 group: "doorbell"
-                url: homeassistant://navigate/lovelace/security
+                url: homeassistant://navigate/lovelace-main/security
                 sound:
                   name: "Doorbell.caf"
                   critical: 1
@@ -326,7 +326,7 @@ automation:
               message: "The doorbell rang. (No image available.)"
               data:
                 group: "doorbell"
-                url: homeassistant://navigate/lovelace/security
+                url: homeassistant://navigate/lovelace-main/security
                 sound:
                   name: "Doorbell.caf"
                   critical: 1

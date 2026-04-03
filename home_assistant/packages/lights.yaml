@@ -1295,7 +1295,7 @@ automation:
             {%- endfor %}
           data:
             group: "lights"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main
             actions:
               - action: "LIGHTS_OFF"
                 title: "Turn off all"

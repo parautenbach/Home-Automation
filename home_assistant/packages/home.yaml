@@ -262,7 +262,7 @@ script:
           message: "Pieter left work and will be home at {{ (now().timestamp() + (states('sensor.google_travel_time') | float - 5)*60) | timestamp_custom('%H:%M', True) }}."
           data:
             group: "travel-eta"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main
   notify_tenant:
     fields:
       message:
@@ -686,7 +686,7 @@ automation:
           title: "⏰ Routine Reminder"
           message: "Remember to check the pets’ food and water, and to leave a window open for the cats."
           data:
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main
             sound:
               name: default
               critical: 1
@@ -846,7 +846,7 @@ automation:
                 title: "Disable"
             # use threads but don't replace: we want to see whenever the state changed
             group: "contractor-mode"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main
 
   - alias: "Contractor Mode Disabled Alert"
     id: "123e8e79-6f0e-48f5-a400-951922bf9b80"
@@ -865,7 +865,7 @@ automation:
               - action: "ENABLE_CONTRACTOR_MODE"
                 title: "Enable"
             group: "contractor-mode"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main
 
   - alias: "Enable Contractor Mode"
     id: "47fc96f9-bf33-4f9e-97ed-8aaea4da1a12"
@@ -985,7 +985,7 @@ automation:
               - action: "DISABLE_CONTRACTOR_MODE"
                 title: "Disable"
             group: "contractor-mode"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main
 
   - alias: "Disable Contractor Mode From Alert Action"
     id: "496603d1-c6b1-46c0-9048-8601edd627d4"
@@ -1044,7 +1044,7 @@ automation:
               - action: "DISABLE_GUEST_MODE"
                 title: "Disable"
             group: "guest-mode"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main
 
   - alias: "Guest Mode Disabled Alert"
     id: "f0aff94c-3b99-4917-b399-6f709cdbf80b"
@@ -1063,7 +1063,7 @@ automation:
               - action: "ENABLE_GUEST_MODE"
                 title: "Enable"
             group: "guest-mode"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main
 
   - alias: "Enable Guest Mode From Alert Action"
     id: "cfeb5963-4854-439b-952e-f1ac37fd125d"
@@ -1133,7 +1133,7 @@ automation:
           message: "Wake-up lights will be suspended from tomorrow until {{ states('input_datetime.vacation_end') }}."
           data:
             group: "routine-change"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main
 
   - alias: "Alert Vacation End"
     id: "e1ce2573-356f-467d-93e4-c7bcb541db9a"
@@ -1166,7 +1166,7 @@ automation:
           message: "Wake-up lights will be resumed from tomorrow at {{ states('input_datetime.wake_up_time')[:5] }}."
           data:
             group: "routine-change"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main
 
   # https://developers.google.com/maps/documentation/routes/reference/rest/v2/TopLevel/computeRoutes#request-body
   #
@@ -1256,7 +1256,7 @@ automation:
           message: "Motion detected!"
           data:
             group: "nursery"
-            url: homeassistant://navigate/lovelace/baby
+            url: homeassistant://navigate/lovelace-main/baby
             # https://companion.home-assistant.io/docs/notifications/dynamic-content
             # just using a thumbnail instead
             # entity_id: camera.baby_monitor_profile000
@@ -1369,7 +1369,7 @@ automation:
                       #   wanted_state: "foo"
                       group: "routine-bedtime"
                       tag: "routine-bedtime"
-                      url: homeassistant://navigate/lovelace/baby
+                      url: homeassistant://navigate/lovelace-main/baby
                       push:
                         sound:
                           name: default
@@ -1402,7 +1402,7 @@ automation:
                           title: "Disable"
                       group: "routine-bedtime"
                       tag: "routine-bedtime"
-                      url: homeassistant://navigate/lovelace/baby
+                      url: homeassistant://navigate/lovelace-main/baby
                       push:
                         sound:
                           name: default
@@ -1582,7 +1582,7 @@ automation:
                 title: "Enable"
             group: "routine-bedtime"
             tag: "routine-bedtime"
-            url: homeassistant://navigate/lovelace/baby
+            url: homeassistant://navigate/lovelace-main/baby
 
   - alias: "Update Baby Sleep Session Counter"
     id: "3d9714c9-dc53-4114-8df8-49a6efc98cc6"
@@ -1696,7 +1696,7 @@ automation:
   #           Please check the filter in the {{ name }}.
   #         data:
   #           group: "maintenance"
-  #           url: homeassistant://navigate/lovelace/main
+  #           url: homeassistant://navigate/lovelace-main/main
 
   - alias: "Turn Off AC Display"
     id: "75417e23-4953-49e4-ae38-2e6833081120"
@@ -1979,7 +1979,7 @@ automation:
 
             It's {{ inside_temp }} inside ({{ inside_perception }}) and {{ outside_temp }} outside ({{ outside_perception }}).
           data:
-            url: homeassistant://navigate/lovelace/environment
+            url: homeassistant://navigate/lovelace-main/environment
             group: "home-climate"
             push:
               sound:
@@ -2307,7 +2307,7 @@ automation:
               data:
                 group: "routine-trash"
                 tag: "routine-trash"
-                url: homeassistant://navigate/lovelace/main
+                url: homeassistant://navigate/lovelace-main/main
                 push:
                   sound:
                     name: default
@@ -2328,7 +2328,7 @@ automation:
                     destructive: true
                 group: "routine-trash"
                 tag: "routine-trash"
-                url: homeassistant://navigate/lovelace/main
+                url: homeassistant://navigate/lovelace-main/main
                 push:
                   sound:
                     name: default
@@ -2375,7 +2375,7 @@ automation:
               data:
                 group: "routine-recycling"
                 tag: "routine-recycling"
-                url: homeassistant://navigate/lovelace/main
+                url: homeassistant://navigate/lovelace-main/main
                 push:
                   sound:
                     name: default
@@ -2396,7 +2396,7 @@ automation:
                     destructive: true
                 group: "routine-recycling"
                 tag: "routine-recycling"
-                url: homeassistant://navigate/lovelace/main
+                url: homeassistant://navigate/lovelace-main/main
                 push:
                   sound:
                     name: default
@@ -2467,7 +2467,7 @@ automation:
           data:
             group: "routine-go-home"
             tag: "routine-go-home"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main
             push:
               sound:
                 name: default
@@ -2586,7 +2586,7 @@ automation:
           data:
             group: "routine-bedtime"
             tag: "routine-bedtime"
-            url: homeassistant://navigate/lovelace/baby
+            url: homeassistant://navigate/lovelace-main/baby
 
   # icon options and combos for the 3 automations below: 🍽️✨ / 🧺💧 / 👕☀️ / 🧺♨️ / ☀️💨
   - alias: "Notify When Washing Machine Is Done"
@@ -2610,7 +2610,7 @@ automation:
           data:
             group: "chores"
             tag: "chores-washing-machine"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main
 
   - alias: "Notify When Tumble Dryer Is Done"
     id: "4adc04b0-cbac-43cf-ae0f-aa9a224204d5"
@@ -2638,7 +2638,7 @@ automation:
           data:
             group: "chores"
             tag: "chores-tumble-dryer"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main
 
   - alias: "Notify When Dishwasher Is Done"
     id: "b3c48682-caec-480e-a417-9138703de430"
@@ -2661,7 +2661,7 @@ automation:
           data:
             group: "chores"
             tag: "chores-dishwasher"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main
 
   - alias: "Enable Large Appliance Cleaning Reminders"
     id: "90b46a3f-f909-4208-a65c-02b3daf5b3ca"
@@ -2705,7 +2705,7 @@ automation:
                 destructive: true
             group: "routine-tumble-dryer"
             tag: "routine-tumble-dryer"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main
 
   - alias: "Clean Dishwasher Filter"
     id: "08f2c851-8775-498e-b2ff-ee570c00cf9d"
@@ -2733,4 +2733,4 @@ automation:
                 destructive: true
             group: "routine-dishwasher"
             tag: "routine-dishwasher"
-            url: homeassistant://navigate/lovelace/main
+            url: homeassistant://navigate/lovelace-main/main

@@ -50,7 +50,7 @@ badges:
     show_name: false
     show_state: true
   - type: entity
-    entity: sensor.watchman_missing_services
+    entity: sensor.watchman_missing_actions
     show_icon: true
     show_name: false
     show_state: true

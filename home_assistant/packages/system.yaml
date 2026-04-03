@@ -28,8 +28,8 @@ homeassistant:
       icon: mdi:store
     sensor.watchman_missing_entities:
       friendly_name: Missing Entities
-    sensor.watchman_missing_services:
-      friendly_name: Missing Services
+    sensor.watchman_missing_actions:
+      friendly_name: Missing Actions
     sensor.network_throughput_in_enp3s0:
       icon: mdi:download-network-outline
     sensor.network_throughput_out_enp3s0:

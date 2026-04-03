@@ -467,9 +467,7 @@ cards:
         entities:
           grid:
             entity:
-              # this sensor doesn't actually exist; it seems the card interprets an unknown sensor as zero
-              # we just want this line drawn, even though we don't export
-              production: sensor.zero
+              production: sensor.zero_energy
               consumption: sensor.daily_grid_energy_consumption
           battery:
             entity:

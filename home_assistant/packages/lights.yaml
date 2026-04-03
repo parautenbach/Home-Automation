@@ -1298,7 +1298,9 @@ automation:
             url: homeassistant://navigate/lovelace-main/main
             actions:
               - action: "LIGHTS_OFF"
-                title: "Turn off all"
+                title: "Turn off"
+                data:
+                  entity_id: "{{ remaining_lights }}"
             sound:
               name: default
               critical: 1
@@ -1312,9 +1314,11 @@ automation:
         event_data:
           action: LIGHTS_OFF
     action:
+      - variables:
+          lights: "{{ trigger.event.data.entity_id }}"
       - service: light.turn_off
         target:
-          entity_id: "{{ states.light | selectattr('state', 'eq', 'on') | rejectattr('attributes.entity_id', 'defined') | map(attribute='entity_id') | list }}"
+          entity_id: "{{ lights }}"
 
   - alias: "Hallway Light Off When Bedroom Lights Off"
     id: "d6a989ae-c951-4b0e-baab-cdd49b44269e"

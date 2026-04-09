@@ -66,7 +66,7 @@ async function createWidget() {
 
     const widget = new ListWidget();
     widget.backgroundColor = new Color(colorCode, 1.0);
-    widget.url = "homeassistant://navigate/lovelace/resources";
+    widget.url = "homeassistant://navigate/lovelace-main/resources";
 
     const header = widget.addStack();
 

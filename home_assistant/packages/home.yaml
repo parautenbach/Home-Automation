@@ -1285,18 +1285,19 @@ automation:
 
   - alias: "Update Sleep Mode Based On Bed Occupancy"
     id: "106574a8-11b2-4679-aff1-f5b25b8e0b74"
-    initial_state: true
+    # the pressure pad isn't detecting presence reliably, atm
+    initial_state: false
     trigger:
       - platform: state
         entity_id: binary_sensor.bed_occupancy_bed_occupied
         to: "on"
         for:
-          seconds: 10
+          seconds: 30
       - platform: state
         entity_id: binary_sensor.bed_occupancy_bed_occupied
         to: "off"
         for:
-          seconds: 10
+          seconds: 30
     action:
       - service: "input_boolean.turn_{{ trigger.to_state.state }}"
         target:
@@ -1441,6 +1442,15 @@ automation:
       - platform: state
         entity_id: input_boolean.baby_sleep_mode
         to: "off"
+    condition:
+      condition: or
+      conditions:
+        - condition: time
+          after: "05:45:00"
+          before: "07:00:00"
+        - condition: time
+          after: "14:15:00"
+          before: "15:15:00"
     action:
       - if:
           - "{{ is_state('timer.bedroom_bedlamp_timer', 'active') }}"
@@ -1448,7 +1458,6 @@ automation:
           - service: timer.cancel
             target:
               entity_id: timer.bedroom_bedlamp_timer
-      # but not during certain times?
       - service: light.turn_on
         target:
           entity_id: light.bedroom_bedlamp

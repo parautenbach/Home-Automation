@@ -1492,10 +1492,15 @@ automation:
       - condition: time
         after: "18:55:00"
     actions:
-      - service: light.turn_off
+      - service: light.turn_on
         target:
           entity_id:
             - light.hallway
+        data:
+          profile: low_tp_link_rgb
+      - service: light.turn_off
+        target:
+          entity_id:
             - light.foyer
             - light.music_room
 

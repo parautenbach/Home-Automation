@@ -198,7 +198,6 @@ template:
     sensor:
       # https://community.home-assistant.io/t/trigger-an-automation-based-on-a-groups-individual-entity-state-change/383560/2
       # https://community.home-assistant.io/t/single-automation-for-all-lights/375028/7
-      # make trigger-based!
       - name: Number of Flat Batteries
         icon: mdi:battery-alert-variant-outline
         state: >

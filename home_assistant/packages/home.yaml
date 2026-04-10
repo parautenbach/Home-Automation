@@ -954,6 +954,9 @@ automation:
     trigger:
       - platform: time
         at: "16:00:00"
+      - platform: state
+        entity_id: alarm_control_panel.home
+        to: "armed_away"
       - platform: homeassistant
         event: start
     condition:

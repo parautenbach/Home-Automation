@@ -177,116 +177,130 @@ cards:
           #     service: shell_command.mute_smoke_alarm  # or another script
           #     data:
           #       host: shellyflood...
-      - type: custom:home-feed-card
+      - type: horizontal-stack
         title: Events
-        show_empty: true
-        max_item_count: 20
-        state_color: false
-        compact_mode: true
-        show_icons: false
-        max_height: 14em
-        entities:
-          - entity: binary_sensor.doorbell_rang
-            include_history: true
-            max_history: 5
-            remove_repeats: false
-            exclude_states:
-              - "off"
-              - "unknown"
-              - "unavailable"
-            format: datetime
-            content_template: "Doorbell rang"
-          - entity: cover.main_gate
-            include_history: true
-            max_history: 5
-            remove_repeats: false
-            exclude_states:
-              - "closed"
-              - "unknown"
-              - "unavailable"
-            format: datetime
-            state_map:
-              open: "opened"
-            content_template: "Main gate {{state}}"
-          - entity: cover.garage_doors_lhs
-            include_history: true
-            max_history: 5
-            remove_repeats: false
-            exclude_states:
-              - "closed"
-              - "unknown"
-              - "unavailable"
-            format: datetime
-            state_map:
-              open: "opened"
-            content_template: "Rouvé's garage door {{state}}"
-          - entity: cover.garage_doors_rhs
-            include_history: true
-            max_history: 5
-            remove_repeats: false
-            exclude_states:
-              - "closed"
-              - "unknown"
-              - "unavailable"
-            format: datetime
-            state_map:
-              open: "opened"
-            content_template: "Pieter's garage door {{state}}"
-          - entity: alarm_control_panel.home
-            include_history: true
-            max_history: 5
-            remove_repeats: false
-            exclude_states:
-              - "unknown"
-              - "unavailable"
-            format: datetime
-            state_map:
-              disarmed: "disarmed"
-              armed_home: "armed (stay)"
-              armed_away: "armed"
-            content_template: "Home alarm was {{state}}"
-          - entity: alarm_control_panel.flatlet
-            include_history: true
-            max_history: 5
-            remove_repeats: false
-            exclude_states:
-              - "unknown"
-              - "unavailable"
-            format: datetime
-            state_map:
-              disarmed: "disarmed"
-              armed_away: "armed"
-            content_template: "Flatlet alarm was {{state}}"
-          - entity: binary_sensor.kitchen_smoke
-            include_history: true
-            max_history: 5
-            remove_repeats: false
-            exclude_states:
-              - "off"
-              - "unknown"
-              - "unavailable"
-            format: datetime
-            content_template: "Smoke was detected in the kitchen"
-          - entity: binary_sensor.garage_smoke
-            include_history: true
-            max_history: 5
-            remove_repeats: false
-            exclude_states:
-              - "off"
-              - "unknown"
-              - "unavailable"
-            format: datetime
-            content_template: "Smoke was detected in the garage"
-          - entity: binary_sensor.braai_room_smoke
-            include_history: true
-            max_history: 5
-            remove_repeats: false
-            exclude_states:
-              - "off"
-              - "unknown"
-              - "unavailable"
-            format: datetime
-            content_template: "Smoke was detected in the braai room"
+        cards:
+          - type: custom:home-feed-card
+            # fix heading font/size
+            # title: Events
+            show_empty: true
+            max_item_count: 20
+            state_color: false
+            compact_mode: true
+            show_icons: false
+            max_height: 14em
+            entities:
+              - entity: binary_sensor.doorbell_rang
+                include_history: true
+                max_history: 5
+                remove_repeats: false
+                exclude_states:
+                  - "off"
+                  - "unknown"
+                  - "unavailable"
+                format: datetime
+                content_template: "Doorbell rang"
+              - entity: cover.main_gate
+                include_history: true
+                max_history: 5
+                remove_repeats: false
+                exclude_states:
+                  - "closed"
+                  - "unknown"
+                  - "unavailable"
+                format: datetime
+                state_map:
+                  open: "opened"
+                content_template: "Main gate {{state}}"
+              - entity: cover.garage_doors_lhs
+                include_history: true
+                max_history: 5
+                remove_repeats: false
+                exclude_states:
+                  - "closed"
+                  - "unknown"
+                  - "unavailable"
+                format: datetime
+                state_map:
+                  open: "opened"
+                content_template: "Rouvé's garage door {{state}}"
+              - entity: cover.garage_doors_rhs
+                include_history: true
+                max_history: 5
+                remove_repeats: false
+                exclude_states:
+                  - "closed"
+                  - "unknown"
+                  - "unavailable"
+                format: datetime
+                state_map:
+                  open: "opened"
+                content_template: "Pieter's garage door {{state}}"
+              - entity: alarm_control_panel.home
+                include_history: true
+                max_history: 5
+                remove_repeats: false
+                exclude_states:
+                  - "unknown"
+                  - "unavailable"
+                format: datetime
+                state_map:
+                  disarmed: "disarmed"
+                  armed_home: "armed (stay)"
+                  armed_away: "armed"
+                content_template: "Home alarm was {{state}}"
+              - entity: alarm_control_panel.flatlet
+                include_history: true
+                max_history: 5
+                remove_repeats: false
+                exclude_states:
+                  - "unknown"
+                  - "unavailable"
+                format: datetime
+                state_map:
+                  disarmed: "disarmed"
+                  armed_away: "armed"
+                content_template: "Flatlet alarm was {{state}}"
+              - entity: binary_sensor.kitchen_smoke
+                include_history: true
+                max_history: 5
+                remove_repeats: false
+                exclude_states:
+                  - "off"
+                  - "unknown"
+                  - "unavailable"
+                format: datetime
+                content_template: "Smoke was detected in the kitchen"
+              - entity: binary_sensor.garage_smoke
+                include_history: true
+                max_history: 5
+                remove_repeats: false
+                exclude_states:
+                  - "off"
+                  - "unknown"
+                  - "unavailable"
+                format: datetime
+                content_template: "Smoke was detected in the garage"
+              - entity: binary_sensor.braai_room_smoke
+                include_history: true
+                max_history: 5
+                remove_repeats: false
+                exclude_states:
+                  - "off"
+                  - "unknown"
+                  - "unavailable"
+                format: datetime
+                content_template: "Smoke was detected in the braai room"
+              - entity: binary_sensor.scullery_flooding
+                include_history: true
+                max_history: 5
+                remove_repeats: false
+                exclude_states:
+                  - "off"
+                  - "unknown"
+                  - "unavailable"
+                format: datetime
+                content_template: "Water was detected in the scullery"
       - type: entities
         title: "Gates & Doors"
         show_header_toggle: false

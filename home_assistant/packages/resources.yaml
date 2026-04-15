@@ -1260,18 +1260,26 @@ automation:
         entity_id: sensor.electricity_pulse_counter_current_power
         # to use this value in a template, provide an input_number here
         above: 500
-        for:
-          minutes: 1
-    condition:
+    action:
+      # capture soc values immediately
+      - variables:
+          soc_at_trigger: "{{ states('sensor.battery_state_of_charge') | int(0) }}"
+          threshold: "{{ states('sensor.capacity_charge_point') | int(0) }}"
+      # observation window
+      - delay: "00:01:00"
+      # ensure it's still happening
+      - condition: numeric_state
+        entity_id: sensor.electricity_pulse_counter_current_power
+        above: 500
+      # prevent a false positive should we change the charge point status while high power is being drawn
       - condition: state
         entity_id: binary_sensor.grid_charge_point_status
         state: "off"
-        # prevent a false positive should we change the charge point status while high power is being drawn
         for:
           minutes: 5
+      # this is what we really want to check: grid power is being drawn while there is battery
       - condition: template
-        value_template: "{{ states('sensor.battery_state_of_charge') | int(0) > states('sensor.capacity_charge_point') | int(0) }}"
-    action:
+        value_template: "{{ soc_at_trigger > threshold }}"
       - service: notify.mobile_app_ceres
         data:
           title: "⚠️ Energy"

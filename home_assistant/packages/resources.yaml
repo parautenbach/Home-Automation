@@ -1252,7 +1252,7 @@ automation:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace-main/resources
 
-  - alias: "Charging From Grid When Not Supposed To"
+  - alias: "Grid Charge Violation"
     id: "085cfb32-deb1-4a04-af50-9dcd5bfaa9c0"
     initial_state: true
     trigger:

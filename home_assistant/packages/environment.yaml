@@ -1175,6 +1175,34 @@ rest:
           }}
         device_class: timestamp
 
+  # cannot get the gis query to work
+  # - resource: "https://services6.arcgis.com/nyYfO9SxHU2ChQd9/ArcGIS/rest/services/Dam_Levels_from_2000/FeatureServer/0/query?where=1%3D1&objectIds=&resultType=none&outFields=&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=false&collation=&orderByFields=&groupByFieldsForStatistics=&returnAggIds=false&outStatistics=&having=&resultOffset=&resultRecordCount=1&sqlFormat=none&f=json"
+  #   scan_interval: 21600  # 6 hours (adjust as needed)
+  #   sensor:
+  #     - name: "WC Dam Report Date"
+  #       value_template: >
+  #         {{ value_json.features[0].attributes.DATE }}
+  #     - name: "Berg River Dam Current"
+  #       unit_of_measurement: "%"
+  #       value_template: >
+  #         {{ value_json.features[0].attributes.BERG_RIVER_Current__ | round(1) }}
+  #     - name: "Theewaterskloof Current"
+  #       unit_of_measurement: "%"
+  #       value_template: >
+  #         {{ value_json.features[0].attributes.THEEWATERSKLOOF_Current | round(1) }}
+  #     - name: "Voelvlei Current"
+  #       unit_of_measurement: "%"
+  #       value_template: >
+  #         {{ value_json.features[0].attributes['VOËLVLEI__Current__'] | round(1) }}
+  #     - name: "Wemmershoek Current"
+  #       unit_of_measurement: "%"
+  #       value_template: >
+  #         {{ value_json.features[0].attributes.WEMMERSHOEK_Current_ | round(1) }}
+  #     - name: "WC Big 6 Total"
+  #       unit_of_measurement: "%"
+  #       value_template: >
+  #         {{ value_json.features[0].attributes.TOTAL_STORED___BIG_6_Current | round(1) }}
+
 automation:
   # note: the individual dam levels and other meta data is parsed via the file integration (set up via the ui)
   - alias: "Download Dam Levels Data"

@@ -205,36 +205,27 @@ cards:
                 max_history: 5
                 remove_repeats: false
                 exclude_states:
-                  - "closed"
                   - "unknown"
                   - "unavailable"
                 format: datetime
-                state_map:
-                  open: "opened"
                 content_template: "Main gate {{state}}"
               - entity: cover.garage_doors_lhs
                 include_history: true
                 max_history: 5
                 remove_repeats: false
                 exclude_states:
-                  - "closed"
                   - "unknown"
                   - "unavailable"
                 format: datetime
-                state_map:
-                  open: "opened"
                 content_template: "Rouvé's garage door {{state}}"
               - entity: cover.garage_doors_rhs
                 include_history: true
                 max_history: 5
                 remove_repeats: false
                 exclude_states:
-                  - "closed"
                   - "unknown"
                   - "unavailable"
                 format: datetime
-                state_map:
-                  open: "opened"
                 content_template: "Pieter's garage door {{state}}"
               - entity: alarm_control_panel.home
                 include_history: true

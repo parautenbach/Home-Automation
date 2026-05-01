@@ -663,6 +663,22 @@ template:
         device_class: energy
         state_class: total_increasing
         state: "{{ states('input_number.backup_power_system_overhead_energy') | float(0) }}"
+  - binary_sensor:
+      - name: "Grid Charging Violation"
+        unique_id: "55d6becc-ba79-45a8-872d-35b299d5cc70"
+        device_class: problem
+        state: >-
+          {% set grid_power = states('sensor.grid_power') | float(0) %}
+          {% set home_power = states('sensor.electricity_pulse_counter_current_power') | float(0) %}
+          {% set pv_power = states('sensor.pv_power') | float(0) %}
+          {% set battery_soc = states('sensor.battery_state_of_charge') | int(0) %}
+          {% set threshold = states('sensor.capacity_charge_point') | int(0) %}
+          {% set charging_allowed = is_state('binary_sensor.grid_charge_point_status', 'on') %}
+          {# grid_power > 200        => ignore trickles #}
+          {# not charging_allowed    => grid charging is off for the time slot (may not charge up to threshold) #}
+          {# battery_soc > threshold => there is battery #}
+          {# pv_power >= home_power  => there is solar #}
+          {{ grid_power > 200 and not charging_allowed and battery_soc > threshold and pv_power >= home_power }}
 
 sensor:
   # digital power meter in db - measures only grid
@@ -1256,36 +1272,20 @@ automation:
     id: "085cfb32-deb1-4a04-af50-9dcd5bfaa9c0"
     initial_state: true
     trigger:
-      - platform: numeric_state
-        entity_id: sensor.electricity_pulse_counter_current_power
-        # to use this value in a template, provide an input_number here
-        above: 500
-    action:
-      # capture soc values immediately
-      - variables:
-          soc_at_trigger: "{{ states('sensor.battery_state_of_charge') | int(0) }}"
-          threshold: "{{ states('sensor.capacity_charge_point') | int(0) }}"
-      # observation window
-      - delay: "00:01:00"
-      # ensure it's still happening
-      - condition: numeric_state
-        entity_id: sensor.electricity_pulse_counter_current_power
-        above: 500
-      # prevent a false positive should we change the charge point status while high power is being drawn
-      - condition: state
-        entity_id: binary_sensor.grid_charge_point_status
-        state: "off"
+      - platform: state
+        entity_id: binary_sensor.grid_charging_violation
+        to: "on"
         for:
-          minutes: 5
-      # this is what we really want to check: grid power is being drawn while there is battery
-      - condition: template
-        value_template: "{{ soc_at_trigger > threshold }}"
+          minutes: 1
+    action:
       - service: notify.mobile_app_ceres
         data:
           title: "⚠️ Energy"
           message: >-
-            {% set current_power = states('sensor.electricity_pulse_counter_current_power') | int(0) %}
-            {% set current_power_with_unit = current_power ~ ' W' if current_power < 1000 else current_power | int(0) | multiply(1/1000) | round(1) ~ ' kW' %}
+            {% set current_power = states('sensor.grid_power') | int(0) %}
+            {% set current_power_with_unit =
+              current_power ~ ' W' if current_power < 1000
+              else (current_power / 1000) | round(1) ~ ' kW' %}
             {% set for_minutes = trigger.for.seconds // 60 %}
             The backup power system has been continuously charging from the grid for {{ for_minutes }} min, drawing {{ current_power_with_unit }} currently.
           data:
@@ -2137,15 +2137,15 @@ automation:
       battery_energy_in_prev: "{{ states('input_number.battery_energy_in_prev') | float(0) }}"
       battery_energy_out_prev: "{{ states('input_number.battery_energy_out_prev') | float(0) }}"
       # deltas
-      delta_solar_energy: "{{ max(solar_energy_now - solar_energy_prev, 0) }}"
-      delta_grid_energy: "{{ max(grid_energy_now - grid_energy_prev, 0) }}"
-      delta_home_energy: "{{ max(home_energy_now - home_energy_prev, 0) }}"
+      delta_solar_energy: "{{ max(solar_energy_now - solar_energy_prev, 0) | float(0) }}"
+      delta_grid_energy: "{{ max(grid_energy_now - grid_energy_prev, 0) | float(0) }}"
+      delta_home_energy: "{{ max(home_energy_now - home_energy_prev, 0) | float(0) }}"
       delta_battery_energy: >
         {{ max((battery_energy_in_now - battery_energy_out_now) -
           (battery_energy_in_prev - battery_energy_out_prev), 0) }}
       # overheads
       overhead_energy_kwh: >
-        {{ max(delta_solar_energy + delta_grid_energy - delta_home_energy - delta_battery_energy, 0) }}
+        {{ max(delta_solar_energy + delta_grid_energy - delta_home_energy - delta_battery_energy, 0) | float(0) }}
     action:
       - service: input_number.set_value
         target:

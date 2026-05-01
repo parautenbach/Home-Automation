@@ -1,5 +1,20 @@
 homeassistant:
   customize:
+    package.node_anchors:
+      dam_full_storage_capacity: &dam_full_storage_capacity
+        icon: "mdi:waves"
+        value_template: >-
+          {{ value | float(0) | multiply(1000000) | int(0) }}
+        unit_of_measurement: "m³"
+        on_error:
+          value: last
+      dam_level_percentage: &dam_level_percentage
+        icon: "mdi:waves"
+        value_template: >-
+          {{ value | float(0) }}
+        unit_of_measurement: "%"
+        on_error:
+          value: last
     sensor.conditions_temperature:
       friendly_name: Temperature
     sensor.conditions_humidity:
@@ -24,35 +39,6 @@ homeassistant:
       icon: mdi:smog
     sensor.saaqis_so2:
       icon: mdi:smog
-    sensor.wemmershoek_dam_level:
-      icon: mdi:waves
-      scan_interval: 3600
-    sensor.steenbras_lower_dam_level:
-      icon: mdi:waves
-      scan_interval: 3600
-    sensor.steenbras_upper_dam_level:
-      icon: mdi:waves
-      scan_interval: 3600
-    sensor.voelvlei_dam_level:
-      icon: mdi:waves
-      scan_interval: 3600
-    sensor.theewaterskloof_dam_level:
-      icon: mdi:waves
-      scan_interval: 3600
-    sensor.bergrivier_dam_level:
-      icon: mdi:waves
-      scan_interval: 3600
-    sensor.total_dam_level:
-      icon: mdi:waves
-      state_class: measurement
-      scan_interval: 3600
-    sensor.total_dam_level_previous_year:
-      icon: mdi:waves
-      scan_interval: 3600
-    sensor.dam_levels_last_update:
-      icon: mdi:update
-      device_class: timestamp
-      scan_interval: 3600
     sensor.owm_pollution_overall_air_quality:
       icon: mdi:lungs
       device_class: aqi
@@ -580,6 +566,60 @@ template:
           {{ get_icon_direction_8(bearing) }}
         attributes:
           bearing: "{{ bearing }}"
+  - sensor:
+      - name: "Cape Town Major Dams Total Level This Week"
+        unique_id: "693844bf-bf47-4e71-abe1-47b9b398daae"
+        icon: mdi:waves
+        unit_of_measurement: "%"
+        state_class: measurement
+        state: >-
+          {% set dams = [
+            'bergrivier',
+            'steenbras_upper',
+            'steenbras_lower',
+            'theewaterskloof',
+            'voelvlei',
+            'wemmershoek'
+          ] %}
+          {% set ns = namespace(total_volume=0, total_capacity=0) %}
+          {% for dam in dams %}
+            {% set level = states('sensor.' ~ dam ~ '_dam_level_this_week') | float(0) %}
+            {% set capacity = states('sensor.' ~ dam ~ '_dam_full_storage_capacity') | float(0) %}
+            {% set ns.total_volume = ns.total_volume + (level / 100 * capacity) %}
+            {% set ns.total_capacity = ns.total_capacity + capacity %}
+          {% endfor %}
+          {% if ns.total_capacity > 0 %}
+            {{ (ns.total_volume / ns.total_capacity * 100) | round(1) }}
+          {% else %}
+            0
+          {% endif %}
+  - sensor:
+      - name: "Cape Town Major Dams Total Level Last Year"
+        unique_id: "896366dc-5eac-4c45-b6fc-63cbfeaa70d6"
+        icon: mdi:waves
+        unit_of_measurement: "%"
+        state_class: measurement
+        state: >-
+          {% set dams = [
+            'bergrivier',
+            'steenbras_upper',
+            'steenbras_lower',
+            'theewaterskloof',
+            'voelvlei',
+            'wemmershoek'
+          ] %}
+          {% set ns = namespace(total_volume=0, total_capacity=0) %}
+          {% for dam in dams %}
+            {% set level = states('sensor.' ~ dam ~ '_dam_level_last_year') | float(0) %}
+            {% set capacity = states('sensor.' ~ dam ~ '_dam_full_storage_capacity') | float(0) %}
+            {% set ns.total_volume = ns.total_volume + (level / 100 * capacity) %}
+            {% set ns.total_capacity = ns.total_capacity + capacity %}
+          {% endfor %}
+          {% if ns.total_capacity > 0 %}
+            {{ (ns.total_volume / ns.total_capacity * 100) | round(1) }}
+          {% else %}
+            0
+          {% endif %}
 
 multiscrape:
   - resource: https://pollencount.co.za/
@@ -763,6 +803,169 @@ multiscrape:
           {{ value | int(0) }}
         on_error:
           value: last
+  - resource: https://www.dws.gov.za/hydrology/Weekly/ProvinceWeek.aspx?region=WC
+    scan_interval: 86400  # daily
+    timeout: 30
+    log_response: true
+    sensor:
+      # Bergrivier
+      - <<: *dam_full_storage_capacity
+        name: Bergrivier Dam Full Storage Capacity
+        unique_id: "bergrivier_dam_full_storage_capacity"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Berg River Dam")) td:nth-of-type(5)
+      - <<: *dam_level_percentage
+        name: Bergrivier Dam Level This Week
+        unique_id: "bergrivier_dam_level_this_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Berg River Dam")) td:nth-of-type(6)
+      - <<: *dam_level_percentage
+        name: Bergrivier Dam Level Last Week
+        unique_id: "bergrivier_dam_level_last_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Berg River Dam")) td:nth-of-type(7)
+      - <<: *dam_level_percentage
+        name: Bergrivier Dam Level Last Year
+        unique_id: "bergrivier_dam_level_last_year"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Berg River Dam")) td:nth-of-type(8)
+
+      # Steenbras Lower
+      - <<: *dam_full_storage_capacity
+        name: Steenbras Lower Dam Full Storage Capacity
+        unique_id: "steenbras_lower_dam_full_storage_capacity"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Steenbras-Lower Dam")) td:nth-of-type(5)
+      - <<: *dam_level_percentage
+        name: Steenbras Lower Dam Level This Week
+        unique_id: "steenbras_lower_dam_level_this_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Steenbras-Lower Dam")) td:nth-of-type(6)
+      - <<: *dam_level_percentage
+        name: Steenbras Lower Dam Level Last Week
+        unique_id: "steenbras_lower_dam_level_last_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Steenbras-Lower Dam")) td:nth-of-type(7)
+      - <<: *dam_level_percentage
+        name: Steenbras Lower Dam Level Last Year
+        unique_id: "steenbras_lower_dam_level_last_year"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Steenbras-Lower Dam")) td:nth-of-type(8)
+
+      # Steenbras Upper
+      - <<: *dam_full_storage_capacity
+        name: Steenbras Upper Dam Full Storage Capacity
+        unique_id: "steenbras_upper_dam_full_storage_capacity"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Steenbras-Upper Dam")) td:nth-of-type(5)
+      - <<: *dam_level_percentage
+        name: Steenbras Upper Dam Level This Week
+        unique_id: "steenbras_upper_dam_level_this_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Steenbras-Upper Dam")) td:nth-of-type(6)
+      - <<: *dam_level_percentage
+        name: Steenbras Upper Dam Level Last Week
+        unique_id: "steenbras_upper_dam_level_last_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Steenbras-Upper Dam")) td:nth-of-type(7)
+      - <<: *dam_level_percentage
+        name: Steenbras Upper Dam Level Last Year
+        unique_id: "steenbras_upper_dam_level_last_year"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Steenbras-Upper Dam")) td:nth-of-type(8)
+
+      # Theewaterskloof
+      - <<: *dam_full_storage_capacity
+        name: Theewaterskloof Dam Full Storage Capacity
+        unique_id: "theewaterskloof_dam_full_storage_capacity"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Theewaterskloof Dam")) td:nth-of-type(5)
+      - <<: *dam_level_percentage
+        name: Theewaterskloof Dam Level This Week
+        unique_id: "theewaterskloof_dam_level_this_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Theewaterskloof Dam")) td:nth-of-type(6)
+      - <<: *dam_level_percentage
+        name: Theewaterskloof Dam Level Last Week
+        unique_id: "theewaterskloof_dam_level_last_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Theewaterskloof Dam")) td:nth-of-type(7)
+      - <<: *dam_level_percentage
+        name: Theewaterskloof Dam Level Last Year
+        unique_id: "theewaterskloof_dam_level_last_year"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Theewaterskloof Dam")) td:nth-of-type(8)
+
+      # Voëlvlei Dam
+      - <<: *dam_full_storage_capacity
+        name: Voëlvlei Dam Full Storage Capacity
+        unique_id: "voelvlei_dam_full_storage_capacity"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Voelvlei Dam")) td:nth-of-type(5)
+      - <<: *dam_level_percentage
+        name: Voëlvlei Dam Level This Week
+        unique_id: "voelvlei_dam_level_this_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Voelvlei Dam")) td:nth-of-type(6)
+      - <<: *dam_level_percentage
+        name: Voëlvlei Dam Level Last Week
+        unique_id: "voelvlei_dam_level_last_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Voelvlei Dam")) td:nth-of-type(7)
+      - <<: *dam_level_percentage
+        name: Voëlvlei Dam Level Last Year
+        unique_id: "voelvlei_dam_level_last_year"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Voelvlei Dam")) td:nth-of-type(8)
+
+      # Wemmershoek Dam
+      - <<: *dam_full_storage_capacity
+        name: Wemmershoek Dam Full Storage Capacity
+        unique_id: "wemmershoek_dam_full_storage_capacity"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Wemmershoek Dam")) td:nth-of-type(5)
+      - <<: *dam_level_percentage
+        name: Wemmershoek Dam Level This Week
+        unique_id: "wemmershoek_dam_level_this_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Wemmershoek Dam")) td:nth-of-type(6)
+      - <<: *dam_level_percentage
+        name: Wemmershoek Dam Level Last Week
+        unique_id: "wemmershoek_dam_level_last_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Wemmershoek Dam")) td:nth-of-type(7)
+      - <<: *dam_level_percentage
+        name: Wemmershoek Dam Level Last Year
+        unique_id: "wemmershoek_dam_level_last_year"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Wemmershoek Dam")) td:nth-of-type(8)
+
+      # Report Date
+      - name: Dam Levels Last Update
+        unique_id: "dam_levels_last_update"
+        icon: mdi:update
+        device_class: date
+        select: >-
+          th:-soup-contains("Western Cape Provincial State of Dams on")
+        # it seems impossible to get rid of this error:
+        # ValueError: Invalid date: sensor.dam_levels_last_update has date device class but provides state 2026-04-27:<class 'str'> resulting in ''str' object has no attribute 'isoformat''
+        # https://github.com/home-assistant/core/issues/83949
+        # https://github.com/home-assistant/core/issues/67455
+        # https://github.com/danieldotnl/ha-multiscrape/issues/174
+        value_template: >-
+          {% set last_update = value | regex_findall_index("on\s(\d{4}-\d{2}-\d{2})", 0) | as_datetime | as_local %}
+          {% set current = states('sensor.dam_levels_last_update') %}
+          {% if last_update %}
+            {{ last_update.date() }}
+          {% else %}
+            {{ current }}
+          {% endif %}
+        attributes:
+          # for debugging
+          - name: "raw"
+            select: >-
+              th:-soup-contains("Western Cape Provincial State of Dams on")
+            value_template: "{{ value }}"
 
 rest:
   # https://jsoncrack.com/editor
@@ -1207,6 +1410,8 @@ automation:
   # note: the individual dam levels and other meta data is parsed via the file integration (set up via the ui)
   - alias: "Download Dam Levels Data"
     id: "0cb4d6ba-5a63-45f7-8adc-efb98724a44e"
+    # replaced by scraper
+    initial_state: false
     trigger:
       - platform: time
         at: "05:00:00"

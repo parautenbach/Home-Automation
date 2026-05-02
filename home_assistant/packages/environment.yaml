@@ -947,19 +947,14 @@ multiscrape:
         device_class: date
         select: >-
           th:-soup-contains("Western Cape Provincial State of Dams on")
-        # it seems impossible to get rid of this error:
+        # it seems impossible to get rid of this error if you got the value template or device class in a mismatched state somewhere.
+        # either wait for the recorder to drop data, or delete the history manually.
         # ValueError: Invalid date: sensor.dam_levels_last_update has date device class but provides state 2026-04-27:<class 'str'> resulting in ''str' object has no attribute 'isoformat''
         # https://github.com/home-assistant/core/issues/83949
         # https://github.com/home-assistant/core/issues/67455
         # https://github.com/danieldotnl/ha-multiscrape/issues/174
         value_template: >-
-          {% set last_update = value | regex_findall_index("on\s(\d{4}-\d{2}-\d{2})", 0) | as_datetime | as_local %}
-          {% set current = states('sensor.dam_levels_last_update') %}
-          {% if last_update %}
-            {{ last_update.date() }}
-          {% else %}
-            {{ current }}
-          {% endif %}
+          {{ value | regex_findall_index("on\s(\d{4}-\d{2}-\d{2})", 0)}}
         attributes:
           # for debugging
           - name: "raw"

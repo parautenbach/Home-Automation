@@ -1417,7 +1417,7 @@ automation:
     id: "40f9506b-f35b-43ca-903b-7c7b3f006510"
     trigger:
       - platform: state
-        entity_id: sensor.total_dam_level
+        entity_id: sensor.cape_town_major_dams_total_level_this_week
         not_from: "unavailable"
         not_to: "0"
     action:
@@ -1429,7 +1429,7 @@ automation:
             {% set new_dam_levels = trigger.to_state.state | float(0) | round(1) %}
             {# the other option is to use percentage points for a pure delta #}
             {% set change = ((new_dam_levels - previous_dam_levels)/previous_dam_levels*100) | abs | round(1) %}
-            {% set previous_year_dam_levels = states('sensor.total_dam_level_previous_year') | float(0) | round(1) %}
+            {% set previous_year_dam_levels = states('sensor.cape_town_major_dams_total_level_last_year') | float(0) | round(1) %}
             {# we don't want to go through the effort of storing the previous update in a template sensor, #}
             {# because there can still be a race condition (will it have updated when this runs?). #}
             {# this just needs to be approximately accurate, so we'll just use the last time we got notified #}

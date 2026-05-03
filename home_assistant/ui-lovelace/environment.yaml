@@ -1047,7 +1047,7 @@ cards:
             name: Last Update
       - type: statistics-graph
         entities:
-          - sensor.total_dam_level
+          - sensor.cape_town_major_dams_total_level_this_week
         title: Overall Dam Levels
         days_to_show: 90
         period: week

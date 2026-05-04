@@ -1023,38 +1023,136 @@ cards:
             color: var(--custom-color-red)
           - value: 11
             color: var(--custom-color-magenta)
-      - type: entities
+      - type: vertical-stack
         title: Dam Levels
-        show_header_toggle: false
-        entities:
-          - entity: sensor.steenbras_upper_dam_level_this_week
-            name: Steenbras Upper
-          - entity: sensor.steenbras_lower_dam_level_this_week
-            name: Steenbras Lower
-          - entity: sensor.bergrivier_dam_level_this_week
-            name: Bergrivier
-          - entity: sensor.theewaterskloof_dam_level_this_week
-            name: Theewaterskloof
-          - entity: sensor.voelvlei_dam_level_this_week
-            name: Voëlvlei
-          - entity: sensor.wemmershoek_dam_level_this_week
-            name: Wemmershoek
-          - entity: sensor.cape_town_major_dams_total_level_this_week
-            name: Overall
-          - entity: sensor.cape_town_major_dams_total_level_last_year
-            name: Last Year
-          - entity: sensor.dam_levels_last_update
-            name: Last Update
-      - type: statistics-graph
-        entities:
-          - sensor.cape_town_major_dams_total_level_this_week
-        title: Overall Dam Levels
-        days_to_show: 90
-        period: week
-        chart_type: bar
-        stat_types:
-          - mean
-        hide_legend: true
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: gauge
+                name: Total
+                entity: sensor.cape_town_major_dams_total_level_this_week
+                min: 0
+                max: 100
+                severity:
+                  green: 80
+                  yellow: 50
+                  red: 0
+              - type: gauge
+                name: Last Year
+                entity: sensor.cape_town_major_dams_total_level_last_year
+                min: 0
+                max: 100
+                severity:
+                  green: 80
+                  yellow: 50
+                  red: 0
+          - type: horizontal-stack
+            cards:
+              - type: gauge
+                name: Steenbras Upper
+                entity: sensor.steenbras_upper_dam_level_this_week
+                min: 0
+                max: 100
+                severity:
+                  green: 80
+                  yellow: 50
+                  red: 0
+              - type: gauge
+                name: Bergrivier
+                entity: sensor.bergrivier_dam_level_this_week
+                min: 0
+                max: 100
+                severity:
+                  green: 80
+                  yellow: 50
+                  red: 0
+              - type: gauge
+                name: Theewaterskloof
+                entity: sensor.theewaterskloof_dam_level_this_week
+                min: 0
+                max: 100
+                severity:
+                  green: 80
+                  yellow: 50
+                  red: 0
+          - type: horizontal-stack
+            cards:
+              - type: gauge
+                name: Steenbras Lower
+                entity: sensor.steenbras_lower_dam_level_this_week
+                min: 0
+                max: 100
+                severity:
+                  green: 80
+                  yellow: 50
+                  red: 0
+              - type: gauge
+                name: Voëlvlei
+                entity: sensor.voelvlei_dam_level_this_week
+                min: 0
+                max: 100
+                severity:
+                  green: 80
+                  yellow: 50
+                  red: 0
+              - type: gauge
+                name: Wemmershoek
+                entity: sensor.wemmershoek_dam_level_this_week
+                min: 0
+                max: 100
+                severity:
+                  green: 80
+                  yellow: 50
+                  red: 0
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: sensor.dam_levels_last_update
+                name: Last Update
+      # swipe and chart for individual dams
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
+          - type: statistics-graph
+            entities:
+              - sensor.cape_town_major_dams_total_level_this_week
+            title: Overall Dam Levels
+            days_to_show: 90
+            period: week
+            chart_type: bar
+            stat_types:
+              - mean
+            hide_legend: true
+          - type: custom:mini-graph-card
+            name: Individual Dam Levels
+            entities:
+              - entity: sensor.cape_town_major_dams_total_level_this_week
+                show_state: true
+                show_graph: false
+              - entity: sensor.steenbras_upper_dam_level_this_week
+                name: Steenbras Upper
+              - entity: sensor.steenbras_lower_dam_level_this_week
+                name: Steenbras Lower
+              - entity: sensor.bergrivier_dam_level_this_week
+                name: Bergrivier
+              - entity: sensor.theewaterskloof_dam_level_this_week
+                name: Theewaterskloof
+              - entity: sensor.voelvlei_dam_level_this_week
+                name: Voëlvlei
+              - entity: sensor.wemmershoek_dam_level_this_week
+                name: Wemmershoek
+            hours_to_show: 1
+            points_per_hour: 1
+            aggregate_func: last
+            lower_bound: 0
+            upper_bound: 100
+            show:
+              graph: bar
+              labels: true
+              extrema: true
       - type: markdown
         content: >
           **[CAPE TOWN DAM LEVELS](https://www.capetown.gov.za/Family%20and%20home/residential-utility-services/residential-water-and-sanitation-services/this-weeks-dam-levels)**

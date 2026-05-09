@@ -132,6 +132,8 @@ automation:
     trigger:
       - platform: state
         entity_id: sensor.season
+      - platform: homeassistant
+        event: start
     action:
       - if: "{{ is_state('sensor.season', 'winter') }}"
         then:

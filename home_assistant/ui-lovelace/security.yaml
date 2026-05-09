@@ -184,7 +184,7 @@ cards:
             # fix heading font/size
             # title: Events
             show_empty: true
-            max_item_count: 20
+            max_item_count: 50
             state_color: false
             compact_mode: true
             show_icons: false
@@ -292,6 +292,54 @@ cards:
                   - "unavailable"
                 format: datetime
                 content_template: "Water was detected in the scullery"
+              - entity: binary_sensor.home_test_zone_001_front_door
+                include_history: true
+                max_history: 5
+                remove_repeats: false
+                exclude_states:
+                  - "unknown"
+                  - "unavailable"
+                format: datetime
+                state_map:
+                  'on': "opened"
+                  'off': "closed"
+                content_template: "Front door was {{state}}"
+              - entity: binary_sensor.home_test_zone_006_kitchen
+                include_history: true
+                max_history: 5
+                remove_repeats: false
+                exclude_states:
+                  - "unknown"
+                  - "unavailable"
+                format: datetime
+                state_map:
+                  'on': "opened"
+                  'off': "closed"
+                content_template: "Kitchen door was {{state}}"
+              - entity: binary_sensor.home_test_zone_019_music_room_door
+                include_history: true
+                max_history: 5
+                remove_repeats: false
+                exclude_states:
+                  - "unknown"
+                  - "unavailable"
+                format: datetime
+                state_map:
+                  'on': "opened"
+                  'off': "closed"
+                content_template: "Music room door was {{state}}"
+              - entity: binary_sensor.home_test_zone_020_braai_room_door
+                include_history: true
+                max_history: 5
+                remove_repeats: false
+                exclude_states:
+                  - "unknown"
+                  - "unavailable"
+                format: datetime
+                state_map:
+                  'on': "opened"
+                  'off': "closed"
+                content_template: "Braai room door was {{state}}"
       - type: entities
         title: "Gates & Doors"
         show_header_toggle: false

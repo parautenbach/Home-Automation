@@ -2135,12 +2135,14 @@ automation:
       battery_energy_in_prev: "{{ states('input_number.battery_energy_in_prev') | float(0) }}"
       battery_energy_out_prev: "{{ states('input_number.battery_energy_out_prev') | float(0) }}"
       # deltas
-      delta_solar_energy: "{{ max(solar_energy_now - solar_energy_prev, 0) | float(0) }}"
-      delta_grid_energy: "{{ max(grid_energy_now - grid_energy_prev, 0) | float(0) }}"
-      delta_home_energy: "{{ max(home_energy_now - home_energy_prev, 0) | float(0) }}"
+      delta_solar_energy: "{{ max((solar_energy_now - solar_energy_prev) | float(0), 0) }}"
+      delta_grid_energy: "{{ max((grid_energy_now - grid_energy_prev) | float(0), 0) }}"
+      delta_home_energy: "{{ max((home_energy_now - home_energy_prev) | float(0), 0) }}"
       delta_battery_energy: >
-        {{ max((battery_energy_in_now - battery_energy_out_now) -
-          (battery_energy_in_prev - battery_energy_out_prev), 0) }}
+        {{ max(
+            ((battery_energy_in_now - battery_energy_out_now) -
+             (battery_energy_in_prev - battery_energy_out_prev)) | float(0),
+            0) }}
       # overheads
       overhead_energy_kwh: >
         {{ max(delta_solar_energy + delta_grid_energy - delta_home_energy - delta_battery_energy, 0) | float(0) }}
@@ -2150,7 +2152,7 @@ automation:
           entity_id: input_number.backup_power_system_overhead_energy
         data:
           value: >-
-            {{ states('input_number.backup_power_system_overhead_energy') | float(0) + overhead_energy_kwh }}
+            {{ (states('input_number.backup_power_system_overhead_energy') | float(0)) + (overhead_energy_kwh | float(0)) }}
       - service: input_number.set_value
         target:
           entity_id: input_number.solar_energy_prev

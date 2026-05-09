@@ -117,7 +117,7 @@ sensor:
     host: 192.168.0.1
     community: !secret router_snmp_community
     version: 2c
-    baseoid: 1.3.6.1.2.1.2.2.1.10.13  # ifInOctets.13 / eth4 (interface 12, zero-indexed)
+    baseoid: 1.3.6.1.2.1.2.2.1.10.44  # ifInOctets.44: ppp0
     unit_of_measurement: octets
 
   - platform: snmp
@@ -125,7 +125,7 @@ sensor:
     host: 192.168.0.1
     community: !secret router_snmp_community
     version: 2c
-    baseoid: 1.3.6.1.2.1.2.2.1.16.13  # ifOutOctets.13 / eth4 (interface 12, zero-indexed)
+    baseoid: 1.3.6.1.2.1.2.2.1.16.44  # ifOutOctets.44: ppp0
     unit_of_measurement: octets
 
   # alternative: https://community.home-assistant.io/t/snmp-bandwidth-monitor-using-statistics/96684/82
@@ -205,8 +205,12 @@ automation:
             {% set from = trigger.from_state.state | int(0) %}
             {% set to = trigger.to_state.state | int(0) %}
             {% set traffic_delta = (to - from) if (to >= from) else (4294967295 - from + to + 1) %}
-            {% set time_delta = as_timestamp(trigger.to_state.last_updated) - as_timestamp(trigger.from_state.last_updated) %}
-            {{ (traffic_delta * 8) / time_delta }}
+            {% set time_delta = as_timestamp(trigger.to_state.last_updated) - as_timestamp(trigger.from_state.last_changed) %}
+            {% if time_delta > 0 %}
+              {{ (traffic_delta * 8) / time_delta }}
+            {% else %}
+              0
+            {% endif %}
 
   - alias: "Monitor Outbound Internet Traffic"
     id: "719b1fd6-bfc1-40b3-bf0e-5a07cff11aea"
@@ -223,8 +227,12 @@ automation:
             {% set from = trigger.from_state.state | int(0) %}
             {% set to = trigger.to_state.state | int(0) %}
             {% set traffic_delta = (to - from) if (to >= from) else (4294967295 - from + to + 1) %}
-            {% set time_delta = as_timestamp(trigger.to_state.last_updated) - as_timestamp(trigger.from_state.last_updated) %}
-            {{ (traffic_delta * 8) / time_delta }}
+            {% set time_delta = as_timestamp(trigger.to_state.last_updated) - as_timestamp(trigger.from_state.last_changed) %}
+            {% if time_delta > 0 %}
+              {{ (traffic_delta * 8) / time_delta }}
+            {% else %}
+              0
+            {% endif %}
 
   - alias: "Notify If Internet Status Changed"
     id: "ff386c09-1dd5-4381-b404-abad62bffb01"

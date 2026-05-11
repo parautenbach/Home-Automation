@@ -459,11 +459,12 @@ cards:
       #   link_dashboard: true
       # this seems a bit broken
       - type: custom:energy-flow-card-plus
-        energy_date_selection: true
-        kwh_decimals: 1
+        base_decimals: 0
+        kilo_decimals: 1
         use_new_flow_rate_model: true
         clickable_entities: true
         display_zero_lines: true
+        sort_individual_devices: false
         entities:
           grid:
             entity:
@@ -474,6 +475,7 @@ cards:
               production: sensor.battery_energy_in
               consumption: sensor.battery_energy_out
             state_of_charge: sensor.battery_state_of_charge
+            invert_state: true
           solar:
             entity: sensor.daily_solar_energy_consumption
           home:
@@ -498,6 +500,20 @@ cards:
         inverted_entities: battery
         wh_kwh_threshold: 0
         max_expected_energy: 20000
+            - entity: sensor.home_energy_large_appliances
+              name: Large Appliances
+              icon: mdi:home-lightning-bolt
+              color_icon: false
+              # color: "#964cb5"
+              display_zero: true
+            - entity: sensor.home_energy_other
+              name: Other
+              icon: mdi:home-lightbulb
+              color_icon: false
+              # color: "#964cb5"
+              display_zero: true
+        kilo_threshold: 0
+        max_expected_power: 12000
         dashboard_link: /energy
       - type: custom:swipe-card
         parameters:

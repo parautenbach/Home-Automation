@@ -135,7 +135,7 @@ automation:
       - platform: homeassistant
         event: start
     action:
-      - if: "{{ is_state('sensor.season', 'winter') }}"
+      - if: "{{ is_state('sensor.season', 'winter') or is_state('sensor.season', 'autumn') }}"
         then:
           - service: automation.turn_off
             target:
@@ -160,6 +160,7 @@ automation:
                 - input_boolean.irrigation_monday
                 - input_boolean.irrigation_wednesday
                 - input_boolean.irrigation_friday
+        # spring
         else:
           # MtwTfss
           - service: input_boolean.turn_off

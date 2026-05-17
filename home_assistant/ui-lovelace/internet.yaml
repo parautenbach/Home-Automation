@@ -293,7 +293,7 @@ cards:
               border-color: white;
             }
   - type: statistics-graph
-    title: Daily Consumption
+    title: Daily Usage
     entities:
       - sensor.daily_internet_usage_in
       - sensor.daily_internet_usage_out

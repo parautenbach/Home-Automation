@@ -101,7 +101,8 @@ Get a list of entity IDs given a list of states.
   'worldclock': 'World Clock',
   'google_travel_time': 'Google Travel Time',
   'shelly': 'Shelly',
-  'hacs': 'HACS'
+  'hacs': 'HACS',
+  'esphome': 'ESPHome'
 } -%}
 
 {#
@@ -127,7 +128,13 @@ Return the first integration associated with an entity or device.
     -%}
 
     {%- if not raw_integration -%}
-        Derived / Helper
+        {%- set config_entry = device_attr(device_or_entity_id, 'primary_config_entry') -%}
+        {%- set domain = config_entry_attr(config_entry, 'domain') -%}
+        {%- if domain -%}
+          {{ _INTEGRATION_LABELS.get(domain) }}
+        {%- else -%}
+          Derived / Helper
+        {%- endif -%}
     {%- elif ':' in raw_integration -%}
         {{ labels.get(raw_integration.split(':')[0], raw_integration.split(':')[0] | replace('_', ' ') | title) }}
     {%- else -%}

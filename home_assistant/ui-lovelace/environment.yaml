@@ -1124,8 +1124,10 @@ cards:
             period: week
             chart_type: bar
             stat_types:
-              - mean
+              - max
             hide_legend: true
+            min_y_axis: 0
+            max_y_axis: 100
           - type: custom:mini-graph-card
             name: Individual Dam Levels
             entities:

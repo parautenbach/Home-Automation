@@ -1433,7 +1433,7 @@ automation:
             {# we don't want to go through the effort of storing the previous update in a template sensor, #}
             {# because there can still be a race condition (will it have updated when this runs?). #}
             {# this just needs to be approximately accurate, so we'll just use the last time we got notified #}
-            {% set last_update = state_attr('automation.send_dam_level_update', 'last_triggered') %}
+            {% set last_update = this.attributes.last_triggered %}
             {% set time_delta = (now() - last_update).total_seconds() %}
             {% set days_since = (time_delta / 86400) | int(0) %}
             {% set update = '' %}

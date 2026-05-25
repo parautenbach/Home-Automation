@@ -381,6 +381,7 @@ automation:
             | reject('match', '.*sonoff_basic.*')
             | map('device_id')
             | reject('none')
+            | select('is_device_attr', 'disabled_by', None)
             | unique
             | sort
             | list

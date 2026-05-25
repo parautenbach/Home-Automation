@@ -104,7 +104,7 @@ sensor:
     icon: "mdi:contactless-payment"
     trigger_pin: 26
     echo_pin: 27
-    update_interval: 60s
+    update_interval: 10s
     # https://github.com/esphome/issues/issues/3378
     filters:
       - lambda: if (isnan(x)) { return 99; } return x;
@@ -114,7 +114,7 @@ sensor:
     icon: "mdi:contactless-payment"
     trigger_pin: 33
     echo_pin: 25
-    update_interval: 60s
+    update_interval: 10s
     filters:
       - lambda: if (isnan(x)) { return 99; } return x;
   - platform: internal_temperature

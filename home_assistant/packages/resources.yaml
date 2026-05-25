@@ -678,7 +678,8 @@ template:
           {# not charging_allowed    => grid charging is off for the time slot (may not charge up to threshold) #}
           {# battery_soc > threshold => there is battery #}
           {# pv_power >= home_power  => there is solar #}
-          {{ grid_power > 200 and not charging_allowed and battery_soc > threshold and pv_power >= home_power }}
+          {# home_power <= 8000      => power consumptions is below what the inverter can provide #}
+          {{ grid_power > 200 and not charging_allowed and battery_soc > threshold and pv_power >= home_power and home_power <= 8000 }}
 
 sensor:
   # digital power meter in db - measures only grid

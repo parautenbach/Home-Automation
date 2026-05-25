@@ -537,6 +537,27 @@ automation:
             target:
               entity_id: climate.main_bedroom_ac
 
+  - alias: "Child Wake-up Time"
+    id: "56f448c5-e8b1-401f-b4d7-b0875f65fc31"
+    # don't reset this after a reload/restart, since we might've disabled this deliberately via the ui
+    # initial_state: true
+    trigger:
+      - platform: time
+        at: "06:45:00"
+    condition:
+      - condition: state
+        entity_id: light.bedroom_bedlamp
+        state: "off"
+    action:
+      - service: script.turn_on
+        target:
+          entity_id: script.fade_light
+        data:
+          variables:
+            light: light.bedroom_bedlamp
+            target_brightness_pct: 60
+            transition_duration: 60
+
   - alias: "Auto Disarm Alarm"
     id: "de011906-64da-4e0f-8d6b-219a0ded1ee4"
     triggers:

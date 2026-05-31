@@ -205,7 +205,7 @@ automation:
             {% set from = trigger.from_state.state | int(0) %}
             {% set to = trigger.to_state.state | int(0) %}
             {% set traffic_delta = (to - from) if (to >= from) else (4294967295 - from + to + 1) %}
-            {% set time_delta = as_timestamp(trigger.to_state.last_updated) - as_timestamp(trigger.from_state.last_changed) %}
+            {% set time_delta = as_timestamp(trigger.to_state.last_changed) - as_timestamp(trigger.from_state.last_changed) %}
             {% if time_delta > 0 %}
               {{ (traffic_delta * 8) / time_delta }}
             {% else %}
@@ -227,7 +227,7 @@ automation:
             {% set from = trigger.from_state.state | int(0) %}
             {% set to = trigger.to_state.state | int(0) %}
             {% set traffic_delta = (to - from) if (to >= from) else (4294967295 - from + to + 1) %}
-            {% set time_delta = as_timestamp(trigger.to_state.last_updated) - as_timestamp(trigger.from_state.last_changed) %}
+            {% set time_delta = as_timestamp(trigger.to_state.last_changed) - as_timestamp(trigger.from_state.last_changed) %}
             {% if time_delta > 0 %}
               {{ (traffic_delta * 8) / time_delta }}
             {% else %}

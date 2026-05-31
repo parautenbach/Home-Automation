@@ -372,6 +372,7 @@ script:
           entity_id: "{{ camera_entity }}"
         data:
           filename: "{{ filename }}"
+        continue_on_error: true
       - service: shell_command.copy_last_snapshot_image
         data:
           subdirectory: "{{ subdirectory }}"

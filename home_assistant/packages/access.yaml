@@ -273,17 +273,10 @@ automation:
           - condition: template
             value_template: "{{ snapshot_age > 2 or snapshot_age < 0 }}"
         then:
-          # this is a hack!
-          # this block will complete even if there's an unhandled snapshot error
-          # https://github.com/rroller/dahua/issues/290
-          - parallel:
-              - service: script.take_snapshot
-                data:
-                  camera_entity: camera.doorbell
-                  subdirectory: "doorbell"
-                continue_on_error: true
-              - delay:
-                  seconds: 1
+          - service: script.take_snapshot
+            data:
+              camera_entity: camera.doorbell
+              subdirectory: "doorbell"
           - delay:
               seconds: 1
       - service: shell_command.get_doorbell_snapshot_mtime

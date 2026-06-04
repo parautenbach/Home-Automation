@@ -11,3 +11,4 @@ home_assistant/google_calendars.yaml
 *.log
 .vscode
 .idea
+graphify-out

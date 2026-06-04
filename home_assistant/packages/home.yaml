@@ -747,6 +747,7 @@ automation:
       # what if the presence sensor is slow to update, so we trigger motion before we're detected as home?
       # i don't think it's a good idea to have a motion trigger and then choose between the wait below and one for presence
       # rather use a recency check
+      # keep in sync with the garage door template
       - wait_template: >-
           {% set last_motion_detected = (now() - states.binary_sensor.doorbell_motion_detected.last_updated).total_seconds() %}
           {{ is_state('binary_sensor.doorbell_motion_detected', 'on') or
@@ -840,10 +841,11 @@ automation:
           #   entity_id: alarm_control_panel.home
           #   state: "disarmed"
     action:
+      # keep in sync with the main gate template
       - wait_template: >-
           {% set last_motion_detected = (now() - states.binary_sensor.doorbell_motion_detected.last_updated).total_seconds() %}
           {{ is_state('binary_sensor.doorbell_motion_detected', 'on') or
-             (is_state('binary_sensor.doorbell_motion_detected', 'off') and last_motion_detected <= 60) }}
+             (is_state('binary_sensor.doorbell_motion_detected', 'off') and last_motion_detected <= 30) }}
         timeout: "00:01:00"
         continue_on_timeout: false
       - wait_template: "{{ is_state('alarm_control_panel.home', 'disarmed') }}"

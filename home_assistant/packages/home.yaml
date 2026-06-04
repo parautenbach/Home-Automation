@@ -790,6 +790,7 @@ automation:
         to: "on"
         # prevent false positive due to flaky connectivity or after loadshedding and sensors being unavailable
         not_from: "unavailable"
+    mode: single
     condition:
       - condition: and
         conditions:

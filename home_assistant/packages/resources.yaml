@@ -910,7 +910,8 @@ input_number:
     unit_of_measurement: "kWh"
   backup_power_system_overhead_energy:
     min: 0
-    max: 100
+    # 1 TWh
+    max: 1000000000
     unit_of_measurement: "kWh"
 
 input_text:

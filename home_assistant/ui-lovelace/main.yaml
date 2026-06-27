@@ -392,7 +392,7 @@ cards:
             background: '/local/tivoli-model-three.png'
           - type: markdown
             content: >
-              **[ENTERTAINMENT](/lovelace/entertainment)**
+              **[ENTERTAINMENT](/lovelace-main/entertainment)**
   - type: vertical-stack
     cards:
       - type: horizontal-stack

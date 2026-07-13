@@ -1701,34 +1701,42 @@ rest:
         unique_id: "a6216372-5645-4653-a4ee-32646296b0b2"
         icon: mdi:waves-arrow-left
         value_template: >-
-          {% set current = now() %}
-          {% set phase = 'low' %}
-          {{ value_json.data
-            | selectattr('type', 'eq', phase)
-            | map(attribute='time')
-            | map('as_datetime')
-            | map('as_local')
-            | select('>=', current)
-            | sort
-            | first
-          }}
-        device_class: timestamp
+          {% set times = value_json.data
+              | default([])
+              | selectattr('type', 'eq', phase)
+              | map(attribute='time')
+              | map('as_datetime')
+              | map('as_local')
+              | select('>=', current)
+              | sort
+              | list %}
+          {% if times %}
+            {{ times[0] }}
+          {% elif this.state not in ['unknown', 'unavailable'] %}
+            {{ this.state }}
+          {% else %}
+            unknown
+          {% endif %}
       - name: Stormglass Simon's Town Next High Tide
         unique_id: "a62c01e5-b90c-423e-b8f7-efc24a162383"
         icon: mdi:waves-arrow-right
         value_template: >-
-          {% set current = now() %}
-          {% set phase = 'high' %}
-          {{ value_json.data
-            | selectattr('type', 'eq', phase)
-            | map(attribute='time')
-            | map('as_datetime')
-            | map('as_local')
-            | select('>=', current)
-            | sort
-            | first
-          }}
-        device_class: timestamp
+          {% set times = value_json.data
+              | default([])
+              | selectattr('type', 'eq', phase)
+              | map(attribute='time')
+              | map('as_datetime')
+              | map('as_local')
+              | select('>=', current)
+              | sort
+              | list %}
+          {% if times %}
+            {{ times[0] }}
+          {% elif this.state not in ['unknown', 'unavailable'] %}
+            {{ this.state }}
+          {% else %}
+            unknown
+          {% endif %}
 
   # cannot get the gis query to work
   # - resource: "https://services6.arcgis.com/nyYfO9SxHU2ChQd9/ArcGIS/rest/services/Dam_Levels_from_2000/FeatureServer/0/query?where=1%3D1&objectIds=&resultType=none&outFields=&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=false&collation=&orderByFields=&groupByFieldsForStatistics=&returnAggIds=false&outStatistics=&having=&resultOffset=&resultRecordCount=1&sqlFormat=none&f=json"

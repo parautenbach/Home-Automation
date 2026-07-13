@@ -1300,7 +1300,8 @@ multiscrape:
       - name: Dam Levels Last Update
         unique_id: "dam_levels_last_update"
         icon: mdi:update
-        device_class: date
+        # see bug below
+        # device_class: date
         select: >-
           th:-soup-contains("Western Cape Provincial State of Dams on")
         # it seems impossible to get rid of this error if you got the value template or device class in a mismatched state somewhere.

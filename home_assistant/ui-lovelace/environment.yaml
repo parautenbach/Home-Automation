@@ -87,6 +87,189 @@ cards:
           pagination:
             type: 'bullets'
         cards:
+          - type: grid
+            title: Weather & Climate
+            columns: 2
+            square: false
+            cards:
+              - type: tile
+                entity: sensor.outside_temperature
+                name: Temperature
+                icon: mdi:thermometer
+                # todo: card_mod
+                state_content:
+                  - thermal_comfort_label
+                  - state
+              - type: tile
+                entity: sensor.humidity_condition
+                name: Humidity
+                icon: mdi:water-percent
+                state_content:
+                  - label
+                  - humidity_with_unit
+              - type: tile
+                entity: sensor.weather_station_dew_point
+                name: Dew Point
+                icon: mdi:thermometer-water
+                # todo: card_mod
+              - type: tile
+                entity: sensor.air_pressure_qnh
+                name: Atmosphere
+                icon: mdi:weather-hazy
+                state_content:
+                  - trend_label
+                  - state
+              - type: tile
+                entity: sensor.rain_rate_condition
+                name: Rain
+                icon: mdi:weather-pouring
+                state_content:
+                  - label
+                  - rain_rate_with_unit
+                  - rain_24h_with_unit
+              - type: tile
+                entity: sensor.wind_condition_beaufort
+                name: Wind
+                icon: mdi:weather-windy
+                # icon: mdi:compass-outline
+                # icon: mdi:weather-windy-variant
+                state_content:
+                  - label
+                  - wind_speed_with_unit
+                  - compass_direction
+                # todo: card_mod
+              - type: tile
+                entity: sensor.lux_condition
+                name: Light
+                icon: mdi:brightness-6
+                state_content:
+                  - label
+                  - lux_with_unit
+              - type: tile
+                entity: sensor.uv_condition
+                name: UV Risk
+                icon: mdi:sun-wireless-outline
+                state_content:
+                  - label
+                  - index
+                # todo: card_mod
+          - type: entities
+            title: Weather Station
+            entities:
+              - type: custom:fold-entity-row
+                head:
+                  type: section
+                  label: Atmosphere
+                entities:
+                  - entity: sensor.outside_temperature
+                    name: Temperature
+                  - type: attribute
+                    entity: sensor.outside_temperature
+                    name: Perception
+                    attribute: thermal_comfort_label
+                  - entity: sensor.weather_station_humidity
+                    name: Humidity
+                  - entity: sensor.weather_station_dew_point
+                    name: Dew Point
+                  - entity: sensor.weather_station_air_pressure
+                    name: Air Pressure (QFE)
+                  - entity: sensor.air_pressure_qnh
+                    name: Air Pressure (QNH)
+                  - entity: sensor.air_pressure_change_3h
+                    icon: mdi:delta
+                    name: Air Pressure Change
+                  - type: attribute
+                    entity: sensor.air_pressure_trend
+                    name: Air Pressure Trend
+                    attribute: label
+              - type: custom:fold-entity-row
+                head:
+                  type: section
+                  label: Wind
+                entities:
+                  - entity: sensor.wind_speed_filtered
+                    name: Speed
+                  - entity: sensor.weather_station_wind_speed_gust
+                    name: Gust
+                  - type: attribute
+                    entity: sensor.wind_condition_beaufort
+                    name: Condition
+                    attribute: label
+                  - entity: sensor.wind_compass_direction
+                    name: Compass Direction
+                  - entity: sensor.wind_direction_filtered
+                    name: Direction
+              - type: custom:fold-entity-row
+                head:
+                  type: section
+                  label: Rain
+                entities:
+                  - entity: sensor.rain_rate
+                    name: Rate
+                  - type: attribute
+                    entity: sensor.rain_rate_condition
+                    attribute: label
+                    name: Condition
+                  - entity: sensor.daily_precipitation
+                    name: Today
+                    icon: mdi:calendar-today
+                    attribute: label
+                  - type: attribute
+                    entity: sensor.daily_precipitation
+                    attribute: last_period
+                    name: Yesterday
+                    icon: mdi:calendar-arrow-left
+                    suffix: " mm"
+                  - entity: sensor.monthly_precipitation
+                    name: This Month
+                    icon: mdi:calendar-month
+                  - type: attribute
+                    entity: sensor.monthly_precipitation
+                    attribute: last_period
+                    name: Last Month
+                    icon: mdi:calendar-arrow-left
+                    suffix: " mm"
+                  - entity: sensor.annual_precipitation
+                    name: This Year
+                    icon: mdi:calendar-range
+                  - type: attribute
+                    entity: sensor.annual_precipitation
+                    attribute: last_period
+                    name: Last Year
+                    icon: mdi:calendar-arrow-left
+                    suffix: " mm"
+              - type: custom:fold-entity-row
+                head:
+                  type: section
+                  label: Light & UV
+                entities:
+                  - entity: sensor.weather_station_illuminance
+                    name: Illuminance
+                  - type: attribute
+                    entity: sensor.lux_condition
+                    attribute: label
+                    name: Condition
+                  - type: attribute
+                    entity: sensor.uv_condition
+                    attribute: label
+                    name: UV Risk
+                  - entity: sensor.weather_station_uv_index
+                    name: UV Index
+              - type: custom:fold-entity-row
+                head:
+                  type: section
+                  label: Device Health
+                entities:
+                  - entity: sensor.weather_station_battery
+                    name: Battery
+                  - entity: sensor.weather_station_solar_capacitor_voltage
+                    name: Solar Capacitor Voltage
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
+        cards:
           - type: horizontal-stack
             cards:
               - type: vertical-stack
@@ -599,6 +782,7 @@ cards:
         hide_date: true
         hourly_forecast: false
         sun_entity: sun.sun
+        # todo
         apparent_sensor: sensor.outside_feels_like
         aqi_sensor: sensor.owm_pollution_overall_air_quality
       - type: custom:swipe-card
@@ -685,6 +869,9 @@ cards:
           **[LA COLLINE OBSERVATORY, STELLENBOSCH](http://www.weather.lcao.co.za/index.php/Special_WeatherStatsRainfall)**
 
           **[HISTORICAL DAILY RECORDED RAINFALL FIGURES](https://afriwx.co.za/rainfall-reenval/daily-recorded-rainfall-south-africa-historical/)**
+  - type: vertical-stack
+    title: Ambient Conditions
+    cards:
       - type: custom:swipe-card
         parameters:
           autoHeight: true
@@ -748,7 +935,7 @@ cards:
               - entity: sensor.braai_room_ht_humidity
                 name: Braai Room
                 color: var(--custom-color-turquoise)
-              - entity: sensor.openweathermap_humidity
+              - entity: sensor.weather_station_humidity
                 name: Outside
                 color: var(--custom-color-red)
               - entity: sensor.nighttime_number
@@ -832,46 +1019,48 @@ cards:
             chart_type: line
             stat_types:
               - mean
-  - type: vertical-stack
-    cards:
       - type: custom:swipe-card
         parameters:
           autoHeight: true
           pagination:
             type: 'bullets'
         cards:
+          # - type: custom:mini-graph-card
+          #   name: Illuminance
+          #   entities:
+          #     # don't use this if you want to use thresholds: color overrides
+          #     # sensor.sun_illuminance can be very unreliable (operationally); need to use my own light meter
+          #     # - entity: sensor.sun_illuminance
+          #     #   color: var(--custom-color-yellow)
+          #     - entity: sensor.weather_station_illuminance
+          #       name: Outside
+          #       color: var(--custom-color-yellow)
+          #     - entity: sensor.nighttime_number
+          #       name: Inside
+          #       color: var(--custom-color-gray)
+          #       show_line: false
+          #       show_points: false
+          #       show_legend: false
+          #       y_axis: secondary
+          #   hours_to_show: 24
+          #   hour24: true
+          #   smoothing: true
+          #   points_per_hour: 2
+          #   line_width: 2
+          #   lower_bound: 0
+          #   # https://www.grc.nasa.gov/WWW/k-12/Numbers/Math/Mathematical_Thinking/sun12.htm
+          #   upper_bound: 120000
+          #   show:
+          #     extrema: true
+          #     labels_secondary: false
           - type: custom:mini-graph-card
             name: Illuminance
             entities:
-              # don't use this if you want to use thresholds: color overrides
-              # sensor.sun_illuminance can be very unreliable (operationally); need to use my own light meter
-              # - entity: sensor.sun_illuminance
-              #   color: var(--custom-color-yellow)
-              - entity: sensor.weather_based_sun_illuminance
-                color: var(--custom-color-yellow)
-              - entity: sensor.nighttime_number
-                color: var(--custom-color-gray)
-                show_line: false
-                show_points: false
-                show_legend: false
-                y_axis: secondary
-            hours_to_show: 24
-            hour24: true
-            smoothing: true
-            points_per_hour: 2
-            line_width: 2
-            lower_bound: 0
-            # https://www.grc.nasa.gov/WWW/k-12/Numbers/Math/Mathematical_Thinking/sun12.htm
-            upper_bound: 120000
-            show:
-              extrema: true
-              labels_secondary: false
-          - type: custom:mini-graph-card
-            name: Illuminance
-            entities:
-              - entity: sensor.weather_based_sun_illuminance
+              - entity: sensor.weather_station_illuminance
+                name: Outside
                 color: var(--custom-color-yellow)
               - entity: sensor.office_illuminance
+                name: Inside
                 color: var(--custom-color-blue)
                 y_axis: secondary
             hours_to_show: 24
@@ -881,6 +1070,8 @@ cards:
             line_width: 2
             lower_bound: 0
             upper_bound: 120000
+            lower_bound_secondary: 0
+            upper_bound_secondary: 100
             show:
               extrema: true
               labels_secondary: hover
@@ -992,10 +1183,10 @@ cards:
       # https://www.who.int/news-room/q-a-detail/radiation-ultraviolet-(uv)
       # https://en.wikipedia.org/wiki/Ultraviolet_index
       - type: custom:mini-graph-card
-        name: UV
-        icon: mdi:weather-sunny-alert
+        name: UV Risk
+        icon: mdi:sun-wireless-outline
         entities:
-          - entity: sensor.openweathermap_uv_index
+          - entity: sensor.weather_station_uv_index
             name: UV Index
           - entity: sensor.nighttime_number
             color: var(--custom-color-gray)

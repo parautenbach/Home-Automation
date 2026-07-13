@@ -116,6 +116,20 @@ illuminance:
     scan_interval:
       minutes: 5
 
+utility_meter:
+  daily_precipitation:
+    unique_id: "2355938a-fdc3-4b79-bd5b-f2a68f7f55a4"
+    source: sensor.weather_station_precipitation
+    cycle: daily
+  monthly_precipitation:
+    unique_id: "1e1bc0f0-4a3a-4ee3-bd57-4a86d367cdc8"
+    source: sensor.weather_station_precipitation
+    cycle: monthly
+  annual_precipitation:
+    unique_id: "b0894141-7ee1-42d7-80c4-5bb3b1708368"
+    source: sensor.weather_station_precipitation
+    cycle: yearly
+
 binary_sensor:
   - platform: trend
     sensors:
@@ -199,6 +213,38 @@ sensor:
       hours: 12
     precision: 1
 
+  - platform: filter
+    name: "Wind Speed Filtered"
+    entity_id: sensor.weather_station_wind_speed_sustained
+    filters:
+      - filter: lowpass
+        time_constant: 10
+        precision: 2
+
+  - platform: filter
+    name: "Wind Direction Sin Filtered"
+    entity_id: sensor.wind_direction_sin
+    filters:
+      - filter: lowpass
+        time_constant: 15
+        precision: 4
+
+  - platform: filter
+    name: "Wind Direction Cos Filtered"
+    entity_id: sensor.wind_direction_cos
+    filters:
+      - filter: lowpass
+        time_constant: 15
+        precision: 4
+
+  - platform: statistics
+    name: "Air Pressure Change 3h"
+    unique_id: "fe1282c1-da71-4db8-a538-a9c9a7965fb3"
+    entity_id: sensor.air_pressure_qnh
+    state_characteristic: change
+    max_age:
+      hours: 3
+
 template:
   - weather:
       - name: "Forecast Tomorrow"
@@ -251,7 +297,7 @@ template:
         # don't use office illuminance, because we might turn on the desk lamp, which will then trigger a low light condition
         # value_template: "{{ states('sensor.office_illuminance') | int(0) <= 25 }}"
         state: >
-          {{ states('sensor.weather_based_sun_illuminance') | int(0) < 35000 or is_state('binary_sensor.is_fair_weather', 'off') }}
+          {{ states('sensor.weather_station_illuminance') | int(0) < 35000 or is_state('binary_sensor.is_fair_weather', 'off') }}
       # https://github.com/pnbruckner/ha-sun2/blob/master/custom_components/sun2/const.py
       # keep value in sync with the fair weather binary sensor
   - binary_sensor:
@@ -302,17 +348,25 @@ template:
   - sensor:
       - name: "Outside Temperature"
         unique_id: "17306e70-7ffe-49a1-a448-9c99df8f7690"
+        variables:
+          temperature_entity: sensor.weather_station_temperature
+          thermal_perception_entity: sensor.thermal_comfort_outside_summer_simmer_perception
         state: >-
-          {{ state_attr('weather.openweathermap', 'temperature') | float(None) }}
+          {{ states(temperature_entity) }}
+          {# state_attr('weather.openweathermap', 'temperature') | float(None) #}
           {# states('sensor.saaqis_ambient_temperature') | float(None) #}
         device_class: temperature
         unit_of_measurement: "°C"
         icon: mdi:thermometer
+        attributes:
+          thermal_comfort_label: "{{ states(thermal_perception_entity) | replace('_', ' ') | title }}"
+        availability: "{{ has_value(temperature_entity) }}"
   - sensor:
       - name: "Outside Temperature Feels Like"
         unique_id: "95a1d418-6c6c-4df2-bda2-30d575612488"
         default_entity_id: sensor.outside_feels_like
         variables:
+          # todo
           temperature_entity: sensor.openweathermap_feels_like_temperature
         availability: "{{ temperature_entity | has_value }}"
         state: >-
@@ -349,7 +403,7 @@ template:
       - name: Time of Day
         unique_id: "9c81145a-3e30-4850-8e4a-3b8873be4333"
         state: "{{ 'Day' if states('sensor.solar_angle') | float(0) >= -0.833 else 'Night' }}"
-
+        # icon
   # https://www.home-assistant.io/integrations/template/#trigger-based-handling-of-service-response-data
   # https://community.home-assistant.io/t/petition-dont-delete-the-forecast-attribute/609298/38
   # https://community.home-assistant.io/t/petition-dont-delete-the-forecast-attribute/609298/240
@@ -620,6 +674,308 @@ template:
           {% else %}
             0
           {% endif %}
+  - sensor:
+      - name: "Wind Direction Sin"
+        unique_id: "c4415109-747b-4ae9-936f-02303dd4d667"
+        state: >-
+          {{ sin(states('sensor.weather_station_wind_direction') | float(0) * pi / 180) }}
+        unit_of_measurement: "1"
+        availability: >-
+          {{ has_value('sensor.weather_station_wind_direction') }}
+      - name: "Wind Direction Cos"
+        unique_id: "405d088b-18f5-4127-9e1a-9747755ee468"
+        state: >-
+          {{ cos(states('sensor.weather_station_wind_direction') | float(0) * pi / 180) }}
+        unit_of_measurement: "1"
+        availability: >-
+          {{ has_value('sensor.weather_station_wind_direction') }}
+  - sensor:
+      - name: "Wind Speed Filtered (km/h)"
+        unique_id: "129b8596-8fe1-4f6b-8774-6c949f6a1ca3"
+        unit_of_measurement: "km/h"
+        device_class: wind_speed
+        state: >-
+          {{ (states('sensor.wind_speed_filtered') | float(0) * 3.6) | round(1) }}
+        availability: >-
+          {{ has_value('sensor.wind_speed_filtered') }}
+      - name: "Wind Direction Filtered"
+        unique_id: "bc1a58b7-29b5-4100-9962-d1c99dbfe31a"
+        unit_of_measurement: "°"
+        icon: mdi:sign-direction
+        state: >-
+          {% set s = states('sensor.wind_direction_sin_filtered') | float(0) %}
+          {% set c = states('sensor.wind_direction_cos_filtered') | float(0) %}
+          {{ (atan2(s, c) * 180 / pi) % 360 }}
+        availability: >-
+          {{ has_value('sensor.wind_direction_sin_filtered') and has_value('sensor.wind_direction_cos_filtered') }}
+      - name: "Wind Condition (Beaufort)"
+        unique_id: "c78415ce-adf3-469c-a46d-0a04094e5187"
+        icon: mdi:weather-windy
+        state: >-
+          {% set wind_speed = states('sensor.wind_speed_filtered') | float(0) %}
+          {% if wind_speed < 0.5 %} calm
+          {% elif wind_speed < 1.6 %} light_air
+          {% elif wind_speed < 3.4 %} light_breeze
+          {% elif wind_speed < 5.5 %} gentle_breeze
+          {% elif wind_speed < 8.0 %} moderate_breeze
+          {% elif wind_speed < 10.8 %} fresh_breeze
+          {% elif wind_speed < 13.9 %} strong_breeze
+          {% elif wind_speed < 17.2 %} near_gale
+          {% elif wind_speed < 20.8 %} gale
+          {% elif wind_speed < 24.5 %} strong_gale
+          {% elif wind_speed < 28.5 %} storm
+          {% elif wind_speed < 32.7 %} violent_storm
+          {% else %} extreme_storm
+          {% endif %}
+        attributes:
+          label: >-
+            {% set labels = {
+              'calm': 'Calm',
+              'light_air': 'Light Air',
+              'light_breeze': 'Light Breeze',
+              'gentle_breeze': 'Gentle Breeze',
+              'moderate_breeze': 'Moderate Breeze',
+              'fresh_breeze': 'Fresh Breeze',
+              'strong_breeze': 'Strong Breeze',
+              'near_gale': 'Near Gale',
+              'gale': 'Gale',
+              'strong_gale': 'Strong Gale',
+              'storm': 'Storm',
+              'violent_storm': 'Violent Storm',
+              'extreme_storm': 'Extreme Storm'
+            } %}
+            {{ labels.get(this.state, 'Unknown') }}
+          wind_speed_with_unit: >-
+            {{ "{:,.1f}".format(states('sensor.wind_speed_filtered') | float(0) * 3.6) }} km/h
+          compass_direction: >-
+            {{ states('sensor.wind_compass_direction') }}
+        availability: >-
+          {{ has_value('sensor.wind_speed_filtered') }}
+      - name: "Wind Compass Direction"
+        unique_id: "d8242f18-674c-489a-8182-ef8f5c218f8c"
+        icon: mdi:compass-outline
+        state: >-
+          {% from 'environment.jinja' import get_direction_8 %}
+          {% set wind_bearing = states('sensor.wind_direction_filtered') | float(0) | int %}
+          {% set wind_speed = states('sensor.wind_speed_filtered') | float(0) %}
+          {% if wind_speed < 0.5 %}
+            {{ '' }}
+          {% else %}
+            {{ get_direction_8(wind_bearing) }}
+          {% endif %}
+        availability: >-
+          {{ has_value('sensor.wind_direction_filtered') and has_value('sensor.wind_speed_filtered') }}
+      - name: "Lux Condition"
+        unique_id: "f349c751-0b26-4dd0-ab86-3c1c6db42598"
+        icon: mdi:brightness-6
+        state: >-
+          {% set lux = states('sensor.weather_station_illuminance') | float(0) %}
+          {% if lux < 1 %} dark
+          {% elif lux < 50 %} twilight
+          {% elif lux < 500 %} dim
+          {% elif lux < 10000 %} shaded
+          {% elif lux < 32000 %} bright
+          {% else %} brilliant
+          {% endif %}
+        attributes:
+          label: >-
+            {{ this.state | title }}
+          lux_with_unit: >-
+            {{ "{:,.0f}".format(states('sensor.weather_station_illuminance') | float(0)) }} {{ state_attr('sensor.weather_station_illuminance', 'unit_of_measurement') }}
+        availability: >-
+          {{ has_value('sensor.weather_station_illuminance') }}
+      - name: "UV Condition"
+        unique_id: uv_condition
+        icon: mdi:sun-wireless-outline
+        variables:
+          uv_entity: sensor.weather_station_uv_index
+        state: >-
+          {% set uv = states(uv_entity) | float(0) %}
+          {% if uv < 1 %} no_uv
+          {% elif uv < 3 %} low
+          {% elif uv < 6 %} moderate
+          {% elif uv < 8 %} high
+          {% elif uv < 11 %} very_high
+          {% else %} extreme
+          {% endif %}
+        attributes:
+          label: >-
+            {% set labels = {
+              'no_uv': 'No Risk',
+              'low': 'Low',
+              'moderate': 'Moderate',
+              'high': 'High',
+              'very_high': 'Very High',
+              'extreme': 'Extreme'
+            } %}
+            {{ labels.get(this.state, 'Unknown') }}
+          index: >-
+            {{ states(uv_entity) | int(0) }}
+        availability: >-
+          {{ has_value(uv_entity) }}
+      - name: "Humidity Condition"
+        unique_id: "0028b666-9493-4775-8055-63d3e8d7745e"
+        icon: mdi:water-percent
+        variables:
+          perception_entity: sensor.thermal_comfort_outside_dew_point_perception
+          humidity_entity: sensor.weather_station_humidity
+        state: >-
+          {{ states(perception_entity) }}
+        attributes:
+          label: >-
+            {% set labels = {
+              'dry': 'Dry',
+              'very_comfortable': 'Ideal',
+              'comfortable': 'Comfortable',
+              'ok_but_humid': 'Humid',
+              'somewhat_uncomfortable': 'Muggy',
+              'quite_uncomfortable': 'Oppressive',
+              'extremely_uncomfortable': 'Miserable',
+              'severely_high': 'Dangerous'
+            } %}
+            {{ labels.get(this.state, 'Unknown') }}
+          humidity_with_unit: >-
+            {{ "{:.0f}".format(states(humidity_entity) | float(0)) }} {{ state_attr(humidity_entity, 'unit_of_measurement') }}
+        availability: >-
+          {{ has_value(perception_entity) and has_value(humidity_entity) }}
+      - name: "Precipitation Total"
+        unique_id: "ee251e57-e2b0-4c5a-b236-516077712fea"
+        unit_of_measurement: "mm"
+        device_class: precipitation
+        state_class: total_increasing
+        state: >-
+          {{ states('sensor.weather_station_precipitation') | float(0) }}
+        availability: >-
+          {{ has_value('sensor.weather_station_precipitation') }}
+      - name: "Air Pressure (QNH)"
+        unique_id: "f056014d-7059-4b0e-8ea3-cf40bf33a176"
+        unit_of_measurement: "hPa"
+        icon: mdi:gauge
+        device_class: pressure
+        variables:
+          temperature_entity: sensor.weather_station_temperature
+          air_pressure_entity: sensor.weather_station_air_pressure
+          air_pressure_trend_entity: sensor.air_pressure_trend
+        state: >-
+          {% set e = 2.718281828459045 %}
+          {% set P_station = states(air_pressure_entity) | float(0) %}
+          {% set g = 9.80665 %}
+          {% set h = 130 %}
+          {# R is the specific gas constant for dry air #}
+          {% set R = 287.05 %}
+          {% set T = states(temperature_entity) | float(15) + 273.15 %}
+          {# P_sealevel = P_station * exp(g * h / (R * T)) #}
+          {{ (P_station * (e ** (g * h / (R * T)))) | round(1) }}
+        attributes:
+          trend_label: >-
+            {{ state_attr(air_pressure_trend_entity, 'label') }}
+        availability: >-
+          {{ has_value(air_pressure_entity) and has_value(temperature_entity) }}
+      - name: "Rain Rate Condition"
+        unique_id: "9a9e3b1e-c213-4556-b5ec-fcfa52c5f0a5"
+        icon: mdi:weather-pouring
+        variables:
+          rain_rate_entity: sensor.rain_rate
+          daily_precipitation_entity: sensor.daily_precipitation
+          # sql configured via UI:
+          #   SELECT ROUND(
+          #     CAST(MAX(state) AS NUMERIC) - CAST(MIN(state) AS NUMERIC), 2
+          #   ) AS total
+          #   FROM states
+          #   INNER JOIN states_meta ON states.metadata_id = states_meta.metadata_id
+          #   WHERE states_meta.entity_id = 'sensor.precipitation_total'
+          #   AND last_updated_ts >= EXTRACT(EPOCH FROM NOW()) - 86400
+          #   AND state NOT IN ('unknown', 'unavailable');
+          rain_24h_entity: sensor.rain_24h
+        state: >-
+          {% set rate = states(rain_rate_entity) | float(0) %}
+          {% if rate <= 0 %} no_rain
+          {% elif rate < 2.5 %} light
+          {% elif rate < 7.6 %} moderate
+          {% elif rate < 50 %} heavy
+          {% else %} violent
+          {% endif %}
+        attributes:
+          label: >-
+            {% set labels = {
+              'no_rain': 'No Rain',
+              'light': 'Light Rain',
+              'moderate': 'Moderate Rain',
+              'heavy': 'Heavy Rain',
+              'violent': 'Violent Rain'
+            } %}
+            {{ labels.get(this.state, 'Unknown') }}
+          rain_rate_with_unit: >-
+            {{ "{:,.1f}".format(states(rain_rate_entity) | float(0)) }} {{ state_attr(rain_rate_entity, 'unit_of_measurement') }}
+          rain_today_with_unit: >-
+            {{ "{:,.1f}".format(states(daily_precipitation_entity) | float(0)) }} {{ state_attr(daily_precipitation_entity, 'unit_of_measurement') }}
+          rain_24h_with_unit: >-
+            {{ "{:,.1f}".format(states(rain_24h_entity) | float(0)) }} {{ state_attr(rain_24h_entity, 'unit_of_measurement') }}
+        availability: >-
+          {{ has_value('sensor.rain_rate') }}
+      - name: "Air Pressure Trend"
+        unique_id: "ea2872cc-f7af-4be0-852a-ab25a44ebacf"
+        icon: mdi:trending-up
+        variables:
+          change_entity: sensor.air_pressure_change_3h
+        state: >-
+          {% set change = states(change_entity) | float(0) %}
+          {% if change > 3 %} rising_rapidly
+          {% elif change > 1.5 %} rising
+          {% elif change > 0.5 %} rising_slowly
+          {% elif change >= -0.5 %} steady
+          {% elif change >= -1.5 %} falling_slowly
+          {% elif change >= -3 %} falling
+          {% else %} falling_rapidly
+          {% endif %}
+        attributes:
+          label: >-
+            {% set labels = {
+              'rising_rapidly': 'Rising Rapidly',
+              'rising': 'Rising',
+              'rising_slowly': 'Rising Slowly',
+              'steady': 'Steady',
+              'falling_slowly': 'Falling Slowly',
+              'falling': 'Falling',
+              'falling_rapidly': 'Falling Rapidly'
+            } %}
+            {{ labels.get(this.state, 'Unknown') }}
+        availability: >-
+          {{ has_value(change_entity) }}
+  - trigger:
+      - trigger: time_pattern
+        minutes: "/5"
+      - trigger: state
+        entity_id: sensor.precipitation_total
+    sensor:
+      - name: "Rain Rate"
+        unique_id: "283562c0-d3dc-4bab-8d17-2fe3b204f5af"
+        unit_of_measurement: "mm/h"
+        device_class: precipitation_intensity
+        state_class: measurement
+        variables:
+          precipitation_entity: sensor.precipitation_total
+        state: >-
+          {% set current_value = states(precipitation_entity) | float(0) %}
+          {% set prev_value = this.attributes.get('raw_value', current_value) %}
+          {% set prev_time_iso = this.attributes.get('sample_time') %}
+          {% if prev_time_iso is none %}
+            0
+          {% else %}
+            {% set elapsed_hours = (now() - as_datetime(prev_time_iso)).total_seconds() / 3600 %}
+            {% if elapsed_hours <= 0 %}
+              {{ this.state | float(0) }}
+            {% else %}
+              {{ ((current_value - prev_value) / elapsed_hours) | round(2) }}
+            {% endif %}
+          {% endif %}
+        attributes:
+          raw_value: >-
+            {{ states(precipitation_entity) | float(0) }}
+          sample_time: >-
+            {{ now().isoformat() }}
+        availability: >-
+          {{ has_value(precipitation_entity) }}
 
 multiscrape:
   - resource: https://pollencount.co.za/
@@ -1542,7 +1898,7 @@ automation:
     initial_state: true
     trigger:
       - platform: numeric_state
-        entity_id: sensor.openweathermap_uv_index
+        entity_id: sensor.weather_station_uv_index
         above: 7
     mode: single
     condition:
@@ -1652,33 +2008,13 @@ automation:
   #   SELECT * FROM states_meta WHERE entity_id = 'sensor.bedroom_ht_temperature';
   #
   # sql sensor query:
-  #   WITH before_point AS (
-  #     SELECT
-  #       state::NUMERIC AS state
-  #     FROM states
-  #     WHERE metadata_id = 9803
-  #       AND state != 'unavailable'
-  #       AND NOW() - TO_TIMESTAMP(last_updated_ts) >= INTERVAL '24 hours'
-  #     ORDER BY TO_TIMESTAMP(last_updated_ts) DESC
-  #     LIMIT 1
-  #   ),
-  #   after_point AS (
-  #     SELECT
-  #       state::NUMERIC AS state
-  #     FROM states
-  #     WHERE metadata_id = 9803
-  #       AND state != 'unavailable'
-  #       AND NOW() - TO_TIMESTAMP(last_updated_ts) < INTERVAL '24 hours'
-  #     ORDER BY TO_TIMESTAMP(last_updated_ts) ASC
-  #     LIMIT 1
-  #   )
-  #   SELECT
-  #     ROUND(AVG(state), 1) AS average_state
-  #   FROM (
-  #     SELECT state FROM before_point
-  #     UNION ALL
-  #     SELECT state FROM after_point
-  #   ) combined_points;
+  #   SELECT state::NUMERIC AS state
+  #   FROM states
+  #   WHERE metadata_id = 17128
+  #     AND state NOT IN ('unavailable', 'unknown')
+  #     AND TO_TIMESTAMP(last_updated_ts) <= NOW() - INTERVAL '24 hours'
+  #   ORDER BY last_updated_ts DESC
+  #   LIMIT 1;
   - alias: "Update Bedroom Temperature 24 Hours Ago"
     id: "3a6fa2e6-355b-405b-b53a-5d52d8e3aa84"
     initial_state: true

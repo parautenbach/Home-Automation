@@ -395,7 +395,7 @@ cards:
               - entity: sensor.bedroom_ht_humidity
                 name: Bedroom
                 color: var(--custom-color-magenta)
-              - entity: sensor.openweathermap_humidity
+              - entity: sensor.weather_station_humidity
                 name: Outside
                 color: var(--custom-color-red)
               - entity: sensor.nighttime_number

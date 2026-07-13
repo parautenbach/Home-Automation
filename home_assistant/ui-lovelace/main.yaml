@@ -552,6 +552,72 @@ cards:
           labels_secondary: false
   - type: vertical-stack
     cards:
+      - type: grid
+        title: Weather
+        columns: 2
+        square: false
+        cards:
+          - type: tile
+            entity: sensor.outside_temperature
+            name: Temperature
+            icon: mdi:thermometer
+            # todo: card_mod
+            state_content:
+              - thermal_comfort_label
+              - state
+          - type: tile
+            entity: sensor.humidity_condition
+            name: Humidity
+            icon: mdi:water-percent
+            state_content:
+              - label
+              - humidity_with_unit
+          - type: tile
+            entity: sensor.weather_station_dew_point
+            name: Dew Point
+            icon: mdi:thermometer-water
+            # todo: card_mod
+          - type: tile
+            entity: sensor.air_pressure_qnh
+            name: Atmosphere
+            icon: mdi:weather-hazy
+            state_content:
+              - trend_label
+              - state
+          - type: tile
+            entity: sensor.rain_rate_condition
+            name: Rain
+            icon: mdi:weather-pouring
+            state_content:
+              - label
+              - rain_rate_with_unit
+              - rain_24h_with_unit
+          - type: tile
+            entity: sensor.wind_condition_beaufort
+            name: Wind
+            icon: mdi:weather-windy
+            # icon: mdi:compass-outline
+            # icon: mdi:weather-windy-variant
+            state_content:
+              - label
+              - wind_speed_with_unit
+              - compass_direction
+            # todo: card_mod
+          - type: tile
+            entity: sensor.lux_condition
+            name: Light
+            icon: mdi:brightness-6
+            state_content:
+              - label
+              - lux_with_unit
+          - type: tile
+            entity: sensor.uv_condition
+            name: UV Risk
+            icon: mdi:sun-wireless-outline
+            state_content:
+              - label
+              - index
+            # todo: card_mod
       - type: horizontal-stack
         title: Clocks
         cards:

@@ -40,6 +40,9 @@ homeassistant:
       monitor: True
     binary_sensor.cabinet_door:
       device_class: door
+    sensor.weather_station_battery:
+      friendly_name: Weather Station Battery
+      monitor: True
     # sensor.cabinet_luminosity:
     #   state_class: null
     # sensor.cabinet_temperature:

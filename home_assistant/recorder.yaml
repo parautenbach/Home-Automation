@@ -76,6 +76,10 @@ exclude:
     - sensor.inverter_efficiency
     - script.update_entity
     - sensor.faulty_automations
+    - sensor.wind_direction_sin
+    - sensor.wind_direction_sin_filtered
+    - sensor.wind_direction_cos
+    - sensor.wind_direction_cos_filtered
     # large attributes
     - sensor.security_camera_snapshots
     - sensor.home_assistant

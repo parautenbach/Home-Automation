@@ -404,7 +404,7 @@ cards:
               - entity: sensor.power_production_now
                 name: Forecast
                 color: var(--custom-color-gray)
-              - entity: sensor.weather_based_sun_illuminance
+              - entity: sensor.weather_station_illuminance
                 name: Illuminance
                 color: var(--custom-color-magenta)
                 y_axis: secondary

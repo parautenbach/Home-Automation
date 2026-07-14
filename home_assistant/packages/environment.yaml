@@ -857,7 +857,6 @@ template:
           air_pressure_entity: sensor.weather_station_air_pressure
           air_pressure_trend_entity: sensor.air_pressure_trend
         state: >-
-          {% set e = 2.718281828459045 %}
           {% set P_station = states(air_pressure_entity) | float(0) %}
           {% set g = 9.80665 %}
           {% set h = 130 %}

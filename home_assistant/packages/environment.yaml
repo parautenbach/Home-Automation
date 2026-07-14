@@ -375,6 +375,16 @@ template:
         unit_of_measurement: "°C"
         icon: mdi:thermometer
   - sensor:
+      - name: "Outside Apparent Temperature"
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state: >-
+          {% set t = states('sensor.weather_station_temperature') | float(0) %}
+          {% set rh = states('sensor.weather_station_humidity') | float(0) %}
+          {% set ws = states('sensor.wind_speed_filtered') | float(0) %}
+          {% set vp = rh / 100 * 6.105 * e ** (17.27 * t / (237.7 + t)) %}
+          {{ (t + 0.33 * vp - 0.70 * ws - 4.00) | round(1) }}
+  - sensor:
       - name: "Daylight Length"
         unique_id: "561ee1b3-fcf4-4477-9f93-d7c402b9283b"
         default_entity_id: sensor.daylight_hm

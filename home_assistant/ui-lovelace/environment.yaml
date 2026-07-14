@@ -783,7 +783,7 @@ cards:
         hourly_forecast: false
         sun_entity: sun.sun
         # todo
-        apparent_sensor: sensor.outside_feels_like
+        apparent_sensor: sensor.outside_apparent_temperature
         aqi_sensor: sensor.owm_pollution_overall_air_quality
       - type: custom:swipe-card
         parameters:
@@ -899,7 +899,7 @@ cards:
               - entity: sensor.outside_temperature_filtered
                 name: Outside
                 color: var(--custom-color-red)
-              # - entity: sensor.outside_feels_like
+              # - entity: sensor.outside_apparent_temperature
               #   name: Feels Like
               #   color: var(--custom-color-magenta)
               - entity: sensor.nighttime_number

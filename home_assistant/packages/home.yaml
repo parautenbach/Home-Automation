@@ -1695,8 +1695,7 @@ automation:
         state: "off"
       - condition: template
         value_template: >-
-          {{ 'rain' not in states('weather.openweathermap') and
-             'pouring' not in states('weather.openweathermap') }}
+          {{ not is_states('sensor.rain_rate_condition', 'no_rain') }}
     action:
       - service: weather.get_forecasts
         target:

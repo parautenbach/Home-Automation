@@ -1913,8 +1913,7 @@ automation:
     condition:
       - condition: template
         value_template: >-
-          {{ 'rain' not in states('weather.openweathermap') and
-             'pouring' not in states('weather.openweathermap') }}
+          {{ not is_state('sensor.rain_rate_condition', 'no_rain') }}
     action:
       - service: notify.family
         data:

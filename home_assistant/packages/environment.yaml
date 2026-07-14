@@ -1701,6 +1701,8 @@ rest:
         unique_id: "a6216372-5645-4653-a4ee-32646296b0b2"
         icon: mdi:waves-arrow-left
         value_template: >-
+          {% set phase = 'low' %}
+          {% set current = now() %}
           {% set times = value_json.data
               | default([])
               | selectattr('type', 'eq', phase)
@@ -1721,6 +1723,8 @@ rest:
         unique_id: "a62c01e5-b90c-423e-b8f7-efc24a162383"
         icon: mdi:waves-arrow-right
         value_template: >-
+          {% set phase = 'high' %}
+          {% set current = now() %}
           {% set times = value_json.data
               | default([])
               | selectattr('type', 'eq', phase)

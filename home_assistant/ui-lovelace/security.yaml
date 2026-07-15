@@ -180,166 +180,143 @@ cards:
       - type: horizontal-stack
         title: Events
         cards:
-          - type: custom:home-feed-card
-            # fix heading font/size
+          - type: custom:multiple-logbook-card
             # title: Events
-            show_empty: true
-            max_item_count: 50
-            state_color: false
-            compact_mode: true
-            show_icons: false
-            max_height: 14em
+            desc: true
+            hours_to_show: 24
+            max_items: 50
+            date_format: "DD MMM HH:mm"
+            scroll: true
+            show:
+              icon: true
+              duration: true
+              start_date: true
+              end_date: true
+              entity_name: true
+              separator: true
             entities:
               - entity: binary_sensor.doorbell_rang
-                include_history: true
-                max_history: 5
-                remove_repeats: false
-                exclude_states:
+                label: Doorbell
+                hidden_state:
                   - "off"
-                  - "unknown"
-                  - "unavailable"
-                format: datetime
-                content_template: "Doorbell rang"
+                  - unknown
+                  - unavailable
+                state_map:
+                  - value: "on"
+                    label: rang
               - entity: cover.main_gate
-                include_history: true
-                max_history: 5
-                remove_repeats: false
-                exclude_states:
-                  - "unknown"
-                  - "unavailable"
-                format: datetime
-                content_template: "Main gate {{state}}"
+                label: Main gate
+                hidden_state:
+                  - unknown
+                  - unavailable
               - entity: cover.garage_doors_lhs
-                include_history: true
-                max_history: 5
-                remove_repeats: false
-                exclude_states:
-                  - "unknown"
-                  - "unavailable"
-                format: datetime
-                content_template: "Rouvé's garage door {{state}}"
+                label: "Rouvé's garage door"
+                hidden_state:
+                  - unknown
+                  - unavailable
               - entity: cover.garage_doors_rhs
-                include_history: true
-                max_history: 5
-                remove_repeats: false
-                exclude_states:
-                  - "unknown"
-                  - "unavailable"
-                format: datetime
-                content_template: "Pieter's garage door {{state}}"
+                label: "Pieter's garage door"
+                hidden_state:
+                  - unknown
+                  - unavailable
               - entity: alarm_control_panel.home
-                include_history: true
-                max_history: 5
-                remove_repeats: false
-                exclude_states:
-                  - "unknown"
-                  - "unavailable"
-                format: datetime
+                label: Home alarm
+                hidden_state:
+                  - unknown
+                  - unavailable
                 state_map:
-                  disarmed: "disarmed"
-                  armed_home: "armed (stay)"
-                  armed_away: "armed"
-                content_template: "Home alarm was {{state}}"
+                  - value: disarmed
+                    label: disarmed
+                  - value: armed_home
+                    label: armed (stay)
+                  - value: armed_away
+                    label: armed
               - entity: alarm_control_panel.flatlet
-                include_history: true
-                max_history: 5
-                remove_repeats: false
-                exclude_states:
-                  - "unknown"
-                  - "unavailable"
-                format: datetime
+                label: Flatlet alarm
+                hidden_state:
+                  - unknown
+                  - unavailable
                 state_map:
-                  disarmed: "disarmed"
-                  armed_away: "armed"
-                content_template: "Flatlet alarm was {{state}}"
+                  - value: disarmed
+                    label: disarmed
+                  - value: armed_away
+                    label: armed
               - entity: binary_sensor.kitchen_smoke
-                include_history: true
-                max_history: 5
-                remove_repeats: false
-                exclude_states:
+                label: Kitchen smoke
+                hidden_state:
                   - "off"
-                  - "unknown"
-                  - "unavailable"
-                format: datetime
-                content_template: "Smoke was detected in the kitchen"
+                  - unknown
+                  - unavailable
+                state_map:
+                  - value: "on"
+                    label: detected
               - entity: binary_sensor.garage_smoke
-                include_history: true
-                max_history: 5
-                remove_repeats: false
-                exclude_states:
+                label: Garage smoke
+                hidden_state:
                   - "off"
-                  - "unknown"
-                  - "unavailable"
-                format: datetime
-                content_template: "Smoke was detected in the garage"
+                  - unknown
+                  - unavailable
+                state_map:
+                  - value: "on"
+                    label: detected
               - entity: binary_sensor.braai_room_smoke
-                include_history: true
-                max_history: 5
-                remove_repeats: false
-                exclude_states:
+                label: Braai room smoke
+                hidden_state:
                   - "off"
-                  - "unknown"
-                  - "unavailable"
-                format: datetime
-                content_template: "Smoke was detected in the braai room"
+                  - unknown
+                  - unavailable
+                state_map:
+                  - value: "on"
+                    label: detected
               - entity: binary_sensor.scullery_flooding
-                include_history: true
-                max_history: 5
-                remove_repeats: false
-                exclude_states:
+                label: Scullery water
+                hidden_state:
                   - "off"
-                  - "unknown"
-                  - "unavailable"
-                format: datetime
-                content_template: "Water was detected in the scullery"
+                  - unknown
+                  - unavailable
+                state_map:
+                  - value: "on"
+                    label: detected
               - entity: binary_sensor.home_test_zone_001_front_door
-                include_history: true
-                max_history: 5
-                remove_repeats: false
-                exclude_states:
-                  - "unknown"
-                  - "unavailable"
-                format: datetime
+                label: Front door
+                hidden_state:
+                  - unknown
+                  - unavailable
                 state_map:
-                  'on': "opened"
-                  'off': "closed"
-                content_template: "Front door was {{state}}"
+                  - value: "on"
+                    label: opened
+                  - value: "off"
+                    label: closed
               - entity: binary_sensor.home_test_zone_006_kitchen
-                include_history: true
-                max_history: 5
-                remove_repeats: false
-                exclude_states:
-                  - "unknown"
-                  - "unavailable"
-                format: datetime
+                label: Kitchen door
+                hidden_state:
+                  - unknown
+                  - unavailable
                 state_map:
-                  'on': "opened"
-                  'off': "closed"
-                content_template: "Kitchen door was {{state}}"
+                  - value: "on"
+                    label: opened
+                  - value: "off"
+                    label: closed
               - entity: binary_sensor.home_test_zone_019_music_room_door
-                include_history: true
-                max_history: 5
-                remove_repeats: false
-                exclude_states:
-                  - "unknown"
-                  - "unavailable"
-                format: datetime
+                label: Music room door
+                hidden_state:
+                  - unknown
+                  - unavailable
                 state_map:
-                  'on': "opened"
-                  'off': "closed"
-                content_template: "Music room door was {{state}}"
+                  - value: "on"
+                    label: opened
+                  - value: "off"
+                    label: closed
               - entity: binary_sensor.home_test_zone_020_braai_room_door
-                include_history: true
-                max_history: 5
-                remove_repeats: false
-                exclude_states:
-                  - "unknown"
-                  - "unavailable"
-                format: datetime
+                label: Braai room door
+                hidden_state:
+                  - unknown
+                  - unavailable
                 state_map:
-                  'on': "opened"
-                  'off': "closed"
-                content_template: "Braai room door was {{state}}"
+                  - value: "on"
+                    label: opened
+                  - value: "off"
+                    label: closed
       - type: entities
         title: "Gates & Doors"
         show_header_toggle: false

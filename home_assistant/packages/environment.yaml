@@ -540,6 +540,41 @@ template:
       - platform: homeassistant
         event: start
       - platform: state
+        entity_id: sensor.stormglass_simon_s_town_tide_extremes
+        attribute: data
+      - platform: time
+        at:
+          - sensor.stormglass_simon_s_town_next_low_tide
+          - sensor.stormglass_simon_s_town_next_high_tide
+    sensor:
+      - name: Stormglass Simon's Town Next Low Tide
+        unique_id: "a6216372-5645-4653-a4ee-32646296b0b2"
+        icon: mdi:waves-arrow-left
+        device_class: timestamp
+        variables:
+          next_at: >-
+            {% from 'environment.jinja' import next_tide_extreme %}
+            {% set data = state_attr('sensor.stormglass_simon_s_town_tide_extremes', 'data') %}
+            {% set phase = 'low' %}
+            {{ next_tide_extreme(data, phase) }}
+        availability: "{{ next_at != '' or this.state not in ['unknown', 'unavailable'] }}"
+        state: "{{ next_at if next_at != '' else this.state }}"
+      - name: Stormglass Simon's Town Next High Tide
+        unique_id: "a62c01e5-b90c-423e-b8f7-efc24a162383"
+        icon: mdi:waves-arrow-right
+        device_class: timestamp
+        variables:
+          next_at: >-
+            {% from 'environment.jinja' import next_tide_extreme %}
+            {% set data = state_attr('sensor.stormglass_simon_s_town_tide_extremes', 'data') %}
+            {% set phase = 'high' %}
+            {{ next_tide_extreme(data, phase) }}
+        availability: "{{ next_at != '' or this.state not in ['unknown', 'unavailable'] }}"
+        state: "{{ next_at if next_at != '' else this.state }}"
+  - trigger:
+      - platform: homeassistant
+        event: start
+      - platform: state
         entity_id:
           - sensor.stormglass_simon_s_town_next_low_tide
           - sensor.stormglass_simon_s_town_next_high_tide
@@ -582,6 +617,127 @@ template:
             {% else %}
               unknown
             {% endif %}
+  - trigger:
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id: sensor.stormglass_simon_s_town_marine_hours
+        attribute: hours
+      - platform: time_pattern
+        minutes: 0
+    sensor:
+      - name: Stormglass Simon's Town Current Direction
+        unique_id: "48f4928e-df4d-4c31-b10e-96e6054da89d"
+        icon: mdi:compass-outline
+        unit_of_measurement: "°"
+        variables:
+          value: >-
+            {% from 'environment.jinja' import marine_hour_value %}
+            {% set hours = state_attr('sensor.stormglass_simon_s_town_marine_hours', 'hours') %}
+            {% set param = 'currentDirection' %}
+            {{ marine_hour_value(hours, param) }}
+        availability: "{{ value != '' }}"
+        state: "{{ value | float(0) | round(0) | int }}"
+      - name: Stormglass Simon's Town Current Speed
+        unique_id: "47334c18-dcb8-4a48-b859-30bc795401e7"
+        icon: mdi:speedometer
+        unit_of_measurement: "m/s"
+        device_class: speed
+        variables:
+          value: >-
+            {% from 'environment.jinja' import marine_hour_value %}
+            {% set hours = state_attr('sensor.stormglass_simon_s_town_marine_hours', 'hours') %}
+            {% set param = 'currentSpeed' %}
+            {{ marine_hour_value(hours, param) }}
+        availability: "{{ value != '' }}"
+        state: "{{ value | float(0) }}"
+      - name: Stormglass Simon's Town Swell Direction
+        unique_id: "bb12a878-7437-4f5d-81e5-ff519db15fa4"
+        icon: mdi:compass-outline
+        unit_of_measurement: "°"
+        variables:
+          value: >-
+            {% from 'environment.jinja' import marine_hour_value %}
+            {% set hours = state_attr('sensor.stormglass_simon_s_town_marine_hours', 'hours') %}
+            {% set param = 'swellDirection' %}
+            {{ marine_hour_value(hours, param) }}
+        availability: "{{ value != '' }}"
+        state: "{{ value | float(0) | round(0) | int }}"
+      - name: Stormglass Simon's Town Swell Height
+        unique_id: "f42009dd-141c-41e1-94b4-4af626a71992"
+        icon: mdi:arrow-up-down
+        unit_of_measurement: "m"
+        variables:
+          value: >-
+            {% from 'environment.jinja' import marine_hour_value %}
+            {% set hours = state_attr('sensor.stormglass_simon_s_town_marine_hours', 'hours') %}
+            {% set param = 'swellHeight' %}
+            {{ marine_hour_value(hours, param) }}
+        availability: "{{ value != '' }}"
+        state: "{{ value | float(0) }}"
+      - name: Stormglass Simon's Town Swell Period
+        unique_id: "0de68764-b4e7-4541-89d7-aa3185c6ec14"
+        icon: mdi:arrow-left-right
+        unit_of_measurement: "s"
+        device_class: duration
+        variables:
+          value: >-
+            {% from 'environment.jinja' import marine_hour_value %}
+            {% set hours = state_attr('sensor.stormglass_simon_s_town_marine_hours', 'hours') %}
+            {% set param = 'swellPeriod' %}
+            {{ marine_hour_value(hours, param) }}
+        availability: "{{ value != '' }}"
+        state: "{{ value | float(0) }}"
+      - name: Stormglass Simon's Town Water Temperature
+        unique_id: "b0f1ce76-9cdf-47f9-b256-b3a60d5665ee"
+        icon: mdi:water-thermometer-outline
+        unit_of_measurement: "°C"
+        device_class: temperature
+        variables:
+          value: >-
+            {% from 'environment.jinja' import marine_hour_value %}
+            {% set hours = state_attr('sensor.stormglass_simon_s_town_marine_hours', 'hours') %}
+            {% set param = 'waterTemperature' %}
+            {{ marine_hour_value(hours, param) }}
+        availability: "{{ value != '' }}"
+        state: "{{ value | float(0) }}"
+      - name: Stormglass Simon's Town Wave Direction
+        unique_id: "606b1c15-cacd-4c2c-bd84-adacdfba3a0f"
+        icon: mdi:compass-outline
+        unit_of_measurement: "°"
+        variables:
+          value: >-
+            {% from 'environment.jinja' import marine_hour_value %}
+            {% set hours = state_attr('sensor.stormglass_simon_s_town_marine_hours', 'hours') %}
+            {% set param = 'waveDirection' %}
+            {{ marine_hour_value(hours, param) }}
+        availability: "{{ value != '' }}"
+        state: "{{ value | float(0) | round(0) | int }}"
+      - name: Stormglass Simon's Town Wave Height
+        unique_id: "5089ff5f-2781-46fc-b76b-acb53e57a41e"
+        icon: mdi:arrow-up-down
+        unit_of_measurement: "m"
+        variables:
+          value: >-
+            {% from 'environment.jinja' import marine_hour_value %}
+            {% set hours = state_attr('sensor.stormglass_simon_s_town_marine_hours', 'hours') %}
+            {% set param = 'waveHeight' %}
+            {{ marine_hour_value(hours, param) }}
+        availability: "{{ value != '' }}"
+        state: "{{ value | float(0) }}"
+      - name: Stormglass Simon's Town Wave Period
+        unique_id: "9ef143be-739d-4891-801d-eb3f9605a44c"
+        icon: mdi:arrow-left-right
+        unit_of_measurement: "s"
+        device_class: duration
+        variables:
+          value: >-
+            {% from 'environment.jinja' import marine_hour_value %}
+            {% set hours = state_attr('sensor.stormglass_simon_s_town_marine_hours', 'hours') %}
+            {% set param = 'wavePeriod' %}
+            {{ marine_hour_value(hours, param) }}
+        availability: "{{ value != '' }}"
+        state: "{{ value | float(0) }}"
   - trigger:
       - platform: state
         entity_id: sensor.stormglass_simon_s_town_swell_direction
@@ -1636,63 +1792,20 @@ rest:
       lat: -34.1102659
       lng: 18.8228665
       start: "{{ utcnow() | as_timestamp | int(0) }}"
-      end: "{{ utcnow() | as_timestamp | int(0) }}"
+      end: "{{ (utcnow() + timedelta(hours=24)) | as_timestamp | int(0) }}"
       params: "currentDirection,currentSpeed,swellDirection,swellHeight,swellPeriod,waterTemperature,waveDirection,waveHeight,wavePeriod"
+      source: sg
     method: GET
     # check 4 times per day
     scan_interval: 21600  # 60*60*6
     timeout: 15
     sensor:
-      - name: Stormglass Simon's Town Current Direction
-        unique_id: "48f4928e-df4d-4c31-b10e-96e6054da89d"
-        icon: mdi:compass-outline
-        value_template: "{{ value_json.hours.0.currentDirection.sg | int(0) }}"
-        unit_of_measurement: "°"
-      - name: Stormglass Simon's Town Current Speed
-        unique_id: "47334c18-dcb8-4a48-b859-30bc795401e7"
-        icon: mdi:speedometer
-        value_template: "{{ value_json.hours.0.currentSpeed.sg | float(0) }}"
-        unit_of_measurement: "m/s"
-        device_class: speed
-      - name: Stormglass Simon's Town Swell Direction
-        unique_id: "bb12a878-7437-4f5d-81e5-ff519db15fa4"
-        icon: mdi:compass-outline
-        value_template: "{{ value_json.hours.0.swellDirection.sg | float(0) }}"
-        unit_of_measurement: "°"
-      - name: Stormglass Simon's Town Swell Height
-        unique_id: "f42009dd-141c-41e1-94b4-4af626a71992"
-        icon: mdi:arrow-up-down
-        value_template: "{{ value_json.hours.0.swellHeight.sg | float(0) }}"
-        unit_of_measurement: "m"
-      - name: Stormglass Simon's Town Swell Period
-        unique_id: "0de68764-b4e7-4541-89d7-aa3185c6ec14"
-        # icon: mdi:timer-outline
-        icon: mdi:arrow-left-right
-        value_template: "{{ value_json.hours.0.swellPeriod.sg | float(0) }}"
-        unit_of_measurement: "s"
-        device_class: duration
-      - name: Stormglass Simon's Town Water Temperature
-        unique_id: "b0f1ce76-9cdf-47f9-b256-b3a60d5665ee"
-        icon: mdi:water-thermometer-outline
-        value_template: "{{ value_json.hours.0.waterTemperature.sg | float(0) }}"
-        unit_of_measurement: "°C"
-        device_class: temperature
-      - name: Stormglass Simon's Town Wave Direction
-        unique_id: "606b1c15-cacd-4c2c-bd84-adacdfba3a0f"
-        icon: mdi:compass-outline
-        value_template: "{{ value_json.hours.0.waveDirection.sg | float(0) }}"
-        unit_of_measurement: "°"
-      - name: Stormglass Simon's Town Wave Height
-        unique_id: "5089ff5f-2781-46fc-b76b-acb53e57a41e"
-        icon: mdi:arrow-up-down
-        value_template: "{{ value_json.hours.0.waveHeight.sg | float(0) }}"
-        unit_of_measurement: "m"
-      - name: Stormglass Simon's Town Wave Period
-        unique_id: "9ef143be-739d-4891-801d-eb3f9605a44c"
-        icon: mdi:arrow-left-right
-        value_template: "{{ value_json.hours.0.wavePeriod.sg | float(0) }}"
-        unit_of_measurement: "s"
-        device_class: duration
+      - name: Stormglass Simon's Town Marine Hours
+        unique_id: "82ee833c-9a35-436f-9c9b-9fb00744ab89"
+        icon: mdi:waves
+        value_template: "{{ value_json.hours | default([], true) | count }}"
+        json_attributes:
+          - hours
   - resource: "https://api.stormglass.io/v2/tide/extremes/point"
     headers:
       Authorization: !secret stormglass_api_key
@@ -1706,50 +1819,12 @@ rest:
     scan_interval: 21600  # 60*60*6
     timeout: 15
     sensor:
-      - name: Stormglass Simon's Town Next Low Tide
-        unique_id: "a6216372-5645-4653-a4ee-32646296b0b2"
-        icon: mdi:waves-arrow-left
-        value_template: >-
-          {% set phase = 'low' %}
-          {% set current = now() %}
-          {% set times = value_json.data
-              | default([])
-              | selectattr('type', 'eq', phase)
-              | map(attribute='time')
-              | map('as_datetime')
-              | map('as_local')
-              | select('>=', current)
-              | sort
-              | list %}
-          {% if times %}
-            {{ times[0] }}
-          {% elif this.state not in ['unknown', 'unavailable'] %}
-            {{ this.state }}
-          {% else %}
-            unknown
-          {% endif %}
-      - name: Stormglass Simon's Town Next High Tide
-        unique_id: "a62c01e5-b90c-423e-b8f7-efc24a162383"
-        icon: mdi:waves-arrow-right
-        value_template: >-
-          {% set phase = 'high' %}
-          {% set current = now() %}
-          {% set times = value_json.data
-              | default([])
-              | selectattr('type', 'eq', phase)
-              | map(attribute='time')
-              | map('as_datetime')
-              | map('as_local')
-              | select('>=', current)
-              | sort
-              | list %}
-          {% if times %}
-            {{ times[0] }}
-          {% elif this.state not in ['unknown', 'unavailable'] %}
-            {{ this.state }}
-          {% else %}
-            unknown
-          {% endif %}
+      - name: Stormglass Simon's Town Tide Extremes
+        unique_id: "3b9c9f2e-8d1a-4f6b-a2e7-5c04d81f9a37"
+        icon: mdi:waves
+        value_template: "{{ value_json.data | default([]) | count }}"
+        json_attributes:
+          - data
 
   # cannot get the gis query to work
   # - resource: "https://services6.arcgis.com/nyYfO9SxHU2ChQd9/ArcGIS/rest/services/Dam_Levels_from_2000/FeatureServer/0/query?where=1%3D1&objectIds=&resultType=none&outFields=&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=false&collation=&orderByFields=&groupByFieldsForStatistics=&returnAggIds=false&outStatistics=&having=&resultOffset=&resultRecordCount=1&sqlFormat=none&f=json"

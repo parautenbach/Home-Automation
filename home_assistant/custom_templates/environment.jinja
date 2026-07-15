@@ -54,3 +54,40 @@ Get the directional arrow icon from the bearing in degrees.
                  ] %}
   {{ icons[((bearing + 180 + 22.5) // 45) | int % 8] }}
 {%- endmacro %}
+
+{#
+Get the next future tide extreme of the given phase from tide extremes data.
+
+:param data: List of extremes dicts ({height, time, type}) as returned by the Stormglass tide endpoint.
+:param phase: 'low' or 'high'.
+
+:returns: ISO timestamp of the next extreme, or empty string if none remain.
+#}
+{% macro next_tide_extreme(data, phase) %}
+  {% set times = data
+      | default([], true)
+      | selectattr('type', 'eq', phase)
+      | map(attribute='time')
+      | map('as_datetime')
+      | select('>', now())
+      | sort
+      | list %}
+  {{ times[0].isoformat() if times else '' }}
+{% endmacro %}
+
+{#
+Get the current hour's value for a parameter from marine hours data.
+
+:param hours: List of hourly dicts as returned by the Stormglass weather endpoint.
+:param param: Stormglass parameter name, e.g. 'swellHeight'.
+
+:returns: The sg value for the latest non-future hour, or empty string if none.
+#}
+{% macro marine_hour_value(hours, param) %}
+  {% set entries = hours
+      | default([], true)
+      | selectattr('time', 'le', utcnow().isoformat())
+      | sort(attribute='time')
+      | list -%}
+  {{ entries[-1][param].sg if entries else '' }}
+{% endmacro %}

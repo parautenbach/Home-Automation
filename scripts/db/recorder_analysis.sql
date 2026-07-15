@@ -2,10 +2,10 @@
 -- All tables: \dt
 -- Describe table: \d events
 
-SELECT (pg_database_size('homeassistant')/1024/1024) as db_size;
+SELECT (pg_database_size('homeassistant')/1024/1024) AS db_size;
 
-SELECT pg_size_pretty(pg_total_relation_size('events'));
-SELECT pg_size_pretty(pg_total_relation_size('states'));
+SELECT pg_size_pretty(pg_total_relation_size('events')) AS events;
+SELECT pg_size_pretty(pg_total_relation_size('states')) AS states;
 
 SELECT event_type, COUNT(*) AS count FROM events GROUP BY event_type ORDER BY count DESC;
 SELECT domain, COUNT(*) AS count FROM states GROUP BY domain ORDER BY count DESC;
@@ -93,7 +93,7 @@ ORDER BY
 
 {# not sql, i know #}
 {% set entities = states | selectattr('attributes.state_class', 'defined') | list %}
-{% for e in entities -%}
+{% for e in entities %}
 {{ e.entity_id, e.attributes.state_class }}
 {%- endfor %}
 

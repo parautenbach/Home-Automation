@@ -210,6 +210,8 @@ cards:
                     entity: sensor.rain_rate_condition
                     attribute: label
                     name: Condition
+                  - entity: sensor.rain_24h
+                    name: Past 24 hours
                   - entity: sensor.daily_precipitation
                     name: Today
                     icon: mdi:calendar-today

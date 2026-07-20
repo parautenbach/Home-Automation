@@ -6,7 +6,7 @@ cards:
   - type: entities
     title: Irrigation
     icon: mdi:sprinkler-variant
-    card_mod:
+    uix:
       style: |
         .icon {
           color: var(--state-icon-color);
@@ -91,7 +91,7 @@ cards:
           - entity: input_datetime.irrigation_start_time
             name: Start Time
             icon: mdi:clock-time-four-outline
-            card_mod:
+            uix:
               style:
                 ha-time-input $ ha-base-time-input $:
                   ha-textfield:
@@ -176,7 +176,7 @@ cards:
           - entity: number.irrigation_front_lawn_run_duration
             name: Front Lawn
             icon: mdi:timer-edit-outline
-            card_mod: &runtime_timer_mods
+            uix: &runtime_timer_mods
               style:
                 ha-time-input $ ha-base-time-input $:
                   ha-textfield:
@@ -192,15 +192,15 @@ cards:
           - entity: number.irrigation_front_beds_run_duration
             name: Front Beds
             icon: mdi:timer-edit-outline
-            card_mod: *runtime_timer_mods
+            uix: *runtime_timer_mods
           - entity: number.irrigation_rear_lawn_run_duration
             name: Rear Lawn
             icon: mdi:timer-edit-outline
-            card_mod: *runtime_timer_mods
+            uix: *runtime_timer_mods
           - entity: number.irrigation_rear_beds_run_duration
             name: Rear Beds
             icon: mdi:timer-edit-outline
-            card_mod: *runtime_timer_mods
+            uix: *runtime_timer_mods
   - type: history-graph
     title: Runtime History
     hours_to_show: 4

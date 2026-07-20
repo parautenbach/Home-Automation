@@ -8,7 +8,7 @@ badges:
     show_icon: true
     show_name: false
     show_state: true
-    card_mod:
+    uix:
       style: |
         :host {
           {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
@@ -22,7 +22,7 @@ badges:
     show_icon: true
     show_name: false
     show_state: true
-    card_mod:
+    uix:
       style: |
         :host {
           {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
@@ -37,7 +37,7 @@ badges:
     show_state: false
   # - entity: binary_sensor.baby_monitor_sound_alarm
   #   name: Sound
-  #   card_mod:
+  #   uix:
   #     style:
   #       ha-state-label-badge:
   #         $:
@@ -234,7 +234,7 @@ cards:
         entities:
           - entity: sensor.time_of_day
             name: Time of Day
-            card_mod:
+            uix:
               style:
                 .: |
                   :host {
@@ -261,7 +261,7 @@ cards:
                     margin: 0;
                   }
           - entity: sensor.season
-            card_mod:
+            uix:
               style:
                 .: |
                   div:nth-child(3) {
@@ -285,7 +285,7 @@ cards:
           - entity: sensor.thermal_comfort_inside_summer_simmer_perception
             name: Inside
             icon: mdi:home-thermometer-outline
-            card_mod: &card_mod_comfort_style
+            uix: &card_mod_comfort_style
               # #0484d9: blue
               # #3498db: light blue
               # #34dbd5: cyan
@@ -320,14 +320,14 @@ cards:
           - entity: sensor.thermal_comfort_outside_summer_simmer_perception
             name: Outside
             icon: mdi:sun-thermometer-outline
-            card_mod: *card_mod_comfort_style
+            uix: *card_mod_comfort_style
       - type: glance
         columns: 3
         entities:
           - entity: sensor.bedroom_ht_temperature
             name: Current
             icon: mdi:thermometer
-            card_mod: &card_mod_temp_style
+            uix: &card_mod_temp_style
               style:
                 .: |
                   div:nth-child(3) {
@@ -342,23 +342,23 @@ cards:
           - entity: sensor.outside_temperature
             name: "Outside"
             icon: mdi:thermometer
-            card_mod: *card_mod_temp_style
+            uix: *card_mod_temp_style
           - entity: sensor.minimum_temperature_tomorrow
             name: "Min tomorrow"
             icon: mdi:thermometer-low
-            card_mod: *card_mod_temp_style
+            uix: *card_mod_temp_style
           - entity: sensor.bedroom_temperature_24_hours_ago
             name: "24h ago"
             icon: mdi:thermometer
-            card_mod: *card_mod_temp_style
+            uix: *card_mod_temp_style
           - entity: sensor.bedroom_minimum_temperature_12_hours
             name: "Min (12h)"
             icon: mdi:thermometer-low
-            card_mod: *card_mod_temp_style
+            uix: *card_mod_temp_style
           - entity: sensor.bedroom_maximum_temperature_12_hours
             name: "Max (12h)"
             icon: mdi:thermometer-high
-            card_mod: *card_mod_temp_style
+            uix: *card_mod_temp_style
       - type: custom:swipe-card
         parameters:
           autoHeight: true

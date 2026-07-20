@@ -121,7 +121,7 @@ cards:
                 extrema: true
                 average: true
                 labels_secondary: false
-              card_mod: &network_chart_mods
+              uix: &network_chart_mods
                 style:
                   .: |
                     ha-card {
@@ -147,7 +147,7 @@ cards:
                 extrema: true
                 average: true
                 labels_secondary: false
-              card_mod: *network_chart_mods
+              uix: *network_chart_mods
             - type: custom:mini-graph-card
               name: Packet Loss
               entities:
@@ -168,7 +168,7 @@ cards:
                 extrema: true
                 average: true
                 labels_secondary: false
-              card_mod: *network_chart_mods
+              uix: *network_chart_mods
       # https://community.home-assistant.io/t/2024-10-heading-in-the-right-direction/777864/335
       # - type: markdown
       #   content: >
@@ -177,7 +177,7 @@ cards:
       #      | <ha-icon icon="{{ state_attr('sensor.internet_round_trip_time_avg', 'icon') }}"></ha-icon> | Mean Ping Time | {{ states('sensor.internet_round_trip_time_avg', rounded=True, with_unit=True) }} |
       #      | <ha-icon icon="{{ state_attr('sensor.internet_round_trip_time_mdev', 'icon') }}"></ha-icon> | Mean Ping Deviation | {{ states('sensor.internet_round_trip_time_mdev', rounded=True, with_unit=True) }} |
       #      | <ha-icon icon="{{ state_attr('sensor.internet_packet_loss', 'icon') }}"></ha-icon> | Packet Loss | {{ states('sensor.internet_packet_loss', rounded=True, with_unit=True) }} |
-      #   card_mod: &ping_sensor_mods
+      #   uix: &ping_sensor_mods
       #     style:
       #       ha-markdown:
       #         $:
@@ -244,7 +244,7 @@ cards:
             extrema: true
             average: true
             labels_secondary: false
-          card_mod: *network_chart_mods
+          uix: *network_chart_mods
       - type: entities
         show_header_toggle: false
         entities:
@@ -276,7 +276,7 @@ cards:
             extrema: true
             average: true
             labels_secondary: false
-          card_mod: *network_chart_mods
+          uix: *network_chart_mods
   - type: vertical-stack
     title: Join Home Network
     cards:
@@ -284,7 +284,7 @@ cards:
       - type: picture
         # generated with https://qifi.org/
         image: /local/join_home_internet.png
-        card_mod:
+        uix:
           style: |
             img {
               transform: scale(0.8);

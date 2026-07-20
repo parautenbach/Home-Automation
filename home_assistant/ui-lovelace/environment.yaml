@@ -11,7 +11,7 @@ badges:
     show_icon: true
     show_name: false
     show_state: true
-    card_mod:
+    uix:
       style: |
         :host {
           {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
@@ -30,7 +30,7 @@ badges:
     show_icon: true
     show_name: false
     show_state: true
-    card_mod:
+    uix:
       style: |
         :host {
           {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
@@ -44,7 +44,7 @@ badges:
     show_icon: true
     show_name: false
     show_state: true
-    card_mod:
+    uix:
       style: |
         :host {
           {%- from 'dynamic_colors.jinja' import discrete_5_point_map, mapped_color -%}
@@ -57,7 +57,7 @@ badges:
     show_icon: true
     show_name: false
     show_state: true
-    card_mod:
+    uix:
       style: |
         :host {
           {%- from 'dynamic_colors.jinja' import discrete_5_point_map, mapped_color -%}
@@ -353,7 +353,7 @@ cards:
               - type: entities
                 title: AC Conditions
                 icon: mdi:air-conditioner
-                card_mod:
+                uix:
                   style: |
                     .icon {
                       color: var(--state-icon-color);
@@ -371,7 +371,7 @@ cards:
                         state: >-
                           {{ 'Met' if is_state('climate.living_room_ac', 'off') else 'Not met' }}
                         secondary: "{{ state_translated('climate.living_room_ac') }}"
-                        card_mod:
+                        uix:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if is_state('climate.living_room_ac', 'off') else 'var(--custom-color-red)' }}
@@ -382,7 +382,7 @@ cards:
                         state: >-
                           {{ 'Met' if is_state('input_boolean.ac_maintenance_mode', 'off') else 'Not met' }}
                         secondary: "{{ state_translated('input_boolean.ac_maintenance_mode') }}"
-                        card_mod:
+                        uix:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if is_state(config.entity, 'off') else 'var(--custom-color-red)' }};
@@ -394,7 +394,7 @@ cards:
                         state: >-
                           {{ 'Met' if is_state('alarm_control_panel.home', 'disarmed') else 'Not met' }}
                         secondary: "{{ state_translated('alarm_control_panel.home') }}"
-                        card_mod:
+                        uix:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if is_state(config.entity, 'disarmed') else 'var(--custom-color-red)' }};
@@ -406,7 +406,7 @@ cards:
                         state: >-
                           {{ 'Met' if is_state('binary_sensor.pieter_present', 'on') else 'Not met' }}
                         secondary: "{{ state_translated('binary_sensor.pieter_present') }}"
-                        card_mod:
+                        uix:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if is_state(config.entity, 'on') else 'var(--custom-color-red)' }};
@@ -429,7 +429,7 @@ cards:
                           {% set conditions_met = (is_workday and in_workday_range) or (not is_workday and in_non_workday_range) %}
                           {% set hh_mm = now().strftime('%H:%M') %}
                           {{ hh_mm }} is {{ 'not' if not in_workday_range else '' }} 09:00-17:00 ({{ workday_str }})
-                        card_mod:
+                        uix:
                           style: |
                             .state {
                               color:
@@ -451,7 +451,7 @@ cards:
                         state: >-
                           {{ 'Met' if states('sensor.office_temperature') | float(0) >= 24.5 else 'Not met' }}
                         secondary: "{{ states('sensor.office_temperature', with_unit=True) }} {{ '>=' if states('sensor.office_temperature') | float(0) >= 24.5 else '<' }} 24.5 °C"
-                        card_mod:
+                        uix:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if states(config.entity) | float(0) >= 24.5 else 'var(--custom-color-red)' }};
@@ -463,7 +463,7 @@ cards:
                         state: >-
                           {{ 'Met' if states('sensor.thermal_comfort_inside_summer_simmer_perception') in ['slightly_warm', 'increasing_discomfort', 'extremely_warm', 'danger_of_heatstroke'] else 'Not met' }}
                         secondary: "{{ state_translated('sensor.thermal_comfort_inside_summer_simmer_perception') }}"
-                        card_mod:
+                        uix:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if states(config.entity) in ['slightly_warm', 'increasing_discomfort', 'extremely_warm', 'danger_of_heatstroke'] else 'var(--custom-color-red)' }};
@@ -475,7 +475,7 @@ cards:
                         state: >-
                           {{ 'Met' if not states('sensor.thermal_comfort_outside_summer_simmer_perception') in ['slightly_cool', 'comfortable'] else 'Not met' }}
                         secondary: "{{ state_translated('sensor.thermal_comfort_outside_summer_simmer_perception') }}"
-                        card_mod:
+                        uix:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if not states(config.entity) in ['slightly_cool', 'comfortable'] else 'var(--custom-color-red)' }};
@@ -494,7 +494,7 @@ cards:
                           {% set inside_temp = states('sensor.office_temperature') | float(0) %}
                           {% set diff = (outside_temp - inside_temp) | round(1) %}
                           {{ diff }} {{ '>=' if diff >= 1 else '<' }} 1 °C (delta)
-                        card_mod:
+                        uix:
                           style: |
                             .state {
                               color:
@@ -511,7 +511,7 @@ cards:
                         state: >-
                           {{ 'Met' if states('sensor.outside_temperature_change') | float(0) >= 1.0 else 'Not met' }}
                         secondary: "{{ states('sensor.outside_temperature_change', with_unit=True) }} {{ '>=' if states('sensor.outside_temperature_change') | float(0) >= 1.0 else '<' }} 1.0 °C (over 3 hours)"
-                        card_mod:
+                        uix:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if states('sensor.outside_temperature_change') | float(0) >= 1.0 else 'var(--custom-color-red)' }};
@@ -528,7 +528,7 @@ cards:
                         state: >-
                           {{ 'Met' if states('sensor.office_temperature') | float(0) <= 16.0 else 'Not met' }}
                         secondary: "{{ states('sensor.office_temperature', with_unit=True) }} {{ '<=' if states('sensor.office_temperature') | float(0) <= 16.0 else '>' }} 16.0 °C"
-                        card_mod:
+                        uix:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if states(config.entity) | float(0) <= 16.0 else 'var(--custom-color-red)' }};
@@ -540,7 +540,7 @@ cards:
                         state: >-
                           {{ 'Met' if states('sensor.thermal_comfort_inside_summer_simmer_perception') in ['cool', 'cold'] else 'Not met' }}
                         secondary: "{{ state_translated('sensor.thermal_comfort_inside_summer_simmer_perception') }}"
-                        card_mod:
+                        uix:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if states(config.entity) in ['cool', 'cold'] else 'var(--custom-color-red)' }};
@@ -552,7 +552,7 @@ cards:
                         state: >-
                           {{ 'Met' if not states('sensor.thermal_comfort_outside_summer_simmer_perception') in ['comfortable', 'slightly_warm'] else 'Not met' }}
                         secondary: "{{ state_translated('sensor.thermal_comfort_outside_summer_simmer_perception') }}"
-                        card_mod:
+                        uix:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if not states(config.entity) in ['comfortable', 'slightly_warm'] else 'var(--custom-color-red)' }};
@@ -571,7 +571,7 @@ cards:
                       #     {% set inside_temp = states('sensor.office_temperature') | float(0) %}
                       #     {% set diff = (outside_temp - inside_temp) | round(1) %}
                       #     {{ diff }} {{'<=' if diff <= -3 else '>' }} -3 °C (delta)
-                      #   card_mod:
+                      #   uix:
                       #     style: |
                       #       .state {
                       #         color:
@@ -588,7 +588,7 @@ cards:
                       #   state: >-
                       #     {{ 'Met' if states('sensor.outside_temperature_change') | float(0) <= -1.0 else 'Not met' }}
                       #   secondary: "{{ states('sensor.outside_temperature_change', with_unit=True) }} {{ '<=' if states('sensor.outside_temperature_change') | float(0) <= -1.0 else '>' }} -1.0 °C (over 3 hours)"
-                      #   card_mod:
+                      #   uix:
                       #     style: |
                       #       .state {
                       #         color: {{ 'var(--custom-color-green)' if states('sensor.outside_temperature_change') | float(0) < -1.0 else 'var(--custom-color-red)' }};
@@ -605,7 +605,7 @@ cards:
                         state: >-
                           {{ 'Met' if is_state('binary_sensor.grid_feed', 'on') else 'Not met' }}
                         secondary: "{{ 'Connected' if is_state('binary_sensor.grid_feed', 'on') else 'Disconnected' }}"
-                        card_mod:
+                        uix:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if is_state('binary_sensor.grid_feed', 'on') else 'var(--custom-color-red)' }};
@@ -624,7 +624,7 @@ cards:
           - entity: sensor.office_temperature
             name: Living Room
             icon: mdi:sofa-outline
-            card_mod: &card_mod_temp_style
+            uix: &card_mod_temp_style
               style:
                 .: |
                   div:nth-child(3) {
@@ -639,28 +639,28 @@ cards:
           - entity: sensor.braai_room_ht_temperature
             name: Braai Room
             icon: mdi:gas-burner
-            card_mod: *card_mod_temp_style
+            uix: *card_mod_temp_style
           - entity: sensor.outside_temperature_filtered
             name: Outside
             icon: mdi:weather-partly-cloudy
-            card_mod: *card_mod_temp_style
+            uix: *card_mod_temp_style
           - entity: sensor.main_bedroom_ht_temperature
             name: Main Bedroom
             icon: mdi:bed-king-outline
-            card_mod: *card_mod_temp_style
+            uix: *card_mod_temp_style
           - entity: sensor.guest_bedroom_ht_temperature
             name: Guest Bedroom
             icon: mdi:bed-single-outline
-            card_mod: *card_mod_temp_style
+            uix: *card_mod_temp_style
           - entity: sensor.bedroom_ht_temperature
             name: Bedroom
             icon: mdi:bed-single-outline
-            card_mod: *card_mod_temp_style
+            uix: *card_mod_temp_style
       - type: glance
         entities:
           - entity: sensor.time_of_day
             name: Time of Day
-            card_mod:
+            uix:
               style:
                 .: |
                   :host {
@@ -687,7 +687,7 @@ cards:
                     margin: 0;
                   }
           - entity: sensor.season
-            card_mod:
+            uix:
               style:
                 .: |
                   div:nth-child(3) {
@@ -710,7 +710,7 @@ cards:
           - entity: sensor.thermal_comfort_inside_summer_simmer_perception
             name: Inside
             icon: mdi:home-thermometer-outline
-            card_mod: &card_mod_comfort_style
+            uix: &card_mod_comfort_style
               # https://github.com/dolezsa/thermal_comfort/blob/master/custom_components/thermal_comfort/translations/en.json#L129
               # #0484d9: blue
               # #3498db: light blue
@@ -746,7 +746,7 @@ cards:
           - entity: sensor.thermal_comfort_outside_summer_simmer_perception
             name: Outside
             icon: mdi:sun-thermometer-outline
-            card_mod: *card_mod_comfort_style
+            uix: *card_mod_comfort_style
       - type: conditional
         conditions:
           - condition: numeric_state

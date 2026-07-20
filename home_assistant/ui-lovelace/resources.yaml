@@ -17,7 +17,7 @@ badges:
     icon: mdi:home
     show_name: false
     show_state: true
-    card_mod:
+    uix:
       style: |
         :host {
           {%- from 'dynamic_colors.jinja' import gradient_color -%}
@@ -37,7 +37,7 @@ badges:
     show_name: false
     show_icon: true
     show_state: true
-    card_mod:
+    uix:
       style: |
         :host {
           {%- from 'dynamic_colors.jinja' import gradient_color -%}
@@ -57,7 +57,7 @@ badges:
     show_name: false
     show_icon: true
     show_state: true
-    card_mod:
+    uix:
       style: |
         :host {
           {%- from 'dynamic_colors.jinja' import reserve_percentage_map, gradient_color -%}
@@ -70,7 +70,7 @@ badges:
     show_name: false
     show_icon: true
     show_state: true
-    card_mod:
+    uix:
       style: |
         :host {
           {%- from 'dynamic_colors.jinja' import reserve_percentage_map, gradient_color -%}
@@ -306,7 +306,7 @@ cards:
           - entity: sensor.solar_energy_utilisation_today
             name: Utilisation Today
             # icon: mdi:solar-power-variant-outline
-            # card_mod:
+            # uix:
             #   style: |
             #     :host {
             #       --card-mod-icon:
@@ -872,7 +872,7 @@ cards:
           entities:
             - entity: sensor.charge_mode
               name: Charge Mode
-              card_mod: &battery_charge_mode_mods
+              uix: &battery_charge_mode_mods
                 style:
                   hui-generic-entity-row:
                     $:
@@ -887,7 +887,7 @@ cards:
                         }
             - entity: sensor.battery_state_of_charge
               name: State of Charge
-              card_mod: &battery_state_of_charge_mods
+              uix: &battery_state_of_charge_mods
                 style:
                   hui-generic-entity-row:
                     $:
@@ -911,7 +911,7 @@ cards:
               icon: mdi:close-circle-outline
             - entity: binary_sensor.grid_charge_point_status
               name: Grid Charge Point Status
-              card_mod: &grid_charge_point_status_mods
+              uix: &grid_charge_point_status_mods
                 style:
                   hui-generic-entity-row:
                     $:
@@ -926,7 +926,7 @@ cards:
                         }
             - entity: sensor.battery_status
               name: Status
-              card_mod: &battery_status_mods
+              uix: &battery_status_mods
                 style:
                   hui-generic-entity-row:
                     $:
@@ -951,10 +951,10 @@ cards:
           entities:
             - entity: sensor.charge_mode
               name: Charge Mode
-              card_mod: *battery_charge_mode_mods
+              uix: *battery_charge_mode_mods
             - entity: sensor.battery_state_of_charge
               name: State of Charge
-              card_mod: *battery_state_of_charge_mods
+              uix: *battery_state_of_charge_mods
             - entity: sensor.capacity_charge_point
               name: Charge Point Target
             - entity: sensor.output_shutdown_capacity
@@ -962,10 +962,10 @@ cards:
               icon: mdi:close-circle-outline
             - entity: binary_sensor.grid_charge_point_status
               name: Grid Charge Point Status
-              card_mod: *grid_charge_point_status_mods
+              uix: *grid_charge_point_status_mods
             - entity: sensor.battery_status
               name: Status
-              card_mod: *battery_status_mods
+              uix: *battery_status_mods
             - entity: sensor.battery_power
               name: Power
             - entity: sensor.battery_change_of_charge
@@ -994,10 +994,10 @@ cards:
           entities:
             - entity: sensor.charge_mode
               name: Charge Mode
-              card_mod: *battery_charge_mode_mods
+              uix: *battery_charge_mode_mods
             - entity: sensor.battery_state_of_charge
               name: State of Charge
-              card_mod: *battery_state_of_charge_mods
+              uix: *battery_state_of_charge_mods
             - entity: sensor.capacity_charge_point
               name: Charge Point Target
             - entity: sensor.output_shutdown_capacity
@@ -1005,10 +1005,10 @@ cards:
               icon: mdi:close-circle-outline
             - entity: binary_sensor.grid_charge_point_status
               name: Grid Charge Point Status
-              card_mod: *grid_charge_point_status_mods
+              uix: *grid_charge_point_status_mods
             - entity: sensor.battery_status
               name: Status
-              card_mod: *battery_status_mods
+              uix: *battery_status_mods
             - entity: sensor.battery_power
               name: Power
             - entity: sensor.battery_change_of_charge
@@ -1030,7 +1030,7 @@ cards:
       - type: entities
         title: Settings
         icon: mdi:cog
-        card_mod:
+        uix:
           style: |
             .icon {
               color: var(--state-icon-color);
@@ -1052,7 +1052,7 @@ cards:
                 state_header: Grid
                 style:
                   text-align: right
-                card_mod: &grid_charge_mod
+                uix: &grid_charge_mod
                   style: |
                     .state {
                       color: {{ 'var(--custom-color-green)' if is_state(config.entity, 'on') else 'var(--custom-color-red)' }};
@@ -1081,7 +1081,7 @@ cards:
                 state_header: Grid
                 style:
                   text-align: right
-                card_mod: *grid_charge_mod
+                uix: *grid_charge_mod
                 tap_action: *tap_action
                 double_tap_action: *double_tap_action
                 entities:
@@ -1096,7 +1096,7 @@ cards:
                 state_header: Grid
                 style:
                   text-align: right
-                card_mod: *grid_charge_mod
+                uix: *grid_charge_mod
                 tap_action: *tap_action
                 double_tap_action: *double_tap_action
                 entities:
@@ -1111,7 +1111,7 @@ cards:
                 state_header: Grid
                 style:
                   text-align: right
-                card_mod: *grid_charge_mod
+                uix: *grid_charge_mod
                 tap_action: *tap_action
                 double_tap_action: *double_tap_action
                 entities:
@@ -1126,7 +1126,7 @@ cards:
                 state_header: Grid
                 style:
                   text-align: right
-                card_mod: *grid_charge_mod
+                uix: *grid_charge_mod
                 tap_action: *tap_action
                 double_tap_action: *double_tap_action
                 entities:
@@ -1141,7 +1141,7 @@ cards:
                 state_header: Grid
                 style:
                   text-align: right
-                card_mod: *grid_charge_mod
+                uix: *grid_charge_mod
                 tap_action: *tap_action
                 double_tap_action: *double_tap_action
                 entities:
@@ -1232,7 +1232,7 @@ cards:
               state: true
               labels: hover
               labels_secondary: false
-            card_mod:
+            uix:
               style:
                 .: |
                   ha-card {

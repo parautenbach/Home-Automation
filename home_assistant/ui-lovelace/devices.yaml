@@ -86,7 +86,7 @@ cards:
         - sensor.ceres_battery_state
       title: Ceres
       icon: mdi:cellphone
-      card_mod:
+      uix:
         style: |
           .icon {
             color: var(--state-icon-color);
@@ -99,7 +99,7 @@ cards:
         - sensor.rouve_battery_state
       title: Rouvé
       icon: mdi:cellphone
-      card_mod:
+      uix:
         style: |
           .icon {
             color: var(--state-icon-color);
@@ -108,7 +108,7 @@ cards:
     - type: entities
       title: Thor (WD Cloud Drive)
       icon: mdi:nas
-      card_mod:
+      uix:
         style: |
           .icon {
             color: var(--state-icon-color);
@@ -446,7 +446,7 @@ cards:
             - grid-template-columns: 1fr
           card:
             - font-size: 14px
-        card_mod:
+        uix:
           # https://github.com/home-assistant/frontend/blob/dev/src/resources/ha-style.ts
           # https://stackoverflow.com/questions/25006951/how-do-i-know-why-a-css-style-is-ignored
           style: |
@@ -509,7 +509,7 @@ cards:
       #       **{{ name }}** | {{ states[domain[0]] | count }}
       #     {% endfor %}
       #     **Total** | {{ states | count }}
-      #   card_mod:
+      #   uix:
       #     style:
       #       ha-markdown:
       #         $:
@@ -641,7 +641,7 @@ cards:
           - entity: sensor.network_throughput_out_enp3s0
             name: Network throughput out
           - entity: sensor.last_backup
-            card_mod:
+            uix:
               style:
                 hui-generic-entity-row:
                   $:
@@ -659,7 +659,7 @@ cards:
                         color: {{ "var(--custom-color-red)" if not is_state('binary_sensor.no_recent_backup', 'off') }};
                       }
           - entity: sensor.last_db_backup
-            card_mod:
+            uix:
               style:
                 hui-generic-entity-row:
                   $:
@@ -720,7 +720,7 @@ cards:
           show:
             extrema: true
             average: true
-          card_mod:
+          uix:
             style:
               .: |
                 ha-card {

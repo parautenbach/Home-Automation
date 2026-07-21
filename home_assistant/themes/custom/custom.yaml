@@ -1,8 +1,8 @@
 custom-light-mode:
   mini-media-player-base-color: var(--state-icon-color)
   # https://community.home-assistant.io/t/card-mod-super-charge-your-themes/212176/1949
-  card-mod-theme: custom-light-mode
-  card-mod-view-yaml: |
+  uix-theme: custom-light-mode
+  uix-view-yaml: |
     :first-child $:
       hui-view-badges $: |
         /* mobile-specific styles */

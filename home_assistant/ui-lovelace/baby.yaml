@@ -13,7 +13,7 @@ badges:
         :host {
           {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
           {%- set state = states(config.entity) | float(0) -%}
-          --card-mod-icon-color: {{ gradient_color(state, temp_degrees_c_human_map) }};
+          --uix-icon-color: {{ gradient_color(state, temp_degrees_c_human_map) }};
         }
   - type: entity
     entity: sensor.outside_temperature
@@ -27,7 +27,7 @@ badges:
         :host {
           {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
           {%- set state = states(config.entity) | float(0) -%}
-          --card-mod-icon-color: {{ gradient_color(state, temp_degrees_c_human_map) }};
+          --uix-icon-color: {{ gradient_color(state, temp_degrees_c_human_map) }};
         }
   - type: entity
     entity: binary_sensor.baby_monitor_motion_alarm
@@ -238,7 +238,7 @@ cards:
               style:
                 .: |
                   :host {
-                    --card-mod-icon:
+                    --uix-icon:
                       {%- if is_state(config.entity, 'Day') -%};
                         mdi:weather-sunny
                       {%- else -%}

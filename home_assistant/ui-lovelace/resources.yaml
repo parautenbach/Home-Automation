@@ -29,7 +29,7 @@ badges:
                       7.0: "#aa0000"
                     }
             -%}
-          --card-mod-icon-color: {{ gradient_color(state, consumption_kw_map) }};
+          --uix-icon-color: {{ gradient_color(state, consumption_kw_map) }};
         }
   - type: entity
     entity: sensor.solar_reserve_kw
@@ -49,7 +49,7 @@ badges:
                       3.5: "#40b100"
                     }
             -%}
-          --card-mod-icon-color: {{ gradient_color(state, reserve_kw_map) }};
+          --uix-icon-color: {{ gradient_color(state, reserve_kw_map) }};
         }
   - type: entity
     entity: sensor.solar_reserve_percentage
@@ -62,7 +62,7 @@ badges:
         :host {
           {%- from 'dynamic_colors.jinja' import reserve_percentage_map, gradient_color -%}
           {%- set state = states(config.entity) | float(0) -%}
-          --card-mod-icon-color: {{ gradient_color(state, reserve_percentage_map) }};
+          --uix-icon-color: {{ gradient_color(state, reserve_percentage_map) }};
         }
   - type: entity
     entity: sensor.battery_state_of_charge
@@ -75,7 +75,7 @@ badges:
         :host {
           {%- from 'dynamic_colors.jinja' import reserve_percentage_map, gradient_color -%}
           {%- set state = states(config.entity) | float(0) -%}
-          --card-mod-icon-color: {{ gradient_color(state, reserve_percentage_map) }};
+          --uix-icon-color: {{ gradient_color(state, reserve_percentage_map) }};
         }
 cards:
   - type: vertical-stack
@@ -309,7 +309,7 @@ cards:
             # uix:
             #   style: |
             #     :host {
-            #       --card-mod-icon:
+            #       --uix-icon:
             #         {% set index = ((states(config.entity) | int(0))/12.5) | int(0) %}
             #         {% if 0 < index <= 8 %}
             #           mdi:circle-slice-{{ index }}

@@ -90,17 +90,15 @@
             }
 %}
 
-{# Rain rate (mm/h), plateaued at the same thresholds as sensor.rain_rate_condition. #}
-{% set rain_rate_mm_map =
+{# Rain rate (mm/h), log10-scaled (rate+1 to handle zero) above a dry-brown floor at exactly 0,
+   matching the same thresholds as sensor.rain_rate_condition's bands. #}
+{% set rain_rate_log10_map =
             {
-                0.0:  "#cccccc",
-                2.0:  "#cccccc",
-                2.5:  "#3498db",
-                6.5:  "#3498db",
-                7.6:  "#62a7a0",
-                40.0: "#62a7a0",
-                50.0: "#ffa800",
-                65.0: "#aa0000"
+                0.001: "#3498db",
+                0.544: "#3498db",
+                0.934: "#62a7a0",
+                1.708: "#ffa800",
+                2.004: "#aa0000"
             }
 %}
 

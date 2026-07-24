@@ -615,7 +615,7 @@ cards:
               style: |
                 :host {
                   {%- from 'dynamic_colors.jinja' import gradient_color, rain_rate_mm_map -%}
-                  {%- set state = state_attr(config.entity, 'rate') | float(0) -%}
+                  {%- set state = state_attr(config.entity, 'rain_rate') | float(0) -%}
                   --uix-icon-color: {{ gradient_color(state, rain_rate_mm_map) }};
                 }
           - type: tile

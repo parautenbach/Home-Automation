@@ -1133,27 +1133,43 @@ template:
         state_class: measurement
         variables:
           precipitation_entity: sensor.precipitation_total
+          # stale_after_minutes: how long to hold the last computed rate before
+          # decaying to 0 when no new precipitation arrives. sensor resolution
+          # is 0.1mm/tick, so this sets the minimum sustained rate we can still
+          # detect as nonzero (time to accumulate one 0.1mm tick at that rate):
+          #
+          #   target min. rate    time for one 0.1mm tick
+          #   1.0 mm/h            6 min
+          #   0.5 mm/h            12 min
+          #   0.2 mm/h            30 min
+          #   0.1 mm/h            60 min
+          #
+          # lower = faster to detect rain has actually stopped, but sustained
+          #         rain below the implied floor will flicker to 0 between ticks.
+          # higher = detects lighter sustained rain, but slower to admit it's
+          #          stopped. Currently set for a ~0.5 mm/h floor.
+          stale_after_minutes: 12
         state: >-
           {% set current_value = states(precipitation_entity) | float(0) %}
-          {% set prev_value = this.attributes.get('raw_value', current_value) %}
-          {% set prev_time_iso = this.attributes.get('sample_time') %}
-          {% if prev_time_iso is none %}
+          {% set last_value = this.attributes.get('last_value', current_value) %}
+          {% set last_time_iso = this.attributes.get('last_time') %}
+          {% if last_time_iso is none %}
             0
+          {% elif trigger.platform == 'state' %}
+            {% set elapsed_hours = (now() - as_datetime(last_time_iso)).total_seconds() / 3600 %}
+            {{ ((current_value - last_value) / elapsed_hours) | round(1) if elapsed_hours > 0 else this.state | float(0) }}
           {% else %}
-            {% set elapsed_hours = (now() - as_datetime(prev_time_iso)).total_seconds() / 3600 %}
-            {% if elapsed_hours <= 0 %}
-              {{ this.state | float(0) }}
-            {% else %}
-              {{ ((current_value - prev_value) / elapsed_hours) | round(2) }}
-            {% endif %}
+            {% set minutes_since = (now() - as_datetime(last_time_iso)).total_seconds() / 60 %}
+            {{ 0 if minutes_since > stale_after_minutes else this.state | float(0) }}
           {% endif %}
         attributes:
-          raw_value: >-
-            {{ states(precipitation_entity) | float(0) }}
-          sample_time: >-
-            {{ now().isoformat() }}
-        availability: >-
-          {{ has_value(precipitation_entity) }}
+          last_value: >-
+            {{ states(precipitation_entity) | float(0) if trigger.platform == 'state'
+               else this.attributes.get('last_value', states(precipitation_entity) | float(0)) }}
+          last_time: >-
+            {{ now().isoformat() if trigger.platform == 'state'
+               else this.attributes.get('last_time', now().isoformat()) }}
+        availability: "{{ has_value(precipitation_entity) }}"
 
 multiscrape:
   - resource: https://pollencount.co.za/

@@ -911,6 +911,8 @@ template:
               'extreme_storm': 'Extreme Storm'
             } %}
             {{ labels.get(this.state, 'Unknown') }}
+          wind_speed_ms: >-
+            {{ states(wind_speed_entity) | float(0) }}
           wind_speed_with_unit: >-
             {{ "{:,.1f}".format(states('sensor.wind_speed_filtered') | float(0) * 3.6) }} km/h
           compass_direction: >-
@@ -934,8 +936,10 @@ template:
       - name: "Lux Condition"
         unique_id: "f349c751-0b26-4dd0-ab86-3c1c6db42598"
         icon: mdi:brightness-6
+        variables:
+          lux_entity: sensor.weather_station_illuminance
         state: >-
-          {% set lux = states('sensor.weather_station_illuminance') | float(0) %}
+          {% set lux = states(lux_entity) | float(0) %}
           {% if lux < 1 %} dark
           {% elif lux < 50 %} twilight
           {% elif lux < 500 %} dim
@@ -947,9 +951,11 @@ template:
           label: >-
             {{ this.state | title }}
           lux_with_unit: >-
-            {{ "{:,.0f}".format(states('sensor.weather_station_illuminance') | float(0)) }} {{ state_attr('sensor.weather_station_illuminance', 'unit_of_measurement') }}
+            {{ "{:,.0f}".format(states(lux_entity) | float(0)) }} {{ state_attr(lux_entity, 'unit_of_measurement') }}
+          lux: >-
+            {{ states(lux_entity) | float(0) }}
         availability: >-
-          {{ has_value('sensor.weather_station_illuminance') }}
+          {{ has_value(lux_entity) }}
       - name: "UV Condition"
         unique_id: uv_condition
         icon: mdi:sun-wireless-outline

@@ -31,6 +31,79 @@
             }
 %}
 
+{# Illuminance (lux), log10-scaled, single-hue ramp from dim to HA's standard active/on yellow. #}
+{% set light_lux_log10_map =
+            {
+                0: "#8a7534",
+                5: "#ffc107"
+            }
+%}
+
+{# Barometric pressure (hPa), following the classic barometer dial: Stormy / Rain / Change / Fair / Very Dry. #}
+{% set pressure_hpa_map =
+            {
+                 970: "#aa0000",
+                 995: "#ffa800",
+                1013: "#ffe500",
+                1025: "#40b100",
+                1040: "#3498db"
+            }
+%}
+
+{# UV index, WHO exposure categories (Low/Moderate/High/Very High/Extreme), matching the mini-graph-card thresholds. #}
+{% set uv_index_map =
+            {
+                 0: "#70a03c",
+                 3: "#ffe500",
+                 6: "#ffa800",
+                 8: "#e74c3c",
+                11: "#8840a7"
+            }
+%}
+
+{# Humidity/thermal-comfort perception colors, keyed to sensor.humidity_condition's state. #}
+{% set humidity_condition_map =
+            {
+                "dry":                     "#3498db",
+                "very_comfortable":        "#40b100",
+                "comfortable":             "#70a03c",
+                "ok_but_humid":            "#ffe500",
+                "somewhat_uncomfortable":  "#ffa800",
+                "quite_uncomfortable":     "#ff5800",
+                "extremely_uncomfortable": "#aa0000",
+                "severely_high":           "#8840a7"
+            }
+%}
+
+{# Wind speed (m/s), plateaued at the same thresholds as sensor.wind_condition_beaufort. #}
+{% set wind_speed_ms_map =
+            {
+                 0.0: "#40b100",
+                 2.8: "#40b100",
+                 3.4: "#ffe500",
+                 7.0: "#ffe500",
+                 8.0: "#ffa800",
+                12.5: "#ffa800",
+                13.9: "#aa0000",
+                22.0: "#aa0000",
+                24.5: "#8840a7"
+            }
+%}
+
+{# Rain rate (mm/h), plateaued at the same thresholds as sensor.rain_rate_condition. #}
+{% set rain_rate_mm_map =
+            {
+                0.0:  "#cccccc",
+                2.0:  "#cccccc",
+                2.5:  "#3498db",
+                6.5:  "#3498db",
+                7.6:  "#62a7a0",
+                40.0: "#62a7a0",
+                50.0: "#ffa800",
+                65.0: "#aa0000"
+            }
+%}
+
 {#
 Calculate a color value between two RGB colors using the difference between the given start and stop values for each color channel.
 

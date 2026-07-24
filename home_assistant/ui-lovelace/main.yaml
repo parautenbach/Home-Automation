@@ -561,10 +561,16 @@ cards:
             entity: sensor.outside_temperature
             name: Temperature
             icon: mdi:thermometer
-            # todo: card_mod
             state_content:
               - thermal_comfort_label
               - state
+            uix: &tile_temperature_mod
+              style: |
+                :host {
+                  {%- from 'dynamic_colors.jinja' import temp_degrees_c_human_map, gradient_color -%}
+                  {%- set state = states(config.entity) | float(0) -%}
+                  --uix-icon-color: {{ gradient_color(state, temp_degrees_c_human_map) }};
+                }
           - type: tile
             entity: sensor.humidity_condition
             name: Humidity
@@ -572,11 +578,17 @@ cards:
             state_content:
               - label
               - humidity_with_unit
+            uix:
+              style: |
+                :host {
+                  {%- from 'dynamic_colors.jinja' import mapped_color, humidity_condition_map -%}
+                  --uix-icon-color: {{ mapped_color(states(config.entity), humidity_condition_map) }};
+                }
           - type: tile
             entity: sensor.weather_station_dew_point
             name: Dew Point
             icon: mdi:thermometer-water
-            # todo: card_mod
+            uix: *tile_temperature_mod
           - type: tile
             entity: sensor.air_pressure_qnh
             name: Atmosphere
@@ -584,6 +596,13 @@ cards:
             state_content:
               - trend_label
               - state
+            uix:
+              style: |
+                :host {
+                  {%- from 'dynamic_colors.jinja' import gradient_color, pressure_hpa_map -%}
+                  {%- set state = states(config.entity) | float(1013) -%}
+                  --uix-icon-color: {{ gradient_color(state, pressure_hpa_map) }};
+                }
           - type: tile
             entity: sensor.rain_rate_condition
             name: Rain
@@ -592,6 +611,13 @@ cards:
               - label
               - rain_rate_with_unit
               - rain_24h_with_unit
+            uix:
+              style: |
+                :host {
+                  {%- from 'dynamic_colors.jinja' import gradient_color, rain_rate_mm_map -%}
+                  {%- set state = state_attr(config.entity, 'rate') | float(0) -%}
+                  --uix-icon-color: {{ gradient_color(state, rain_rate_mm_map) }};
+                }
           - type: tile
             entity: sensor.wind_condition_beaufort
             name: Wind
@@ -602,7 +628,13 @@ cards:
               - label
               - wind_speed_with_unit
               - compass_direction
-            # todo: card_mod
+            uix:
+              style: |
+                :host {
+                  {%- from 'dynamic_colors.jinja' import gradient_color, wind_speed_ms_map -%}
+                  {%- set state = state_attr(config.entity, 'wind_speed_ms') | float(0) -%}
+                  --uix-icon-color: {{ gradient_color(state, wind_speed_ms_map) }};
+                }
           - type: tile
             entity: sensor.lux_condition
             name: Light
@@ -610,6 +642,13 @@ cards:
             state_content:
               - label
               - lux_with_unit
+            uix:
+              style: |
+                :host {
+                  {%- from 'dynamic_colors.jinja' import gradient_color, light_lux_log10_map -%}
+                  {%- set state = max(state_attr(config.entity, 'lux') | float(1), 1) | log(10) -%}
+                  --uix-icon-color: {{ gradient_color(state, light_lux_log10_map) }};
+                }
           - type: tile
             entity: sensor.uv_condition
             name: UV Risk
@@ -617,7 +656,13 @@ cards:
             state_content:
               - label
               - index
-            # todo: card_mod
+            uix:
+              style: |
+                :host {
+                  {%- from 'dynamic_colors.jinja' import gradient_color, uv_index_map -%}
+                  {%- set state = state_attr(config.entity, 'index') | float(0) -%}
+                  --uix-icon-color: {{ gradient_color(state, uv_index_map) }};
+                }
       - type: horizontal-stack
         title: Clocks
         cards:

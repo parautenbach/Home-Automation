@@ -119,15 +119,15 @@ illuminance:
 utility_meter:
   daily_precipitation:
     unique_id: "2355938a-fdc3-4b79-bd5b-f2a68f7f55a4"
-    source: sensor.weather_station_precipitation
+    source: sensor.precipitation_total
     cycle: daily
   monthly_precipitation:
     unique_id: "1e1bc0f0-4a3a-4ee3-bd57-4a86d367cdc8"
-    source: sensor.weather_station_precipitation
+    source: sensor.precipitation_total
     cycle: monthly
   annual_precipitation:
     unique_id: "b0894141-7ee1-42d7-80c4-5bb3b1708368"
-    source: sensor.weather_station_precipitation
+    source: sensor.precipitation_total
     cycle: yearly
 
 binary_sensor:
@@ -1021,10 +1021,16 @@ template:
         unit_of_measurement: "mm"
         device_class: precipitation
         state_class: total_increasing
+        variables:
+          raw_precipitation_entity: sensor.weather_station_precipitation
+          # provisional flat gain from 2 clean same-morning manual readings
+          # (2026-07-20: 2.70x, 2026-07-24: 4.32x — event on 07-23 discarded,
+          # revisit once more clean readings are logged.
+          calibration_gain: 3.5
         state: >-
-          {{ states('sensor.weather_station_precipitation') | float(0) }}
+          {{ (states(raw_precipitation_entity) | float(0) * calibration_gain) | round(1) }}
         availability: >-
-          {{ has_value('sensor.weather_station_precipitation') }}
+          {{ has_value(raw_precipitation_entity) }}
       - name: "Air Pressure (QNH)"
         unique_id: "f056014d-7059-4b0e-8ea3-cf40bf33a176"
         unit_of_measurement: "hPa"
@@ -1089,7 +1095,7 @@ template:
           rain_24h_with_unit: >-
             {{ "{:,.1f}".format(states(rain_24h_entity) | float(0)) }} {{ state_attr(rain_24h_entity, 'unit_of_measurement') }}
         availability: >-
-          {{ has_value('sensor.rain_rate') }}
+          {{ has_value(rain_rate_entity) }}
       - name: "Air Pressure Trend"
         unique_id: "ea2872cc-f7af-4be0-852a-ab25a44ebacf"
         icon: mdi:trending-up

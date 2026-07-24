@@ -1080,14 +1080,7 @@ template:
           {% endif %}
         attributes:
           label: >-
-            {% set labels = {
-              'no_rain': 'No Rain',
-              'light': 'Light Rain',
-              'moderate': 'Moderate Rain',
-              'heavy': 'Heavy Rain',
-              'violent': 'Violent Rain'
-            } %}
-            {{ labels.get(this.state, 'Unknown') }}
+            {{ this.state | replace('_', ' ') | title }}
           rain_rate_with_unit: >-
             {{ "{:,.1f}".format(states(rain_rate_entity) | float(0)) }} {{ state_attr(rain_rate_entity, 'unit_of_measurement') }}
           rain_today_with_unit: >-

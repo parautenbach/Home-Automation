@@ -1061,9 +1061,9 @@ template:
           rain_rate_entity: sensor.rain_rate
           daily_precipitation_entity: sensor.daily_precipitation
           # sql configured via UI:
-          #   SELECT ROUND(
-          #     CAST(MAX(state) AS NUMERIC) - CAST(MIN(state) AS NUMERIC), 2
-          #   ) AS total
+          #   SELECT COALESCE(ROUND(
+          #     MAX(CAST(state AS NUMERIC)) - MIN(CAST(state AS NUMERIC)), 2
+          #   ), 0) AS total
           #   FROM states
           #   INNER JOIN states_meta ON states.metadata_id = states_meta.metadata_id
           #   WHERE states_meta.entity_id = 'sensor.precipitation_total'

@@ -860,10 +860,12 @@ template:
         unique_id: "129b8596-8fe1-4f6b-8774-6c949f6a1ca3"
         unit_of_measurement: "km/h"
         device_class: wind_speed
+        variables:
+          wind_speed_entity: sensor.wind_speed_filtered
         state: >-
-          {{ (states('sensor.wind_speed_filtered') | float(0) * 3.6) | round(1) }}
+          {{ (states(wind_speed_entity) | float(0) * 3.6) | round(1) }}
         availability: >-
-          {{ has_value('sensor.wind_speed_filtered') }}
+          {{ has_value(wind_speed_entity) }}
       - name: "Wind Direction Filtered"
         unique_id: "bc1a58b7-29b5-4100-9962-d1c99dbfe31a"
         unit_of_measurement: "°"
@@ -877,8 +879,10 @@ template:
       - name: "Wind Condition (Beaufort)"
         unique_id: "c78415ce-adf3-469c-a46d-0a04094e5187"
         icon: mdi:weather-windy
+        variables:
+          wind_speed_entity: sensor.wind_speed_filtered
         state: >-
-          {% set wind_speed = states('sensor.wind_speed_filtered') | float(0) %}
+          {% set wind_speed = states(wind_speed_entity) | float(0) %}
           {% if wind_speed < 0.5 %} calm
           {% elif wind_speed < 1.6 %} light_air
           {% elif wind_speed < 3.4 %} light_breeze
@@ -914,25 +918,27 @@ template:
           wind_speed_ms: >-
             {{ states(wind_speed_entity) | float(0) }}
           wind_speed_with_unit: >-
-            {{ "{:,.1f}".format(states('sensor.wind_speed_filtered') | float(0) * 3.6) }} km/h
+            {{ "{:,.1f}".format(states(wind_speed_entity) | float(0) * 3.6) }} km/h
           compass_direction: >-
             {{ states('sensor.wind_compass_direction') }}
         availability: >-
-          {{ has_value('sensor.wind_speed_filtered') }}
+          {{ has_value(wind_speed_entity) }}
       - name: "Wind Compass Direction"
         unique_id: "d8242f18-674c-489a-8182-ef8f5c218f8c"
         icon: mdi:compass-outline
+        variables:
+          wind_speed_entity: sensor.wind_speed_filtered
         state: >-
           {% from 'environment.jinja' import get_direction_8 %}
           {% set wind_bearing = states('sensor.wind_direction_filtered') | float(0) | int %}
-          {% set wind_speed = states('sensor.wind_speed_filtered') | float(0) %}
+          {% set wind_speed = states(wind_speed_entity) | float(0) %}
           {% if wind_speed < 0.5 %}
             {{ '' }}
           {% else %}
             {{ get_direction_8(wind_bearing) }}
           {% endif %}
         availability: >-
-          {{ has_value('sensor.wind_direction_filtered') and has_value('sensor.wind_speed_filtered') }}
+          {{ has_value('sensor.wind_direction_filtered') and has_value(wind_speed_entity) }}
       - name: "Lux Condition"
         unique_id: "f349c751-0b26-4dd0-ab86-3c1c6db42598"
         icon: mdi:brightness-6

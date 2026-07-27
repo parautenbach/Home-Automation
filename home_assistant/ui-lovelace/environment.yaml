@@ -247,8 +247,11 @@ cards:
                   type: section
                   label: Wind
                 entities:
+                  - entity: sensor.wind_speed_filtered_km_h
+                    name: Speed (km/h)
+                    icon: mdi:speedometer
                   - entity: sensor.wind_speed_filtered
-                    name: Speed
+                    name: Speed (m/s)
                   - entity: sensor.weather_station_wind_speed_gust
                     name: Gust
                   - type: attribute

@@ -1061,14 +1061,27 @@ template:
           rain_rate_entity: sensor.rain_rate
           daily_precipitation_entity: sensor.daily_precipitation
           # sql configured via UI:
-          #   SELECT COALESCE(ROUND(
-          #     MAX(CAST(state AS NUMERIC)) - MIN(CAST(state AS NUMERIC)), 2
-          #   ), 0) AS total
-          #   FROM states
-          #   INNER JOIN states_meta ON states.metadata_id = states_meta.metadata_id
-          #   WHERE states_meta.entity_id = 'sensor.precipitation_total'
-          #   AND last_updated_ts >= EXTRACT(EPOCH FROM NOW()) - 86400
-          #   AND state NOT IN ('unknown', 'unavailable');
+          #   WITH latest AS (
+          #       SELECT state
+          #       FROM states
+          #       WHERE metadata_id = 31345  -- sensor.precipitation_total
+          #         AND state NOT IN ('unknown', 'unavailable')
+          #       ORDER BY last_updated_ts DESC
+          #       LIMIT 1
+          #   ),
+          #   baseline AS (
+          #       SELECT state
+          #       FROM states
+          #       WHERE metadata_id = 31345
+          #         AND last_updated_ts <= EXTRACT(EPOCH FROM NOW()) - 86400
+          #         AND state NOT IN ('unknown', 'unavailable')
+          #       ORDER BY last_updated_ts DESC
+          #       LIMIT 1
+          #   )
+          #   SELECT ROUND(
+          #       CAST((SELECT CAST(state AS NUMERIC) FROM latest) -
+          #            (SELECT CAST(state AS NUMERIC) FROM baseline) AS NUMERIC), 2
+          #   ) AS total;
           rain_24h_entity: sensor.rain_24h
         state: >-
           {% set rate = states(rain_rate_entity) | float(0) %}

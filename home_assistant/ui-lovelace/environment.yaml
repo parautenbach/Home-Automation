@@ -113,6 +113,9 @@ cards:
                 state_content:
                   - label
                   - humidity_with_unit
+                tap_action:
+                  action: more-info
+                  entity: sensor.weather_station_humidity
                 uix:
                   style: |
                     :host {
@@ -146,6 +149,9 @@ cards:
                   - label
                   - rain_rate_with_unit
                   - rain_24h_with_unit
+                tap_action:
+                  action: more-info
+                  entity: sensor.rain_24h
                 uix:
                   style: |
                     :host {
@@ -163,6 +169,9 @@ cards:
                   - label
                   - wind_speed_with_unit
                   - compass_direction
+                tap_action:
+                  action: more-info
+                  entity: sensor.wind_speed_filtered_km_h
                 uix:
                   style: |
                     :host {
@@ -177,6 +186,9 @@ cards:
                 state_content:
                   - label
                   - lux_with_unit
+                tap_action:
+                  action: more-info
+                  entity: sensor.weather_station_illuminance
                 uix:
                   style: |
                     :host {
@@ -191,6 +203,9 @@ cards:
                 state_content:
                   - label
                   - index
+                tap_action:
+                  action: more-info
+                  entity: sensor.weather_station_uv_index
                 uix:
                   style: |
                     :host {

@@ -13,38 +13,36 @@
 #   - https://eskom-calendar-api.shuttleapp.rs/
 
 # test stuff
-# curl -s -X GET -H "Token: XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX" --url "https://developer.sepush.co.za/business/2.0/api_allowance"
+# curl -s -X GET -H "Token: XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX" --url "https://developer.sepush.co.za/business/3.0/api_allowance"
 
 # v3 api
-# 🚨 We have no plans to deprecate v2 right now. We might consider it if loadshedding starts again.
+# schema: https://developer.sepush.co.za/business/3.0/openapi.json
+# area "eskme-2-stellenboschstellenboschwesterncape" (v2) -> area "za_wc_dc2_onderpapegaaiberg_4l1s" / schedule "eskme-2" (v3, municipal block 2)
 # https://zatech.slack.com/archives/C043YCM6BRS/p1764598351314599
-# https://documenter.getpostman.com/view/1296288/2sB3dLVY6h
 
 rest:
-  # new: https://developer.sepush.co.za/business/3.0/schedule?id=eskme-2
-  - resource: "https://developer.sepush.co.za/business/2.0/area"
+  - resource: "https://developer.sepush.co.za/business/3.0/schedule"
     # maybe give this and the sensor below a scheduled update interval in future
     # https://community.home-assistant.io/t/rest-sensor-can-i-schedule-when-the-update-happens/408500
     scan_interval: 3600  # rate limit
     headers:
       token: !secret eskomsepush
     params:
-      id: "eskme-2-stellenboschstellenboschwesterncape"
+      id: "eskme-2"
     sensor:
       - name: EskomSePush
         force_update: true
         value_template: "OK"
         json_attributes:
           - events
-          - info
           - schedule
 
 sensor:
   # Eskom se Push sensor
   - platform: rest
     name: EskomSePush Allowance
-    # new: https://developer.sepush.co.za/business/3.0/api_allowance
-    resource: "https://developer.sepush.co.za/business/2.0/api_allowance"
+    # deprecated in v3 in favour of x-ratelimit-* response headers, which the HA rest platform doesn't expose to templates
+    resource: "https://developer.sepush.co.za/business/3.0/api_allowance"
     headers:
       Token: !secret eskomsepush
     json_attributes_path: "$.allowance"

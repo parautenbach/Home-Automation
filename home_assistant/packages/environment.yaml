@@ -1063,7 +1063,7 @@ template:
           #   WITH latest AS (
           #       SELECT state
           #       FROM states
-          #       WHERE metadata_id = 31345  -- sensor.precipitation_total
+          #       WHERE metadata_id = 31345
           #         AND state NOT IN ('unknown', 'unavailable')
           #       ORDER BY last_updated_ts DESC
           #       LIMIT 1
@@ -1077,10 +1077,10 @@ template:
           #       ORDER BY last_updated_ts DESC
           #       LIMIT 1
           #   )
-          #   SELECT ROUND(
+          #   SELECT COALESCE(ROUND(
           #       CAST((SELECT CAST(state AS NUMERIC) FROM latest) -
           #            (SELECT CAST(state AS NUMERIC) FROM baseline) AS NUMERIC), 2
-          #   ) AS total;
+          #   ), 0) AS total;
           rain_24h_entity: sensor.rain_24h
         state: >-
           {% set rate = states(rain_rate_entity) | float(0) %}

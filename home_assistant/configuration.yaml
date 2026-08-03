@@ -20,6 +20,7 @@ homeassistant:
     - /mnt/nas/Backups/home_assistant_db/
     - /sys/class/power_supply/
     - /config/downloads/
+    - /config/exports/
     - /config/www/
     - /config/www/gallery/
     - /config/www/gallery/baby_monitor/

@@ -38,6 +38,20 @@ badges:
           --uix-icon-color: {{ gradient_color(state, temp_degrees_c_human_map) }};
         }
   - type: entity
+    entity: sensor.weather_station_uv_index
+    name: UV
+    icon: mdi:sun-wireless-outline
+    show_icon: true
+    show_name: false
+    show_state: true
+    uix:
+      style: |
+        :host {
+          {%- from 'dynamic_colors.jinja' import uv_index_map, gradient_color -%}
+          {%- set state = states(config.entity) | float(0) -%}
+          --uix-icon-color: {{ gradient_color(state, uv_index_map) }};
+        }
+  - type: entity
     entity: sensor.overall_pollen_risk
     name: Pollen
     icon: mdi:flower-pollen-outline

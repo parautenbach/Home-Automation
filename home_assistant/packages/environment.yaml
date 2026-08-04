@@ -533,8 +533,9 @@ template:
              | sum %}
           {{ total >= threshold }}
   - trigger:
-      - platform: time
-        at: "23:55"
+      - platform: state
+        entity_id: sensor.daily_precipitation
+        attribute: last_period
     sensor:
       - name: Weather Forecast Precipitation Yesterday
         unique_id: "701c1f90-bc1c-47d4-b490-1267ec7155e4"

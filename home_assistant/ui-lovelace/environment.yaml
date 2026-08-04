@@ -941,6 +941,8 @@ cards:
             name: Today
           - entity: weather.forecast_tomorrow
             name: Tomorrow
+          - entity: binary_sensor.weather_forecast_precipitation_soon
+            name: Rain Soon
       - type: markdown
         content: >
           **[PELIKAAN ST](https://www.wunderground.com/dashboard/pws/IONDER4)**

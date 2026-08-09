@@ -211,12 +211,13 @@ cards:
             name: Office
             switch_entity: switch.office_restart
         - type: custom:button-card
-          template: restart
-          entity: binary_sensor.bed_occupancy_status
-          icon: mdi:bed
-          variables:
-            name: Bed Occupancy
-            switch_entity: switch.bed_occupancy_restart
+          color_type: blank-card
+          # template: restart
+          # entity: binary_sensor.bed_occupancy_status
+          # icon: mdi:bed
+          # variables:
+          #   name: Bed Occupancy
+          #   switch_entity: switch.bed_occupancy_restart
     - type: history-graph
       hours_to_show: 24
       entities:

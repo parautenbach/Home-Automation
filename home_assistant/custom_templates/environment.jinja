@@ -109,19 +109,17 @@ already underway and we name a time mid-band.
   {%- set wet = ['rainy', 'pouring', 'lightning-rainy', 'hail'] -%}
   {%- set start = utcnow() + timedelta(hours=12) -%}
   {%- set end = start + timedelta(hours=24) -%}
-
   {%- set hours = forecast
     | selectattr('datetime', '>=', start.isoformat())
     | selectattr('datetime', '<',  end.isoformat())
     | selectattr('condition', 'in', wet)
     | list -%}
-
-  {%- set onset = forecast
+  {%- set onset_hours = forecast
     | selectattr('datetime', '>=', utcnow().isoformat())
     | selectattr('datetime', '<',  end.isoformat())
     | selectattr('condition', 'in', wet)
-    | list | first -%}
+    | list -%}
 
   {%- do returns({'hours': hours | count,
-                  'onset': onset.datetime if onset else none}) -%}
+                  'onset': onset_hours[0].datetime if onset_hours else none}) -%}
 {%- endmacro -%}

@@ -129,9 +129,9 @@ cards:
         entities:
           - entity: input_boolean.baby_sleep_mode
             name: "Sleep Mode"
-          - entity: binary_sensor.bed_occupancy_bed_occupied
-            name: "In Bed"
-            icon: mdi:bed
+          # - entity: binary_sensor.bed_occupancy_bed_occupied
+          #   name: "In Bed"
+          #   icon: mdi:bed
           - entity: sensor.baby_current_sleep_session
             name: "Current Sleep Session"
           - entity: sensor.baby_last_sleep_session

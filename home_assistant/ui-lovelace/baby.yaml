@@ -138,26 +138,6 @@ cards:
             name: "Last Sleep Session"
           - entity: sensor.baby_sleeping
             name: "Today's Sleep Time"
-          - type: custom:fold-entity-row
-            head:
-              name: Settings
-              icon: mdi:cog
-            entities:
-              - entity: input_datetime.baby_nap_start_time
-                name: "Nap Start Time"
-                icon: mdi:power-sleep
-              - entity: input_datetime.baby_nap_end_time
-                name: "Nap End Time"
-                icon: mdi:alarm
-              - entity: input_datetime.baby_bedtime_start_time
-                name: "Night Bedtime"
-                icon: mdi:bed-clock
-              - entity: input_datetime.baby_wake_up_time
-                name: "Morning Wake Time"
-                icon: mdi:alarm
-              - entity: input_datetime.lights_out_time
-                name: "Lights Out Time"
-                icon: mdi:lightbulb-off-outline
       - type: horizontal-stack
         cards:
           - type: custom:button-card
@@ -446,3 +426,33 @@ cards:
         chart_type: bar
         stat_types:
           - state
+  - type: entities
+    title: Settings
+    icon: mdi:cog
+    uix:
+      style: |
+        .icon {
+          color: var(--state-icon-color);
+        }
+    show_header_toggle: false
+    entities:
+      - type: custom:fold-entity-row
+        head:
+          type: section
+          label: Times
+        entities:
+          - entity: input_datetime.baby_nap_start_time
+            name: "Nap Start Time"
+            icon: mdi:power-sleep
+          - entity: input_datetime.baby_nap_end_time
+            name: "Nap End Time"
+            icon: mdi:alarm
+          - entity: input_datetime.baby_bedtime_start_time
+            name: "Night Bedtime"
+            icon: mdi:bed-clock
+          - entity: input_datetime.baby_wake_up_time
+            name: "Morning Wake Time"
+            icon: mdi:alarm
+          - entity: input_datetime.lights_out_time
+            name: "Lights Out Time"
+            icon: mdi:lightbulb-off-outline

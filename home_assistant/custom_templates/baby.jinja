@@ -1,0 +1,34 @@
+{# https://www.home-assistant.io/docs/configuration/templating/#reusing-templates #}
+
+{#
+End of the "just settled into nap" window: the point where the bedlamp stops being
+force-dimmed on turn-on, and automations switch to assuming she might be waking up.
+Also the start of the window where disabling sleep mode restores the lamp to normal
+brightness (paired with input_datetime.baby_nap_end_time as that window's end).
+
+:returns: A time value, 75 minutes after input_datetime.baby_nap_start_time.
+#}
+{%- macro nap_restore_start_time() -%}
+  {{ ((states('input_datetime.baby_nap_start_time') | today_at) + timedelta(minutes=75)).time() }}
+{%- endmacro -%}
+
+{#
+End of the "whole night" forced-dim window, and the start of the (narrower) window where
+we proactively ask whether to disable sleep mode.
+
+:returns: A time value, 630 minutes (10.5 hours) after input_datetime.baby_bedtime_start_time.
+#}
+{%- macro bedtime_ask_disable_start_time() -%}
+  {{ ((states('input_datetime.baby_bedtime_start_time') | today_at) + timedelta(minutes=630)).time() }}
+{%- endmacro -%}
+
+{#
+Start of the morning "waking up" period: resumes motion alerts and opens the window where
+disabling sleep mode restores the lamp to normal brightness. A small grace buffer before
+her actual wake-up time.
+
+:returns: A time value, 15 minutes before input_datetime.baby_wake_up_time.
+#}
+{%- macro bedtime_morning_transition_start_time() -%}
+  {{ ((states('input_datetime.baby_wake_up_time') | today_at) - timedelta(minutes=15)).time() }}
+{%- endmacro -%}

@@ -27,6 +27,11 @@ exclude:
     - camera.security_camera_proxy
     - input_datetime.foyer_motion_detected_last
     - input_number.baby_current_sleep_session
+    - input_datetime.baby_nap_start_time
+    - input_datetime.baby_nap_end_time
+    - input_datetime.baby_bedtime_start_time
+    - input_datetime.baby_wake_up_time
+    - input_datetime.lights_out_time
     - sensor.resource_widget
     - sensor.garage_doors_lhs_ultrasonic_sensor
     - sensor.garage_doors_rhs_ultrasonic_sensor

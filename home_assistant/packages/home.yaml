@@ -32,6 +32,26 @@ input_datetime:
   go_home_reminder:
     has_time: true
     icon: mdi:home-clock-outline
+  baby_nap_start_time:
+    name: "Baby Nap Start Time"
+    has_time: true
+    icon: mdi:power-sleep
+  baby_nap_end_time:
+    name: "Baby Nap End Time"
+    has_time: true
+    icon: mdi:alarm
+  baby_bedtime_start_time:
+    name: "Baby Bedtime Start Time"
+    has_time: true
+    icon: mdi:bed-clock
+  baby_wake_up_time:
+    name: "Baby Wake Up Time"
+    has_time: true
+    icon: mdi:alarm
+  lights_out_time:
+    name: "Lights Out Time"
+    has_time: true
+    icon: mdi:lightbulb-off-outline
 
 input_boolean:
   pieter_present:
@@ -1258,18 +1278,22 @@ automation:
         state: "on"
         for:
           minutes: 5
-      # keep in sync with bedlamp on/off automation
       - condition: or
         conditions:
           - condition: time
-            after: "12:15:00"
-            before: "15:05:00"
+            after: input_datetime.baby_nap_start_time
+            before: input_datetime.baby_nap_end_time
           - condition: time
-            after: "18:50:00"
-            before: "22:30:00"
-          - condition: time
-            after: "05:45:00"
-            before: "08:00:00"
+            after: input_datetime.baby_bedtime_start_time
+            before: input_datetime.lights_out_time
+          - condition: template
+            # resumes 15 min before wake-up time, closes at wake-up time itself
+            value_template: >-
+              {% from 'baby.jinja' import bedtime_morning_transition_start_time %}
+              {% set now_time = now().time() %}
+              {% set morning_start = bedtime_morning_transition_start_time() %}
+              {% set wake_up = (states('input_datetime.baby_wake_up_time') | today_at).time() %}
+              {{ morning_start <= now_time <= wake_up }}
       - condition: state
         entity_id: sensor.ceres_battery_state
         state: 'Not Charging'  # Can be to Charging or Full
@@ -1340,26 +1364,26 @@ automation:
           - "off"
         for:
           minutes: 1
+    variables:
+      now_time: "{{ now().time() }}"
+      nap_start: "{{ (states('input_datetime.baby_nap_start_time') | today_at).time() }}"
+      # ask-to-enable closes 30 min after nap start; ask-to-disable opens 75 min after
+      nap_ask_enable_end: "{{ ((states('input_datetime.baby_nap_start_time') | today_at) + timedelta(minutes=30)).time() }}"
+      nap_dim_end: "{% from 'baby.jinja' import nap_restore_start_time %}{{ nap_restore_start_time() }}"
+      nap_end: "{{ (states('input_datetime.baby_nap_end_time') | today_at).time() }}"
+      bedtime_start: "{{ (states('input_datetime.baby_bedtime_start_time') | today_at).time() }}"
+      lights_out: "{{ (states('input_datetime.lights_out_time') | today_at).time() }}"
+      # ask-to-disable opens 630 min (10.5 hours) after bedtime start
+      bed_ask_disable_start: "{% from 'baby.jinja' import bedtime_ask_disable_start_time %}{{ bedtime_ask_disable_start_time() }}"
+      wake_up: "{{ (states('input_datetime.baby_wake_up_time') | today_at).time() }}"
+      ask_enable_nap: "{{ nap_start <= now_time <= nap_ask_enable_end }}"
+      ask_disable_nap: "{{ nap_dim_end <= now_time <= nap_end }}"
+      ask_enable_bedtime: "{{ bedtime_start <= now_time <= lights_out }}"
+      ask_disable_bedtime: "{{ bed_ask_disable_start <= now_time <= wake_up }}"
     condition:
-      # keep in sync with nursery motion detection automation
-      - condition: or
-        conditions:
-          # ask to turn off
-          - condition: time
-            after: "12:15:00"
-            before: "13:15:00"
-          # ask to turn on
-          - condition: time
-            after: "13:30:00"
-            before: "15:05:00"
-          # ask to turn off
-          - condition: time
-            after: "18:50:00"
-            before: "22:30:00"
-          # ask to turn on
-          - condition: time
-            after: "05:30:00"
-            before: "08:00:00"
+      - condition: template
+        value_template: >-
+          {{ ask_enable_nap or ask_disable_nap or ask_enable_bedtime or ask_disable_bedtime }}
     actions:
         # cannot template this, because the actions section's action and title isn't templateable
         # - variables:
@@ -1381,14 +1405,8 @@ automation:
                 - condition: state
                   entity_id: input_boolean.baby_sleep_mode
                   state: "off"
-                - condition: or
-                  conditions:
-                    - condition: time
-                      after: "12:15:00"
-                      before: "13:15:00"
-                    - condition: time
-                      after: "18:50:00"
-                      before: "22:30:00"
+                - condition: template
+                  value_template: "{{ ask_enable_nap or ask_enable_bedtime }}"
               sequence:
                 - service: notify.mobile_app_ceres
                   data:
@@ -1416,14 +1434,8 @@ automation:
                 - condition: state
                   entity_id: input_boolean.baby_sleep_mode
                   state: "on"
-                - condition: or
-                  conditions:
-                    - condition: time
-                      after: "13:30:00"
-                      before: "15:05:00"
-                    - condition: time
-                      after: "05:30:00"
-                      before: "08:00:00"
+                - condition: template
+                  value_template: "{{ ask_disable_nap or ask_disable_bedtime }}"
               sequence:
                 - service: notify.mobile_app_ceres
                   data:
@@ -1472,12 +1484,22 @@ automation:
     condition:
       condition: or
       conditions:
-        - condition: time
-          after: "05:45:00"
-          before: "07:00:00"
-        - condition: time
-          after: "14:15:00"
-          before: "15:15:00"
+        # restore window: 15 min before wake-up time to 30 min after
+        - condition: template
+          value_template: >-
+            {% from 'baby.jinja' import bedtime_morning_transition_start_time %}
+            {% set now_time = now().time() %}
+            {% set morning_start = bedtime_morning_transition_start_time() %}
+            {% set restore_end = ((states('input_datetime.baby_wake_up_time') | today_at) + timedelta(minutes=30)).time() %}
+            {{ morning_start <= now_time <= restore_end }}
+        # restore window: 75 min after nap start to nap end
+        - condition: template
+          value_template: >-
+            {% from 'baby.jinja' import nap_restore_start_time %}
+            {% set now_time = now().time() %}
+            {% set nap_restore_start = nap_restore_start_time() %}
+            {% set nap_end = (states('input_datetime.baby_nap_end_time') | today_at).time() %}
+            {{ nap_restore_start <= now_time <= nap_end }}
     action:
       - if:
           - "{{ is_state('timer.bedroom_bedlamp_timer', 'active') }}"
@@ -1495,8 +1517,11 @@ automation:
     id: "6285c20a-1e7b-4855-bd90-b910ad7bc1bd"
     initial_state: true
     trigger:
+      # fires 30 min before nap start, so the lamp is ready when she's put down
       - platform: time
-        at: "12:00:00"
+        at:
+          - entity_id: input_datetime.baby_nap_start_time
+            offset: "-00:30:00"
     action:
       - service: light.turn_on
         target:
@@ -1558,14 +1583,18 @@ automation:
             - condition: state
               entity_id: input_boolean.baby_sleep_mode
               state: "on"
-            - condition: or
-              conditions:
-                - condition: time
-                  after: "12:15:00"
-                  before: "13:30:00"
-                - condition: time
-                  after: "18:50:00"
-                  before: "05:15:00"
+            # force dim while sleep mode is on, until a reasonable sleep time has been
+            # reached: 75 min in for a nap, or close to wake-up for bedtime (which forces
+            # dim nearly all night, so this window wraps past midnight)
+            - condition: template
+              value_template: >-
+                {% from 'baby.jinja' import nap_restore_start_time, bedtime_ask_disable_start_time %}
+                {% set now_time = now().time() %}
+                {% set nap_start = (states('input_datetime.baby_nap_start_time') | today_at).time() %}
+                {% set nap_dim_end = nap_restore_start_time() %}
+                {% set bedtime_start = (states('input_datetime.baby_bedtime_start_time') | today_at).time() %}
+                {% set bedtime_dim_end = bedtime_ask_disable_start_time() %}
+                {{ (nap_start <= now_time <= nap_dim_end) or (now_time >= bedtime_start or now_time <= bedtime_dim_end) }}
           sequence:
             - service: script.turn_on
               target:
@@ -1608,17 +1637,19 @@ automation:
       - condition: state
         entity_id: input_boolean.baby_sleep_mode
         state: "on"
-      # correlate with the night light automation
       # this is just for safety, in case there's an issue during night/nap time
-      # to prevent incorrectly turning off sleep mode
-      - condition: or
-        conditions:
-          - condition: time
-            after: "13:30:00"
-            before: "15:05:00"
-          - condition: time
-            after: "05:15:00"
-            before: "19:00:00"
+      # to prevent incorrectly turning off sleep mode. covers the tail of the nap (from 75 min
+      # in, up to nap end) and the tail of the night (from the dim-forcing window's end, with
+      # a small grace overlap past the next bedtime start)
+      - condition: template
+        value_template: >-
+          {% from 'baby.jinja' import nap_restore_start_time, bedtime_ask_disable_start_time %}
+          {% set now_time = now().time() %}
+          {% set nap_dim_end = nap_restore_start_time() %}
+          {% set nap_end = (states('input_datetime.baby_nap_end_time') | today_at).time() %}
+          {% set bedtime_dim_end = bedtime_ask_disable_start_time() %}
+          {% set bedtime_safety_end = ((states('input_datetime.baby_bedtime_start_time') | today_at) + timedelta(minutes=10)).time() %}
+          {{ (nap_dim_end <= now_time <= nap_end) or (bedtime_dim_end <= now_time <= bedtime_safety_end) }}
     action:
       - service: input_boolean.turn_off
         entity_id: input_boolean.baby_sleep_mode

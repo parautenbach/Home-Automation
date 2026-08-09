@@ -91,3 +91,37 @@ Get the current hour's value for a parameter from marine hours data.
       | list -%}
   {{ entries[-1][param].sg if entries else '' }}
 {% endmacro %}
+
+{#
+Rain outlook from an hourly forecast.
+
+:param forecast: hourly forecast list from weather.get_forecasts
+:returns: dict with 'hours' (count of rainy hours in the 12-36h planning
+          window) and 'onset' (datetime string of the first rainy hour from
+          now, or none).
+
+'hours' answers whether to notify, over the plan-ahead window. 'onset'
+answers when it starts, and so deliberately looks from now rather than from
+the window start - otherwise the 12h edge clips the leading edge of an event
+already underway and we name a time mid-band.
+#}
+{%- macro rain_outlook(forecast, returns) -%}
+  {%- set wet = ['rainy', 'pouring', 'lightning-rainy', 'hail'] -%}
+  {%- set start = utcnow() + timedelta(hours=12) -%}
+  {%- set end = start + timedelta(hours=24) -%}
+
+  {%- set hours = forecast
+    | selectattr('datetime', '>=', start.isoformat())
+    | selectattr('datetime', '<',  end.isoformat())
+    | selectattr('condition', 'in', wet)
+    | list -%}
+
+  {%- set onset = forecast
+    | selectattr('datetime', '>=', utcnow().isoformat())
+    | selectattr('datetime', '<',  end.isoformat())
+    | selectattr('condition', 'in', wet)
+    | list | first -%}
+
+  {%- do returns({'hours': hours | count,
+                  'onset': onset.datetime if onset else none}) -%}
+{%- endmacro -%}

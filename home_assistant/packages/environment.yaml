@@ -515,23 +515,18 @@ template:
         unique_id: "949dd25e-35cf-4000-a3f9-f38ab20e112f"
         device_class: moisture
         state: >-
-          {# threshold is a total (mm) summed across the whole window below,
-             not an hourly rate - see min_hourly in the notification automation
-             for the separate per-hour rate used there #}
-          {% set threshold = 2 %}
-          {% set forecast = hourly['weather.openweathermap']['forecast'] %}
-          {# windows is 24 hours, 12 hours from now #}
-          {% set start = utcnow() + timedelta(hours=12) %}
-          {% set end = start + timedelta(hours=24) %}
-          {% set window = forecast
-             | selectattr('datetime', '>=', start.isoformat())
-             | selectattr('datetime', '<', end.isoformat())
-             | list %}
-          {% set total = window
-             | map(attribute='precipitation')
-             | map('float')
-             | sum %}
-          {{ total >= threshold }}
+          {% from 'environment.jinja' import rain_outlook %}
+          {% set rain_outlook_fn = rain_outlook | as_function %}
+          {% set outlook = rain_outlook_fn(hourly['weather.openweathermap']['forecast']) %}
+          {# minimum rainy hours in the window to count as significant - a
+             single rainy hour is a blip, not a reason to move the chores #}
+          {{ outlook.hours >= 3 }}
+        attributes:
+          onset: >-
+            {% from 'environment.jinja' import rain_outlook %}
+            {% set rain_outlook_fn = rain_outlook | as_function %}
+            {% set outlook = rain_outlook_fn(hourly['weather.openweathermap']['forecast']) %}
+            {{ outlook.onset }}
   - trigger:
       - platform: state
         entity_id: sensor.daily_precipitation
@@ -2200,12 +2195,13 @@ automation:
       - condition: state
         entity_id: binary_sensor.weather_forecast_precipitation_soon
         state: "on"
-      # the sensor is a sliding-window sum recalculated every 5 minutes, so it can flap
-      # on/off during a multi-day rain spell - track our own notification history
-      # instead of the sensor's last_changed, and only notify once a day at most
-      # 20h rather than 24h: gives enough slack that the same daily trigger slot
-      # (e.g. 06:30) is always eligible again the next day, even with a few
-      # minutes of timing jitter - a strict 24h gate could skip a whole day
+      # the sensor is a sliding window recalculated every 5 minutes, so it can
+      # flap on/off during a multi-day rain spell - track our own notification
+      # history instead of the sensor's last_changed, and only notify once a
+      # day at most.
+      # 20h rather than 24h: gives enough slack that the same daily trigger
+      # slot (e.g. 06:30) is always eligible again the next day, even with a
+      # few minutes of timing jitter - a strict 24h gate could skip a whole day
       # if the previous notification landed slightly late
       - condition: template
         value_template: >
@@ -2214,51 +2210,29 @@ automation:
         entity_id: binary_sensor.pieter_present
         state: "on"
     action:
-      - service: weather.get_forecasts
-        target:
-          entity_id: weather.openweathermap
-        data:
-          type: hourly
-        response_variable: hourly
       - service: notify.mobile_app_ceres
         data:
           title: "🌧️ Rain Expected"
           message: >-
-            {% set forecast = hourly['weather.openweathermap']['forecast'] %}
-            {# must match the sensor's definition #}
-            {% set start = utcnow() + timedelta(hours=12) %}
-            {% set end = start + timedelta(hours=24) %}
-            {% set rain_window = forecast
-               | selectattr('datetime', '>=', start.isoformat())
-               | selectattr('datetime', '<', end.isoformat())
-               | list %}
-            {# min_hourly is a rate (mm/h) applied per forecast entry, used only to
-               pick a sensible hour to name in the message - not the same kind of
-               value as the sensor's threshold, which is a total (mm) summed over
-               the whole window. Deliberately lower than that threshold: most rain
-               events ramp up gradually, so requiring a single hour to carry the
-               full window total would rarely match and the message would fall
-               back to "timing is uncertain" far more often than useful #}
-            {% set min_hourly = 0.5 %}
-            {% set first_rain = rain_window
-               | selectattr('precipitation', '>=', min_hourly)
-               | first %}
-            {% if first_rain %}
-              {% set first_rain_local_dt = first_rain.datetime | as_datetime | as_local %}
-              {% set rain_time = first_rain_local_dt.strftime('%H:%M') %}
-              {# later today → tonight → overnight → early morning → early tomorrow → later tomorrow #}
-              {% if first_rain_local_dt.date() == now().date() %}
-                {% set time_phrase = "later today" %}
-              {% elif first_rain_local_dt.hour < 4 %}
+            {# onset comes from the sensor, so the window is defined in exactly
+               one place (environment.jinja) and cannot drift from the state
+               that gated this notification #}
+            {% set onset = state_attr('binary_sensor.weather_forecast_precipitation_soon', 'onset') %}
+            {% if onset %}
+              {% set onset_local = onset | as_datetime | as_local %}
+              {% set rain_time = onset_local.strftime('%H:%M') %}
+              {% if onset_local.date() == now().date() %}
+                {% set time_phrase = "tonight" if onset_local.hour >= 18 else "later today" %}
+              {% elif onset_local.hour < 4 %}
                 {% set time_phrase = "overnight" %}
-              {% elif first_rain_local_dt.hour < 7 %}
+              {% elif onset_local.hour < 7 %}
                 {% set time_phrase = "early morning" %}
-              {% elif first_rain_local_dt.hour < 10 %}
+              {% elif onset_local.hour < 10 %}
                 {% set time_phrase = "early tomorrow" %}
-              {% elif first_rain_local_dt.hour < 18 %}
+              {% elif onset_local.hour < 18 %}
                 {% set time_phrase = "later tomorrow" %}
               {% else %}
-                {% set time_phrase = "tonight" %}
+                {% set time_phrase = "tomorrow night" %}
               {% endif %}
               Rain is expected {{ time_phrase }} around {{ rain_time }}. Plan accordingly.
             {% else %}

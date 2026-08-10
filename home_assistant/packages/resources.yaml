@@ -410,6 +410,8 @@ template:
       - name: "ACs Power"
         unique_id: "d450b906-159f-458d-ad46-0eb8a2b131f5"
         state: "{{ states('sensor.living_room_ac_power') | float(0) + states('sensor.main_bedroom_ac_power') | float(0) }}"
+        availability: >-
+          {{ has_value('sensor.living_room_ac_power') and has_value('sensor.main_bedroom_ac_power') }}
         icon: mdi:air-conditioner
         device_class: power
         unit_of_measurement: W
@@ -421,6 +423,9 @@ template:
           {% set tumble_dryer = states('sensor.tumble_dryer_power') | float(0) %}
           {% set dishwasher = states('sensor.dishwasher_power') | float(0) %}
           {{ acs + washing_machine + tumble_dryer + dishwasher }}
+        availability: >-
+          {{ has_value('sensor.acs_power') and has_value('sensor.washing_machine_power')
+             and has_value('sensor.tumble_dryer_power') and has_value('sensor.dishwasher_power') }}
         icon: mdi:lightning-bolt
         device_class: power
         unit_of_measurement: W
@@ -432,6 +437,10 @@ template:
           {% set outbuilding = states('sensor.outbuilding_power_meter_channel_1_power') | float(0) %}
           {% set large_appliances = states('sensor.home_power_large_appliances') | float(0) %}
           {{ home - (geyser + outbuilding + large_appliances) }}
+        availability: >-
+          {{ has_value('sensor.home_power') and has_value('sensor.geyser_power')
+             and has_value('sensor.outbuilding_power_meter_channel_1_power')
+             and has_value('sensor.home_power_large_appliances') }}
         icon: mdi:dots-horizontal
         device_class: power
         unit_of_measurement: W

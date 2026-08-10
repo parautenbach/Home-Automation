@@ -1290,8 +1290,9 @@ automation:
             # resumes 15 min before wake-up time, closes at wake-up time itself
             value_template: >-
               {% from 'baby.jinja' import bedtime_morning_transition_start_time %}
+              {% set morning_start_fn = bedtime_morning_transition_start_time | as_function %}
               {% set now_time = now().time() %}
-              {% set morning_start = bedtime_morning_transition_start_time() %}
+              {% set morning_start = morning_start_fn() %}
               {% set wake_up = (states('input_datetime.baby_wake_up_time') | today_at).time() %}
               {{ morning_start <= now_time <= wake_up }}
       - condition: state
@@ -1370,13 +1371,13 @@ automation:
       # closes 30 min after nap start. ask-to-disable opens 75 min after
       nap_ask_enable_start: "{{ ((states('input_datetime.baby_nap_start_time') | today_at) - timedelta(minutes=15)).time() }}"
       nap_ask_enable_end: "{{ ((states('input_datetime.baby_nap_start_time') | today_at) + timedelta(minutes=30)).time() }}"
-      nap_dim_end: "{% from 'baby.jinja' import nap_restore_start_time %}{{ nap_restore_start_time() }}"
+      nap_dim_end: "{% from 'baby.jinja' import nap_restore_start_time %}{{ (nap_restore_start_time | as_function)() }}"
       nap_end: "{{ (states('input_datetime.baby_nap_end_time') | today_at).time() }}"
       # ask-to-enable opens 15 min before bedtime start, since she's often put down early
       bedtime_ask_enable_start: "{{ ((states('input_datetime.baby_bedtime_start_time') | today_at) - timedelta(minutes=15)).time() }}"
       lights_out: "{{ (states('input_datetime.lights_out_time') | today_at).time() }}"
       # ask-to-disable opens 630 min (10.5 hours) after bedtime start
-      bed_ask_disable_start: "{% from 'baby.jinja' import bedtime_ask_disable_start_time %}{{ bedtime_ask_disable_start_time() }}"
+      bed_ask_disable_start: "{% from 'baby.jinja' import bedtime_ask_disable_start_time %}{{ (bedtime_ask_disable_start_time | as_function)() }}"
       wake_up: "{{ (states('input_datetime.baby_wake_up_time') | today_at).time() }}"
       ask_enable_nap: "{{ nap_ask_enable_start <= now_time <= nap_ask_enable_end }}"
       ask_disable_nap: "{{ nap_dim_end <= now_time <= nap_end }}"
@@ -1490,16 +1491,18 @@ automation:
         - condition: template
           value_template: >-
             {% from 'baby.jinja' import bedtime_morning_transition_start_time %}
+            {% set morning_start_fn = bedtime_morning_transition_start_time | as_function %}
             {% set now_time = now().time() %}
-            {% set morning_start = bedtime_morning_transition_start_time() %}
+            {% set morning_start = morning_start_fn() %}
             {% set restore_end = ((states('input_datetime.baby_wake_up_time') | today_at) + timedelta(minutes=30)).time() %}
             {{ morning_start <= now_time <= restore_end }}
         # restore window: 75 min after nap start to nap end
         - condition: template
           value_template: >-
             {% from 'baby.jinja' import nap_restore_start_time %}
+            {% set nap_restore_start_fn = nap_restore_start_time | as_function %}
             {% set now_time = now().time() %}
-            {% set nap_restore_start = nap_restore_start_time() %}
+            {% set nap_restore_start = nap_restore_start_fn() %}
             {% set nap_end = (states('input_datetime.baby_nap_end_time') | today_at).time() %}
             {{ nap_restore_start <= now_time <= nap_end }}
     action:
@@ -1591,11 +1594,13 @@ automation:
             - condition: template
               value_template: >-
                 {% from 'baby.jinja' import nap_restore_start_time, bedtime_ask_disable_start_time %}
+                {% set nap_restore_start_fn = nap_restore_start_time | as_function %}
+                {% set bedtime_ask_disable_start_fn = bedtime_ask_disable_start_time | as_function %}
                 {% set now_time = now().time() %}
                 {% set nap_start = (states('input_datetime.baby_nap_start_time') | today_at).time() %}
-                {% set nap_dim_end = nap_restore_start_time() %}
+                {% set nap_dim_end = nap_restore_start_fn() %}
                 {% set bedtime_start = (states('input_datetime.baby_bedtime_start_time') | today_at).time() %}
-                {% set bedtime_dim_end = bedtime_ask_disable_start_time() %}
+                {% set bedtime_dim_end = bedtime_ask_disable_start_fn() %}
                 {{ (nap_start <= now_time <= nap_dim_end) or (now_time >= bedtime_start or now_time <= bedtime_dim_end) }}
           sequence:
             - service: script.turn_on
@@ -1646,10 +1651,12 @@ automation:
       - condition: template
         value_template: >-
           {% from 'baby.jinja' import nap_restore_start_time, bedtime_ask_disable_start_time %}
+          {% set nap_restore_start_fn = nap_restore_start_time | as_function %}
+          {% set bedtime_ask_disable_start_fn = bedtime_ask_disable_start_time | as_function %}
           {% set now_time = now().time() %}
-          {% set nap_dim_end = nap_restore_start_time() %}
+          {% set nap_dim_end = nap_restore_start_fn() %}
           {% set nap_end = (states('input_datetime.baby_nap_end_time') | today_at).time() %}
-          {% set bedtime_dim_end = bedtime_ask_disable_start_time() %}
+          {% set bedtime_dim_end = bedtime_ask_disable_start_fn() %}
           {% set bedtime_safety_end = ((states('input_datetime.baby_bedtime_start_time') | today_at) + timedelta(minutes=10)).time() %}
           {{ (nap_dim_end <= now_time <= nap_end) or (bedtime_dim_end <= now_time <= bedtime_safety_end) }}
     action:

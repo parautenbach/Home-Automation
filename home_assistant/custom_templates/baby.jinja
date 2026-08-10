@@ -8,8 +8,8 @@ brightness (paired with input_datetime.baby_nap_end_time as that window's end).
 
 :returns: A time value, 75 minutes after input_datetime.baby_nap_start_time.
 #}
-{%- macro nap_restore_start_time() -%}
-  {{ ((states('input_datetime.baby_nap_start_time') | today_at) + timedelta(minutes=75)).time() }}
+{%- macro nap_restore_start_time(returns) -%}
+  {%- do returns(((states('input_datetime.baby_nap_start_time') | today_at) + timedelta(minutes=75)).time()) -%}
 {%- endmacro -%}
 
 {#
@@ -18,8 +18,8 @@ we proactively ask whether to disable sleep mode.
 
 :returns: A time value, 630 minutes (10.5 hours) after input_datetime.baby_bedtime_start_time.
 #}
-{%- macro bedtime_ask_disable_start_time() -%}
-  {{ ((states('input_datetime.baby_bedtime_start_time') | today_at) + timedelta(minutes=630)).time() }}
+{%- macro bedtime_ask_disable_start_time(returns) -%}
+  {%- do returns(((states('input_datetime.baby_bedtime_start_time') | today_at) + timedelta(minutes=630)).time()) -%}
 {%- endmacro -%}
 
 {#
@@ -29,6 +29,6 @@ her actual wake-up time.
 
 :returns: A time value, 15 minutes before input_datetime.baby_wake_up_time.
 #}
-{%- macro bedtime_morning_transition_start_time() -%}
-  {{ ((states('input_datetime.baby_wake_up_time') | today_at) - timedelta(minutes=15)).time() }}
+{%- macro bedtime_morning_transition_start_time(returns) -%}
+  {%- do returns(((states('input_datetime.baby_wake_up_time') | today_at) - timedelta(minutes=15)).time()) -%}
 {%- endmacro -%}

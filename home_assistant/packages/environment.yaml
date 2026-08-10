@@ -851,54 +851,24 @@ template:
         icon: mdi:waves
         unit_of_measurement: "%"
         state_class: measurement
-        state: >-
-          {% set dams = [
-            'bergrivier',
-            'steenbras_upper',
-            'steenbras_lower',
-            'theewaterskloof',
-            'voelvlei',
-            'wemmershoek'
-          ] %}
-          {% set ns = namespace(total_volume=0, total_capacity=0) %}
-          {% for dam in dams %}
-            {% set level = states('sensor.' ~ dam ~ '_dam_level_this_week') | float(0) %}
-            {% set capacity = states('sensor.' ~ dam ~ '_dam_full_storage_capacity') | float(0) %}
-            {% set ns.total_volume = ns.total_volume + (level / 100 * capacity) %}
-            {% set ns.total_capacity = ns.total_capacity + capacity %}
-          {% endfor %}
-          {% if ns.total_capacity > 0 %}
-            {{ (ns.total_volume / ns.total_capacity * 100) | round(1) }}
-          {% else %}
-            0
-          {% endif %}
-  - sensor:
+        availability: "{% from 'environment.jinja' import dam_data_ok %}{{ dam_data_ok('this_week') }}"
+        state: "{% from 'environment.jinja' import dam_total %}{{ dam_total('this_week') }}"
+
+      - name: "Cape Town Major Dams Total Level Last Week"
+        unique_id: "6afd64f2-4305-48df-a269-ec9c8dfcaa7b"
+        icon: mdi:waves
+        unit_of_measurement: "%"
+        state_class: measurement
+        availability: "{% from 'environment.jinja' import dam_data_ok %}{{ dam_data_ok('last_week') }}"
+        state: "{% from 'environment.jinja' import dam_total %}{{ dam_total('last_week') }}"
+
       - name: "Cape Town Major Dams Total Level Last Year"
         unique_id: "896366dc-5eac-4c45-b6fc-63cbfeaa70d6"
         icon: mdi:waves
         unit_of_measurement: "%"
         state_class: measurement
-        state: >-
-          {% set dams = [
-            'bergrivier',
-            'steenbras_upper',
-            'steenbras_lower',
-            'theewaterskloof',
-            'voelvlei',
-            'wemmershoek'
-          ] %}
-          {% set ns = namespace(total_volume=0, total_capacity=0) %}
-          {% for dam in dams %}
-            {% set level = states('sensor.' ~ dam ~ '_dam_level_last_year') | float(0) %}
-            {% set capacity = states('sensor.' ~ dam ~ '_dam_full_storage_capacity') | float(0) %}
-            {% set ns.total_volume = ns.total_volume + (level / 100 * capacity) %}
-            {% set ns.total_capacity = ns.total_capacity + capacity %}
-          {% endfor %}
-          {% if ns.total_capacity > 0 %}
-            {{ (ns.total_volume / ns.total_capacity * 100) | round(1) }}
-          {% else %}
-            0
-          {% endif %}
+        availability: "{% from 'environment.jinja' import dam_data_ok %}{{ dam_data_ok('last_year') }}"
+        state: "{% from 'environment.jinja' import dam_total %}{{ dam_total('last_year') }}"
   - sensor:
       - name: "Wind Direction Sin"
         unique_id: "c4415109-747b-4ae9-936f-02303dd4d667"
@@ -2051,35 +2021,38 @@ automation:
     id: "40f9506b-f35b-43ca-903b-7c7b3f006510"
     trigger:
       - platform: state
-        entity_id: sensor.cape_town_major_dams_total_level_this_week
-        not_from: "unavailable"
-        not_to: "0"
+        entity_id: sensor.dam_levels_last_update
+        not_to: ["unavailable", "unknown"]
+        for: "00:01:00"
+    condition:
+      - condition: template
+        value_template: >-
+          {{ [
+            'sensor.cape_town_major_dams_total_level_this_week',
+            'sensor.cape_town_major_dams_total_level_last_week',
+            'sensor.cape_town_major_dams_total_level_last_year'
+          ] | map('states') | select('in', ['unknown', 'unavailable']) | list | count == 0 }}
     action:
       - service: notify.mobile_app_ceres
         data:
           title: "💧 Dam Levels"
           message: >-
-            {% set previous_dam_levels = trigger.from_state.state | float(0) | round(1) %}
-            {% set new_dam_levels = trigger.to_state.state | float(0) | round(1) %}
+            {% set this_week = states('sensor.cape_town_major_dams_total_level_this_week') | float(0) %}
+            {% set last_week = states('sensor.cape_town_major_dams_total_level_last_week') | float(0) %}
+            {% set last_year = states('sensor.cape_town_major_dams_total_level_last_year') | float(0) %}
+            {% set from_date = trigger.from_state.state | as_datetime %}
+            {% set to_date = trigger.to_state.state | as_datetime %}
+            {% set days = (to_date - from_date).days %}
             {# the other option is to use percentage points for a pure delta #}
-            {% set change = ((new_dam_levels - previous_dam_levels)/previous_dam_levels*100) | abs | round(1) %}
-            {% set previous_year_dam_levels = states('sensor.cape_town_major_dams_total_level_last_year') | float(0) | round(1) %}
-            {# we don't want to go through the effort of storing the previous update in a template sensor, #}
-            {# because there can still be a race condition (will it have updated when this runs?). #}
-            {# this just needs to be approximately accurate, so we'll just use the last time we got notified #}
-            {% set last_update = this.attributes.last_triggered %}
-            {% set time_delta = (now() - last_update).total_seconds() %}
-            {% set days_since = (time_delta / 86400) | int(0) %}
-            {% set update = '' %}
-            {% if new_dam_levels > previous_dam_levels %}
-              {% set update = 'rose by ' ~ change ~ '% to ' ~ new_dam_levels ~ '%' %}
-            {% elif new_dam_levels < previous_dam_levels %}
-              {% set update = 'dropped by ' ~ change ~ '% to ' ~ new_dam_levels ~ '%' %}
+            {% set change = ((this_week - last_week) / last_week * 100) | abs | round(1) if last_week > 0 else 0 %}
+            {% if this_week > last_week %}
+              {% set update = 'rose by ' ~ change ~ '% to ' ~ this_week ~ '%' %}
+            {% elif this_week < last_week %}
+              {% set update = 'dropped by ' ~ change ~ '% to ' ~ this_week ~ '%' %}
             {% else %}
-              {% set update = 'is stable at ' ~ new_dam_levels ~ '%' %}
+              {% set update = 'is stable at ' ~ this_week ~ '%' %}
             {% endif %}
-            {# updates are never just 1 day apart; ignoring the singular case #}
-            Dam levels {{ update }} over the past {{ days_since }} days. Last year it was at {{ previous_year_dam_levels }}%.
+            Dam levels {{ update }} over the past {{ days }} days. Last year it was at {{ last_year }}%.
           data:
             url: homeassistant://navigate/lovelace-main/environment
             group: "environment"

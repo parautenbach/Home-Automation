@@ -1,5 +1,66 @@
 {# https://www.home-assistant.io/docs/configuration/templating/#reusing-templates #}
 
+{#
+  The six major dams of the Western Cape water supply system, as named in
+  the multiscrape sensor entity IDs (not the DWS page's own spelling).
+#}
+{% set DAMS = [
+  'bergrivier',
+  'steenbras_upper',
+  'steenbras_lower',
+  'theewaterskloof',
+  'voelvlei',
+  'wemmershoek'
+] %}
+
+{#
+  Colume-weighted total level across all six dams, as a percentage, to 1dp.
+
+  period: One of 'this_week', 'last_week', 'last_year' — the suffix of the
+          per-dam level sensors scraped from the dws table.
+
+  A plain average of the six percentages would be wrong: Theewaterskloof is
+  roughly half the system and Steenbras Upper a few percent, so we convert
+  each level back to a volume against its own capacity, then divide by the
+  summed capacity.
+
+  The float(0) fallbacks mean a missing sensor silently skews the result
+  rather than erroring — a missing capacity drops that dam from both the
+  numerator and the denominator, quietly reweighting the rest. Guard with
+  dam_data_ok() in availability: rather than relying on this.
+#}
+{% macro dam_total(period) %}
+  {% set ns = namespace(volume=0, capacity=0) %}
+  {% for dam in DAMS %}
+    {% set level = states('sensor.' ~ dam ~ '_dam_level_' ~ period) | float(0) %}
+    {% set capacity = states('sensor.' ~ dam ~ '_dam_full_storage_capacity') | float(0) %}
+    {% set ns.volume = ns.volume + (level / 100 * capacity) %}
+    {% set ns.capacity = ns.capacity + capacity %}
+  {% endfor %}
+  {{ (ns.volume / ns.capacity * 100) | round(1) if ns.capacity > 0 else 0 }}
+{% endmacro %}
+
+{#
+  True when every sensor dam_total(period) depends on holds a real number.
+
+  period: One of 'this_week', 'last_week', 'last_year' — the suffix of the
+          per-dam level sensors scraped from the dws table.
+
+  Checks capacity as well as level, because capacity going unavailable is the
+  more dangerous of the two — it changes the weighting instead of just the
+  value, so the result stays plausible while being wrong.
+#}
+{% macro dam_data_ok(period) %}
+  {% set ns = namespace(ok=true) %}
+  {% for dam in DAMS %}
+    {% if states('sensor.' ~ dam ~ '_dam_level_' ~ period) | float(none) is none
+       or states('sensor.' ~ dam ~ '_dam_full_storage_capacity') | float(none) is none %}
+      {% set ns.ok = false %}
+    {% endif %}
+  {% endfor %}
+  {{ ns.ok }}
+{% endmacro %}
+
 {# Mapping pollen colours to levels (for the scraper sensors). #}
 {% set color_level_map = {
                            "pollen-green": 1,

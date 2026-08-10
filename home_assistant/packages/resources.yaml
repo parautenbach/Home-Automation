@@ -2183,3 +2183,46 @@ automation:
           entity_id: input_number.battery_energy_out_prev
         data:
           value: "{{ battery_energy_out_now }}"
+  - alias: "Monthly Energy CSV Export"
+    id: "cd7057d2-06b3-420b-835a-f597d9b3910f"
+    initial_state: true
+    trigger:
+      - platform: time
+        at: "00:05:00"
+    condition:
+      - condition: template
+        value_template: "{{ now().day == 1 }}"
+    action:
+      - variables:
+          period_end: "{{ now().replace(day=1, hour=0, minute=0, second=0, microsecond=0) }}"
+          period_start: "{{ (as_datetime(period_end) - timedelta(days=1)).replace(day=1) }}"
+          month_label: "{{ as_datetime(period_start).strftime('%Y-%m') }}"
+          entities:
+            - sensor.monthly_grid_energy_consumption
+            - sensor.monthly_home_energy_consumption
+            - sensor.monthly_geyser_energy_consumption
+            - sensor.outbuilding_power_meter_channel_1_energy
+            - sensor.backup_power_system_overhead_energy
+      - action: recorder.get_statistics
+        data:
+          statistic_ids: "{{ entities }}"
+          start_time: "{{ period_start }}"
+          end_time: "{{ as_datetime(period_end) - timedelta(seconds=1) }}"
+          period: month
+          types:
+            - change
+        response_variable: stats
+      - variables:
+          values: >
+            {% set ns = namespace(vals=[]) %}
+            {% for e in entities %}
+              {% set v = stats.statistics.get(e, [{}])[0].get('change', 0) %}
+              {% set ns.vals = ns.vals + [v | round(2) | string] %}
+            {% endfor %}
+            {{ month_label ~ ',' ~ ns.vals | join(',') }}
+      - action: notify.send_message
+        target:
+          entity_id: notify.monthly_resource_usage_csv
+        data:
+          # month,grid_energy,home_energy,geyser_energy,outbuilding_energy,backup_power_system_overhead_energy,water_volume
+          message: "{{ values }}"

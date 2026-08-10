@@ -1453,10 +1453,7 @@ automation:
         minutes: "/30"
         variables:
           # we need to give the average forecast filter time to get past its initial transient after midnight
-          first_run: >-
-            {# this isn't available here :-( #}
-            {% set current_trigger = now().replace(second=0).replace(microsecond=0) %}
-            {{ current_trigger == ('03:30' | today_at) }}
+          first_run: "{{ trigger.now.replace(second=0, microsecond=0) == today_at('03:30') }}"
     mode: single
     # this would ensure we only get a notification if the mode has changed
     # but do we really want to do this? perhaps it's good to know every time, so that a human can do a sanity check

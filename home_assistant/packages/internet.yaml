@@ -6,6 +6,7 @@ homeassistant:
     sensor.internet_speed_out:
       friendly_name: 'Upload Traffic'
       icon: mdi:upload
+    # kept for reference/comparison against the 64-bit sensors below; safe to remove after ~2026-10
     sensor.internet_usage_in:
       friendly_name: 'Download Usage'
       icon: mdi:download
@@ -24,6 +25,26 @@ homeassistant:
       friendly_name: 'Monthly Downloads'
       icon: mdi:download
     sensor.monthly_internet_usage_out:
+      friendly_name: 'Monthly Uploads'
+      icon: mdi:upload
+    sensor.internet_usage_in_64:
+      friendly_name: 'Download Usage'
+      icon: mdi:download
+    sensor.internet_usage_out_64:
+      friendly_name: 'Upload Usage'
+      icon: mdi:upload
+    sensor.daily_internet_usage_in_64:
+      friendly_name: 'Daily Downloads'
+      icon: mdi:download
+      state_class: total_increasing
+    sensor.daily_internet_usage_out_64:
+      friendly_name: 'Daily Uploads'
+      icon: mdi:upload
+      state_class: total_increasing
+    sensor.monthly_internet_usage_in_64:
+      friendly_name: 'Monthly Downloads'
+      icon: mdi:download
+    sensor.monthly_internet_usage_out_64:
       friendly_name: 'Monthly Uploads'
       icon: mdi:upload
     binary_sensor.internet:
@@ -59,10 +80,6 @@ homeassistant:
     sensor.back_extender_jitter:
       friendly_name: Back Extender Jitter
       icon: mdi:sigma-lower
-    input_number.wan_traffic_delta_in:
-      friendly_name: WAN Traffic Delta In
-    input_number.wan_traffic_delta_out:
-      friendly_name: WAN Traffic Delta Out
 
 # why these when you can just look at the last_changed property?
 # because this is more resilient against restarts
@@ -73,16 +90,6 @@ input_datetime:
   back_extender_disconnected:
     has_date: true
     has_time: true
-
-input_number:
-  wan_traffic_delta_in:
-    # snmp counter is 32-bit unsigned int
-    min: 0
-    max: 4294967295
-  wan_traffic_delta_out:
-    # snmp counter is 32-bit unsigned int
-    min: 0
-    max: 4294967295
 
 timer:
   front_extender_disconnected:
@@ -109,6 +116,22 @@ utility_meter:
     unique_id: "00f46f8f-f570-4e3f-a883-7b747d36d47f"
     source: sensor.internet_usage_out
     cycle: monthly
+  daily_internet_usage_in_64:
+    unique_id: "aa255d75-688e-4c43-97f4-ed3db54c0997"
+    source: sensor.internet_usage_in_64
+    cycle: daily
+  monthly_internet_usage_in_64:
+    unique_id: "4f0df1ad-e7e8-4f90-91b4-4a3f7024dc50"
+    source: sensor.internet_usage_in_64
+    cycle: monthly
+  daily_internet_usage_out_64:
+    unique_id: "c7c132ea-da63-414d-85da-3aad78612b75"
+    source: sensor.internet_usage_out_64
+    cycle: daily
+  monthly_internet_usage_out_64:
+    unique_id: "6b1114a2-1276-4860-9084-84ce207cc6eb"
+    source: sensor.internet_usage_out_64
+    cycle: monthly
 
 sensor:
   # https://community.ui.com/releases/UniFi-OS-Dream-Router-4-0-6/305296c8-c5ed-4dbf-b79e-cb259945d9fb
@@ -126,6 +149,22 @@ sensor:
     community: !secret router_snmp_community
     version: 2c
     baseoid: 1.3.6.1.2.1.2.2.1.16.44  # ifOutOctets.44: ppp0
+    unit_of_measurement: octets
+
+  - platform: snmp
+    name: snmp_wan_in_64
+    host: 192.168.0.1
+    community: !secret router_snmp_community
+    version: 2c
+    baseoid: 1.3.6.1.2.1.31.1.1.1.6.44  # 64-bit
+    unit_of_measurement: octets
+
+  - platform: snmp
+    name: snmp_wan_out_64
+    host: 192.168.0.1
+    community: !secret router_snmp_community
+    version: 2c
+    baseoid: 1.3.6.1.2.1.31.1.1.1.10.44  # 64-bit
     unit_of_measurement: octets
 
   # alternative: https://community.home-assistant.io/t/snmp-bandwidth-monitor-using-statistics/96684/82
@@ -162,16 +201,33 @@ template:
             mdi:server-network-off
           {% endif %}
   # https://github.com/home-assistant/core/blob/dev/homeassistant/const.py#L571
-  - sensor:
+  # background on the original delta-tracking approach this replaced:
+  # https://community.home-assistant.io/t/snmp-bandwidth-monitor/7122
+  # https://community.home-assistant.io/t/snmp-bandwidth-monitor-using-statistics-and-a-utility-meter/176971
+  - trigger:
+      - platform: state
+        entity_id: sensor.snmp_wan_in_64
+    sensor:
       - name: "Internet Speed In"
         unique_id: "cb6da88f-f6b0-46ba-a003-6dcce4999e18"
-        state: "{{ ((states('input_number.wan_traffic_delta_in')  | float(0) ) / 1000000 ) | round(3) }}"
+        state: >-
+          {% set to = trigger.to_state.state | float(0) %}
+          {% set from = trigger.from_state.state | float(0) if trigger.from_state else to %}
+          {% set time_delta = (trigger.to_state.last_changed - trigger.from_state.last_changed).total_seconds() if trigger.from_state else 0 %}
+          {{ (((to - from) * 8) / time_delta / 1000000) | round(3) if time_delta > 0 else 0 }}
         device_class: data_rate
         unit_of_measurement: 'Mbit/s'
-  - sensor:
+  - trigger:
+      - platform: state
+        entity_id: sensor.snmp_wan_out_64
+    sensor:
       - name: "Internet Speed Out"
         unique_id: "da1b796f-2e23-4ca3-88e6-d39fdde983bc"
-        state: "{{ ((states('input_number.wan_traffic_delta_out') | float(0) ) / 1000000 ) | round(3) }}"
+        state: >-
+          {% set to = trigger.to_state.state | float(0) %}
+          {% set from = trigger.from_state.state | float(0) if trigger.from_state else to %}
+          {% set time_delta = (trigger.to_state.last_changed - trigger.from_state.last_changed).total_seconds() if trigger.from_state else 0 %}
+          {{ (((to - from) * 8) / time_delta / 1000000) | round(3) if time_delta > 0 else 0 }}
         device_class: data_rate
         unit_of_measurement: 'Mbit/s'
   - sensor:
@@ -186,54 +242,20 @@ template:
         state: "{{ ((states('sensor.snmp_wan_out') | float(0) ) / 1000000000 ) }}"
         device_class: data_size
         unit_of_measurement: 'GB'
+  - sensor:
+      - name: "Internet Usage In (64)"
+        unique_id: "ca6f49a3-33a5-44d8-b6e7-8051c58967ff"
+        state: "{{ ((states('sensor.snmp_wan_in_64')  | float(0) ) / 1000000000 ) }}"
+        device_class: data_size
+        unit_of_measurement: 'GB'
+  - sensor:
+      - name: "Internet Usage Out (64)"
+        unique_id: "cb3f34c4-23ad-44d9-a52e-2aa716666025"
+        state: "{{ ((states('sensor.snmp_wan_out_64') | float(0) ) / 1000000000 ) }}"
+        device_class: data_size
+        unit_of_measurement: 'GB'
 
 automation:
-  # https://community.home-assistant.io/t/snmp-bandwidth-monitor/7122
-  # https://community.home-assistant.io/t/snmp-bandwidth-monitor-using-statistics-and-a-utility-meter/176971
-  - alias: "Monitor Inbound Internet Traffic"
-    id: "244f20ae-8cc6-4442-b3aa-0336763508f8"
-    trigger:
-      platform: state
-      entity_id: sensor.snmp_wan_in
-    action:
-      - service: input_number.set_value
-        data:
-          entity_id: input_number.wan_traffic_delta_in
-          value: >-
-            {# safe delta catering for wrap-around of a 32-bit unsigned int (snmp counter is 32-bit unsigned int) #}
-            {# basically taking 2's complement #}
-            {% set from = trigger.from_state.state | int(0) %}
-            {% set to = trigger.to_state.state | int(0) %}
-            {% set traffic_delta = (to - from) if (to >= from) else (4294967295 - from + to + 1) %}
-            {% set time_delta = as_timestamp(trigger.to_state.last_changed) - as_timestamp(trigger.from_state.last_changed) %}
-            {% if time_delta > 0 %}
-              {{ (traffic_delta * 8) / time_delta }}
-            {% else %}
-              0
-            {% endif %}
-
-  - alias: "Monitor Outbound Internet Traffic"
-    id: "719b1fd6-bfc1-40b3-bf0e-5a07cff11aea"
-    trigger:
-      platform: state
-      entity_id: sensor.snmp_wan_out
-    action:
-      - service: input_number.set_value
-        data:
-          entity_id: input_number.wan_traffic_delta_out
-          value: >-
-            {# safe delta catering for wrap-around of a 32-bit unsigned int (snmp counter is 32-bit unsigned int) #}
-            {# basically taking 2's complement #}
-            {% set from = trigger.from_state.state | int(0) %}
-            {% set to = trigger.to_state.state | int(0) %}
-            {% set traffic_delta = (to - from) if (to >= from) else (4294967295 - from + to + 1) %}
-            {% set time_delta = as_timestamp(trigger.to_state.last_changed) - as_timestamp(trigger.from_state.last_changed) %}
-            {% if time_delta > 0 %}
-              {{ (traffic_delta * 8) / time_delta }}
-            {% else %}
-              0
-            {% endif %}
-
   - alias: "Notify If Internet Status Changed"
     id: "ff386c09-1dd5-4381-b404-abad62bffb01"
     initial_state: true

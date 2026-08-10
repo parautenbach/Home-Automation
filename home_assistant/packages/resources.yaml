@@ -1115,17 +1115,19 @@ automation:
         data:
           title: "🔋 Energy"
           message: >-
-            {# we're assuming we will never get to 0% SOC – not coding for that edge case; it will work, but the working will be awkward #}
-            {# The backup power battery is {{ 'at ' ~ battery_soc ~ '% and ' ~ battery_status if battery_soc < 100 else 'fully charged.' }} #}
+            {# we're assuming we will never get to 0% SOC – not coding for that edge case; it will work, but the wording will be awkward #}
             {% set threshold = states('sensor.capacity_charge_point') %}
+            {% set grid_mode = states('binary_sensor.grid_charge_point_status') %}
+            {% set prefix = "The backup power battery" %}
+            {% set params = "(threshold: " ~ threshold ~ "%, grid mode: " ~ grid_mode ~ ")" %}
             {% if is_state('sensor.battery_status', 'Charging') and battery_soc < 100 %}
-              The backup power battery has charged to {{ battery_soc }}% (threshold: {{ threshold }}%).
+              {{ prefix }} has charged to {{ battery_soc }}% {{ params }}.
             {% elif is_state('sensor.battery_status', 'Discharging') and battery_soc < 100 %}
-              The backup power battery has discharged to {{ battery_soc }}% (threshold: {{ threshold }}%).
+              {{ prefix }} has discharged to {{ battery_soc }}% {{ params }}.
             {% elif is_state('sensor.battery_status', 'Trickling') and battery_soc < 100 %}
-              The backup power battery is trickling at {{ battery_soc }}% (threshold: {{ threshold }}%).
+              {{ prefix }} is trickling at {{ battery_soc }}% {{ params }}.
             {% else %}
-              The backup power battery is fully charged (threshold: {{ threshold }}%).
+              {{ prefix }} is fully charged {{ params }}.
             {% endif %}
           data:
             group: "home-electricity-battery"

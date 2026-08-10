@@ -990,6 +990,30 @@ automation:
                 group: "{{ trigger.entity_id }}"
                 url: homeassistant://navigate/lovelace-main/main
 
+  - alias: "Alert When Water Detected"
+    id: "c77aa289-96ab-4f80-b405-1f25a116f6c3"
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.scullery_flooding
+        to: "on"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "💧 Safety"
+          message: >-
+            {% set entity_id = trigger.entity_id %}
+            {% set area = area_name(entity_id) | lower %}
+            Water has been detected in the {{ area }}!
+          data:
+            group: "home-safety"
+            url: homeassistant://navigate/lovelace-main/security
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 0.3
+
   - alias: "Alert When Smoke Detected"
     id: "3f2d5457-34db-464f-88d2-515fbb3e202a"
     trigger:

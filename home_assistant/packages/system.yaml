@@ -674,8 +674,9 @@ automation:
     variables:
       timeout: 90
     trigger:
-      - platform: template
-        value_template: "{{ is_state('sensor.home_assistant_server_battery_status', 'Discharging') }}"
+      - platform: state
+        entity_id: sensor.home_assistant_server_battery_status
+        to: "Discharging"
     mode: single
     action:
       - service: homeassistant.update_entity

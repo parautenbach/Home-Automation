@@ -93,6 +93,59 @@ Get the current hour's value for a parameter from marine hours data.
 {% endmacro %}
 
 {#
+Compute a held/decaying rate-of-change (e.g. mm/h) from a monotonically
+increasing source value, for use in a trigger-based template sensor that
+fires on both a state change of the source entity and a periodic
+time_pattern (to detect staleness when the source goes quiet).
+
+Pure calculation only - the caller is responsible for deciding whether this
+render was triggered by a fresh sample of the source (e.g.
+`trigger.platform == 'state' and trigger.entity_id == entity`), since only
+the caller's trigger list makes that unambiguous.
+
+:param current_value: latest reading of the accumulating source value.
+:param last_value: reading of the source value as of last_time_iso.
+:param last_time_iso: ISO timestamp of last_value, or none if never set.
+:param is_fresh_sample: true if this render was triggered by a new sample of the source value.
+:param stale_after_minutes: minutes of no new sample before the rate decays to 0.
+:param current_state: this sensor's current state, used to hold the rate steady between updates.
+
+:returns: the computed (or held/decayed) rate.
+#}
+{%- macro compute_rate(current_value, last_value, last_time_iso, is_fresh_sample, stale_after_minutes, current_state) -%}
+  {%- if last_time_iso is none -%}
+    0
+  {%- elif is_fresh_sample -%}
+    {%- set elapsed_hours = (now() - as_datetime(last_time_iso)).total_seconds() / 3600 -%}
+    {{ ((current_value - last_value) / elapsed_hours) | round(1) if elapsed_hours > 0 else current_state | float(0) }}
+  {%- else -%}
+    {%- set minutes_since = (now() - as_datetime(last_time_iso)).total_seconds() / 60 -%}
+    {{ 0 if minutes_since > stale_after_minutes else current_state | float(0) }}
+  {%- endif -%}
+{%- endmacro -%}
+
+{#
+Pick a calibration gain for a raw precipitation delta based on the current
+validated event rate, from an ordered list of rate tiers.
+
+:param event_rate_state: raw state string of the event-rate entity (may be unknown/unavailable/none).
+:param tiers: list of {'ceiling': <rate>, 'gain': <gain>} dicts, sorted ascending by ceiling.
+              the first tier whose ceiling exceeds event_rate is used.
+:param default_gain: gain to apply when the rate is unvalidated or exceeds every tier's ceiling.
+
+:returns: the gain to multiply the raw delta by.
+#}
+{%- macro select_gain(event_rate_state, tiers, default_gain) -%}
+  {%- if event_rate_state in ['unknown', 'unavailable', 'none'] -%}
+    {{ default_gain }}
+  {%- else -%}
+    {%- set event_rate = event_rate_state | float(0) -%}
+    {%- set match = tiers | selectattr('ceiling', '>', event_rate) | list | first -%}
+    {{ match.gain if match else default_gain }}
+  {%- endif -%}
+{%- endmacro -%}
+
+{#
 Rain outlook from an hourly forecast.
 
 :param forecast: hourly forecast list from weather.get_forecasts

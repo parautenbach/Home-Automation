@@ -1,3 +1,54 @@
+# ─────────────────────────────────────────────────────────
+# Thermal time constant (tau) reference — living room / office zone
+# tau (clear night, confirmed) ~= 15h (14.4-15.5h)
+# tau (cloudy night)           ~= 21-26h
+# UA and C below were derived using the OLD tau=37.7h estimate
+# and should be refit against tau=15h before trusting formula 5-6
+# absolute power/energy numbers.
+#
+# Core relationship (T_outside assumed constant over the window):
+#   T_inside(t) = T_outside + (T_inside_0 - T_outside) * e^(-t / tau)
+#
+# 1. Predict inside temp after time t (free decay, no heating)
+#    T_inside(t) = T_outside + (T_inside_0 - T_outside) * e^(-t / tau)
+#    Example: inside 17C, outside steady at 9C, tau=15h, t=6h
+#      T_inside = 9 + (17-9) * e^(-6/15) = 14.4C
+#
+# 2. Time to reach a target inside temperature
+#    t = -tau * ln[ (T_target - T_outside) / (T_inside_0 - T_outside) ]
+#    Example: 17C -> 15C, outside 9C, tau=15h
+#      t = -15 * ln[(15-9)/(17-9)] = 4.3h
+#
+# 3. Quick "time per degree" near current conditions (small steps only)
+#    t ~= tau / (T_inside_0 - T_outside)
+#    Example: dT=8C, tau=15h -> ~1.9h per degree right now
+#
+# 4. Standard decay milestones (fraction of inside-outside gap closed)
+#    50%    -> 0.69 * tau
+#    63.2%  -> 1.00 * tau
+#    86.5%  -> 2.00 * tau
+#    95%    -> 3.00 * tau
+#
+# 5. Steady-state heating power to hold a target inside temperature
+#    P = UA * (T_target - T_outside) = (C / tau) * (T_target - T_outside)
+#
+# 6. Time to heat from T_inside_0 to a target, constant heater power P
+#    T_eq = T_outside + P / UA     (equilibrium temp the heater alone sustains)
+#    t = -tau * ln[ (T_target - T_eq) / (T_inside_0 - T_eq) ]
+#
+# 7. Energy needed for a temperature rise (ignoring ongoing losses)
+#    E = C * (T_target - T_inside_0)
+#
+# Caveats:
+#  - Single lumped zone (this room), not necessarily the whole house
+#  - Assumes T_outside constant over the window; use small time-steps
+#    with real forecast T_outside for anything beyond a few hours
+#  - No wind/cloud term - use tau~15h clear nights, ~21-26h cloudy
+#  - Ignores internal gains and residual daytime solar mass release,
+#    which distorts predictions for the first few hours after sunset
+# ─────────────────────────────────────────────────────────
+# refereince: https://claude.ai/chat/454df39a-7aa8-40db-a698-9ec0f6aaed35
+
 homeassistant:
   customize:
     package.node_anchors:
@@ -1052,6 +1103,41 @@ template:
           {% endif %}
         availability: >-
           {{ precip_stats is defined and (precip_stats.statistics.get('sensor.precipitation_total') | length > 0) }}
+  - trigger:
+    - trigger: time_pattern
+      minutes: "/5"
+    - trigger: state
+      entity_id: sensor.weather_station_precipitation
+    sensor:
+      - name: "Raw Rain Rate"
+        unique_id: "7a1f3c9e-6b2d-4e8a-9c1f-3d5e7a9b2c4f"
+        unit_of_measurement: "mm/h"
+        device_class: precipitation_intensity
+        state_class: measurement
+        variables:
+          precipitation_entity: sensor.weather_station_precipitation
+          stale_after_minutes: 12
+        state: >-
+          {% from 'environment.jinja' import compute_rate %}
+          {% set is_fresh_sample = trigger.platform == 'state' and trigger.entity_id == precipitation_entity %}
+          {% set current_value = states(precipitation_entity) | float(0) %}
+          {% set last_value = this.attributes.get('last_value', current_value) %}
+          {% set last_time_iso = this.attributes.get('last_time') %}
+          {{ compute_rate(current_value, last_value, last_time_iso, is_fresh_sample, stale_after_minutes, this.state) }}
+        attributes:
+          last_value: >-
+            {% set is_fresh_sample = trigger.platform == 'state' and trigger.entity_id == precipitation_entity %}
+            {{ states(precipitation_entity) | float(0) if is_fresh_sample
+               else this.attributes.get('last_value', states(precipitation_entity) | float(0)) }}
+          last_time: >-
+            {% set is_fresh_sample = trigger.platform == 'state' and trigger.entity_id == precipitation_entity %}
+            {{ now().isoformat() if is_fresh_sample
+               else this.attributes.get('last_time', now().isoformat()) }}
+        availability: "{{ has_value(precipitation_entity) }}"
+  - trigger:
+      - trigger: state
+        entity_id: sensor.weather_station_precipitation
+    sensor:
       - name: "Precipitation Total"
         unique_id: "ee251e57-e2b0-4c5a-b236-516077712fea"
         unit_of_measurement: "mm"
@@ -1059,14 +1145,32 @@ template:
         state_class: total_increasing
         variables:
           raw_precipitation_entity: sensor.weather_station_precipitation
-          # provisional flat gain from 2 clean same-morning manual readings
-          # (2026-07-20: 2.70x, 2026-07-24: 4.32x — event on 07-23 discarded,
-          # revisit once more clean readings are logged.
-          calibration_gain: 3.5
+          event_rate_entity: sensor.raw_rain_rate
+          gain_tiers:
+            - ceiling: 0.3
+              gain: 3.5
+            - ceiling: 2.0
+              gain: 2.56
+          gain_unvalidated: 1.0
         state: >-
-          {{ (states(raw_precipitation_entity) | float(0) * calibration_gain) | round(1) }}
-        availability: >-
-          {{ has_value(raw_precipitation_entity) }}
+          {% from 'environment.jinja' import select_gain %}
+          {% set current_raw = states(raw_precipitation_entity) | float(0) %}
+          {% set last_raw = this.attributes.get('last_raw', current_raw) %}
+          {% set delta_raw = current_raw - last_raw %}
+          {% set gain = select_gain(states(event_rate_entity), gain_tiers, gain_unvalidated) | float %}
+          {% set prev_total = this.attributes.get('calibrated_total', this.state | float(0)) %}
+          {{ (prev_total + delta_raw * gain) | round(2) }}
+        attributes:
+          last_raw: "{{ states(raw_precipitation_entity) | float(0) }}"
+          calibrated_total: >-
+            {% from 'environment.jinja' import select_gain %}
+            {% set current_raw = states(raw_precipitation_entity) | float(0) %}
+            {% set last_raw = this.attributes.get('last_raw', current_raw) %}
+            {% set delta_raw = current_raw - last_raw %}
+            {% set gain = select_gain(states(event_rate_entity), gain_tiers, gain_unvalidated) | float %}
+            {% set prev_total = this.attributes.get('calibrated_total', 0) | float(0) %}
+            {{ (prev_total + delta_raw * gain) | round(2) }}
+        availability: "{{ has_value(raw_precipitation_entity) }}"
       - name: "Air Pressure (QNH)"
         unique_id: "f056014d-7059-4b0e-8ea3-cf40bf33a176"
         unit_of_measurement: "hPa"
@@ -1202,24 +1306,20 @@ template:
           #          stopped. Currently set for a ~0.5 mm/h floor.
           stale_after_minutes: 12
         state: >-
+          {% from 'environment.jinja' import compute_rate %}
+          {% set is_fresh_sample = trigger.platform == 'state' and trigger.entity_id == precipitation_entity %}
           {% set current_value = states(precipitation_entity) | float(0) %}
           {% set last_value = this.attributes.get('last_value', current_value) %}
           {% set last_time_iso = this.attributes.get('last_time') %}
-          {% if last_time_iso is none %}
-            0
-          {% elif trigger.platform == 'state' %}
-            {% set elapsed_hours = (now() - as_datetime(last_time_iso)).total_seconds() / 3600 %}
-            {{ ((current_value - last_value) / elapsed_hours) | round(1) if elapsed_hours > 0 else this.state | float(0) }}
-          {% else %}
-            {% set minutes_since = (now() - as_datetime(last_time_iso)).total_seconds() / 60 %}
-            {{ 0 if minutes_since > stale_after_minutes else this.state | float(0) }}
-          {% endif %}
+          {{ compute_rate(current_value, last_value, last_time_iso, is_fresh_sample, stale_after_minutes, this.state) }}
         attributes:
           last_value: >-
-            {{ states(precipitation_entity) | float(0) if trigger.platform == 'state'
+            {% set is_fresh_sample = trigger.platform == 'state' and trigger.entity_id == precipitation_entity %}
+            {{ states(precipitation_entity) | float(0) if is_fresh_sample
                else this.attributes.get('last_value', states(precipitation_entity) | float(0)) }}
           last_time: >-
-            {{ now().isoformat() if trigger.platform == 'state'
+            {% set is_fresh_sample = trigger.platform == 'state' and trigger.entity_id == precipitation_entity %}
+            {{ now().isoformat() if is_fresh_sample
                else this.attributes.get('last_time', now().isoformat()) }}
         availability: "{{ has_value(precipitation_entity) }}"
 

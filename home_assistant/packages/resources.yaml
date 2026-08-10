@@ -747,14 +747,18 @@ sensor:
     type: time  # duration
     start: "{{ today_at() }}"
     end: "{{ now() }}"
-  # https://github.com/Limych/ha-average
-  # device class
-  - platform: average
+  # smoothed daily solar forecast for the charge mode, to stop it flapping on
+  # forecast jitter. window must stay under 3.5h so it holds only today's
+  # samples by the 03:30 first read — no midnight anchor needed.
+  # average_step is time-weighted; statistics drops the incompatible 'energy'
+  # device class for us.
+  - platform: statistics
     name: Average Solar Energy Forecast Today
-    start: '{{ today_at() }}'
-    end: '{{ now() }}'
-    entities:
-      - sensor.energy_production_today
+    unique_id: "884fe9cf-79bd-4c86-bcfe-52abe5fe33e1"
+    entity_id: sensor.energy_production_today
+    state_characteristic: average_step
+    max_age:
+      hours: 3
   - platform: statistics
     name: 'PV Power 5min Average'
     entity_id: sensor.pv_power

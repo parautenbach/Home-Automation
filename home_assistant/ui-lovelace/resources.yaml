@@ -481,32 +481,28 @@ cards:
           home:
             entity: sensor.daily_home_energy_consumption
             override_state: true
-          individual1:
-            entity: sensor.outbuilding_power_meter_channel_1_energy
-            name: Outbuilding
-            icon: mdi:garage-variant
-            color_icon: false
-            # cannot use var(--individual-left-bottom-color)
-            color: "#964cb5"
-            display_zero: true
-          individual2:
-            entity: sensor.daily_geyser_energy_consumption
-            name: Geyser
-            icon: mdi:water-boiler
-            color_icon: false
-            # cannot use var(--individual-left-top-color)
-            color: "#d0cc5b"
-            display_zero: true
-        inverted_entities: battery
-        wh_kwh_threshold: 0
-        max_expected_energy: 20000
-            - entity: sensor.home_energy_large_appliances
+          individual:
+            - entity: sensor.daily_geyser_energy_consumption
+              name: Geyser
+              icon: mdi:water-boiler
+              color_icon: false
+              # cannot use var(--individual-left-top-color)
+              color: "#d0cc5b"
+              display_zero: true
+            - entity: sensor.daily_outbuilding_energy_consumption
+              name: Outbuilding
+              icon: mdi:garage-variant
+              color_icon: false
+              # cannot use var(--individual-left-bottom-color)
+              color: "#964cb5"
+              display_zero: true
+            - entity: sensor.daily_home_energy_large_appliances
               name: Large Appliances
               icon: mdi:home-lightning-bolt
               color_icon: false
               # color: "#964cb5"
               display_zero: true
-            - entity: sensor.home_energy_other
+            - entity: sensor.daily_home_energy_other
               name: Other
               icon: mdi:home-lightbulb
               color_icon: false

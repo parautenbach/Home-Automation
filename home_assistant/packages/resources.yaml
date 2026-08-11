@@ -415,6 +415,15 @@ template:
         icon: mdi:air-conditioner
         device_class: power
         unit_of_measurement: W
+      - name: "ACs Energy"
+        unique_id: "f675f4b5-0e99-4b82-b833-4f259fb192f5"
+        state: "{{ states('sensor.living_room_ac_energy') | float(0) + states('sensor.main_bedroom_ac_energy') | float(0) }}"
+        availability: >-
+          {{ has_value('sensor.living_room_ac_energy') and has_value('sensor.main_bedroom_ac_energy') }}
+        icon: mdi:air-conditioner
+        device_class: energy
+        state_class: total_increasing
+        unit_of_measurement: kWh
       - name: "Home Power Large Appliances"
         unique_id: "90ade1f3-887b-42a9-9c87-e0c92df40395"
         state: >-
@@ -429,6 +438,21 @@ template:
         icon: mdi:lightning-bolt
         device_class: power
         unit_of_measurement: W
+      - name: "Home Energy Large Appliances"
+        unique_id: "bd53df87-1ce1-42c0-b38c-b785c51c0fca"
+        state: >-
+          {% set acs = states('sensor.acs_energy') | float(0) %}
+          {% set washing_machine = states('sensor.washing_machine_energy') | float(0) %}
+          {% set tumble_dryer = states('sensor.tumble_dryer_energy') | float(0) %}
+          {% set dishwasher = states('sensor.dishwasher_energy') | float(0) %}
+          {{ acs + washing_machine + tumble_dryer + dishwasher }}
+        availability: >-
+          {{ has_value('sensor.acs_energy') and has_value('sensor.washing_machine_energy')
+             and has_value('sensor.tumble_dryer_energy') and has_value('sensor.dishwasher_energy') }}
+        icon: mdi:lightning-bolt
+        device_class: energy
+        state_class: total_increasing
+        unit_of_measurement: kWh
       - name: "Home Power Other"
         unique_id: "ce771aeb-49ae-4777-816a-2af98c4939d9"
         state: >-
@@ -444,6 +468,22 @@ template:
         icon: mdi:dots-horizontal
         device_class: power
         unit_of_measurement: W
+      - name: "Home Energy Other"
+        unique_id: "1d46fac8-f9dc-4b5d-83b7-c7f5b3e00dc0"
+        state: >-
+          {% set home = states('sensor.home_energy') | float(0) %}
+          {% set geyser = states('sensor.geyser_energy') | float(0) %}
+          {% set outbuilding = states('sensor.outbuilding_power_meter_channel_1_energy') | float(0) %}
+          {% set large_appliances = states('sensor.home_energy_large_appliances') | float(0) %}
+          {{ home - (geyser + outbuilding + large_appliances) }}
+        availability: >-
+          {{ has_value('sensor.home_energy') and has_value('sensor.geyser_energy')
+             and has_value('sensor.outbuilding_power_meter_channel_1_energy')
+             and has_value('sensor.home_energy_large_appliances') }}
+        icon: mdi:dots-horizontal
+        device_class: energy
+        state_class: total_increasing
+        unit_of_measurement: kWh
       # for the energy dashboard's now view
       - name: "Battery Power (Inverted)"
         unique_id: "05853cd9-18a8-42e2-9f93-476042cd1490"
@@ -876,6 +916,18 @@ utility_meter:
     unique_id: "9eafc3cb-bdf3-4c37-bdf3-7e84a286319a"
     source: sensor.geyser_energy
     cycle: monthly
+  daily_home_energy_large_appliances:
+    unique_id: "6dfd0f91-b8d8-4b3b-bd5c-c772ff3e8254"
+    source: sensor.home_energy_large_appliances
+    cycle: daily
+  daily_home_energy_other:
+    unique_id: "d58fedc7-42b1-4a2a-aee5-f41bcaf696d7"
+    source: sensor.home_energy_other
+    cycle: daily
+  daily_outbuilding_energy_consumption:
+    unique_id: "d014080e-0035-4d38-bc07-b96905c892f6"
+    source: sensor.outbuilding_power_meter_channel_1_energy
+    cycle: daily
 
 input_boolean:
   # avoid jitter when we're around a charge point and the battery is trickling

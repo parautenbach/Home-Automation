@@ -142,6 +142,9 @@ binary_sensor:
   #   # don't detect ptz movement!
   #   duration: 3
   #   extra_arguments: -nostats
+  # customize:
+  #   binary_sensor.baby_monitor_sound_alarm:
+  #     device_class: sound
 
   - platform: group
     name: "Family Present"

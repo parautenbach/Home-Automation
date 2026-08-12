@@ -1,0 +1,287 @@
+homeassistant:
+  customize:
+    package.node_anchors:
+      dam_full_storage_capacity: &dam_full_storage_capacity
+        icon: "mdi:waves"
+        value_template: >-
+          {{ value | float(0) | multiply(1000000) | int(0) }}
+        unit_of_measurement: "m³"
+        on_error:
+          value: last
+      dam_level_percentage: &dam_level_percentage
+        icon: "mdi:waves"
+        value_template: >-
+          {{ value | float(0) }}
+        unit_of_measurement: "%"
+        on_error:
+          value: last
+
+shell_command:
+  download_latest_dam_levels: "/root/scripts/download_latest_dam_levels.sh"
+
+template:
+  - sensor:
+      - name: "Cape Town Major Dams Total Level This Week"
+        unique_id: "693844bf-bf47-4e71-abe1-47b9b398daae"
+        icon: mdi:waves
+        unit_of_measurement: "%"
+        state_class: measurement
+        availability: "{% from 'environment.jinja' import dam_data_ok %}{{ dam_data_ok('this_week') }}"
+        state: "{% from 'environment.jinja' import dam_total %}{{ dam_total('this_week') }}"
+
+      - name: "Cape Town Major Dams Total Level Last Week"
+        unique_id: "6afd64f2-4305-48df-a269-ec9c8dfcaa7b"
+        icon: mdi:waves
+        unit_of_measurement: "%"
+        state_class: measurement
+        availability: "{% from 'environment.jinja' import dam_data_ok %}{{ dam_data_ok('last_week') }}"
+        state: "{% from 'environment.jinja' import dam_total %}{{ dam_total('last_week') }}"
+
+      - name: "Cape Town Major Dams Total Level Last Year"
+        unique_id: "896366dc-5eac-4c45-b6fc-63cbfeaa70d6"
+        icon: mdi:waves
+        unit_of_measurement: "%"
+        state_class: measurement
+        availability: "{% from 'environment.jinja' import dam_data_ok %}{{ dam_data_ok('last_year') }}"
+        state: "{% from 'environment.jinja' import dam_total %}{{ dam_total('last_year') }}"
+
+multiscrape:
+  - resource: https://www.dws.gov.za/hydrology/Weekly/ProvinceWeek.aspx?region=WC
+    scan_interval: 86400  # daily
+    timeout: 30
+    log_response: true
+    sensor:
+      # Bergrivier
+      - <<: *dam_full_storage_capacity
+        name: Bergrivier Dam Full Storage Capacity
+        unique_id: "bergrivier_dam_full_storage_capacity"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Berg River Dam")) td:nth-of-type(5)
+      - <<: *dam_level_percentage
+        name: Bergrivier Dam Level This Week
+        unique_id: "bergrivier_dam_level_this_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Berg River Dam")) td:nth-of-type(6)
+      - <<: *dam_level_percentage
+        name: Bergrivier Dam Level Last Week
+        unique_id: "bergrivier_dam_level_last_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Berg River Dam")) td:nth-of-type(7)
+      - <<: *dam_level_percentage
+        name: Bergrivier Dam Level Last Year
+        unique_id: "bergrivier_dam_level_last_year"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Berg River Dam")) td:nth-of-type(8)
+
+      # Steenbras Lower
+      - <<: *dam_full_storage_capacity
+        name: Steenbras Lower Dam Full Storage Capacity
+        unique_id: "steenbras_lower_dam_full_storage_capacity"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Steenbras-Lower Dam")) td:nth-of-type(5)
+      - <<: *dam_level_percentage
+        name: Steenbras Lower Dam Level This Week
+        unique_id: "steenbras_lower_dam_level_this_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Steenbras-Lower Dam")) td:nth-of-type(6)
+      - <<: *dam_level_percentage
+        name: Steenbras Lower Dam Level Last Week
+        unique_id: "steenbras_lower_dam_level_last_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Steenbras-Lower Dam")) td:nth-of-type(7)
+      - <<: *dam_level_percentage
+        name: Steenbras Lower Dam Level Last Year
+        unique_id: "steenbras_lower_dam_level_last_year"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Steenbras-Lower Dam")) td:nth-of-type(8)
+
+      # Steenbras Upper
+      - <<: *dam_full_storage_capacity
+        name: Steenbras Upper Dam Full Storage Capacity
+        unique_id: "steenbras_upper_dam_full_storage_capacity"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Steenbras-Upper Dam")) td:nth-of-type(5)
+      - <<: *dam_level_percentage
+        name: Steenbras Upper Dam Level This Week
+        unique_id: "steenbras_upper_dam_level_this_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Steenbras-Upper Dam")) td:nth-of-type(6)
+      - <<: *dam_level_percentage
+        name: Steenbras Upper Dam Level Last Week
+        unique_id: "steenbras_upper_dam_level_last_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Steenbras-Upper Dam")) td:nth-of-type(7)
+      - <<: *dam_level_percentage
+        name: Steenbras Upper Dam Level Last Year
+        unique_id: "steenbras_upper_dam_level_last_year"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Steenbras-Upper Dam")) td:nth-of-type(8)
+
+      # Theewaterskloof
+      - <<: *dam_full_storage_capacity
+        name: Theewaterskloof Dam Full Storage Capacity
+        unique_id: "theewaterskloof_dam_full_storage_capacity"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Theewaterskloof Dam")) td:nth-of-type(5)
+      - <<: *dam_level_percentage
+        name: Theewaterskloof Dam Level This Week
+        unique_id: "theewaterskloof_dam_level_this_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Theewaterskloof Dam")) td:nth-of-type(6)
+      - <<: *dam_level_percentage
+        name: Theewaterskloof Dam Level Last Week
+        unique_id: "theewaterskloof_dam_level_last_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Theewaterskloof Dam")) td:nth-of-type(7)
+      - <<: *dam_level_percentage
+        name: Theewaterskloof Dam Level Last Year
+        unique_id: "theewaterskloof_dam_level_last_year"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Theewaterskloof Dam")) td:nth-of-type(8)
+
+      # Voëlvlei Dam
+      - <<: *dam_full_storage_capacity
+        name: Voëlvlei Dam Full Storage Capacity
+        unique_id: "voelvlei_dam_full_storage_capacity"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Voelvlei Dam")) td:nth-of-type(5)
+      - <<: *dam_level_percentage
+        name: Voëlvlei Dam Level This Week
+        unique_id: "voelvlei_dam_level_this_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Voelvlei Dam")) td:nth-of-type(6)
+      - <<: *dam_level_percentage
+        name: Voëlvlei Dam Level Last Week
+        unique_id: "voelvlei_dam_level_last_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Voelvlei Dam")) td:nth-of-type(7)
+      - <<: *dam_level_percentage
+        name: Voëlvlei Dam Level Last Year
+        unique_id: "voelvlei_dam_level_last_year"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Voelvlei Dam")) td:nth-of-type(8)
+
+      # Wemmershoek Dam
+      - <<: *dam_full_storage_capacity
+        name: Wemmershoek Dam Full Storage Capacity
+        unique_id: "wemmershoek_dam_full_storage_capacity"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Wemmershoek Dam")) td:nth-of-type(5)
+      - <<: *dam_level_percentage
+        name: Wemmershoek Dam Level This Week
+        unique_id: "wemmershoek_dam_level_this_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Wemmershoek Dam")) td:nth-of-type(6)
+      - <<: *dam_level_percentage
+        name: Wemmershoek Dam Level Last Week
+        unique_id: "wemmershoek_dam_level_last_week"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Wemmershoek Dam")) td:nth-of-type(7)
+      - <<: *dam_level_percentage
+        name: Wemmershoek Dam Level Last Year
+        unique_id: "wemmershoek_dam_level_last_year"
+        select: >-
+          #ContentPlaceHolder1_tw tr:has(td:nth-of-type(1):-soup-contains("Wemmershoek Dam")) td:nth-of-type(8)
+
+      # Report Date
+      - name: Dam Levels Last Update
+        unique_id: "dam_levels_last_update"
+        icon: mdi:update
+        # see bug below
+        # device_class: date
+        select: >-
+          th:-soup-contains("Western Cape Provincial State of Dams on")
+        # it seems impossible to get rid of this error if you got the value template or device class in a mismatched state somewhere.
+        # either wait for the recorder to drop data, or delete the history manually.
+        # ValueError: Invalid date: sensor.dam_levels_last_update has date device class but provides state 2026-04-27:<class 'str'> resulting in ''str' object has no attribute 'isoformat''
+        # https://github.com/home-assistant/core/issues/83949
+        # https://github.com/home-assistant/core/issues/67455
+        # https://github.com/danieldotnl/ha-multiscrape/issues/174
+        value_template: >-
+          {{ value | regex_findall_index("on\s(\d{4}-\d{2}-\d{2})", 0)}}
+        attributes:
+          # for debugging
+          - name: "raw"
+            select: >-
+              th:-soup-contains("Western Cape Provincial State of Dams on")
+            value_template: "{{ value }}"
+
+  # cannot get the gis query to work
+  # - resource: "https://services6.arcgis.com/nyYfO9SxHU2ChQd9/ArcGIS/rest/services/Dam_Levels_from_2000/FeatureServer/0/query?where=1%3D1&objectIds=&resultType=none&outFields=&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnDistinctValues=false&cacheHint=false&collation=&orderByFields=&groupByFieldsForStatistics=&returnAggIds=false&outStatistics=&having=&resultOffset=&resultRecordCount=1&sqlFormat=none&f=json"
+  #   scan_interval: 21600  # 6 hours (adjust as needed)
+  #   sensor:
+  #     - name: "WC Dam Report Date"
+  #       value_template: >
+  #         {{ value_json.features[0].attributes.DATE }}
+  #     - name: "Berg River Dam Current"
+  #       unit_of_measurement: "%"
+  #       value_template: >
+  #         {{ value_json.features[0].attributes.BERG_RIVER_Current__ | round(1) }}
+  #     - name: "Theewaterskloof Current"
+  #       unit_of_measurement: "%"
+  #       value_template: >
+  #         {{ value_json.features[0].attributes.THEEWATERSKLOOF_Current | round(1) }}
+  #     - name: "Voelvlei Current"
+  #       unit_of_measurement: "%"
+  #       value_template: >
+  #         {{ value_json.features[0].attributes['VOËLVLEI__Current__'] | round(1) }}
+  #     - name: "Wemmershoek Current"
+  #       unit_of_measurement: "%"
+  #       value_template: >
+  #         {{ value_json.features[0].attributes.WEMMERSHOEK_Current_ | round(1) }}
+  #     - name: "WC Big 6 Total"
+  #       unit_of_measurement: "%"
+  #       value_template: >
+  #         {{ value_json.features[0].attributes.TOTAL_STORED___BIG_6_Current | round(1) }}
+  # note: the individual dam levels and other meta data is parsed via the file integration (set up via the ui)
+
+automation:
+  - alias: "Download Dam Levels Data"
+    id: "0cb4d6ba-5a63-45f7-8adc-efb98724a44e"
+    # replaced by scraper
+    initial_state: false
+    trigger:
+      - platform: time
+        at: "05:00:00"
+    action:
+      - service: shell_command.download_latest_dam_levels
+
+  - alias: "Send Dam Level Update"
+    id: "40f9506b-f35b-43ca-903b-7c7b3f006510"
+    trigger:
+      - platform: state
+        entity_id: sensor.dam_levels_last_update
+        not_to: ["unavailable", "unknown"]
+        for: "00:01:00"
+    condition:
+      - condition: template
+        value_template: >-
+          {{ [
+            'sensor.cape_town_major_dams_total_level_this_week',
+            'sensor.cape_town_major_dams_total_level_last_week',
+            'sensor.cape_town_major_dams_total_level_last_year'
+          ] | map('states') | select('in', ['unknown', 'unavailable']) | list | count == 0 }}
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "💧 Dam Levels"
+          message: >-
+            {% set this_week = states('sensor.cape_town_major_dams_total_level_this_week') | float(0) %}
+            {% set last_week = states('sensor.cape_town_major_dams_total_level_last_week') | float(0) %}
+            {% set last_year = states('sensor.cape_town_major_dams_total_level_last_year') | float(0) %}
+            {% set from_date = trigger.from_state.state | as_datetime %}
+            {% set to_date = trigger.to_state.state | as_datetime %}
+            {% set days = (to_date - from_date).days %}
+            {# the other option is to use percentage points for a pure delta #}
+            {% set change = ((this_week - last_week) / last_week * 100) | abs | round(1) if last_week > 0 else 0 %}
+            {% if this_week > last_week %}
+              {% set update = 'rose by ' ~ change ~ '% to ' ~ this_week ~ '%' %}
+            {% elif this_week < last_week %}
+              {% set update = 'dropped by ' ~ change ~ '% to ' ~ this_week ~ '%' %}
+            {% else %}
+              {% set update = 'is stable at ' ~ this_week ~ '%' %}
+            {% endif %}
+            Dam levels {{ update }} over the past {{ days }} days. Last year it was at {{ last_year }}%.
+          data:
+            url: homeassistant://navigate/lovelace-main/environment
+            group: "environment"

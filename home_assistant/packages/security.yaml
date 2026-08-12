@@ -1183,7 +1183,7 @@ automation:
                 data:
                   title: "⚠️ Security"
                   message: >-
-                    The backup power system's cabinet has been opened unexpectedly!
+                    The backup power system's cabinet has been opened!
                   data:
                     group: "home-security"
                     url: homeassistant://navigate/lovelace-main/security

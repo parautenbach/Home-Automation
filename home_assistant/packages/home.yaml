@@ -1603,26 +1603,22 @@ automation:
                 {% set bedtime_dim_end = bedtime_ask_disable_start_fn() %}
                 {{ (nap_start <= now_time <= nap_dim_end) or (now_time >= bedtime_start or now_time <= bedtime_dim_end) }}
           sequence:
-            - service: script.turn_on
+            - service: light.turn_on
               target:
-                entity_id: script.turn_on_light
+                entity_id: light.bedroom_bedlamp
               data:
-                variables:
-                  light: light.bedroom_bedlamp
-                  profile: night_bedlamp
+                profile: night_bedlamp
             - service: timer.start
               target:
                 entity_id: timer.bedroom_bedlamp_timer
               data:
                 duration: "00:00:30"
         default:
-          - service: script.turn_on
+          - service: light.turn_on
             target:
-              entity_id: script.turn_on_light
+              entity_id: light.bedroom_bedlamp
             data:
-              variables:
-                light: light.bedroom_bedlamp
-                profile: normal_bedlamp
+              profile: normal_bedlamp
 
   # the purpose of this automation is to stop sleep tracking automatically
   # when the light is turned on, but we forget to disable sleep mode

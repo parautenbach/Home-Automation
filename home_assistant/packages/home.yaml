@@ -2584,16 +2584,15 @@ automation:
       - platform: state
         entity_id: person.pieter_rautenbach
         to: "home"
-    condition:
-      - condition: state
-        entity_id: timer.go_home_reminder
-        state: "active"
     action:
       - service: notify.mobile_app_ceres
         data:
           message: "clear_notification"
           data:
             tag: "routine-go-home"
+      - condition: state
+        entity_id: timer.go_home_reminder
+        state: "active"
       - service: timer.cancel
         target:
           entity_id: timer.go_home_reminder

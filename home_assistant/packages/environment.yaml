@@ -282,6 +282,14 @@ sensor:
         precision: 2
 
   - platform: filter
+    name: "Wind Gust Filtered"
+    entity_id: sensor.weather_station_wind_speed_gust
+    filters:
+      - filter: lowpass
+        time_constant: 10
+        precision: 2
+
+  - platform: filter
     name: "Wind Direction Sin Filtered"
     entity_id: sensor.wind_direction_sin
     filters:
@@ -895,6 +903,16 @@ template:
           {{ (states(wind_speed_entity) | float(0) * 3.6) | round(1) }}
         availability: >-
           {{ has_value(wind_speed_entity) }}
+      - name: "Wind Gust Filtered (km/h)"
+        unique_id: "c3ea5517-3713-471d-bc0a-c636100528ec"
+        unit_of_measurement: "km/h"
+        device_class: wind_speed
+        variables:
+          wind_gust_entity: sensor.wind_gust_filtered
+        state: >-
+          {{ (states(wind_gust_entity) | float(0) * 3.6) | round(1) }}
+        availability: >-
+          {{ has_value(wind_gust_entity) }}
       - name: "Wind Direction Filtered"
         unique_id: "bc1a58b7-29b5-4100-9962-d1c99dbfe31a"
         unit_of_measurement: "°"

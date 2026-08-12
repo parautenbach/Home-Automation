@@ -264,10 +264,9 @@ cards:
                   - entity: sensor.wind_speed_filtered_km_h
                     name: Speed (km/h)
                     icon: mdi:speedometer
-                  - entity: sensor.wind_speed_filtered
-                    name: Speed (m/s)
-                  - entity: sensor.weather_station_wind_speed_gust
-                    name: Gust
+                  - entity: sensor.wind_gust_filtered_km_h
+                    name: Gust (km/h)
+                    icon: mdi:speedometer
                   - type: attribute
                     entity: sensor.wind_condition_beaufort
                     name: Condition
@@ -873,7 +872,7 @@ cards:
           - type: custom:weather-chart-card
             entity: weather.openweathermap
             show_main: false
-            # show_wind_gust_speed: true
+            show_wind_gust_speed: true
             show_visibility: true
             animated_icons: true
             forecast:
@@ -884,6 +883,7 @@ cards:
             entity: weather.openweathermap
             animated_icons: true
             show_main: false
+            show_wind_gust_speed: true
             forecast:
               type: hourly
               style: style2
@@ -994,6 +994,31 @@ cards:
             smoothing: true
             points_per_hour: 1
             line_width: 2
+            show:
+              extrema: true
+              average: true
+              labels_secondary: false
+          - type: custom:mini-graph-card
+            name: Wind
+            entities:
+              - entity: sensor.wind_speed_filtered_km_h
+                name: Speed
+                color: var(--custom-color-blue)
+              - entity: sensor.wind_gust_filtered_km_h
+                name: Gust
+                color: var(--custom-color-red)
+              - entity: sensor.nighttime_number
+                color: var(--custom-color-gray)
+                show_line: false
+                show_points: false
+                show_legend: false
+                y_axis: secondary
+            hours_to_show: 24
+            hour24: true
+            smoothing: true
+            points_per_hour: 2
+            line_width: 2
+            lower_bound: 0
             show:
               extrema: true
               average: true
@@ -1444,6 +1469,7 @@ cards:
         entity: weather.openweathermapstrand
         animated_icons: true
         show_main: false
+        show_wind_gust_speed: true
         forecast:
           type: hourly
           style: style2

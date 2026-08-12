@@ -888,6 +888,10 @@ automation:
           message: "request_location_update"
       - delay:
           seconds: 45
+      # give the location update a chance to land, then only alert if presence still hasn't been confirmed
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "off"
       - choose:
           - conditions:
               - condition: template
@@ -945,21 +949,30 @@ automation:
           message: >-
             {% set action = 'opened' if (trigger.to_state.state == 'open') else 'closed' %}
             The main gate has been {{ action }}.
-      # can remove this now since the alarm has been integrated into the anybody home binary sensor
       # https://companion.home-assistant.io/docs/notifications/notification-commands#request-location-updates
-      # - service: notify.mobile_app_ceres
-      #   data:
-      #     message: "request_location_update"
-      # - service: notify.mobile_app_rouve
-      #   data:
-      #     message: "request_location_update"
+      - service: notify.mobile_app_ceres
+        data:
+          message: "request_location_update"
+      - service: notify.mobile_app_rouve
+        data:
+          message: "request_location_update"
       - service: homeassistant.update_entity
         target:
           entity_id: binary_sensor.tenant_mobile_phone
       - delay:
           seconds: 15
-      - condition: template
-        value_template: "{{ not is_state('alarm_control_panel.home', 'disarmed') }}"
+      # give the location updates a chance to land, then only alert if presence still hasn't been confirmed
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: binary_sensor.anybody_home
+            state: "off"
+          - condition: state
+            entity_id: binary_sensor.tenant_present
+            state: "off"
+          - condition: state
+            entity_id: binary_sensor.housekeeper_mobile_phone
+            state: "off"
       - choose:
           - conditions:
               - condition: template

@@ -146,6 +146,15 @@ template:
         state: "{{ has_value('sensor.tumble_dryer_power') }}"
         device_class: connectivity
   - binary_sensor:
+      - name: ACs Power Meter
+        state: >-
+          {{ has_value('sensor.living_room_ac_power') or has_value('sensor.main_bedroom_ac_power') }}
+        device_class: connectivity
+  - binary_sensor:
+      - name: Outbuilding Power Meter
+        state: "{{ has_value('sensor.outbuilding_power_meter_channel_1_power') }}"
+        device_class: connectivity
+  - binary_sensor:
       - name: "On Air"
         # https://github.com/home-assistant/iOS/issues/1903
         state: >

@@ -19,6 +19,14 @@ homeassistant:
 shell_command:
   download_latest_dam_levels: "/root/scripts/download_latest_dam_levels.sh"
 
+# sensor.dam_levels_last_update does not survive an HA restart (goes to
+# unknown until the next scrape), so the last valid report date is mirrored
+# here instead, which does survive restarts
+input_datetime:
+  dam_levels_last_update:
+    has_date: true
+    has_time: false
+
 template:
   - sensor:
       - name: "Cape Town Major Dams Total Level This Week"
@@ -199,6 +207,8 @@ multiscrape:
         # https://github.com/danieldotnl/ha-multiscrape/issues/174
         value_template: >-
           {{ value | regex_findall_index("on\s(\d{4}-\d{2}-\d{2})", 0)}}
+        on_error:
+          value: last
         attributes:
           # for debugging
           - name: "raw"
@@ -251,7 +261,6 @@ automation:
     trigger:
       - platform: state
         entity_id: sensor.dam_levels_last_update
-        not_from: ["unavailable", "unknown"]
         not_to: ["unavailable", "unknown"]
         for: "00:01:00"
     condition:
@@ -270,9 +279,11 @@ automation:
             {% set this_week = states('sensor.cape_town_major_dams_total_level_this_week') | float(0) %}
             {% set last_week = states('sensor.cape_town_major_dams_total_level_last_week') | float(0) %}
             {% set last_year = states('sensor.cape_town_major_dams_total_level_last_year') | float(0) %}
-            {% set from_date = trigger.from_state.state | as_datetime %}
+            {# from input_datetime.dam_levels_last_update rather than trigger.from_state, since the
+               latter resets to unavailable/unknown on every HA restart, before the sensor's next scrape #}
+            {% set from_date = states('input_datetime.dam_levels_last_update') | as_datetime %}
             {% set to_date = trigger.to_state.state | as_datetime %}
-            {% set days = (to_date - from_date).days %}
+            {% set days = (to_date - from_date).days if from_date else none %}
             {# the other option is to use percentage points for a pure delta #}
             {% set change = ((this_week - last_week) / last_week * 100) | abs | round(1) if last_week > 0 else 0 %}
             {% if this_week > last_week %}
@@ -282,7 +293,12 @@ automation:
             {% else %}
               {% set update = 'is stable at ' ~ this_week ~ '%' %}
             {% endif %}
-            Dam levels {{ update }} over the past {{ days }} days. Last year it was at {{ last_year }}%.
+            Dam levels {{ update }}{{ ' over the past ' ~ days ~ ' days' if days is not none }}. Last year it was at {{ last_year }}%.
           data:
             url: homeassistant://navigate/lovelace-main/environment
             group: "environment"
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.dam_levels_last_update
+        data:
+          datetime: "{{ trigger.to_state.state }}"

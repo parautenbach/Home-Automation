@@ -1,0 +1,560 @@
+homeassistant:
+  customize:
+    camera.security_camera:
+      friendly_name: Security Camera
+    binary_sensor.foyer_motion_homebridge:
+      friendly_name: Foyer Motion Sensor
+      icon: mdi:motion-sensor
+    light.led:
+      icon: mdi:motion-sensor
+      friendly_name: Foyer Motion LED
+    automation.take_foyer_motion_snapshots:
+      icon: mdi:camera
+    script.security_camera_record_clip:
+      friendly_name: Record Security Camera Clip
+      icon: mdi:video
+    script.security_camera_create_snapshot:
+      friendly_name: Take Security Camera Snapshot
+      icon: mdi:camera
+    script.take_snapshot:
+      friendly_name: Take Camera Snapshot
+      icon: mdi:camera
+    sensor.security_camera_last_snapshot:
+      icon: mdi:clock-outline
+    sensor.security_camera_last_snapshot_relative:
+      icon: mdi:clock-outline
+    sensor.security_camera_last_clip_relative:
+      icon: mdi:clock-outline
+    sensor.motion_detected_last_relative:
+      icon: mdi:clock-outline
+    input_datetime.security_camera_last_snapshot:
+      friendly_name: Security Camera Last Snapshot
+    sensor.foyer_motion_detections:
+      # unit_of_measurement: count
+      state_class: total_increasing
+    sensor.doorbell_motion_detections:
+      # unit_of_measurement: count
+      state_class: total_increasing
+
+input_datetime:
+  security_camera_last_snapshot:
+    has_date: true
+    has_time: true
+  security_camera_last_clip:
+    has_date: true
+    has_time: true
+  foyer_motion_detected_last:
+    has_date: true
+    has_time: true
+
+# https://community.home-assistant.io/t/control-recursion-in-the-folder-watcher-integration/200110
+# folder_watcher:
+#   - folder: /tmp/
+#     patterns:
+#       - 'camera.security_camera_*.jpg'
+
+sensor:
+  # used by the gallery panel
+  - platform: files
+    folder: /config/www/gallery/security_camera/
+    filter: 'camera.security_camera_*.jpg'
+    name: security_camera_snapshots
+    sort: date
+    recursive: False
+
+  # used to sync files from tmp to the gallery
+  # alt: https://www.home-assistant.io/integrations/folder_watcher/
+  # then watch /config/www/camera.security_camera_last.jpg
+  - platform: folder
+    folder: /tmp/
+    filter: 'camera.security_camera_*.jpg'
+
+  - platform: history_stats
+    name: Foyer Motion Detections
+    entity_id: binary_sensor.foyer_motion_detected
+    state: "on"
+    type: count
+    start: "{{ today_at() }}"
+    end: "{{ now() }}"
+
+  - platform: history_stats
+    name: Doorbell Motion Detections
+    entity_id: binary_sensor.doorbell_motion_detected
+    state: "on"
+    type: count
+    start: "{{ today_at() }}"
+    end: "{{ now() }}"
+
+template:
+  - binary_sensor:
+      - name: Foyer Motion Detector
+        default_entity_id: binary_sensor.foyer_motion_detected
+        device_class: motion
+        # this is the occupancy sensor and not the raw motion sensor and is delayed in the homebridge config by 5 sec
+        state: >-
+          {{ is_state('binary_sensor.foyer_occupancy_homebridge', 'on') }}
+  - sensor:
+      - name: "Security Camera Last Snapshot"
+        unique_id: "979c1c9e-12bb-4a39-a870-87d87f3f6af5"
+        device_class: timestamp
+        state: "{{ states('input_datetime.security_camera_last_snapshot') | as_datetime | as_local }}"
+  - sensor:
+      - name: "Security Camera Last Snapshot Relative"
+        unique_id: "39606520-c76f-4639-8f14-113f011f1692"
+        # the first line is a hack to avoid having to write an automation
+        # - https://www.home-assistant.io/integrations/template/#working-without-entities
+        # - https://community.home-assistant.io/t/heads-up-upcoming-breaking-change-in-the-template-integration/223715
+        state: >
+          {%- set _ = states('sensor.time') %}
+          {%- set t = state_attr('input_datetime.security_camera_last_snapshot', 'timestamp') %}
+          {%- if t != None %}
+            {%- set n = now().timestamp() %}
+            {%- set d = n-t %}
+            {%- set midnight_today = as_timestamp(strptime(now().date() | string, "%Y-%m-%d")) %}
+            {%- set midnight_yesterday = midnight_today - 86400 %}
+            {%- set midnight_week_ago = midnight_today - 604800 %}
+            {%- if d < 60 %}
+              {{ d | int }} seconds ago
+            {%- elif d >= 60 and d < 120 %}
+              1 minute ago
+            {%- elif d < 3600 %}
+              {{ (d // 60) | int }} minutes ago
+            {%- elif d < n-midnight_today %}
+              Today at {{ t | timestamp_custom('%H:%M') }}
+            {%- elif d < n-midnight_yesterday %}
+              Yesterday at {{ t | timestamp_custom('%H:%M') }}
+            {%- elif d < n-midnight_week_ago %}
+              {{ t | timestamp_custom('%A at %H:%M') }}
+            {%- else %}
+              {{ t | timestamp_custom('%Y-%m-%d %H:%M:%S') }}
+            {%- endif %}
+          {% else %}
+            unknown
+          {% endif %}
+  - sensor:
+      - name: "Motion Detected Last Relative"
+        unique_id: "2570fe8c-b9d0-4cf5-96d0-ce30bbcc31cc"
+        state: >
+          {%- set _ = states('sensor.time') %}
+          {%- set t = state_attr('input_datetime.foyer_motion_detected_last', 'timestamp') %}
+          {%- if t != None %}
+            {%- set n = now().timestamp() %}
+            {%- set d = n-t %}
+            {%- set midnight_today = as_timestamp(strptime(now().date() | string, "%Y-%m-%d")) %}
+            {%- set midnight_yesterday = midnight_today - 86400 %}
+            {%- set midnight_week_ago = midnight_today - 604800 %}
+            {%- if d < 60 %}
+              {{ d | int }} seconds ago
+            {%- elif d >= 60 and d < 120 %}
+              1 minute ago
+            {%- elif d < 3600 %}
+              {{ (d // 60) | int }} minutes ago
+            {%- elif d < n-midnight_today %}
+              Today at {{ t | timestamp_custom('%H:%M') }}
+            {%- elif d < n-midnight_yesterday %}
+              Yesterday at {{ t | timestamp_custom('%H:%M') }}
+            {%- elif d < n-midnight_week_ago %}
+              {{ t | timestamp_custom('%A at %H:%M') }}
+            {%- else %}
+              {{ t | timestamp_local }}
+            {%- endif %}
+          {% else %}
+            unknown
+          {% endif %}
+  - sensor:
+      - name: "Security Camera Last Clip"
+        unique_id: "071ab27c-e873-44c4-850a-37621b26d3cc"
+        device_class: timestamp
+        state: "{{ states('input_datetime.security_camera_last_clip') | as_datetime | as_local }}"
+  - sensor:
+      - name: "Security Camera Last Clip Relative"
+        unique_id: "43495b89-3417-4915-a34a-7bbfd941fe50"
+        state: >
+          {%- set _ = states('sensor.time') %}
+          {%- set t = state_attr('input_datetime.security_camera_last_clip', 'timestamp') %}
+          {%- if t != None %}
+            {%- set n = now().timestamp() %}
+            {%- set d = n - t %}
+            {%- set midnight_today = as_timestamp(strptime(now().date() | string, "%Y-%m-%d")) %}
+            {%- set midnight_yesterday = midnight_today - 86400 %}
+            {%- set midnight_week_ago = midnight_today - 604800 %}
+            {%- if d < 60 %}
+              {{ d | int }} seconds ago
+            {%- elif d >= 60 and d < 120 %}
+              1 minute ago
+            {%- elif d < 3600 %}
+              {{ (d // 60) | int }} minutes ago
+            {%- elif d < n - midnight_today %}
+              Today at {{ t | timestamp_custom('%H:%M') }}
+            {%- elif d < n - midnight_yesterday %}
+              Yesterday at {{ t | timestamp_custom('%H:%M') }}
+            {%- elif d < n - midnight_week_ago %}
+              {{ t | timestamp_custom('%A at %H:%M') }}
+            {%- else %}
+              {{ t | timestamp_custom('%Y-%m-%d %H:%M:%S') }}
+            {%- endif %}
+          {% else %}
+            unknown
+          {% endif %}
+
+group:
+  security_automations:
+    name: Security Automations
+    entities:
+      - automation.take_foyer_motion_snapshots
+      - automation.switch_on_lights_if_motion_is_detected
+
+camera:
+  - platform: ffmpeg
+    name: security_camera
+    input: -rtsp_transport tcp -i rtsp://securitypi:8554/unicast
+    # https://stackoverflow.com/questions/37427498/how-to-escape-double-and-single-quotes-in-yaml-within-the-same-string
+    # https://stackoverflow.com/questions/6195872/applying-multiple-filters-at-once-with-ffmpeg
+    # https://einar.slaskete.net/2011/09/05/adding-time-stamp-overlay-to-video-stream-using-ffmpeg/
+    # also check /home/pi/v4l2rtspserver/v4l2rtspserver.service (on the pi)
+    # and /etc/modprobe.d/v4l2loopback.conf
+    # https://github.com/umlaeute/v4l2loopback
+    # the ha docs state the -pred 1 is the default, but that option is nowhere to be found in the ffmpeg docs
+    extra_arguments: >-
+      -vf "hue=s=0,
+           drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:
+             text='%{localtime\:%Y-%m-%d %T}':
+             fontcolor=white@0.8:
+             x=w-text_w-10:
+             y=10:
+             box=0:
+             borderw=2:
+             bordercolor=black@1"
+      -frames:v 1
+      -update 1
+  # the proxy camera will contain the overlaid timestamp on the video stream (but you cannot record this stream):
+  # https://community.home-assistant.io/t/camera-using-ffmpeg-platform-and-drawtext-overlay-showing-on-snapshot-but-not-recording/372129
+  # can one configure an overlay in v4l2? yes, but it's hacky (for a dynamic piece of text)
+  # https://www.linux-projects.org/uv4l/tutorials/text-overlay/
+  # issue: https://github.com/home-assistant/core/issues/149849
+  - platform: proxy
+    name: security_camera_proxy
+    entity_id: camera.security_camera
+    # why on earth doesn't this work?
+    # https://github.com/home-assistant/core/issues/84576
+    # https://github.com/home-assistant/core/pull/141676
+    stream_quality: 90
+    # workaround
+    # max_stream_width: 1024
+    # max_image_width: 1024
+  - platform: ffmpeg
+    name: security_camera_last_clip
+    input: /config/www/camera.security_camera_last.mp4
+
+shell_command:
+  copy_last_security_camera_snapshot_image: "cp `ls -t /tmp/camera.security_camera_*.jpg | head -1` /config/www/camera.security_camera_last.jpg"
+  copy_last_snapshot_image: "/root/scripts/copy_last_snapshot_image.sh {{ subdirectory }} {{ camera_entity }}"
+  copy_last_video_clip: "cp `ls -t /tmp/camera.security_camera_*.mp4 | head -n1` /config/www/camera.security_camera_last.mp4"
+  # keep a rolling buffer of n snapshots by always copying only the latest ones and removing the oldest
+  # rsync will only copy what's new up to n and the second command will remove what's extra (can't do it with rsync's --delete unless the source is a directory)
+  # this is to avoid the distination from growing indefinitely
+  sync_snapshots: "cp -a $(ls /tmp/camera.security_camera_*.jpg | sort | tail -n5) /config/www/gallery/security_camera/"
+  trim_snapshots: "find /config/www/gallery/security_camera/ -maxdepth 1 -type f | sort -r | tail -n +51 | xargs -I {} rm -- \"{}\""
+  trim_doorbell_snapshots: "find /config/www/gallery/doorbell/*.jpg -type f -mtime +1 -delete"
+  record_security_camera_clip: "/root/scripts/record_security_camera_clip_with_overlay_and_audio.sh"
+  get_doorbell_snapshot_mtime: "stat -c %Y /config/www/camera.doorbell_last.jpg || echo 0"
+
+script:
+  security_camera_record_clip:
+    # todo: fire a custom event to catch in another automation and turn on the light (if dark and not already on, etc.)
+    mode: queued
+    sequence:
+      # - variables:
+      #     camera_entity_id: camera.security_camera
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.security_camera_last_clip
+        data:
+          datetime: "{{ now() }}"
+      # - service: camera.record
+      #   target:
+      #     entity_id: "{{ camera_entity_id }}"
+      #   # https://github.com/home-assistant/core/issues/40241
+      #   # https://github.com/home-assistant/core/issues/40241#issuecomment-1220046988
+      #   # entity_id: camera.security_camera
+      #   data:
+      #     # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
+      #     # filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+      #     # filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+      #     filename: '/tmp/{{ camera_entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.mp4'
+      #     duration: 10
+      # blocking call: ha will time out after 60 seconds!
+      - service: shell_command.record_security_camera_clip
+      # would love to get rid of this. maybe watch for an updated timestamp on the file?
+      - delay: "00:00:05"
+      - service: shell_command.copy_last_video_clip
+  security_camera_create_snapshot:
+    # https://www.reddit.com/r/homeassistant/comments/9fz5e4/show_the_x_most_recent_pictures_in_a_directory/e69alpc/
+    mode: queued
+    sequence:
+      - variables:
+          camera_entity_id: camera.security_camera
+      - choose:
+          # same as automation: "Switch On Lights If Motion Is Detected"
+          conditions:
+            - condition: or
+              conditions:
+                - condition: sun
+                  after: sunset
+                  after_offset: "-02:00:00"
+                - condition: sun
+                  before: sunrise
+                  before_offset: "-00:30:00"
+                - condition: state
+                  entity_id: binary_sensor.low_light
+                  state: "on"
+          sequence:
+            - wait_template: "{{ is_state('light.foyer', 'on') }}"
+              timeout:
+                seconds: 1
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.security_camera_last_snapshot
+        data:
+          datetime: "{{ now() }}"
+      - service: camera.snapshot
+        # https://github.com/home-assistant/core/issues/40241
+        # entity_id: camera.security_camera
+        target:
+          # cannot use the proxy service, unfortunately (so no timestamp overlay)
+          entity_id: "{{ camera_entity_id }}"
+        data:
+          # https://community.home-assistant.io/t/referencing-entity-id-causing-a-template-error/236597
+          # filename: '/tmp/{{ entity_id.entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+          # filename: '/tmp/camera.security_camera_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+          filename: '/tmp/{{ camera_entity_id }}_{{ now().strftime("%Y%m%d-%H%M%S") }}.jpg'
+      - service: shell_command.copy_last_security_camera_snapshot_image
+  take_snapshot:
+    fields:
+      camera_entity:
+        description: "A camera entity"
+        example: "camera.my_camera"
+      subdirectory:
+        description: "The subdirectory under www/gallery/ to write the snapshot to."
+        example: "my_subdirectory"
+    mode: queued
+    sequence:
+      - variables:
+          timestamp: "{{ now().strftime('%Y%m%d-%H%M%S') }}"
+          filename: "/config/www/gallery/{{ subdirectory }}/{{ camera_entity }}_{{ timestamp }}.jpg"
+      - service: camera.snapshot
+        target:
+          entity_id: "{{ camera_entity }}"
+        data:
+          filename: "{{ filename }}"
+        continue_on_error: true
+      - service: shell_command.copy_last_snapshot_image
+        data:
+          subdirectory: "{{ subdirectory }}"
+          camera_entity: "{{ camera_entity }}"
+
+automation:
+  - alias: "Take Foyer Motion Snapshots"
+    id: "e160923e-daf9-417d-9561-174feb2cd350"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.foyer_motion_homebridge
+      to: "on"
+    mode: queued
+    condition:
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "off"
+      - condition: template
+        value_template: >-
+          {# prevent the action of the light turning off after the last trigger to trigger the motion sensor again immediately #}
+          {{ (utcnow() - states.light.foyer.last_changed).seconds >= 1 }}
+    action:
+      # blocking call
+      - service: script.security_camera_create_snapshot
+      - condition: state
+        entity_id: group.security_automations
+        state: "on"
+      - service: notify.family
+        data:
+          title: "⚠️ Security"
+          message: "Motion detected!"
+          data:
+            group: "security-camera-snapshots"
+            url: homeassistant://navigate/lovelace-main/security
+            attachment:
+              # url: https://geoexpressinternational.com/wp-content/plugins/webp-express/test/test-pattern-tv.jpg
+              url: !secret security_camera_last_snapshot_url
+              # content-type: jpg
+              hide-thumbnail: false
+              lazy: false
+            actions:
+              - action: "ENABLE_GUEST_MODE"
+                title: "Enable guest mode"
+
+  - alias: "Foyer Motion Detected Last"
+    id: "ef364d58-2cb7-4d5b-8e96-8724c132365a"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.foyer_motion_homebridge
+      to: "on"
+    action:
+      - service: input_datetime.set_datetime
+        entity_id: input_datetime.foyer_motion_detected_last
+        data:
+          datetime: "{{ now() }}"
+
+  - alias: "Switch On Lights If Motion Is Detected"
+    id: "a3e56532-e1e9-42a1-9371-bfe2ad04c2af"
+    # only at night though
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.foyer_motion_homebridge
+      to: "on"
+    condition:
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "off"
+      - condition: template
+        # todo: might need to check the light state? implicitly assuming here that the last state change was to "off"
+        value_template: >-
+          {# prevent the light turning off after the last trigger to trigger the motion sensor again immediately #}
+          {{ (utcnow() - states.light.foyer.last_changed).seconds >= 1 }}
+      # use or, because, you can't be after sunset AND before sunrise ON THE SAME DAY
+      - condition: or
+        conditions:
+          - condition: sun
+            after: sunset
+            after_offset: "-02:00:00"
+          - condition: sun
+            before: sunrise
+            before_offset: "-00:30:00"
+          - condition: state
+            entity_id: binary_sensor.low_light
+            state: "on"
+    action:
+      - service: scene.turn_on
+        target:
+          entity_id: scene.inside_security_lights
+      - service: script.turn_on
+        target:
+          entity_id: script.action_light_group_timers
+        data:
+          variables:
+            light_group: light.inside_security_group
+            timer_action: start
+
+  - alias: "Motion Indicator On"
+    id: "3cd46514-8bea-4d73-9625-ae4487cca15d"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.foyer_motion_detected
+      to: "on"
+    action:
+      - service: light.turn_on
+        entity_id: light.led
+
+  - alias: "Motion Indicator Off"
+    id: "4e7d3f9b-e91a-46d9-afc3-83f40ee90636"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: binary_sensor.foyer_motion_detected
+      to: "off"
+    action:
+      - service: light.turn_off
+        entity_id: light.led
+
+  - alias: "Blink Motion Indicator While Recording"
+    id: "8daef3c1-2edf-4fc0-b687-3df4f782c348"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: script.security_camera_record_clip
+      to: "on"
+    mode: single
+    action:
+      # stop motion indicator
+      - service: automation.turn_off
+        entity_id: automation.motion_indicator_on
+      # blink
+      - repeat:
+          sequence:
+            - service: light.turn_on
+              entity_id: light.led
+            - delay:
+                milliseconds: 500
+            - service: light.turn_off
+              entity_id: light.led
+            - delay:
+                milliseconds: 500
+          until:
+            - condition: state
+              entity_id: script.security_camera_record_clip
+              state: "off"
+      # resume motion indicator
+      - service: automation.turn_on
+        entity_id: automation.motion_indicator_on
+
+  - alias: "Update Security Camera Snapshot Gallery"
+    id: "41ab0956-cd7b-498d-bf4c-bce81da3c5a3"
+    trigger:
+      - platform: state
+        entity_id: sensor.tmp
+        attribute: number_of_files
+    mode: queued
+    action:
+      - service: shell_command.sync_snapshots
+      - service: shell_command.trim_snapshots
+
+  - alias: "Track Motion At Doorbell"
+    id: "bec7c2b6-265a-41b1-80c8-48a999f65d35"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.doorbell_motion_detected
+        to: "on"
+    mode: single
+    condition:
+      - condition: template
+        value_template: "{{ now() - this.attributes.last_triggered >= timedelta(seconds=30) }}"
+      - condition: or
+        conditions:
+          - condition: and
+            conditions:
+              # proxy for sleeping/in bed
+              - condition: state
+                entity_id: light.living_room_lamp
+                state: "off"
+                enabled: false
+              - condition: time
+                after: "17:00:00"
+                before: "09:00:00"
+              - condition: template
+                value_template: "{{ states('sensor.solar_angle') | float(0) >= -5 }}"
+                # temporarily disabled for the neighbour, but seems like it's not adding many more images, so keeping it
+                enabled: false
+          - condition: state
+            entity_id: binary_sensor.anybody_home
+            state: "off"
+    action:
+      # non-blocking call
+      - service: script.turn_on
+        target:
+          entity_id: script.take_snapshot
+        data:
+          variables:
+            camera_entity: camera.doorbell
+            subdirectory: "doorbell"
+
+  - alias: "Trim Doorbell Snapshots"
+    id: "e774768f-f464-4c34-8ed4-7e7c31d50804"
+    trigger:
+      - platform: time_pattern
+        hours: "/1"
+    mode: single
+    action:
+      - service: shell_command.trim_doorbell_snapshots

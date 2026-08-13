@@ -21,6 +21,18 @@ input_datetime:
     has_date: true
     has_time: true
 
+timer:
+  # format: <entity_id>_timer
+  main_gate_timer:
+    duration: "00:05:00"
+    restore: true
+  garage_doors_lhs_timer:
+    duration: "00:05:00"
+    restore: true
+  garage_doors_rhs_timer:
+    duration: "00:05:00"
+    restore: true
+
 cover:
   - platform: group
     name: "Garage Doors"
@@ -392,3 +404,515 @@ automation:
                 data:
                   entity_id: cover.main_gate
         # default: intentionally omitted. for safety, do nothing.
+
+  - alias: "Start Cover Timer When Opened"
+    id: "e2ec6802-6131-4264-8226-5df65c900699"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id:
+          - cover.main_gate
+          - cover.garage_doors_lhs
+          - cover.garage_doors_rhs
+        to: "open"
+    mode: queued
+    action:
+      - service: timer.start
+        target:
+          entity_id: "timer.{{ trigger.entity_id | replace('cover.', '') }}_timer"
+        data:
+          duration: "00:05:00"
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: "input_datetime.{{ trigger.entity_id | replace('cover.', '') }}_opened"
+        data:
+          datetime: "{{ now() }}"
+
+  - alias: "Update Timers For Covers On Startup"
+    id: "29fc90a8-8fd1-4aad-a803-81db261509f2"
+    initial_state: true
+    trigger:
+      - platform: homeassistant
+        event: start
+    mode: single
+    action:
+      - repeat:
+          for_each: "{{ expand('group.covers_with_timers') | map(attribute='entity_id') | list }}"
+          sequence:
+            # this will fire regardless of whether there's a timer running or it was disabled
+            # the implication is: a disabled timer typically means we know a cover is open and that it's on purpose,
+            # but we'll remind ourselves anyway, just in case
+            - if:
+                - condition: template
+                  value_template: "{{ is_state(repeat.item, 'open') }}"
+              then:
+                - service: notify.mobile_app_ceres
+                  data:
+                    title: "⚠️ Security"
+                    message: >-
+                      {% set name = None %}
+                      {% if repeat.item | regex_search("lhs", ignorecase=True) %}
+                        {% set name = "Rouvé's garage door" %}
+                      {% elif repeat.item | regex_search("rhs", ignorecase=True) %}
+                        {% set name = "Pieter's garage door" %}
+                      {% else %}
+                        {% set name = "The main gate" %}
+                      {% endif %}
+                      {{ name }} is open.
+                    data:
+                      # group notifications by the timer entity
+                      group: "timer.{{ repeat.item | replace('cover.', '') }}_timer"
+                      url: homeassistant://navigate/lovelace-main/main
+                      actions:
+                        - action: "CLOSE_COVER"
+                          title: "Close now"
+                        - action: "EXTEND_COVER_TIMEOUT_10_MIN"
+                          title: "Snooze for 10 min"
+                        - action: "EXTEND_COVER_TIMEOUT_30_MIN"
+                          title: "Snooze for 30 min"
+                        - action: "DISABLE_COVER_TIMEOUT"
+                          title: "Disable"
+                      action_data:
+                        # convert this to the cover entity to use in the automation that receives this
+                        cover_id: "{{ repeat.item }}"
+                        timer_id: "timer.{{ repeat.item | replace('cover.', '') }}_timer"
+                      push:
+                        # perhaps one day it will be possible to use a template to only make it critical under certain conditions
+                        sound:
+                          name: default
+                          critical: 1
+                          volume: 0.3
+                # saving for later:
+                # if e.g. the gate is open, but the timer was disabled, don't start it now, since it was intentional
+                # if the timer wasn't disabled, it will be restored, so the normal mechanism will notify
+                # in other words, maintain the status quo
+                # can also just create a guard condition to not continue (simpler)
+                # - if:
+                #     - condition: template
+                #       value_template: "{{ is_state('timer.' ~ repeat.item | replace('cover.', 'timer.') ~ '_timer', 'idle') }}"
+                #   then:
+                #     - service: timer.start
+                #       target:
+                #         entity_id: "timer.{{ repeat.item | replace('cover.', '') }}_timer"
+                #       data:
+                #         duration: "00:05:00"
+              else:
+                # if the cover got opened while the server was running, but closed while down
+                - service: timer.cancel
+                  target:
+                    entity_id: "timer.{{ repeat.item | replace('cover.', '') }}_timer"
+
+  - alias: "Cover Left Open Alert"
+    id: "26bf6fd5-1caf-4c21-ac29-8cd7985b2de7"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.main_gate_timer
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.garage_doors_lhs_timer
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.garage_doors_rhs_timer
+    mode: queued
+    condition:
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: cover.main_gate
+            state: "open"
+          - condition: state
+            entity_id: cover.garage_doors_lhs
+            state: "open"
+          - condition: state
+            entity_id: cover.garage_doors_rhs
+            state: "open"
+    action:
+      # https://companion.home-assistant.io/docs/notifications/critical-notifications/
+      - service: notify.mobile_app_ceres
+        data:
+          title: "⚠️ Security"
+          # timer.garage_doors_lhs_timer -> Pieter's garage door
+          message: >-
+            {% set name = None %}
+            {% if trigger.event.data.entity_id | regex_search("lhs", ignorecase=True) %}
+              {% set name = "Rouvé's garage door" %}
+            {% elif trigger.event.data.entity_id | regex_search("rhs", ignorecase=True) %}
+              {% set name = "Pieter's garage door" %}
+            {% else %}
+              {% set name = "The main gate" %}
+            {% endif %}
+            {% set last_opened_entity = trigger.event.data.entity_id | replace('_timer', '_opened') | replace('timer.', 'input_datetime.') %}
+            {% set last_opened = as_timestamp(states(last_opened_entity)) %}
+            {% set utc_now_ts = as_timestamp(utcnow()) %}
+            {{ name }} has been left open for {{ ((utc_now_ts - last_opened) // 60) | int }} min.
+          data:
+            # https://github.com/home-assistant/iOS/issues/579
+            # https://github.com/home-assistant/iOS/issues/215
+            # https://companion.home-assistant.io/docs/notifications/notifications-basic (to clear and/or replace; note the quotes around 'apns-collapse-id')
+            # https://developer.apple.com/documentation/usernotifications/unnotificationrequest/1649634-identifier
+            # by apple rules, critical notifications can't be grouped or replaced
+            # group notifications by the timer entity
+            group: "{{ trigger.event.data.entity_id }}"
+            tag: "{{ trigger.event.data.entity_id }}"
+            url: homeassistant://navigate/lovelace-main/main
+            actions:
+              - action: "CLOSE_COVER"
+                title: "Close now"
+              - action: "EXTEND_COVER_TIMEOUT_10_MIN"
+                title: "Snooze for 10 min"
+              - action: "EXTEND_COVER_TIMEOUT_30_MIN"
+                title: "Snooze for 30 min"
+              - action: "DISABLE_COVER_TIMEOUT"
+                title: "Disable"
+            action_data:
+              # convert this to the cover entity to use in the automation that receives this
+              cover_id: "{{ trigger.event.data.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
+              timer_id: "{{ trigger.event.data.entity_id }}"
+            push:
+              # perhaps one day it will be possible to use a template to only make it critical under certain conditions
+              sound:
+                name: default
+                critical: 1
+                volume: 0.3
+      - service: timer.start
+        target:
+          entity_id: "{{ trigger.event.data.entity_id }}"
+
+  - alias: "Close Cover From Alert Action"
+    id: "4a65ac41-3dae-43dd-ae75-486adfc747b7"
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: CLOSE_COVER
+    condition:
+      # check this for that case where the notification gets sent just as the gate closes
+      - condition: template
+        value_template: "{{ is_state(trigger.event.data.action_data.cover_id, 'open') }}"
+    action:
+      - service: cover.close_cover
+        data:
+          entity_id: "{{ trigger.event.data.action_data.cover_id }}"
+
+  - alias: "Extend Cover Timeout From Alert Action"
+    id: "1d1b940e-c70d-47e2-bb39-1e984e5514f1"
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: EXTEND_COVER_TIMEOUT_05_MIN
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: EXTEND_COVER_TIMEOUT_10_MIN
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: EXTEND_COVER_TIMEOUT_30_MIN
+    action:
+      - service: timer.start
+        target:
+          # {
+          #   'id': '0',
+          #   'idx': '0',
+          #   'platform':
+          #     'event',
+          #     'event': <Event mobile_app_notification_action[R]:
+          #       action=EXTEND_COVER_TIMEOUT_05_MIN,
+          #       action_data=
+          #         cover_id=cover.garage_doors_rhs,
+          #         timer_id=timer.garage_doors_rhs_timer>,
+          #       'description': "event 'mobile_app_notification_action'"
+          # }
+          entity_id: "{{ trigger.event.data.action_data.timer_id }}"
+        data:
+          # in seconds
+          duration: "{{ trigger.event.data.action | regex_findall_index(find='\\d+', index=0, ignorecase=False) | int * 60 }}"
+
+  - alias: "Disable Cover Timeout From Alert Action"
+    id: "a8f612ad-fade-45cb-b774-d65feb8831ae"
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: DISABLE_COVER_TIMEOUT
+    action:
+      - service: timer.cancel
+        target:
+          entity_id: "{{ trigger.event.data.action_data.timer_id }}"
+
+  - alias: "Stop Cover Timer When Closed"
+    id: "7ccfaf0f-ab16-4a3b-9b43-e884138971b2"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id:
+          - cover.main_gate
+          - cover.garage_doors_lhs
+          - cover.garage_doors_rhs
+        to: "closed"
+    mode: queued
+    action:
+      - service: timer.cancel
+        target:
+          entity_id: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
+
+  - alias: "Notify If Cover Was Left Open"
+    id: "db54683c-0216-4985-9136-de81baee3e00"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id:
+        - cover.main_gate
+        - cover.garage_doors_lhs
+        - cover.garage_doors_rhs
+      to: "closed"
+      # prevent false positive due to flaky connectivity or after loadshedding and sensors being unavailable
+      not_from: "unavailable"
+    mode: queued
+    condition:
+      condition: template
+      value_template: >-
+        {% set timer_entity = trigger.entity_id | replace('cover', 'timer') ~ "_timer" %}
+        {% set duration = state_attr(timer_entity, 'duration') %}
+        {% set (hours, minutes, seconds) = duration.split(':') | map('int') %}
+        {% set threshold =  minutes*60 + seconds %}
+        {% set last_opened_entity = trigger.entity_id | replace('cover', 'input_datetime') ~ "_opened" %}
+        {% set last_opened = as_timestamp(states(last_opened_entity)) %}
+        {% set utc_now_ts = as_timestamp(utcnow()) %}
+        {{ (utc_now_ts - last_opened) | int >= threshold }}
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          message: "clear_notification"
+          data:
+            tag: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
+      # we need to wait, otherwise it seems like the next notification will be cleared too
+      # could be a race condition in HA, the companion app, ios or firebase – who knows...
+      - delay:
+          seconds: 1
+      - service: notify.mobile_app_ceres
+        data:
+          title: "⚠️ Security"
+          # cover.garage_doors_rhs -> Pieter's garage door
+          message: >-
+            {% set name = None %}
+            {% if trigger.entity_id | regex_search("lhs", ignorecase=True) %}
+              {% set name = "Rouvé's garage door" %}
+            {% elif trigger.entity_id | regex_search("rhs", ignorecase=True) %}
+              {% set name = "Pieter's garage door" %}
+            {% else %}
+              {% set name = "The main gate" %}
+            {% endif %}
+            {% set last_opened_entity = trigger.entity_id | replace('cover', 'input_datetime') ~ "_opened" %}
+            {% set last_opened = as_timestamp(states(last_opened_entity)) %}
+            {{ name }} has been closed after {{ ((as_timestamp(utcnow()) - last_opened) // 60) | int }} min.
+          data:
+            # the timer entity
+            # cover.garage_doors_rhs -> timer.garage_doors_rhs_timer
+            group: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
+            tag: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
+            url: homeassistant://navigate/lovelace-main/main
+
+  - alias: "Alert If Garages Opened Or Closed When Not Supposed To"
+    id: "ad4db54e-fbb3-4377-9711-4731d58da0f5"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id:
+        - cover.garage_doors_lhs
+        - cover.garage_doors_rhs
+      from:
+        - "open"
+        - "closed"
+      to:
+        - "open"
+        - "closed"
+    condition:
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "off"
+    action:
+      - variables:
+          message: >-
+            {% set name = None %}
+            {% if trigger.entity_id | regex_search("lhs", ignorecase=True) %}
+              {% set name = "Rouvé's garage door" %}
+            {% else %}
+              {% set name = "Pieter's garage door" %}
+            {% endif %}
+            {% set action = 'opened' if (trigger.to_state.state == 'open') else 'closed' %}
+            {{ name }} has been {{ action }}.
+      # https://companion.home-assistant.io/docs/notifications/notification-commands#request-location-updates
+      - service: notify.mobile_app_ceres
+        data:
+          message: "request_location_update"
+      - service: notify.mobile_app_rouve
+        data:
+          message: "request_location_update"
+      - delay:
+          seconds: 45
+      # give the location update a chance to land, then only alert if presence still hasn't been confirmed
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "off"
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.to_state.state == 'open' }}"
+            sequence:
+              - service: notify.mobile_app_ceres
+                data:
+                  title: "⚠️ Security"
+                  message: "{{ message }}"
+                  data:
+                    group: "{{ trigger.entity_id }}"
+                    url: homeassistant://navigate/lovelace-main/security
+                    actions:
+                      - action: "CLOSE_COVER"
+                        title: "Close now"
+                    action_data:
+                      # convert this to the cover entity to use in the automation that receives this
+                      cover_id: "{{ trigger.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
+                      timer_id: "{{ trigger.entity_id }}"
+                    # todo: make critical?
+        default:
+          - service: notify.mobile_app_ceres
+            data:
+              title: "⚠️ Security"
+              message: "{{ message }}"
+              data:
+                group: "{{ trigger.entity_id }}"
+                url: homeassistant://navigate/lovelace-main/security
+
+  - alias: "Alert If Gate Opened Or Closed When Not Supposed To"
+    id: "62a52103-4d0d-429e-a59a-fc674d72f3ee"
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id:
+        - cover.main_gate
+      # prevent false positive due to flaky connectivity or after loadshedding and sensors being unavailable
+      not_from: "unavailable"
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.anybody_home
+          state: "off"
+          for:
+            minutes: 1
+        - condition: state
+          entity_id: binary_sensor.tenant_present
+          state: "off"
+        - condition: state
+          entity_id: binary_sensor.housekeeper_mobile_phone
+          state: "off"
+    action:
+      - variables:
+          message: >-
+            {% set action = 'opened' if (trigger.to_state.state == 'open') else 'closed' %}
+            The main gate has been {{ action }}.
+      # https://companion.home-assistant.io/docs/notifications/notification-commands#request-location-updates
+      - service: notify.mobile_app_ceres
+        data:
+          message: "request_location_update"
+      - service: notify.mobile_app_rouve
+        data:
+          message: "request_location_update"
+      - service: homeassistant.update_entity
+        target:
+          entity_id: binary_sensor.tenant_mobile_phone
+      - delay:
+          seconds: 15
+      # give the location updates a chance to land, then only alert if presence still hasn't been confirmed
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: binary_sensor.anybody_home
+            state: "off"
+          - condition: state
+            entity_id: binary_sensor.tenant_present
+            state: "off"
+          - condition: state
+            entity_id: binary_sensor.housekeeper_mobile_phone
+            state: "off"
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.to_state.state == 'open' }}"
+            sequence:
+              - service: notify.mobile_app_ceres
+                data:
+                  title: "⚠️ Security"
+                  message: "{{ message }}"
+                  data:
+                    group: "{{ trigger.entity_id }}"
+                    url: homeassistant://navigate/lovelace-main/security
+                    # https://companion.home-assistant.io/docs/notifications/actionable-notifications#building-notification-action-scripts
+                    actions:
+                      - action: "CLOSE_COVER"
+                        title: "Close now"
+                    action_data:
+                      # convert this to the cover entity to use in the automation that receives this
+                      cover_id: "{{ trigger.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
+                      timer_id: "{{ trigger.entity_id }}"
+                    # todo: make critical?
+        default:
+          - service: notify.mobile_app_ceres
+            data:
+              title: "⚠️ Security"
+              message: "{{ message }}"
+              data:
+                group: "{{ trigger.entity_id }}"
+                url: homeassistant://navigate/lovelace-main/main
+
+  - alias: "Alert When Cabinet Opened"
+    id: "f9a95e6c-e0bf-45a4-bf5c-3b774ff3fd47"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.cabinet_door
+        # https://www.home-assistant.io/integrations/binary_sensor/
+        # not open/close unless it's a cover
+        to: "on"
+        # not going to use this, since it seems the sensor just goes unavailable,
+        # but will come back online when the state changes – annoyingly so (just stay online)
+        # not_from: "unavailable"
+    action:
+      - choose:
+          - conditions:
+              - condition: time
+                after: "21:00:00"
+                before: "07:00:00"
+              # maybe later; not sure yet
+              # - condition: state
+              #   entity_id: binary_sensor.pieter_present
+              #   state: "off"
+            sequence:
+              - service: notify.mobile_app_ceres
+                data:
+                  title: "⚠️ Security"
+                  message: >-
+                    The backup power system's cabinet has been opened!
+                  data:
+                    group: "home-security"
+                    url: homeassistant://navigate/lovelace-main/security
+                    push:
+                      sound:
+                        name: default
+                        critical: 1
+                        volume: 0.3
+        default:
+          - service: notify.mobile_app_ceres
+            data:
+              title: "⚠️ Security"
+              message: >-
+                The backup power system's cabinet has been opened.
+              data:
+                group: "home-security"
+                url: homeassistant://navigate/lovelace-main/security

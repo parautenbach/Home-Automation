@@ -945,6 +945,12 @@ input_boolean:
   inverter_battery_temperature_notification_governor:
     name: Inverter Battery Temperature Notification Governor
     icon: mdi:speedometer
+  # set only when the "ceased" notification actually fires; read by the "resumes"
+  # automation instead of re-deriving elapsed time, which raced against a stale
+  # input_datetime.solarassistant_activity_ceased on short blips
+  solarassistant_ceased_notified:
+    name: SolarAssistant Ceased Notification Sent
+    icon: mdi:bell-alert-outline
 
 input_number:
   last_battery_soc_notification:
@@ -995,6 +1001,8 @@ timer:
     restore: true
 
 alert:
+  # kept alongside the automation-based detection (below) for a side-by-side
+  # comparison; "experimental" tag distinguishes its notifications from those
   solarassistant_inactivity:
     name: "SolarAssistant Inactivity"
     entity_id: binary_sensor.solarassistant_activity
@@ -1005,16 +1013,16 @@ alert:
     title: "⚠️ System"
     message: >-
       {% set minutes = (now() - states.binary_sensor.solarassistant_activity.last_updated).total_seconds() | multiply(1/60) | int or 1 %}
-      The SolarAssistant bridge's activity has ceased {{ minutes }} min ago.
+      [Test] The SolarAssistant bridge's activity has ceased {{ minutes }} min ago.
     done_message: >-
       {% set last_ceased = states('input_datetime.solarassistant_activity_ceased') | as_timestamp %}
       {% set utc_now_ts = utcnow() | as_timestamp %}
       {% set minutes = ((utc_now_ts - last_ceased) // 60) | int %}
-      The SolarAssistant bridge's activity has been resumed after {{ minutes }} min.
+      [Test] The SolarAssistant bridge's activity has been resumed after {{ minutes }} min.
     data:
       group: "system-electricity"
       url: homeassistant://navigate/lovelace-system/devices
-      tag: "solarassistant-activity"
+      tag: "solarassistant-activity-alert"
     notifiers:
       - mobile_app_ceres
 
@@ -1442,16 +1450,14 @@ automation:
     mode: single
     action:
       - choose:
+          # only notify if "Notify Ceased" actually sent a message - i.e. the outage
+          # outlasted the timer. checking a flag set by that automation avoids racing
+          # against input_datetime.solarassistant_activity_ceased on short blips, where
+          # this automation could run before "Ceases" had finished writing it
           - conditions:
-              - condition: template
-                value_template: >-
-                  {% set duration = state_attr('timer.solarassistant_inactivity', 'duration') %}
-                  {% set (hours, minutes, seconds) = duration.split(':') | map('int') %}
-                  {# the timer's actual runtime seems to be a fraction less than the configured duration #}
-                  {% set threshold = minutes*60 + seconds - 1 %}
-                  {% set last_ceased = states('input_datetime.solarassistant_activity_ceased') | as_timestamp %}
-                  {% set utc_now_ts = utcnow() | as_timestamp %}
-                  {{ (utc_now_ts - last_ceased) | int >= threshold }}
+              - condition: state
+                entity_id: input_boolean.solarassistant_ceased_notified
+                state: "on"
             sequence:
               - service: notify.mobile_app_ceres
                 data:
@@ -1465,6 +1471,9 @@ automation:
                     group: "system-electricity"
                     url: homeassistant://navigate/lovelace-system/devices
                     tag: "solarassistant-activity"
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.solarassistant_ceased_notified
       - service: timer.cancel
         target:
           entity_id: timer.solarassistant_inactivity
@@ -1493,6 +1502,9 @@ automation:
             group: "system-electricity"
             url: homeassistant://navigate/lovelace-system/devices
             tag: "solarassistant-activity"
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.solarassistant_ceased_notified
       - service: timer.start
         target:
           entity_id: timer.solarassistant_inactivity

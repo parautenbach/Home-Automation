@@ -1317,6 +1317,7 @@ automation:
           message: "Motion detected!"
           data:
             group: "nursery"
+            tag: "nursery"
             url: homeassistant://navigate/lovelace-main/baby
             # https://companion.home-assistant.io/docs/notifications/dynamic-content
             # just using a thumbnail instead
@@ -1532,6 +1533,20 @@ automation:
             group: "routine-bedtime"
             tag: "routine-bedtime"
             url: homeassistant://navigate/lovelace-main/baby
+
+  - alias: "Clear Nursery Motion Notifications When Sleep Mode Disabled"
+    id: "0898da8b-9333-4aa2-8ca7-46dcdd30a3ca"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: input_boolean.baby_sleep_mode
+        to: "off"
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          message: "clear_notification"
+          data:
+            tag: "nursery"
 
   - alias: "Turn On Bedroom Bedlamp When Sleep Mode Disabled"
     id: "fb5d83c6-5e79-456b-a525-a75942d0165b"

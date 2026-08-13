@@ -1,0 +1,55 @@
+multiscrape:
+  - resource: https://forestry.co.za/fire-danger-index/
+    scan_interval: 3600  # 60*60 or hourly updates
+    timeout: 30
+    log_response: true
+    sensor:
+      # http://envirowildfire.co.za/the-fire-danger-index/
+      # Blue   :  0 –  20 : SAFE           : Cold and wet.
+      # Green  : 21 –  45 : MODERATE       : Low fire risk. Care to be taken for burning operations.
+      # Yellow : 46 –  60 : DANGEROUS      : Caution advised.
+      # Orange : 61 –  75 : VERY DANGEROUS : Teams kept on stand by. No open flames.
+      # Red    : 81 – 100 : EXTREME        : Warnings presented on radio and TV forecasts.
+      - name: Winelands FDI
+        icon: >-
+          {% if value | int(0) > 45 %}
+            mdi:fire-alert
+          {% else %}
+            mdi:fire
+          {% endif %}
+        # https://community.home-assistant.io/t/scrape-sensor-improved-scraping-multiple-values/218350/469
+        # copy soup file locally
+        # from bs4 import BeautifulSoup
+        # f = open('page_soup.txt')
+        # soup = BeautifulSoup(f, 'html.parser')
+        # prettyHtml = soup.prettify()
+        # with open('pretty.html', 'w') as o:
+        #   o.write(prettyHtml)
+        # open file in browser
+        # copy selector
+        # test selector with:
+        # soup.select_one("...")
+        select: ".postie-post tr:has(td:-soup-contains('Winelands')) td:nth-of-type(3) font"
+        value_template: >-
+          {{ value | int(0) }}
+        on_error:
+          value: last
+
+automation:
+  - alias: "High Fire Risk Notification"
+    id: "657e1700-f69f-416e-9b62-269d702e8a38"
+    initial_state: true
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.winelands_fdi
+        above: 45
+    mode: single
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🔥 Environment"
+          message: >-
+            The risk of fires is high. FDI: {{ states('sensor.winelands_fdi') }}.
+          data:
+            group: "environment"
+            url: homeassistant://navigate/lovelace-main/environment

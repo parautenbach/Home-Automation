@@ -1,0 +1,539 @@
+homeassistant:
+  customize:
+    # sensor.saaqis_pm_coarse:
+    #   icon: mdi:grain
+    # sensor.saaqis_pm_10:
+    #   icon: mdi:grain
+    #   device_class: pm10
+    # sensor.saaqis_pm_2_5:
+    #   icon: mdi:grain
+    #   device_class: pm25
+    sensor.saaqis_o3:
+      icon: mdi:skull-outline
+    sensor.saaqis_no2:
+      icon: mdi:smog
+    sensor.saaqis_so2:
+      icon: mdi:smog
+    sensor.owm_pollution_overall_air_quality:
+      icon: mdi:lungs
+      device_class: aqi
+      # unit_of_measurement: aqi
+    sensor.owm_pollution_ammonia_nh3:
+      icon: mdi:skull
+      unit_of_measurement: "µg/m³"
+    sensor.owm_pollution_carbon_monoxide_co:
+      icon: mdi:molecule-co
+      device_class: carbon_monoxide
+    sensor.owm_pollution_coarse_particles_pm10:
+      icon: mdi:grain
+      device_class: pm10
+    sensor.owm_pollution_fine_particles_pm2_5:
+      icon: mdi:grain
+      device_class: pm25
+    sensor.owm_pollution_nitrogen_dioxide_no2:
+      icon: mdi:smog
+      device_class: nitrogen_dioxide
+    sensor.owm_pollution_nitrogen_monoxide_no:
+      icon: mdi:smog
+      device_class: nitrogen_monoxide
+    sensor.owm_pollution_ozone_o3:
+      icon: mdi:skull-outline
+      device_class: ozone
+    sensor.owm_pollution_sulphur_dioxide_so2:
+      icon: mdi:smog
+      device_class: sulphur_dioxide
+
+template:
+  - sensor:
+      - name: Overall Pollen Risk for Badge
+        state: >-
+          {{ states('sensor.overall_pollen_risk') }}
+        attributes:
+          label: >-
+            {% set mapping = {
+                                1: "Very Low",
+                                2: "Low",
+                                3: "Moderate",
+                                4: "High",
+                                5: "Very High" } %}
+            {% set key = states('sensor.overall_pollen_risk') | int(0) %}
+            {{ mapping[key] if key in mapping else "Unknown" }}
+          color: >-
+            {% set mapping = {
+                                1: "#40b100",
+                                2: "#ffe500",
+                                3: "#ffa800",
+                                4: "#ff5800",
+                                5: "#aa0000" } %}
+            {% set key = states('sensor.overall_pollen_risk') | int(0) %}
+            {{ mapping[key] if key in mapping else "#ffffff" }}
+        icon: >-
+          {% set mapping = {
+                              1: "mdi:gauge-empty",
+                              2: "mdi:gauge-low",
+                              3: "mdi:gauge",
+                              4: "mdi:gauge-full",
+                              5: "mdi:gauge-full" } %}
+          {% set key = states('sensor.overall_pollen_risk') | int(0) %}
+          {{ mapping[key] if key in mapping else "mdi:alert" }}
+
+multiscrape:
+  - resource: https://pollencount.co.za/
+    scan_interval: 21600  # 60*60*6 or 4 updates per day
+    timeout: 30
+    log_response: true
+    sensor:
+      - name: Overall Pollen Risk
+        icon: mdi:flower-pollen-outline
+        select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(2) > div"
+        attribute: "class"
+        value_template: >-
+          {# set value = ["pollen-darkorange"] #}
+          {%- from 'environment.jinja' import color_level_map -%}
+          {%- set key = value | first -%}
+          {{ color_level_map[key] if key in color_level_map else "unknown" }}
+        on_error:
+          value: last
+        attributes:
+          - name: Label
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(2) > div"
+            attribute: "class"
+            value_template: >-
+              {%- from 'environment.jinja' import color_label_map -%}
+              {%- set key = value | first -%}
+              {{ color_label_map[key] if key in color_label_map else "Unavailable" }}
+            on_error:
+              value: last
+          # this looks like massive duplication, but we want attributes here so that we can trigger on state
+          # changes of this sensor if an individual pollen level has changed. we need the individual sensors
+          # so that we can set a name and an icon for use on dashboards. granted, we can make these normal
+          # template sensors that extracts the attributes from here.
+          - name: Tree Pollen
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(3) > div"
+            attribute: "class"
+            value_template: >-
+              {%- from 'environment.jinja' import color_label_map -%}
+              {%- set key = value | first -%}
+              {{ color_label_map[key] if key in color_label_map else "unknown" }}
+            on_error:
+              value: last
+          - name: Grass Pollen
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(4) > div"
+            attribute: "class"
+            value_template: >-
+              {%- from 'environment.jinja' import color_label_map -%}
+              {%- set key = value | first -%}
+              {{ color_label_map[key] if key in color_label_map else "unknown" }}
+            on_error:
+              value: last
+          - name: Weed Pollen
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(5) > div"
+            attribute: "class"
+            value_template: >-
+              {%- from 'environment.jinja' import color_label_map -%}
+              {%- set key = value | first -%}
+              {{ color_label_map[key] if key in color_label_map else "unknown" }}
+            on_error:
+              value: last
+          - name: Mould Spores
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(6) > div"
+            attribute: "class"
+            value_template: >-
+              {%- from 'environment.jinja' import color_label_map -%}
+              {%- set key = value | first -%}
+              {{ color_label_map[key] if key in color_label_map else "unknown" }}
+            on_error:
+              value: last
+      - name: Tree Pollen
+        icon: mdi:pine-tree
+        select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(3) > div"
+        attribute: "class"
+        value_template: >-
+          {%- from 'environment.jinja' import color_level_map -%}
+          {%- set key = value | first -%}
+          {{ color_level_map[key] if key in color_level_map else "unknown" }}
+        on_error:
+          value: last
+        attributes:
+          - name: Label
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(3) > div"
+            attribute: "class"
+            value_template: >-
+              {%- from 'environment.jinja' import color_label_map -%}
+              {%- set key = value | first -%}
+              {{ color_label_map[key] if key in color_label_map else "Unavailable" }}
+            on_error:
+              value: last
+      - name: Grass Pollen
+        icon: mdi:grass
+        select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(4) > div"
+        attribute: "class"
+        value_template: >-
+          {%- from 'environment.jinja' import color_level_map -%}
+          {%- set key = value | first -%}
+          {{ color_level_map[key] if key in color_level_map else "unknown" }}
+        on_error:
+          value: last
+        attributes:
+          - name: Label
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(4) > div"
+            attribute: "class"
+            value_template: >-
+              {%- from 'environment.jinja' import color_label_map -%}
+              {%- set key = value | first -%}
+              {{ color_label_map[key] if key in color_label_map else "Unavailable" }}
+            on_error:
+              value: last
+      - name: Weed Pollen
+        icon: mdi:sprout
+        select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(5) > div"
+        attribute: "class"
+        value_template: >-
+          {%- from 'environment.jinja' import color_level_map -%}
+          {%- set key = value | first -%}
+          {{ color_level_map[key] if key in color_level_map else "unknown" }}
+        on_error:
+          value: last
+        attributes:
+          - name: Label
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(5) > div"
+            attribute: "class"
+            value_template: >-
+              {%- from 'environment.jinja' import color_label_map -%}
+              {%- set key = value | first -%}
+              {{ color_label_map[key] if key in color_label_map else "Unavailable" }}
+            on_error:
+              value: last
+      - name: Mould Spores
+        icon: mdi:grain
+        select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(6) > div"
+        attribute: "class"
+        value_template: >-
+          {%- from 'environment.jinja' import color_level_map -%}
+          {%- set key = value | first -%}
+          {{ color_level_map[key] if key in color_level_map else "unknown" }}
+        on_error:
+          value: last
+        attributes:
+          - name: Label
+            select: "#wpv-view-layout-300 .row:has(h5:-soup-contains('Cape Town')) > div.col-xs-2:nth-of-type(6) > div"
+            attribute: "class"
+            value_template: >-
+              {%- from 'environment.jinja' import color_label_map -%}
+              {%- set key = value | first -%}
+              {{ color_label_map[key] if key in color_label_map else "Unavailable" }}
+            on_error:
+              value: last
+
+rest:
+  - resource_template: >-
+      {# station ID: 156 (Stellenbosch) #}
+      {% set from = (now() - timedelta(minutes=30)) | as_timestamp | timestamp_custom('%Y-%m-%dT%H:%M') %}
+      {% set to = now() | as_timestamp | timestamp_custom('%Y-%m-%dT%H:%M') %}
+      https://saaqis.environment.gov.za:44301/v1/envista/stations/156/Average?from={{ from }}&to={{ to }}&fromTimebase=1&toTimebase=1&timeBeginning=false&useBackWard=false&includeSummary=false&roundType=1&unitid=-1
+    headers:
+      Accept-Language: 'en-ZA;q=1.0'
+      User-Agent: 'SouthAfricaAQM/2.0.28 (com.Envitech.SouthAfricaAQM; build:1.0.0; iOS 14.7.1) Alamofire/4.0.1'
+      Accept: '*/*'
+      Authorization: !secret saaqis_api_token
+    method: GET
+    verify_ssl: false
+    scan_interval: 600  # 10 min
+    timeout: 15
+    sensor:
+      # these don't seem to be available anymore
+      # - name: SAAQIS PM Coarse
+      #   value_template: >-
+      #     {% if value_json is defined and "data" in value_json %}
+      #       {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'PM Coarse') | list %}
+      #       {% if data_list != [] %}
+      #         {% set data = data_list | first %}
+      #         {% if data.valid %}
+      #           {% if data.value >= 0 %}
+      #             {{ data.value }}
+      #           {% else %}
+      #             0
+      #           {% endif %}
+      #         {% else %}
+      #           0
+      #         {% endif %}
+      #       {% else %}
+      #         0
+      #       {% endif %}
+      #     {% else %}
+      #       0
+      #     {% endif %}
+      #   unit_of_measurement: "µg/m³"
+      # - name: SAAQIS PM 10
+      #   value_template: >-
+      #     {% if value_json is defined and "data" in value_json %}
+      #       {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'PM10') | list %}
+      #       {% if data_list != [] %}
+      #         {% set data = data_list | first %}
+      #         {% if data.valid %}
+      #           {% if data.value >= 0 %}
+      #             {{ data.value }}
+      #           {% else %}
+      #             0
+      #           {% endif %}
+      #         {% else %}
+      #           0
+      #         {% endif %}
+      #       {% else %}
+      #         0
+      #       {% endif %}
+      #     {% else %}
+      #       0
+      #     {% endif %}
+      #   device_class: pm10
+      #   unit_of_measurement: "µg/m³"
+      # - name: SAAQIS PM 2.5
+      #   value_template: >-
+      #     {% if value_json is defined and "data" in value_json %}
+      #       {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'PM2.5') | list %}
+      #       {% if data_list != [] %}
+      #         {% set data = data_list | first %}
+      #         {% if data.valid %}
+      #           {% if data.value >= 0 %}
+      #             {{ data.value }}
+      #           {% else %}
+      #             0
+      #           {% endif %}
+      #         {% else %}
+      #           0
+      #         {% endif %}
+      #       {% else %}
+      #         0
+      #       {% endif %}
+      #     {% else %}
+      #       0
+      #     {% endif %}
+      #   device_class: pm25
+      #   unit_of_measurement: "µg/m³"
+      # https://www2.dmu.dk/atmosphericenvironment/expost/database/docs/ppm_conversion.pdf
+      # https://cfpub.epa.gov/ncer_abstracts/index.cfm/fuseaction/display.files/fileid/14285
+      # https://www.breeze-technologies.de/blog/air-pollution-how-to-convert-between-mgm3-%C2%B5gm3-ppm-ppb/
+      - name: SAAQIS O3
+        value_template: >-
+          {% if value_json is defined and "data" in value_json %}
+            {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'O3') | list %}
+            {% if data_list != [] %}
+              {% set data = data_list | first %}
+              {% if data.valid %}
+                {% if data.value >= 0 %}
+                  {% set temp_kelvin = 273.15 + states('sensor.outside_temperature_filtered') | float(0) %}
+                  {% set const = 12.187 %}
+                  {% set molecular_weight = 48 %}
+                  {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
+                {% else %}
+                  0
+                {% endif %}
+              {% else %}
+                0
+              {% endif %}
+            {% else %}
+              0
+            {% endif %}
+          {% else %}
+            0
+          {% endif %}
+        device_class: ozone
+        unit_of_measurement: "µg/m³"
+      - name: SAAQIS NO2
+        value_template: >-
+          {% if value_json is defined and "data" in value_json %}
+            {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'NO2') | list %}
+            {% if data_list != [] %}
+              {% set data = data_list | first %}
+              {% if data.valid %}
+                {% if data.value >= 0 %}
+                  {% set temp_kelvin = 273.15 + states('sensor.outside_temperature_filtered') | float(0) %}
+                  {% set const = 12.187 %}
+                  {% set molecular_weight = 46.0055 %}
+                  {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
+                {% else %}
+                  0
+                {% endif %}
+              {% else %}
+                0
+              {% endif %}
+            {% else %}
+              0
+            {% endif %}
+          {% else %}
+            0
+          {% endif %}
+        device_class: nitrogen_dioxide
+        unit_of_measurement: "µg/m³"
+      - name: SAAQIS SO2
+        value_template: >-
+          {% if value_json is defined and "data" in value_json %}
+            {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'SO2') | list %}
+            {% if data_list != [] %}
+              {% set data = data_list | first %}
+              {% if data.valid %}
+                {% if data.value >= 0 %}
+                  {% set temp_kelvin = 273.15 + states('sensor.outside_temperature_filtered') | float(0) %}
+                  {% set const = 12.187 %}
+                  {% set molecular_weight = 64.066 %}
+                  {{ (data.value*const*molecular_weight/temp_kelvin) | round(3) }}
+                {% else %}
+                  0
+                {% endif %}
+              {% else %}
+                0
+              {% endif %}
+            {% else %}
+              0
+            {% endif %}
+          {% else %}
+            0
+          {% endif %}
+        device_class: sulphur_dioxide
+        unit_of_measurement: "µg/m³"
+      - name: SAAQIS Ambient Temperature
+        value_template: >-
+          {% if value_json is defined and "data" in value_json %}
+            {% set data_list = (value_json.data | last).channels | selectattr('name', '==', 'Amb Temp') | list %}
+            {% if data_list != [] %}
+              {% set data = data_list | first %}
+              {% if data.valid %}
+                {% if data.value >= 0 %}
+                  {{ data.value | round(1) }}
+                {% else %}
+                  0
+                {% endif %}
+              {% else %}
+                0
+              {% endif %}
+            {% else %}
+              0
+            {% endif %}
+          {% else %}
+            0
+          {% endif %}
+        device_class: temperature
+        unit_of_measurement: "°C"
+  # https://openweathermap.org/api/air-pollution
+  - resource: !secret open_weather_map_air_quality_url
+    headers:
+      Accept: 'application/json'
+    method: GET
+    scan_interval: 3600  # 60 min
+    timeout: 15
+    sensor:
+      - name: OWM Pollution Overall Air Quality
+        value_template: >-
+          {{ value_json["list"][0]["main"]["aqi"] }}
+      - name: OWM Pollution Ammonia NH3
+        value_template: >-
+          {{ value_json["list"][0]["components"]["nh3"] }}
+      - name: OWM Pollution Carbon Monoxide CO
+        value_template: >-
+          {{ value_json["list"][0]["components"]["co"] }}
+      - name: OWM Pollution Coarse Particles (PM10)
+        value_template: >-
+          {{ value_json["list"][0]["components"]["pm10"] }}
+      - name: OWM Pollution Fine Particles (PM2.5)
+        value_template: >-
+          {{ value_json["list"][0]["components"]["pm2_5"] }}
+      - name: OWM Pollution Nitrogen Dioxide (NO2)
+        value_template: >-
+          {{ value_json["list"][0]["components"]["no2"] }}
+      - name: OWM Pollution Nitrogen Monoxide (NO)
+        value_template: >-
+          {{ value_json["list"][0]["components"]["no"] }}
+      - name: OWM Pollution Ozone (O3)
+        value_template: >-
+          {{ value_json["list"][0]["components"]["o3"] }}
+      - name: OWM Pollution Sulphur dioxide (SO2)
+        value_template: >-
+          {{ value_json["list"][0]["components"]["so2"] }}
+
+automation:
+  - alias: "Pollen Levels Update"
+    id: "eeb7f4a7-367d-4aee-b4d5-cf84da3b1323"
+    initial_state: true
+    trigger:
+      # If only entity_id is given, the trigger will fire for all state changes, even if only state attributes change.
+      # https://www.home-assistant.io/docs/automation/trigger/#state-trigger
+      - platform: state
+        entity_id:
+          - sensor.overall_pollen_risk
+        # avoid triggering on attribute changes
+        # https://www.home-assistant.io/docs/automation/trigger/#state-trigger
+        # not_from: null
+        # actually, we want to trigger on attribute changes; just not on the individual pollen sensors too
+    mode: single
+    # workaround for the case where the multiscrape sensor during startup adds the icon separately after updating the state,
+    # which causes the state trigger to fire when including attribute changes
+    # https://github.com/danieldotnl/ha-multiscrape/issues/437
+    # {
+    #     'id': '0',
+    #     'idx': '0',
+    #     'alias': None,
+    #     'platform': 'state',
+    #     'entity_id': 'sensor.overall_pollen_risk',
+    #     'from_state': {
+    #         'state': '4',
+    #         'label': 'High',
+    #         'tree_pollen': 'Moderate',
+    #         'grass_pollen': 'Moderate',
+    #         'weed_pollen': 'Moderate',
+    #         'mould_spores': 'Very Low',
+    #         'friendly_name': 'Overall Pollen Risk',
+    #         'unit_of_measurement': 'index',
+    #         'timestamp': '2025-01-24T17:32:44.031622+02:00'
+    #     },
+    #     'to_state': {
+    #         'state': '4',
+    #         'label': 'High',
+    #         'tree_pollen': 'Moderate',
+    #         'grass_pollen': 'Moderate',
+    #         'weed_pollen': 'Moderate',
+    #         'mould_spores': 'Very Low',
+    #         'icon': 'mdi:flower-pollen-outline',
+    #         'friendly_name': 'Overall Pollen Risk',
+    #         'unit_of_measurement': 'index',
+    #         'timestamp': '2025-01-24T17:32:44.031622+02:00'
+    #     },
+    #     'for': None,
+    #     'attribute': None,
+    #     'description': 'state of sensor.overall_pollen_risk'
+    # }
+    condition:
+      - condition: template
+        value_template: "{{ 'icon' in trigger.from_state.attributes }}"
+    action:
+      - service: notify.family
+        data:
+          title: "⛑️ Health"
+          # https://community.home-assistant.io/t/trigger-to-from-attribute/325345
+          # https://community.home-assistant.io/t/access-attribute-of-from-state/380497
+          message: >-
+            {%- macro build_item(sensor, name) -%}
+              {%- set attribute = sensor.split('.')[1] -%}
+              {%- set from = trigger.from_state.attributes[attribute] | lower -%}
+              {%- set to = trigger.to_state.attributes[attribute] | lower -%}
+              {%- if from != to and (from != 'unavailable' or to != 'unavailable') -%}
+                {{ name }}: {{ from }} → {{ to }}
+              {%- else -%}
+                {{ name }}: {{ to }}
+              {%- endif -%}
+            {%- endmacro -%}
+            {%- set sensors = [('sensor.tree_pollen', 'Trees'), ('sensor.grass_pollen', 'Grasses'), ('sensor.weed_pollen', 'Weeds'), ('sensor.mould_spores', 'Mould')] -%}
+            {%- set summary = '' -%}
+            {%- set from_state_label = trigger.from_state.attributes.label | lower -%}
+            {%- set to_state_label = trigger.to_state.attributes.label | lower -%}
+            {%- if from_state_label != to_state_label -%}
+              {%- set summary = 'Pollen levels changed from ' ~ from_state_label ~ ' to ' ~ to_state_label ~ ':' -%}
+            {%- else -%}
+              {%- set summary = 'Pollen levels are ' ~ to_state_label ~ ':' -%}
+            {%- endif -%}
+            {{ summary }}
+            {%- for (sensor, name) in sensors %}
+              - {{ build_item(sensor, name) }}
+            {%- endfor %}
+          data:
+            group: "environment"
+            url: homeassistant://navigate/lovelace-main/environment

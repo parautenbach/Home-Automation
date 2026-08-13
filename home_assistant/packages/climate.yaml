@@ -1,0 +1,175 @@
+# ─────────────────────────────────────────────────────────
+# Thermal time constant (tau) reference — living room / office zone
+# tau (clear night, confirmed) ~= 15h (14.4-15.5h)
+# tau (cloudy night)           ~= 21-26h
+# UA and C below were derived using the OLD tau=37.7h estimate
+# and should be refit against tau=15h before trusting formula 5-6
+# absolute power/energy numbers.
+#
+# Core relationship (T_outside assumed constant over the window):
+#   T_inside(t) = T_outside + (T_inside_0 - T_outside) * e^(-t / tau)
+#
+# 1. Predict inside temp after time t (free decay, no heating)
+#    T_inside(t) = T_outside + (T_inside_0 - T_outside) * e^(-t / tau)
+#    Example: inside 17C, outside steady at 9C, tau=15h, t=6h
+#      T_inside = 9 + (17-9) * e^(-6/15) = 14.4C
+#
+# 2. Time to reach a target inside temperature
+#    t = -tau * ln[ (T_target - T_outside) / (T_inside_0 - T_outside) ]
+#    Example: 17C -> 15C, outside 9C, tau=15h
+#      t = -15 * ln[(15-9)/(17-9)] = 4.3h
+#
+# 3. Quick "time per degree" near current conditions (small steps only)
+#    t ~= tau / (T_inside_0 - T_outside)
+#    Example: dT=8C, tau=15h -> ~1.9h per degree right now
+#
+# 4. Standard decay milestones (fraction of inside-outside gap closed)
+#    50%    -> 0.69 * tau
+#    63.2%  -> 1.00 * tau
+#    86.5%  -> 2.00 * tau
+#    95%    -> 3.00 * tau
+#
+# 5. Steady-state heating power to hold a target inside temperature
+#    P = UA * (T_target - T_outside) = (C / tau) * (T_target - T_outside)
+#
+# 6. Time to heat from T_inside_0 to a target, constant heater power P
+#    T_eq = T_outside + P / UA     (equilibrium temp the heater alone sustains)
+#    t = -tau * ln[ (T_target - T_eq) / (T_inside_0 - T_eq) ]
+#
+# 7. Energy needed for a temperature rise (ignoring ongoing losses)
+#    E = C * (T_target - T_inside_0)
+#
+# Caveats:
+#  - Single lumped zone (this room), not necessarily the whole house
+#  - Assumes T_outside constant over the window; use small time-steps
+#    with real forecast T_outside for anything beyond a few hours
+#  - No wind/cloud term - use tau~15h clear nights, ~21-26h cloudy
+#  - Ignores internal gains and residual daytime solar mass release,
+#    which distorts predictions for the first few hours after sunset
+# ─────────────────────────────────────────────────────────
+# refereince: https://claude.ai/chat/454df39a-7aa8-40db-a698-9ec0f6aaed35
+
+homeassistant:
+  customize:
+    sensor.conditions_temperature:
+      friendly_name: Temperature
+    sensor.conditions_humidity:
+      friendly_name: Humidity
+    sensor.ambient_temperature_filtered:
+      friendly_name: Temperature
+    sensor.bedroom_ht_temperature:
+      friendly_name: Bedroom Temperature
+      state_class: measurement
+    sensor.bedroom_ht_humidity:
+      friendly_name: Bedroom Humidity
+    sensor.main_bedroom_ht_temperature:
+      friendly_name: Main Bedroom Temperature
+      state_class: measurement
+    sensor.main_bedroom_ht_humidity:
+      friendly_name: Main Bedroom Humidity
+    sensor.temperature_difference:
+      state_class: measurement
+
+binary_sensor:
+  - platform: trend
+    sensors:
+      inside_temperature_trend:
+        entity_id: sensor.office_temperature
+        friendly_name: "Inside Temperature Trend"
+        # 30 minutes * 60 seconds
+        sample_duration: 1800
+        # 1 degree in the last 30 min
+        min_gradient: 0.00056
+
+sensor:
+  - platform: filter
+    name: ambient_temperature_filtered
+    entity_id: sensor.conditions_temperature
+    filters:
+      filter: lowpass
+      time_constant: 10
+      precision: 1
+
+  - platform: statistics
+    entity_id: sensor.office_temperature
+    name: "Inside Temperature Change"
+    # the difference between the newest and the oldest measurement
+    state_characteristic: change
+    max_age:
+      minutes: 30
+
+  - platform: statistics
+    name: "Bedroom Minimum Temperature (12 hours)"
+    entity_id: sensor.bedroom_ht_temperature
+    state_characteristic: value_min
+    max_age:
+      hours: 12
+    precision: 1
+
+  - platform: statistics
+    name: "Bedroom Maximum Temperature (12 hours)"
+    entity_id: sensor.bedroom_ht_temperature
+    state_characteristic: value_max
+    max_age:
+      hours: 12
+    precision: 1
+
+  - platform: statistics
+    name: "Bedroom Average Temperature (12 hours)"
+    entity_id: sensor.bedroom_ht_temperature
+    state_characteristic: average_linear
+    max_age:
+      hours: 12
+    precision: 1
+
+template:
+  - binary_sensor:
+      # this is just to be able to plot a simple state history,
+      # because the history graph chart will do a fancy plot if it sees a climate entity
+      - name: Living Room AC
+        state: "{{ has_value('climate.living_room_ac') and not is_state('climate.living_room_ac', 'off') }}"
+        device_class: running
+      - name: Main Bedroom AC
+        state: "{{ has_value('climate.main_bedroom_ac') and not is_state('climate.main_bedroom_ac', 'off') }}"
+        device_class: running
+  - sensor:
+      - name: "Inside vs Outside Temperature"
+        unique_id: "77c739d7-87b1-47f7-bcf5-a26f2a484335"
+        default_entity_id: sensor.temperature_difference
+        state: >-
+          {{ (states('sensor.office_temperature') | float(0) - states('sensor.outside_temperature_filtered') | float(0)) | round(1) }}
+        device_class: temperature
+        unit_of_measurement: "°C"
+
+automation:
+  # polling should be turned off for this sql sensor (via the ui)
+  # https://github.com/home-assistant/core/issues/71563
+  #
+  # helper query:
+  #   SELECT * FROM states_meta WHERE entity_id = 'sensor.bedroom_ht_temperature';
+  #
+  # sql sensor query:
+  #   SELECT state::NUMERIC AS state
+  #   FROM states
+  #   WHERE metadata_id = 17128
+  #     AND state NOT IN ('unavailable', 'unknown')
+  #     AND TO_TIMESTAMP(last_updated_ts) <= NOW() - INTERVAL '24 hours'
+  #   ORDER BY last_updated_ts DESC
+  #   LIMIT 1;
+  - alias: "Update Bedroom Temperature 24 Hours Ago"
+    id: "3a6fa2e6-355b-405b-b53a-5d52d8e3aa84"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: sensor.bedroom_ht_temperature
+        # trigger on any state change, but not attribute changes
+        to: null
+      - platform: time_pattern
+        minutes: "/30"
+      - platform: homeassistant
+        event: start
+    mode: single
+    action:
+      - service: homeassistant.update_entity
+        target:
+          entity_id: sensor.bedroom_temperature_24_hours_ago

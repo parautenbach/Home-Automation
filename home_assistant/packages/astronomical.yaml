@@ -1,0 +1,41 @@
+homeassistant:
+  customize:
+    sensor.home_sun_daylight:
+      state_class: measurement
+
+template:
+  - binary_sensor:
+      - name: "Golden Hour"
+        # https://community.home-assistant.io/t/wth-is-there-no-golden-hour-data-available-to-trigger-light-automations/220359/3
+        state: >
+          {{ -4 <  states('sensor.solar_angle') | float(0) < 6 }}
+        icon: mdi:weather-sunset
+  - binary_sensor:
+      - name: "Nighttime"
+        state: "{{  states('sensor.solar_angle') | float(0) < -0.833 }}"
+  - binary_sensor:
+      - name: "Daytime"
+        state: "{{  states('sensor.solar_angle') | float(0) >= -0.833 }}"
+  - sensor:
+      - name: "Sun Angle"
+        unique_id: "87e4fff1-5099-41a6-9c1a-6c95e0f491ab"
+        default_entity_id: sensor.solar_angle
+        unit_of_measurement: '°'
+        state: "{{ '%+.1f' | format(state_attr('sun.sun', 'elevation')) }}"
+        icon: mdi:sun-angle-outline
+  - sensor:
+      - name: "Daylight Length"
+        unique_id: "561ee1b3-fcf4-4477-9f93-d7c402b9283b"
+        default_entity_id: sensor.daylight_hm
+        state: >-
+          {{ state_attr('sensor.home_sun_daylight', 'today_hms')[:5] }}
+        icon: mdi:weather-sunny
+  - sensor:
+      - name: "Nighttime Number"
+        unique_id: "4afecc94-25fc-41a3-a11d-162044c1dda8"
+        state: "{{ iif(is_state('binary_sensor.nighttime', 'on'), 1, 0) }}"
+  - sensor:
+      - name: Time of Day
+        unique_id: "9c81145a-3e30-4850-8e4a-3b8873be4333"
+        state: "{{ 'Day' if states('sensor.solar_angle') | float(0) >= -0.833 else 'Night' }}"
+        # icon

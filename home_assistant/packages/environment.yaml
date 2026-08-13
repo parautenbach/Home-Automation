@@ -118,27 +118,6 @@ homeassistant:
     sensor.temperature_difference:
       state_class: measurement
 
-# https://community.home-assistant.io/t/outdoor-illuminance-template-sensor/228581
-# https://community.home-assistant.io/t/automations-to-turn-on-lights-based-on-actual-season/252830/19
-# https://www.engineeringtoolbox.com/light-level-rooms-d_708.html
-illuminance:
-    name: Weather-Based Sun Illuminance
-    unique_id: "ad67d49a-4db4-49c0-81b1-1e068df41b31"
-    entity_id: weather.openweathermap
-    mode: normal
-    fallback: 10
-    scan_interval:
-      minutes: 5
-
-# why not just use binary_sensor.weather_forecast_precipitation_soon's last_changed?
-# because that sensor is a sliding-window sum recalculated every 5 minutes, so it can
-# flap on/off several times while the same rain event is still "coming" - last_changed
-# is not a reliable signal of "have we already told him about this"
-input_datetime:
-  rain_expected_notification_sent:
-    has_date: true
-    has_time: true
-
 binary_sensor:
   - platform: trend
     sensors:
@@ -158,14 +137,6 @@ sensor:
       filter: lowpass
       time_constant: 10
       precision: 1
-
-  - platform: history_stats
-    name: Fair Weather Time
-    entity_id: binary_sensor.is_fair_weather
-    state: "on"
-    type: time  # duration
-    start: "{{ today_at() }}"
-    end: "{{ now() }}"
 
   - platform: statistics
     entity_id: sensor.office_temperature
@@ -200,29 +171,7 @@ sensor:
     precision: 1
 
 template:
-  - weather:
-      - name: "Forecast Tomorrow"
-        condition_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['condition'] }}"
-        temperature_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['temperature'] }}"
-        temperature_unit: °C
-        humidity_template: "{{ 0.0 | float(0) }}"
-        pressure_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['pressure'] }}"
-        pressure_unit: hPa
-        wind_speed_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['wind_speed'] }}"
-        wind_speed_unit: km/h
-        wind_bearing_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['wind_bearing'] }}"
-        precipitation_unit: mm
-        attribution_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'attribution') }}"
   - binary_sensor:
-      # https://www.home-assistant.io/integrations/weather/#condition-mapping
-      # see day-time and night-time sensors regarding the value of -0.833
-      - name: Is Fair Weather
-        # only for daytime
-        state: >-
-          {# technically it should be -0.833 (not -1), but due to sensor update timings we're stretching it a little bit #}
-          {{ (is_state('weather.openweathermap', 'sunny') or
-              is_state('weather.openweathermap', 'partlycloudy')) and
-             states('sensor.solar_angle') | float(0) >= -1 }}
       # this is just to be able to plot a simple state history,
       # because the history graph chart will do a fancy plot if it sees a climate entity
       - name: Living Room AC
@@ -283,19 +232,6 @@ template:
         state: "{{ '%+.1f' | format(state_attr('sun.sun', 'elevation')) }}"
         icon: mdi:sun-angle-outline
   - sensor:
-      - name: "Outside Temperature Feels Like"
-        unique_id: "95a1d418-6c6c-4df2-bda2-30d575612488"
-        default_entity_id: sensor.outside_feels_like
-        variables:
-          # todo
-          temperature_entity: sensor.openweathermap_feels_like_temperature
-        availability: "{{ temperature_entity | has_value }}"
-        state: >-
-          {{ states(temperature_entity) | round(1)  }}
-        device_class: temperature
-        unit_of_measurement: "°C"
-        icon: mdi:thermometer
-  - sensor:
       - name: "Daylight Length"
         unique_id: "561ee1b3-fcf4-4477-9f93-d7c402b9283b"
         default_entity_id: sensor.daylight_hm
@@ -315,120 +251,10 @@ template:
         device_class: temperature
         unit_of_measurement: "°C"
   - sensor:
-      - name: "Fair Weather Time Share"
-        unique_id: "7564e4b6-c7c6-4536-bd02-efa115f6e6c1"
-        state: >-
-          {{ min((states('sensor.fair_weather_time') | float(0) / states('sensor.home_sun_daylight') | float(0) * 100) | round(0), 100) if has_value('sensor.home_sun_daylight') else 0 }}
-        unit_of_measurement: "%"
-  - sensor:
       - name: Time of Day
         unique_id: "9c81145a-3e30-4850-8e4a-3b8873be4333"
         state: "{{ 'Day' if states('sensor.solar_angle') | float(0) >= -0.833 else 'Night' }}"
         # icon
-  # https://www.home-assistant.io/integrations/template/#trigger-based-handling-of-service-response-data
-  # https://community.home-assistant.io/t/petition-dont-delete-the-forecast-attribute/609298/38
-  # https://community.home-assistant.io/t/petition-dont-delete-the-forecast-attribute/609298/240
-  - trigger:
-      - platform: time_pattern
-        # every 5 minutes past the hour
-        hours: "*"
-        minutes: "5"
-      - platform: state
-        entity_id: weather.openweathermap
-    action:
-      - service: weather.get_forecasts
-        target:
-          entity_id: weather.openweathermap
-        data:
-          type: hourly
-        response_variable: hourly
-    sensor:
-      - name: Weather Tomorrow Hourly
-        unique_id: "3e214cd0-be86-4ec9-b9ae-d9f7133a35a2"
-        # make temperature? (and then device_class and uom)
-        state: "{{ now().isoformat() }}"
-        # device_class: duration
-        # unit_of_measurement: s
-        attributes:
-          forecast: "{{ hourly['weather.openweathermap']['forecast'][24:] }}"
-          attribution: "{{ state_attr('sensor.weather_tomorrow_hourly', 'attribution') }}"
-  - trigger:
-      - platform: time_pattern
-        # every 5 minutes past the hour
-        hours: "*"
-        minutes: "5"
-      - platform: state
-        entity_id: weather.openweathermap
-    action:
-      - service: weather.get_forecasts
-        target:
-          entity_id: weather.openweathermap
-        data:
-          type: daily
-        response_variable: daily
-    sensor:
-      - name: Weather Forecast Precipitation Today
-        unique_id: "413a950a-150d-4faf-9f93-3d35b240dd5d"
-        state: >-
-          {{ daily['weather.openweathermap']['forecast'][0]['precipitation'] }}
-        device_class: precipitation
-        unit_of_measurement: "mm"
-        icon: >-
-          {% if daily['weather.openweathermap']['forecast'][0]['precipitation'] > 0 %}
-            mdi:water
-          {% else %}
-            mdi:water-off
-          {% endif %}
-      - name: Weather Forecast Precipitation Tomorrow
-        unique_id: "2f58f787-0427-462d-a5c1-c2e1b568f0c7"
-        state: >-
-          {{ daily['weather.openweathermap']['forecast'][1]['precipitation'] }}
-        device_class: precipitation
-        unit_of_measurement: "mm"
-        icon: >-
-          {% if daily['weather.openweathermap']['forecast'][1]['precipitation'] > 0 %}
-            mdi:water
-          {% else %}
-            mdi:water-off
-          {% endif %}
-      - name: Minimum Temperature Tomorrow
-        unique_id: "9ee15a95-74b7-4263-a578-7347e830b68b"
-        state: >-
-          {{ daily['weather.openweathermap']['forecast'][1]['templow'] }}
-        device_class: temperature
-        unit_of_measurement: °C
-        icon: mdi:thermometer
-  - trigger:
-      - platform: time_pattern
-        # every 5 minutes past the hour
-        hours: "*"
-        minutes: "5"
-      - platform: state
-        entity_id: weather.openweathermap
-    action:
-      - service: weather.get_forecasts
-        target:
-          entity_id: weather.openweathermap
-        data:
-          type: hourly
-        response_variable: hourly
-    binary_sensor:
-      - name: "Weather Forecast Precipitation Soon"
-        unique_id: "949dd25e-35cf-4000-a3f9-f38ab20e112f"
-        device_class: moisture
-        state: >-
-          {% from 'environment.jinja' import rain_outlook %}
-          {% set rain_outlook_fn = rain_outlook | as_function %}
-          {% set outlook = rain_outlook_fn(hourly['weather.openweathermap']['forecast']) %}
-          {# minimum rainy hours in the window to count as significant - a
-             single rainy hour is a blip, not a reason to move the chores #}
-          {{ outlook.hours >= 3 }}
-        attributes:
-          onset: >-
-            {% from 'environment.jinja' import rain_outlook %}
-            {% set rain_outlook_fn = rain_outlook | as_function %}
-            {% set outlook = rain_outlook_fn(hourly['weather.openweathermap']['forecast']) %}
-            {{ outlook.onset }}
   - trigger:
       - platform: homeassistant
         event: start
@@ -1109,24 +935,6 @@ rest:
           {% endif %}
         device_class: temperature
         unit_of_measurement: "°C"
-  # https://www.weatherapi.com/docs/#apis-forecast
-  # https://api.weatherapi.com/v1/forecast.json?q=<lat>%2C<long>&days=1&alerts=yes&key=<key>
-  # https://www.baeldung.com/linux/jq-command-json
-  - resource: !secret weather_api_alerts_url
-    headers:
-      Accept: 'application/json'
-    method: GET
-    # an alert seems to last 6 hours, but then they'll re-issue the same alert 6 hours later
-    scan_interval: 43200  # 60*60*12
-    timeout: 15
-    sensor:
-      - name: Weather Alerts
-        icon: mdi:alert-outline
-        value_template: "{{ value_json.alerts.alert | count }}"
-        unit_of_measurement: count
-        json_attributes_path: "$.alerts"
-        json_attributes:
-          - alert
   # https://openweathermap.org/api/air-pollution
   - resource: !secret open_weather_map_air_quality_url
     headers:
@@ -1309,71 +1117,6 @@ automation:
             group: "environment"
             url: homeassistant://navigate/lovelace-main/environment
 
-  - alias: "Weather Alert Notification"
-    id: "c0b01006-be9e-41e9-b1b5-adafc3ecae1b"
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id: sensor.weather_alerts
-    condition:
-      # not to 0 is obvious: there's no alert, so nothing to notify
-      # otherwise, we can go from 0 to 1, or 0 to 2, or more
-      # we only want to alert the first time going from 0
-      # and not for e.g. 1 to 2
-      - condition: template
-        value_template: >-
-          {% set from = trigger.from_state.state | int(0) %}
-          {% set to = trigger.to_state.state | int(0) %}
-          {{ from == 0 and to != 0 }}
-    action:
-      - repeat:
-          for_each: "{{ state_attr('sensor.weather_alerts', 'alert') | sort(attribute='effective') }}"
-          sequence:
-            - variables:
-                message: >-
-                  {%- set event = repeat.item['event'] %}
-                  {%- set from = repeat.item['effective'] | as_datetime(0) | as_local %}
-                  {%- set from_str = from.strftime('%A %-d %B') %}
-                  {%- set to = repeat.item['expires'] | as_datetime(0) | as_local %}
-                  {%- set to_str = to.strftime('%A %-d %B') %}
-                  {%- set event_body = event | capitalize %}
-                  {# api encoding bug #}
-                  {%- set desc = repeat.item['desc'] | replace('Â', '') %}
-                  {%- if from.date() == to.date() -%}
-                    {{ event_body }} for {{ from_str }}:
-                  {%- else -%}
-                    {{ event_body }} from {{ from_str }} until {{ to_str }}:
-                  {%- endif %}
-                  {%- for line in desc.split('\n') %}
-                    - {{ line }}
-                  {%- endfor %}
-            # only a critical sound notification when it's not night
-            - choose:
-                - conditions:
-                    - condition: time
-                      after: "08:00:00"
-                      before: "20:00:00"
-                  sequence:
-                    - service: notify.family
-                      data:
-                        title: "⚠️ Extreme Weather"
-                        message: "{{ message }}"
-                        data:
-                          group: "weather"
-                          url: homeassistant://navigate/lovelace-main/environment
-                          push:
-                            sound:
-                              name: default
-                              critical: 1
-                              volume: 0.3
-              default:
-                - service: notify.family
-                  data:
-                    title: "⚠️ Extreme Weather"
-                    message: "{{ message }}"
-                    data:
-                      group: "weather"
-                      url: homeassistant://navigate/lovelace-main/environment
 
   # polling should be turned off for this sql sensor (via the ui)
   # https://github.com/home-assistant/core/issues/71563
@@ -1407,70 +1150,3 @@ automation:
         target:
           entity_id: sensor.bedroom_temperature_24_hours_ago
 
-  - alias: "Notify When Significant Rain Is Expected"
-    id: "aff421a7-d99a-45c2-baa5-710b11d010b9"
-    initial_state: true
-    trigger:
-      - platform: time
-        at: "06:30:00"
-      - platform: time
-        at: "12:00:00"
-      - platform: time
-        at: "17:30:00"
-      - platform: time
-        at: "19:00:00"
-    condition:
-      - condition: state
-        entity_id: binary_sensor.weather_forecast_precipitation_soon
-        state: "on"
-      # the sensor is a sliding window recalculated every 5 minutes, so it can
-      # flap on/off during a multi-day rain spell - track our own notification
-      # history instead of the sensor's last_changed, and only notify once a
-      # day at most.
-      # 20h rather than 24h: gives enough slack that the same daily trigger
-      # slot (e.g. 06:30) is always eligible again the next day, even with a
-      # few minutes of timing jitter - a strict 24h gate could skip a whole day
-      # if the previous notification landed slightly late
-      - condition: template
-        value_template: >
-          {{ as_timestamp(now()) - as_timestamp(states('input_datetime.rain_expected_notification_sent'), 0) >= 20 * 60 * 60 }}
-      - condition: state
-        entity_id: binary_sensor.pieter_present
-        state: "on"
-    action:
-      - service: notify.mobile_app_ceres
-        data:
-          title: "🌧️ Rain Expected"
-          message: >-
-            {# onset comes from the sensor, so the window is defined in exactly
-               one place (environment.jinja) and cannot drift from the state
-               that gated this notification #}
-            {% set onset = state_attr('binary_sensor.weather_forecast_precipitation_soon', 'onset') %}
-            {% if onset %}
-              {% set onset_local = onset | as_datetime | as_local %}
-              {% set rain_time = onset_local.strftime('%H:%M') %}
-              {% if onset_local.date() == now().date() %}
-                {% set time_phrase = "tonight" if onset_local.hour >= 18 else "later today" %}
-              {% elif onset_local.hour < 4 %}
-                {% set time_phrase = "overnight" %}
-              {% elif onset_local.hour < 7 %}
-                {% set time_phrase = "early morning" %}
-              {% elif onset_local.hour < 10 %}
-                {% set time_phrase = "early tomorrow" %}
-              {% elif onset_local.hour < 18 %}
-                {% set time_phrase = "later tomorrow" %}
-              {% else %}
-                {% set time_phrase = "tomorrow night" %}
-              {% endif %}
-              Rain is expected {{ time_phrase }} around {{ rain_time }}. Plan accordingly.
-            {% else %}
-              Rain is expected, but timing is uncertain. Check the forecast and plan accordingly.
-            {% endif %}
-          data:
-            url: homeassistant://navigate/lovelace-main/environment
-            group: "environment"
-      - service: input_datetime.set_datetime
-        target:
-          entity_id: input_datetime.rain_expected_notification_sent
-        data:
-          datetime: "{{ now() }}"

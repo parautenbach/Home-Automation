@@ -47,7 +47,7 @@ template:
 
 multiscrape:
   - resource: https://www.dws.gov.za/hydrology/Weekly/ProvinceWeek.aspx?region=WC
-    scan_interval: 86400  # daily
+    scan_interval: 21600  # 4 times per day
     timeout: 30
     log_response: true
     sensor:

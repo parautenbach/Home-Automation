@@ -251,6 +251,7 @@ automation:
     trigger:
       - platform: state
         entity_id: sensor.dam_levels_last_update
+        not_from: ["unavailable", "unknown"]
         not_to: ["unavailable", "unknown"]
         for: "00:01:00"
     condition:

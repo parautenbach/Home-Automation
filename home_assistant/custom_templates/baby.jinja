@@ -24,11 +24,11 @@ we proactively ask whether to disable sleep mode.
 
 {#
 Start of the morning "waking up" period: resumes motion alerts and opens the window where
-disabling sleep mode restores the lamp to normal brightness. A small grace buffer before
+disabling sleep mode restores the lamp to normal brightness. A grace buffer before
 her actual wake-up time.
 
-:returns: A time value, 15 minutes before input_datetime.baby_wake_up_time.
+:returns: A time value, 30 minutes before input_datetime.baby_wake_up_time.
 #}
 {%- macro bedtime_morning_transition_start_time(returns) -%}
-  {%- do returns(((states('input_datetime.baby_wake_up_time') | today_at) - timedelta(minutes=15)).time()) -%}
+  {%- do returns(((states('input_datetime.baby_wake_up_time') | today_at) - timedelta(minutes=30)).time()) -%}
 {%- endmacro -%}

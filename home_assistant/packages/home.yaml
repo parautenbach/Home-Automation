@@ -1290,7 +1290,7 @@ automation:
             after: input_datetime.baby_bedtime_start_time
             before: input_datetime.lights_out_time
           - condition: template
-            # resumes 15 min before wake-up time, closes at wake-up time itself
+            # resumes 30 min before wake-up time, closes at wake-up time itself
             value_template: >-
               {% from 'baby.jinja' import bedtime_morning_transition_start_time %}
               {% set morning_start_fn = bedtime_morning_transition_start_time | as_function %}
@@ -1490,7 +1490,7 @@ automation:
     condition:
       condition: or
       conditions:
-        # restore window: 15 min before wake-up time to 30 min after
+        # restore window: 30 min before wake-up time to 30 min after
         - condition: template
           value_template: >-
             {% from 'baby.jinja' import bedtime_morning_transition_start_time %}

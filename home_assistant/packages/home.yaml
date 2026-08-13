@@ -1480,6 +1480,59 @@ automation:
         target:
           entity_id: input_boolean.baby_sleep_mode
 
+  - alias: "Automatically Enable Sleep Mode When Lamp Off And No Motion"
+    id: "80903b7e-e94e-4a31-91ea-2569e5e42b56"
+    initial_state: true
+    trigger:
+      # single combined trigger, not two separate "for" timers, so the light
+      # turning off and the baby monitor's night mode falsely reporting
+      # motion moments later can't race each other to the 10-minute mark
+      - platform: template
+        value_template: >-
+          {{ is_state('light.bedroom_bedlamp', 'off') and
+             is_state('binary_sensor.baby_monitor_motion_alarm', 'off') }}
+        for:
+          minutes: 10
+    variables:
+      now_time: "{{ now().time() }}"
+      # same ask-enable windows as "Offer To Toggle Sleep Mode"
+      nap_ask_enable_start: "{{ ((states('input_datetime.baby_nap_start_time') | today_at) - timedelta(minutes=15)).time() }}"
+      nap_ask_enable_end: "{{ ((states('input_datetime.baby_nap_start_time') | today_at) + timedelta(minutes=30)).time() }}"
+      bedtime_ask_enable_start: "{{ ((states('input_datetime.baby_bedtime_start_time') | today_at) - timedelta(minutes=15)).time() }}"
+      lights_out: "{{ (states('input_datetime.lights_out_time') | today_at).time() }}"
+    condition:
+      - condition: state
+        entity_id: input_boolean.baby_sleep_mode
+        state: "off"
+      - condition: template
+        value_template: >-
+          {{ (nap_ask_enable_start <= now_time <= nap_ask_enable_end) or
+             (bedtime_ask_enable_start <= now_time <= lights_out) }}
+    action:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.baby_sleep_mode
+      # replace the "would you like to enable" offer with a statement that it already happened
+      - service: notify.mobile_app_ceres
+        data:
+          message: "clear_notification"
+          data:
+            tag: "routine-bedtime"
+      - delay:
+          seconds: 5
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🛌 Sleep Mode"
+          message: >-
+            Sleep mode has been enabled automatically.
+          data:
+            actions:
+              - action: "SLEEP_OFF"
+                title: "Disable"
+            group: "routine-bedtime"
+            tag: "routine-bedtime"
+            url: homeassistant://navigate/lovelace-main/baby
+
   - alias: "Turn On Bedroom Bedlamp When Sleep Mode Disabled"
     id: "fb5d83c6-5e79-456b-a525-a75942d0165b"
     initial_state: true

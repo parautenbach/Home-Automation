@@ -143,6 +143,7 @@ light:
 template:
   - light:
       - name: Living Room Fairy Lights
+        unique_id: "ce38698b-3290-4adf-8483-5065c9b33989"
         icon: mdi:string-lights
         turn_on:
           service: script.living_room_fairy_lights_on

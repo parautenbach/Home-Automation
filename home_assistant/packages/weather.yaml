@@ -637,9 +637,11 @@ template:
             {{ state_attr(air_pressure_trend_entity, 'label') }}
         availability: >-
           {{ has_value(air_pressure_entity) and has_value(temperature_entity) }}
+  - sensor:
       - name: "Rain Rate Condition"
         unique_id: "9a9e3b1e-c213-4556-b5ec-fcfa52c5f0a5"
-        icon: mdi:weather-pouring
+        icon: >-
+          {{ 'mdi:water-off-outline' if this.state == 'no_rain' else 'mdi:weather-pouring' }}
         variables:
           rain_rate_entity: sensor.rain_rate
           daily_precipitation_entity: sensor.daily_precipitation
@@ -690,6 +692,7 @@ template:
             {{ "{:,.1f}".format(states(rain_24h_entity) | float(0)) }} {{ state_attr(rain_24h_entity, 'unit_of_measurement') }}
         availability: >-
           {{ has_value(rain_rate_entity) }}
+  - sensor:
       - name: "Air Pressure Trend"
         unique_id: "ea2872cc-f7af-4be0-852a-ab25a44ebacf"
         icon: mdi:trending-up

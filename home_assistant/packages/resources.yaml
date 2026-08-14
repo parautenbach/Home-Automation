@@ -468,18 +468,18 @@ template:
         icon: mdi:dots-horizontal
         device_class: power
         unit_of_measurement: W
-      - name: "Home Energy Other"
-        unique_id: "1d46fac8-f9dc-4b5d-83b7-c7f5b3e00dc0"
+      # derived directly from the daily meters below (rather than subtracting lifetime
+      # counters and re-metering the result) so a momentary `unavailable` blip on any one
+      # of the underlying power-meter sensors can't stall the subtraction for the rest of the day
+      - name: "Daily Home Energy Other"
+        unique_id: "357cd445-a592-445d-9af4-73e1fe73df2e"
+        default_entity_id: sensor.daily_home_energy_other
         state: >-
-          {% set home = states('sensor.home_energy') | float(0) %}
-          {% set geyser = states('sensor.geyser_energy') | float(0) %}
-          {% set outbuilding = states('sensor.outbuilding_power_meter_channel_1_energy') | float(0) %}
-          {% set large_appliances = states('sensor.home_energy_large_appliances') | float(0) %}
-          {{ home - (geyser + outbuilding + large_appliances) }}
-        availability: >-
-          {{ has_value('sensor.home_energy') and has_value('sensor.geyser_energy')
-             and has_value('sensor.outbuilding_power_meter_channel_1_energy')
-             and has_value('sensor.home_energy_large_appliances') }}
+          {% set home = states('sensor.daily_home_energy_consumption') | float(0) %}
+          {% set geyser = states('sensor.daily_geyser_energy_consumption') | float(0) %}
+          {% set outbuilding = states('sensor.daily_outbuilding_energy_consumption') | float(0) %}
+          {% set large_appliances = states('sensor.daily_home_energy_large_appliances') | float(0) %}
+          {{ max(home - (geyser + outbuilding + large_appliances), 0) }}
         icon: mdi:dots-horizontal
         device_class: energy
         state_class: total_increasing
@@ -919,10 +919,6 @@ utility_meter:
   daily_home_energy_large_appliances:
     unique_id: "6dfd0f91-b8d8-4b3b-bd5c-c772ff3e8254"
     source: sensor.home_energy_large_appliances
-    cycle: daily
-  daily_home_energy_other:
-    unique_id: "d58fedc7-42b1-4a2a-aee5-f41bcaf696d7"
-    source: sensor.home_energy_other
     cycle: daily
   daily_outbuilding_energy_consumption:
     unique_id: "d014080e-0035-4d38-bc07-b96905c892f6"

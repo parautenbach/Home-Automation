@@ -1368,7 +1368,7 @@ automation:
           - "on"
           - "off"
         for:
-          minutes: 1
+          minutes: 5
     variables:
       now_time: "{{ now().time() }}"
       # ask-to-enable opens 15 min before nap start, since she's often put down early;
@@ -1493,7 +1493,7 @@ automation:
           {{ is_state('light.bedroom_bedlamp', 'off') and
              is_state('binary_sensor.baby_monitor_motion_alarm', 'off') }}
         for:
-          minutes: 10
+          minutes: 5
     variables:
       now_time: "{{ now().time() }}"
       # same ask-enable windows as "Offer To Toggle Sleep Mode"

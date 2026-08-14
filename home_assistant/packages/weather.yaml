@@ -613,6 +613,7 @@ template:
             {% set prev_total = this.attributes.get('calibrated_total', 0) | float(0) %}
             {{ (prev_total + delta_raw * gain) | round(2) }}
         availability: "{{ has_value(raw_precipitation_entity) }}"
+  - sensor:
       - name: "Air Pressure (QNH)"
         unique_id: "f056014d-7059-4b0e-8ea3-cf40bf33a176"
         unit_of_measurement: "hPa"
@@ -764,6 +765,44 @@ template:
             {{ now().isoformat() if is_fresh_sample
                else this.attributes.get('last_time', now().isoformat()) }}
         availability: "{{ has_value(precipitation_entity) }}"
+  - sensor:
+      - name: "Dew Point Spread"
+        unique_id: "d4f2a9b5-8e3c-4b7f-ad4c-2f9a3b6e8d1f"
+        unit_of_measurement: "°C"
+        state_class: measurement
+        state: >
+          {% set t = states('sensor.weather_station_temperature') | float(none) %}
+          {% set dp = states('sensor.weather_station_dew_point') | float(none) %}
+          {% if t is none or dp is none %}
+            {{ none }}
+          {% else %}
+            {{ (t - dp) | round(1) }}
+          {% endif %}
+  - binary_sensor:
+      - name: "Fog Condition"
+        unique_id: "e5a3b0c6-9f4d-4c8a-be5d-3a0b4c7f9e2a"
+        icon: >-
+          {{ 'mdi:weather-fog' if this.state == 'on' else 'mdi:eye-outline' }}
+        variables:
+          spread_entity: sensor.dew_point_spread
+          wind_entity: sensor.wind_speed_filtered_km_h
+          rain_entity: sensor.rain_rate_condition
+          moisture_entity: binary_sensor.weather_station_moisture
+        state: >-
+          {% set spread = states(spread_entity) | float(none) %}
+          {% set wind = states(wind_entity) | float(none) %}
+          {% set raining = not is_state(rain_entity, 'no_rain') %}
+          {% set moist = is_state(moisture_entity, 'on') %}
+          {{ spread is not none and wind is not none and spread < 1.0 and wind < 8.0 and not raining and moist }}
+        attributes:
+          label: >-
+            {{ 'Foggy' if this.state == 'on' else 'Clear' }}
+          dew_point: >-
+            {{ states('sensor.weather_station_dew_point') }}
+          dew_point_spread: >-
+            {{ states(spread_entity) }}
+        availability: >-
+          {{ has_value(spread_entity) and has_value(wind_entity) }}
 
 rest:
   # https://jsoncrack.com/editor

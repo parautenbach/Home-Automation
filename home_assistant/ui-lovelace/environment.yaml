@@ -137,10 +137,17 @@ cards:
                       --uix-icon-color: {{ mapped_color(states(config.entity), humidity_condition_map) }};
                     }
               - type: tile
-                entity: sensor.weather_station_dew_point
-                name: Dew Point
-                icon: mdi:thermometer-water
-                uix: *tile_temperature_mod
+                entity: binary_sensor.fog_condition
+                name: Fog Condition
+                state_content:
+                  - label
+                  - dew_point
+                # teal for on, green for off
+                uix:
+                  style: |
+                    :host {
+                      --uix-icon-color: {{ '#62a7a0' if is_state(config.entity, 'on') else '#40b100' }};
+                    }
               - type: tile
                 entity: sensor.air_pressure_qnh
                 name: Atmosphere
@@ -245,6 +252,8 @@ cards:
                     name: Humidity
                   - entity: sensor.weather_station_dew_point
                     name: Dew Point
+                  - entity: sensor.fog_conditions
+                    name: Fog Conditions
                   - entity: sensor.weather_station_air_pressure
                     name: Air Pressure (QFE)
                   - entity: sensor.air_pressure_qnh

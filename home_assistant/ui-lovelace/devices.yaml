@@ -212,12 +212,6 @@ cards:
             switch_entity: switch.office_restart
         - type: custom:button-card
           color_type: blank-card
-          # template: restart
-          # entity: binary_sensor.bed_occupancy_status
-          # icon: mdi:bed
-          # variables:
-          #   name: Bed Occupancy
-          #   switch_entity: switch.bed_occupancy_restart
     - type: history-graph
       hours_to_show: 24
       entities:
@@ -244,8 +238,6 @@ cards:
         - entity: binary_sensor.outbuilding_power_meter
           name: Outb. Pwr
         - entity: binary_sensor.office_status
-        - entity: binary_sensor.bed_occupancy_status
-          name: Bed Occ.
         - entity: binary_sensor.baby_monitor
           name: Baby Mon.
         - entity: binary_sensor.dishwasher
@@ -313,8 +305,6 @@ cards:
         include:
           - domain: automation
         exclude:
-          - entity_id: automation.monitor_inbound_internet_traffic
-          - entity_id: automation.monitor_outbound_internet_traffic
           - entity_id: automation.motion_indicator_off
           - entity_id: automation.motion_indicator_on
           - entity_id: automation.update_baby_sleep_session_counter

@@ -1276,11 +1276,6 @@ automation:
         entity_id: binary_sensor.baby_monitor_motion_alarm
         to: "on"
     condition:
-      - condition: state
-        entity_id: input_boolean.baby_sleep_mode
-        state: "on"
-        for:
-          minutes: 5
       - condition: or
         conditions:
           - condition: time
@@ -1290,14 +1285,17 @@ automation:
             after: input_datetime.baby_bedtime_start_time
             before: input_datetime.lights_out_time
           - condition: template
-            # resumes 30 min before wake-up time, closes at wake-up time itself
+            # relative to OUR wake-up time, not baby's: 15 min before to 30 min after
             value_template: >-
-              {% from 'baby.jinja' import bedtime_morning_transition_start_time %}
-              {% set morning_start_fn = bedtime_morning_transition_start_time | as_function %}
               {% set now_time = now().time() %}
-              {% set morning_start = morning_start_fn() %}
-              {% set wake_up = (states('input_datetime.baby_wake_up_time') | today_at).time() %}
-              {{ morning_start <= now_time <= wake_up }}
+              {% set morning_start = ((states('input_datetime.wake_up_time') | today_at) - timedelta(minutes=15)).time() %}
+              {% set morning_end = ((states('input_datetime.wake_up_time') | today_at) + timedelta(minutes=30)).time() %}
+              {{ morning_start <= now_time <= morning_end }}
+      - condition: state
+        entity_id: light.bedroom_bedlamp
+        state: "off"
+        for:
+          minutes: 5
       - condition: state
         entity_id: sensor.ceres_battery_state
         state: 'Not Charging'  # Can be to Charging or Full

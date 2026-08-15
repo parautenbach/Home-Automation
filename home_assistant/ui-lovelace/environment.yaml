@@ -141,7 +141,7 @@ cards:
                 name: Fog Condition
                 state_content:
                   - label
-                  - dew_point
+                  - dew_point_with_unit
                 # teal for on, green for off
                 uix:
                   style: |

@@ -787,6 +787,7 @@ template:
         icon: >-
           {{ 'mdi:weather-fog' if this.state == 'on' else 'mdi:eye-outline' }}
         variables:
+          dew_point_entity: sensor.weather_station_dew_point
           spread_entity: sensor.dew_point_spread
           wind_entity: sensor.wind_speed_filtered_km_h
           rain_entity: sensor.rain_rate_condition
@@ -800,10 +801,10 @@ template:
         attributes:
           label: >-
             {{ 'Foggy' if this.state == 'on' else 'Clear' }}
-          dew_point: >-
-            {{ states('sensor.weather_station_dew_point') }}
-          dew_point_spread: >-
-            {{ states(spread_entity) }}
+          dew_point_with_unit: >-
+            {{ "{:.1f}".format(states(dew_point_entity) | float(0)) }} {{ state_attr(dew_point_entity, 'unit_of_measurement') }}
+          dew_point_spread_with_unit: >-
+            {{ "{:.1f}".format(states(spread_entity) | float(0)) }} {{ state_attr(spread_entity, 'unit_of_measurement') }}
         availability: >-
           {{ has_value(spread_entity) and has_value(wind_entity) }}
 

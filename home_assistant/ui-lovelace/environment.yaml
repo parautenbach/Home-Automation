@@ -141,6 +141,7 @@ cards:
                 name: Fog Condition
                 state_content:
                   - label
+                  - probability_with_unit
                   - dew_point_with_unit
                 # teal for on, green for off
                 uix:

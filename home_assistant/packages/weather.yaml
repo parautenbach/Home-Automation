@@ -781,6 +781,27 @@ template:
           {% else %}
             {{ (t - dp) | round(1) }}
           {% endif %}
+  - sensor:
+      - name: "Fog Probability"
+        unique_id: "d6dee5e4-64f6-483f-90bb-de1d527c6a9f"
+        unit_of_measurement: "%"
+        state_class: measurement
+        icon: mdi:weather-fog
+        variables:
+          spread_entity: sensor.dew_point_spread
+          wind_entity: sensor.wind_speed_filtered_km_h
+          spread: "{{ states(spread_entity) | float(none) }}"
+          wind: "{{ states(wind_entity) | float(none) }}"
+        # spread and wind approach 0 as fog becomes more likely; scores fall to 0 by 1.5°C spread / 10 km/h wind
+        state: >-
+          {% if spread is none or wind is none %}
+            {{ none }}
+          {% else %}
+            {% set spread_score = ((1.5 - spread) / 1.5) | max(0) | min(1) %}
+            {% set wind_score = ((10 - wind) / 10) | max(0) | min(1) %}
+            {{ (spread_score * wind_score * 100) | round(0) }}
+          {% endif %}
+        availability: "{{ has_value(spread_entity) and has_value(wind_entity) }}"
   - binary_sensor:
       - name: "Fog Condition"
         unique_id: "e5a3b0c6-9f4d-4c8a-be5d-3a0b4c7f9e2a"
@@ -789,24 +810,30 @@ template:
         variables:
           dew_point_entity: sensor.weather_station_dew_point
           spread_entity: sensor.dew_point_spread
-          wind_entity: sensor.wind_speed_filtered_km_h
+          probability_entity: sensor.fog_probability
           rain_entity: sensor.rain_rate_condition
           moisture_entity: binary_sensor.weather_station_moisture
+          probability_threshold: 70
+          probability: "{{ states(probability_entity) | float(none) }}"
+          raining: "{{ not is_state(rain_entity, 'no_rain') }}"
+          moist: "{{ is_state(moisture_entity, 'on') }}"
+        # moisture alone doesn't mean fog (it also confirms dew), but real fog should always wet the sensor,
+        # so require it as a confirmatory check on top of the probability estimate rather than as a trigger on its own
         state: >-
-          {% set spread = states(spread_entity) | float(none) %}
-          {% set wind = states(wind_entity) | float(none) %}
-          {% set raining = not is_state(rain_entity, 'no_rain') %}
-          {% set moist = is_state(moisture_entity, 'on') %}
-          {{ spread is not none and wind is not none and spread < 1.0 and wind < 8.0 and not raining and moist }}
+          {{ probability is not none and probability > probability_threshold and not raining and moist }}
+        delay_on: "00:15:00"
         attributes:
           label: >-
             {{ 'Foggy' if this.state == 'on' else 'Clear' }}
+          probability: "{{ probability }}"
+          probability_with_unit: >-
+            {{ probability | round(0) if probability is not none else 0 }} {{ state_attr(probability_entity, 'unit_of_measurement') }}
           dew_point_with_unit: >-
             {{ "{:.1f}".format(states(dew_point_entity) | float(0)) }} {{ state_attr(dew_point_entity, 'unit_of_measurement') }}
           dew_point_spread_with_unit: >-
             {{ "{:.1f}".format(states(spread_entity) | float(0)) }} {{ state_attr(spread_entity, 'unit_of_measurement') }}
         availability: >-
-          {{ has_value(spread_entity) and has_value(wind_entity) }}
+          {{ has_value(spread_entity) and has_value(probability_entity) }}
 
 rest:
   # https://jsoncrack.com/editor

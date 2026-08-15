@@ -1413,8 +1413,9 @@ cards:
           - type: entities
             show_header_toggle: false
             entities:
-              - entity: sensor.dam_levels_last_update
+              - entity: input_datetime.dam_levels_last_update
                 name: Last Update
+                type: simple-entity
       # swipe and chart for individual dams
       - type: custom:swipe-card
         parameters:

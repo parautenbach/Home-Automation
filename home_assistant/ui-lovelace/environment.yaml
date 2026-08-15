@@ -137,8 +137,8 @@ cards:
                       --uix-icon-color: {{ mapped_color(states(config.entity), humidity_condition_map) }};
                     }
               - type: tile
-                entity: binary_sensor.fog_condition
-                name: Fog Condition
+                entity: binary_sensor.fog_conditions
+                name: Fog Conditions
                 state_content:
                   - label
                   - probability_with_unit
@@ -166,7 +166,6 @@ cards:
               - type: tile
                 entity: sensor.rain_rate_condition
                 name: Rain
-                icon: mdi:weather-pouring
                 state_content:
                   - label
                   - rain_rate_with_unit
@@ -253,8 +252,12 @@ cards:
                     name: Humidity
                   - entity: sensor.weather_station_dew_point
                     name: Dew Point
-                  - entity: sensor.fog_conditions
+                  - type: attribute
+                    entity: binary_sensor.fog_conditions
                     name: Fog Conditions
+                    attribute: label
+                  - entity: sensor.fog_probability
+                    name: Fog Probability
                   - entity: sensor.weather_station_air_pressure
                     name: Air Pressure (QFE)
                   - entity: sensor.air_pressure_qnh

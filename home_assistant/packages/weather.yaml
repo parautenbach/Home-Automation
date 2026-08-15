@@ -785,7 +785,6 @@ template:
       - name: "Fog Probability"
         unique_id: "d6dee5e4-64f6-483f-90bb-de1d527c6a9f"
         unit_of_measurement: "%"
-        state_class: measurement
         icon: mdi:weather-fog
         variables:
           spread_entity: sensor.dew_point_spread
@@ -797,13 +796,13 @@ template:
           {% if spread is none or wind is none %}
             {{ none }}
           {% else %}
-            {% set spread_score = ((1.5 - spread) / 1.5) | max(0) | min(1) %}
-            {% set wind_score = ((10 - wind) / 10) | max(0) | min(1) %}
+            {% set spread_score = [[((1.5 - spread) / 1.5), 0] | max, 1] | min %}
+            {% set wind_score = [[((10 - wind) / 10), 0] | max, 1] | min %}
             {{ (spread_score * wind_score * 100) | round(0) }}
           {% endif %}
         availability: "{{ has_value(spread_entity) and has_value(wind_entity) }}"
   - binary_sensor:
-      - name: "Fog Condition"
+      - name: "Fog Conditions"
         unique_id: "e5a3b0c6-9f4d-4c8a-be5d-3a0b4c7f9e2a"
         icon: >-
           {{ 'mdi:weather-fog' if this.state == 'on' else 'mdi:eye-outline' }}
@@ -827,7 +826,7 @@ template:
             {{ 'Foggy' if this.state == 'on' else 'Clear' }}
           probability: "{{ probability }}"
           probability_with_unit: >-
-            {{ probability | round(0) if probability is not none else 0 }} {{ state_attr(probability_entity, 'unit_of_measurement') }}
+            {{ probability | round(0) if probability is not none else 0 }}{{ state_attr(probability_entity, 'unit_of_measurement') }}
           dew_point_with_unit: >-
             {{ "{:.1f}".format(states(dew_point_entity) | float(0)) }} {{ state_attr(dew_point_entity, 'unit_of_measurement') }}
           dew_point_spread_with_unit: >-
@@ -837,7 +836,6 @@ template:
 
 rest:
   # https://jsoncrack.com/editor
-
   # - resource_template: 'http://weather.sun.ac.za/api/getSonbesie.php?start={{ utcnow() | as_timestamp | int - 300 }}&end={{ utcnow() | as_timestamp | int }}'
   #   method: GET
   #   scan_interval: 300

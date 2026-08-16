@@ -355,15 +355,14 @@ automation:
             entity_id: light.hallway
             state: "off"
     action:
+      # skip_next_wake_up_time is cleared later, once by "Clear Skip Next Wake Up Time" at
+      # 10:00 – not here, so it stays in effect for the whole lie-in morning instead of just
+      # until this fixed clock time
       - if:
           - condition: state
             entity_id: input_boolean.skip_next_wake_up_time
-            state: "on"
+            state: "off"
         then:
-          - service: input_boolean.turn_off
-            target:
-              entity_id: input_boolean.skip_next_wake_up_time
-        else:
           - service: scene.turn_on
             target:
               entity_id: scene.normal_lights
@@ -560,6 +559,47 @@ automation:
             target:
               entity_id: climate.main_bedroom_ac
 
+  # a safe, signal-independent fallback so the flag can't get stuck on – e.g. if we get up
+  # without ever turning on a bedside lamp. by 08:00 we're up regardless of the reason we skipped.
+  # also mops up whatever "Turn Off Morning AC" and "Auto Disarm Alarm" would've done at their
+  # own fixed times, since both of those stay blocked for as long as this flag is on
+  - alias: "Clear Skip Next Wake Up Time"
+    id: "e879306e-2e8f-4eba-ab2b-33c1a23f71e4"
+    trigger:
+      - platform: time
+        at: "08:00:00"
+    condition:
+      - condition: state
+        entity_id: input_boolean.skip_next_wake_up_time
+        state: "on"
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.skip_next_wake_up_time
+      - if:
+          - condition: state
+            entity_id: climate.main_bedroom_ac
+            state: "on"
+        then:
+          - service: climate.turn_off
+            target:
+              entity_id: climate.main_bedroom_ac
+      - if:
+          - condition: state
+            entity_id: binary_sensor.pieter_present
+            state: "on"
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: alarm_control_panel.home
+                state: "disarmed"
+        then:
+          - action: alarm_control_panel.alarm_disarm
+            target:
+              entity_id: alarm_control_panel.home
+            data:
+              code: !secret alarm_code
+
   - alias: "Child Wake-up Time"
     id: "56f448c5-e8b1-401f-b4d7-b0875f65fc31"
     # don't reset this after a reload/restart, since we might've disabled this deliberately via the ui
@@ -633,6 +673,36 @@ automation:
       - condition: state
         entity_id: input_boolean.skip_next_wake_up_time
         state: "off"
+    action:
+      - service: climate.turn_off
+        target:
+          entity_id: climate.main_bedroom_ac
+
+  # both bedside lamps on is a reliable proxy for "we're up", independent of any wake-up
+  # schedule – catches us getting up later than usual (skip_next_wake_up_time on, or a rough
+  # night) when "Turn Off Morning AC" above already missed its window. deliberately ignores
+  # skip_next_wake_up_time, since this is direct evidence we're up regardless of the schedule
+  - alias: "Turn Off Morning AC When Both Up"
+    id: "2d60eab0-fdc7-4a9f-96b2-d5b97133c222"
+    trigger:
+      - platform: state
+        entity_id:
+          - light.pieter_bedside
+          - light.rouve_bedside
+        to: "on"
+    condition:
+      - condition: time
+        after: "06:00:00"
+        before: "09:00:00"
+      - condition: state
+        entity_id: light.pieter_bedside
+        state: "on"
+      - condition: state
+        entity_id: light.rouve_bedside
+        state: "on"
+      - condition: state
+        entity_id: climate.main_bedroom_ac
+        state: "on"
     action:
       - service: climate.turn_off
         target:

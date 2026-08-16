@@ -1224,6 +1224,22 @@ automation:
       - condition: state
         entity_id: input_boolean.baby_sleep_mode
         state: "off"
+      # if we're skipping our wake-up, don't blast full brightness in the hallway/foyer –
+      # "Switch On Night Light If Motion Is Detected" already covers dim, motion-based lighting.
+      # but if both bedside lamps are already on, we're genuinely up regardless of the skip flag
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: input_boolean.skip_next_wake_up_time
+            state: "off"
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: light.pieter_bedside
+                state: "on"
+              - condition: state
+                entity_id: light.rouve_bedside
+                state: "on"
       - service: light.turn_on
         target:
           entity_id:

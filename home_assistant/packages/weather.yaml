@@ -486,8 +486,9 @@ template:
               'severely_high': 'Dangerous'
             } %}
             {{ labels.get(this.state, 'Unknown') }}
+          # no space for %
           humidity_with_unit: >-
-            {{ "{:.0f}".format(states(humidity_entity) | float(0)) }} {{ state_attr(humidity_entity, 'unit_of_measurement') }}
+            {{ "{:.0f}".format(states(humidity_entity) | float(0)) }}{{ state_attr(humidity_entity, 'unit_of_measurement') }}
         availability: >-
           {{ has_value(perception_entity) and has_value(humidity_entity) }}
   - trigger:

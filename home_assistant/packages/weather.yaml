@@ -564,7 +564,8 @@ template:
           event_rate_entity: sensor.raw_rain_rate
           gain_tiers:
             - ceiling: 0.3
-              gain: 3.5
+              # was 3.5 — avg of 2.70x, 4.32x, 2.00x across 3 light-rain readings
+              gain: 3.01
             - ceiling: 2.0
               gain: 2.56
           gain_unvalidated: 1.0

@@ -383,39 +383,12 @@ template:
         variables:
           wind_speed_entity: sensor.wind_speed_filtered
         state: >-
-          {% set wind_speed = states(wind_speed_entity) | float(0) %}
-          {% if wind_speed < 0.5 %} calm
-          {% elif wind_speed < 1.6 %} light_air
-          {% elif wind_speed < 3.4 %} light_breeze
-          {% elif wind_speed < 5.5 %} gentle_breeze
-          {% elif wind_speed < 8.0 %} moderate_breeze
-          {% elif wind_speed < 10.8 %} fresh_breeze
-          {% elif wind_speed < 13.9 %} strong_breeze
-          {% elif wind_speed < 17.2 %} near_gale
-          {% elif wind_speed < 20.8 %} gale
-          {% elif wind_speed < 24.5 %} strong_gale
-          {% elif wind_speed < 28.5 %} storm
-          {% elif wind_speed < 32.7 %} violent_storm
-          {% else %} extreme_storm
-          {% endif %}
+          {% from 'environment.jinja' import beaufort_scale %}
+          {{ beaufort_scale(states(wind_speed_entity) | float(0) * 3.6) }}
         attributes:
           label: >-
-            {% set labels = {
-              'calm': 'Calm',
-              'light_air': 'Light Air',
-              'light_breeze': 'Light Breeze',
-              'gentle_breeze': 'Gentle Breeze',
-              'moderate_breeze': 'Moderate Breeze',
-              'fresh_breeze': 'Fresh Breeze',
-              'strong_breeze': 'Strong Breeze',
-              'near_gale': 'Near Gale',
-              'gale': 'Gale',
-              'strong_gale': 'Strong Gale',
-              'storm': 'Storm',
-              'violent_storm': 'Violent Storm',
-              'extreme_storm': 'Extreme Storm'
-            } %}
-            {{ labels.get(this.state, 'Unknown') }}
+            {% from 'environment.jinja' import beaufort_label %}
+            {{ beaufort_label(states(wind_speed_entity) | float(0) * 3.6) }}
           wind_speed_ms: >-
             {{ states(wind_speed_entity) | float(0) }}
           wind_speed_with_unit: >-
@@ -692,6 +665,18 @@ template:
             {{ "{:,.1f}".format(states(rain_24h_entity) | float(0)) }} {{ state_attr(rain_24h_entity, 'unit_of_measurement') }}
         availability: >-
           {{ has_value(rain_rate_entity) }}
+  - binary_sensor:
+      - name: "Raining"
+        unique_id: "a20205f5-8e5c-4295-bf3c-e96c6015c940"
+        device_class: moisture
+        icon: >-
+          {{ 'mdi:weather-pouring' if this.state == 'on' else 'mdi:water-off-outline' }}
+        variables:
+          rain_condition_entity: sensor.rain_rate_condition
+        state: >-
+          {{ not is_state(rain_condition_entity, 'no_rain') }}
+        availability: >-
+          {{ has_value(rain_condition_entity) }}
   - sensor:
       - name: "Air Pressure Trend"
         unique_id: "ea2872cc-f7af-4be0-852a-ab25a44ebacf"
@@ -789,10 +774,10 @@ template:
         variables:
           spread_entity: sensor.dew_point_spread
           wind_entity: sensor.wind_speed_filtered_km_h
-          spread: "{{ states(spread_entity) | float(none) }}"
-          wind: "{{ states(wind_entity) | float(none) }}"
         # spread and wind approach 0 as fog becomes more likely; scores fall to 0 by 1.5°C spread / 10 km/h wind
         state: >-
+          {% set spread = states(spread_entity) | float(none) %}
+          {% set wind = states(wind_entity) | float(none) %}
           {% if spread is none or wind is none %}
             {{ none }}
           {% else %}
@@ -810,22 +795,24 @@ template:
           dew_point_entity: sensor.weather_station_dew_point
           spread_entity: sensor.dew_point_spread
           probability_entity: sensor.fog_probability
-          rain_entity: sensor.rain_rate_condition
+          rain_entity: binary_sensor.raining
           moisture_entity: binary_sensor.weather_station_moisture
           probability_threshold: 70
-          probability: "{{ states(probability_entity) | float(none) }}"
-          raining: "{{ not is_state(rain_entity, 'no_rain') }}"
-          moist: "{{ is_state(moisture_entity, 'on') }}"
         # moisture alone doesn't mean fog (it also confirms dew), but real fog should always wet the sensor,
         # so require it as a confirmatory check on top of the probability estimate rather than as a trigger on its own
         state: >-
+          {% set probability = states(probability_entity) | float(none) %}
+          {% set raining = is_state(rain_entity, 'on') %}
+          {% set moist = is_state(moisture_entity, 'on') %}
           {{ probability is not none and probability > probability_threshold and not raining and moist }}
         delay_on: "00:15:00"
         attributes:
           label: >-
             {{ 'Foggy' if this.state == 'on' else 'Clear' }}
-          probability: "{{ probability }}"
+          probability: "{{ states(probability_entity) | float(none) }}"
+          # no space for %
           probability_with_unit: >-
+            {% set probability = states(probability_entity) | float(none) %}
             {{ probability | round(0) if probability is not none else 0 }}{{ state_attr(probability_entity, 'unit_of_measurement') }}
           dew_point_with_unit: >-
             {{ "{:.1f}".format(states(dew_point_entity) | float(0)) }} {{ state_attr(dew_point_entity, 'unit_of_measurement') }}
@@ -1056,9 +1043,9 @@ automation:
         above: 7
     mode: single
     condition:
-      - condition: template
-        value_template: >-
-          {{ not is_state('sensor.rain_rate_condition', 'no_rain') }}
+      - condition: state
+        entity_id: binary_sensor.raining
+        state: "off"
     action:
       - service: notify.family
         data:

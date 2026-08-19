@@ -207,6 +207,54 @@ validated event rate, from an ordered list of rate tiers.
 {%- endmacro -%}
 
 {#
+Beaufort scale tier for a wind speed.
+
+:param speed_kmh: wind speed in km/h.
+:returns: snake_case tier name, matching sensor.wind_condition_beaufort's states.
+#}
+{%- macro beaufort_scale(speed_kmh) -%}
+  {%- if speed_kmh < 1.8 -%} calm
+  {%- elif speed_kmh < 5.8 -%} light_air
+  {%- elif speed_kmh < 12.2 -%} light_breeze
+  {%- elif speed_kmh < 19.8 -%} gentle_breeze
+  {%- elif speed_kmh < 28.8 -%} moderate_breeze
+  {%- elif speed_kmh < 38.9 -%} fresh_breeze
+  {%- elif speed_kmh < 50.0 -%} strong_breeze
+  {%- elif speed_kmh < 61.9 -%} near_gale
+  {%- elif speed_kmh < 74.9 -%} gale
+  {%- elif speed_kmh < 88.2 -%} strong_gale
+  {%- elif speed_kmh < 102.6 -%} storm
+  {%- elif speed_kmh < 117.7 -%} violent_storm
+  {%- else -%} extreme_storm
+  {%- endif -%}
+{%- endmacro -%}
+
+{#
+Display label for a wind speed's Beaufort scale tier.
+
+:param speed_kmh: wind speed in km/h.
+:returns: title-cased display label, or 'Unknown' if the tier isn't recognised.
+#}
+{%- macro beaufort_label(speed_kmh) -%}
+  {%- set labels = {
+    'calm': 'Calm',
+    'light_air': 'Light',
+    'light_breeze': 'Light',
+    'gentle_breeze': 'Gentle',
+    'moderate_breeze': 'Moderate',
+    'fresh_breeze': 'Fresh',
+    'strong_breeze': 'Strong',
+    'near_gale': 'Gale',
+    'gale': 'Gale',
+    'strong_gale': 'Gale',
+    'storm': 'Storm',
+    'violent_storm': 'Violent',
+    'extreme_storm': 'Extreme'
+  } -%}
+  {{ labels.get(beaufort_scale(speed_kmh), 'Unknown') }}
+{%- endmacro -%}
+
+{#
 Rain outlook from an hourly forecast.
 
 :param forecast: hourly forecast list from weather.get_forecasts

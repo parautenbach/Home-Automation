@@ -1868,9 +1868,9 @@ automation:
       - condition: state
         entity_id: input_boolean.baby_sleep_mode
         state: "off"
-      - condition: template
-        value_template: >-
-          {{ not is_states('sensor.rain_rate_condition', 'no_rain') }}
+      - condition: state
+        entity_id: binary_sensor.raining
+        state: "off"
     action:
       - service: weather.get_forecasts
         target:

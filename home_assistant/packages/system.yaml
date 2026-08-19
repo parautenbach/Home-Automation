@@ -183,19 +183,6 @@ template:
     - platform: time_pattern
       minutes: "/1"
     sensor:
-      - name: Monitored Batteries
-        icon: mdi:battery-alert
-        state: "{{ states.sensor | selectattr('attributes.monitor','eq',True) | map(attribute='entity_id') | list | count }}"
-        unit_of_measurement: batteries
-        state_class: measurement
-        attributes:
-          # https://community.home-assistant.io/t/recommended-ways-to-manage-devices-and-entities-names/243815/12
-          batteries: "{{ states.sensor | selectattr('attributes.monitor', 'eq', True) | map(attribute='entity_id') | list }}"
-
-  - trigger:
-    - platform: time_pattern
-      minutes: "/1"
-    sensor:
       # https://community.home-assistant.io/t/trigger-an-automation-based-on-a-groups-individual-entity-state-change/383560/2
       # https://community.home-assistant.io/t/single-automation-for-all-lights/375028/7
       - name: Number of Flat Batteries

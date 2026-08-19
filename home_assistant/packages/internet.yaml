@@ -346,6 +346,10 @@ automation:
         # this automation and the one to notify an extender has disconnected can race...
         for:
           seconds: 5
+    variables:
+      # captured here, before the delay below, so the "for X" message reflects
+      # the time the state actually changed rather than when the delay ends
+      now_dt: "{{ now() }}"
     mode: parallel
     action:
       # if the timer completed at least once
@@ -356,30 +360,34 @@ automation:
                   {% set timer_entity_id = trigger.entity_id | replace('binary_sensor', 'timer') ~ '_disconnected' %}
                   {% set duration = state_attr(timer_entity_id, 'duration') %}
                   {% set (hours, minutes, seconds) = duration.split(':') | map('int') %}
+                  {# note that we assume here and in the next automation that the timer's duration isn't less than 1 min #}
+                  {# for some reason the calculated duration for a 1 min timer will be a second or two less #}
+                  {# i guess this is due to some relative frame of intertia... #}
                   {% set threshold =  minutes*60 + seconds - 1 %}
                   {% set input_datetime_entity_id = trigger.entity_id | replace('binary_sensor', 'input_datetime') ~ '_disconnected' %}
                   {% set last_available = states(input_datetime_entity_id) | as_timestamp %}
-                  {% set utc_now_ts = utcnow() | as_timestamp %}
-                  {{ (utc_now_ts - last_available) | int(0) >= threshold }}
+                  {{ (as_timestamp(now_dt) - last_available) | int(0) >= threshold }}
             sequence:
+              # give the "unavailable" push a head start so it isn't still in flight when
+              # "was unavailable for" arrives with the same tag - same-tag pushes fired within
+              # the same delivery window aren't guaranteed to both surface
+              - delay:
+                  seconds: 1
               - service: notify.mobile_app_ceres
                 data:
                   title: "⚠️ Internet"
                   message: >-
+                    {% from 'utilities.jinja' import sec_to_hour_and_min %}
                     {% set input_datetime_entity_id = trigger.entity_id | replace('binary_sensor', 'input_datetime') ~ '_disconnected' %}
                     {% set last_available = states(input_datetime_entity_id) | as_timestamp %}
-                    {% set utc_now_ts = utcnow() | as_timestamp %}
-                    {# note that we assume here and in the next automation that the timer's duration isn't less than 1 min #}
-                    {# for some reason the calculated duration for a 1 min timer will be a second or two less #}
-                    {# i guess this is due to some relative frame of intertia... #}
-                    {% set minutes = ((utc_now_ts - last_available) // 60) | int(0) or 1 %}
+                    {% set seconds = (as_timestamp(now_dt) - last_available) | int %}
+                    {% set duration = sec_to_hour_and_min(seconds) %}
                     {% set extender_name = state_attr(trigger.entity_id, 'friendly_name') | lower %}
-                    The {{ extender_name }} was unavailable for {{ minutes }} min.
+                    The {{ extender_name }} was unavailable for {{ duration }}.
                   data:
                     group: "home-internet"
                     url: homeassistant://navigate/lovelace-main/internet
                     tag: "{{ trigger.entity_id }}"
-      # add a wait for here?
       - service: timer.cancel
         target:
           entity_id: "{{ trigger.entity_id | replace('binary_sensor', 'timer') }}_disconnected"

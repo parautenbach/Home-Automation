@@ -1036,11 +1036,24 @@ automation:
           title: "🔌 Energy"
           message: >-
             {% from 'utilities.jinja' import sec_to_hour_and_min %}
-            {% set seconds = (as_timestamp(utcnow()) - as_timestamp(trigger.from_state.last_changed)) | int %}
+            {% set seconds = (as_timestamp(now_dt) - as_timestamp(trigger.from_state.last_changed)) | int %}
             {% set after = sec_to_hour_and_min(seconds) %}
-            {% set loadshedding = states('sensor.loadshedding_start_time') | as_datetime <= now() <= states('sensor.loadshedding_end_time') | as_datetime %}
+            {% set loadshedding = states('sensor.loadshedding_start_time') | as_datetime <= now_dt <= states('sensor.loadshedding_end_time') | as_datetime %}
             {% set reason = ' due to loadshedding' if loadshedding else '' %}
-            The grid feed has been {{ 'restored after ' ~ after ~ '.' if is_state('binary_sensor.grid_feed', 'on') else 'cut' ~ reason ~ '. Please mind energy usage.' }}
+            {# a dead MQTT connection (bridge off) is an immediate, certain signal - no need to
+               wait out the activity window for that case. but the connection can also stay up
+               while the bridge stops actually publishing, which only message freshness
+               (solarassistant_activity) catches. either way we can't tell a real cut from a
+               bridge problem - say so rather than staying silent, since a missed real cut is
+               worse than an unconfirmed one #}
+            {% set unconfirmed = is_state('binary_sensor.solarassistant_bridge', 'off') or is_state('binary_sensor.solarassistant_activity', 'off') %}
+            {%- if is_state('binary_sensor.grid_feed', 'on') -%}
+            The grid feed has been restored after {{ after }}.
+            {%- elif unconfirmed -%}
+            The grid feed appears to have been cut{{ reason }}, but the monitoring bridge is also down or stale so this can't be confirmed. Please mind energy usage just in case.
+            {%- else -%}
+            The grid feed has been cut{{ reason }}. Please mind energy usage.
+            {%- endif %}
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace-main/resources
@@ -1443,6 +1456,10 @@ automation:
         entity_id:
           - binary_sensor.solarassistant_activity
         to: "on"
+    variables:
+      # captured here, before the delay below, so the "after X" message reflects
+      # the time the state actually changed rather than when the delay ends
+      now_dt: "{{ now() }}"
     mode: single
     action:
       - choose:
@@ -1455,14 +1472,20 @@ automation:
                 entity_id: input_boolean.solarassistant_ceased_notified
                 state: "on"
             sequence:
+              # give the "ceased" push a head start so it isn't still in flight when
+              # "resumed" arrives with the same tag - same-tag pushes fired within
+              # the same delivery window aren't guaranteed to both surface
+              - delay:
+                  seconds: 1
               - service: notify.mobile_app_ceres
                 data:
                   title: "⚠️ System"
                   message: >-
+                    {% from 'utilities.jinja' import sec_to_hour_and_min %}
                     {% set last_ceased = states('input_datetime.solarassistant_activity_ceased') | as_timestamp %}
-                    {% set utc_now_ts = utcnow() | as_timestamp %}
-                    {% set minutes = ((utc_now_ts - last_ceased) // 60) | int %}
-                    The SolarAssistant bridge's activity has been resumed after {{ minutes }} min.
+                    {% set seconds = (as_timestamp(now_dt) - last_ceased) | int %}
+                    {% set after = sec_to_hour_and_min(seconds) %}
+                    The SolarAssistant bridge's activity has been resumed after {{ after }}.
                   data:
                     group: "system-electricity"
                     url: homeassistant://navigate/lovelace-system/devices

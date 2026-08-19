@@ -9,7 +9,9 @@ Convert seconds to a convenient hours and minutes format.
 #}
 {%- macro sec_to_hour_and_min(seconds) -%}
   {%- set sec_to_hour_and_min = "" -%}
-  {%- if seconds < 60 -%}
+  {%- if seconds < 1 -%}
+    {%- set sec_to_hour_and_min = "less than a second" -%}
+  {%- elif seconds < 60 -%}
     {%- set sec_to_hour_and_min = seconds ~ " sec" -%}
   {%- elif seconds < 60*60 -%}
     {%- set sec_to_hour_and_min = seconds // 60 ~ " min" -%}

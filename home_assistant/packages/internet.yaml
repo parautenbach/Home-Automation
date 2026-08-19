@@ -318,6 +318,12 @@ automation:
           - binary_sensor.back_extender
         from: "on"
         to: "off"
+    variables:
+      # captured once here, at trigger time, so the timer and the input_datetime
+      # below are anchored to the same instant instead of two independent now()
+      # samples (which drifted apart by a second or two - see the threshold note
+      # in "Detect When Extender Reconnected")
+      now_dt: "{{ now() }}"
     mode: parallel
     action:
       - service: timer.start
@@ -331,7 +337,7 @@ automation:
         target:
           entity_id: "{{ trigger.entity_id | replace('binary_sensor', 'input_datetime') }}_disconnected"
         data:
-          datetime: "{{ now() }}"
+          datetime: "{{ now_dt }}"
 
   - alias: "Detect When Extender Reconnected"
     id: "a80aad69-169e-4a24-aec0-088512a443ae"
@@ -361,8 +367,9 @@ automation:
                   {% set duration = state_attr(timer_entity_id, 'duration') %}
                   {% set (hours, minutes, seconds) = duration.split(':') | map('int') %}
                   {# note that we assume here and in the next automation that the timer's duration isn't less than 1 min #}
-                  {# for some reason the calculated duration for a 1 min timer will be a second or two less #}
-                  {# i guess this is due to some relative frame of intertia... #}
+                  {# the -1 is a small safety margin: int() truncates the elapsed-seconds float
+                     towards zero, and there's normal (sub-second) automation dispatch latency
+                     between the trigger firing and the timer/input_datetime actions running #}
                   {% set threshold =  minutes*60 + seconds - 1 %}
                   {% set input_datetime_entity_id = trigger.entity_id | replace('binary_sensor', 'input_datetime') ~ '_disconnected' %}
                   {% set last_available = states(input_datetime_entity_id) | as_timestamp %}

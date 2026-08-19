@@ -1029,6 +1029,16 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.grid_feed
+        # debounces sub-second blips in either direction (no notification for either
+        # half of a cut+restore pair that resolves within a second), and as a side
+        # effect keeps cut/restored pushes at least ~1s apart, so a same-tag push
+        # isn't still in flight when the next one arrives - same-tag pushes fired
+        # within the same delivery window aren't guaranteed to both surface
+        for:
+          seconds: 1
+    variables:
+      # captured once here, at trigger time, and reused below for consistency
+      now_dt: "{{ now() }}"
     mode: queued
     action:
       - service: notify.family
@@ -1434,19 +1444,24 @@ automation:
         # # so the timer got canceled before it actually started
         # for:
         #   seconds: 5
+    variables:
+      # captured once here, at trigger time, so the timer and the input_datetime
+      # below are anchored to the same instant instead of two independent now()
+      # samples (see the threshold note in internet.yaml's extender-reconnect automation)
+      now_dt: "{{ now() }}"
     mode: single
     action:
-      - service: input_datetime.set_datetime
-        target:
-          entity_id: input_datetime.solarassistant_activity_ceased
-        data:
-          datetime: "{{ now() }}"
       - service: timer.start
         target:
           entity_id: timer.solarassistant_inactivity
         data:
           # if changed here, change it in "Notify When SolarAssistant MQTT Bridge Activity Ceased" too
           duration: "00:01:00"
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.solarassistant_activity_ceased
+        data:
+          datetime: "{{ now_dt }}"
 
   - alias: "Detect When SolarAssistant MQTT Bridge Activity Resumes"
     id: "3b012ea4-cd46-42c1-86cd-84002ce7d2ee"
@@ -1456,9 +1471,15 @@ automation:
         entity_id:
           - binary_sensor.solarassistant_activity
         to: "on"
+        # debounces sub-second blips, and as a side effect keeps this at least ~1s
+        # behind "ceased" (which can only have fired at least a minute earlier, via
+        # the flag check below) so a same-tag push isn't still in flight when this
+        # one arrives - same-tag pushes fired within the same delivery window aren't
+        # guaranteed to both surface
+        for:
+          seconds: 1
     variables:
-      # captured here, before the delay below, so the "after X" message reflects
-      # the time the state actually changed rather than when the delay ends
+      # captured once here, at trigger time, and reused below for consistency
       now_dt: "{{ now() }}"
     mode: single
     action:
@@ -1472,11 +1493,6 @@ automation:
                 entity_id: input_boolean.solarassistant_ceased_notified
                 state: "on"
             sequence:
-              # give the "ceased" push a head start so it isn't still in flight when
-              # "resumed" arrives with the same tag - same-tag pushes fired within
-              # the same delivery window aren't guaranteed to both surface
-              - delay:
-                  seconds: 1
               - service: notify.mobile_app_ceres
                 data:
                   title: "⚠️ System"

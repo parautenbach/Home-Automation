@@ -143,6 +143,9 @@ cards:
                   - label
                   - probability_with_unit
                   - dew_point_with_unit
+                tap_action:
+                  action: more-info
+                  entity: sensor.fog_probability
                 # teal for on, green for off
                 uix:
                   style: |

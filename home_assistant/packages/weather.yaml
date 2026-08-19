@@ -1056,3 +1056,98 @@ automation:
             group: "environment"
             tag: "environment-uv"
             url: homeassistant://navigate/lovelace-main/environment
+
+  - alias: "Morning Weather Brief"
+    id: "9c0ff371-189f-4573-8745-17b538695d46"
+    initial_state: true
+    trigger:
+      - platform: time
+        at: input_datetime.wake_up_time
+    condition:
+      - condition: state
+        entity_id: binary_sensor.pieter_present
+        state: "on"
+    action:
+      - delay:
+          minutes: 15
+      - action: weather.get_forecasts
+        target:
+          entity_id: weather.openweathermap
+        data:
+          type: daily
+        response_variable: daily
+      - variables:
+          # now (measured)
+          current_temp: "{{ states('sensor.outside_temperature') | int(0) }}"
+          heat_label: "{{ state_attr('sensor.outside_temperature', 'thermal_comfort_label') }}"
+          humidity_label: "{{ state_attr('sensor.humidity_condition', 'label') }}"
+          humidity_value: "{{ state_attr('sensor.humidity_condition', 'humidity_with_unit') }}"
+          fog_on: "{{ is_state('binary_sensor.fog_conditions', 'on') }}"
+          fog_probability: "{{ state_attr('binary_sensor.fog_conditions', 'probability_with_unit') }}"
+          wind_state: "{{ states('sensor.wind_condition_beaufort') }}"
+          wind_label: "{{ state_attr('sensor.wind_condition_beaufort', 'label') }}"
+          wind_speed: "{{ state_attr('sensor.wind_condition_beaufort', 'wind_speed_with_unit') }}"
+          wind_dir: "{{ state_attr('sensor.wind_condition_beaufort', 'compass_direction') }}"
+          uv_state: "{{ states('sensor.uv_condition') }}"
+          uv_label: "{{ state_attr('sensor.uv_condition', 'label') }}"
+          pressure_state: "{{ states('sensor.air_pressure_trend') }}"
+          pressure_label: "{{ state_attr('sensor.air_pressure_trend', 'label') }}"
+          # later (forecast, via the get_forecasts call above rather than any derived weather entity)
+          rain_soon: "{{ is_state('binary_sensor.weather_forecast_precipitation_soon', 'on') }}"
+          rain_onset: "{{ state_attr('binary_sensor.weather_forecast_precipitation_soon', 'onset') }}"
+          rain_today_mm: "{{ states('sensor.weather_forecast_precipitation_today') | float(0) | round(1) }}"
+          today_high: "{{ daily['weather.openweathermap']['forecast'][0]['temperature'] | int(0) }}"
+          today_condition: "{{ daily['weather.openweathermap']['forecast'][0]['condition'] }}"
+          later_wind_state: >-
+            {% from 'environment.jinja' import beaufort_scale %}
+            {{ beaufort_scale(daily['weather.openweathermap']['forecast'][0]['wind_speed'] | float(0)) }}
+          later_wind_label: >-
+            {% from 'environment.jinja' import beaufort_label %}
+            {{ beaufort_label(daily['weather.openweathermap']['forecast'][0]['wind_speed'] | float(0)) }}
+          later_wind_dir: >-
+            {% from 'environment.jinja' import get_direction_8 %}
+            {{ get_direction_8(daily['weather.openweathermap']['forecast'][0]['wind_bearing'] | float(0)) }}
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🌤️ Weather Brief"
+          message: >-
+            {% set condition_words = {
+              'clear-night': 'clear', 'cloudy': 'cloudy', 'fog': 'foggy', 'hail': 'hail',
+              'lightning': 'thunderstorms', 'lightning-rainy': 'thunderstorms', 'partlycloudy': 'partly cloudy',
+              'pouring': 'heavy rain', 'rainy': 'rain', 'snowy': 'snow', 'snowy-rainy': 'sleet',
+              'sunny': 'sunny', 'windy': 'windy', 'windy-variant': 'windy', 'exceptional': 'unusual weather'
+            } %}
+            {% set later_condition = condition_words.get(today_condition, today_condition | replace('-', ' ')) %}
+            {# fog_conditions is inferred from dew point spread + wind + moisture, not observed directly,
+               and it's real-time only - there's no forecast for onset or when it would lift #}
+            {% set feel_clause = 'Feels ' ~ (heat_label | lower) ~ ' at ' ~ current_temp ~ '°C, humidity ' ~ (humidity_label | lower) ~ ' (' ~ humidity_value ~ ') now.' %}
+            {% if fog_on %}
+              {% set now_clause = 'Conditions suitable for fog right now (' ~ fog_probability ~ ' probability). ' ~ feel_clause %}
+            {% else %}
+              {% set now_clause = feel_clause %}
+            {% endif %}
+            {% if rain_soon %}
+              {% set onset_local = rain_onset | as_datetime | as_local %}
+              {% set later_clause = 'Rain expected around ' ~ onset_local.strftime('%H:%M') ~ ' (' ~ rain_today_mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
+            {% elif rain_today_mm > 0 %}
+              {% set later_clause = (later_condition | capitalize) ~ ' with some rain (' ~ rain_today_mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
+            {% else %}
+              {% set later_clause = (later_condition | capitalize) ~ ' later, high of ' ~ today_high ~ '°C.' %}
+            {% endif %}
+            {% set extras = [] %}
+            {% if wind_state not in ['calm', 'light_air', 'light_breeze'] %}
+              {% set extras = extras + [(wind_label | capitalize) ~ ' from the ' ~ wind_dir ~ ' (' ~ wind_speed ~ ') right now.'] %}
+            {% endif %}
+            {% if uv_state in ['high', 'very_high', 'extreme'] %}
+              {% set extras = extras + ['UV ' ~ (uv_label | lower) ~ '.'] %}
+            {% endif %}
+            {% if pressure_state in ['rising_rapidly', 'falling_rapidly'] %}
+              {% set extras = extras + ['Pressure ' ~ (pressure_label | lower) ~ '.'] %}
+            {% endif %}
+            {% if later_wind_state not in ['calm', 'light_air', 'light_breeze'] %}
+              {% set extras = extras + [(later_wind_label | capitalize) ~ ' from the ' ~ later_wind_dir ~ ' expected later.'] %}
+            {% endif %}
+            {{ ([now_clause, later_clause] + extras) | join(' ') }}
+          data:
+            url: homeassistant://navigate/lovelace-main/environment
+            group: "environment"

@@ -460,7 +460,9 @@ template:
           {% set geyser = states('sensor.geyser_power') | float(0) %}
           {% set outbuilding = states('sensor.outbuilding_power_meter_channel_1_power') | float(0) %}
           {% set large_appliances = states('sensor.home_power_large_appliances') | float(0) %}
-          {{ home - (geyser + outbuilding + large_appliances) }}
+          {# floored so a downstream energy integration of this sensor is guaranteed
+             non-decreasing, instead of patching negative noise out at the kWh layer #}
+          {{ max(home - (geyser + outbuilding + large_appliances), 0) }}
         availability: >-
           {{ has_value('sensor.home_power') and has_value('sensor.geyser_power')
              and has_value('sensor.outbuilding_power_meter_channel_1_power')
@@ -468,22 +470,6 @@ template:
         icon: mdi:dots-horizontal
         device_class: power
         unit_of_measurement: W
-      # derived directly from the daily meters below (rather than subtracting lifetime
-      # counters and re-metering the result) so a momentary `unavailable` blip on any one
-      # of the underlying power-meter sensors can't stall the subtraction for the rest of the day
-      - name: "Daily Home Energy Other"
-        unique_id: "357cd445-a592-445d-9af4-73e1fe73df2e"
-        default_entity_id: sensor.daily_home_energy_other
-        state: >-
-          {% set home = states('sensor.daily_home_energy_consumption') | float(0) %}
-          {% set geyser = states('sensor.daily_geyser_energy_consumption') | float(0) %}
-          {% set outbuilding = states('sensor.daily_outbuilding_energy_consumption') | float(0) %}
-          {% set large_appliances = states('sensor.daily_home_energy_large_appliances') | float(0) %}
-          {{ max(home - (geyser + outbuilding + large_appliances), 0) }}
-        icon: mdi:dots-horizontal
-        device_class: energy
-        state_class: total_increasing
-        unit_of_measurement: kWh
       # for the energy dashboard's now view
       - name: "Battery Power (Inverted)"
         unique_id: "05853cd9-18a8-42e2-9f93-476042cd1490"
@@ -765,6 +751,17 @@ sensor:
     unit_time: h
     method: left
     round: 3
+  # integrated instead of derived by live-subtracting the daily_* trackers: that
+  # approach raced against their independent midnight resets and produced garbage
+  # (a momentary spike above the whole house's daily total) right at the boundary
+  - platform: integration
+    unique_id: "d3008dc2-3151-42e2-8ef2-1f2922644982"
+    name: "Home Energy Other"
+    source: sensor.home_power_other
+    unit_prefix: k
+    unit_time: h
+    method: trapezoidal
+    round: 3
   # - platform: integration
   #   unique_id: "f1d3ef94-1d5c-4c6c-a7bb-7fa72b357dc5"
   #   name: "Inverter Energy"
@@ -923,6 +920,10 @@ utility_meter:
   daily_outbuilding_energy_consumption:
     unique_id: "d014080e-0035-4d38-bc07-b96905c892f6"
     source: sensor.outbuilding_power_meter_channel_1_energy
+    cycle: daily
+  daily_home_energy_other:
+    unique_id: "c6659185-20a2-4758-9629-16db8ddab4a2"
+    source: sensor.home_energy_other
     cycle: daily
 
 input_boolean:

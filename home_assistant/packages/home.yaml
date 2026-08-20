@@ -326,7 +326,7 @@ automation:
           - service: climate.turn_off
             entity_id: all
 
-  - alias: "Run Morning Routine At Wake Up Time"
+  - alias: "Run Morning Lights Routine At Wake Up Time"
     id: "5486f6f9-da52-4cf0-8a23-e54f40a80721"
     # don't reset this after a reload/restart, since we might've disabled this deliberately via the ui
     # initial_state: true
@@ -545,19 +545,6 @@ automation:
                     - light.foyer
                 data:
                   profile: normal_tp_link_rgb
-          - delay:
-              minutes: 5
-          - condition: template
-            value_template: >-
-              {% set entity_id = 'climate.main_bedroom_ac' %}
-              {% set current_temperature = states('sensor.main_bedroom_ht_temperature') | float(0) %}
-              {% set target_temperature = state_attr(entity_id, 'temperature') | float(0) %}
-              {{ is_state(entity_id, 'fan_only') or
-                 (is_state(entity_id, 'cool') and current_temperature <= target_temperature) or
-                 (is_state(entity_id, 'heat') and current_temperature >= target_temperature) }}
-          - service: climate.turn_off
-            target:
-              entity_id: climate.main_bedroom_ac
 
   # a safe, signal-independent fallback so the flag can't get stuck on – e.g. if we get up
   # without ever turning on a bedside lamp. by 08:00 we're up regardless of the reason we skipped.
@@ -681,15 +668,21 @@ automation:
   # both bedside lamps on is a reliable proxy for "we're up", independent of any wake-up
   # schedule – catches us getting up later than usual (skip_next_wake_up_time on, or a rough
   # night) when "Turn Off Morning AC" above already missed its window. deliberately ignores
-  # skip_next_wake_up_time, since this is direct evidence we're up regardless of the schedule
+  # skip_next_wake_up_time, since this is direct evidence we're up regardless of the schedule.
+  # this is the sole mechanism that turns off the AC at wake-up – "Run Morning Lights Routine
+  # At Wake Up Time" only handles lights, so the temperature-aware condition below lives here
   - alias: "Turn Off Morning AC When Both Up"
     id: "2d60eab0-fdc7-4a9f-96b2-d5b97133c222"
     trigger:
+      # for: gives the wake-up lights scene a moment to finish switching both lamps on before
+      # treating "both up" as settled, rather than acting on the instant they flick on
       - platform: state
         entity_id:
           - light.pieter_bedside
           - light.rouve_bedside
         to: "on"
+        for:
+          minutes: 5
     condition:
       - condition: time
         after: "06:00:00"
@@ -703,6 +696,14 @@ automation:
       - condition: state
         entity_id: climate.main_bedroom_ac
         state: "on"
+      - condition: template
+        value_template: >-
+          {% set entity_id = 'climate.main_bedroom_ac' %}
+          {% set current_temperature = states('sensor.main_bedroom_ht_temperature') | float(0) %}
+          {% set target_temperature = state_attr(entity_id, 'temperature') | float(0) %}
+          {{ is_state(entity_id, 'fan_only') or
+             (is_state(entity_id, 'cool') and current_temperature <= target_temperature) or
+             (is_state(entity_id, 'heat') and current_temperature >= target_temperature) }}
     action:
       - service: climate.turn_off
         target:

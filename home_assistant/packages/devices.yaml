@@ -470,9 +470,13 @@ automation:
     initial_state: true
     variables:
       # a battery must have read below this for at least min_low_minutes to count as a genuine low
-      # (as opposed to e.g. a Shelly BLU button's ~1-minute BLE misread-and-self-correct blip)
+      # (as opposed to e.g. a Shelly BLU button's ~1-minute BLE misread-and-self-correct blip).
+      # sensor.monitored_batteries only polls once a minute, so an observed "low" duration is
+      # quantised to whole minutes - a blip needs 2+ consecutive missed advertisements (2min+)
+      # to even read back as 2. keeping this at 3 requires 3 in a row, well past the ~1-minute
+      # self-correct blips actually seen.
       low_threshold: 85
-      min_low_minutes: 2
+      min_low_minutes: 3
     trigger:
       # reacts to the derived sensor rather than polling independently - same pattern as "Check For Flat
       # Batteries" below. battery_readings only changes when a monitored battery's level actually

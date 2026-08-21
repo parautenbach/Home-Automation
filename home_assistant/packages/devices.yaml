@@ -480,9 +480,9 @@ automation:
       low_threshold: 30
       min_low_minutes: 3
     trigger:
-      # reacts to the derived sensor rather than polling independently - same pattern as "Check For Flat
-      # Batteries" below. battery_readings only changes when a monitored battery's level actually
-      # changes, so this fires exactly once per real transition, no dedup/windowing needed
+      # battery_readings is one shared attribute covering every monitored battery, so this fires
+      # whenever ANY one of them gets a new reading - not just the one that actually changed. The
+      # repeat below must therefore filter itself down to whichever battery(ies) were just updated.
       - platform: state
         entity_id: sensor.monitored_batteries
         attribute: battery_readings
@@ -501,13 +501,27 @@ automation:
                 minutes_previously_low: >-
                   {{ (((current.since | as_datetime) - (previous_reading.since | as_datetime)).total_seconds() / 60)
                      if current and previous_reading else 0 }}
+                # without a genuine prior low reading there's no "recharge" to report - a battery
+                # that's simply always been at 100% (no history yet) should stay silent forever,
+                # not just until its next unrelated read.
+                # a real transition, once recorded, would otherwise also re-satisfy this condition
+                # forever afterwards, since current/previous_reading don't change again until this
+                # battery's own level next moves - and every OTHER battery's change re-fires this
+                # shared trigger in the meantime. comparing against trigger.to_state.last_updated
+                # (this specific run's own event) rather than now() matters: any window as wide as
+                # the 1-minute poll interval would let a battery that changed one poll ago (already
+                # notified) get caught again by the very next unrelated battery's trigger, since
+                # that next trigger is itself only ~60s later - well inside a loose window.
+                just_recorded: >-
+                  {{ current is not none and
+                     ((trigger.to_state.last_updated - (current.since | as_datetime)).total_seconds() | abs) < 5 }}
             - if:
                 - condition: template
                   value_template: >-
-                    {{ current is not none and current.level == 100 and
-                       (previous_reading is none or
-                        (previous_reading.level < low_threshold and
-                         minutes_previously_low >= min_low_minutes)) }}
+                    {{ just_recorded and current.level == 100 and
+                       previous_reading is not none and
+                       previous_reading.level < low_threshold and
+                       minutes_previously_low >= min_low_minutes }}
               then:
                 - service: notify.mobile_app_ceres
                   data:

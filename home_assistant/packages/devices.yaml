@@ -189,7 +189,7 @@ template:
           # reads it. self-referential via this.attributes so it survives restarts/reloads without a
           # separate helper entity.
           battery_readings: >-
-            {% set max_entries = 5 %}
+            {% set max_entries = 2 %}
             {% set previous = this.attributes.battery_readings | default({}) %}
             {% set ns = namespace(result={}) %}
             {% for b in states.sensor | selectattr('attributes.monitor', 'eq', True) | map(attribute='entity_id') | list %}
@@ -475,7 +475,10 @@ automation:
       # quantised to whole minutes - a blip needs 2+ consecutive missed advertisements (2min+)
       # to even read back as 2. keeping this at 3 requires 3 in a row, well past the ~1-minute
       # self-correct blips actually seen.
-      low_threshold: 85
+      # kept well below where H&Ts' ~10% temp drops (down to ~90%) settle, so those aren't
+      # mistaken for a genuine low - a real depletion or replacement is the only thing that
+      # should ever pull a battery this far down.
+      low_threshold: 30
       min_low_minutes: 3
     trigger:
       # reacts to the derived sensor rather than polling independently - same pattern as "Check For Flat

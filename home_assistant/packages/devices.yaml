@@ -196,11 +196,11 @@ template:
               {% set level = states(b) | int(-1) %}
               {% set prev_readings = previous.get(b, []) %}
               {% if level < 0 %}
-                {% do ns.result.update({b: prev_readings}) %}
+                {% set ns.result = ns.result | combine({b: prev_readings}) %}
               {% elif prev_readings and prev_readings[-1].level == level %}
-                {% do ns.result.update({b: prev_readings}) %}
+                {% set ns.result = ns.result | combine({b: prev_readings}) %}
               {% else %}
-                {% do ns.result.update({b: (prev_readings + [{'level': level, 'since': now().isoformat()}])[-max_entries:]}) %}
+                {% set ns.result = ns.result | combine({b: (prev_readings + [{'level': level, 'since': now().isoformat()}])[-max_entries:]}) %}
               {% endif %}
             {% endfor %}
             {{ ns.result }}

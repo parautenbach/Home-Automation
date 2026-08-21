@@ -1144,10 +1144,14 @@ automation:
             {% else %}
               {% set later_clause = (later_condition | capitalize) ~ ' later, high of ' ~ today_high ~ '°C.' %}
             {% endif %}
-            {% set extras = [] %}
-            {% if wind_state not in ['calm', 'light_air', 'light_breeze'] %}
-              {% set extras = extras + [(wind_label | capitalize) ~ ' from the ' ~ wind_dir ~ ' (' ~ wind_speed ~ ') right now.'] %}
+            {% if wind_state == 'calm' %}
+              {% set wind_now_clause = 'Calm right now.' %}
+            {% elif wind_dir %}
+              {% set wind_now_clause = (wind_label | capitalize) ~ ' from the ' ~ wind_dir ~ ' (' ~ wind_speed ~ ') right now.' %}
+            {% else %}
+              {% set wind_now_clause = (wind_label | capitalize) ~ ' right now (' ~ wind_speed ~ ').' %}
             {% endif %}
+            {% set extras = [wind_now_clause] %}
             {% if uv_state in ['high', 'very_high', 'extreme'] %}
               {% set extras = extras + ['UV ' ~ (uv_label | lower) ~ '.'] %}
             {% endif %}

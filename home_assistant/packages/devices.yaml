@@ -467,6 +467,11 @@ automation:
   - alias: "Notify When Monitored Battery Fully Charged"
     id: "e3433145-19b2-48bd-a364-5ca87db912e9"
     initial_state: true
+    # from_state/to_state diffing (below) needs every transition processed - mode: single (the
+    # default) would silently drop a trigger that arrives while a previous run is still busy (e.g.
+    # a notify() call in flight), permanently losing that battery's notification rather than just
+    # delaying it, since the next run's diff would no longer show the dropped change.
+    mode: queued
     variables:
       # a battery must have read below this for at least min_low_minutes to count as a genuine low
       # (as opposed to e.g. a Shelly BLU button's ~1-minute BLE misread-and-self-correct blip).
@@ -495,30 +500,28 @@ automation:
                 # battery_readings only gets a new entry when the level actually changes, so the last
                 # entry is the current (still-ongoing) reading and the one before it is whatever it read
                 # immediately beforehand
-                readings: "{{ (state_attr('sensor.monitored_batteries', 'battery_readings') | default({})).get(repeat.item, []) }}"
+                readings: "{{ (trigger.to_state.attributes.battery_readings | default({})).get(repeat.item, []) }}"
+                # the shared attribute changing doesn't mean THIS battery changed - 13 batteries share
+                # one dict, so any single one of them updating fires this trigger for all. from_state
+                # vs to_state gives an exact, timestamp-free answer to "did this battery's own reading
+                # list change in this specific trigger" rather than approximating it via when things
+                # happened.
+                previous_readings: >-
+                  {{ (trigger.from_state.attributes.battery_readings | default({})).get(repeat.item, [])
+                     if trigger.from_state else [] }}
                 current: "{{ readings[-1] if readings | count > 0 else None }}"
                 previous_reading: "{{ readings[-2] if readings | count > 1 else None }}"
                 minutes_previously_low: >-
                   {{ (((current.since | as_datetime) - (previous_reading.since | as_datetime)).total_seconds() / 60)
                      if current and previous_reading else 0 }}
-                # without a genuine prior low reading there's no "recharge" to report - a battery
-                # that's simply always been at 100% (no history yet) should stay silent forever,
-                # not just until its next unrelated read.
-                # a real transition, once recorded, would otherwise also re-satisfy this condition
-                # forever afterwards, since current/previous_reading don't change again until this
-                # battery's own level next moves - and every OTHER battery's change re-fires this
-                # shared trigger in the meantime. comparing against trigger.to_state.last_updated
-                # (this specific run's own event) rather than now() matters: any window as wide as
-                # the 1-minute poll interval would let a battery that changed one poll ago (already
-                # notified) get caught again by the very next unrelated battery's trigger, since
-                # that next trigger is itself only ~60s later - well inside a loose window.
-                just_recorded: >-
-                  {{ current is not none and
-                     ((trigger.to_state.last_updated - (current.since | as_datetime)).total_seconds() | abs) < 5 }}
             - if:
                 - condition: template
+                  # without a genuine prior low reading there's no "recharge" to report - a battery
+                  # that's simply always been at 100% (no history yet) stays silent, not just until
+                  # its next unrelated read.
                   value_template: >-
-                    {{ just_recorded and current.level == 100 and
+                    {{ readings != previous_readings and
+                       current is not none and current.level == 100 and
                        previous_reading is not none and
                        previous_reading.level < low_threshold and
                        minutes_previously_low >= min_low_minutes }}

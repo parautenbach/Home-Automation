@@ -1851,6 +1851,8 @@ automation:
     trigger:
       - platform: state
         entity_id: number.output_shutdown_capacity
+        not_to: unavailable
+        not_from: unavailable
     condition:
       # workaround for HA start-up
       - condition: template

@@ -20,3 +20,181 @@ custom-light-mode:
                 min-width: fit-content;
             }
         }
+  # Consolidates the input_datetime row mods that used to be duplicated per-card
+  # (irrigation.yaml, main.yaml). No domain guard needed: ha-time-input/ha-date-input
+  # simply don't exist in the DOM for non-input_datetime rows, so this is inert there.
+  # HA's time/date inputs moved from MDC (ha-textfield/.mdc-text-field) to a
+  # Web Awesome-based ha-input/wa-input structure - old card-mod snippets for
+  # these referencing ha-textfield are stale and silently no-op on this HA version.
+  # Both branches confirmed working via live DOM inspection (wake_up_time,
+  # vacation_start/end and others).
+  # Rows nested inside custom:fold-entity-row (baby.yaml, irrigation.yaml's
+  # irrigation_start_time) need a third branch below: fold-entity-row renders its
+  # own nested rows internally, so from row scope's perspective (:host =
+  # fold-entity-row itself) ha-time-input/ha-date-input aren't direct descendants -
+  # they're one more shadow-crossing down, inside each hui-input-datetime-entity-row
+  # fold-entity-row creates for its nested entities. Confirmed via live DOM
+  # inspection (baby.yaml's Times fold). A card-scope ($$) attempt at this was
+  # tried first and broke every card site-wide - reverted. This row-scope addition
+  # is purely additive to the existing two branches, so it carries no such risk.
+  # NOTE: not shared with the Slate dark theme (not in this repo) - port manually.
+  uix-row-yaml: |
+    ha-time-input $ ha-base-time-input $:
+      ".": |
+        .time-input-wrap {
+          height: 2.5em !important;
+          align-items: center !important;
+        }
+        .time-separator {
+          height: 2.5em !important;
+          min-height: 2.5em !important;
+          max-height: 2.5em !important;
+          overflow: hidden !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          line-height: normal !important;
+        }
+      ha-input $:
+        ".": |
+          :host {
+            height: 2.5em !important;
+            display: flex !important;
+            align-items: center !important;
+          }
+        wa-input $: |
+          :host {
+            height: 2.5em !important;
+            display: flex !important;
+            align-items: center !important;
+          }
+          .text-field {
+            height: 2.5em !important;
+            display: flex !important;
+            align-items: center !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+          }
+          .control {
+            align-self: center !important;
+            margin-top: 0 !important;
+          }
+          #input {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+          }
+          label.label {
+            display: none !important;
+          }
+    ha-date-input $:
+      ha-input $:
+        ".": |
+          :host {
+            height: 2.5em !important;
+            display: flex !important;
+            align-items: center !important;
+          }
+        wa-input $: |
+          :host {
+            height: 2.5em !important;
+            display: flex !important;
+            align-items: center !important;
+          }
+          .text-field {
+            height: 2.5em !important;
+            display: flex !important;
+            align-items: center !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+          }
+          .control {
+            align-self: center !important;
+            margin-top: 0 !important;
+          }
+          #input {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+          }
+          label.label {
+            display: none !important;
+          }
+    hui-input-datetime-entity-row $:
+      ha-time-input $ ha-base-time-input $:
+        ".": |
+          .time-input-wrap {
+            height: 2.5em !important;
+            align-items: center !important;
+          }
+          .time-separator {
+            height: 2.5em !important;
+            min-height: 2.5em !important;
+            max-height: 2.5em !important;
+            overflow: hidden !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            line-height: normal !important;
+          }
+        ha-input $:
+          ".": |
+            :host {
+              height: 2.5em !important;
+              display: flex !important;
+              align-items: center !important;
+            }
+          wa-input $: |
+            :host {
+              height: 2.5em !important;
+              display: flex !important;
+              align-items: center !important;
+            }
+            .text-field {
+              height: 2.5em !important;
+              display: flex !important;
+              align-items: center !important;
+              padding-top: 0 !important;
+              padding-bottom: 0 !important;
+            }
+            .control {
+              align-self: center !important;
+              margin-top: 0 !important;
+            }
+            #input {
+              padding-top: 0 !important;
+              padding-bottom: 0 !important;
+            }
+            label.label {
+              display: none !important;
+            }
+      ha-date-input $:
+        ha-input $:
+          ".": |
+            :host {
+              height: 2.5em !important;
+              display: flex !important;
+              align-items: center !important;
+            }
+          wa-input $: |
+            :host {
+              height: 2.5em !important;
+              display: flex !important;
+              align-items: center !important;
+            }
+            .text-field {
+              height: 2.5em !important;
+              display: flex !important;
+              align-items: center !important;
+              padding-top: 0 !important;
+              padding-bottom: 0 !important;
+            }
+            .control {
+              align-self: center !important;
+              margin-top: 0 !important;
+            }
+            #input {
+              padding-top: 0 !important;
+              padding-bottom: 0 !important;
+            }
+            label.label {
+              display: none !important;
+            }

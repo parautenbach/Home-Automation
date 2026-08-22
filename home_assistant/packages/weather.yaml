@@ -1091,8 +1091,18 @@ automation:
               'N': 'North', 'NE': 'Northeast', 'E': 'East', 'SE': 'Southeast',
               'S': 'South', 'SW': 'Southwest', 'W': 'West', 'NW': 'Northwest'
             } }}
+          # full phrases for use in sentences, keyed by beaufort tier - distinct from
+          # sensor.wind_condition_beaufort's 'label' attribute, which is a terse
+          # dashboard-tile display value (e.g. "Light", "Gale") not meant to stand alone in prose
+          wind_phrases: >-
+            {{ {
+              'calm': 'Calm', 'light_air': 'Light wind', 'light_breeze': 'Light breeze',
+              'gentle_breeze': 'Gentle breeze', 'moderate_breeze': 'Moderate breeze',
+              'fresh_breeze': 'Fresh breeze', 'strong_breeze': 'Strong breeze',
+              'near_gale': 'Near-gale wind', 'gale': 'Gale-force wind', 'strong_gale': 'Strong gale',
+              'storm': 'Storm-force wind', 'violent_storm': 'Violent storm', 'extreme_storm': 'Extreme storm'
+            } }}
           wind_state: "{{ states('sensor.wind_condition_beaufort') }}"
-          wind_label: "{{ state_attr('sensor.wind_condition_beaufort', 'label') }}"
           wind_speed: "{{ state_attr('sensor.wind_condition_beaufort', 'wind_speed_with_unit') }}"
           wind_dir: >-
             {% set abbr = state_attr('sensor.wind_condition_beaufort', 'compass_direction') %}
@@ -1110,9 +1120,6 @@ automation:
           later_wind_state: >-
             {% from 'environment.jinja' import beaufort_scale %}
             {{ beaufort_scale(daily['weather.openweathermap']['forecast'][0]['wind_speed'] | float(0)) }}
-          later_wind_label: >-
-            {% from 'environment.jinja' import beaufort_label %}
-            {{ beaufort_label(daily['weather.openweathermap']['forecast'][0]['wind_speed'] | float(0)) }}
           later_wind_dir: >-
             {% from 'environment.jinja' import get_direction_8 %}
             {% set abbr = get_direction_8(daily['weather.openweathermap']['forecast'][0]['wind_bearing'] | float(0)) %}
@@ -1147,9 +1154,9 @@ automation:
             {% if wind_state == 'calm' %}
               {% set wind_now_clause = 'Calm right now.' %}
             {% elif wind_dir %}
-              {% set wind_now_clause = (wind_label | capitalize) ~ ' from the ' ~ wind_dir ~ ' (' ~ wind_speed ~ ') right now.' %}
+              {% set wind_now_clause = wind_phrases[wind_state] ~ ' from the ' ~ wind_dir ~ ' (' ~ wind_speed ~ ') right now.' %}
             {% else %}
-              {% set wind_now_clause = (wind_label | capitalize) ~ ' right now (' ~ wind_speed ~ ').' %}
+              {% set wind_now_clause = wind_phrases[wind_state] ~ ' right now (' ~ wind_speed ~ ').' %}
             {% endif %}
             {% set extras = [wind_now_clause] %}
             {% if uv_state in ['high', 'very_high', 'extreme'] %}
@@ -1159,7 +1166,7 @@ automation:
               {% set extras = extras + ['Pressure ' ~ (pressure_label | lower) ~ '.'] %}
             {% endif %}
             {% if later_wind_state not in ['calm', 'light_air', 'light_breeze'] %}
-              {% set extras = extras + [(later_wind_label | capitalize) ~ ' from the ' ~ later_wind_dir ~ ' expected later.'] %}
+              {% set extras = extras + [wind_phrases[later_wind_state] ~ ' from the ' ~ later_wind_dir ~ ' expected later.'] %}
             {% endif %}
             {{ ([now_clause, later_clause] + extras) | join(' ') }}
           data:

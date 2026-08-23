@@ -717,34 +717,47 @@ cards:
             entity: sensor.sydney
       - type: entities
         title: Routine
+        icon: mdi:cog
+        uix:
+          style: |
+            .icon {
+              color: var(--state-icon-color);
+            }
         show_header_toggle: false
         entities:
-          - entity: input_boolean.disable_auto_on_bedlamps
-            name: Disable Daytime Auto On Bedlamps
-          - entity: automation.run_morning_lights_routine_at_wake_up_time
-            name: Automatic Wake-up Lights
-          - entity: input_boolean.everyday_routine
-            name: Everyday Routine
-          - entity: input_datetime.wake_up_time
-            name: Wake-up Time
-          - entity: input_boolean.skip_next_wake_up_time
-            name: Skip Next
-          - entity: input_datetime.vacation_start
-            name: Vacation Start
-          - entity: input_datetime.vacation_end
-            name: Vacation End
-          - entity: binary_sensor.workday
-            name: Workday Today
-          - entity: binary_sensor.workday_tomorrow
-            name: Workday Tomorrow
-          - entity: input_boolean.trash_reminder
-            name: Trash Reminder
-          - entity: input_datetime.workday_alarm_arm_reminder
-            name: Workday Alarm Arm Reminder
-          - entity: input_datetime.non_workday_alarm_arm_reminder
-            name: Non-workday Alarm Arm Reminder
-          - entity: input_datetime.go_home_reminder
-            name: Go Home Reminder
+          - type: custom:fold-entity-row
+            head:
+              type: section
+            entities:
+              - entity: input_boolean.disable_auto_on_bedlamps
+                name: Disable Daytime Auto On Bedlamps
+              - entity: automation.run_morning_lights_routine_at_wake_up_time
+                name: Automatic Wake-up Lights
+              - entity: input_boolean.everyday_routine
+                name: Everyday Routine
+              - entity: input_datetime.wake_up_time
+                name: Wake-up Time
+              - entity: input_boolean.skip_next_wake_up_time
+                name: Skip Next
+              - entity: input_datetime.lights_out_time
+                name: "Lights Out Time"
+                icon: mdi:lightbulb-off-outline
+              - entity: input_datetime.vacation_start
+                name: Vacation Start
+              - entity: input_datetime.vacation_end
+                name: Vacation End
+              - entity: binary_sensor.workday
+                name: Workday Today
+              - entity: binary_sensor.workday_tomorrow
+                name: Workday Tomorrow
+              - entity: input_boolean.trash_reminder
+                name: Trash Reminder
+              - entity: input_datetime.workday_alarm_arm_reminder
+                name: Workday Alarm Arm Reminder
+              - entity: input_datetime.non_workday_alarm_arm_reminder
+                name: Non-workday Alarm Arm Reminder
+              - entity: input_datetime.go_home_reminder
+                name: Go Home Reminder
       - type: custom:atomic-calendar-revive
         name: Upcoming Events
         showLocation: false

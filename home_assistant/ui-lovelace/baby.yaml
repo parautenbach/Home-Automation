@@ -453,6 +453,3 @@ cards:
           - entity: input_datetime.baby_wake_up_time
             name: "Morning Wake Time"
             icon: mdi:alarm
-          - entity: input_datetime.lights_out_time
-            name: "Lights Out Time"
-            icon: mdi:lightbulb-off-outline

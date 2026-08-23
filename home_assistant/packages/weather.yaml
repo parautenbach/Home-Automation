@@ -1122,7 +1122,7 @@ automation:
             {{ beaufort_scale(daily['weather.openweathermap']['forecast'][0]['wind_speed'] | float(0)) }}
           later_wind_dir: >-
             {% from 'environment.jinja' import get_direction_8 %}
-            {% set abbr = get_direction_8(daily['weather.openweathermap']['forecast'][0]['wind_bearing'] | float(0)) %}
+            {% set abbr = get_direction_8(daily['weather.openweathermap']['forecast'][0]['wind_bearing'] | float(0)) | trim %}
             {{ compass_names.get(abbr, abbr) }}
       - service: notify.mobile_app_ceres
         data:

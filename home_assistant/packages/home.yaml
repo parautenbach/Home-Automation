@@ -623,7 +623,7 @@ automation:
     # initial_state: true
     trigger:
       - platform: time
-        at: "06:45:00"
+        at: input_datetime.baby_wake_up_time
     condition:
       - condition: state
         entity_id: light.bedroom_bedlamp

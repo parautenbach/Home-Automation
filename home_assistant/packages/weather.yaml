@@ -1103,7 +1103,7 @@ automation:
               'storm': 'Storm-force wind', 'violent_storm': 'Violent storm', 'extreme_storm': 'Extreme storm'
             } }}
           wind_state: "{{ states('sensor.wind_condition_beaufort') }}"
-          wind_speed: "{{ state_attr('sensor.wind_condition_beaufort', 'wind_speed_with_unit') }}"
+          wind_speed: "{{ states('sensor.wind_speed_filtered_km_h') | float(0) | round(0) }} km/h"
           wind_dir: >-
             {% set abbr = state_attr('sensor.wind_condition_beaufort', 'compass_direction') %}
             {{ compass_names.get(abbr, abbr) }}
@@ -1120,6 +1120,8 @@ automation:
           later_wind_state: >-
             {% from 'environment.jinja' import beaufort_scale %}
             {{ beaufort_scale(daily['weather.openweathermap']['forecast'][0]['wind_speed'] | float(0)) }}
+          later_wind_speed: >-
+            {{ daily['weather.openweathermap']['forecast'][0]['wind_speed'] | float(0) | round(0) }} km/h
           later_wind_dir: >-
             {% from 'environment.jinja' import get_direction_8 %}
             {% set abbr = get_direction_8(daily['weather.openweathermap']['forecast'][0]['wind_bearing'] | float(0)) | trim %}
@@ -1166,7 +1168,7 @@ automation:
               {% set extras = extras + ['Pressure ' ~ (pressure_label | lower) ~ '.'] %}
             {% endif %}
             {% if later_wind_state not in ['calm', 'light_air', 'light_breeze'] %}
-              {% set extras = extras + [wind_phrases[later_wind_state] ~ ' from the ' ~ later_wind_dir ~ ' expected later.'] %}
+              {% set extras = extras + [wind_phrases[later_wind_state] ~ ' (' ~ later_wind_speed ~ ') from the ' ~ later_wind_dir ~ ' expected later.'] %}
             {% endif %}
             {{ ([now_clause, later_clause] + extras) | join(' ') }}
           data:

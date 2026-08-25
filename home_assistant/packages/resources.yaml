@@ -871,7 +871,7 @@ group:
   automations_to_save_energy:
     name: Automations To Save Energy
     entities:
-      - automation.lights_on_upon_low_light
+      - automation.normal_lights_on_while_home
       - automation.open_the_gate_when_arriving_home
       - automation.open_garage_door_when_arriving
 

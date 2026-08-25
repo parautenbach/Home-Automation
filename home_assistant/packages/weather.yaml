@@ -777,15 +777,16 @@ template:
           spread_entity: sensor.dew_point_spread
           wind_entity: sensor.wind_speed_filtered_km_h
         # spread and wind approach 0 as fog becomes more likely; each score plateaus at 1 below a floor
-        # (0.5°C spread is within sensor noise of saturation, and 3 km/h still supports radiation fog)
-        # so that ideal-but-nonzero inputs aren't penalised, then falls to 0 by 2.5°C spread / 12 km/h wind
+        # (0.1°C spread is true saturation, and 3 km/h still supports radiation fog), then falls to 0 by
+        # 1.5°C spread / 12 km/h wind; dewy-but-unsaturated nights sit at 0.3-0.6°C spread, so the spread
+        # ramp must keep its gradient in that range to separate dew from fog
         state: >-
           {% set spread = states(spread_entity) | float(none) %}
           {% set wind = states(wind_entity) | float(none) %}
           {% if spread is none or wind is none %}
             {{ none }}
           {% else %}
-            {% set spread_score = [[((2.5 - spread) / 2.0), 0] | max, 1] | min %}
+            {% set spread_score = [[((1.5 - spread) / 1.4), 0] | max, 1] | min %}
             {% set wind_score = [[((12 - wind) / 9), 0] | max, 1] | min %}
             {{ (spread_score * wind_score * 100) | round(0) }}
           {% endif %}
@@ -801,8 +802,8 @@ template:
           probability_entity: sensor.fog_probability
           rain_entity: binary_sensor.raining
           moisture_entity: binary_sensor.weather_station_moisture
-          # the score plateaus make high values common on merely dewy calm nights (~85% observed),
-          # so the bar sits above that band; genuine fog conditions score 88-100 in the same data
+          # dewy-but-unsaturated calm nights score in the 70s with only brief spikes above 85
+          # (which delay_on absorbs); sustained saturation (spread <= 0.2°C) scores 93-100
           probability_threshold: 85
         # moisture alone doesn't mean fog (it also confirms dew), but real fog should always wet the sensor,
         # so require it as a confirmatory check on top of the probability estimate rather than as a trigger on its own

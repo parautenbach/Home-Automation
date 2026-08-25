@@ -118,7 +118,24 @@ cards:
               - armed_away
               - disarmed
         uix: *alarm_mods
-      # todo: panic button (mdi:alert-outline/mdi:shield-alert-outline)
+      # hold (not tap) plus a confirmation dialog to prevent accidental panics;
+      # the button presses the panel's user panic via the olarm integration
+      - type: tile
+        entity: button.home_user_panic
+        name: "Panic"
+        icon: mdi:shield-alert-outline
+        color: red
+        tap_action:
+          action: none
+        icon_tap_action:
+          action: none
+        hold_action:
+          action: call-service
+          service: button.press
+          target:
+            entity_id: button.home_user_panic
+          confirmation:
+            text: "This will raise a panic alarm and the security company will respond. Are you sure?"
       - type: history-graph
         hours_to_show: 24
         entities:

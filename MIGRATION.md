@@ -116,6 +116,9 @@ waiting avoids any ambiguity while both systems run side by side.
 - [ ] HomeKit: both alarms still work in the Home app; night mode no longer offered
       (then delete the "Set To Stay If Night Mode Activated" automation).
 - [ ] Presence flows (ask to arm when leaving, ask to disarm when arriving) fire.
+- [ ] Panic button: hold shows the confirmation dialog and tap does nothing. Only
+      confirm the dialog if the panic test is coordinated with the security company —
+      confirming raises a real panic.
 
 ### After the soak period (a week or so of stable running)
 
@@ -128,10 +131,11 @@ waiting avoids any ambiguity while both systems run side by side.
       into the package header.
 - [ ] Merge `olarm-migration` into `master`; `git worktree remove ../Home-Automation-olarm`.
 
-## Still to do on this branch (phase 3)
+## Still to do on this branch
 
-- UI: panic button — hold action + confirmation dialog pressing `button.home_user_panic`.
 - Done (phase 2): the zone sensors shown individually on the security view, grouped
   into a Door Zones and a Motion Zones glance card (state-coloured icons).
+- Done (phase 3): panic button on the security and main views — hold plus a
+  confirmation dialog pressing `button.home_user_panic` (tap deliberately disabled).
 - Consider: `binary_sensor.home_ac_power` (panel mains) → `devices.yaml` monitoring.
 - Consider: a bypass panel (the 14 `switch.alarm_bypass_*` entities) on the security view.

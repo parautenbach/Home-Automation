@@ -277,7 +277,7 @@ cards:
                 state_map:
                   - value: "on"
                     label: detected
-              - entity: binary_sensor.home_test_zone_001_front_door
+              - entity: binary_sensor.home_zone_001_front_door
                 label: Front door
                 hidden_state:
                   - unknown
@@ -287,7 +287,7 @@ cards:
                     label: opened
                   - value: "off"
                     label: closed
-              - entity: binary_sensor.home_test_zone_006_kitchen
+              - entity: binary_sensor.home_zone_007_kitchen_door
                 label: Kitchen door
                 hidden_state:
                   - unknown
@@ -297,7 +297,7 @@ cards:
                     label: opened
                   - value: "off"
                     label: closed
-              - entity: binary_sensor.home_test_zone_019_music_room_door
+              - entity: binary_sensor.home_zone_019_music_room_door
                 label: Music room door
                 hidden_state:
                   - unknown
@@ -307,7 +307,7 @@ cards:
                     label: opened
                   - value: "off"
                     label: closed
-              - entity: binary_sensor.home_test_zone_020_braai_room_door
+              - entity: binary_sensor.home_zone_020_braai_room_door
                 label: Braai room door
                 hidden_state:
                   - unknown

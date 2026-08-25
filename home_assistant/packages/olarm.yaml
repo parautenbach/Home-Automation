@@ -1,165 +1,92 @@
-# features:
-#  * real-time alarm state updates and triggers
-#  * basic alarm management: arming/disarming (advanced management via the olarm app)
+# olarm alarm panel (official olarm integration: https://github.com/olarmtech/hacs-olarm)
+#
+# the integration provides (via mqtt, real-time):
+#  * one alarm_control_panel per area/partition (no code required: code_arm_required is false)
+#  * per-zone state sensors and bypass state sensors
+#  * per-zone bypass/unbypass buttons and a user panic button
+#  * panel attributes: zone_in_alarm, zone_in_alarm_time, changed_by
+#  * an ac power sensor for the panel's mains supply
+#
+# this package builds on top of it:
 #  * presence aware: ask to arm/disarm when leaving/arriving
-#  * extensible with more custom automations and integration of one's own sensors
-#  * area/partition aware, but you'll need to customise it to your needs
+#  * arm reminders and state-change notifications
+#  * template switches wrapping the integration's bypass buttons and sensors
+#    (bypass is a state, not an event, so a switch is the honest ui for it)
+#  * device class and friendly name customisations for the zone sensors
 #
-# unsupported:
-#  * zone monitoring (no real-time updates via webhooks or mqtt)
-#  * bypassing zones (not implemented; not supported by the alarm integration)
-#  * alarm action history (not implemented; not supported by the alarm integration)
-#  * how or who armed/disarmed the alarm (complex)
+# expected entity ids (after renaming the device from "Home Test" to "Home" and
+# manually renaming the two area panels – see MIGRATION.md in the repo root):
+#  * alarm_control_panel.home, alarm_control_panel.flatlet
+#  * binary_sensor.home_zone_<nnn>_<name> (zone state)
+#  * binary_sensor.home_zone_<nnn>_bypass_<name> (bypass state)
+#  * button.home_zone_<nnn>_bypass_<name>, button.home_zone_<nnn>_unbypass_<name>
+#  * button.home_user_panic
+# note: zones 19 and 20 (recently added wireless zones) were unnamed in olarm when
+# the integration first created their entities, so some of their entity ids lack the
+# name suffix (ids are generated once from the name and never regenerated). those ids
+# are normalised by hand in the entity registry during the migration (see MIGRATION.md);
+# this package references the normalised ids.
 #
-# future:
-#  * distinct alerts (notifications) for breach, panic, fire and emergency (currently no distinction)
-#  * hoping for an mqtt integration with additional features (multiple requests made; apparently wip)
-#  * include zone that triggered the alarm
-#  * zone bypass notifications
-#
-# known issues & bugs:
-#  * arming when a zone is active (open) will not fail when calling the api (issue reported)
-#    feedback from olarm: by default, it tries to force arm, but it will only work if your alarm system is set to allow it
-#  * there's no real-time updates for zones bypassed or reset via the webhook
+# partitions/areas (zones belong to the device, not a partition, so the
+# partition membership map lives in custom_templates/security.jinja):
+#  * area 1 (home): all zones except 018
+#  * area 2 (flatlet): zone 018
+#  * ignored: 002, 014, 015, 016, 021–024 (spares) and 011, 012 (remotes)
 #
 # notes:
 #  * you cannot bypass a zone after a partition has been armed
-#
-# instructions:
-#
-# visit https://user.olarm.com/#/api to get your access key and set the following up:
-#  * webhook url: this must be the ful external url to access your home assistant instance concatenated
-#    with a webhook id
-#  * home assistant cannot accept the additional secret set on olarm's side. this weakens the overall
-#    security, unfortunately, since webhook ids aren't secure in itself (security through obscurity).
-#
-# to get your device id, run this from a terminal:
-#  curl -X GET https://apiv4.olarm.co/api/v4/devices?accessToken=<ACCESS_KEY> | jq
-#
-# in secrets.yaml, define the following:
-#  * olarm_webhook_id: "<WEBHOOK_ID>"  # only the id; not the full url as above
-#  * olarm_bearer_token: "Bearer <ACCESS_KEY>"  # be sure to include the api_ prefix – do not remove this
-#  * olarm_device_endpoint: "https://apiv4.olarm.co/api/v4/devices/<DEVICE_ID>"
-#  * olarm_actions_endpoint: "https://apiv4.olarm.co/api/v4/devices/<DEVICE_ID>/actions"
-#  * alarm_code: "<CODE>"
-#
-# place this file in your home assistant's packages directory (create it if it doesn't exist) and restart home assistant.
-#
-# for debugging of the olarm api, see the official olarm docs: https://user.olarm.com/#/api/documentation.
-#
-# references:
-#  * https://community.home-assistant.io/t/olarm-integration/384560/28
-#  * https://community.home-assistant.io/t/olarm-integration/384560/52
-#  * https://github.com/rainepretorius/olarm-ha-integration
-#  * https://github.com/rainepretorius/olarm-ha-integration/discussions/85
+#  * force-arm behaviour is inherited knowledge from the old rest api (olarm: it force-arms
+#    only if the alarm system is configured to allow it). how a *rejected* arm command
+#    surfaces through this integration is unverified – assumed to show as no state change,
+#    since state is mirrored from the panel. to verify during the soak (see MIGRATION.md).
+#  * real-time state flows through olarm's mqtt connection; the webhook automation at
+#    the bottom is a temporary, independent safety net during the migration soak period
 
-# https://www.home-assistant.io/integrations/alarm_control_panel/
-# https://www.home-assistant.io/integrations/manual/
-# https://www.home-assistant.io/integrations/alarm_control_panel.template/
-# triggering the alarm:
-#   * https://community.home-assistant.io/t/solved-alarm-control-panel-alarm-trigger-service-doesnt-trigger-the-alarm/72108
-# might switch to this once we can properly monitor zones:
-#   * https://github.com/nielsfaber/alarmo
-alarm_control_panel:
-  - platform: manual
-    name: "Home"
-    code: !secret alarm_code
-    code_arm_required: true
-    arming_time: 0
-    delay_time: 0
-    trigger_time: 900
-    disarm_after_trigger: false
-    disarmed:
-      trigger_time: 900
-    armed_home:
-      arming_time: 0
-      delay_time: 0
-      trigger_time: 900
-    armed_away:
-      arming_time: 0
-      delay_time: 0
-      trigger_time: 900
-    # https://github.com/home-assistant/core/issues/111926
-    # https://github.com/home-assistant/core/pull/119122
-    # https://github.com/home-assistant/home-assistant.io/pull/33148/files
-    arming_states:
-      - armed_away
-      - armed_home
-  - platform: manual
-    name: "Flatlet"
-    code: !secret alarm_code
-    code_arm_required: true
-    arming_time: 0
-    delay_time: 0
-    trigger_time: 900
-    disarm_after_trigger: false
-    disarmed:
-      trigger_time: 900
-    armed_away:
-      arming_time: 0
-      delay_time: 0
-      trigger_time: 900
-    arming_states:
-      - armed_away
-      # armed_home (stay) doesn't make sense for this panel, but not having this causes a HomeKit error upon startup:
-      # ERROR (MainThread) [pyhap.characteristic] SecuritySystemCurrentState: value=0 is an invalid value.
-      # ERROR (MainThread) [pyhap.characteristic] SecuritySystemTargetState: value=0 is an invalid value.
-
-input_boolean:
-  alarm_zone_1_bypass:
-    name: Front Door Bypass
-    icon: mdi:door
-  alarm_zone_2_bypass:
-    name: Zone 2 Bypass
-    icon: mdi:cancel
-  alarm_zone_3_bypass:
-    name: Foyer Bypass
-    icon: mdi:coat-rack
-  alarm_zone_4_bypass:
-    name: Living Area Bypass
-    icon: mdi:sofa-outline
-  alarm_zone_5_bypass:
-    name: Braai Room Bypass
-    icon: mdi:gas-burner  # fireplace/radiator/grill-outline
-  alarm_zone_6_bypass:
-    name: Kitchen Bypass
-    icon: mdi:countertop-outline
-  alarm_zone_7_bypass:
-    name: Kitchen Door Bypass
-    icon: mdi:door
-  alarm_zone_8_bypass:
-    name: Julia's Room Bypass
-    icon: mdi:teddy-bear
-  alarm_zone_9_bypass:
-    name: Guest Room Bypass
-    icon: mdi:bed-king-outline
-  alarm_zone_10_bypass:
-    name: Main Bedroom Bypass
-    icon: mdi:bed-king-outline
-  alarm_zone_11_bypass:
-    name: Partition 1 Remotes Bypass
-    icon: mdi:remote
-  alarm_zone_12_bypass:
-    name: Partition 2 Remotes Bypass
-    icon: mdi:remote
-  alarm_zone_13_bypass:
-    name: Backyard Bypass
-    icon: mdi:grass  # tree-outline
-  alarm_zone_14_bypass:
-    name: Zone 14 Bypass
-    icon: mdi:cancel
-  alarm_zone_15_bypass:
-    name: Zone 15 Bypass
-    icon: mdi:cancel
-  alarm_zone_16_bypass:
-    name: Zone 16 Bypass
-    icon: mdi:cancel
-  alarm_zone_17_bypass:
-    name: Garage Bypass
-    icon: mdi:garage-variant
-  alarm_zone_18_bypass:
-    name: Flatlet Bypass
-    icon: mdi:bed-outline
+homeassistant:
+  customize:
+    # the integration only sets device_class on the door contacts (1, 7, 19, 20);
+    # the motion zones get theirs here so the ui and the 'doors' scope in
+    # security.jinja can filter on device class instead of name matching.
+    # friendly names are cleaned up ("Zone 001 - Front Door" -> "Front Door") for
+    # notifications and auto-populated cards.
+    binary_sensor.home_zone_001_front_door:
+      friendly_name: Front Door
+    binary_sensor.home_zone_003_foyer:
+      friendly_name: Foyer
+      device_class: motion
+    binary_sensor.home_zone_004_living_area:
+      friendly_name: Living Area
+      device_class: motion
+    binary_sensor.home_zone_005_braai_room:
+      friendly_name: Braai Room
+      device_class: motion
+    binary_sensor.home_zone_006_kitchen:
+      friendly_name: Kitchen
+      device_class: motion
+    binary_sensor.home_zone_007_kitchen_door:
+      friendly_name: Kitchen Door
+    binary_sensor.home_zone_008_bedroom:
+      friendly_name: Bedroom
+      device_class: motion
+    binary_sensor.home_zone_009_guest_room:
+      friendly_name: Guest Room
+      device_class: motion
+    binary_sensor.home_zone_010_main_bedroom:
+      friendly_name: Main Bedroom
+      device_class: motion
+    binary_sensor.home_zone_013_backyard:
+      friendly_name: Backyard
+      device_class: motion
+    binary_sensor.home_zone_017_garage:
+      friendly_name: Garage
+      device_class: motion
+    binary_sensor.home_zone_018_flatlet:
+      friendly_name: Flatlet
+      device_class: motion
+    binary_sensor.home_zone_019_music_room_door:
+      friendly_name: Music Room Door
+    binary_sensor.home_zone_020_braai_room_door:
+      friendly_name: Braai Room Door
 
 input_datetime:
   workday_alarm_arm_reminder:
@@ -169,231 +96,185 @@ input_datetime:
     has_time: true
     icon: mdi:calendar-weekend
 
-# https://www.home-assistant.io/integrations/rest_command/
-# https://user.olarm.co/#/api
-# https://user.olarm.co/#/api/documentation
-rest_command:
-  olarm_get_state:
-    method: "GET"
-    headers:
-      Authorization: !secret olarm_bearer_token
-    url: !secret olarm_device_endpoint
-    content_type: "application/json"
-  olarm_disarmed:
-    method: "POST"
-    headers:
-      Authorization: !secret olarm_bearer_token
-    url: !secret olarm_actions_endpoint
-    # areas are 1-indexed (i.e. starts at 1 not 0)
-    payload: >-
-      {
-        "actionCmd": "area-disarm",
-        "actionNum": {{ area }}
-      }
-    content_type: "application/json"
-  olarm_armed_home:
-    method: "POST"
-    headers:
-      Authorization: !secret olarm_bearer_token
-    url: !secret olarm_actions_endpoint
-    payload: >-
-      {
-        "actionCmd": "area-stay",
-        "actionNum": {{ area }}
-      }
-    content_type: "application/json"
-  olarm_armed_away:
-    method: "POST"
-    headers:
-      Authorization: !secret olarm_bearer_token
-    url: !secret olarm_actions_endpoint
-    payload: >-
-      {
-        "actionCmd": "area-arm",
-        "actionNum": {{ area }}
-      }
-    content_type: "application/json"
-  olarm_zone_bypassed:
-    method: "POST"
-    headers:
-      Authorization: !secret olarm_bearer_token
-    url: !secret olarm_actions_endpoint
-    payload: >-
-      {
-        "actionCmd": "zone-bypass",
-        "actionNum": {{ zone }}
-      }
-    content_type: "application/json"
-  olarm_zone_reset:
-    method: "POST"
-    headers:
-      Authorization: !secret olarm_bearer_token
-    url: !secret olarm_actions_endpoint
-    payload: >-
-      {
-        "actionCmd": "zone-unbypass",
-        "actionNum": {{ zone }}
-      }
+# bypass is a state you set and clear, not an event, so each zone's pair of
+# bypass/unbypass buttons is wrapped in a template switch. the state comes from
+# the integration's bypass sensor, so the switch also reflects bypasses made
+# from the keypad or the olarm app. if the panel refuses a bypass (e.g. while
+# armed), the switch simply snaps back.
+# spares (2, 14–16, 21–24) and remotes (11, 12) are deliberately excluded.
+switch:
+  - platform: template
+    switches:
+      alarm_bypass_front_door:
+        friendly_name: "Front Door Bypass"
+        icon_template: mdi:door
+        value_template: "{{ is_state('binary_sensor.home_zone_001_bypass_front_door', 'on') }}"
+        turn_on:
+          service: button.press
+          target:
+            entity_id: button.home_zone_001_bypass_front_door
+        turn_off:
+          service: button.press
+          target:
+            entity_id: button.home_zone_001_unbypass_front_door
+      alarm_bypass_foyer:
+        friendly_name: "Foyer Bypass"
+        icon_template: mdi:coat-rack
+        value_template: "{{ is_state('binary_sensor.home_zone_003_bypass_foyer', 'on') }}"
+        turn_on:
+          service: button.press
+          target:
+            entity_id: button.home_zone_003_bypass_foyer
+        turn_off:
+          service: button.press
+          target:
+            entity_id: button.home_zone_003_unbypass_foyer
+      alarm_bypass_living_area:
+        friendly_name: "Living Area Bypass"
+        icon_template: mdi:sofa-outline
+        value_template: "{{ is_state('binary_sensor.home_zone_004_bypass_living_area', 'on') }}"
+        turn_on:
+          service: button.press
+          target:
+            entity_id: button.home_zone_004_bypass_living_area
+        turn_off:
+          service: button.press
+          target:
+            entity_id: button.home_zone_004_unbypass_living_area
+      alarm_bypass_braai_room:
+        friendly_name: "Braai Room Bypass"
+        icon_template: mdi:gas-burner
+        value_template: "{{ is_state('binary_sensor.home_zone_005_bypass_braai_room', 'on') }}"
+        turn_on:
+          service: button.press
+          target:
+            entity_id: button.home_zone_005_bypass_braai_room
+        turn_off:
+          service: button.press
+          target:
+            entity_id: button.home_zone_005_unbypass_braai_room
+      alarm_bypass_kitchen:
+        friendly_name: "Kitchen Bypass"
+        icon_template: mdi:countertop-outline
+        value_template: "{{ is_state('binary_sensor.home_zone_006_bypass_kitchen', 'on') }}"
+        turn_on:
+          service: button.press
+          target:
+            entity_id: button.home_zone_006_bypass_kitchen
+        turn_off:
+          service: button.press
+          target:
+            entity_id: button.home_zone_006_unbypass_kitchen
+      alarm_bypass_kitchen_door:
+        friendly_name: "Kitchen Door Bypass"
+        icon_template: mdi:door
+        value_template: "{{ is_state('binary_sensor.home_zone_007_bypass_kitchen_door', 'on') }}"
+        turn_on:
+          service: button.press
+          target:
+            entity_id: button.home_zone_007_bypass_kitchen_door
+        turn_off:
+          service: button.press
+          target:
+            entity_id: button.home_zone_007_unbypass_kitchen_door
+      alarm_bypass_bedroom:
+        friendly_name: "Bedroom Bypass"
+        icon_template: mdi:bed-single-outline
+        value_template: "{{ is_state('binary_sensor.home_zone_008_bypass_bedroom', 'on') }}"
+        turn_on:
+          service: button.press
+          target:
+            entity_id: button.home_zone_008_bypass_bedroom
+        turn_off:
+          service: button.press
+          target:
+            entity_id: button.home_zone_008_unbypass_bedroom
+      alarm_bypass_guest_room:
+        friendly_name: "Guest Room Bypass"
+        icon_template: mdi:bed-king-outline
+        value_template: "{{ is_state('binary_sensor.home_zone_009_bypass_guest_room', 'on') }}"
+        turn_on:
+          service: button.press
+          target:
+            entity_id: button.home_zone_009_bypass_guest_room
+        turn_off:
+          service: button.press
+          target:
+            entity_id: button.home_zone_009_unbypass_guest_room
+      alarm_bypass_main_bedroom:
+        friendly_name: "Main Bedroom Bypass"
+        icon_template: mdi:bed-king-outline
+        value_template: "{{ is_state('binary_sensor.home_zone_010_bypass_main_bedroom', 'on') }}"
+        turn_on:
+          service: button.press
+          target:
+            entity_id: button.home_zone_010_bypass_main_bedroom
+        turn_off:
+          service: button.press
+          target:
+            entity_id: button.home_zone_010_unbypass_main_bedroom
+      alarm_bypass_backyard:
+        friendly_name: "Backyard Bypass"
+        icon_template: mdi:grass
+        value_template: "{{ is_state('binary_sensor.home_zone_013_bypass_backyard', 'on') }}"
+        turn_on:
+          service: button.press
+          target:
+            entity_id: button.home_zone_013_bypass_backyard
+        turn_off:
+          service: button.press
+          target:
+            entity_id: button.home_zone_013_unbypass_backyard
+      alarm_bypass_garage:
+        friendly_name: "Garage Bypass"
+        icon_template: mdi:garage-variant
+        value_template: "{{ is_state('binary_sensor.home_zone_017_bypass_garage', 'on') }}"
+        turn_on:
+          service: button.press
+          target:
+            entity_id: button.home_zone_017_bypass_garage
+        turn_off:
+          service: button.press
+          target:
+            entity_id: button.home_zone_017_unbypass_garage
+      alarm_bypass_flatlet:
+        friendly_name: "Flatlet Bypass"
+        icon_template: mdi:bed-outline
+        value_template: "{{ is_state('binary_sensor.home_zone_018_bypass_flatlet', 'on') }}"
+        turn_on:
+          service: button.press
+          target:
+            entity_id: button.home_zone_018_bypass_flatlet
+        turn_off:
+          service: button.press
+          target:
+            entity_id: button.home_zone_018_unbypass_flatlet
+      alarm_bypass_music_room_door:
+        friendly_name: "Music Room Door Bypass"
+        icon_template: mdi:door
+        value_template: "{{ is_state('binary_sensor.home_zone_019_bypass_music_room_door', 'on') }}"
+        turn_on:
+          service: button.press
+          target:
+            entity_id: button.home_zone_019_bypass_music_room_door
+        turn_off:
+          service: button.press
+          target:
+            entity_id: button.home_zone_019_unbypass_music_room_door
+      alarm_bypass_braai_room_door:
+        friendly_name: "Braai Room Door Bypass"
+        icon_template: mdi:door
+        value_template: "{{ is_state('binary_sensor.home_zone_020_bypass_braai_room_door', 'on') }}"
+        turn_on:
+          service: button.press
+          target:
+            entity_id: button.home_zone_020_bypass_braai_room_door
+        turn_off:
+          service: button.press
+          target:
+            entity_id: button.home_zone_020_unbypass_braai_room_door
 
 automation:
-  - alias: "Sync Alarm State"
-    id: "e8f36533-e1c8-40d5-b35f-3001a159ec8e"
-    initial_state: true
-    trace:
-      stored_traces: 20
-    trigger:
-      - platform: homeassistant
-        event: start
-      - platform: state
-        entity_id: binary_sensor.internet_connection
-        to: "on"
-    action:
-      - variables:
-          state_map:
-            notready: "disarm"
-            disarm: "disarm"
-            stay: "arm_home"
-            arm: "arm_away"
-      - service: rest_command.olarm_get_state
-        response_variable: olarm_response
-      # index 0 is area/partition 1 in this case, because we're indexing an array
-      # it's not the olarm area/partition numbers which are 1-indexed
-      # values are: stay, arm, disarm
-      # todo: if state doesn't match
-      - service: "alarm_control_panel.alarm_{{ state_map[olarm_response.content.deviceState.areas[0]] }}"
-        target:
-          entity_id: alarm_control_panel.home
-        data:
-          code: !secret alarm_code
-      - service: "alarm_control_panel.alarm_{{ state_map[olarm_response.content.deviceState.areas[1]] }}"
-        target:
-          entity_id: alarm_control_panel.flatlet
-        data:
-          code: !secret alarm_code
-      # todo: sync zones
-
-  # examples for state changes:
-  # {'deviceId': '<uuid>', 'eventTime': 1708664464105, 'eventAction': 'area', 'eventState': 'disarm', 'eventNum': 1, 'eventMsg': 'DISARMED - Area 1 - Home', 'userFullname': ''}
-  # {'deviceId': '<uuid>', 'eventTime': 1708797060201, 'eventAction': 'area', 'eventState': 'stay', 'eventNum': 1, 'eventMsg': 'STAY ARMED - Area 1 - Home', 'userFullname': ''}
-  # {'deviceId': '<uuid>', 'eventTime': 1708882676603, 'eventAction': 'area', 'eventState': 'stay', 'eventNum': 1, 'eventMsg': 'STAY ARMED - Area 1 - Home', 'userFullname': 'Pieter Rautenbach'}
-  # {'deviceId': '<uuid>', 'eventTime': 1709539839721, 'eventAction': 'area', 'eventState': 'arm', 'eventNum': 1, 'eventMsg': 'ARMED - Area 1 - Home', 'userFullname': ''}
-  #
-  # examples for triggers
-  # {'deviceId': '<uuid>', 'eventTime': 1716790300370, 'eventAction': 'area', 'eventState': 'alarm', 'eventNum': 1, 'eventMsg': 'ALARM! - Area 1 - Home', 'userFullname': ''}
-  # {'deviceId': '<uuid>', 'eventTime': 1716790300457, 'eventAction': 'zone_alarm', 'eventState': 'alarm', 'eventNum': 1, 'eventMsg': 'ZONE 1 IN ALARM - Zone 1 - Front Door', 'userFullname': ''}
-  #
-  # examples for emergencies
-  # these are all panics. these two events seem to say that eventNum refers to the area/partition.
-  # {'deviceId': '<uuid>', 'eventTime': 1709539853196, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 1, 'eventMsg': 'EMERGENCY! - Area 1 - Home', 'userFullname': ''}
-  # {'deviceId': '<uuid>', 'eventTime': 1709539853197, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 2, 'eventMsg': 'EMERGENCY! - Area 2 - Flatlet', 'userFullname': ''}
-  # but here eventNum seem to refer to the zone. thus, one needs to parse the eventMsg. seems like there are events for zones activated during a panic.
-  # {'deviceId': '<uuid>', 'eventTime': 1709539853200, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 5, 'eventMsg': 'EMERGENCY! - Area 5', 'userFullname': ''}
-  # {'deviceId': '<uuid>', 'eventTime': 1709539853199, 'eventAction': 'area', 'eventState': 'emergency', 'eventNum': 4, 'eventMsg': 'EMERGENCY! - Area 4', 'userFullname': ''}
-  # then there's this one (note the eventAction):
-  # {'deviceId': '<uuid>', 'eventTime': 1709539853544, 'eventAction': 's_alm', 'eventState': 'panic', 'eventNum': 1, 'eventMsg': 'EMERGENCY! - Panic', 'userFullname': ''}
-  #
-  # todo: need example for remote button press and panel
-  # real-time zone events are currently not available from olarm
-  #
-  - alias: "Receive Olarm Event"
-    id: "fbf7afaa-c357-4a85-b50d-ba5d57b9e187"
-    initial_state: true
-    trace:
-      stored_traces: 20
-    trigger:
-      - platform: webhook
-        webhook_id: !secret olarm_webhook_id
-        local_only: false
-        allowed_methods:
-          - POST
-    mode: queued
-    action:
-      - variables:
-          state_map:
-            disarm: "disarm"
-            stay: "arm_home"
-            arm: "arm_away"
-            panic: "triggered"
-            alarm: "triggered"
-          area_map:
-            1: "home"
-            2: "flatlet"
-      - service: system_log.write
-        data:
-          message: "{{ trigger.webhook_id ~ ': ' ~ trigger.json }}"
-          level: debug
-          logger: "homeassistant.components.olarm"
-      - choose:
-          # if triggered
-          - conditions:
-              - condition: template
-                # todo: test
-                # check that we're not already in a triggered state:
-                # all panels will be in the triggered state at the same time,
-                # but olarm will be sending multiple trigger events –
-                # one for each panels, and also both a panic and alarm event
-                value_template: >-
-                  {% set mapped_state = state_map[trigger.json.eventState] %}
-                  {{ mapped_state == 'triggered' and
-                     (not is_state('alarm_control_panel.home', mapped_state) or
-                      not is_state('alarm_control_panel.flatlet', mapped_state)) }}
-            sequence:
-              # todo: save panic type (mapped):
-              # if panic
-              #   'eventAction': 's_alm'   => general
-              #   'eventAction': 's_alm_f' => fire
-              #   'eventAction': 's_alm_m' => medical
-              # elif alarm & partition 1 (not 2):
-              #   ...
-              - service: alarm_control_panel.alarm_trigger
-                target:
-                  entity_id:
-                    - alarm_control_panel.home
-                    - alarm_control_panel.flatlet
-          # elif state changed: home
-          - conditions:
-              # compare with current state (noop it if matches; means it was actioned from HA, so don't cause a loop)
-              - condition: template
-                value_template: >-
-                  {% set mapped_state = state_map[trigger.json.eventState] %}
-                  {% set mapped_area = area_map[trigger.json.eventNum] %}
-                  {{ mapped_area == 'home' and
-                     mapped_state in ['disarm', 'arm_home', 'arm_away'] and
-                     not is_state('alarm_control_panel.home', mapped_state) }}
-            sequence:
-              - service: "alarm_control_panel.alarm_{{ state_map[trigger.json.eventState] }}"
-                target:
-                  entity_id: alarm_control_panel.home
-                data:
-                  code: !secret alarm_code
-          # elif state changed: flatlet
-          - conditions:
-              # compare with current state (noop it if matches; means it was actioned from HA, so don't cause a loop)
-              - condition: template
-                value_template: >-
-                  {% set mapped_state = state_map[trigger.json.eventState] %}
-                  {% set mapped_area = area_map[trigger.json.eventNum] %}
-                  {{ mapped_area == 'flatlet' and
-                     mapped_state in ['disarm', 'arm_away'] and
-                     not is_state('alarm_control_panel.flatlet', mapped_state) }}
-            sequence:
-              - service: "alarm_control_panel.alarm_{{ state_map[trigger.json.eventState] }}"
-                target:
-                  entity_id: alarm_control_panel.flatlet
-                data:
-                  code: !secret alarm_code
-          # todo: handle zone bypass
-          # should we rather notify in the above sequence blocks? this would be a potential solution (workaround?) for the
-          # api bug noted in the "Alarm State Changed" automation, because we will only execute this if the physical panel's
-          # actual state changed. on the other hand, we might change the state from home assistant, and the panel's state
-          # will then be set, but the call to olarm will still silently fail, so the state will still be out of sync.
-        default:
-          - service: system_log.write
-            data:
-              message: "{{ trigger.webhook_id ~ ': Unprocessable event received: ' ~ trigger.json.eventState ~ '\n' ~ trigger.json }}"
-              level: warning
-              logger: "homeassistant.components.olarm"
-
   - alias: "Notify When Alarm Triggered"
     id: "45f0ac46-8bbb-42cb-a051-64ea1ca695e2"
     initial_state: true
@@ -405,13 +286,19 @@ automation:
           - alarm_control_panel.home
           - alarm_control_panel.flatlet
         to: "triggered"
+    # a panic can trigger both partitions near-simultaneously; the default single
+    # mode would silently drop the second notification
+    mode: queued
     action:
       - variables:
-          message: "The alarm has been triggered at {{ now().strftime('%H:%M') }}!"
+          area: "{{ trigger.entity_id | replace('alarm_control_panel.', '') }}"
+          zone_in_alarm: "{{ trigger.to_state.attributes.zone_in_alarm }}"
+          message: >-
+            The {{ area }} alarm has been triggered at {{ now().strftime('%H:%M') }}!
+            {%- if zone_in_alarm not in [none, 'None', ''] %} Zone: {{ zone_in_alarm }}.{% endif %}
       - service: notify.mobile_app_ceres
         data:
           title: "🚨 Security"
-          # todo: check for active (triggered) zones
           # todo: specialise alert according to a panic, fire, medical alarm
           #       if we have this, we can e.g. contact the fire department or call for an ambulance automatically
           #       or maybe the security company will already triage this when receiving the panic signal
@@ -434,9 +321,9 @@ automation:
                 title: "Disarm"
                 destructive: true
             action_data:
-              # on the physical panel, when we disarm, only one disarm command matters,
-              # but for HA, we must disarm both panels (only when it was triggered)
-              entity_ids: "{{ ['alarm_control_panel.home', 'alarm_control_panel.flatlet'] }}"
+              # each panel now mirrors its own partition, so only the triggered
+              # partition needs disarming (one disarm silences the physical panel)
+              entity_ids: "{{ [trigger.entity_id] }}"
       - service: script.turn_on
         target:
           entity_id: script.notify_tenant
@@ -461,6 +348,9 @@ automation:
       - condition: state
         entity_id: alarm_control_panel.home
         state: "disarmed"
+
+      # todo
+
       - service: notify.mobile_app_ceres
         data:
           title: "🔒 Security"
@@ -502,16 +392,16 @@ automation:
           - condition: state
             entity_id: alarm_control_panel.home
             state: "disarmed"
-      # rather use the wait template below (and we don't have the bypass functionality yet)
+      # rather use the wait template below
       # # another check that the alarm is probably disarmed:
-      # # olarm webhooks can be a tad too slow when we disarm with the remote
+      # # state updates can be a tad too slow when we disarm with the remote
       # - condition: and
       #   conditions:
       #     - condition: state
       #       entity_id: cover.garage_doors
       #       state: "closed"
       #     - condition: state
-      #       entity_id: input_boolean.alarm_zone_17_bypass
+      #       entity_id: switch.alarm_bypass_garage
       #       state: "off"
     action:
       # delivery of the notification can be slow
@@ -616,8 +506,17 @@ automation:
         data:
           title: "🔒 Security"
           message: >-
+            {%- from 'security.jinja' import get_active_zones -%}
+            {%- set get_active_zones_fn = get_active_zones | as_function -%}
+            {%- set active_zones = get_active_zones_fn('home', 'doors') -%}
             You haven't yet armed the stay alarm. Would you like to arm it?
 
+            {% if active_zones -%}
+            The following zones are still active:
+              {%- for zone in active_zones %}
+              - {{ zone }}
+              {%- endfor %}
+            {% endif -%}
 
             Remember to lock all doors and gates first.
           data:
@@ -676,24 +575,31 @@ automation:
     action:
       - if: "{{ trigger.id == 'arm_away_bypass_garage' }}"
         then:
-          - service: "rest_command.olarm_zone_bypassed"
-            data:
-              zone: "17"
-            response_variable: olarm_response
-          - service: system_log.write
-            data:
-              message: "{{ olarm_response.status }}: {{ olarm_response.content }}"
-              level: debug
-              # level: error
-              logger: "homeassistant.components.olarm"
-          # todo: rather check the response
-          - delay:
-              seconds: 5
+          - service: switch.turn_on
+            target:
+              entity_id: switch.alarm_bypass_garage
+          # wait on the integration's own bypass sensor: it only turns on once the
+          # panel confirmed the bypass, so this cannot be fooled by optimistic state
+          # (the template switch mirrors this same sensor, but waiting on the source
+          # keeps that explicit and refactor-proof)
+          - wait_template: "{{ is_state('binary_sensor.home_zone_017_bypass_garage', 'on') }}"
+            timeout: "00:00:15"
+            continue_on_timeout: true
+          - if: "{{ not wait.completed }}"
+            then:
+              - service: notify.mobile_app_ceres
+                data:
+                  title: "⛔️ Security"
+                  message: >-
+                    The garage zone couldn't be bypassed, so the alarm wasn't armed.
+                  data:
+                    group: "home-security"
+                    url: homeassistant://navigate/lovelace-main/security
+              - stop: "Garage bypass was not confirmed."
+      # no code required: the integration's panels have code_arm_required off
       - service: "alarm_control_panel.alarm_{{ trigger.id | replace('_bypass_garage', '') }}"
         target:
           entity_id: "{{ trigger.event.data.action_data.entity_ids }}"
-        data:
-          code: !secret alarm_code
       - if: "{{ trigger.id[0:3] == 'arm'}}"
         then:
           - service: light.turn_off
@@ -715,7 +621,23 @@ automation:
           - "disarmed"
           - "armed_home"
           - "armed_away"
+    # both partitions can change state near-simultaneously (e.g. after a panic);
+    # queued prevents the default single mode from dropping the second run
+    mode: queued
+    condition:
+      # defensive: integration entities typically start as unknown after a restart
+      # and can go unavailable on an mqtt reconnect; restoring to the actual state
+      # is not a change worth notifying about. from_state is none for a newly
+      # created entity, so guard that too.
+      - condition: template
+        value_template: >-
+          {{ trigger.from_state is not none and
+             trigger.from_state.state not in ['unknown', 'unavailable'] }}
     action:
+      # a state change from the integration is ground truth (it arrives after the
+      # panel confirmed it via mqtt), regardless of whether it originated from ha,
+      # the olarm app, the keypad or a remote – so this is pure notification logic.
+      # a rejected arm (e.g. force-arm disallowed) shows as no state change at all.
       - variables:
           state_map:
             disarmed: "disarmed"
@@ -724,111 +646,87 @@ automation:
           state: "{{ state_map[trigger.to_state.state] }}"
           area: >-
             {{ trigger.entity_id | replace('alarm_control_panel.', '') }}
-      # this call will not fail if e.g. arming when a zone is active when it shouldn't be
-      - service: "rest_command.olarm_{{ trigger.to_state.state }}"
-        data:
-          area: "{{ '1' if area == 'home' else '2' }}"
-        response_variable: olarm_response
-      - if: "{{ olarm_response.status == 200 and olarm_response.content.actionStatus == 'OK' }}"
+          changed_by: "{{ trigger.to_state.attributes.changed_by }}"
+          bypassed_zones: >-
+            {%- from 'security.jinja' import get_bypassed_zones -%}
+            {%- set get_bypassed_zones_fn = get_bypassed_zones | as_function -%}
+            {{ get_bypassed_zones_fn(area) }}
+          message: >-
+            The {{ area }}'s alarm was {{ state }}
+            {%- if changed_by not in [none, 'None', ''] %} by {{ changed_by }}{% endif %} at {{ now().strftime('%H:%M') }}.
+            {%- if trigger.to_state.state != 'disarmed' and bypassed_zones %} Bypassed: {{ bypassed_zones | join(', ') }}.{% endif %}
+      - if: "{{ trigger.to_state.state == 'disarmed' }}"
         then:
-          - variables:
-              message: >-
-                The {{ area }}'s alarm was {{ state }} at {{ now().strftime('%H:%M') }}.
-          - if: "{{ trigger.to_state.state == 'disarmed' }}"
+          - if: "{{ area == 'flatlet' }}"
             then:
-              - if: "{{ area == 'flatlet' }}"
-                then:
-                  - service: notify.mobile_app_ceres
-                    data:
-                      title: "🔒 Security"
-                      # todo: user (can be from olarm or HA context; tricky to get right)
-                      # todo: list bypassed zones, if any
-                      message: "{{ message }}"
-                      data:
-                        group: "home-security"
-                        url: homeassistant://navigate/lovelace-main/security
-                        actions:
-                          - action: "ARM_ALARM"
-                            title: "Arm"
-                            destructive: true
-                        action_data:
-                          entity_ids: "{{ [trigger.entity_id] }}"
-                else:
-                  - service: notify.mobile_app_ceres
-                    data:
-                      title: "🔒 Security"
-                      # todo: user (can be from olarm or HA context; tricky to get right)
-                      # todo: list bypassed zones, if any
-                      message: "{{ message }}"
-                      data:
-                        group: "home-security"
-                        url: homeassistant://navigate/lovelace-main/security
-                        actions:
-                          - action: "ARM_ALARM"
-                            title: "Arm (full)"
-                            destructive: true
-                          - action: "ARM_ALARM_BYPASS_GARAGE"
-                            title: "Arm (bypass garage)"
-                            destructive: true
-                          - action: "ARM_STAY_ALARM"
-                            title: "Arm (stay)"
-                            destructive: true
-                        # https://companion.home-assistant.io/docs/notifications/actionable-notifications/
-                        # https://community.home-assistant.io/t/custom-data-in-actionable-notification-on-ios/429748/2
-                        # https://blog.kalavala.net/homeassistant/event/2018/01/11/custom-events.html
-                        action_data:
-                          entity_ids: "{{ [trigger.entity_id] }}"
-            else:
-              - service: notify.mobile_app_ceres
-                data:
-                  message: "clear_notification"
-                  data:
-                    tag: "arm-alarm-reminder"
               - service: notify.mobile_app_ceres
                 data:
                   title: "🔒 Security"
-                  # todo: user (can be from olarm or HA context; tricky to get right)
-                  # todo: list bypassed zones, if any
                   message: "{{ message }}"
                   data:
                     group: "home-security"
                     url: homeassistant://navigate/lovelace-main/security
                     actions:
-                      - action: "DISARM_ALARM"
-                        title: "Disarm"
+                      - action: "ARM_ALARM"
+                        title: "Arm"
                         destructive: true
                     action_data:
                       entity_ids: "{{ [trigger.entity_id] }}"
-          - condition: template
-            value_template: "{{ area == 'flatlet' }}"
-          - service: script.turn_on
-            target:
-              entity_id: script.notify_tenant
-            data:
-              variables:
-                message: "{{ message }}"
+            else:
+              - service: notify.mobile_app_ceres
+                data:
+                  title: "🔒 Security"
+                  message: "{{ message }}"
+                  data:
+                    group: "home-security"
+                    url: homeassistant://navigate/lovelace-main/security
+                    actions:
+                      - action: "ARM_ALARM"
+                        title: "Arm (full)"
+                        destructive: true
+                      - action: "ARM_ALARM_BYPASS_GARAGE"
+                        title: "Arm (bypass garage)"
+                        destructive: true
+                      - action: "ARM_STAY_ALARM"
+                        title: "Arm (stay)"
+                        destructive: true
+                    # https://companion.home-assistant.io/docs/notifications/actionable-notifications/
+                    # https://community.home-assistant.io/t/custom-data-in-actionable-notification-on-ios/429748/2
+                    # https://blog.kalavala.net/homeassistant/event/2018/01/11/custom-events.html
+                    action_data:
+                      entity_ids: "{{ [trigger.entity_id] }}"
         else:
-          - service: system_log.write
-            data:
-              message: "{{ olarm_response.status }}: {{ olarm_response.content }}"
-              level: error
-              logger: "homeassistant.components.olarm"
           - service: notify.mobile_app_ceres
             data:
-              title: "⛔️ Security"
-              message: >-
-                {% set area = trigger.entity_id | replace('alarm_control_panel.', '') %}
-                The alarm's {{ area }} partition couldn't be {{ state }} at {{ now().strftime('%H:%M') }}. Check the log for errors.
+              message: "clear_notification"
+              data:
+                tag: "arm-alarm-reminder"
+          - service: notify.mobile_app_ceres
+            data:
+              title: "🔒 Security"
+              message: "{{ message }}"
               data:
                 group: "home-security"
-                url: homeassistant://navigate/config/logs
+                url: homeassistant://navigate/lovelace-main/security
+                actions:
+                  - action: "DISARM_ALARM"
+                    title: "Disarm"
+                    destructive: true
+                action_data:
+                  entity_ids: "{{ [trigger.entity_id] }}"
+      - condition: template
+        value_template: "{{ area == 'flatlet' }}"
+      - service: script.turn_on
+        target:
+          entity_id: script.notify_tenant
+        data:
+          variables:
+            message: "{{ message }}"
 
-  # my alarm only has a stay mode – not also a night mode
-  # the alarm frontend card used shouldn't have night mode as a valid feature
-  # also, if exposing the alarm entity to homekit, you cannot specify the features that are supported
-  # (so it will allow setting the alarm to home (stay), away, night or off)
-  # neither this package, olarm, my alarm panel or homekit supports the vacation arm mode or a custom bypass command
-  # and i don't care about the flatlet's alarm in this case, because it's not exposed to homekit
+  # my alarm only has a stay mode – not also a night mode.
+  # the integration's panels only advertise stay and away (supported_features: 3),
+  # so homekit should no longer offer night mode at all – in which case this
+  # automation is dead code. verify in the home app after the migration, then delete.
   - alias: "Set To Stay If Night Mode Activated"
     id: "651adacf-f189-48ef-814a-24a051e60bd5"
     initial_state: true
@@ -843,5 +741,45 @@ automation:
       - service: "alarm_control_panel.alarm_arm_home"
         target:
           entity_id: alarm_control_panel.home
+
+  # temporary: independent signal path while soaking the new integration.
+  # the integration receives state via olarm's mqtt connection; this webhook is a
+  # second, independent channel for the one event class we cannot afford to miss.
+  # it deliberately does not touch any alarm entities (the panels are now owned by
+  # the integration – issuing commands from here would fight it).
+  # delete this automation, the webhook registration on olarm's portal and the
+  # olarm_webhook_id secret once the soak period is over. see MIGRATION.md.
+  - alias: "Log Olarm Webhook Events"
+    id: "fbf7afaa-c357-4a85-b50d-ba5d57b9e187"
+    initial_state: true
+    trace:
+      stored_traces: 20
+    trigger:
+      - platform: webhook
+        webhook_id: !secret olarm_webhook_id
+        local_only: false
+        allowed_methods:
+          - POST
+    mode: queued
+    action:
+      - service: system_log.write
         data:
-          code: !secret alarm_code
+          message: "{{ trigger.webhook_id ~ ': ' ~ trigger.json }}"
+          level: debug
+          logger: "homeassistant.components.olarm"
+      - if: "{{ trigger.json.eventState in ['alarm', 'panic', 'emergency'] }}"
+        then:
+          - service: notify.mobile_app_ceres
+            data:
+              title: "🚨 Security (webhook)"
+              message: >-
+                Olarm webhook reports: {{ trigger.json.eventMsg }}.
+                Verify the alarm panels show this too (they should have notified separately).
+              data:
+                group: "home-security"
+                url: homeassistant://navigate/lovelace-main/security
+                push:
+                  sound:
+                    name: default
+                    critical: 1
+                    volume: 0.3

@@ -37,3 +37,92 @@ Get the status icon for a cover.
         {{ icon_base }}
     {%- endif -%}
 {%- endmacro -%}
+
+{#
+The alarm zone sensors created by the Olarm integration belong to the panel
+device, not to a partition, so partition membership is maintained here:
+  * flatlet (area 2): zone 018
+  * home (area 1): every other real zone
+  * ignored: 002, 014, 015, 016, 021-024 (spares) and 011, 012 (remotes)
+Zone entity ids look like binary_sensor.home_zone_<nnn>_<name>, with a matching
+bypass state sensor binary_sensor.home_zone_<nnn>_bypass[_<name>] (the name
+suffix is inconsistent upstream, so bypass sensors are matched by zone number).
+#}
+
+{#
+Get a list of active alarm zones for a partition, optionally filtered by scope.
+
+Zones that are currently bypassed are excluded: a bypassed zone cannot block
+arming the partition, which is what callers use this list for.
+
+:param partition: 'home' or 'flatlet'.
+:param scope: Scope of zones to include.
+              'all' includes all active zones.
+              'doors' includes only zones with the door device class.
+
+:returns: A list of active zone names.
+          Returns an empty list if no matching zones are active.
+#}
+{%- macro get_active_zones(partition, scope, returns) -%}
+  {%- set ignored_pattern = '^binary_sensor\.home_zone_(002|011|012|014|015|016|021|022|023|024)' -%}
+  {%- set flatlet_pattern = '^binary_sensor\.home_zone_018_' -%}
+  {%- set zones = states.binary_sensor
+    | selectattr('entity_id', 'match', '^binary_sensor\.home_zone_')
+    | rejectattr('entity_id', 'match', '^binary_sensor\.home_zone_\d+_bypass')
+    | rejectattr('entity_id', 'match', ignored_pattern)
+  -%}
+  {%- if partition == 'flatlet' -%}
+    {%- set zones = zones | selectattr('entity_id', 'match', flatlet_pattern) -%}
+  {%- else -%}
+    {%- set zones = zones | rejectattr('entity_id', 'match', flatlet_pattern) -%}
+  {%- endif -%}
+  {%- set zones = zones | selectattr('state', 'eq', 'on') -%}
+  {%- if scope == 'doors' -%}
+    {%- set zones = zones
+      | selectattr('attributes.device_class', 'defined')
+      | selectattr('attributes.device_class', 'eq', 'door')
+    -%}
+  {%- endif -%}
+  {%- set ns = namespace(names=[]) -%}
+  {%- for zone in zones -%}
+    {%- set zone_number = zone.entity_id | regex_findall('zone_(\d+)_') | first -%}
+    {%- set is_bypassed = states.binary_sensor
+      | selectattr('entity_id', 'match', '^binary_sensor\.home_zone_' ~ zone_number ~ '_bypass')
+      | selectattr('state', 'eq', 'on')
+      | list | count > 0
+    -%}
+    {%- if not is_bypassed -%}
+      {%- set ns.names = ns.names + [zone.name | regex_replace('^.*?\\s+-\\s+', '')] -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- do returns(ns.names) -%}
+{%- endmacro -%}
+
+{#
+Get a list of currently bypassed alarm zones for a partition.
+
+:param partition: 'home' or 'flatlet'.
+
+:returns: A list of bypassed zone names.
+          Returns an empty list if no zones are bypassed.
+#}
+{%- macro get_bypassed_zones(partition, returns) -%}
+  {%- set ignored_pattern = '^binary_sensor\.home_zone_(002|011|012|014|015|016|021|022|023|024)' -%}
+  {%- set flatlet_pattern = '^binary_sensor\.home_zone_018_' -%}
+  {%- set bypass_sensors = states.binary_sensor
+    | selectattr('entity_id', 'match', '^binary_sensor\.home_zone_\d+_bypass')
+    | rejectattr('entity_id', 'match', ignored_pattern)
+    | selectattr('state', 'eq', 'on')
+  -%}
+  {%- if partition == 'flatlet' -%}
+    {%- set bypass_sensors = bypass_sensors | selectattr('entity_id', 'match', flatlet_pattern) -%}
+  {%- else -%}
+    {%- set bypass_sensors = bypass_sensors | rejectattr('entity_id', 'match', flatlet_pattern) -%}
+  {%- endif -%}
+  {%- set names = bypass_sensors
+    | map(attribute='name')
+    | map('regex_replace', '^.*?\\s+-\\s+', '')
+    | list
+  -%}
+  {%- do returns(names) -%}
+{%- endmacro -%}

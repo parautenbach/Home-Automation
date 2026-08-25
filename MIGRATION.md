@@ -80,8 +80,9 @@ All renames happen here, after the legacy manual panels are gone — technically
 zone/device renames could be done earlier (the new ids collide with nothing), but
 waiting avoids any ambiguity while both systems run side by side.
 
-4. Deploy this branch to the host and restart HA — this removes the manual panels and
-   frees the `home`/`flatlet` entity ids. (The template switches and customize entries
+4. Merge the latest `master` into this branch (master keeps moving with unrelated
+   work), then deploy this branch to the host and restart HA — this removes the manual
+   panels and frees the `home`/`flatlet` entity ids. (The template switches and customize entries
    reference entities that only exist after the renames below; they sit unavailable
    until step 8.)
 5. In HA (Settings → Devices → Olarm): rename the device **"Home Test" → "Home"** and
@@ -127,11 +128,10 @@ waiting avoids any ambiguity while both systems run side by side.
       into the package header.
 - [ ] Merge `olarm-migration` into `master`; `git worktree remove ../Home-Automation-olarm`.
 
-## Still to do on this branch (phases 2 & 3)
+## Still to do on this branch (phase 3)
 
-- UI: show door and motion zones as two groups on the security view (device-class-based,
-  via the customisations added here); consider group binary sensors for "any door open" /
-  "any motion".
 - UI: panic button — hold action + confirmation dialog pressing `button.home_user_panic`.
+- Done (phase 2): the zone sensors shown individually on the security view, grouped
+  into a Door Zones and a Motion Zones glance card (state-coloured icons).
 - Consider: `binary_sensor.home_ac_power` (panel mains) → `devices.yaml` monitoring.
 - Consider: a bypass panel (the 14 `switch.alarm_bypass_*` entities) on the security view.

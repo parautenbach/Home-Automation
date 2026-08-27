@@ -533,9 +533,32 @@ template:
       seconds: "/10"
     binary_sensor:
       - name: "SolarAssistant Activity"
-        state: >-
-          {{ states.sensor.solarassistant_activity_counter.last_updated >= now() - timedelta(seconds=15) }}
+        # freshness comes from the counter's expire_after (15s, set where that sensor
+        # is defined) rather than from its last_updated. last_updated marks when HA
+        # last *wrote* the state, and adding the entity at startup is a write, so the
+        # old check read "fresh" for 15s after every restart or MQTT reload even with
+        # the bridge dead. expiry is driven by actual message arrival instead, and is
+        # rebuilt on startup from .storage/core.restore_state.
+        # still polled rather than tracking the counter directly: that entity churns
+        # at the inverter's publish rate (it is recorder-excluded for the same
+        # reason), and an untriggered template would re-render on every message
+        state: "{{ has_value('sensor.solarassistant_activity_counter') }}"
         device_class: running
+  # cease timestamp owned by the experimental alert below, so it doesn't read
+  # input_datetime.solarassistant_activity_ceased - that helper is written by the
+  # automation-based mechanism, which would leave the alert silently reporting a
+  # wrong elapsed time if those automations were ever removed. the two mechanisms
+  # now share only the binary sensor they both watch
+  - trigger:
+    - platform: state
+      entity_id: binary_sensor.solarassistant_activity
+      to: "off"
+    sensor:
+      - name: "SolarAssistant Activity Ceased At"
+        unique_id: "e523322e-e984-480f-a702-2761ab5f5b70"
+        icon: mdi:clock-alert-outline
+        device_class: timestamp
+        state: "{{ now().isoformat() }}"
   # https://docs.google.com/spreadsheets/d/1bfyoQDx-s5W7BBBhJeABa-aw1v9K8Z9-ETFwj0kDMYE/edit#gid=2129307858
   # https://en.wikipedia.org/wiki/Duck_curve
   - trigger:
@@ -864,6 +887,13 @@ mqtt:
       unique_id: "c63b23e4-2b85-405a-8d64-b9866875bf0c"
       state_topic: solar_assistant/inverter_1/load_power_essential/state
       value_template: "{{ states('sensor.solarassistant_activity_counter') | int(0) + 1 }}"
+      # goes unavailable 15s after the last message - this is what
+      # binary_sensor.solarassistant_activity reads. the timer is reset per message
+      # and rebuilt on startup from the restore store (not the recorder, which
+      # excludes this entity), so a restart while the bridge is down comes up
+      # unavailable instead of falsely reporting activity. note the counter restarts
+      # from 1 after each expiry, since states() then returns "unavailable" -> int(0)
+      expire_after: 15
       unit_of_measurement: "messages"
       icon: mdi:counter
 
@@ -999,7 +1029,10 @@ timer:
 
 alert:
   # kept alongside the automation-based detection (below) for a side-by-side
-  # comparison; "experimental" tag distinguishes its notifications from those
+  # comparison; "experimental" tag distinguishes its notifications from those.
+  # self-contained on purpose - it reads only binary_sensor.solarassistant_activity
+  # and its own sensor.solarassistant_activity_ceased_at, never the timer, the
+  # input_boolean or the input_datetime that drive the automation-based mechanism
   solarassistant_inactivity:
     name: "SolarAssistant Inactivity"
     entity_id: binary_sensor.solarassistant_activity
@@ -1009,12 +1042,11 @@ alert:
     can_acknowledge: false
     title: "⚠️ System"
     message: >-
-      {% set minutes = (now() - states.binary_sensor.solarassistant_activity.last_updated).total_seconds() | multiply(1/60) | int or 1 %}
+      {% set minutes = (now() - states.binary_sensor.solarassistant_activity.last_changed).total_seconds() | multiply(1/60) | int or 1 %}
       [Test] The SolarAssistant bridge's activity has ceased {{ minutes }} min ago.
     done_message: >-
-      {% set last_ceased = states('input_datetime.solarassistant_activity_ceased') | as_timestamp %}
-      {% set utc_now_ts = utcnow() | as_timestamp %}
-      {% set minutes = ((utc_now_ts - last_ceased) // 60) | int %}
+      {% set last_ceased = states('sensor.solarassistant_activity_ceased_at') | as_timestamp(0) %}
+      {% set minutes = (((utcnow() | as_timestamp) - last_ceased) // 60) | int if last_ceased else 0 %}
       [Test] The SolarAssistant bridge's activity has been resumed after {{ minutes }} min.
     data:
       group: "system-electricity"
@@ -1471,6 +1503,13 @@ automation:
       - platform: state
         entity_id:
           - binary_sensor.solarassistant_activity
+        # only a genuine recovery, which is always off -> on. the activity sensor has
+        # no state until its first evaluation after a restart, and the input_boolean
+        # below survives one, so an unqualified "to: on" could announce a recovery
+        # that never happened. belt and braces since the sensor switched to
+        # expire_after (it now comes up off, not on, when the bridge is dead), but
+        # this costs nothing and does not gate any real resume
+        from: "off"
         to: "on"
         # debounces sub-second blips, and as a side effect keeps this at least ~1s
         # behind "ceased" (which can only have fired at least a minute earlier, via
@@ -1532,7 +1571,7 @@ automation:
         data:
           title: "⚠️ System"
           message: >-
-            {% set minutes = (now() - states.binary_sensor.solarassistant_activity.last_updated).total_seconds() | multiply(1/60) | int or 1 %}
+            {% set minutes = (now() - states.binary_sensor.solarassistant_activity.last_changed).total_seconds() | multiply(1/60) | int or 1 %}
             The SolarAssistant bridge's activity has ceased {{ minutes }} min ago.
           data:
             group: "system-electricity"

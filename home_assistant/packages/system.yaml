@@ -212,11 +212,22 @@ template:
         # https://community.home-assistant.io/t/template-trigger-based-sensors-add-variables/657527
         # https://community.home-assistant.io/t/support-variables-in-template-sensors/249082
         variables:
-          notification_data: "{{ trigger.event.data.service_data }}"
           notification_service: "{{ trigger.event.data.service }}"
-          notification_title: "{{ notification_data.title | default('Notification') }}"
+          # the payload is navigated in place rather than assigned to a variable of
+          # its own first: a variable holds the *rendered* value, so the dict is
+          # stringified and only becomes a dict again if literal_eval can parse the
+          # repr back. when that fails it silently stays a string - and jinja then
+          # resolves both payload.title and payload['title'] to the str.title method,
+          # logging "<built-in method title of str object at 0x...>" as the whole
+          # notification. a {% set %} inside one template keeps the real object.
+          # the "is mapping" guard makes that failure mode impossible rather than
+          # unlikely, since subscript syntax falls back to getattr just like dots do
+          notification_title: >-
+            {% set payload = trigger.event.data.service_data %}
+            {{ payload['title'] | default('Notification') if payload is mapping else 'Notification' }}
           notification_message: >-
-            {{ notification_data.message | default(notification_data.title | default('No content')) | trim }}
+            {% set payload = trigger.event.data.service_data %}
+            {{ payload['message'] | default('No content') | trim if payload is mapping else 'No content' }}
           notification_target: |-
             {% if notification_service == 'notify' %}
               All devices/recipients

@@ -348,9 +348,20 @@ automation:
       - condition: state
         entity_id: alarm_control_panel.home
         state: "disarmed"
-
-      # todo
-
+      # ios can neither replace nor group critical notifications, so an unactioned prompt
+      # on this tag would stack underneath this one instead of being replaced by it
+      # https://companion.home-assistant.io/docs/notifications/notifications-basic
+      - service: notify.mobile_app_ceres
+        data:
+          message: "clear_notification"
+          data:
+            tag: "arm-alarm-reminder"
+      - delay:
+          seconds: 1
+      # re-check, in case the alarm got armed during the gap above
+      - condition: state
+        entity_id: alarm_control_panel.home
+        state: "disarmed"
       - service: notify.mobile_app_ceres
         data:
           title: "🔒 Security"
@@ -404,6 +415,14 @@ automation:
       #       entity_id: switch.alarm_bypass_garage
       #       state: "off"
     action:
+      # clear any unactioned arm prompt first: it shares this tag, and ios can neither
+      # replace nor group critical notifications. the 30 sec delay below doubles as the
+      # gap the clear needs, and the if after it re-checks state
+      - service: notify.mobile_app_ceres
+        data:
+          message: "clear_notification"
+          data:
+            tag: "arm-alarm-reminder"
       # delivery of the notification can be slow
       # so, even if this triggers immediately, it may only be delivered after the garage door has been opened
       # the traces and history shows the order of events are correct
@@ -471,6 +490,7 @@ automation:
       - platform: state
         entity_id: light.living_room_lamp
         to: "off"
+        id: "lamp_off"
       - platform: state
         entity_id:
           - binary_sensor.pieter_present
@@ -487,8 +507,8 @@ automation:
           {% set is_workday_tomorrow = is_state('binary_sensor.workday_tomorrow', 'on') %}
           {{ (trigger.id == 'workday' and is_workday_tomorrow and workday_reminder <= now() < non_workday_reminder) or
              (trigger.id == 'non_workday' and not is_workday_tomorrow and non_workday_reminder <= now()) or
-             (trigger.id in ['phone_plugged_in', 'arrived_home'] and is_workday_tomorrow and workday_reminder <= now()) or
-             (trigger.id in ['phone_plugged_in', 'arrived_home'] and not is_workday_tomorrow and non_workday_reminder <= now()) }}
+             (trigger.id in ['phone_plugged_in', 'arrived_home', 'lamp_off'] and is_workday_tomorrow and workday_reminder <= now()) or
+             (trigger.id in ['phone_plugged_in', 'arrived_home', 'lamp_off'] and not is_workday_tomorrow and non_workday_reminder <= now()) }}
       - condition: time
         after: "20:00:00"
       - condition: state
@@ -502,6 +522,20 @@ automation:
       #   value_template: >-
       #     {{ (trigger.id == 'weekdays' and is_state('binary_sensor.workday_tomorrow', 'on')) or trigger.id == 'weekends' }}
     action:
+      # this can re-ask several times in an evening (phone plugged in, lamp off, arriving
+      # home), and ios can neither replace nor group critical notifications, so clear the
+      # previous ask rather than stacking another one on the same tag
+      - service: notify.mobile_app_ceres
+        data:
+          message: "clear_notification"
+          data:
+            tag: "arm-alarm-reminder"
+      - delay:
+          seconds: 1
+      # re-check, in case the alarm got armed during the gap above
+      - condition: state
+        entity_id: alarm_control_panel.home
+        state: "disarmed"
       - service: notify.mobile_app_ceres
         data:
           title: "🔒 Security"

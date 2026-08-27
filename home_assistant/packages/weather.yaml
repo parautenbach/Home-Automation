@@ -491,6 +491,58 @@ template:
             {{ "{:.0f}".format(states(humidity_entity) | float(0)) }}{{ state_attr(humidity_entity, 'unit_of_measurement') }}
         availability: >-
           {{ has_value(perception_entity) and has_value(humidity_entity) }}
+      - name: "Humidity Perception"
+        unique_id: "4c46ae9e-179e-41d0-bca2-31ae481b3d00"
+        icon: >-
+          {{ 'mdi:water-outline' if this.state == 'damp' else 'mdi:water-percent' }}
+        variables:
+          perception_entity: sensor.thermal_comfort_outside_dew_point_perception
+          humidity_entity: sensor.weather_station_humidity
+          dew_point_entity: sensor.weather_station_dew_point
+          # relative humidity at which cool air reads as damp rather than merely un-muggy
+          damp_humidity: 90
+        # a single humidity word conflates two independent axes: dew point perception measures mugginess
+        # (how much water the air actually holds), relative humidity measures how close that air is to
+        # saturation. They agree when it's warm and contradict on a cold saturated morning, where the dew
+        # point says 'dry' - correctly, cold air holds little water - while 97% RH and visible fog say
+        # otherwise. Only that contradiction is rewritten here; the muggy end is left as the perception
+        # reports it, so heat-health signals are never masked. The override cannot fire on a hot day
+        # anyway: RH >= 90% with a dew point below 10°C forces the temperature below 11.6°C.
+        state: >-
+          {% set perception = states(perception_entity) %}
+          {% set humidity = states(humidity_entity) | float(none) %}
+          {% if humidity is not none and humidity >= damp_humidity
+                and perception in ['dry', 'very_comfortable'] %}
+            damp
+          {% else %}
+            {{ perception }}
+          {% endif %}
+        attributes:
+          label: >-
+            {% set labels = {
+              'damp': 'Damp',
+              'dry': 'Dry',
+              'very_comfortable': 'Ideal',
+              'comfortable': 'Comfortable',
+              'ok_but_humid': 'Humid',
+              'somewhat_uncomfortable': 'Muggy',
+              'quite_uncomfortable': 'Oppressive',
+              'extremely_uncomfortable': 'Miserable',
+              'severely_high': 'Dangerous'
+            } %}
+            {{ labels.get(this.state, 'Unknown') }}
+          # both inputs and the override decision, exposed so the combined state can be read at a glance
+          mugginess: >-
+            {{ states(perception_entity) }}
+          overridden: >-
+            {{ this.state != states(perception_entity) }}
+          # no space for %
+          humidity_with_unit: >-
+            {{ "{:.0f}".format(states(humidity_entity) | float(0)) }}{{ state_attr(humidity_entity, 'unit_of_measurement') }}
+          dew_point_with_unit: >-
+            {{ "{:.1f}".format(states(dew_point_entity) | float(0)) }} {{ state_attr(dew_point_entity, 'unit_of_measurement') }}
+        availability: >-
+          {{ has_value(perception_entity) and has_value(humidity_entity) }}
   - trigger:
       - trigger: time_pattern
         minutes: "/5"
@@ -776,19 +828,38 @@ template:
         variables:
           spread_entity: sensor.dew_point_spread
           wind_entity: sensor.wind_speed_filtered_km_h
+          cloud_entity: weather.openweathermap
+          rain_entity: binary_sensor.raining
         # spread and wind approach 0 as fog becomes more likely; each score plateaus at 1 below a floor
         # (0.1°C spread is true saturation, and 3 km/h still supports radiation fog), then falls to 0 by
         # 1.5°C spread / 12 km/h wind; dewy-but-unsaturated nights sit at 0.3-0.6°C spread, so the spread
         # ramp must keep its gradient in that range to separate dew from fog
+        #
+        # cloud cover gates the radiative cooling that closes the spread, so an overcast sky means the
+        # remaining gap probably won't close. It applies only while the air is still unsaturated: at
+        # spread <= 0.2°C the air is saturated however it got there, and damping there would veto both
+        # fog already present (which OWM itself tends to report as cloud) and advection fog.
+        #
+        # the wind veto assumes radiation fog, which a breeze mixes out. Advection (sea) fog off the cold
+        # Benguela water instead arrives on that breeze, already saturated, so saturated air overrides the
+        # wind score rather than being penalised by it. Rain zeroes the whole estimate: it saturates the
+        # air without being fog, and would otherwise read as certainty once wind can no longer veto it.
         state: >-
           {% set spread = states(spread_entity) | float(none) %}
           {% set wind = states(wind_entity) | float(none) %}
+          {% set cloud = state_attr(cloud_entity, 'cloud_coverage') | float(0) %}
           {% if spread is none or wind is none %}
             {{ none }}
+          {% elif is_state(rain_entity, 'on') %}
+            {{ 0 }}
           {% else %}
             {% set spread_score = [[((1.5 - spread) / 1.4), 0] | max, 1] | min %}
-            {% set wind_score = [[((12 - wind) / 9), 0] | max, 1] | min %}
-            {{ (spread_score * wind_score * 100) | round(0) }}
+            {% set unsaturated = [[((spread - 0.2) / 0.8), 0] | max, 1] | min %}
+            {% set saturated = 1 - unsaturated %}
+            {% set cloud_score = [[((90 - cloud) / 50), 0] | max, 1] | min %}
+            {% set cooling_score = 1 - (1 - cloud_score) * unsaturated %}
+            {% set wind_score = [[[((12 - wind) / 9), 0] | max, 1] | min, saturated] | max %}
+            {{ (spread_score * wind_score * cooling_score * 100) | round(0) }}
           {% endif %}
         availability: "{{ has_value(spread_entity) and has_value(wind_entity) }}"
   - binary_sensor:
@@ -806,7 +877,8 @@ template:
           # (which delay_on absorbs); sustained saturation (spread <= 0.2°C) scores 93-100
           probability_threshold: 85
         # moisture alone doesn't mean fog (it also confirms dew), but real fog should always wet the sensor,
-        # so require it as a confirmatory check on top of the probability estimate rather than as a trigger on its own
+        # so require it as a confirmatory check on top of the probability estimate rather than as a trigger on its own.
+        # rain is also excluded upstream in the probability itself; kept here so this sensor stands on its own
         state: >-
           {% set probability = states(probability_entity) | float(none) %}
           {% set raining = is_state(rain_entity, 'on') %}
@@ -1083,6 +1155,12 @@ automation:
         data:
           type: daily
         response_variable: daily
+      - action: weather.get_forecasts
+        target:
+          entity_id: weather.openweathermap
+        data:
+          type: hourly
+        response_variable: hourly
       - variables:
           # now (measured)
           current_temp: "{{ states('sensor.outside_temperature') | int(0) }}"
@@ -1125,15 +1203,34 @@ automation:
           rain_today_mm: "{{ states('sensor.weather_forecast_precipitation_today') | float(0) | round(1) }}"
           today_high: "{{ daily['weather.openweathermap']['forecast'][0]['temperature'] | int(0) }}"
           today_condition: "{{ daily['weather.openweathermap']['forecast'][0]['condition'] }}"
+          # the daily forecast carries one representative wind for the whole day, which hides the shape
+          # of it - a southeaster that builds through the afternoon and drops at sunset reads the same as
+          # a steady breeze. Scan what's left of today hourly instead and keep the windiest hour, so the
+          # brief can say both how strong it gets and when. Speed stays none if the hourly forecast has
+          # nothing for the rest of today, and the clause is then dropped rather than guessed at.
+          later_wind: >-
+            {% set ns = namespace(speed=none, bearing=0, at=none) %}
+            {% for f in hourly['weather.openweathermap']['forecast'] %}
+              {% set dt = f.datetime | as_datetime | as_local %}
+              {% if dt >= now() and dt.date() == now().date()
+                    and (ns.speed is none or (f.wind_speed | float(0)) > ns.speed) %}
+                {% set ns.speed = f.wind_speed | float(0) %}
+                {% set ns.bearing = f.wind_bearing | float(0) %}
+                {% set ns.at = dt.strftime('%H:%M') %}
+              {% endif %}
+            {% endfor %}
+            {{ {'speed': ns.speed, 'bearing': ns.bearing, 'at': ns.at} }}
           later_wind_state: >-
             {% from 'environment.jinja' import beaufort_scale %}
-            {{ beaufort_scale(daily['weather.openweathermap']['forecast'][0]['wind_speed'] | float(0)) }}
+            {{ beaufort_scale(later_wind.speed | float(0)) }}
           later_wind_speed: >-
-            {{ daily['weather.openweathermap']['forecast'][0]['wind_speed'] | float(0) | round(0) }} km/h
+            {{ later_wind.speed | float(0) | round(0) }} km/h
           later_wind_dir: >-
             {% from 'environment.jinja' import get_direction_8 %}
-            {% set abbr = get_direction_8(daily['weather.openweathermap']['forecast'][0]['wind_bearing'] | float(0)) | trim %}
+            {% set abbr = get_direction_8(later_wind.bearing | float(0)) | trim %}
             {{ compass_names.get(abbr, abbr) }}
+          later_wind_peak: >-
+            {{ later_wind.at if later_wind.at else '' }}
       - service: notify.mobile_app_ceres
         data:
           title: "🌤️ Weather Brief"
@@ -1146,14 +1243,14 @@ automation:
             } %}
             {% set later_condition = condition_words.get(today_condition, today_condition | replace('-', ' ')) %}
             {# fog_conditions is inferred from dew point spread + wind + moisture, not observed directly,
-               and it's real-time only - there's no forecast for onset or when it would lift #}
-            {% set feel_clause = 'Feels ' ~ (heat_label | lower) ~ ' at ' ~ current_temp ~ '°C, humidity ' ~ (humidity_label | lower) ~ ' (' ~ humidity_value ~ ') now.' %}
+               and it's real-time only - there's no forecast for onset or when it would lift.
+               The brief always opens with how it feels outside; confirmed fog qualifies that sentence
+               rather than displacing it, and merely possible fog drops to the trailing extras below #}
+            {% set feel_clause = 'Feels ' ~ (heat_label | lower) ~ ' at ' ~ current_temp ~ '°C, humidity ' ~ (humidity_label | lower) ~ ' (' ~ humidity_value ~ ')' %}
             {% if fog_on %}
-              {% set now_clause = 'Fog likely right now (' ~ fog_probability ~ ' probability). ' ~ feel_clause %}
-            {% elif fog_probability_value >= fog_possible_threshold %}
-              {% set now_clause = 'Fog possible (' ~ fog_probability ~ ' probability). ' ~ feel_clause %}
+              {% set now_clause = feel_clause ~ ' now, with fog likely (' ~ fog_probability ~ ').' %}
             {% else %}
-              {% set now_clause = feel_clause %}
+              {% set now_clause = feel_clause ~ ' now.' %}
             {% endif %}
             {% if rain_soon %}
               {% set onset_local = rain_onset | as_datetime | as_local %}
@@ -1171,14 +1268,28 @@ automation:
               {% set wind_now_clause = wind_phrases[wind_state] ~ ' right now (' ~ wind_speed ~ ').' %}
             {% endif %}
             {% set extras = [wind_now_clause] %}
+            {% if not fog_on and fog_probability_value >= fog_possible_threshold %}
+              {% set extras = extras + ['Fog possible (' ~ fog_probability ~ ').'] %}
+            {% endif %}
             {% if uv_state in ['high', 'very_high', 'extreme'] %}
               {% set extras = extras + ['UV ' ~ (uv_label | lower) ~ '.'] %}
             {% endif %}
             {% if pressure_state in ['rising_rapidly', 'falling_rapidly'] %}
               {% set extras = extras + ['Pressure ' ~ (pressure_label | lower) ~ '.'] %}
             {% endif %}
-            {% if later_wind_state not in ['calm', 'light_air', 'light_breeze'] %}
-              {% set extras = extras + [wind_phrases[later_wind_state] ~ ' (' ~ later_wind_speed ~ ') from the ' ~ later_wind_dir ~ ' expected later.'] %}
+            {# always stated, including for a quiet day: "no news" would be indistinguishable from a
+               missing forecast, and knowing it stays light is itself worth confirming. Mirrors the
+               structure of the now clause above, where a direction is meaningless for calm #}
+            {% if later_wind.speed is not none %}
+              {% set when_clause = ' peaking around ' ~ later_wind_peak if later_wind_peak else ' expected later' %}
+              {% if later_wind_state == 'calm' %}
+                {% set wind_later_clause = 'Calm conditions expected later.' %}
+              {% elif later_wind_dir %}
+                {% set wind_later_clause = wind_phrases[later_wind_state] ~ ' from the ' ~ later_wind_dir ~ ' (' ~ later_wind_speed ~ ')' ~ when_clause ~ '.' %}
+              {% else %}
+                {% set wind_later_clause = wind_phrases[later_wind_state] ~ ' (' ~ later_wind_speed ~ ')' ~ when_clause ~ '.' %}
+              {% endif %}
+              {% set extras = extras + [wind_later_clause] %}
             {% endif %}
             {{ ([now_clause, later_clause] + extras) | join(' ') }}
           data:

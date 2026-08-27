@@ -2725,6 +2725,23 @@ automation:
         entity_id: timer.go_home_reminder
         state: "idle"
     action:
+      # this fires again every 5 min while still out, and ios will only clear the most
+      # recent critical notification from a given tag, so clear the previous reminder
+      # before sending the next one to stop them stacking up unclearable
+      # https://companion.home-assistant.io/docs/notifications/notifications-basic
+      - service: notify.mobile_app_ceres
+        data:
+          message: "clear_notification"
+          data:
+            tag: "routine-go-home"
+      - delay:
+          seconds: 1
+      # if we got home during the clear delay, the cancel automation has already run
+      # and won't run again, so stop here rather than sending a reminder that nothing
+      # will ever clear. this also skips the timer.start below, ending the nag
+      - condition: state
+        entity_id: person.pieter_rautenbach
+        state: "Park"
       - service: notify.mobile_app_ceres
         data:
           title: "⏰ Routine"
@@ -2753,17 +2770,16 @@ automation:
         entity_id: person.pieter_rautenbach
         to: "home"
     action:
+      # cancel first, otherwise a timer.finished landing mid-sequence can queue
+      # another reminder that we then never clear. cancelling an idle timer is a no-op
+      - service: timer.cancel
+        target:
+          entity_id: timer.go_home_reminder
       - service: notify.mobile_app_ceres
         data:
           message: "clear_notification"
           data:
             tag: "routine-go-home"
-      - condition: state
-        entity_id: timer.go_home_reminder
-        state: "active"
-      - service: timer.cancel
-        target:
-          entity_id: timer.go_home_reminder
 
   - alias: "Send Bedtime Update"
     id: "a57345d4-eec3-42b6-970d-84e2b77fb646"

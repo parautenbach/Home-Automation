@@ -99,6 +99,36 @@ arming the partition, which is what callers use this list for.
 {%- endmacro -%}
 
 {#
+Get the name of the Home Assistant user behind a state change, if there is one.
+
+The olarm integration's changed_by attribute is always null (verified for both
+ha-initiated and app-initiated changes), so attribution comes from the ha context
+instead. Only a user id is trusted: a change made at the panel, on the keypad, on a
+remote or in the olarm app carries no ha user, and a slow round trip through the panel
+can outlive the context window too. An empty result therefore means "not known to be a
+person", not "not a person" – so callers should omit the attribution, never assert that
+it happened at the panel.
+
+:param context: The context of the state change (e.g. trigger.to_state.context).
+
+:returns: The person's name, or an empty string.
+#}
+{%- macro get_ha_actor(context, returns) -%}
+  {%- set ns = namespace(name='') -%}
+  {%- if context.user_id -%}
+    {%- set person = states.person
+      | selectattr('attributes.user_id', 'defined')
+      | selectattr('attributes.user_id', 'eq', context.user_id)
+      | list | first | default(none)
+    -%}
+    {%- if person -%}
+      {%- set ns.name = person.name -%}
+    {%- endif -%}
+  {%- endif -%}
+  {%- do returns(ns.name) -%}
+{%- endmacro -%}
+
+{#
 Get a list of currently bypassed alarm zones for a partition.
 
 :param partition: 'home' or 'flatlet'.

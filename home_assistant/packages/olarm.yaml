@@ -4,7 +4,8 @@
 #  * one alarm_control_panel per area/partition (no code required: code_arm_required is false)
 #  * per-zone state sensors and bypass state sensors
 #  * per-zone bypass/unbypass buttons and a user panic button
-#  * panel attributes: zone_in_alarm, zone_in_alarm_time, changed_by
+#  * panel attributes: zone_in_alarm, zone_in_alarm_time (changed_by exists but is
+#    always null, so attribution comes from the ha context instead – see security.jinja)
 #  * an ac power sensor for the panel's mains supply
 #
 # this package builds on top of it:
@@ -793,14 +794,20 @@ automation:
           state: "{{ state_map[trigger.to_state.state] }}"
           area: >-
             {{ trigger.entity_id | replace('alarm_control_panel.', '') }}
-          changed_by: "{{ trigger.to_state.attributes.changed_by }}"
+          # the panel's changed_by attribute is always null, so attribution comes from
+          # the ha context: a name when a person did it in ha, empty otherwise (which
+          # includes the app, the keypad and the remotes – so say nothing, don't guess)
+          actor: >-
+            {%- from 'security.jinja' import get_ha_actor -%}
+            {%- set get_ha_actor_fn = get_ha_actor | as_function -%}
+            {{ get_ha_actor_fn(trigger.to_state.context) }}
           bypassed_zones: >-
             {%- from 'security.jinja' import get_bypassed_zones -%}
             {%- set get_bypassed_zones_fn = get_bypassed_zones | as_function -%}
             {{ get_bypassed_zones_fn(area) }}
           message: >-
             The {{ area }}'s alarm was {{ state }}
-            {%- if changed_by not in [none, 'None', ''] %} by {{ changed_by }}{% endif %} at {{ now().strftime('%H:%M') }}.
+            {%- if actor %} by {{ actor }}{% endif %} at {{ now().strftime('%H:%M') }}.
             {%- if trigger.to_state.state != 'disarmed' and bypassed_zones %} Bypassed: {{ bypassed_zones | join(', ') }}.{% endif %}
       - if: "{{ trigger.to_state.state == 'disarmed' }}"
         then:

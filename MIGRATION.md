@@ -102,8 +102,17 @@ marker under the Home Alarm tile.
 **2026-08-28 — disarmed and armed stay from the Olarm app:** state followed correctly,
 and `changed_by` was **still null**. Combined with the HA-initiated arm above, that is
 two of the three sources confirmed null, so `changed_by` is dead for our purposes — the
-old webhook's `userFullname` has no MQTT equivalent. Replace the attribution in "Alarm
-State Changed" with something derived from the HA context (see below), or drop it.
+old webhook's `userFullname` has no MQTT equivalent, which is a genuine regression from
+the custom integration. Attribution now comes from the HA context instead
+(`get_ha_actor` in `security.jinja`): a name when a person did it in HA, nothing
+otherwise. Correlating the webhook's `userFullname` with the MQTT state change was
+considered and rejected — two async channels, and `userFullname` was empty in six of the
+seven captured webhook examples anyway.
+
+Note the context can also be lost on a slow round trip through the panel, so a missing
+name means "not known to be a person", never "it happened at the panel" — the message
+omits the attribution rather than guessing. Worth watching during the soak: how often an
+HA-initiated arm actually carries the user through.
 
 **Parity confirmed:** the manual `alarm_control_panel.home` followed the new panel's
 state via the old webhook, so both paths agree on a real event.
@@ -169,6 +178,8 @@ panels stay at their generated ids and are only ever addressed by the template p
       a warning; the correct code works. Flatlet offers no stay mode.
 - [ ] Automations still arm/disarm (they pass the code): the notification actions and
       the presence flows.
+- [ ] Arming from the HA UI names you in the notification ("armed by Pieter"); arming
+      from the app or keypad omits the name rather than claiming anything.
 - [ ] Arm/disarm from the app/keypad/remote notifies (via "Alarm State Changed").
 - [ ] No notification spam after an HA restart (unknown → state is filtered).
 - [ ] Only one arm-reminder notification is present at a time (the stacking fix): let a

@@ -828,38 +828,33 @@ template:
         variables:
           spread_entity: sensor.dew_point_spread
           wind_entity: sensor.wind_speed_filtered_km_h
-          cloud_entity: weather.openweathermap
           rain_entity: binary_sensor.raining
+          moisture_entity: binary_sensor.weather_station_moisture
         # spread and wind approach 0 as fog becomes more likely; each score plateaus at 1 below a floor
-        # (0.1°C spread is true saturation, and 3 km/h still supports radiation fog), then falls to 0 by
-        # 1.5°C spread / 12 km/h wind; dewy-but-unsaturated nights sit at 0.3-0.6°C spread, so the spread
-        # ramp must keep its gradient in that range to separate dew from fog
+        # (0.5°C spread is within sensor noise of saturation, and 3 km/h still supports radiation fog)
+        # so that ideal-but-nonzero inputs aren't penalised, then falls to 0 by 2.5°C spread / 12 km/h wind
         #
-        # cloud cover gates the radiative cooling that closes the spread, so an overcast sky means the
-        # remaining gap probably won't close. It applies only while the air is still unsaturated: at
-        # spread <= 0.2°C the air is saturated however it got there, and damping there would veto both
-        # fog already present (which OWM itself tends to report as cloud) and advection fog.
+        # this entity is user-facing - it carries a % and the morning brief quotes it verbatim - so it
+        # states the probability that fog is present now, and every piece of evidence bearing on that
+        # belongs here rather than in one consumer. Two things zero it outright:
         #
-        # the wind veto assumes radiation fog, which a breeze mixes out. Advection (sea) fog off the cold
-        # Benguela water instead arrives on that breeze, already saturated, so saturated air overrides the
-        # wind score rather than being penalised by it. Rain zeroes the whole estimate: it saturates the
-        # air without being fog, and would otherwise read as certainty once wind can no longer veto it.
+        #   rain     - it drives the spread to nearly nothing without being fog, so steady light rain
+        #              otherwise scores 78-100% on spread and wind alone
+        #   dryness  - real fog always wets the sensor, so an explicitly dry sensor rules it out
+        #
+        # dryness is tested as an explicit 'off' rather than "not on", so that a moisture sensor which
+        # goes unavailable leaves the estimate alone instead of silently pinning it to zero
         state: >-
           {% set spread = states(spread_entity) | float(none) %}
           {% set wind = states(wind_entity) | float(none) %}
-          {% set cloud = state_attr(cloud_entity, 'cloud_coverage') | float(0) %}
           {% if spread is none or wind is none %}
             {{ none }}
-          {% elif is_state(rain_entity, 'on') %}
+          {% elif is_state(rain_entity, 'on') or is_state(moisture_entity, 'off') %}
             {{ 0 }}
           {% else %}
-            {% set spread_score = [[((1.5 - spread) / 1.4), 0] | max, 1] | min %}
-            {% set unsaturated = [[((spread - 0.2) / 0.8), 0] | max, 1] | min %}
-            {% set saturated = 1 - unsaturated %}
-            {% set cloud_score = [[((90 - cloud) / 50), 0] | max, 1] | min %}
-            {% set cooling_score = 1 - (1 - cloud_score) * unsaturated %}
-            {% set wind_score = [[[((12 - wind) / 9), 0] | max, 1] | min, saturated] | max %}
-            {{ (spread_score * wind_score * cooling_score * 100) | round(0) }}
+            {% set spread_score = [[((2.5 - spread) / 2.0), 0] | max, 1] | min %}
+            {% set wind_score = [[((12 - wind) / 9), 0] | max, 1] | min %}
+            {{ (spread_score * wind_score * 100) | round(0) }}
           {% endif %}
         availability: "{{ has_value(spread_entity) and has_value(wind_entity) }}"
   - binary_sensor:
@@ -871,19 +866,14 @@ template:
           dew_point_entity: sensor.weather_station_dew_point
           spread_entity: sensor.dew_point_spread
           probability_entity: sensor.fog_probability
-          rain_entity: binary_sensor.raining
-          moisture_entity: binary_sensor.weather_station_moisture
-          # dewy-but-unsaturated calm nights score in the 70s with only brief spikes above 85
-          # (which delay_on absorbs); sustained saturation (spread <= 0.2°C) scores 93-100
+          # the score plateaus make high values common on merely dewy calm nights (~85% observed),
+          # so the bar sits above that band; genuine fog conditions score 88-100 in the same data
           probability_threshold: 85
-        # moisture alone doesn't mean fog (it also confirms dew), but real fog should always wet the sensor,
-        # so require it as a confirmatory check on top of the probability estimate rather than as a trigger on its own.
-        # rain is also excluded upstream in the probability itself; kept here so this sensor stands on its own
+        # rain and a dry moisture sensor are both handled upstream in the probability, so this is left as
+        # a threshold plus delay_on: the sustained-ness of the reading is the only thing it adds
         state: >-
           {% set probability = states(probability_entity) | float(none) %}
-          {% set raining = is_state(rain_entity, 'on') %}
-          {% set moist = is_state(moisture_entity, 'on') %}
-          {{ probability is not none and probability > probability_threshold and not raining and moist }}
+          {{ probability is not none and probability > probability_threshold }}
         delay_on: "00:15:00"
         attributes:
           label: >-

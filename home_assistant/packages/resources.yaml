@@ -371,6 +371,11 @@ template:
       - name: "Battery Charge Variance"
         unique_id: "1ec45caf-70f4-4e15-b424-a16e86407b49"
         unit_of_measurement: "%"
+        # without this a momentary unavailable source reads as 0% via int(0),
+        # which looks like a huge negative variance and trips the alert below
+        availability: >-
+          {{ has_value('sensor.battery_state_of_charge') and
+             has_value('sensor.capacity_charge_point') }}
         state: >-
           {{ states('sensor.battery_state_of_charge') | int(0) - states('sensor.capacity_charge_point') | int(0) }}
         icon: mdi:sigma-lower

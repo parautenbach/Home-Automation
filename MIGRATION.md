@@ -81,6 +81,32 @@ marker under the Home Alarm tile.
      error. The "Alarm State Changed" notification logic relies on state being mirrored
      from the panel — verify nothing shows a false "armed".)
 
+### Soak findings
+
+**2026-08-28 — armed home from HA via `alarm_control_panel.home_test_area_01_home`:**
+
+    state: armed_home
+    code_format: null          code_arm_required: false
+    changed_by: null           zone_in_alarm: null
+    supported_features: 3
+
+- Arming from HA works and needs no code — the `code:`-free service calls are correct.
+- `supported_features: 3` is arm-home + arm-away only. So: no `armed_night` (the
+  "Set To Stay If Night Mode Activated" automation is almost certainly dead code —
+  confirm the Home app no longer offers night mode, then delete it), no
+  `alarm_control_panel.alarm_trigger` (panic must go through `button.home_user_panic`,
+  as built), and no custom bypass.
+- `changed_by` was null for an HA-initiated arm. Still unknown whether it populates for
+  the app, keypad or remotes — that is the test that matters. If it is always null, the
+  attribution clause in "Alarm State Changed" never fires; that degrades cleanly (the
+  message simply omits it), but the variable could then be dropped.
+- `zone_in_alarm` null while merely armed is expected; it only means anything during an
+  alarm.
+
+Still to test: force-arm with a zone open, and the panic (coordinate with the security
+company). Also worth checking on any state change: does the manual panel
+`alarm_control_panel.home` follow via the old webhook, i.e. do both paths agree?
+
 ### Cutover (quiet day, single restart)
 
 All renames happen here, after the legacy manual panels are gone. The zone and device

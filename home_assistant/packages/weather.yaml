@@ -1184,8 +1184,8 @@ automation:
           # now (measured)
           current_temp: "{{ states('sensor.outside_temperature') | int(0) }}"
           heat_label: "{{ state_attr('sensor.outside_temperature', 'thermal_comfort_label') }}"
-          humidity_label: "{{ state_attr('sensor.humidity_condition', 'label') }}"
-          humidity_value: "{{ state_attr('sensor.humidity_condition', 'humidity_with_unit') }}"
+          humidity_label: "{{ state_attr('sensor.humidity_perception', 'label') }}"
+          humidity_value: "{{ state_attr('sensor.humidity_perception', 'humidity_with_unit') }}"
           fog_on: "{{ is_state('binary_sensor.fog_conditions', 'on') }}"
           fog_probability: "{{ state_attr('binary_sensor.fog_conditions', 'probability_with_unit') }}"
           fog_probability_value: "{{ states('sensor.fog_probability') | float(0) }}"

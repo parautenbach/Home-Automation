@@ -61,9 +61,12 @@
             }
 %}
 
-{# Humidity/thermal-comfort perception colors, keyed to sensor.humidity_condition's state. #}
+{# Humidity/thermal-comfort perception colors, keyed to sensor.humidity_perception's state.
+   'damp' is that sensor's own addition - cold saturated air, which the underlying dew point
+   perception scale calls 'dry' - so it sits beside dry's blue rather than on the muggy ramp. #}
 {% set humidity_condition_map =
             {
+                "damp":                    "#1abc9c",
                 "dry":                     "#3498db",
                 "very_comfortable":        "#40b100",
                 "comfortable":             "#70a03c",

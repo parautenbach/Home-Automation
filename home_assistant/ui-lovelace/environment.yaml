@@ -121,7 +121,7 @@ cards:
                       --uix-icon-color: {{ gradient_color(state, temp_degrees_c_human_map) }};
                     }
               - type: tile
-                entity: sensor.humidity_condition
+                entity: sensor.humidity_perception
                 name: Humidity
                 icon: mdi:water-percent
                 state_content:

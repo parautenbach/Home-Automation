@@ -96,16 +96,20 @@ marker under the Home Alarm tile.
   confirm the Home app no longer offers night mode, then delete it), no
   `alarm_control_panel.alarm_trigger` (panic must go through `button.home_user_panic`,
   as built), and no custom bypass.
-- `changed_by` was null for an HA-initiated arm. Still unknown whether it populates for
-  the app, keypad or remotes — that is the test that matters. If it is always null, the
-  attribution clause in "Alarm State Changed" never fires; that degrades cleanly (the
-  message simply omits it), but the variable could then be dropped.
 - `zone_in_alarm` null while merely armed is expected; it only means anything during an
   alarm.
 
+**2026-08-28 — disarmed and armed stay from the Olarm app:** state followed correctly,
+and `changed_by` was **still null**. Combined with the HA-initiated arm above, that is
+two of the three sources confirmed null, so `changed_by` is dead for our purposes — the
+old webhook's `userFullname` has no MQTT equivalent. Replace the attribution in "Alarm
+State Changed" with something derived from the HA context (see below), or drop it.
+
+**Parity confirmed:** the manual `alarm_control_panel.home` followed the new panel's
+state via the old webhook, so both paths agree on a real event.
+
 Still to test: force-arm with a zone open, and the panic (coordinate with the security
-company). Also worth checking on any state change: does the manual panel
-`alarm_control_panel.home` follow via the old webhook, i.e. do both paths agree?
+company).
 
 ### Cutover (quiet day, single restart)
 

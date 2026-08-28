@@ -150,24 +150,25 @@ renames in one sitting.
    switches reference the normalised ids, so this step is mandatory. Deleting and
    re-adding the integration would also regenerate every id from the current names, but
    that rebuilds everything — targeted renames are safer.)
-7. Rename the two panels (entity id *and* display name):
-   - `alarm_control_panel.home_area_01_home` → `alarm_control_panel.home` ("Home")
-   - `alarm_control_panel.home_area_02_flatlet` → `alarm_control_panel.flatlet` ("Flatlet")
+7. Reload template entities (or restart once more) so the template panels and switches
+   bind to the renamed entities.
 
-   These two renames are the pivot of the whole migration: the panels take over the ids
-   the manual panels used, so the 47 existing references across `olarm.yaml` (17),
-   `home.yaml` (14), `security.yaml` (6), `homekit.yaml` (4) and `main.yaml` (2) keep
-   working untouched. Keeping the integration's default ids instead would mean rewriting
-   all 47, and HomeKit would re-create the alarm accessories (the accessory id derives
-   from the entity id), so they would lose their room assignment and any Apple Home
-   automations referencing them would break. Renaming also keeps the recorder history
-   continuous, since history is keyed on entity id.
-8. Reload template entities (or restart once more) so the template switches bind to the
-   renamed entities.
+**No panel renames are needed.** The template alarm panels in `olarm.yaml` claim
+`alarm_control_panel.home` and `.flatlet` themselves (via `default_entity_id`), so the
+47 existing references across `olarm.yaml`, `home.yaml`, `security.yaml`, `homekit.yaml`
+and `main.yaml` keep working untouched, HomeKit keeps its accessories (their ids derive
+from the entity id), and the recorder history stays continuous. The integration's own
+panels stay at their generated ids and are only ever addressed by the template panels.
 
 ### Verify after cutover
 
-- [ ] Both panels show correct state; arm/disarm from HA works without a code.
+- [ ] The template panels came up as `alarm_control_panel.home` and `.flatlet` (check
+      `default_entity_id` took effect and nothing landed as `..._2`).
+- [ ] Both panels show correct state, mirroring the integration's panels.
+- [ ] Arm/disarm from the HA UI prompts for the code; a wrong code does nothing and logs
+      a warning; the correct code works. Flatlet offers no stay mode.
+- [ ] Automations still arm/disarm (they pass the code): the notification actions and
+      the presence flows.
 - [ ] Arm/disarm from the app/keypad/remote notifies (via "Alarm State Changed").
 - [ ] No notification spam after an HA restart (unknown → state is filtered).
 - [ ] Only one arm-reminder notification is present at a time (the stacking fix): let a

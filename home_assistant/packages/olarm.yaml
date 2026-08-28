@@ -8,15 +8,20 @@
 #  * an ac power sensor for the panel's mains supply
 #
 # this package builds on top of it:
+#  * template alarm panels wrapping the integration's panels to require a code
+#    (the integration's own panels take none) – these own alarm_control_panel.home
+#    and .flatlet, so the rest of the config, the dashboards and homekit are unchanged
 #  * presence aware: ask to arm/disarm when leaving/arriving
 #  * arm reminders and state-change notifications
 #  * template switches wrapping the integration's bypass buttons and sensors
 #    (bypass is a state, not an event, so a switch is the honest ui for it)
 #  * device class and friendly name customisations for the zone sensors
 #
-# expected entity ids (after renaming the device from "Home Test" to "Home" and
-# manually renaming the two area panels – see MIGRATION.md in the repo root):
-#  * alarm_control_panel.home, alarm_control_panel.flatlet
+# expected entity ids (after renaming the device from "Home Test" to "Home" –
+# see MIGRATION.md in the repo root):
+#  * alarm_control_panel.home, alarm_control_panel.flatlet (the template panels below)
+#  * alarm_control_panel.home_area_01_home, alarm_control_panel.home_area_02_flatlet
+#    (the integration's own panels, kept at their generated ids)
 #  * binary_sensor.home_zone_<nnn>_<name> (zone state)
 #  * binary_sensor.home_zone_<nnn>_bypass_<name> (bypass state)
 #  * button.home_zone_<nnn>_bypass_<name>, button.home_zone_<nnn>_unbypass_<name>
@@ -87,6 +92,111 @@ homeassistant:
       friendly_name: Music Room Door
     binary_sensor.home_zone_020_braai_room_door:
       friendly_name: Braai Room Door
+
+# the integration's own panels take no code (code_format is null, code_arm_required is
+# false), so arming or disarming from the ha ui would be a single tap. these template
+# panels wrap them to restore the code prompt the old manual panels had, and they take
+# over the alarm_control_panel.home / .flatlet entity ids, so the rest of the config,
+# the dashboards and homekit keep working and the integration's panels can keep their
+# generated ids.
+#
+# note: the template alarm panel does not validate the code itself – it passes whatever
+# was entered to the actions as `code`, so each action compares it explicitly.
+# https://community.home-assistant.io/t/add-a-code-to-the-template-alarm-control-panel/602869
+#
+# this is an accident guard, not a security boundary: anybody with access to home
+# assistant can still call alarm_control_panel.alarm_disarm on the underlying panel.
+#
+# state is mirrored straight from the integration's panel, so the ui only moves once the
+# physical panel has confirmed – a wrong code, or a command the panel rejects, leaves the
+# state where it was.
+template:
+  - alarm_control_panel:
+      - name: "Home"
+        unique_id: "f82351c6-5e50-4902-9b9e-48d2ebd5ec87"
+        default_entity_id: alarm_control_panel.home
+        state: "{{ states('alarm_control_panel.home_area_01_home') }}"
+        code_format: number
+        code_arm_required: true
+        arm_home:
+          - variables:
+              valid_code: !secret alarm_code
+          - if: "{{ code != valid_code }}"
+            then:
+              - service: system_log.write
+                data:
+                  message: "Rejected arm (stay) for the home alarm: invalid code."
+                  level: warning
+                  logger: "homeassistant.components.olarm"
+              - stop: "Invalid code."
+          - service: alarm_control_panel.alarm_arm_home
+            target:
+              entity_id: alarm_control_panel.home_area_01_home
+        arm_away:
+          - variables:
+              valid_code: !secret alarm_code
+          - if: "{{ code != valid_code }}"
+            then:
+              - service: system_log.write
+                data:
+                  message: "Rejected arm (away) for the home alarm: invalid code."
+                  level: warning
+                  logger: "homeassistant.components.olarm"
+              - stop: "Invalid code."
+          - service: alarm_control_panel.alarm_arm_away
+            target:
+              entity_id: alarm_control_panel.home_area_01_home
+        disarm:
+          - variables:
+              valid_code: !secret alarm_code
+          - if: "{{ code != valid_code }}"
+            then:
+              - service: system_log.write
+                data:
+                  message: "Rejected disarm for the home alarm: invalid code."
+                  level: warning
+                  logger: "homeassistant.components.olarm"
+              - stop: "Invalid code."
+          - service: alarm_control_panel.alarm_disarm
+            target:
+              entity_id: alarm_control_panel.home_area_01_home
+      - name: "Flatlet"
+        unique_id: "0f8ab03e-4fec-45c2-b4c9-62b323787692"
+        default_entity_id: alarm_control_panel.flatlet
+        state: "{{ states('alarm_control_panel.home_area_02_flatlet') }}"
+        code_format: number
+        code_arm_required: true
+        # no arm_home: stay mode doesn't make sense for the flatlet, and leaving it out
+        # means the panel doesn't advertise the feature at all (the old manual panel had
+        # to list armed_home anyway to keep homekit happy)
+        arm_away:
+          - variables:
+              valid_code: !secret alarm_code
+          - if: "{{ code != valid_code }}"
+            then:
+              - service: system_log.write
+                data:
+                  message: "Rejected arm for the flatlet alarm: invalid code."
+                  level: warning
+                  logger: "homeassistant.components.olarm"
+              - stop: "Invalid code."
+          - service: alarm_control_panel.alarm_arm_away
+            target:
+              entity_id: alarm_control_panel.home_area_02_flatlet
+        disarm:
+          - variables:
+              valid_code: !secret alarm_code
+          - if: "{{ code != valid_code }}"
+            then:
+              - service: system_log.write
+                data:
+                  message: "Rejected disarm for the flatlet alarm: invalid code."
+                  level: warning
+                  logger: "homeassistant.components.olarm"
+              - stop: "Invalid code."
+          - service: alarm_control_panel.alarm_disarm
+            target:
+              entity_id: alarm_control_panel.home_area_02_flatlet
 
 input_datetime:
   workday_alarm_arm_reminder:
@@ -630,10 +740,13 @@ automation:
                     group: "home-security"
                     url: homeassistant://navigate/lovelace-main/security
               - stop: "Garage bypass was not confirmed."
-      # no code required: the integration's panels have code_arm_required off
+      # the template panels require a code, so pass it (the underlying olarm panels
+      # don't, but nothing calls those directly)
       - service: "alarm_control_panel.alarm_{{ trigger.id | replace('_bypass_garage', '') }}"
         target:
           entity_id: "{{ trigger.event.data.action_data.entity_ids }}"
+        data:
+          code: !secret alarm_code
       - if: "{{ trigger.id[0:3] == 'arm'}}"
         then:
           - service: light.turn_off
@@ -775,6 +888,8 @@ automation:
       - service: "alarm_control_panel.alarm_arm_home"
         target:
           entity_id: alarm_control_panel.home
+        data:
+          code: !secret alarm_code
 
   # temporary: independent signal path while soaking the new integration.
   # the integration receives state via olarm's mqtt connection; this webhook is a

@@ -132,7 +132,59 @@ template:
       - name: Main Bedroom AC
         state: "{{ has_value('climate.main_bedroom_ac') and not is_state('climate.main_bedroom_ac', 'off') }}"
         device_class: running
+  # the summer simmer index is a heat index: it combines temperature and humidity because in heat,
+  # humidity is what stops sweat evaporating. Below 21.1°C (70°F) there is no heat stress left to
+  # index and it flattens into a single 'cool' tier, so a 12°C room reads the same as a mild 20°C one.
+  #
+  # these wrappers split that bottom tier and pass the rest of the scale through untouched. They key
+  # off plain room temperature: there is no wind indoors, so an apparent temperature adds nothing, and
+  # humidity barely affects perceived cold anyway. Clothing and metabolic rate would be needed to model
+  # this properly (PMV/PPD), but those differ per person, so tiers on room temperature are the honest
+  # approximation. Thresholds sit higher than the outdoor ones because you are sedentary and lightly
+  # dressed indoors - 15°C in a chair is far less tolerable than 15°C on a walk.
   - sensor:
+      - name: "Inside Thermal Perception"
+        unique_id: "908a9e50-207e-4560-bebd-cc4bb9eddab0"
+        icon: >-
+          {{ 'mdi:snowflake-thermometer' if this.state in ['cold', 'very_cold', 'freezing']
+             else 'mdi:home-thermometer' }}
+        variables:
+          perception_entity: sensor.thermal_comfort_inside_summer_simmer_perception
+          temperature_entity: sensor.office_temperature
+        state: >-
+          {% from 'environment.jinja' import thermal_tier %}
+          {{ thermal_tier(states(temperature_entity) | float(none), states(perception_entity),
+                          indoor=true) }}
+        attributes:
+          label: >-
+            {{ this.state | replace('_', ' ') | title }}
+          perception: >-
+            {{ states(perception_entity) }}
+          overridden: >-
+            {{ this.state != states(perception_entity) }}
+        availability: >-
+          {{ has_value(perception_entity) }}
+      - name: "Bedroom Thermal Perception"
+        unique_id: "0d66834a-99fe-4ff4-8d0d-c2cb5ee9f617"
+        icon: >-
+          {{ 'mdi:snowflake-thermometer' if this.state in ['cold', 'very_cold', 'freezing']
+             else 'mdi:home-thermometer' }}
+        variables:
+          perception_entity: sensor.thermal_comfort_bedroom_summer_simmer_perception
+          temperature_entity: sensor.bedroom_ht_temperature
+        state: >-
+          {% from 'environment.jinja' import thermal_tier %}
+          {{ thermal_tier(states(temperature_entity) | float(none), states(perception_entity),
+                          indoor=true) }}
+        attributes:
+          label: >-
+            {{ this.state | replace('_', ' ') | title }}
+          perception: >-
+            {{ states(perception_entity) }}
+          overridden: >-
+            {{ this.state != states(perception_entity) }}
+        availability: >-
+          {{ has_value(perception_entity) }}
       - name: "Inside vs Outside Temperature"
         unique_id: "77c739d7-87b1-47f7-bcf5-a26f2a484335"
         default_entity_id: sensor.temperature_difference

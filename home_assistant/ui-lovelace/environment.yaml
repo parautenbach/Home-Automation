@@ -552,11 +552,12 @@ cards:
                               }
                             }
                       - type: custom:template-entity-row
-                        entity: sensor.thermal_comfort_inside_summer_simmer_perception
+                        entity: sensor.inside_thermal_perception
                         name: Inside Thermal Comfort
                         state: >-
-                          {{ 'Met' if states('sensor.thermal_comfort_inside_summer_simmer_perception') in ['slightly_warm', 'increasing_discomfort', 'extremely_warm', 'danger_of_heatstroke'] else 'Not met' }}
-                        secondary: "{{ state_translated('sensor.thermal_comfort_inside_summer_simmer_perception') }}"
+                          {{ 'Met' if states('sensor.inside_thermal_perception') in ['slightly_warm', 'increasing_discomfort', 'extremely_warm', 'danger_of_heatstroke'] else 'Not met' }}
+                        # the wrapper's own label, since state_translated has no strings for a template entity
+                        secondary: "{{ state_attr('sensor.inside_thermal_perception', 'label') }}"
                         uix:
                           style: |
                             .state {
@@ -564,11 +565,12 @@ cards:
                               }
                             }
                       - type: custom:template-entity-row
-                        entity: sensor.thermal_comfort_outside_summer_simmer_perception
+                        entity: sensor.outside_thermal_perception
                         name: Outside Thermal Comfort
                         state: >-
-                          {{ 'Met' if not states('sensor.thermal_comfort_outside_summer_simmer_perception') in ['slightly_cool', 'comfortable'] else 'Not met' }}
-                        secondary: "{{ state_translated('sensor.thermal_comfort_outside_summer_simmer_perception') }}"
+                          {{ 'Met' if not states('sensor.outside_thermal_perception') in ['slightly_cool', 'comfortable'] else 'Not met' }}
+                        # the wrapper's own label, since state_translated has no strings for a template entity
+                        secondary: "{{ state_attr('sensor.outside_thermal_perception', 'label') }}"
                         uix:
                           style: |
                             .state {
@@ -629,11 +631,12 @@ cards:
                               }
                             }
                       - type: custom:template-entity-row
-                        entity: sensor.thermal_comfort_inside_summer_simmer_perception
+                        entity: sensor.inside_thermal_perception
                         name: Inside Thermal Comfort
                         state: >-
-                          {{ 'Met' if states('sensor.thermal_comfort_inside_summer_simmer_perception') in ['cool', 'cold'] else 'Not met' }}
-                        secondary: "{{ state_translated('sensor.thermal_comfort_inside_summer_simmer_perception') }}"
+                          {{ 'Met' if states('sensor.inside_thermal_perception') in ['cool', 'cold', 'very_cold', 'freezing'] else 'Not met' }}
+                        # the wrapper's own label, since state_translated has no strings for a template entity
+                        secondary: "{{ state_attr('sensor.inside_thermal_perception', 'label') }}"
                         uix:
                           style: |
                             .state {
@@ -641,11 +644,12 @@ cards:
                               }
                             }
                       - type: custom:template-entity-row
-                        entity: sensor.thermal_comfort_outside_summer_simmer_perception
+                        entity: sensor.outside_thermal_perception
                         name: Outside Thermal Comfort
                         state: >-
-                          {{ 'Met' if not states('sensor.thermal_comfort_outside_summer_simmer_perception') in ['comfortable', 'slightly_warm'] else 'Not met' }}
-                        secondary: "{{ state_translated('sensor.thermal_comfort_outside_summer_simmer_perception') }}"
+                          {{ 'Met' if not states('sensor.outside_thermal_perception') in ['comfortable', 'slightly_warm'] else 'Not met' }}
+                        # the wrapper's own label, since state_translated has no strings for a template entity
+                        secondary: "{{ state_attr('sensor.outside_thermal_perception', 'label') }}"
                         uix:
                           style: |
                             .state {
@@ -801,7 +805,7 @@ cards:
                   state-badge {
                     margin: 0;
                   }
-          - entity: sensor.thermal_comfort_inside_summer_simmer_perception
+          - entity: sensor.inside_thermal_perception
             name: Inside
             icon: mdi:home-thermometer-outline
             uix: &card_mod_comfort_style
@@ -821,6 +825,10 @@ cards:
                       {%- set comfort_map =
                             {
                               'unknown':               '',
+                              {# below 'cold' the ramp turns icy rather than darker: a deeper blue
+                                 loses too much contrast to stay legible on the dark theme #}
+                              'freezing':              '#7fc4ff',
+                              'very_cold':             '#5aa9f0',
                               'cold':                  '#0484d9',
                               'cool':                  '#3498db',
                               'slightly_cool':         '#34dbd5',
@@ -837,7 +845,7 @@ cards:
                   state-badge {
                     margin: 0;
                   }
-          - entity: sensor.thermal_comfort_outside_summer_simmer_perception
+          - entity: sensor.outside_thermal_perception
             name: Outside
             icon: mdi:sun-thermometer-outline
             uix: *card_mod_comfort_style
@@ -947,9 +955,9 @@ cards:
         entities:
           - entity: binary_sensor.daytime
             name: Daytime
-          - entity: sensor.thermal_comfort_inside_summer_simmer_perception
+          - entity: sensor.inside_thermal_perception
             name: Inside
-          - entity: sensor.thermal_comfort_outside_summer_simmer_perception
+          - entity: sensor.outside_thermal_perception
             name: Outside
           - entity: binary_sensor.outside_temperature_trend
             name: O. Trend

@@ -287,11 +287,42 @@ template:
       # https://github.com/pnbruckner/ha-sun2/blob/master/custom_components/sun2/const.py
       # keep value in sync with the fair weather binary sensor
   - sensor:
+      - name: "Outside Thermal Perception"
+        unique_id: "a47c934a-e27b-45bd-aa95-c0f0a10b054e"
+        icon: >-
+          {{ 'mdi:snowflake-thermometer' if this.state in ['cold', 'very_cold', 'freezing']
+             else 'mdi:thermometer' }}
+        variables:
+          perception_entity: sensor.thermal_comfort_outside_summer_simmer_perception
+          apparent_entity: sensor.outside_apparent_temperature
+        # thermal_tier splits the index's single 'cool' tier, which otherwise makes a 5°C winter
+        # morning read identically to a mild 20°C evening; its thresholds live with the macro.
+        #
+        # it is fed apparent temperature rather than the dry-bulb reading because at the cold end the
+        # body loses heat convectively, so wind is what matters - a 12°C day in a 25 km/h southeaster
+        # feels like 6°C. Humidity is in that formula too but barely moves it down here (about +2°C
+        # across the whole RH range, and in the warming direction); the damp side of cold is carried
+        # by sensor.humidity_perception instead, which keeps the two axes separate.
+        state: >-
+          {% from 'environment.jinja' import thermal_tier %}
+          {{ thermal_tier(states(apparent_entity) | float(none), states(perception_entity)) }}
+        attributes:
+          label: >-
+            {{ this.state | replace('_', ' ') | title }}
+          # the underlying index reading, what the tiers were judged on, and whether they overrode it
+          perception: >-
+            {{ states(perception_entity) }}
+          apparent_temperature: >-
+            {{ states(apparent_entity) | float(0) | round(1) }}
+          overridden: >-
+            {{ this.state != states(perception_entity) }}
+        availability: >-
+          {{ has_value(perception_entity) }}
       - name: "Outside Temperature"
         unique_id: "17306e70-7ffe-49a1-a448-9c99df8f7690"
         variables:
           temperature_entity: sensor.weather_station_temperature
-          thermal_perception_entity: sensor.thermal_comfort_outside_summer_simmer_perception
+          thermal_perception_entity: sensor.outside_thermal_perception
         state: >-
           {{ states(temperature_entity) }}
           {# state_attr('weather.openweathermap', 'temperature') | float(None) #}

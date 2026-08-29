@@ -207,6 +207,36 @@ validated event rate, from an ordered list of rate tiers.
 {%- endmacro -%}
 
 {#
+Cold tiers below the summer simmer index's floor.
+
+The index is a heat index: below 21.1°C (70°F) there is no heat stress left to measure and it
+collapses into a single 'cool' tier, so a 5°C morning reads the same as a mild 20°C evening. This
+splits that tier and passes the rest of the scale through untouched.
+
+The two threshold sets are not the same scale. Outdoors the temperature passed in is an apparent
+temperature, since wind is what makes cold bite; indoors it is dry-bulb, because there is no wind
+and humidity barely moves perceived cold. The indoor numbers also sit higher because you are
+sedentary and lightly dressed there - an 18°C room is chilly, an 18°C walk is pleasant.
+
+:param temperature: temperature to judge, in °C. Apparent outdoors, dry-bulb indoors.
+:param perception: the underlying index state, returned unchanged above the cold tiers.
+:param indoor: true to use the indoor thresholds.
+:returns: snake_case tier name, or the perception unchanged. Untrimmed, so use | trim if the
+          result is compared rather than rendered as an entity state.
+#}
+{%- macro thermal_tier(temperature, perception, indoor=false) -%}
+  {%- set cold      = 18 if indoor else 15 -%}
+  {%- set very_cold = 15 if indoor else 10 -%}
+  {%- set freezing  = 12 if indoor else  5 -%}
+  {%- if temperature is none -%} {{ perception }}
+  {%- elif temperature < freezing -%} freezing
+  {%- elif temperature < very_cold -%} very_cold
+  {%- elif temperature < cold -%} cold
+  {%- else -%} {{ perception }}
+  {%- endif -%}
+{%- endmacro -%}
+
+{#
 Beaufort scale tier for a wind speed.
 
 :param speed_kmh: wind speed in km/h.

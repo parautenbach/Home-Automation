@@ -282,7 +282,7 @@ cards:
                   state-badge {
                     margin: 0;
                   }
-          - entity: sensor.thermal_comfort_inside_summer_simmer_perception
+          - entity: sensor.inside_thermal_perception
             name: Inside
             icon: mdi:home-thermometer-outline
             uix: &card_mod_comfort_style
@@ -301,6 +301,10 @@ cards:
                       {%- set comfort_map =
                             {
                               'unknown':               '',
+                              {# below 'cold' the ramp turns icy rather than darker: a deeper blue
+                                 loses too much contrast to stay legible on the dark theme #}
+                              'freezing':              '#7fc4ff',
+                              'very_cold':             '#5aa9f0',
                               'cold':                  '#0484d9',
                               'cool':                  '#3498db',
                               'slightly_cool':         '#34dbd5',
@@ -317,7 +321,7 @@ cards:
                   state-badge {
                     margin: 0;
                   }
-          - entity: sensor.thermal_comfort_outside_summer_simmer_perception
+          - entity: sensor.outside_thermal_perception
             name: Outside
             icon: mdi:sun-thermometer-outline
             uix: *card_mod_comfort_style

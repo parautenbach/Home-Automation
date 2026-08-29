@@ -115,7 +115,6 @@ template:
   - alarm_control_panel:
       - name: "Home"
         unique_id: "f82351c6-5e50-4902-9b9e-48d2ebd5ec87"
-        default_entity_id: alarm_control_panel.home
         state: "{{ states('alarm_control_panel.home_area_01_home') }}"
         code_format: number
         code_arm_required: true
@@ -163,7 +162,6 @@ template:
               entity_id: alarm_control_panel.home_area_01_home
       - name: "Flatlet"
         unique_id: "0f8ab03e-4fec-45c2-b4c9-62b323787692"
-        default_entity_id: alarm_control_panel.flatlet
         state: "{{ states('alarm_control_panel.home_area_02_flatlet') }}"
         code_format: number
         code_arm_required: true

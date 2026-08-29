@@ -162,8 +162,8 @@ renames in one sitting.
 7. Reload template entities (or restart once more) so the template panels and switches
    bind to the renamed entities.
 
-**No panel renames are needed.** The template alarm panels in `olarm.yaml` claim
-`alarm_control_panel.home` and `.flatlet` themselves (via `default_entity_id`), so the
+**No panel renames are needed.** The template alarm panels in `olarm.yaml` are named
+"Home" and "Flatlet", so they take `alarm_control_panel.home` and `.flatlet`, and the
 47 existing references across `olarm.yaml`, `home.yaml`, `security.yaml`, `homekit.yaml`
 and `main.yaml` keep working untouched, HomeKit keeps its accessories (their ids derive
 from the entity id), and the recorder history stays continuous. The integration's own
@@ -171,8 +171,8 @@ panels stay at their generated ids and are only ever addressed by the template p
 
 ### Verify after cutover
 
-- [ ] The template panels came up as `alarm_control_panel.home` and `.flatlet` (check
-      `default_entity_id` took effect and nothing landed as `..._2`).
+- [ ] The template panels came up as `alarm_control_panel.home` and `.flatlet` (rename
+      them if the ids were still taken when they first registered).
 - [ ] Both panels show correct state, mirroring the integration's panels.
 - [ ] Arm/disarm from the HA UI prompts for the code; a wrong code does nothing and logs
       a warning; the correct code works. Flatlet offers no stay mode.

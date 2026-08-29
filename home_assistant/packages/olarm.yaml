@@ -799,8 +799,7 @@ automation:
           # includes the app, the keypad and the remotes – so say nothing, don't guess)
           actor: >-
             {%- from 'security.jinja' import get_ha_actor -%}
-            {%- set get_ha_actor_fn = get_ha_actor | as_function -%}
-            {{ get_ha_actor_fn(trigger.to_state.context) }}
+            {{ get_ha_actor(trigger.to_state.context) | trim }}
           bypassed_zones: >-
             {%- from 'security.jinja' import get_bypassed_zones -%}
             {%- set get_bypassed_zones_fn = get_bypassed_zones | as_function -%}

@@ -623,7 +623,7 @@ automation:
     # initial_state: true
     trigger:
       - platform: time
-        at: "06:45:00"
+        at: input_datetime.baby_wake_up_time
     condition:
       - condition: state
         entity_id: light.bedroom_bedlamp
@@ -2034,12 +2034,15 @@ automation:
         id: "falling_temp"
       # outside simmer trigger? perhaps not, since we really care what it feels like inside.
       - platform: state
-        entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
+        entity_id: sensor.inside_thermal_perception
         # same as matching condition below
         to:
-          # cool
+          # cool - the wrapper splits the index's single 'cool' tier, so the colder states are listed
+          # explicitly or genuinely cold readings would stop matching
           - cool
           - cold
+          - very_cold
+          - freezing
           # warm
           - slightly_warm
           - increasing_discomfort
@@ -2085,7 +2088,7 @@ automation:
                 # same as matching trigger above
                 above: 24.4
               - condition: state
-                entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
+                entity_id: sensor.inside_thermal_perception
                 # same as matching trigger above
                 state:
                   - slightly_warm
@@ -2095,7 +2098,7 @@ automation:
               - condition: not
                 conditions:
                   - condition: state
-                    entity_id: sensor.thermal_comfort_outside_summer_simmer_perception
+                    entity_id: sensor.outside_thermal_perception
                     state:
                       - slightly_cool
                       - comfortable
@@ -2116,15 +2119,17 @@ automation:
                 # same as matching trigger above
                 below: 16.1
               - condition: state
-                entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
+                entity_id: sensor.inside_thermal_perception
                 # same as matching trigger above
                 state:
                   - cool
                   - cold
+                  - very_cold
+                  - freezing
               - condition: not
                 conditions:
                   - condition: state
-                    entity_id: sensor.thermal_comfort_outside_summer_simmer_perception
+                    entity_id: sensor.outside_thermal_perception
                     state:
                       - comfortable
                       - slightly_warm
@@ -2186,10 +2191,12 @@ automation:
                     # same as matching trigger/condition above
                     below: 16.1
                   - condition: state
-                    entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
+                    entity_id: sensor.inside_thermal_perception
                     # same as matching trigger/condition above
                     state:
                       - cold
+                      - very_cold
+                      - freezing
             sequence:
              # https://github.com/mill1000/midea-ac-py/issues/284
               - service: climate.set_temperature
@@ -2229,9 +2236,11 @@ automation:
           message: >-
             {% set mode = states('climate.living_room_ac') ~ 'ing' %}
             {% set outside_temp = states('sensor.outside_temperature_filtered', with_unit=True) %}
-            {% set outside_perception = state_translated('sensor.thermal_comfort_outside_summer_simmer_perception') | lower %}
+            {# the wrapper's own label: state_translated has no strings for a template entity #}
+            {% set outside_perception = state_attr('sensor.outside_thermal_perception', 'label') | lower %}
             {% set inside_temp = states('sensor.office_temperature', with_unit=True) %}
-            {% set inside_perception = state_translated('sensor.thermal_comfort_inside_summer_simmer_perception') | lower %}
+            {# the wrapper's own label: state_translated has no strings for a template entity #}
+            {% set inside_perception = state_attr('sensor.inside_thermal_perception', 'label') | lower %}
             {% if trigger.id == "presence" %}
               {% set reason = "you arrived home" %}
             {% else %}
@@ -2275,7 +2284,7 @@ automation:
         above: 17.9
       - platform: state
         # we use the OUTSIDE sensor here, since the house will tend to this, but delayed due to thermal mass
-        entity_id: sensor.thermal_comfort_outside_summer_simmer_perception
+        entity_id: sensor.outside_thermal_perception
         # same as matching condition below
         to:
           - comfortable
@@ -2344,7 +2353,7 @@ automation:
                     above: 0.9
           # we trigger on "comfortable" outside, but we check the inside here
           - condition: state
-            entity_id: sensor.thermal_comfort_inside_summer_simmer_perception
+            entity_id: sensor.inside_thermal_perception
             state:
               - slightly_cool
               - comfortable
@@ -2725,6 +2734,23 @@ automation:
         entity_id: timer.go_home_reminder
         state: "idle"
     action:
+      # this fires again every 5 min while still out, and ios will only clear the most
+      # recent critical notification from a given tag, so clear the previous reminder
+      # before sending the next one to stop them stacking up unclearable
+      # https://companion.home-assistant.io/docs/notifications/notifications-basic
+      - service: notify.mobile_app_ceres
+        data:
+          message: "clear_notification"
+          data:
+            tag: "routine-go-home"
+      - delay:
+          seconds: 1
+      # if we got home during the clear delay, the cancel automation has already run
+      # and won't run again, so stop here rather than sending a reminder that nothing
+      # will ever clear. this also skips the timer.start below, ending the nag
+      - condition: state
+        entity_id: person.pieter_rautenbach
+        state: "Park"
       - service: notify.mobile_app_ceres
         data:
           title: "⏰ Routine"
@@ -2753,17 +2779,16 @@ automation:
         entity_id: person.pieter_rautenbach
         to: "home"
     action:
+      # cancel first, otherwise a timer.finished landing mid-sequence can queue
+      # another reminder that we then never clear. cancelling an idle timer is a no-op
+      - service: timer.cancel
+        target:
+          entity_id: timer.go_home_reminder
       - service: notify.mobile_app_ceres
         data:
           message: "clear_notification"
           data:
             tag: "routine-go-home"
-      - condition: state
-        entity_id: timer.go_home_reminder
-        state: "active"
-      - service: timer.cancel
-        target:
-          entity_id: timer.go_home_reminder
 
   - alias: "Send Bedtime Update"
     id: "a57345d4-eec3-42b6-970d-84e2b77fb646"
@@ -2798,7 +2823,8 @@ automation:
             {% else %}
               {% set direction = 'same' %}
             {% endif %}
-            {% set inside_perception = state_translated('sensor.thermal_comfort_bedroom_summer_simmer_perception') | lower %}
+            {# the wrapper's own label: state_translated has no strings for a template entity #}
+            {% set inside_perception = state_attr('sensor.bedroom_thermal_perception', 'label') | lower %}
             {% set inside_min = states('sensor.bedroom_minimum_temperature_12_hours', with_unit=True) %}
             {% set inside_max = states('sensor.bedroom_maximum_temperature_12_hours', with_unit=True) %}
             {% set outside_min = states('sensor.minimum_temperature_tomorrow', with_unit=True) %}

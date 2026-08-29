@@ -951,7 +951,7 @@ automation:
   # might need to specialise this a bit more in future:
   # e.g. switch on from 6 am when arriving home and light is low
   # separate from the default on at 8 am (and maybe only on workdays)
-  - alias: "Lights On Upon Low Light"
+  - alias: "Normal Lights On While Home"
     id: "36373097-6fba-45ae-9888-d88b668b997d"
     initial_state: true
     trace:
@@ -960,8 +960,25 @@ automation:
       - platform: state
         entity_id: binary_sensor.low_light
         to: "on"
-      - platform: time_pattern
-        minutes: "/15"
+      # targeted triggers replacing the old /15 polling trigger, which papered over these cases:
+      # entering the daytime window while already home (see the time gate in the conditions)
+      - platform: time
+        at: "08:00:00"
+      - platform: sun
+        event: sunrise
+        offset: "01:30:00"
+      # the electricity feed condition below blocks runs during load shedding; retry once it's restored
+      - platform: state
+        entity_id: binary_sensor.electricity_feed
+        to: "on"
+      # similarly, the housekeeping condition below blocks runs while cleaning is in progress
+      # (note: "Revert Cleaning Day Lights" reverts the cleaning-day lights on this same trigger;
+      # this one restores the normal lights, which that automation doesn't touch)
+      - platform: state
+        entity_id: calendar.housekeeping
+        to: "off"
+        # same guard as in "Revert Cleaning Day Lights": the calendar has flapped via unavailable at night
+        not_from: "unavailable"
       - platform: state
         entity_id: binary_sensor.anybody_home
         to: "on"
@@ -972,7 +989,9 @@ automation:
         entity_id: input_boolean.baby_sleep_mode
         to: "off"
     condition:
+      # disabled to figure out whether this "something needs turning on" guard is needed at all
       - condition: or
+        enabled: false
         conditions:
           - condition: state
             entity_id: light.living_room_lamp
@@ -987,17 +1006,14 @@ automation:
       - condition: state
         entity_id: binary_sensor.electricity_feed
         state: "on"
+      # disabled so that the normal lights are on all day while we're home, not only in low light
       - condition: state
         entity_id: binary_sensor.low_light
         state: "on"
-      - condition: and
-        conditions:
-          - condition: state
-            entity_id: binary_sensor.pieter_present
-            state: "on"
-          - condition: state
-            entity_id: binary_sensor.rouve_present
-            state: "on"
+        enabled: false
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "on"
       - condition: state
         entity_id: calendar.housekeeping
         state: "off"
@@ -1030,9 +1046,16 @@ automation:
                 state: "on"
           - condition: and
             conditions:
-              - condition: sun
-                after: sunrise
-                after_offset: "01:30:00"
+              - condition: or
+                conditions:
+                  - condition: sun
+                    after: sunrise
+                    after_offset: "01:30:00"
+                  # in winter, sunrise+1:30 is only ~09:20, leaving a gap after the
+                  # wake-up branch above ends at 08:00 – so accept 08:00 as the
+                  # daytime start, whichever comes first
+                  - condition: time
+                    after: "08:00:00"
               - condition: time
                 before: "19:00:00"
       - condition: state
@@ -1109,6 +1132,7 @@ automation:
 
   - alias: "Lights Off After Sunrise"
     id: "7f64fa82-a158-4f78-b406-2f0653f8f764"
+    # let's keep normal lights on all day
     initial_state: false
     trigger:
       - platform: sun

@@ -532,6 +532,22 @@ automation:
             entity_id: cover.garage_doors_rhs
             state: "open"
     action:
+      # this re-arms its own timer below, so it re-nags every timer period on a fixed tag,
+      # and ios can neither replace nor group critical notifications: without clearing
+      # first, each period stacks another alert that a single clear can't remove
+      # https://companion.home-assistant.io/docs/notifications/notifications-basic
+      - service: notify.mobile_app_ceres
+        data:
+          message: "clear_notification"
+          data:
+            tag: "{{ trigger.event.data.entity_id }}"
+      - delay:
+          seconds: 1
+      # if the cover was closed during the gap above, stop here: the alert would be stale,
+      # and this also skips the timer.start below rather than re-arming a zombie timer
+      - condition: template
+        value_template: >-
+          {{ is_state(trigger.event.data.entity_id | replace('_timer', '') | replace('timer', 'cover'), 'open') }}
       # https://companion.home-assistant.io/docs/notifications/critical-notifications/
       - service: notify.mobile_app_ceres
         data:

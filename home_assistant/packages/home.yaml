@@ -839,6 +839,14 @@ automation:
           message: "Remember to check the pets’ food and water, and to leave a window open for the cats."
           data:
             url: homeassistant://navigate/lovelace-main/main
+            # 2026-08-28: this reminder arrived twice on the phone, but the lamp had a single
+            # on->off transition and the automation has a single trace for that night, so the
+            # duplication happens downstream of the notify call, not in the trigger.
+            # the tag maps to the apns collapse id, so a second delivery replaces the banner
+            # instead of stacking a new one. this hides the symptom only — if it recurs, check
+            # the companion app's notification history to see whether two pushes were actually
+            # received (likely both local push and cloud apns delivering) or one was rendered twice.
+            tag: "bedtime-routine-reminder"
             sound:
               name: default
               critical: 1

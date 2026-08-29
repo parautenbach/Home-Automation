@@ -894,18 +894,31 @@ template:
         # elevation, using the standard global-horizontal approximation (133.8 klux * sin(h)^1.15).
         #
         # diagnostic only - nothing consumes this. Fog, cloud and haze all depress it, so it cannot
-        # identify fog on its own. It exists to accumulate a record across many mornings, because the
-        # two events measured so far (one foggy, one not) only separate from about 09:00 onwards and
-        # that is too thin a basis to key a detector on.
+        # identify fog on its own; it is here to be sampled across many mornings, since the two events
+        # measured so far (one foggy, one not) only separate from about 09:00 onwards.
+        #
+        # a low sun reports 0 rather than unknown. That is a sentinel, not a measurement - the ratio is
+        # measured over expected and both tend to zero at night - but it is safely out of band, because
+        # daylight cannot produce it: reading 0.0% at 20° elevation would need under 20 lux, and dense
+        # fog measured 8350 lux (19%) on 28 Aug. Anything a consumer reads as 0.0 is therefore night.
+        #
+        # a consumer must still gate on sun elevation regardless, since the signal is unusable below
+        # roughly 10-17° whatever it reports there.
         state: >-
           {% set lux = states(lux_entity) | float(none) %}
           {% set elevation = state_attr(sun_entity, 'elevation') | float(none) %}
           {% if lux is none or elevation is none or elevation < min_elevation %}
-            {{ none }}
+            {{ 0 }}
           {% else %}
             {% set clear = 133800 * (sin(elevation * pi / 180)) ** 1.15 %}
             {{ (100 * lux / clear) | round(1) }}
           {% endif %}
+        attributes:
+          sun_elevation: >-
+            {{ state_attr(sun_entity, 'elevation') | float(0) | round(1) }}
+          # false while the sun is too low for the ratio to mean anything
+          measurable: >-
+            {{ state_attr(sun_entity, 'elevation') | float(-90) >= min_elevation }}
         availability: >-
           {{ has_value(lux_entity) and state_attr(sun_entity, 'elevation') is not none }}
       - name: "Fog Probability"

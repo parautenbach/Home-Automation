@@ -1348,7 +1348,15 @@ automation:
               {% set onset_local = rain_onset | as_datetime | as_local %}
               {% set later_clause = 'Rain expected around ' ~ onset_local.strftime('%H:%M') ~ ' (' ~ rain_today_mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
             {% elif rain_today_mm > 0 %}
-              {% set later_clause = (later_condition | capitalize) ~ ' with some rain (' ~ rain_today_mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
+              {# some rain today, but not enough consecutive hours for an onset time - so it reads
+                 as an amount, not a start. Conditions whose own word already carries precipitation
+                 take the amount directly ("Rain later (0.9 mm)"); anything else needs the rain
+                 said out loud, since "Partly cloudy" alone wouldn't imply it #}
+              {% if today_condition in ['hail', 'lightning-rainy', 'pouring', 'rainy', 'snowy', 'snowy-rainy'] %}
+                {% set later_clause = (later_condition | capitalize) ~ ' later (' ~ rain_today_mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
+              {% else %}
+                {% set later_clause = (later_condition | capitalize) ~ ' with some rain (' ~ rain_today_mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
+              {% endif %}
             {% else %}
               {% set later_clause = (later_condition | capitalize) ~ ' later, high of ' ~ today_high ~ '°C.' %}
             {% endif %}
@@ -1359,16 +1367,20 @@ automation:
             {% else %}
               {% set wind_now_clause = wind_phrases[wind_state] ~ ' right now (' ~ wind_speed ~ ').' %}
             {% endif %}
-            {% set extras = [wind_now_clause] %}
+            {# the brief reads as two blocks: everything measured right now, then everything
+               forecast for the rest of today. Wind, fog, UV and pressure are all current
+               readings and belong with the opening sentence, not stranded behind the forecast #}
+            {% set now_extras = [wind_now_clause] %}
             {% if not fog_on and fog_probability_value >= fog_possible_threshold %}
-              {% set extras = extras + ['Fog possible (' ~ fog_probability ~ ').'] %}
+              {% set now_extras = now_extras + ['Fog possible (' ~ fog_probability ~ ').'] %}
             {% endif %}
             {% if uv_state in ['high', 'very_high', 'extreme'] %}
-              {% set extras = extras + ['UV ' ~ (uv_label | lower) ~ '.'] %}
+              {% set now_extras = now_extras + ['UV ' ~ (uv_label | lower) ~ '.'] %}
             {% endif %}
             {% if pressure_state in ['rising_rapidly', 'falling_rapidly'] %}
-              {% set extras = extras + ['Pressure ' ~ (pressure_label | lower) ~ '.'] %}
+              {% set now_extras = now_extras + ['Pressure ' ~ (pressure_label | lower) ~ '.'] %}
             {% endif %}
+            {% set later_extras = [] %}
             {# always stated, including for a quiet day: "no news" would be indistinguishable from a
                missing forecast, and knowing it stays light is itself worth confirming. Mirrors the
                structure of the now clause above, where a direction is meaningless for calm #}
@@ -1381,9 +1393,9 @@ automation:
               {% else %}
                 {% set wind_later_clause = wind_phrases[later_wind_state] ~ ' (' ~ later_wind_speed ~ ')' ~ when_clause ~ '.' %}
               {% endif %}
-              {% set extras = extras + [wind_later_clause] %}
+              {% set later_extras = later_extras + [wind_later_clause] %}
             {% endif %}
-            {{ ([now_clause, later_clause] + extras) | join(' ') }}
+            {{ ([now_clause] + now_extras + [later_clause] + later_extras) | join(' ') }}
           data:
             url: homeassistant://navigate/lovelace-main/environment
             group: "environment"

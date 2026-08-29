@@ -769,6 +769,26 @@ template:
           {{ not is_state(rain_condition_entity, 'no_rain') }}
         availability: >-
           {{ has_value(rain_condition_entity) }}
+      - name: "Recently Raining"
+        unique_id: "74337f62-9edc-4ecd-9260-7356ab4b8f15"
+        device_class: moisture
+        icon: >-
+          {{ 'mdi:weather-rainy' if this.state == 'on' else 'mdi:water-off-outline' }}
+        variables:
+          rain_entity: binary_sensor.raining
+        # drizzle is intermittent, and the piezo sensor only registers while drops are actually landing,
+        # so 'raining' flickers off during the gaps while the air stays every bit as saturated from the
+        # precipitation. On 29 Aug 2026 it toggled 18 times in ten hours of spitting.
+        #
+        # this holds the state across those gaps, for consumers that care whether it has been raining
+        # rather than whether a drop is hitting the sensor this second. 30 minutes covered every gap
+        # that produced a false fog reading that morning - though that is a single event, and the cost
+        # is being blind to fog that genuinely forms in the half hour after rain clears.
+        state: >-
+          {{ is_state(rain_entity, 'on') }}
+        delay_off: "00:30:00"
+        availability: >-
+          {{ has_value(rain_entity) }}
   - sensor:
       - name: "Air Pressure Trend"
         unique_id: "ea2872cc-f7af-4be0-852a-ab25a44ebacf"
@@ -895,7 +915,7 @@ template:
         variables:
           spread_entity: sensor.dew_point_spread
           wind_entity: sensor.wind_speed_filtered_km_h
-          rain_entity: binary_sensor.raining
+          rain_entity: binary_sensor.recently_raining
           moisture_entity: binary_sensor.weather_station_moisture
         # spread and wind approach 0 as fog becomes more likely; each score plateaus at 1 below a floor
         # (0.5°C spread is within sensor noise of saturation, and 3 km/h still supports radiation fog)
@@ -906,7 +926,9 @@ template:
         # belongs here rather than in one consumer. Two things zero it outright:
         #
         #   rain     - it drives the spread to nearly nothing without being fog, so steady light rain
-        #              otherwise scores 78-100% on spread and wind alone
+        #              otherwise scores 78-100% on spread and wind alone. This gates on the held
+        #              'recently raining' rather than the raw sensor, because intermittent drizzle
+        #              leaves the air saturated through the gaps between bursts
         #   dryness  - real fog always wets the sensor, so an explicitly dry sensor rules it out
         #
         # dryness is tested as an explicit 'off' rather than "not on", so that a moisture sensor which

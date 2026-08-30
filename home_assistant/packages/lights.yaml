@@ -1688,6 +1688,12 @@ automation:
         target:
           entity_id: input_boolean.disable_auto_on_bedlamps
 
+  # single press only, unlike the blueprint-driven buttons: this i4 input is in switch mode,
+  # so it reports steady state and carries no click count. putting it in button mode would
+  # give single_push/double_push/triple_push, but it replaces this binary_sensor with an
+  # event entity (so the trigger below changes), it needs a momentary switch to make sense,
+  # and neither blueprint matches those values – shelly_button.yaml is gen1 shelly.click and
+  # shelly_bt_button.yaml expects the blu's press/double_press/triple_press
   - alias: "Toggle Hallway Light"
     id: "161a5d6e-6863-412d-b9a0-35856339627a"
     initial_state: true
@@ -1701,7 +1707,7 @@ automation:
           - "on"
           - "off"
     action:
-      # profile?
+      # no profile on purpose: a single press should behave like any other light switch
       - service: light.toggle
         target:
           entity_id: light.hallway

@@ -822,11 +822,11 @@ cards:
                   div:nth-child(3) {
                     color:
                       {# https://www.sciencedirect.com/science/article/pii/S0378778819314070 #}
+                      {# below 'cold' the ramp turns icy rather than darker: a deeper blue
+                         loses too much contrast to stay legible on the dark theme #}
                       {%- set comfort_map =
                             {
                               'unknown':               '',
-                              {# below 'cold' the ramp turns icy rather than darker: a deeper blue
-                                 loses too much contrast to stay legible on the dark theme #}
                               'freezing':              '#7fc4ff',
                               'very_cold':             '#5aa9f0',
                               'cold':                  '#0484d9',

@@ -716,7 +716,7 @@ cards:
             name: Sydney
             entity: sensor.sydney
       - type: entities
-        title: Routine
+        title: Settings
         icon: mdi:cog
         uix:
           style: |
@@ -727,6 +727,7 @@ cards:
         entities:
           - type: custom:fold-entity-row
             head:
+              label: Routine
               type: section
             entities:
               - entity: input_boolean.disable_auto_on_bedlamps

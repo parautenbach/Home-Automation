@@ -95,6 +95,10 @@ arming the partition, which is what callers use this list for.
       | list | count > 0
     -%}
     {%- if not is_bypassed -%}
+      {#- drop the leading "Zone <nnn> - " that olarm puts on an uncustomised name and
+          keep what follows: "Home Zone 007  - Kitchen Door" -> "Kitchen Door".
+          the match ends at the first " - ", so only that prefix is replaced.
+          a customised name (see packages/olarm.yaml) has no " - " and passes through. -#}
       {%- set ns.names = ns.names + [zone.name | regex_replace('^.*?\\s+-\\s+', '')] -%}
     {%- endif -%}
   {%- endfor -%}
@@ -149,10 +153,25 @@ Get a list of currently bypassed alarm zones for a partition.
   {%- else -%}
     {%- set bypass_sensors = bypass_sensors | rejectattr('entity_id', 'match', flatlet_pattern) -%}
   {%- endif -%}
-  {%- set names = bypass_sensors
-    | map(attribute='name')
-    | map('regex_replace', '^.*?\\s+-\\s+', '')
-    | list
-  -%}
-  {%- do returns(names) -%}
+  {#- resolve each bypass sensor back to its zone sensor so the names here are the
+      customised ones (packages/olarm.yaml) and match the rest of the ui; this list
+      mixes doors and motion zones, so the names have to say which is which.
+      olarm's own bypass sensor naming is only a fallback. -#}
+  {%- set ns = namespace(names=[]) -%}
+  {%- for sensor in bypass_sensors -%}
+    {%- set zone_number = sensor.entity_id | regex_findall('zone_(\d+)') | first -%}
+    {%- set zone = states.binary_sensor
+      | selectattr('entity_id', 'match', '^binary_sensor\.home_zone_' ~ zone_number ~ '($|_)')
+      | rejectattr('entity_id', 'match', '^binary_sensor\.home_zone_\d+_bypass')
+      | list | first | default(none)
+    -%}
+    {%- if zone -%}
+      {%- set ns.names = ns.names + [zone.name] -%}
+    {%- else -%}
+      {#- same trim as in get_active_zones, on olarm's bypass sensor name:
+          "Home Zone 007 Bypass  - Kitchen Door" -> "Kitchen Door" -#}
+      {%- set ns.names = ns.names + [sensor.name | regex_replace('^.*?\\s+-\\s+', '')] -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- do returns(ns.names) -%}
 {%- endmacro -%}

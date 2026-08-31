@@ -6,8 +6,6 @@ homeassistant:
       entity_picture: '/local/rouve.jpg'
     sensor.google_travel_time:
       device_class: duration
-    sensor.google_travel_time_filtered:
-      device_class: duration
     sensor.baby_sleeping:
       device_class: duration
       unit_of_measurement: h
@@ -1120,6 +1118,47 @@ automation:
           data:
             group: "routine-change"
             url: homeassistant://navigate/lovelace-main/main
+
+  # the google maps travel time integration is set up via the ui and polls every 10 minutes on its
+  # own, round the clock, which burns quota all day for a number that only matters near the
+  # commute (measured: dead flat ~39 min from 21:00 to 06:00, and all day at weekends). polling
+  # is therefore disabled on the config entry itself (settings > devices & services > google maps
+  # travel time > entry's three-dot menu > "enable polling for updates", switched off) and this
+  # automation drives the updates instead.
+  # note: this can't use the generic scan_interval mechanism in common.yaml, because that only
+  # supports one fixed interval per entity and the rate here depends on the time of day
+  - alias: "Update Travel Time"
+    id: "81a76cba-a922-41cf-8860-c0485f8dfe3c"
+    initial_state: true
+    # one trigger at the finest rate we ever need, with the coarser rate expressed as a condition:
+    # two overlapping time patterns would both fire on the hour and log a "already running" warning
+    trigger:
+      - platform: time_pattern
+        minutes: "/10"
+        seconds: 0
+    condition:
+      - condition: or
+        conditions:
+          # baseline: hourly, every day, so the 24 h graph never has a hole in it
+          - condition: template
+            value_template: "{{ now().minute == 0 }}"
+          # the waking hours, when a commute could plausibly happen in either direction, and only
+          # on a day he's going to or coming from the office (binary_sensor.workday already
+          # excludes weekends, public holidays and vacation days). measured profile: flat ~39 min
+          # overnight, a small bump to ~47 around 07:00, and the real peak 15:00-20:00 topping
+          # 80+ min - so this window is a deliberately generous superset of both commutes
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: binary_sensor.workday
+                state: "on"
+              - condition: time
+                after: "04:00:00"
+                before: "20:00:00"
+    action:
+      - service: homeassistant.update_entity
+        target:
+          entity_id: sensor.google_travel_time
 
   # https://developers.google.com/maps/documentation/routes/reference/rest/v2/TopLevel/computeRoutes#request-body
   #

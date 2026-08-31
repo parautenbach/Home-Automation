@@ -12,16 +12,6 @@ input_boolean:
     name: Pieter Driving
     icon: mdi:car
 
-sensor:
-  # https://github.com/home-assistant/core/issues/87941: fixed
-  - platform: filter
-    name: google_travel_time_filtered
-    entity_id: sensor.google_travel_time
-    filters:
-      filter: lowpass
-      time_constant: 10
-      precision: 0
-
 template:
   - binary_sensor:
       - name: "Pieter Driving"

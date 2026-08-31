@@ -37,3 +37,146 @@ Get the status icon for a cover.
         {{ icon_base }}
     {%- endif -%}
 {%- endmacro -%}
+
+{#
+The alarm zone sensors created by the Olarm integration belong to the panel
+device, not to a partition, so partition membership is maintained here:
+  * flatlet (area 2): zone 018
+  * home (area 1): every other real zone
+  * ignored: 011 and 012 only - these are the channels the remote receivers are
+    wired to (arm/disarm zones, not intrusion zones), so they are never something
+    that blocks arming or is worth reporting.
+Unused zones are deliberately NOT excluded by number. A zone that is activated on
+the panel but not yet named or customised here shows up as "Home Zone 025", which
+is ugly on purpose: it announces itself instead of being silently ignored.
+Zone entity ids look like binary_sensor.home_zone_<nnn>_<name>, with a matching
+bypass state sensor binary_sensor.home_zone_<nnn>_bypass[_<name>] (the name
+suffix is inconsistent upstream, so bypass sensors are matched by zone number).
+#}
+
+{#
+Get a list of active alarm zones for a partition, optionally filtered by scope.
+
+Zones that are currently bypassed are excluded: a bypassed zone cannot block
+arming the partition, which is what callers use this list for.
+
+:param partition: 'home' or 'flatlet'.
+:param scope: Scope of zones to include.
+              'all' includes all active zones.
+              'doors' includes only zones with the door device class.
+
+:returns: A list of active zone names.
+          Returns an empty list if no matching zones are active.
+#}
+{%- macro get_active_zones(partition, scope, returns) -%}
+  {%- set ignored_pattern = '^binary_sensor\.home_zone_(011|012)' -%}
+  {%- set flatlet_pattern = '^binary_sensor\.home_zone_018_' -%}
+  {%- set zones = states.binary_sensor
+    | selectattr('entity_id', 'match', '^binary_sensor\.home_zone_')
+    | rejectattr('entity_id', 'match', '^binary_sensor\.home_zone_\d+_bypass')
+    | rejectattr('entity_id', 'match', ignored_pattern)
+  -%}
+  {%- if partition == 'flatlet' -%}
+    {%- set zones = zones | selectattr('entity_id', 'match', flatlet_pattern) -%}
+  {%- else -%}
+    {%- set zones = zones | rejectattr('entity_id', 'match', flatlet_pattern) -%}
+  {%- endif -%}
+  {%- set zones = zones | selectattr('state', 'eq', 'on') -%}
+  {%- if scope == 'doors' -%}
+    {%- set zones = zones
+      | selectattr('attributes.device_class', 'defined')
+      | selectattr('attributes.device_class', 'eq', 'door')
+    -%}
+  {%- endif -%}
+  {%- set ns = namespace(names=[]) -%}
+  {%- for zone in zones -%}
+    {#- no trailing underscore in the pattern: an unnamed zone's id ends at the
+        number (binary_sensor.home_zone_025), and requiring one found nothing,
+        which silently disabled the bypass check below -#}
+    {%- set zone_number = zone.entity_id | regex_findall('zone_(\d+)') | first -%}
+    {%- set is_bypassed = states.binary_sensor
+      | selectattr('entity_id', 'match', '^binary_sensor\.home_zone_' ~ zone_number ~ '_bypass')
+      | selectattr('state', 'eq', 'on')
+      | list | count > 0
+    -%}
+    {%- if not is_bypassed -%}
+      {#- drop the leading "Zone <nnn> - " that olarm puts on an uncustomised name and
+          keep what follows: "Home Zone 007  - Kitchen Door" -> "Kitchen Door".
+          the match ends at the first " - ", so only that prefix is replaced.
+          a customised name (see packages/olarm.yaml) has no " - " and passes through. -#}
+      {%- set ns.names = ns.names + [zone.name | regex_replace('^.*?\\s+-\\s+', '')] -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- do returns(ns.names) -%}
+{%- endmacro -%}
+
+{#
+Get the name of the Home Assistant user behind a state change, if there is one.
+
+The olarm integration's changed_by attribute is always null (verified for both
+ha-initiated and app-initiated changes), so attribution comes from the ha context
+instead. Only a user id is trusted: a change made at the panel, on the keypad, on a
+remote or in the olarm app carries no ha user, and a slow round trip through the panel
+can outlive the context window too. An empty result therefore means "not known to be a
+person", not "not a person" – so callers should omit the attribution, never assert that
+it happened at the panel.
+
+:param context: The context of the state change (e.g. trigger.to_state.context).
+
+:returns: The person's name, or an empty string. (A plain string, so this macro outputs
+          its result directly and needs no returns callback.)
+#}
+{%- macro get_ha_actor(context) -%}
+  {%- if context.user_id -%}
+    {%- set person = states.person
+      | selectattr('attributes.user_id', 'defined')
+      | selectattr('attributes.user_id', 'eq', context.user_id)
+      | list | first | default(none)
+    -%}
+    {{- person.name if person else '' -}}
+  {%- endif -%}
+{%- endmacro -%}
+
+{#
+Get a list of currently bypassed alarm zones for a partition.
+
+:param partition: 'home' or 'flatlet'.
+
+:returns: A list of bypassed zone names.
+          Returns an empty list if no zones are bypassed.
+#}
+{%- macro get_bypassed_zones(partition, returns) -%}
+  {%- set ignored_pattern = '^binary_sensor\.home_zone_(011|012)' -%}
+  {%- set flatlet_pattern = '^binary_sensor\.home_zone_018_' -%}
+  {%- set bypass_sensors = states.binary_sensor
+    | selectattr('entity_id', 'match', '^binary_sensor\.home_zone_\d+_bypass')
+    | rejectattr('entity_id', 'match', ignored_pattern)
+    | selectattr('state', 'eq', 'on')
+  -%}
+  {%- if partition == 'flatlet' -%}
+    {%- set bypass_sensors = bypass_sensors | selectattr('entity_id', 'match', flatlet_pattern) -%}
+  {%- else -%}
+    {%- set bypass_sensors = bypass_sensors | rejectattr('entity_id', 'match', flatlet_pattern) -%}
+  {%- endif -%}
+  {#- resolve each bypass sensor back to its zone sensor so the names here are the
+      customised ones (packages/olarm.yaml) and match the rest of the ui; this list
+      mixes doors and motion zones, so the names have to say which is which.
+      olarm's own bypass sensor naming is only a fallback. -#}
+  {%- set ns = namespace(names=[]) -%}
+  {%- for sensor in bypass_sensors -%}
+    {%- set zone_number = sensor.entity_id | regex_findall('zone_(\d+)') | first -%}
+    {%- set zone = states.binary_sensor
+      | selectattr('entity_id', 'match', '^binary_sensor\.home_zone_' ~ zone_number ~ '($|_)')
+      | rejectattr('entity_id', 'match', '^binary_sensor\.home_zone_\d+_bypass')
+      | list | first | default(none)
+    -%}
+    {%- if zone -%}
+      {%- set ns.names = ns.names + [zone.name] -%}
+    {%- else -%}
+      {#- same trim as in get_active_zones, on olarm's bypass sensor name:
+          "Home Zone 007 Bypass  - Kitchen Door" -> "Kitchen Door" -#}
+      {%- set ns.names = ns.names + [sensor.name | regex_replace('^.*?\\s+-\\s+', '')] -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- do returns(ns.names) -%}
+{%- endmacro -%}

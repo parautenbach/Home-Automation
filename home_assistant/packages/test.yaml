@@ -181,6 +181,55 @@ script:
           message: >-
             {{ wait.trigger.event.data.action_data.qux }}
 
+  test_active_zones:
+    variables:
+      active_zones_all: >-
+        {% from 'security.jinja' import get_active_zones %}
+        {% set get_active_zones_fn = get_active_zones | as_function %}
+        {{ get_active_zones_fn('home', 'all') }}
+      active_zones_doors: >-
+        {% from 'security.jinja' import get_active_zones %}
+        {% set get_active_zones_fn = get_active_zones | as_function %}
+        {{ get_active_zones_fn('home', 'doors') }}
+    sequence:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Active Zones Test"
+          message: >-
+            All:
+            {%- for z in active_zones_all %}
+              - {{ z }}
+            {%- endfor %}
+
+            Doors:
+            {%- for z in active_zones_doors %}
+              - {{ z }}
+            {%- endfor %}
+          data:
+            group: "test"
+  test_notification_formatting:
+    sequence:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Formatting Test"
+          message: >-
+            {% from 'security.jinja' import get_active_zones -%}
+            {%- set get_active_zones_fn = get_active_zones | as_function -%}
+            {%- set active_zones = get_active_zones_fn('home', 'doors') -%}
+            {%- set active_zones = ['Foo'] -%}
+            You haven't yet armed the stay alarm. Would you like to arm it?
+
+            {% if active_zones %}
+            The following zones are still active:
+              {%- for zone in active_zones %}
+              - {{ zone }}
+              {%- endfor %}
+            {% endif %}
+
+            Remember to lock all doors and gates first.
+          data:
+            group: "test"
+
 automation:
   - alias: "Handle Actionable Notification Action Data Event"
     id: "1a3eac29-c988-4117-a768-2fb940b546f6"

@@ -1202,6 +1202,225 @@ automation:
         target:
           entity_id: light.foyer
 
+  # these two cover the morning between them, and they interlock by side effect: the routine
+  # fires on the clock and starts with scene.normal_lights, which turns on light.living_room_lamp
+  # – the very entity "Wake-up Lights" reads as its "nobody inside" proxy. so the routine locks
+  # "Wake-up Lights" out for the rest of the morning, and before the appointed time
+  # "Wake-up Lights" is what covers waking early. changing that lamp condition breaks the pairing.
+  - alias: "Run Morning Lights Routine At Wake Up Time"
+    id: "5486f6f9-da52-4cf0-8a23-e54f40a80721"
+    # don't reset this after a reload/restart, since we might've disabled this deliberately via the ui
+    # initial_state: true
+    trigger:
+      - platform: time
+        at: input_datetime.wake_up_time
+    condition:
+      - condition: state
+        entity_id: binary_sensor.wake_up_routine_day
+        state: "on"
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: light.pieter_bedside
+            state: "off"
+          - condition: state
+            entity_id: light.rouve_bedside
+            state: "off"
+          - condition: state
+            entity_id: light.hallway
+            state: "off"
+    action:
+      # skip_next_wake_up_time is cleared later, once by "Clear Skip Next Wake Up Time" at
+      # 08:00 – not here, so it stays in effect for the whole lie-in morning instead of just
+      # until this fixed clock time
+      - if:
+          - condition: state
+            entity_id: input_boolean.skip_next_wake_up_time
+            state: "off"
+        then:
+          - service: scene.turn_on
+            target:
+              entity_id: scene.normal_lights
+          # it's a bit wild if alarms go off and lights turn on all at the same time – be gentle
+          - delay:
+              seconds: 10
+          # add a condition for only if we are home – but if it's a workday, why wouldn't we?
+          # only run the fade-in if all lights are off for a soft awakening
+          - if:
+              - condition: and
+                conditions:
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity_id:
+                          - light.pieter_bedside
+                        state: "off"
+                      - condition: numeric_state
+                        entity_id: light.pieter_bedside
+                        attribute: brightness
+                        below: 13  # 13/255 ~= 5%
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity_id:
+                          - light.rouve_bedside
+                        state: "off"
+                      - condition: numeric_state
+                        entity_id: light.rouve_bedside
+                        attribute: brightness
+                        below: 13  # 13/255 ~= 5%
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity_id:
+                          - light.hallway
+                        state: "off"
+                      - condition: numeric_state
+                        entity_id: light.hallway
+                        attribute: brightness
+                        below: 13  # 13/255 ~= 5%
+            then:
+              - if:
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity_id:
+                          - light.pieter_bedside
+                        state: "off"
+                      - condition: numeric_state
+                        entity_id: light.pieter_bedside
+                        attribute: brightness
+                        below: 13  # 13/255 ~= 5%
+                then:
+                  - service: light.turn_on
+                    target:
+                      entity_id: light.pieter_bedside
+                    data:
+                      profile: low_shelly_duo
+              - if:
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity_id:
+                          - light.rouve_bedside
+                        state: "off"
+                      - condition: numeric_state
+                        entity_id: light.rouve_bedside
+                        attribute: brightness
+                        below: 13  # 13/255 ~= 5%
+                then:
+                  - service: light.turn_on
+                    target:
+                      entity_id: light.rouve_bedside
+                    data:
+                      profile: low_shelly_duo
+              # - if:
+              #     - condition: state
+              #       entity_id: input_boolean.baby_sleep_mode
+              #       state: "off"
+              #     - condition: or
+              #       conditions:
+              #         - condition: state
+              #           entity_id:
+              #             - light.hallway
+              #           state: "off"
+              #         - condition: numeric_state
+              #           entity_id: light.hallway
+              #           attribute: brightness
+              #           below: 13  # 13/255 ~= 5%
+              #   then:
+              - service: light.turn_on
+                target:
+                  entity_id:
+                    - light.hallway
+                data:
+                  profile: low_tp_link_rgb
+              # - if:
+              #     - condition: state
+              #       entity_id: input_boolean.baby_sleep_mode
+              #       state: "off"
+              #     - condition: or
+              #       conditions:
+              #         - condition: state
+              #           entity_id:
+              #             - light.foyer
+              #           state: "off"
+              #         - condition: numeric_state
+              #           entity_id: light.foyer
+              #           attribute: brightness
+              #           below: 13  # 13/255 ~= 5%
+              #   then:
+              - service: light.turn_on
+                target:
+                  entity_id:
+                    - light.foyer
+                data:
+                  profile: low_tp_link_rgb
+              - delay:
+                  minutes: 1
+              # these script calls don't block/wait, so the transitions will start at almost the same time
+              # https://www.home-assistant.io/integrations/script/#waiting-for-script-to-complete
+              - service: script.turn_on
+                target:
+                  entity_id: script.fade_light
+                data:
+                  variables:
+                    light: light.pieter_bedside
+                    target_brightness_pct: 40
+                    transition_duration: 120
+              - service: script.turn_on
+                target:
+                  entity_id: script.fade_light
+                data:
+                  variables:
+                    light: light.rouve_bedside
+                    target_brightness_pct: 40
+                    transition_duration: 120
+              # - if:
+              #     - condition: state
+              #       entity_id: input_boolean.baby_sleep_mode
+              #       state: "off"
+              #   then:
+              - service: script.turn_on
+                target:
+                  entity_id: script.fade_light
+                data:
+                  variables:
+                    light: light.hallway
+                    target_brightness_pct: 60
+                    transition_duration: 120
+              - service: script.turn_on
+                target:
+                  entity_id: script.fade_light
+                data:
+                  variables:
+                    light: light.foyer
+                    target_brightness_pct: 60
+                    transition_duration: 120
+            else:
+              - service: light.turn_on
+                target:
+                  entity_id: light.pieter_bedside
+                data:
+                  profile: normal_main_bedroom_bedlamps
+              - service: light.turn_on
+                target:
+                  entity_id: light.rouve_bedside
+                data:
+                  profile: normal_main_bedroom_bedlamps
+              # - if:
+              #     - condition: state
+              #       entity_id: input_boolean.baby_sleep_mode
+              #       state: "off"
+              #   then:
+              - service: light.turn_on
+                target:
+                  entity_id:
+                    - light.hallway
+                    - light.foyer
+                data:
+                  profile: normal_tp_link_rgb
+
   - alias: "Wake-up Lights"
     id: "ca60418c-1870-4c55-845d-4d5eba9aea52"
     trigger:
@@ -1243,32 +1462,27 @@ automation:
         target:
           entity_id: scene.normal_lights
       - condition: state
-        entity_id: binary_sensor.daytime
-        state: "off"
-      - condition: state
         entity_id: input_boolean.baby_sleep_mode
         state: "off"
-      # if we're skipping our wake-up, don't blast full brightness in the hallway/foyer –
+      # her sleep mode clears on its own two minutes after her bedlamp comes on, so it says
+      # nothing about us: don't blast full brightness until one of our lamps is on too.
       # "Switch On Night Light If Motion Is Detected" already covers dim, motion-based lighting.
-      # but if both bedside lamps are already on, we're genuinely up regardless of the skip flag
-      - condition: or
-        conditions:
-          - condition: state
-            entity_id: input_boolean.skip_next_wake_up_time
-            state: "off"
-          - condition: and
-            conditions:
-              - condition: state
-                entity_id: light.pieter_bedside
-                state: "on"
-              - condition: state
-                entity_id: light.rouve_bedside
-                state: "on"
+      - condition: state
+        entity_id: light.main_bedroom_group
+        state: "on"
       - service: light.turn_on
         target:
-          entity_id:
-            - light.hallway
-            - light.foyer
+          entity_id: light.hallway
+        data:
+          profile: normal_tp_link_rgb
+      # the foyer is atmosphere rather than seeing where you're going, so it only joins in
+      # before sunrise – and only ever after the hallway, never on its own
+      - condition: state
+        entity_id: binary_sensor.daytime
+        state: "off"
+      - service: light.turn_on
+        target:
+          entity_id: light.foyer
         data:
           profile: normal_tp_link_rgb
 

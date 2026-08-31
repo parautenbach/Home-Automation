@@ -16,15 +16,18 @@ Commits: `8d73053` (phase 1), `b734cb9` (phase 2), `a8b18ba` (phase 3),
 - **Deleted**: both `manual` alarm panels, all `rest_command`s (get state, arm/disarm,
   bypass/unbypass), the "Sync Alarm State" automation, the old "Receive Olarm Event"
   webhook automation, and all 18 `alarm_zone_*_bypass` input booleans.
-- **Added**: 14 template switches (`switch.alarm_bypass_*`) wrapping the integration's
-  bypass buttons + bypass state sensors; `homeassistant.customize` entries giving the
-  motion zones a `device_class` and all real zones clean friendly names.
+- **Added**: two template alarm panels that wrap the integration's panels to require a
+  code, taking over `alarm_control_panel.home` and `.flatlet`; 14 template switches
+  (`switch.alarm_bypass_*`) wrapping the integration's bypass buttons + bypass state
+  sensors; `homeassistant.customize` entries giving the motion zones a `device_class`
+  and every real zone a clean, type-suffixed friendly name.
 - **Reworked**: "Alarm State Changed" is pure notification logic (state from the
-  integration is ground truth; includes `changed_by` and bypassed zones when arming);
-  "Notify When Alarm Triggered" includes the `zone_in_alarm` attribute and disarms only
-  the triggered partition; both are `mode: queued` (a panic can trigger both partitions
-  at once); bypass-garage arming waits for the panel to confirm the bypass instead of a
-  blind 5 s delay; `code:` no longer passed (panels have `code_arm_required: false`).
+  integration is ground truth; names the person when HA context identifies one, and
+  lists bypassed zones when arming); "Notify When Alarm Triggered" includes the
+  `zone_in_alarm` attribute and disarms only the triggered partition; both are
+  `mode: queued` (a panic can trigger both partitions at once); bypass-garage arming
+  waits for the panel to confirm the bypass instead of a blind 5 s delay; service calls
+  pass `code:` again, since the template panels require one.
 - **Notification stacking fix** (`671d078`): the three senders sharing the
   `arm-alarm-reminder` tag now clear before sending, with a re-check after the gap,
   because iOS can neither replace nor group critical notifications. Also gave the living
@@ -34,8 +37,12 @@ Commits: `8d73053` (phase 1), `b734cb9` (phase 2), `a8b18ba` (phase 3),
 
 **`home_assistant/custom_templates/security.jinja`** — `get_active_zones(partition, scope)`
 is now partition-aware (`'home'`/`'flatlet'`), excludes bypassed zones, and filters doors
-by device class; new `get_bypassed_zones(partition)`. The partition→zone map lives here
-(flatlet = zone 018; spares 002/014–016/021–024 and remotes 011/012 ignored).
+by device class; `get_bypassed_zones(partition)` resolves each bypassed zone back to its
+zone sensor so the names match the rest of the UI; `get_ha_actor(context)` names the
+person behind a state change when HA knows one. The partition→zone map lives here
+(flatlet = zone 018; only the remote receiver channels 011/012 are ignored — an
+unused zone that gets activated later announces itself rather than being silently
+dropped).
 
 **`home_assistant/ui-lovelace/security.yaml`**
 
@@ -54,20 +61,49 @@ marker under the Home Alarm tile.
 ### Before cutover
 
 1. In the Olarm app: check the zone names match reality — they become the friendly names
-   in notifications, and the entity ids are already fixed regardless. (Zone 8 is
+   in notifications, and the entity IDs are already fixed regardless. (Zone 8 is
    "Bedroom", which is what this branch expects.)
-2. Map the panic sources. Zones 011/012 are the channels the remote *receivers* are wired
-   to: 011 = the home remotes (partition 1), 012 = the flatlet remotes (partition 2).
-   There are also two hard-wired panic buttons in the house whose wiring is unknown —
-   possibly onto the same inputs, possibly elsewhere; confirm with the security company.
-   During the panic test (step 3): press each hard-wired button and a remote panic
-   separately, and note which zone sensors, panel states and webhook events fire. If
-   panics register on identifiable zones, use those sensors for per-partition panic
-   detection in the trigger notification (panic vs breach — the last open item from the
-   old integration's wishlist). The remotes zones stay excluded from the arming checks in
-   `security.jinja` regardless: a receiver channel is not an open door or motion zone.
+2. Map the panic sources. The panel is an IDS X64 and the remotes are Sherlotronics, so
+   the receivers are relay units wired into zone inputs (not the IDS bus receiver).
+
+   **Zones 011/012 are almost certainly Arm/Disarm zones, not panic.** The X64 has a zone
+   type for exactly this — type 05, Arm/Disarm: "Violation of an Arm/Disarm zone will
+   cause the panel to toggle between (away) armed and disarmed. It is typical to connect
+   a momentary key-switch, or non-latching remote control unit to this zone", with the
+   note "A zone must be added to a partition in order for it to arm". That last line
+   explains why there are exactly two, one per partition, which is what the P1/P2 labels
+   say. Sherlo's own wiring diagram shows the receiver's relay COM/N.O. going to a panel
+   zone input for "typical alarm panel wiring", while panic is a separate output.
+   Panic on the X64 is a different zone type: 03 (Panic/Priority) or 12 (24 Hour Alarm).
+   Caveat: type 05 toggles *away* armed only — if a remote can arm stay, it is wired some
+   other way.
+
+   So the two hard-wired panic buttons are likely on their own zone(s) programmed as
+   type 03, plausibly among the unnamed zones (002, 014–016, 021–024).
+
+   To confirm without pressing anything, cheapest first:
+   - **HA history**: `binary_sensor.home_zone_011_p1_remotes` / `..._012_p2_remotes` have
+     been recording since the integration was installed. Any past remote arm/disarm will
+     show as a pulse there, next to the panel's state change. This needs no access to the
+     panel at all.
+   - **Olarm API**: the device endpoint's profile may expose zone types (the bearer token
+     and endpoint are still in `secrets.yaml` until the post-soak cleanup).
+   - **Panel event log**: past arm/disarm events already record the source, via the keypad
+     or IDS Download software.
+   - **Installer programming**: location 1 holds the zone type per zone
+     (`[#][installer code][*]`, then `[1][*]`, then `[zone][*]`). Definitive, but that is
+     programming mode on a live panel — read, do not change.
+
+   If a panic source does map to an identifiable zone, use that sensor for per-partition
+   panic detection in the trigger notification (panic vs breach — the last open item from
+   the old integration's wishlist). The remotes zones stay excluded from the arming checks
+   in `security.jinja` regardless: a receiver channel is not an open door or motion zone.
    (Unexplained: the March 2024 panic in the old webhook examples logged
-   `EMERGENCY! - Area 4` and `Area 5` events — see what the test produces.)
+   `EMERGENCY! - Area 4` and `Area 5` events.)
+
+   References: [IDS X64 Installer Manual, Table 5, p.24](https://www.totalprotection.gr/uploads/product_0_1_2_13.pdf) ·
+   [IDS X64 Remote Receiver Installer Manual](https://www.idsprotect.co.za/site-documents/product-download/intrusion/xseries/IDS%20X64%20Remote%20Receiver.pdf) ·
+   [Sherlotronics RX1-500 installation manual](https://www.sherlotronics.co.za/wp-content/uploads/2020/03/RX1-500_Installation-manual_Revision-2020.pdf)
 3. Parity soak with both systems live (manual panels still authoritative):
    - Arm/disarm both partitions from HA, the app, the keypad and remotes — the
      integration panels must follow in real time.
@@ -139,34 +175,25 @@ renames in one sitting.
        # sync the config to the host, then:
        scripts/management/restart_ha.sh
 
-   This removes the manual panels and frees the `home`/`flatlet` entity ids. Expect
+   This removes the manual panels and frees the `home`/`flatlet` entity IDs. Expect
    errors and unavailable entities until the renames below are done.
 5. In HA (Settings → Devices & Services → Olarm): rename the device
-   **"Home Test" → "Home"** and accept the entity id rename prompt (`home_test_*` →
+   **"Home Test" → "Home"** and accept the entity ID rename prompt (`home_test_*` →
    `home_*`). That prompt is a one-time offer and renames all of the device's entities
    at once; declining it means renaming ~100 entities by hand.
-6. Normalise the zone 19/20 entity ids in the registry. These two wireless zones were
-   added recently and were unnamed when the integration created their entities, so the
-   generated ids lack the name suffix (ids are generated once from the name and never
-   regenerated, so they will not fix themselves):
-   - `binary_sensor.home_zone_019_bypass` → `binary_sensor.home_zone_019_bypass_music_room_door`
-   - `button.home_zone_019_unbypass` → `button.home_zone_019_unbypass_music_room_door`
-   - `binary_sensor.home_zone_020_bypass` → `binary_sensor.home_zone_020_bypass_braai_room_door`
-   - `button.home_zone_020_bypass` → `button.home_zone_020_bypass_braai_room_door`
-   - `button.home_zone_020_unbypass` → `button.home_zone_020_unbypass_braai_room_door`
-
-   (`button.home_zone_019_bypass_music_room_door` is already correct. The template
-   switches reference the normalised ids, so this step is mandatory. Deleting and
-   re-adding the integration would also regenerate every id from the current names, but
-   that rebuilds everything — targeted renames are safer.)
-7. Reload template entities (or restart once more) so the template panels and switches
+6. Reload template entities (or restart once more) so the template panels and switches
    bind to the renamed entities.
+
+   (The zone 19/20 ids that used to lack their name suffix — the bypass sensors and
+   three of the buttons — were regenerated on 2026-08-30 and now carry the full names,
+   so no per-entity renames are needed. Verified: all 62 olarm entities the config
+   references exist on the panel, modulo the `home_test` → `home` prefix.)
 
 **No panel renames are needed.** The template alarm panels in `olarm.yaml` are named
 "Home" and "Flatlet", so they take `alarm_control_panel.home` and `.flatlet`, and the
 47 existing references across `olarm.yaml`, `home.yaml`, `security.yaml`, `homekit.yaml`
 and `main.yaml` keep working untouched, HomeKit keeps its accessories (their ids derive
-from the entity id), and the recorder history stays continuous. The integration's own
+from the entity ID), and the recorder history stays continuous. The integration's own
 panels stay at their generated ids and are only ever addressed by the template panels.
 
 ### Verify after cutover
@@ -190,7 +217,7 @@ panels stay at their generated ids and are only ever addressed by the template p
 - [ ] Bypass switches reflect and control bypass state; "Arm (bypass garage)" from the
       notification works end to end.
 - [ ] Stay-arm reminder lists active door zones (test via `script.test_active_zones`).
-- [ ] HomeKit: both alarms still work in the Home app (entity ids are unchanged, so the
+- [ ] HomeKit: both alarms still work in the Home app (entity IDs are unchanged, so the
       accessories should carry over); night mode no longer offered — then delete the
       "Set To Stay If Night Mode Activated" automation.
 - [ ] Presence flows (ask to arm when leaving, ask to disarm when arriving) fire.
@@ -203,7 +230,7 @@ panels stay at their generated ids and are only ever addressed by the template p
 Everything is version-controlled YAML, so rollback is a deploy away:
 
 1. Deploy `master` to the host and restart — the manual panels come back with their
-   original entity ids, and the REST/webhook automations resume.
+   original entity IDs, and the REST/webhook automations resume.
 2. The Olarm-side webhook is still registered during the soak, so state sync resumes too.
 3. The device/entity renames in the registry do not need reverting: master's config does
    not reference the integration's entities (bar four logbook rows on the security view).

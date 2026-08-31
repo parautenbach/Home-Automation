@@ -476,6 +476,26 @@ cards:
                     label: disarmed
                   - value: armed_away
                     label: armed
+              # the remote receivers are wired to arm/disarm zones (one per partition),
+              # so these pulse whenever someone arms or disarms with a remote
+              - entity: binary_sensor.home_zone_011_p1_remotes
+                label: Home remote
+                hidden_state:
+                  - "off"
+                  - unknown
+                  - unavailable
+                state_map:
+                  - value: "on"
+                    label: used
+              - entity: binary_sensor.home_zone_012_p2_remotes
+                label: Flatlet remote
+                hidden_state:
+                  - "off"
+                  - unknown
+                  - unavailable
+                state_map:
+                  - value: "on"
+                    label: used
               - entity: binary_sensor.kitchen_smoke
                 label: Kitchen smoke
                 hidden_state:
@@ -552,6 +572,39 @@ cards:
                     label: opened
                   - value: "off"
                     label: closed
+              # mains failure at the panel matters on its own (and during load shedding
+              # tells you how long the panel has been on battery)
+              - entity: binary_sensor.home_ac_power
+                label: Alarm mains
+                hidden_state:
+                  - unknown
+                  - unavailable
+                state_map:
+                  - value: "on"
+                    label: restored
+                  - value: "off"
+                    label: cut
+              - entity: binary_sensor.cabinet_door
+                label: Backup power cabinet
+                hidden_state:
+                  - unknown
+                  - unavailable
+                state_map:
+                  - value: "on"
+                    label: opened
+                  - value: "off"
+                    label: closed
+              # arming with the garage bypassed is worth seeing next to the arm event
+              - entity: switch.alarm_bypass_garage_pir
+                label: Garage PIR
+                hidden_state:
+                  - unknown
+                  - unavailable
+                state_map:
+                  - value: "on"
+                    label: bypass set
+                  - value: "off"
+                    label: bypass cleared
       - type: entities
         title: "Gates & Doors"
         show_header_toggle: false

@@ -37,7 +37,9 @@
 # partition membership map lives in custom_templates/security.jinja):
 #  * area 1 (home): all zones except 018
 #  * area 2 (flatlet): zone 018
-#  * ignored: 002, 014, 015, 016, 021–024 (spares) and 011, 012 (remotes)
+#  * ignored: 011, 012 only (the remote receiver channels). unused zones are not
+#    excluded by number: a newly activated zone should announce itself rather than
+#    be silently dropped – see custom_templates/security.jinja
 #
 # notes:
 #  * you cannot bypass a zone after a partition has been armed
@@ -210,7 +212,8 @@ input_datetime:
 # the integration's bypass sensor, so the switch also reflects bypasses made
 # from the keypad or the olarm app. if the panel refuses a bypass (e.g. while
 # armed), the switch simply snaps back.
-# spares (2, 14–16, 21–24) and remotes (11, 12) are deliberately excluded.
+# only the zones in use get a switch; the unused ones and the remote receiver
+# channels (11, 12) are left out. a zone put into use later needs one adding here.
 switch:
   - platform: template
     switches:

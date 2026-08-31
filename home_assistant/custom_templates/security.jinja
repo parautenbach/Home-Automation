@@ -43,7 +43,12 @@ The alarm zone sensors created by the Olarm integration belong to the panel
 device, not to a partition, so partition membership is maintained here:
   * flatlet (area 2): zone 018
   * home (area 1): every other real zone
-  * ignored: 002, 014, 015, 016, 021-024 (spares) and 011, 012 (remotes)
+  * ignored: 011 and 012 only - these are the channels the remote receivers are
+    wired to (arm/disarm zones, not intrusion zones), so they are never something
+    that blocks arming or is worth reporting.
+Unused zones are deliberately NOT excluded by number. A zone that is activated on
+the panel but not yet named or customised here shows up as "Home Zone 025", which
+is ugly on purpose: it announces itself instead of being silently ignored.
 Zone entity ids look like binary_sensor.home_zone_<nnn>_<name>, with a matching
 bypass state sensor binary_sensor.home_zone_<nnn>_bypass[_<name>] (the name
 suffix is inconsistent upstream, so bypass sensors are matched by zone number).
@@ -64,7 +69,7 @@ arming the partition, which is what callers use this list for.
           Returns an empty list if no matching zones are active.
 #}
 {%- macro get_active_zones(partition, scope, returns) -%}
-  {%- set ignored_pattern = '^binary_sensor\.home_zone_(002|011|012|014|015|016|021|022|023|024)' -%}
+  {%- set ignored_pattern = '^binary_sensor\.home_zone_(011|012)' -%}
   {%- set flatlet_pattern = '^binary_sensor\.home_zone_018_' -%}
   {%- set zones = states.binary_sensor
     | selectattr('entity_id', 'match', '^binary_sensor\.home_zone_')
@@ -141,7 +146,7 @@ Get a list of currently bypassed alarm zones for a partition.
           Returns an empty list if no zones are bypassed.
 #}
 {%- macro get_bypassed_zones(partition, returns) -%}
-  {%- set ignored_pattern = '^binary_sensor\.home_zone_(002|011|012|014|015|016|021|022|023|024)' -%}
+  {%- set ignored_pattern = '^binary_sensor\.home_zone_(011|012)' -%}
   {%- set flatlet_pattern = '^binary_sensor\.home_zone_018_' -%}
   {%- set bypass_sensors = states.binary_sensor
     | selectattr('entity_id', 'match', '^binary_sensor\.home_zone_\d+_bypass')

@@ -291,9 +291,11 @@ scenery:
     - entity_id:
         - light.bedroom_bedlamp
       profiles:
-        # check
-        - normal_shelly_duo
-      profile_default: normal_shelly_duo
+        - normal_bedlamp
+        - lilac_bedlamp
+        - low_bedlamp
+        - night_bedlamp
+      profile_default: normal_bedlamp
     - entity_id:
         - light.kitchen_counter
       profiles:

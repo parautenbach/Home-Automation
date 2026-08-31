@@ -6,10 +6,16 @@ force-dimmed on turn-on, and automations switch to assuming she might be waking 
 Also the start of the window where disabling sleep mode restores the lamp to normal
 brightness (paired with input_datetime.baby_nap_end_time as that window's end).
 
-:returns: A time value, 75 minutes after input_datetime.baby_nap_start_time.
+Clamped to the nap end so that a nap shorter than 75 minutes degrades sanely: without the
+clamp the force-dim window would run past nap end (dimming the lamp "Child Nap Wake-up
+Time" turns on) and the restore/safety windows that start here would invert and never open.
+
+:returns: A time value, 75 minutes after input_datetime.baby_nap_start_time, but never
+          later than input_datetime.baby_nap_end_time.
 #}
 {%- macro nap_restore_start_time(returns) -%}
-  {%- do returns(((states('input_datetime.baby_nap_start_time') | today_at) + timedelta(minutes=75)).time()) -%}
+  {%- do returns(min((states('input_datetime.baby_nap_start_time') | today_at) + timedelta(minutes=75),
+                     states('input_datetime.baby_nap_end_time') | today_at).time()) -%}
 {%- endmacro -%}
 
 {#

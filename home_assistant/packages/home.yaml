@@ -1500,6 +1500,27 @@ automation:
         data:
           profile: normal_bedlamp
 
+  # the nap counterpart of "Child Wake-up Time": sleep mode is normally disabled manually
+  # (or by the bed occupancy automation) before nap end, which restores the lamp, but if
+  # that never happens the lamp would stay off. the safety net in
+  # "Turn Off Sleep Mode When Bedroom Bedlamp Remains On" picks up sleep mode afterwards.
+  - alias: "Child Nap Wake-up Time"
+    id: "43756d24-898a-4e10-89e1-409a883250d7"
+    initial_state: true
+    trigger:
+      - platform: time
+        at: input_datetime.baby_nap_end_time
+    condition:
+      - condition: state
+        entity_id: light.bedroom_bedlamp
+        state: "off"
+    action:
+      - service: light.turn_on
+        target:
+          entity_id: light.bedroom_bedlamp
+        data:
+          profile: normal_bedlamp
+
   - alias: "Turn Off Bedroom Bedlamp When Sleep Mode Enabled"
     id: "8991ff53-d2c5-47f2-a6e5-7e196978400a"
     trigger:
@@ -1579,12 +1600,10 @@ automation:
                 entity_id: timer.bedroom_bedlamp_timer
               data:
                 duration: "00:00:30"
-        default:
-          - service: light.turn_on
-            target:
-              entity_id: light.bedroom_bedlamp
-            data:
-              profile: normal_bedlamp
+        # deliberately no default: outside the dim windows, scenery's profile_default for this
+        # lamp (normal_bedlamp) already normalises a plain turn-on, and re-applying the profile
+        # here would cut short a fade in progress ("Child Wake-up Time") by jumping the lamp
+        # straight to the target brightness
 
   # the purpose of this automation is to stop sleep tracking automatically
   # when the light is turned on, but we forget to disable sleep mode
@@ -1608,8 +1627,10 @@ automation:
         state: "on"
       # this is just for safety, in case there's an issue during night/nap time
       # to prevent incorrectly turning off sleep mode. covers the tail of the nap (from 75 min
-      # in, up to nap end) and the tail of the night (from the dim-forcing window's end, with
-      # a small grace overlap past the next bedtime start)
+      # in, with a grace overlap past nap end so that the lamp "Child Nap Wake-up Time" turns
+      # on at nap end still lands inside the window once the 2 min above have elapsed) and the
+      # tail of the night (from the dim-forcing window's end, with a small grace overlap past
+      # the next bedtime start)
       - condition: template
         value_template: >-
           {% from 'baby.jinja' import nap_restore_start_time, bedtime_ask_disable_start_time %}
@@ -1617,10 +1638,10 @@ automation:
           {% set bedtime_ask_disable_start_fn = bedtime_ask_disable_start_time | as_function %}
           {% set now_time = now().time() %}
           {% set nap_dim_end = nap_restore_start_fn() %}
-          {% set nap_end = (states('input_datetime.baby_nap_end_time') | today_at).time() %}
+          {% set nap_safety_end = ((states('input_datetime.baby_nap_end_time') | today_at) + timedelta(minutes=15)).time() %}
           {% set bedtime_dim_end = bedtime_ask_disable_start_fn() %}
           {% set bedtime_safety_end = ((states('input_datetime.baby_bedtime_start_time') | today_at) + timedelta(minutes=10)).time() %}
-          {{ (nap_dim_end <= now_time <= nap_end) or (bedtime_dim_end <= now_time <= bedtime_safety_end) }}
+          {{ (nap_dim_end <= now_time <= nap_safety_end) or (bedtime_dim_end <= now_time <= bedtime_safety_end) }}
     action:
       - service: input_boolean.turn_off
         entity_id: input_boolean.baby_sleep_mode

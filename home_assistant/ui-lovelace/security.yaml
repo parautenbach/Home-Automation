@@ -152,30 +152,63 @@ cards:
               --state-alarm_control_panel-disarmed-color: #40b100;
               --state-alarm_control_panel-triggered-color: #135dd8;
             }
-      - type: glance
-        title: Door Zones
-        columns: 4
-        state_color: true
-        entities:
-          - binary_sensor.home_zone_001_front_door
-          - binary_sensor.home_zone_007_kitchen_door
-          - binary_sensor.home_zone_019_music_room_door
-          - binary_sensor.home_zone_020_braai_room_door
-      - type: glance
-        title: Motion Zones
-        columns: 5
-        state_color: true
-        entities:
-          - binary_sensor.home_zone_003_foyer
-          - binary_sensor.home_zone_004_living_area
-          - binary_sensor.home_zone_005_braai_room
-          - binary_sensor.home_zone_006_kitchen
-          - binary_sensor.home_zone_008_bedroom
-          - binary_sensor.home_zone_009_guest_room
-          - binary_sensor.home_zone_010_main_bedroom
-          - binary_sensor.home_zone_013_backyard
-          - binary_sensor.home_zone_017_garage
-          - binary_sensor.home_zone_018_flatlet
+      # filtered by device class rather than listed by hand, so a zone added on the
+      # panel later appears on its own instead of being silently missing. olarm sets
+      # device_class only on door contacts; the motion zones get theirs in
+      # packages/olarm.yaml, and anything still unclassified falls into the third card.
+      - type: custom:auto-entities
+        card:
+          type: glance
+          title: Door Zones
+          columns: 4
+          state_color: true
+        filter:
+          include:
+            - entity_id: "binary_sensor.home_zone_*"
+              attributes:
+                device_class: door
+          exclude:
+            - entity_id: "*_bypass*"
+        sort:
+          method: entity_id
+      - type: custom:auto-entities
+        card:
+          type: glance
+          title: PIR Zones
+          columns: 5
+          state_color: true
+        filter:
+          include:
+            - entity_id: "binary_sensor.home_zone_*"
+              attributes:
+                device_class: motion
+          exclude:
+            - entity_id: "*_bypass*"
+        sort:
+          method: entity_id
+      # normally empty and hidden: a zone shows up here when it has no device class
+      # yet, i.e. it was activated on the panel but not yet classified in
+      # packages/olarm.yaml. the remote receiver channels (011/012) are never zones.
+      - type: custom:auto-entities
+        card:
+          type: glance
+          title: Unclassified Zones
+          columns: 4
+          state_color: true
+        show_empty: false
+        filter:
+          include:
+            - entity_id: "binary_sensor.home_zone_*"
+          exclude:
+            - entity_id: "*_bypass*"
+            - entity_id: "binary_sensor.home_zone_011*"
+            - entity_id: "binary_sensor.home_zone_012*"
+            - attributes:
+                device_class: door
+            - attributes:
+                device_class: motion
+        sort:
+          method: entity_id
       - type: horizontal-stack
         title: Smoke Detectors
         cards:

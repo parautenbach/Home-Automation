@@ -196,6 +196,25 @@ and `main.yaml` keep working untouched, HomeKit keeps its accessories (their ids
 from the entity ID), and the recorder history stays continuous. The integration's own
 panels stay at their generated ids and are only ever addressed by the template panels.
 
+### Entities left behind
+
+The 18 `input_boolean.alarm_zone_*_bypass` helpers, replaced by the bypass switches,
+survived the config change as registry entries and had to be deleted by hand
+(Settings → Devices & services → Entities, filter Status = Unavailable).
+
+Automations removed in the same change did **not** need this — "Sync Alarm State" and
+the renamed webhook automation left nothing behind, so HA prunes those itself. Verified
+after the cutover: no alarm-related entity was left unavailable.
+
+The manual alarm panels leave nothing behind either — the `manual` platform sets no
+unique ID, so they were never registered, which is also why the template panels could
+take `alarm_control_panel.home` and `.flatlet` straight over.
+
+To check for strays:
+
+    {{ states | selectattr('state', 'eq', 'unavailable')
+       | map(attribute='entity_id') | select('search', 'alarm|olarm') | list }}
+
 ### Verify after cutover
 
 - [ ] The template panels came up as `alarm_control_panel.home` and `.flatlet` (rename

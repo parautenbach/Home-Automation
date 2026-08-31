@@ -202,28 +202,20 @@ template:
             target:
               entity_id: alarm_control_panel.home_area_02_flatlet
 
-input_datetime:
-  workday_alarm_arm_reminder:
-    has_time: true
-    icon: mdi:calendar-week
-  non_workday_alarm_arm_reminder:
-    has_time: true
-    icon: mdi:calendar-weekend
-
-# bypass is a state you set and clear, not an event, so each zone's pair of
-# bypass/unbypass buttons is wrapped in a template switch. the state comes from
-# the integration's bypass sensor, so the switch also reflects bypasses made
-# from the keypad or the olarm app. if the panel refuses a bypass (e.g. while
-# armed), the switch simply snaps back.
-# only the zones in use get a switch; the unused ones and the remote receiver
-# channels (11, 12) are left out. a zone put into use later needs one adding here.
-switch:
-  - platform: template
-    switches:
-      alarm_bypass_front_door:
-        friendly_name: "Front Door Bypass"
-        icon_template: mdi:door
-        value_template: "{{ is_state('binary_sensor.home_zone_001_bypass_front_door', 'on') }}"
+  # bypass is a state you set and clear, not an event, so each zone's pair of
+  # bypass/unbypass buttons is wrapped in a template switch. the state comes from
+  # the integration's bypass sensor, so the switch also reflects bypasses made
+  # from the keypad or the olarm app. if the panel refuses a bypass (e.g. while
+  # armed), the switch simply snaps back.
+  # only the zones in use get a switch; the unused ones and the remote receiver
+  # channels (11, 12) are left out. a zone put into use later needs one adding here.
+  # default_entity_id is needed here: this schema derives the entity id from the
+  # name, so "Front Door Bypass" would otherwise become switch.front_door_bypass.
+  - switch:
+      - name: "Front Door Bypass"
+        default_entity_id: switch.alarm_bypass_front_door
+        icon: mdi:door
+        state: "{{ is_state('binary_sensor.home_zone_001_bypass_front_door', 'on') }}"
         turn_on:
           service: button.press
           target:
@@ -232,10 +224,10 @@ switch:
           service: button.press
           target:
             entity_id: button.home_zone_001_unbypass_front_door
-      alarm_bypass_foyer:
-        friendly_name: "Foyer Bypass"
-        icon_template: mdi:coat-rack
-        value_template: "{{ is_state('binary_sensor.home_zone_003_bypass_foyer', 'on') }}"
+      - name: "Foyer Bypass"
+        default_entity_id: switch.alarm_bypass_foyer
+        icon: mdi:coat-rack
+        state: "{{ is_state('binary_sensor.home_zone_003_bypass_foyer', 'on') }}"
         turn_on:
           service: button.press
           target:
@@ -244,10 +236,10 @@ switch:
           service: button.press
           target:
             entity_id: button.home_zone_003_unbypass_foyer
-      alarm_bypass_living_area:
-        friendly_name: "Living Area Bypass"
-        icon_template: mdi:sofa-outline
-        value_template: "{{ is_state('binary_sensor.home_zone_004_bypass_living_area', 'on') }}"
+      - name: "Living Area Bypass"
+        default_entity_id: switch.alarm_bypass_living_area
+        icon: mdi:sofa-outline
+        state: "{{ is_state('binary_sensor.home_zone_004_bypass_living_area', 'on') }}"
         turn_on:
           service: button.press
           target:
@@ -256,10 +248,10 @@ switch:
           service: button.press
           target:
             entity_id: button.home_zone_004_unbypass_living_area
-      alarm_bypass_braai_room:
-        friendly_name: "Braai Room Bypass"
-        icon_template: mdi:gas-burner
-        value_template: "{{ is_state('binary_sensor.home_zone_005_bypass_braai_room', 'on') }}"
+      - name: "Braai Room Bypass"
+        default_entity_id: switch.alarm_bypass_braai_room
+        icon: mdi:gas-burner
+        state: "{{ is_state('binary_sensor.home_zone_005_bypass_braai_room', 'on') }}"
         turn_on:
           service: button.press
           target:
@@ -268,10 +260,10 @@ switch:
           service: button.press
           target:
             entity_id: button.home_zone_005_unbypass_braai_room
-      alarm_bypass_kitchen:
-        friendly_name: "Kitchen Bypass"
-        icon_template: mdi:countertop-outline
-        value_template: "{{ is_state('binary_sensor.home_zone_006_bypass_kitchen', 'on') }}"
+      - name: "Kitchen Bypass"
+        default_entity_id: switch.alarm_bypass_kitchen
+        icon: mdi:countertop-outline
+        state: "{{ is_state('binary_sensor.home_zone_006_bypass_kitchen', 'on') }}"
         turn_on:
           service: button.press
           target:
@@ -280,10 +272,10 @@ switch:
           service: button.press
           target:
             entity_id: button.home_zone_006_unbypass_kitchen
-      alarm_bypass_kitchen_door:
-        friendly_name: "Kitchen Door Bypass"
-        icon_template: mdi:door
-        value_template: "{{ is_state('binary_sensor.home_zone_007_bypass_kitchen_door', 'on') }}"
+      - name: "Kitchen Door Bypass"
+        default_entity_id: switch.alarm_bypass_kitchen_door
+        icon: mdi:door
+        state: "{{ is_state('binary_sensor.home_zone_007_bypass_kitchen_door', 'on') }}"
         turn_on:
           service: button.press
           target:
@@ -292,10 +284,10 @@ switch:
           service: button.press
           target:
             entity_id: button.home_zone_007_unbypass_kitchen_door
-      alarm_bypass_bedroom:
-        friendly_name: "Bedroom Bypass"
-        icon_template: mdi:bed-single-outline
-        value_template: "{{ is_state('binary_sensor.home_zone_008_bypass_bedroom', 'on') }}"
+      - name: "Bedroom Bypass"
+        default_entity_id: switch.alarm_bypass_bedroom
+        icon: mdi:bed-single-outline
+        state: "{{ is_state('binary_sensor.home_zone_008_bypass_bedroom', 'on') }}"
         turn_on:
           service: button.press
           target:
@@ -304,10 +296,10 @@ switch:
           service: button.press
           target:
             entity_id: button.home_zone_008_unbypass_bedroom
-      alarm_bypass_guest_room:
-        friendly_name: "Guest Room Bypass"
-        icon_template: mdi:bed-king-outline
-        value_template: "{{ is_state('binary_sensor.home_zone_009_bypass_guest_room', 'on') }}"
+      - name: "Guest Room Bypass"
+        default_entity_id: switch.alarm_bypass_guest_room
+        icon: mdi:bed-king-outline
+        state: "{{ is_state('binary_sensor.home_zone_009_bypass_guest_room', 'on') }}"
         turn_on:
           service: button.press
           target:
@@ -316,10 +308,10 @@ switch:
           service: button.press
           target:
             entity_id: button.home_zone_009_unbypass_guest_room
-      alarm_bypass_main_bedroom:
-        friendly_name: "Main Bedroom Bypass"
-        icon_template: mdi:bed-king-outline
-        value_template: "{{ is_state('binary_sensor.home_zone_010_bypass_main_bedroom', 'on') }}"
+      - name: "Main Bedroom Bypass"
+        default_entity_id: switch.alarm_bypass_main_bedroom
+        icon: mdi:bed-king-outline
+        state: "{{ is_state('binary_sensor.home_zone_010_bypass_main_bedroom', 'on') }}"
         turn_on:
           service: button.press
           target:
@@ -328,10 +320,10 @@ switch:
           service: button.press
           target:
             entity_id: button.home_zone_010_unbypass_main_bedroom
-      alarm_bypass_backyard:
-        friendly_name: "Backyard Bypass"
-        icon_template: mdi:grass
-        value_template: "{{ is_state('binary_sensor.home_zone_013_bypass_backyard', 'on') }}"
+      - name: "Backyard Bypass"
+        default_entity_id: switch.alarm_bypass_backyard
+        icon: mdi:grass
+        state: "{{ is_state('binary_sensor.home_zone_013_bypass_backyard', 'on') }}"
         turn_on:
           service: button.press
           target:
@@ -340,10 +332,10 @@ switch:
           service: button.press
           target:
             entity_id: button.home_zone_013_unbypass_backyard
-      alarm_bypass_garage_pir:
-        friendly_name: "Garage PIR Bypass"
-        icon_template: mdi:garage-variant
-        value_template: "{{ is_state('binary_sensor.home_zone_017_bypass_garage', 'on') }}"
+      - name: "Garage PIR Bypass"
+        default_entity_id: switch.alarm_bypass_garage_pir
+        icon: mdi:garage-variant
+        state: "{{ is_state('binary_sensor.home_zone_017_bypass_garage', 'on') }}"
         turn_on:
           service: button.press
           target:
@@ -352,10 +344,10 @@ switch:
           service: button.press
           target:
             entity_id: button.home_zone_017_unbypass_garage
-      alarm_bypass_flatlet:
-        friendly_name: "Flatlet Bypass"
-        icon_template: mdi:bed-outline
-        value_template: "{{ is_state('binary_sensor.home_zone_018_bypass_flatlet', 'on') }}"
+      - name: "Flatlet Bypass"
+        default_entity_id: switch.alarm_bypass_flatlet
+        icon: mdi:bed-outline
+        state: "{{ is_state('binary_sensor.home_zone_018_bypass_flatlet', 'on') }}"
         turn_on:
           service: button.press
           target:
@@ -364,10 +356,10 @@ switch:
           service: button.press
           target:
             entity_id: button.home_zone_018_unbypass_flatlet
-      alarm_bypass_music_room_door:
-        friendly_name: "Music Room Door Bypass"
-        icon_template: mdi:door
-        value_template: "{{ is_state('binary_sensor.home_zone_019_bypass_music_room_door', 'on') }}"
+      - name: "Music Room Door Bypass"
+        default_entity_id: switch.alarm_bypass_music_room_door
+        icon: mdi:door
+        state: "{{ is_state('binary_sensor.home_zone_019_bypass_music_room_door', 'on') }}"
         turn_on:
           service: button.press
           target:
@@ -376,10 +368,10 @@ switch:
           service: button.press
           target:
             entity_id: button.home_zone_019_unbypass_music_room_door
-      alarm_bypass_braai_room_door:
-        friendly_name: "Braai Room Door Bypass"
-        icon_template: mdi:door
-        value_template: "{{ is_state('binary_sensor.home_zone_020_bypass_braai_room_door', 'on') }}"
+      - name: "Braai Room Door Bypass"
+        default_entity_id: switch.alarm_bypass_braai_room_door
+        icon: mdi:door
+        state: "{{ is_state('binary_sensor.home_zone_020_bypass_braai_room_door', 'on') }}"
         turn_on:
           service: button.press
           target:
@@ -388,6 +380,14 @@ switch:
           service: button.press
           target:
             entity_id: button.home_zone_020_unbypass_braai_room_door
+
+input_datetime:
+  workday_alarm_arm_reminder:
+    has_time: true
+    icon: mdi:calendar-week
+  non_workday_alarm_arm_reminder:
+    has_time: true
+    icon: mdi:calendar-weekend
 
 automation:
   - alias: "Notify When Alarm Triggered"

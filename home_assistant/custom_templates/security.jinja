@@ -85,7 +85,10 @@ arming the partition, which is what callers use this list for.
   {%- endif -%}
   {%- set ns = namespace(names=[]) -%}
   {%- for zone in zones -%}
-    {%- set zone_number = zone.entity_id | regex_findall('zone_(\d+)_') | first -%}
+    {#- no trailing underscore in the pattern: an unnamed zone's id ends at the
+        number (binary_sensor.home_zone_025), and requiring one found nothing,
+        which silently disabled the bypass check below -#}
+    {%- set zone_number = zone.entity_id | regex_findall('zone_(\d+)') | first -%}
     {%- set is_bypassed = states.binary_sensor
       | selectattr('entity_id', 'match', '^binary_sensor\.home_zone_' ~ zone_number ~ '_bypass')
       | selectattr('state', 'eq', 'on')

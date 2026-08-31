@@ -502,6 +502,8 @@ automation:
     #     'description': 'state of sensor.overall_pollen_risk'
     # }
     condition:
+      # bug: https://github.com/danieldotnl/ha-multiscrape/issues/437
+      # fix: https://github.com/danieldotnl/ha-multiscrape/pull/605
       - condition: template
         value_template: "{{ 'icon' in trigger.from_state.attributes }}"
     action:

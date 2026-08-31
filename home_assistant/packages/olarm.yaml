@@ -56,40 +56,43 @@ homeassistant:
     # the motion zones get theirs here so the ui and the 'doors' scope in
     # security.jinja can filter on device class instead of name matching.
     # friendly names are cleaned up ("Zone 001 - Front Door" -> "Front Door") for
-    # notifications and auto-populated cards.
+    # notifications and cards, and each name ends in its type. that matters for the
+    # bypassed-zones list in "Alarm State Changed", which mixes doors and motion zones
+    # with no filtering: "Garage" alone does not say whether a door or a PIR was
+    # bypassed. door zones already carry "Door" in the name.
     binary_sensor.home_zone_001_front_door:
       friendly_name: Front Door
     binary_sensor.home_zone_003_foyer:
-      friendly_name: Foyer
+      friendly_name: Foyer PIR
       device_class: motion
     binary_sensor.home_zone_004_living_area:
-      friendly_name: Living Area
+      friendly_name: Living Area PIR
       device_class: motion
     binary_sensor.home_zone_005_braai_room:
-      friendly_name: Braai Room
+      friendly_name: Braai Room PIR
       device_class: motion
     binary_sensor.home_zone_006_kitchen:
-      friendly_name: Kitchen
+      friendly_name: Kitchen PIR
       device_class: motion
     binary_sensor.home_zone_007_kitchen_door:
       friendly_name: Kitchen Door
     binary_sensor.home_zone_008_bedroom:
-      friendly_name: Bedroom
+      friendly_name: Bedroom PIR
       device_class: motion
     binary_sensor.home_zone_009_guest_room:
-      friendly_name: Guest Room
+      friendly_name: Guest Room PIR
       device_class: motion
     binary_sensor.home_zone_010_main_bedroom:
-      friendly_name: Main Bedroom
+      friendly_name: Main Bedroom PIR
       device_class: motion
     binary_sensor.home_zone_013_backyard:
-      friendly_name: Backyard
+      friendly_name: Backyard PIR
       device_class: motion
     binary_sensor.home_zone_017_garage:
-      friendly_name: Garage
+      friendly_name: Garage PIR
       device_class: motion
     binary_sensor.home_zone_018_flatlet:
-      friendly_name: Flatlet
+      friendly_name: Flatlet PIR
       device_class: motion
     binary_sensor.home_zone_019_music_room_door:
       friendly_name: Music Room Door
@@ -337,8 +340,8 @@ switch:
           service: button.press
           target:
             entity_id: button.home_zone_013_unbypass_backyard
-      alarm_bypass_garage:
-        friendly_name: "Garage Bypass"
+      alarm_bypass_garage_pir:
+        friendly_name: "Garage PIR Bypass"
         icon_template: mdi:garage-variant
         value_template: "{{ is_state('binary_sensor.home_zone_017_bypass_garage', 'on') }}"
         turn_on:
@@ -524,7 +527,7 @@ automation:
       #       entity_id: cover.garage_doors
       #       state: "closed"
       #     - condition: state
-      #       entity_id: switch.alarm_bypass_garage
+      #       entity_id: switch.alarm_bypass_garage_pir
       #       state: "off"
     action:
       # clear any unactioned arm prompt first: it shares this tag, and ios can neither
@@ -723,7 +726,7 @@ automation:
         then:
           - service: switch.turn_on
             target:
-              entity_id: switch.alarm_bypass_garage
+              entity_id: switch.alarm_bypass_garage_pir
           # wait on the integration's own bypass sensor: it only turns on once the
           # panel confirmed the bypass, so this cannot be fooled by optimistic state
           # (the template switch mirrors this same sensor, but waiting on the source

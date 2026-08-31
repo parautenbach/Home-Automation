@@ -209,6 +209,167 @@ cards:
                 device_class: motion
         sort:
           method: entity_id
+      # bypass state is worth seeing while armed, so this is not hidden behind the
+      # alarm being disarmed - but the panel refuses bypass changes once armed, and a
+      # switch will simply snap back if you try.
+      # template-entity-row rather than a plain toggle row: the toggle control ignores
+      # tap_action, so it is the only way to get a confirmation on the whole row.
+      # names match the zone friendly names in packages/olarm.yaml; the confirmation
+      # text is static (the frontend handles it, not the card), which is fine since
+      # each row names its own zone.
+      # red when a bypass is set: that zone is a hole in the alarm while armed.
+      - type: entities
+        show_header_toggle: false
+        entities:
+          - type: custom:fold-entity-row
+            head:
+              type: section
+              label: Zone Bypasses
+            entities:
+              - type: custom:template-entity-row
+                entity: switch.alarm_bypass_front_door
+                name: Front Door
+                state: >-
+                  {{ 'Set' if is_state('switch.alarm_bypass_front_door', 'on') else 'Cleared' }}
+                tap_action:
+                  action: toggle
+                  confirmation:
+                    text: "Change the bypass for the front door?"
+                uix: &bypass_state_colour
+                  style: |
+                    .state {
+                      color: {{ 'var(--custom-color-red)' if is_state(config.entity, 'on') else 'var(--custom-color-green)' }};
+                    }
+              - type: custom:template-entity-row
+                entity: switch.alarm_bypass_foyer
+                name: Foyer PIR
+                state: >-
+                  {{ 'Set' if is_state('switch.alarm_bypass_foyer', 'on') else 'Cleared' }}
+                tap_action:
+                  action: toggle
+                  confirmation:
+                    text: "Change the bypass for the foyer PIR?"
+                uix: *bypass_state_colour
+              - type: custom:template-entity-row
+                entity: switch.alarm_bypass_living_area
+                name: Living Area PIR
+                state: >-
+                  {{ 'Set' if is_state('switch.alarm_bypass_living_area', 'on') else 'Cleared' }}
+                tap_action:
+                  action: toggle
+                  confirmation:
+                    text: "Change the bypass for the living area PIR?"
+                uix: *bypass_state_colour
+              - type: custom:template-entity-row
+                entity: switch.alarm_bypass_braai_room
+                name: Braai Room PIR
+                state: >-
+                  {{ 'Set' if is_state('switch.alarm_bypass_braai_room', 'on') else 'Cleared' }}
+                tap_action:
+                  action: toggle
+                  confirmation:
+                    text: "Change the bypass for the braai room PIR?"
+                uix: *bypass_state_colour
+              - type: custom:template-entity-row
+                entity: switch.alarm_bypass_kitchen
+                name: Kitchen PIR
+                state: >-
+                  {{ 'Set' if is_state('switch.alarm_bypass_kitchen', 'on') else 'Cleared' }}
+                tap_action:
+                  action: toggle
+                  confirmation:
+                    text: "Change the bypass for the kitchen PIR?"
+                uix: *bypass_state_colour
+              - type: custom:template-entity-row
+                entity: switch.alarm_bypass_kitchen_door
+                name: Kitchen Door
+                state: >-
+                  {{ 'Set' if is_state('switch.alarm_bypass_kitchen_door', 'on') else 'Cleared' }}
+                tap_action:
+                  action: toggle
+                  confirmation:
+                    text: "Change the bypass for the kitchen door?"
+                uix: *bypass_state_colour
+              - type: custom:template-entity-row
+                entity: switch.alarm_bypass_bedroom
+                name: Bedroom PIR
+                state: >-
+                  {{ 'Set' if is_state('switch.alarm_bypass_bedroom', 'on') else 'Cleared' }}
+                tap_action:
+                  action: toggle
+                  confirmation:
+                    text: "Change the bypass for the bedroom PIR?"
+                uix: *bypass_state_colour
+              - type: custom:template-entity-row
+                entity: switch.alarm_bypass_guest_room
+                name: Guest Room PIR
+                state: >-
+                  {{ 'Set' if is_state('switch.alarm_bypass_guest_room', 'on') else 'Cleared' }}
+                tap_action:
+                  action: toggle
+                  confirmation:
+                    text: "Change the bypass for the guest room PIR?"
+                uix: *bypass_state_colour
+              - type: custom:template-entity-row
+                entity: switch.alarm_bypass_main_bedroom
+                name: Main Bedroom PIR
+                state: >-
+                  {{ 'Set' if is_state('switch.alarm_bypass_main_bedroom', 'on') else 'Cleared' }}
+                tap_action:
+                  action: toggle
+                  confirmation:
+                    text: "Change the bypass for the main bedroom PIR?"
+                uix: *bypass_state_colour
+              - type: custom:template-entity-row
+                entity: switch.alarm_bypass_backyard
+                name: Backyard PIR
+                state: >-
+                  {{ 'Set' if is_state('switch.alarm_bypass_backyard', 'on') else 'Cleared' }}
+                tap_action:
+                  action: toggle
+                  confirmation:
+                    text: "Change the bypass for the backyard PIR?"
+                uix: *bypass_state_colour
+              - type: custom:template-entity-row
+                entity: switch.alarm_bypass_garage_pir
+                name: Garage PIR
+                state: >-
+                  {{ 'Set' if is_state('switch.alarm_bypass_garage_pir', 'on') else 'Cleared' }}
+                tap_action:
+                  action: toggle
+                  confirmation:
+                    text: "Change the bypass for the garage PIR?"
+                uix: *bypass_state_colour
+              - type: custom:template-entity-row
+                entity: switch.alarm_bypass_flatlet
+                name: Flatlet PIR
+                state: >-
+                  {{ 'Set' if is_state('switch.alarm_bypass_flatlet', 'on') else 'Cleared' }}
+                tap_action:
+                  action: toggle
+                  confirmation:
+                    text: "Change the bypass for the flatlet PIR?"
+                uix: *bypass_state_colour
+              - type: custom:template-entity-row
+                entity: switch.alarm_bypass_music_room_door
+                name: Music Room Door
+                state: >-
+                  {{ 'Set' if is_state('switch.alarm_bypass_music_room_door', 'on') else 'Cleared' }}
+                tap_action:
+                  action: toggle
+                  confirmation:
+                    text: "Change the bypass for the music room door?"
+                uix: *bypass_state_colour
+              - type: custom:template-entity-row
+                entity: switch.alarm_bypass_braai_room_door
+                name: Braai Room Door
+                state: >-
+                  {{ 'Set' if is_state('switch.alarm_bypass_braai_room_door', 'on') else 'Cleared' }}
+                tap_action:
+                  action: toggle
+                  confirmation:
+                    text: "Change the bypass for the braai room door?"
+                uix: *bypass_state_colour
       - type: horizontal-stack
         title: Smoke Detectors
         cards:

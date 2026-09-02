@@ -153,23 +153,6 @@ template:
           - service: alarm_control_panel.alarm_arm_away
             target:
               entity_id: alarm_control_panel.home_area_01_home
-        # homekit always offers night mode - the bridge cannot limit which states the
-        # home app shows - so map it rather than let the call fail. the panel reports
-        # back armed_home, which is what the home app then displays.
-        arm_night:
-          - variables:
-              valid_code: !secret alarm_code
-          - if: "{{ code != valid_code }}"
-            then:
-              - service: system_log.write
-                data:
-                  message: "Rejected arm (night) for the home alarm: invalid code."
-                  level: warning
-                  logger: "homeassistant.components.olarm"
-              - stop: "Invalid code."
-          - service: alarm_control_panel.alarm_arm_home
-            target:
-              entity_id: alarm_control_panel.home_area_01_home
         disarm:
           - variables:
               valid_code: !secret alarm_code
@@ -200,23 +183,6 @@ template:
               - service: system_log.write
                 data:
                   message: "Rejected arm for the flatlet alarm: invalid code."
-                  level: warning
-                  logger: "homeassistant.components.olarm"
-              - stop: "Invalid code."
-          - service: alarm_control_panel.alarm_arm_away
-            target:
-              entity_id: alarm_control_panel.home_area_02_flatlet
-        # homekit always offers night mode - the bridge cannot limit which states the
-        # home app shows - so map it rather than let the call fail. the panel reports
-        # back armed_away, which is what the home app then displays.
-        arm_night:
-          - variables:
-              valid_code: !secret alarm_code
-          - if: "{{ code != valid_code }}"
-            then:
-              - service: system_log.write
-                data:
-                  message: "Rejected arm (night) for the flatlet alarm: invalid code."
                   level: warning
                   logger: "homeassistant.components.olarm"
               - stop: "Invalid code."

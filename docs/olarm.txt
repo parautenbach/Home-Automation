@@ -131,8 +131,13 @@ The shape of it, and the reasoning that is not obvious from the config:
     template alarm panel does not check codes itself).
   * The integration's panels keep their generated ids (home_area_01_home,
     home_area_02_flatlet) and are only ever addressed by the template panels.
-  * HomeKit always offers night mode - the bridge cannot limit which states the Home
-    app shows - so both panels map arm_night onto stay (home) and away (flatlet).
+  * Night mode is gone from HomeKit, and that is deliberate. The template panels define
+    only arm_home/arm_away/disarm, so they never advertise ARM_NIGHT and the Home app
+    offers just Away, Home and Off. Verified 2026-09-02. Before the migration the manual
+    panel did support night, so the Home app offered it and an automation had to catch
+    armed_night and re-arm to stay; both that automation and the confusing option are
+    now unnecessary. Do not add an arm_night action back - it would put the option
+    (and the flip) back.
   * changed_by is always null, so who armed/disarmed comes from the HA context instead
     (get_ha_actor in security.jinja). A name only appears when a person did it in HA.
   * Zones belong to the device, not a partition, so the partition map lives in

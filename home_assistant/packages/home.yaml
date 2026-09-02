@@ -1212,21 +1212,13 @@ automation:
         entity_id: binary_sensor.baby_monitor_motion_alarm
         to: "on"
     condition:
-      - condition: or
-        conditions:
-          - condition: time
-            after: input_datetime.baby_nap_start_time
-            before: input_datetime.baby_nap_end_time
-          - condition: time
-            after: input_datetime.baby_bedtime_start_time
-            before: input_datetime.lights_out_time
-          - condition: template
-            # relative to OUR wake-up time, not baby's: 15 min before to 30 min after
-            value_template: >-
-              {% set now_time = now().time() %}
-              {% set morning_start = ((states('input_datetime.wake_up_time') | today_at) - timedelta(minutes=15)).time() %}
-              {% set morning_end = ((states('input_datetime.wake_up_time') | today_at) + timedelta(minutes=30)).time() %}
-              {{ morning_start <= now_time <= morning_end }}
+      # shared with "Turn On Bedroom Bedlamp When Sleep Mode Disabled", which has to restore
+      # the lamp across exactly this window: the lamp is what gates the alerts below, so a
+      # window it doesn't cover is one where nothing can stop them
+      - condition: template
+        value_template: >-
+          {% from 'baby.jinja' import in_nursery_alert_window %}
+          {{ (in_nursery_alert_window | as_function)() }}
       - condition: state
         entity_id: light.bedroom_bedlamp
         state: "off"
@@ -1468,13 +1460,23 @@ automation:
             tag: "routine-bedtime"
             url: homeassistant://navigate/lovelace-main/baby
 
-  - alias: "Clear Nursery Motion Notifications When Sleep Mode Disabled"
+  - alias: "Clear Nursery Motion Notifications When Sleep Mode Changes"
     id: "0898da8b-9333-4aa2-8ca7-46dcdd30a3ca"
     initial_state: true
     trigger:
+      # on: she's settled, so the settling-in alerts are stale
+      # off: the sleep session is over
       - platform: state
         entity_id: input_boolean.baby_sleep_mode
-        to: "off"
+        to:
+          - "on"
+          - "off"
+      # during a struggling settle sleep mode never armed, so the action turns off something
+      # already off: no state change, and the trigger above would never fire
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: SLEEP_OFF
     action:
       - service: notify.mobile_app_ceres
         data:
@@ -1489,27 +1491,20 @@ automation:
       - platform: state
         entity_id: input_boolean.baby_sleep_mode
         to: "off"
+      # during a struggling settle sleep mode never armed, so the action turns off something
+      # already off: no state change, and the trigger above would never fire
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: SLEEP_OFF
     condition:
-      condition: or
-      conditions:
-        # restore window: 30 min before wake-up time to 30 min after
-        - condition: template
-          value_template: >-
-            {% from 'baby.jinja' import bedtime_morning_transition_start_time %}
-            {% set morning_start_fn = bedtime_morning_transition_start_time | as_function %}
-            {% set now_time = now().time() %}
-            {% set morning_start = morning_start_fn() %}
-            {% set restore_end = ((states('input_datetime.baby_wake_up_time') | today_at) + timedelta(minutes=30)).time() %}
-            {{ morning_start <= now_time <= restore_end }}
-        # restore window: 75 min after nap start to nap end
-        - condition: template
-          value_template: >-
-            {% from 'baby.jinja' import nap_restore_start_time %}
-            {% set nap_restore_start_fn = nap_restore_start_time | as_function %}
-            {% set now_time = now().time() %}
-            {% set nap_restore_start = nap_restore_start_fn() %}
-            {% set nap_end = (states('input_datetime.baby_nap_end_time') | today_at).time() %}
-            {{ nap_restore_start <= now_time <= nap_end }}
+      # the same window "Notify When Motion Detected In The Nursery" alerts in, because the
+      # lamp coming back on is what stops those alerts. restoring across a narrower window
+      # than they fire in leaves them running with nothing to end them
+      - condition: template
+        value_template: >-
+          {% from 'baby.jinja' import in_nursery_alert_window %}
+          {{ (in_nursery_alert_window | as_function)() }}
     action:
       - if:
           - "{{ is_state('timer.bedroom_bedlamp_timer', 'active') }}"
@@ -1521,7 +1516,22 @@ automation:
         target:
           entity_id: light.bedroom_bedlamp
         data:
-          profile: normal_bedlamp
+          # dim if she's only just gone down, normal once she's had a real stretch. same
+          # windows as "Force To Night Light If Bedlamp Turned On During Bedtime", which
+          # can't do it for us here: it requires sleep mode to still be on, and we have
+          # just turned it off
+          profile: >-
+            {% from 'baby.jinja' import nap_restore_start_time, bedtime_ask_disable_start_time %}
+            {% set nap_restore_start_fn = nap_restore_start_time | as_function %}
+            {% set bedtime_ask_disable_start_fn = bedtime_ask_disable_start_time | as_function %}
+            {% set now_time = now().time() %}
+            {% set nap_start = (states('input_datetime.baby_nap_start_time') | today_at).time() %}
+            {% set nap_dim_end = nap_restore_start_fn() %}
+            {% set bedtime_start = (states('input_datetime.baby_bedtime_start_time') | today_at).time() %}
+            {% set bedtime_dim_end = bedtime_ask_disable_start_fn() %}
+            {% set dim = (nap_start <= now_time <= nap_dim_end) or
+                         (now_time >= bedtime_start or now_time <= bedtime_dim_end) %}
+            {{ 'night_bedlamp' if dim else 'normal_bedlamp' }}
 
   - alias: "Turn On Bedroom Bedlamp Before Afternoon Nap"
     id: "6285c20a-1e7b-4855-bd90-b910ad7bc1bd"

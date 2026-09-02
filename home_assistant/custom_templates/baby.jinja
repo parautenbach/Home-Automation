@@ -38,3 +38,30 @@ her actual wake-up time.
 {%- macro bedtime_morning_transition_start_time(returns) -%}
   {%- do returns(((states('input_datetime.baby_wake_up_time') | today_at) - timedelta(minutes=30)).time()) -%}
 {%- endmacro -%}
+
+{#
+The window during which nursery motion is worth alerting on: she's in bed and we're out of
+the room. Deliberately independent of input_boolean.baby_sleep_mode, which means "actually
+asleep" and so is off during exactly the settling-in period we most want to hear about.
+
+Consumed by "Notify When Motion Detected In The Nursery", to decide when to alert, and by
+"Turn On Bedroom Bedlamp When Sleep Mode Disabled", to decide when ending the session must
+restore the lamp. Those two have to stay the same window: wherever the first is open and
+the second is not, disabling sleep mode leaves the lamp off, and since the lamp is what
+gates the alerts they carry on with nothing left to stop them.
+
+:returns: True if now falls in the nap, bedtime or morning window.
+#}
+{%- macro in_nursery_alert_window(returns) -%}
+  {%- set now_time = now().time() -%}
+  {%- set nap_start = (states('input_datetime.baby_nap_start_time') | today_at).time() -%}
+  {%- set nap_end = (states('input_datetime.baby_nap_end_time') | today_at).time() -%}
+  {%- set bedtime_start = (states('input_datetime.baby_bedtime_start_time') | today_at).time() -%}
+  {%- set lights_out = (states('input_datetime.lights_out_time') | today_at).time() -%}
+  {#- relative to OUR wake-up time, not baby's: 15 min before to 30 min after -#}
+  {%- set morning_start = ((states('input_datetime.wake_up_time') | today_at) - timedelta(minutes=15)).time() -%}
+  {%- set morning_end = ((states('input_datetime.wake_up_time') | today_at) + timedelta(minutes=30)).time() -%}
+  {%- do returns((nap_start <= now_time <= nap_end) or
+                 (bedtime_start <= now_time <= lights_out) or
+                 (morning_start <= now_time <= morning_end)) -%}
+{%- endmacro -%}

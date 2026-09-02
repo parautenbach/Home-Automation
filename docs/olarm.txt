@@ -1,0 +1,118 @@
+Olarm: MQTT access, and the local-control question (2026-09-02)
+
+
+==========
+
+MQTT — connecting directly (e.g. MQTT Explorer)
+
+The official integration (github.com/olarmtech/hacs-olarm) talks to Olarm's cloud
+broker, not to the device on the LAN. The connection parameters below are read from
+their client library's const.py and _make_mqtt_client():
+github.com/olarmtech/olarmflowclient-python
+
+  Protocol   wss (MQTT over WebSockets, TLS)
+  Host       mqtt-pubapi.olarm.com
+  Port       443
+  Path       /mqtt
+  Username   public-api-user-v1
+  Password   <API access token>
+  Client ID  <userId>-<any suffix>
+  Topic      v4/devices/<deviceId>
+
+Where the values come from:
+  * access token: user.olarm.com -> API. This is the same value that used to be in
+    the olarm_bearer_token secret, but WITHOUT the "Bearer " prefix - that prefix is
+    only for the REST Authorization header.
+  * deviceId and userId: GET https://apiv4.olarm.co/api/v4/devices?accessToken=<token>
+    returns userId at the top level and the device ids under data[].
+
+Gotchas:
+  * MQTT Explorer defaults to plain TCP. Set the protocol to ws:// or wss:// and the
+    path to /mqtt, otherwise port 443 just refuses the connection.
+  * The client ID is built as "<userId>-<suffix>", so the broker most likely validates
+    the prefix against the token's user. A random client ID may be rejected.
+
+Port 443 over WebSockets is deliberate on Olarm's part: it passes through restrictive
+firewalls where a normal MQTT connection on 8883 would not.
+
+
+==========
+
+Why there is no local connection
+
+The Olarm device is a cellular alarm communicator. Its job is to relay the panel to
+Olarm's cloud, and it does not run a broker for third parties. Panel -> Olarm's
+communicator -> Olarm cloud -> their public API broker -> Home Assistant.
+
+Consequences:
+  * an internet outage (ours or theirs) means HA has no alarm state at all. The panel,
+    keypad and remotes keep working.
+  * binary_sensor.home_ac_power reports the PANEL's mains supply through that same
+    cloud path, so it is a real signal about the panel rather than about our network.
+  * the automations are reactive rather than polling, so a reconnect resyncs on its own.
+
+The API also exposes an event feed the integration does not surface (see below), which
+is where panic/fire/medical classification lives.
+
+
+==========
+
+The local route: the panel's RS485 bus
+
+The IDS X64 has two interfaces worth knowing about.
+
+1. The onboard serial port, running IDS's own "IDS Serial Protocol" (what IDSwift
+   uses). Documented at a high level here, but IDS has not published the protocol
+   itself and has historically declined to share it:
+   idsprotect.co.za/za/en/product-assets/xseries/control-panels/860-1-864-xs-ids-x64-control-panel/assets/documents/IDS%20XSeries%20Serial%20Owners%20Manual.pdf
+
+2. The RS485 peripheral bus (D+ / D-), which every keypad, zone expander and the IDS
+   remote receiver hangs off. The X64 Remote Receiver installer manual shows the
+   terminal layout plainly - 12V, GND, D-, D+ alongside the relay contacts:
+   idsprotect.co.za/site-documents/product-download/intrusion/xseries/IDS%20X64%20Remote%20Receiver.pdf
+
+   This is the accessible one: it can be tapped at any keypad without touching the
+   panel's own port.
+
+Prior art — the closest thing to what we want:
+  github.com/kellerza/python-ids-alarm
+
+  Decodes IDS panel traffic (816/1632 and X64) off the RS485 bus. Hardware used: an
+  FTDI 232R USB-to-serial adaptor (5V) with a Maxim MAX485E RS-485 driver wired
+  directly to D+ and D- of the alarm bus. Honest about its limits:
+    * archived February 2022, read-only, no longer maintained
+    * receive only, though it notes RTS control could make it bidirectional
+    * decodes events to stdout; zone/partition/arming decode is partial
+    * the author's own conclusion is that DSC + Envisalink is a better choice if you
+      are picking a panel rather than stuck with one
+
+Also useful: the X64 is rebadged as the WatchGuard WGAP864, so WatchGuard's installer
+and training material is a second source for the same hardware:
+  downloads.rhinoco.com.au/products/wgap864/Training/wgap864_Product_Training.pdf
+
+Sketch of a local build, if ever: MAX3485/MAX485 transceiver on D+/D-, into an ESP32
+running ESPHome's uart + serial_proxy (esphome.io/components/serial_proxy), sniff first
+to rebuild the decode against a known-good reference (Olarm's own state), then attempt
+TX. It would run alongside Olarm rather than replace it - Olarm is also the armed
+response link.
+
+
+==========
+
+What the integration does not expose (2026-09-02)
+
+Their client library has the pieces, the HA integration just does not surface them:
+
+  get_device_events()   GET /api/v4/devices/{id}/events   the panel event feed, which
+                        is where eventAction s_alm (general), s_alm_f (fire),
+                        s_alm_m (medical) and eventState panic/alarm live
+  get_device_actions()  GET /api/v4/devices/{id}/actions  history of commands sent
+  MQTT topic v4/devices/{id} carries "real-time state changes and events" per their
+                        README, so events may already arrive on the connection the
+                        integration holds open
+
+Consequence for us: a panic cannot currently be distinguished from a zone breach in
+HA. The old webhook could (eventMsg "EMERGENCY! - Panic" vs "ALARM! - Area 1 - Home")
+but cost eight critical pushes per event, one per panel area, and was removed. The
+remaining hope is the panel's zone_in_alarm attribute populating on a real zone breach
+- it was null during the 2026-09-02 panic, which is correct, since no zone was involved.

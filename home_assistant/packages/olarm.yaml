@@ -407,7 +407,12 @@ automation:
     action:
       - variables:
           area: "{{ trigger.entity_id | replace('alarm_control_panel.', '') }}"
-          zone_in_alarm: "{{ trigger.to_state.attributes.zone_in_alarm }}"
+          # zone_in_alarm is an attribute of the integration's own panel; our template
+          # panel only mirrors state, so read it from the panel behind this partition
+          source_panel: >-
+            {{ 'alarm_control_panel.home_area_01_home' if area == 'home'
+               else 'alarm_control_panel.home_area_02_flatlet' }}
+          zone_in_alarm: "{{ state_attr(source_panel, 'zone_in_alarm') }}"
           message: >-
             The {{ area }} alarm has been triggered at {{ now().strftime('%H:%M') }}!
             {%- if zone_in_alarm not in [none, 'None', ''] %} Zone: {{ zone_in_alarm }}.{% endif %}
@@ -439,6 +444,10 @@ automation:
               # each panel now mirrors its own partition, so only the triggered
               # partition needs disarming (one disarm silences the physical panel)
               entity_ids: "{{ [trigger.entity_id] }}"
+      # a panic trips both partitions, so this runs twice: only the flatlet's alarm is
+      # the tenant's business, same rule as in "Alarm State Changed"
+      - condition: template
+        value_template: "{{ area == 'flatlet' }}"
       - service: script.turn_on
         target:
           entity_id: script.notify_tenant

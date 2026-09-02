@@ -241,7 +241,17 @@ template:
           timestamp: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"
           # no timestamp prefix: the logbook card renders its own date line, and
           # the timestamp is kept as an attribute for anything that needs it
-          full_message: "{{ notification_title }}: {{ notification_message }} → {{ notification_target }}"
+          full_message: "{{ notification_title }}\n{{ notification_message }} → {{ notification_target }}"
+          # the state caps at 255 characters, so only the message is truncated:
+          # truncating full_message as a whole would eat the target off the end,
+          # which is the useful part. 254 rather than 255 leaves room for the
+          # marker the state may append below
+          short_message: >-
+            {%- set head = notification_title ~ '\n' -%}
+            {%- set tail = ' → ' ~ notification_target -%}
+            {%- set budget = [254 - (head ~ tail) | length, 1] | max -%}
+            {{ (head ~ (notification_message | truncate(budget, True, '…', 0)) ~ tail)
+               | truncate(254, True, '…', 0) }}
       # persistent_notification.create is its own domain, so it needs a second
       # trigger - it is what the developer tools action picker and most
       # automations use, while notify.persistent_notification is domain notify.
@@ -261,17 +271,22 @@ template:
     sensor:
       - name: Last Notification
         icon: mdi:email-alert-outline
-        # the state is a hash, not the text: a state caps at 255 characters (HA
-        # falls back to unknown above that) and there is little value in a
-        # truncated message anyway. hashing the message, target and timestamp
-        # together also gives every notification a distinct state, which is what
-        # makes the logbook card draw a separate entry for two notifications
-        # that read identically - it creates entries from state changes only,
-        # and merges consecutive identical states into one. the readable text
-        # lives in the attributes below, which allow far more than 255.
-        state: "{{ (full_message ~ timestamp) | sha256 }}"
+        # the logbook card renders the state as its main line and styles
+        # attributes as small grey key/value metadata, so the text belongs here.
+        # the card creates an entry per state *change* and merges consecutive
+        # identical states, so a notification identical to the one before it
+        # would otherwise never appear: a zero-width space is appended when the
+        # new text matches the current state, which alternates on and off for a
+        # run of any length and is invisible on screen. see the hash attribute
+        # below for a stable key that does not rely on this
+        state: >-
+          {%- set base = short_message -%}
+          {{ base if base != states('sensor.last_notification') else base ~ '\u200b' }}
         attributes:
           full_message: "{{ full_message }}"
+          # unique per notification, unlike the state: useful as a key when
+          # querying the recorder (see scripts/db/)
+          hash: "{{ (full_message ~ timestamp) | sha256 }}"
           title: "{{ notification_title }}"
           message: "{{ notification_message }}"
           target: "{{ notification_target }}"

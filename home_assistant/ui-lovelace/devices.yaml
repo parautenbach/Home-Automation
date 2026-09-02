@@ -558,13 +558,18 @@ cards:
         title: Notification History
         entity: sensor.last_notification
         show:
-          state: true
+          # the state is a hash (see the sensor in packages/system.yaml), so the
+          # readable text comes from the full_message attribute instead
+          state: false
           duration: false
           start_date: true
           end_date: false
           icon: false
           separator: false
           entity_name: true
+        attributes:
+          - value: full_message
+            label: ""
         desc: true
   - type: vertical-stack
     cards:

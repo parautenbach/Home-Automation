@@ -211,7 +211,7 @@ template:
         # https://community.home-assistant.io/t/why-cant-we-use-variables-in-a-template-sensor/467170
         # https://community.home-assistant.io/t/template-trigger-based-sensors-add-variables/657527
         # https://community.home-assistant.io/t/support-variables-in-template-sensors/249082
-        variables:
+        variables: &notification_variables
           notification_service: "{{ trigger.event.data.service }}"
           # the payload is navigated in place rather than assigned to a variable of
           # its own first: a variable holds the *rendered* value, so the dict is
@@ -229,7 +229,9 @@ template:
             {% set payload = trigger.event.data.service_data %}
             {{ payload['message'] | default('No content') | trim if payload is mapping else 'No content' }}
           notification_target: |-
-            {% if notification_service == 'notify' %}
+            {% if trigger.event.data.domain == 'persistent_notification' %}
+              Persistent Notification
+            {% elif notification_service == 'notify' %}
               All devices/recipients
             {% elif 'mobile_app_' in notification_service %}
               {{ notification_service.replace('mobile_app_', '') | replace('_', ' ') | title }}
@@ -237,19 +239,43 @@ template:
               {{ notification_service | replace('_', ' ') | title }}
             {% endif %}
           timestamp: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"
-          full_message: "{{ timestamp }} - {{ notification_title }}: {{ notification_message }} → {{ notification_target }}"
+          # no timestamp prefix: the logbook card renders its own date line, and
+          # the timestamp is kept as an attribute for anything that needs it
+          full_message: "{{ notification_title }}: {{ notification_message }} → {{ notification_target }}"
+      # persistent_notification.create is its own domain, so it needs a second
+      # trigger - it is what the developer tools action picker and most
+      # automations use, while notify.persistent_notification is domain notify.
+      # never give this template an action that creates a persistent
+      # notification: it would retrigger itself
+      - platform: event
+        event_type: call_service
+        event_data:
+          domain: persistent_notification
+          service: create
+        # variables are scoped per trigger, so the same set is aliased here
+        # rather than duplicated
+        variables: *notification_variables
     condition:
       - condition: template
         value_template: "{{ notification_message not in ['request_location_update', 'clear_notification'] }}"
-    # action:
-    #   - service: persistent_notification.create
-    #     data:
-    #       title: "Logged Notification"
-    #       message: "{{ full_message }}"
     sensor:
       - name: Last Notification
         icon: mdi:email-alert-outline
-        state: "{{ full_message }}"
+        # the state is a hash, not the text: a state caps at 255 characters (HA
+        # falls back to unknown above that) and there is little value in a
+        # truncated message anyway. hashing the message, target and timestamp
+        # together also gives every notification a distinct state, which is what
+        # makes the logbook card draw a separate entry for two notifications
+        # that read identically - it creates entries from state changes only,
+        # and merges consecutive identical states into one. the readable text
+        # lives in the attributes below, which allow far more than 255.
+        state: "{{ (full_message ~ timestamp) | sha256 }}"
+        attributes:
+          full_message: "{{ full_message }}"
+          title: "{{ notification_title }}"
+          message: "{{ notification_message }}"
+          target: "{{ notification_target }}"
+          timestamp: "{{ timestamp }}"
 
   - sensor:
       - name: "Last Backup"

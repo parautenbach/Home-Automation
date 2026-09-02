@@ -934,8 +934,8 @@ template:
         # (0.5°C spread is within sensor noise of saturation, and 3 km/h still supports radiation fog)
         # so that ideal-but-nonzero inputs aren't penalised, then falls to 0 by 2.5°C spread / 12 km/h wind
         #
-        # this entity is user-facing - it carries a % and the morning brief quotes it verbatim - so it
-        # states the probability that fog is present now, and every piece of evidence bearing on that
+        # this entity is user-facing - the dashboards show the % directly - so it states the
+        # probability that fog is present now, and every piece of evidence bearing on that
         # belongs here rather than in one consumer. Two things zero it outright:
         #
         #   rain     - it drives the spread to nearly nothing without being fog, so steady light rain
@@ -968,18 +968,40 @@ template:
           dew_point_entity: sensor.weather_station_dew_point
           spread_entity: sensor.dew_point_spread
           probability_entity: sensor.fog_probability
-          # the score plateaus make high values common on merely dewy calm nights (~85% observed),
-          # so the bar sits above that band; genuine fog conditions score 88-100 in the same data
-          probability_threshold: 85
+          # two bars on the same probability, each named for the tier it opens (see 'chance' below).
+          # the score plateaus make high values common on merely dewy calm nights (~85% observed), so
+          # the bar for calling it fog sits above that band; genuine fog scores 88-100 in the same data
+          present_threshold: 85
+          # the softer bar: high enough to stay out of the ordinary damp-morning range, low enough to
+          # reach into the dewy band the one above excludes - which is the point, since a heads-up
+          # costs less when wrong than a claim does
+          possible_threshold: 80
         # rain and a dry moisture sensor are both handled upstream in the probability, so this is left as
         # a threshold plus delay_on: the sustained-ness of the reading is the only thing it adds
         state: >-
           {% set probability = states(probability_entity) | float(none) %}
-          {{ probability is not none and probability > probability_threshold }}
+          {{ probability is not none and probability > present_threshold }}
         delay_on: "00:15:00"
         attributes:
           label: >-
             {{ 'Foggy' if this.state == 'on' else 'Clear' }}
+          # the state answers "is there fog", which loses the difference between a clear night and
+          # one sitting just under the bar. Consumers that want to say something about the
+          # in-between get it here rather than re-deriving it from the raw %, which would mean
+          # duplicating the bars above outside this sensor.
+          #
+          # 'present' tracks the state rather than the raw %, so it inherits delay_on and cannot
+          # contradict it; 'possible' therefore also covers the window where the probability is
+          # over the bar but not yet sustained.
+          chance: >-
+            {% set probability = states(probability_entity) | float(none) %}
+            {% if this.state == 'on' %}
+              present
+            {% elif probability is not none and probability >= possible_threshold %}
+              possible
+            {% else %}
+              none
+            {% endif %}
           probability: "{{ states(probability_entity) | float(none) }}"
           # no space for %
           probability_with_unit: >-
@@ -1257,13 +1279,22 @@ automation:
           # now (measured)
           current_temp: "{{ states('sensor.outside_temperature') | int(0) }}"
           heat_label: "{{ state_attr('sensor.outside_temperature', 'thermal_comfort_label') }}"
-          humidity_label: "{{ state_attr('sensor.humidity_perception', 'label') }}"
-          humidity_value: "{{ state_attr('sensor.humidity_perception', 'humidity_with_unit') }}"
-          fog_on: "{{ is_state('binary_sensor.fog_conditions', 'on') }}"
-          fog_probability: "{{ state_attr('binary_sensor.fog_conditions', 'probability_with_unit') }}"
-          fog_probability_value: "{{ states('sensor.fog_probability') | float(0) }}"
-          # below the binary sensor's threshold (no moisture confirmation) but still worth a heads-up
-          fog_possible_threshold: 70
+          humidity_state: "{{ states('sensor.humidity_perception') }}"
+          # full adjectives for use in a sentence, keyed by perception state - distinct from the
+          # sensor's 'label' attribute, which is a terse dashboard-tile value ("Ideal", "Muggy") that
+          # doesn't read as prose after "Feels very cold and ...". The humid end names the humidity
+          # out loud, since "oppressive" alone would read as a comment on the heat.
+          humidity_phrases: >-
+            {{ {
+              'damp': 'damp', 'dry': 'dry', 'very_comfortable': 'fresh', 'comfortable': 'comfortable',
+              'ok_but_humid': 'humid', 'somewhat_uncomfortable': 'muggy',
+              'quite_uncomfortable': 'oppressively humid',
+              'extremely_uncomfortable': 'miserably humid', 'severely_high': 'dangerously humid'
+            } }}
+          # the sensor owns the bars, so the brief carries no threshold of its own and no raw % -
+          # just the tier: 'present' is stated outright as fog, 'possible' is a heads-up, 'none'
+          # is silence
+          fog_chance: "{{ state_attr('binary_sensor.fog_conditions', 'chance') }}"
           compass_names: >-
             {{ {
               'N': 'North', 'NE': 'Northeast', 'E': 'East', 'SE': 'Southeast',
@@ -1344,13 +1375,20 @@ automation:
               'sunny': 'sunny', 'windy': 'windy', 'windy-variant': 'windy', 'exceptional': 'unusual weather'
             } %}
             {% set later_condition = condition_words.get(today_condition, today_condition | replace('-', ' ')) %}
+            {# how it feels reads as one sentence about the air, not two readings bolted together:
+               the humidity word sits alongside the temperature word rather than trailing it with a
+               percentage, which the dashboards carry anyway. The word is dropped entirely if the
+               perception is unknown, rather than leaving a dangling "and" #}
+            {% set humidity_phrase = humidity_phrases.get(humidity_state, '') %}
+            {% set feel_clause = 'Feels ' ~ (heat_label | lower) ~ (' and ' ~ humidity_phrase if humidity_phrase else '') ~ ' at ' ~ current_temp ~ '°C' %}
             {# fog_conditions is inferred from dew point spread + wind + moisture, not observed directly,
                and it's real-time only - there's no forecast for onset or when it would lift.
                The brief always opens with how it feels outside; confirmed fog qualifies that sentence
-               rather than displacing it, and merely possible fog drops to the trailing extras below #}
-            {% set feel_clause = 'Feels ' ~ (heat_label | lower) ~ ' at ' ~ current_temp ~ '°C, humidity ' ~ (humidity_label | lower) ~ ' (' ~ humidity_value ~ ')' %}
-            {% if fog_on %}
-              {% set now_clause = feel_clause ~ ' now, with fog likely (' ~ fog_probability ~ ').' %}
+               rather than displacing it, while fog that has only just crossed the bar drops to the
+               trailing extras below. Under the bar nothing is said at all - that band is the
+               merely-dewy one a calm night produces, where a fog warning is noise #}
+            {% if fog_chance == 'present' %}
+              {% set now_clause = feel_clause ~ ' now, with fog.' %}
             {% else %}
               {% set now_clause = feel_clause ~ ' now.' %}
             {% endif %}
@@ -1381,8 +1419,8 @@ automation:
                forecast for the rest of today. Wind, fog, UV and pressure are all current
                readings and belong with the opening sentence, not stranded behind the forecast #}
             {% set now_extras = [wind_now_clause] %}
-            {% if not fog_on and fog_probability_value >= fog_possible_threshold %}
-              {% set now_extras = now_extras + ['Fog possible (' ~ fog_probability ~ ').'] %}
+            {% if fog_chance == 'possible' %}
+              {% set now_extras = now_extras + ['Fog possible.'] %}
             {% endif %}
             {% if uv_state in ['high', 'very_high', 'extreme'] %}
               {% set now_extras = now_extras + ['UV ' ~ (uv_label | lower) ~ '.'] %}

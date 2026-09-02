@@ -1,5 +1,6 @@
 .DS_Store
 ignore
+tmp
 venv
 deps
 home_assistant/secrets.yaml

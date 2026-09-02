@@ -176,46 +176,88 @@ cards:
           - type: custom:button-card
             template: alarm_zone
             entity: binary_sensor.home_zone_020_braai_room_door
-      - type: grid
-        title: PIR Zones
-        columns: 3
-        square: false
+      - type: history-graph
+        title: Door Zones
+        hours_to_show: 24
+        entities:
+          - entity: binary_sensor.home_zone_001_front_door
+            name: Front Door
+          - entity: binary_sensor.home_zone_007_kitchen_door
+            name: Kitchen
+          - entity: binary_sensor.home_zone_019_music_room_door
+            name: Music Room
+          - entity: binary_sensor.home_zone_020_braai_room_door
+            name: Braai Room
+      - type: custom:swipe-card
+        parameters:
+          autoHeight: true
+          pagination:
+            type: 'bullets'
         cards:
-          - type: custom:button-card
-            template: alarm_zone_wide
-            entity: binary_sensor.home_zone_003_foyer
-          - type: custom:button-card
-            template: alarm_zone_wide
-            entity: binary_sensor.home_zone_004_living_area
-          - type: custom:button-card
-            template: alarm_zone_wide
-            entity: binary_sensor.home_zone_006_kitchen
-          - type: custom:button-card
-            template: alarm_zone_wide
-            entity: binary_sensor.home_zone_010_main_bedroom
-          - type: custom:button-card
-            template: alarm_zone_wide
-            entity: binary_sensor.home_zone_009_guest_room
-          - type: custom:button-card
-            template: alarm_zone_wide
-            entity: binary_sensor.home_zone_008_bedroom
-          - type: custom:button-card
-            template: alarm_zone_wide
-            entity: binary_sensor.home_zone_005_braai_room
-          - type: custom:button-card
-            template: alarm_zone_wide
-            entity: binary_sensor.home_zone_017_garage
-          - type: custom:button-card
-            template: alarm_zone_wide
-            entity: binary_sensor.home_zone_013_backyard
-          # flatlet sits alone on the last row, so pad it either side to centre it
-          - type: custom:button-card
-            template: blank_card
-          - type: custom:button-card
-            template: alarm_zone_wide
-            entity: binary_sensor.home_zone_018_flatlet
-          - type: custom:button-card
-            template: blank_card
+          - type: grid
+            title: PIR Zones
+            columns: 3
+            square: false
+            cards:
+              - type: custom:button-card
+                template: alarm_zone_wide
+                entity: binary_sensor.home_zone_003_foyer
+              - type: custom:button-card
+                template: alarm_zone_wide
+                entity: binary_sensor.home_zone_004_living_area
+              - type: custom:button-card
+                template: alarm_zone_wide
+                entity: binary_sensor.home_zone_006_kitchen
+              - type: custom:button-card
+                template: alarm_zone_wide
+                entity: binary_sensor.home_zone_010_main_bedroom
+              - type: custom:button-card
+                template: alarm_zone_wide
+                entity: binary_sensor.home_zone_009_guest_room
+              - type: custom:button-card
+                template: alarm_zone_wide
+                entity: binary_sensor.home_zone_008_bedroom
+              - type: custom:button-card
+                template: alarm_zone_wide
+                entity: binary_sensor.home_zone_005_braai_room
+              - type: custom:button-card
+                template: alarm_zone_wide
+                entity: binary_sensor.home_zone_017_garage
+              - type: custom:button-card
+                template: alarm_zone_wide
+                entity: binary_sensor.home_zone_013_backyard
+              # flatlet sits alone on the last row, so pad it either side to centre it
+              - type: custom:button-card
+                template: blank_card
+              - type: custom:button-card
+                template: alarm_zone_wide
+                entity: binary_sensor.home_zone_018_flatlet
+              - type: custom:button-card
+                template: blank_card
+          - type: history-graph
+            title: PIR Zones
+            hours_to_show: 24
+            entities:
+              - entity: binary_sensor.home_zone_003_foyer
+                name: Foyer
+              - entity: binary_sensor.home_zone_004_living_area
+                name: Living Area
+              - entity: binary_sensor.home_zone_006_kitchen
+                name: Kitchen
+              - entity: binary_sensor.home_zone_010_main_bedroom
+                name: Main Bedroom
+              - entity: binary_sensor.home_zone_009_guest_room
+                name: Guest Room
+              - entity: binary_sensor.home_zone_008_bedroom
+                name: Bedroom
+              - entity: binary_sensor.home_zone_005_braai_room
+                name: Braai Room
+              - entity: binary_sensor.home_zone_017_garage
+                name: Garage
+              - entity: binary_sensor.home_zone_013_backyard
+                name: Backyard
+              - entity: binary_sensor.home_zone_018_flatlet
+                name: Flatlet
       # normally empty and hidden. a zone lands here once it has been named in olarm
       # but not yet given a device class in packages/olarm.yaml - i.e. it is in use and
       # needs adopting. excluded: zones still carrying olarm's bare "Home Zone 0NN"
@@ -413,7 +455,7 @@ cards:
               # the remote receivers are wired to arm/disarm zones (one per partition),
               # so these pulse whenever someone arms or disarms with a remote
               - entity: binary_sensor.home_zone_011_p1_remotes
-                label: Home remote
+                label: Home alarm remote
                 hidden_state:
                   - "off"
                   - unknown
@@ -422,7 +464,7 @@ cards:
                   - value: "on"
                     label: used
               - entity: binary_sensor.home_zone_012_p2_remotes
-                label: Flatlet remote
+                label: Flatlet alarm remote
                 hidden_state:
                   - "off"
                   - unknown
@@ -467,6 +509,7 @@ cards:
                   - value: "on"
                     label: detected
               - entity: binary_sensor.home_zone_001_front_door
+                name: Front Door
                 label: Front door
                 hidden_state:
                   - unknown
@@ -477,6 +520,7 @@ cards:
                   - value: "off"
                     label: closed
               - entity: binary_sensor.home_zone_007_kitchen_door
+                name: Kitchen
                 label: Kitchen door
                 hidden_state:
                   - unknown
@@ -487,6 +531,7 @@ cards:
                   - value: "off"
                     label: closed
               - entity: binary_sensor.home_zone_019_music_room_door
+                name: Music Room
                 label: Music room door
                 hidden_state:
                   - unknown
@@ -497,6 +542,7 @@ cards:
                   - value: "off"
                     label: closed
               - entity: binary_sensor.home_zone_020_braai_room_door
+                name: Braai Room
                 label: Braai room door
                 hidden_state:
                   - unknown

@@ -47,8 +47,10 @@
 #    only if the alarm system is configured to allow it). how a *rejected* arm command
 #    surfaces through this integration is unverified – assumed to show as no state change,
 #    since state is mirrored from the panel. to verify during the soak (see MIGRATION.md).
-#  * real-time state flows through olarm's mqtt connection; the webhook automation at
-#    the bottom is a temporary, independent safety net during the migration soak period
+#  * real-time state flows through olarm's mqtt connection. the old webhook was kept as
+#    an independent safety net during the soak and has been removed: it arrived after
+#    the integration on the one real alarm, and sent one critical push per panel area
+#    (eight for a single panic)
 
 homeassistant:
   customize:
@@ -909,45 +911,3 @@ automation:
           entity_id: alarm_control_panel.home
         data:
           code: !secret alarm_code
-
-  # temporary: independent signal path while soaking the new integration.
-  # the integration receives state via olarm's mqtt connection; this webhook is a
-  # second, independent channel for the one event class we cannot afford to miss.
-  # it deliberately does not touch any alarm entities (the panels are now owned by
-  # the integration – issuing commands from here would fight it).
-  # delete this automation, the webhook registration on olarm's portal and the
-  # olarm_webhook_id secret once the soak period is over. see MIGRATION.md.
-  - alias: "Log Olarm Webhook Events"
-    id: "fbf7afaa-c357-4a85-b50d-ba5d57b9e187"
-    initial_state: true
-    trace:
-      stored_traces: 20
-    trigger:
-      - platform: webhook
-        webhook_id: !secret olarm_webhook_id
-        local_only: false
-        allowed_methods:
-          - POST
-    mode: queued
-    action:
-      - service: system_log.write
-        data:
-          message: "{{ trigger.webhook_id ~ ': ' ~ trigger.json }}"
-          level: debug
-          logger: "homeassistant.components.olarm"
-      - if: "{{ trigger.json.eventState in ['alarm', 'panic', 'emergency'] }}"
-        then:
-          - service: notify.mobile_app_ceres
-            data:
-              title: "🚨 Security (webhook)"
-              message: >-
-                Olarm webhook reports: {{ trigger.json.eventMsg }}.
-                Verify the alarm panels show this too (they should have notified separately).
-              data:
-                group: "home-security"
-                url: homeassistant://navigate/lovelace-main/security
-                push:
-                  sound:
-                    name: default
-                    critical: 1
-                    volume: 0.3

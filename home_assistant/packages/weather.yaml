@@ -1290,9 +1290,19 @@ automation:
           pressure_state: "{{ states('sensor.air_pressure_trend') }}"
           pressure_label: "{{ state_attr('sensor.air_pressure_trend', 'label') }}"
           # later (forecast, via the get_forecasts call above rather than any derived weather entity)
-          rain_soon: "{{ is_state('binary_sensor.weather_forecast_precipitation_soon', 'on') }}"
-          rain_onset: "{{ state_attr('binary_sensor.weather_forecast_precipitation_soon', 'onset') }}"
           rain_today_mm: "{{ states('sensor.weather_forecast_precipitation_today') | float(0) | round(1) }}"
+          # the sensor's onset is the first wet hour anywhere in the next 36h, so when it lands today
+          # it already is this brief's rain start - but when it lands tomorrow there is no rain left
+          # today at all, and taking it regardless is what once printed a tomorrow-afternoon start
+          # next to today's 0.0 mm. Keep it only if it's today; otherwise the clause below falls
+          # through to the amount. The sensor's own on/off state gates on a 12-36h window, which is
+          # the Rain Expected notification's question rather than this brief's, so it isn't read here.
+          rain_onset_today: >-
+            {% set onset = state_attr('binary_sensor.weather_forecast_precipitation_soon', 'onset') | as_datetime %}
+            {% if onset %}
+              {% set onset = onset | as_local %}
+              {{ onset.strftime('%H:%M') if onset.date() == now().date() else '' }}
+            {% endif %}
           today_high: "{{ daily['weather.openweathermap']['forecast'][0]['temperature'] | int(0) }}"
           today_condition: "{{ daily['weather.openweathermap']['forecast'][0]['condition'] }}"
           # the daily forecast carries one representative wind for the whole day, which hides the shape
@@ -1344,12 +1354,12 @@ automation:
             {% else %}
               {% set now_clause = feel_clause ~ ' now.' %}
             {% endif %}
-            {% if rain_soon %}
-              {% set onset_local = rain_onset | as_datetime | as_local %}
-              {% set later_clause = 'Rain expected around ' ~ onset_local.strftime('%H:%M') ~ ' (' ~ rain_today_mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
+            {% if rain_onset_today %}
+              {% set later_clause = 'Rain expected around ' ~ rain_onset_today ~ ' (' ~ rain_today_mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
             {% elif rain_today_mm > 0 %}
-              {# some rain today, but not enough consecutive hours for an onset time - so it reads
-                 as an amount, not a start. Conditions whose own word already carries precipitation
+              {# rain in today's daily total but no wet hour still to come - either it already fell,
+                 or it's too thin for the forecast to call any hour wet - so it reads as an
+                 amount, not a start. Conditions whose own word already carries precipitation
                  take the amount directly ("Rain later (0.9 mm)"); anything else needs the rain
                  said out loud, since "Partly cloudy" alone wouldn't imply it #}
               {% if today_condition in ['hail', 'lightning-rainy', 'pouring', 'rainy', 'snowy', 'snowy-rainy'] %}

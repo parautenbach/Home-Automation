@@ -841,6 +841,13 @@ cards:
                         -%}
                       {%- set state = states(config.entity) -%}
                       {{ comfort_map[state] }};
+                    {# a template entity's state is not translated by the frontend, so the raw
+                       snake_case tier would show: hide it and print the label attribute instead #}
+                    font-size: 0;
+                  }
+                  div:nth-child(3)::after {
+                    content: "{{ state_attr(config.entity, 'label') or states(config.entity) | replace('_', ' ') | capitalize }}";
+                    font-size: var(--ha-font-size-m, 14px);
                   }
                   state-badge {
                     margin: 0;

@@ -530,6 +530,54 @@ smoke_detector:
       - grid-template-areas: '"l" "i" "n"'
     card:
       - font-size: 12px
+alarm_zone:
+  template:
+    - old_colors
+  size: 20%
+  show_name: true
+  show_state: true
+  # the card title already says whether these are doors or PIRs, so drop the suffix
+  # the zone names carry for the sake of notifications
+  name: >
+    [[[
+      return entity.attributes.friendly_name.replace(/ (Door|PIR)$/, '');
+    ]]]
+  # button-card shows the raw state, so spell out the device class wording
+  state_display: >
+    [[[
+      if (entity.attributes.device_class === 'door') {
+        return entity.state === 'on' ? 'Open' : 'Closed';
+      }
+      return entity.state === 'on' ? 'Detected' : 'Clear';
+    ]]]
+  styles:
+    name:
+      - color: var(--state-icon-color)
+    state:
+      - color: var(--state-icon-color)
+    grid:
+      - grid-template-areas: '"n" "i" "s"'
+    card:
+      - font-size: 12px
+# three per row means wider cards, so the icon percentage has to come down to keep the
+# icon the same size on screen as the four-per-row door grid (20% * 3/4)
+alarm_zone_wide:
+  template:
+    - alarm_zone
+  size: 15%
+# an invisible filler for grid layouts, to centre an odd card in its row
+blank_card:
+  show_icon: false
+  show_name: false
+  show_state: false
+  show_label: false
+  tap_action:
+    action: none
+  styles:
+    card:
+      - background: none
+      - box-shadow: none
+      - border: none
 climate_led_display:
   icon: mdi:television-ambient-light
   size: 20%

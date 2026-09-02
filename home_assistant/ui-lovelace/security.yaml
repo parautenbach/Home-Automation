@@ -152,43 +152,74 @@ cards:
               --state-alarm_control_panel-disarmed-color: #40b100;
               --state-alarm_control_panel-triggered-color: #135dd8;
             }
-      # filtered by device class rather than listed by hand, so a zone added on the
-      # panel later appears on its own instead of being silently missing. olarm sets
-      # device_class only on door contacts; the motion zones get theirs in
-      # packages/olarm.yaml, and anything still unclassified falls into the third card.
-      - type: custom:auto-entities
-        card:
-          type: glance
-          title: Door Zones
-          columns: 4
-          state_color: true
-        filter:
-          include:
-            - entity_id: "binary_sensor.home_zone_*"
-              attributes:
-                device_class: door
-          exclude:
-            - entity_id: "*_bypass*"
-        sort:
-          method: entity_id
-      - type: custom:auto-entities
-        card:
-          type: glance
-          title: PIR Zones
-          columns: 5
-          state_color: true
-        filter:
-          include:
-            - entity_id: "binary_sensor.home_zone_*"
-              attributes:
-                device_class: motion
-          exclude:
-            - entity_id: "*_bypass*"
-        sort:
-          method: entity_id
-      # normally empty and hidden: a zone shows up here when it has no device class
-      # yet, i.e. it was activated on the panel but not yet classified in
-      # packages/olarm.yaml. the remote receiver channels (011/012) are never zones.
+      # the alarm_zone template derives the label from the zone's friendly name and
+      # spells out the state, so each zone here is usually just its entity. the order is
+      # deliberate: doors by zone, PIRs grouped by area, laid out across then down.
+      # a zone added on the panel later will not appear here on its own, but it does
+      # surface elsewhere: with a door device class it joins the stay-arm reminder, and
+      # without one it shows up in the Unclassified card below.
+      - type: grid
+        title: Door Zones
+        columns: 4
+        square: false
+        cards:
+          - type: custom:button-card
+            template: alarm_zone
+            entity: binary_sensor.home_zone_001_front_door
+            name: Front Door
+          - type: custom:button-card
+            template: alarm_zone
+            entity: binary_sensor.home_zone_007_kitchen_door
+          - type: custom:button-card
+            template: alarm_zone
+            entity: binary_sensor.home_zone_019_music_room_door
+          - type: custom:button-card
+            template: alarm_zone
+            entity: binary_sensor.home_zone_020_braai_room_door
+      - type: grid
+        title: PIR Zones
+        columns: 3
+        square: false
+        cards:
+          - type: custom:button-card
+            template: alarm_zone_wide
+            entity: binary_sensor.home_zone_003_foyer
+          - type: custom:button-card
+            template: alarm_zone_wide
+            entity: binary_sensor.home_zone_004_living_area
+          - type: custom:button-card
+            template: alarm_zone_wide
+            entity: binary_sensor.home_zone_006_kitchen
+          - type: custom:button-card
+            template: alarm_zone_wide
+            entity: binary_sensor.home_zone_010_main_bedroom
+          - type: custom:button-card
+            template: alarm_zone_wide
+            entity: binary_sensor.home_zone_009_guest_room
+          - type: custom:button-card
+            template: alarm_zone_wide
+            entity: binary_sensor.home_zone_008_bedroom
+          - type: custom:button-card
+            template: alarm_zone_wide
+            entity: binary_sensor.home_zone_005_braai_room
+          - type: custom:button-card
+            template: alarm_zone_wide
+            entity: binary_sensor.home_zone_017_garage
+          - type: custom:button-card
+            template: alarm_zone_wide
+            entity: binary_sensor.home_zone_013_backyard
+          # flatlet sits alone on the last row, so pad it either side to centre it
+          - type: custom:button-card
+            template: blank_card
+          - type: custom:button-card
+            template: alarm_zone_wide
+            entity: binary_sensor.home_zone_018_flatlet
+          - type: custom:button-card
+            template: blank_card
+      # normally empty and hidden. a zone lands here once it has been named in olarm
+      # but not yet given a device class in packages/olarm.yaml - i.e. it is in use and
+      # needs adopting. excluded: zones still carrying olarm's bare "Home Zone 0NN"
+      # placeholder, any zone named "Spare" in olarm, and the remote receiver channels.
       - type: custom:auto-entities
         card:
           type: glance
@@ -203,6 +234,8 @@ cards:
             - entity_id: "*_bypass*"
             - entity_id: "binary_sensor.home_zone_011*"
             - entity_id: "binary_sensor.home_zone_012*"
+            - name: '/^Home Zone \d+\s*$/'
+            - name: '/Spare\s*$/'
             - attributes:
                 device_class: door
             - attributes:
@@ -214,11 +247,11 @@ cards:
       # switch will simply snap back if you try.
       # template-entity-row rather than a plain toggle row: the toggle control ignores
       # tap_action, so it is the only way to get a confirmation on the whole row.
-      # names match the zone friendly names in packages/olarm.yaml; the confirmation
-      # text is static (the frontend handles it, not the card), which is fine since
-      # each row names its own zone.
+      # every option below is derived from config.entity (the row's own switch), so the
+      # whole row config is shared by anchor and each entry only names its switch.
       # red when a bypass is set: that zone is a hole in the alarm while armed.
       - type: entities
+        title: Alarm Settings
         show_header_toggle: false
         entities:
           - type: custom:fold-entity-row
@@ -226,150 +259,51 @@ cards:
               type: section
               label: Zone Bypasses
             entities:
-              - type: custom:template-entity-row
+              - <<: &bypass_row
+                  type: custom:template-entity-row
+                  name: >-
+                    {{ state_attr(config.entity, 'friendly_name') | replace(' Bypass', '') }}
+                  state: >-
+                    {{ 'Enabled' if is_state(config.entity, 'on') else 'Disabled' }}
+                  tap_action:
+                    action: toggle
+                    confirmation:
+                      text: >-
+                        Change the bypass for the
+                        {{ state_attr(config.entity, 'friendly_name')
+                           | replace(' Bypass', '') | lower | replace(' pir', ' PIR') }}?
+                  uix:
+                    style: |
+                      .state {
+                        color: {{ 'var(--custom-color-red)' if is_state(config.entity, 'on') else 'var(--custom-color-green)' }};
+                      }
                 entity: switch.alarm_bypass_front_door
-                name: Front Door
-                state: >-
-                  {{ 'Set' if is_state('switch.alarm_bypass_front_door', 'on') else 'Cleared' }}
-                tap_action:
-                  action: toggle
-                  confirmation:
-                    text: "Change the bypass for the front door?"
-                uix: &bypass_state_colour
-                  style: |
-                    .state {
-                      color: {{ 'var(--custom-color-red)' if is_state(config.entity, 'on') else 'var(--custom-color-green)' }};
-                    }
-              - type: custom:template-entity-row
-                entity: switch.alarm_bypass_foyer
-                name: Foyer PIR
-                state: >-
-                  {{ 'Set' if is_state('switch.alarm_bypass_foyer', 'on') else 'Cleared' }}
-                tap_action:
-                  action: toggle
-                  confirmation:
-                    text: "Change the bypass for the foyer PIR?"
-                uix: *bypass_state_colour
-              - type: custom:template-entity-row
-                entity: switch.alarm_bypass_living_area
-                name: Living Area PIR
-                state: >-
-                  {{ 'Set' if is_state('switch.alarm_bypass_living_area', 'on') else 'Cleared' }}
-                tap_action:
-                  action: toggle
-                  confirmation:
-                    text: "Change the bypass for the living area PIR?"
-                uix: *bypass_state_colour
-              - type: custom:template-entity-row
-                entity: switch.alarm_bypass_braai_room
-                name: Braai Room PIR
-                state: >-
-                  {{ 'Set' if is_state('switch.alarm_bypass_braai_room', 'on') else 'Cleared' }}
-                tap_action:
-                  action: toggle
-                  confirmation:
-                    text: "Change the bypass for the braai room PIR?"
-                uix: *bypass_state_colour
-              - type: custom:template-entity-row
-                entity: switch.alarm_bypass_kitchen
-                name: Kitchen PIR
-                state: >-
-                  {{ 'Set' if is_state('switch.alarm_bypass_kitchen', 'on') else 'Cleared' }}
-                tap_action:
-                  action: toggle
-                  confirmation:
-                    text: "Change the bypass for the kitchen PIR?"
-                uix: *bypass_state_colour
-              - type: custom:template-entity-row
+              - <<: *bypass_row
                 entity: switch.alarm_bypass_kitchen_door
-                name: Kitchen Door
-                state: >-
-                  {{ 'Set' if is_state('switch.alarm_bypass_kitchen_door', 'on') else 'Cleared' }}
-                tap_action:
-                  action: toggle
-                  confirmation:
-                    text: "Change the bypass for the kitchen door?"
-                uix: *bypass_state_colour
-              - type: custom:template-entity-row
-                entity: switch.alarm_bypass_bedroom
-                name: Bedroom PIR
-                state: >-
-                  {{ 'Set' if is_state('switch.alarm_bypass_bedroom', 'on') else 'Cleared' }}
-                tap_action:
-                  action: toggle
-                  confirmation:
-                    text: "Change the bypass for the bedroom PIR?"
-                uix: *bypass_state_colour
-              - type: custom:template-entity-row
-                entity: switch.alarm_bypass_guest_room
-                name: Guest Room PIR
-                state: >-
-                  {{ 'Set' if is_state('switch.alarm_bypass_guest_room', 'on') else 'Cleared' }}
-                tap_action:
-                  action: toggle
-                  confirmation:
-                    text: "Change the bypass for the guest room PIR?"
-                uix: *bypass_state_colour
-              - type: custom:template-entity-row
-                entity: switch.alarm_bypass_main_bedroom
-                name: Main Bedroom PIR
-                state: >-
-                  {{ 'Set' if is_state('switch.alarm_bypass_main_bedroom', 'on') else 'Cleared' }}
-                tap_action:
-                  action: toggle
-                  confirmation:
-                    text: "Change the bypass for the main bedroom PIR?"
-                uix: *bypass_state_colour
-              - type: custom:template-entity-row
-                entity: switch.alarm_bypass_backyard
-                name: Backyard PIR
-                state: >-
-                  {{ 'Set' if is_state('switch.alarm_bypass_backyard', 'on') else 'Cleared' }}
-                tap_action:
-                  action: toggle
-                  confirmation:
-                    text: "Change the bypass for the backyard PIR?"
-                uix: *bypass_state_colour
-              - type: custom:template-entity-row
-                entity: switch.alarm_bypass_garage_pir
-                name: Garage PIR
-                state: >-
-                  {{ 'Set' if is_state('switch.alarm_bypass_garage_pir', 'on') else 'Cleared' }}
-                tap_action:
-                  action: toggle
-                  confirmation:
-                    text: "Change the bypass for the garage PIR?"
-                uix: *bypass_state_colour
-              - type: custom:template-entity-row
-                entity: switch.alarm_bypass_flatlet
-                name: Flatlet PIR
-                state: >-
-                  {{ 'Set' if is_state('switch.alarm_bypass_flatlet', 'on') else 'Cleared' }}
-                tap_action:
-                  action: toggle
-                  confirmation:
-                    text: "Change the bypass for the flatlet PIR?"
-                uix: *bypass_state_colour
-              - type: custom:template-entity-row
+              - <<: *bypass_row
                 entity: switch.alarm_bypass_music_room_door
-                name: Music Room Door
-                state: >-
-                  {{ 'Set' if is_state('switch.alarm_bypass_music_room_door', 'on') else 'Cleared' }}
-                tap_action:
-                  action: toggle
-                  confirmation:
-                    text: "Change the bypass for the music room door?"
-                uix: *bypass_state_colour
-              - type: custom:template-entity-row
+              - <<: *bypass_row
                 entity: switch.alarm_bypass_braai_room_door
-                name: Braai Room Door
-                state: >-
-                  {{ 'Set' if is_state('switch.alarm_bypass_braai_room_door', 'on') else 'Cleared' }}
-                tap_action:
-                  action: toggle
-                  confirmation:
-                    text: "Change the bypass for the braai room door?"
-                uix: *bypass_state_colour
+              - <<: *bypass_row
+                entity: switch.alarm_bypass_foyer
+              - <<: *bypass_row
+                entity: switch.alarm_bypass_living_area
+              - <<: *bypass_row
+                entity: switch.alarm_bypass_kitchen
+              - <<: *bypass_row
+                entity: switch.alarm_bypass_main_bedroom
+              - <<: *bypass_row
+                entity: switch.alarm_bypass_guest_room
+              - <<: *bypass_row
+                entity: switch.alarm_bypass_bedroom
+              - <<: *bypass_row
+                entity: switch.alarm_bypass_braai_room
+              - <<: *bypass_row
+                entity: switch.alarm_bypass_garage_pir
+              - <<: *bypass_row
+                entity: switch.alarm_bypass_backyard
+              - <<: *bypass_row
+                entity: switch.alarm_bypass_flatlet
       - type: horizontal-stack
         title: Smoke Detectors
         cards:

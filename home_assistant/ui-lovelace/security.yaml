@@ -177,7 +177,7 @@ cards:
             template: alarm_zone
             entity: binary_sensor.home_zone_020_braai_room_door
       - type: history-graph
-        title: Door Zones
+        title: Activity
         hours_to_show: 24
         entities:
           - entity: binary_sensor.home_zone_001_front_door

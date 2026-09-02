@@ -138,6 +138,14 @@ The shape of it, and the reasoning that is not obvious from the config:
     armed_night and re-arm to stay; both that automation and the confusing option are
     now unnecessary. Do not add an arm_night action back - it would put the option
     (and the flip) back.
+
+    The manual panel was the cause. Its arming_states (armed_away, armed_home) limited
+    what it could be armed INTO, but not what it advertised, so HomeKit still offered
+    night. The flatlet showed the same mismatch from the other side: armed_home had to
+    be listed there despite the flatlet having no stay mode, purely because leaving it
+    out produced "SecuritySystemCurrentState: value=0 is an invalid value" on startup.
+    That workaround is obsolete too - a template panel advertises exactly the actions
+    it defines, so the flatlet legitimately offers only away and off.
   * changed_by is always null, so who armed/disarmed comes from the HA context instead
     (get_ha_actor in security.jinja). A name only appears when a person did it in HA.
   * Zones belong to the device, not a partition, so the partition map lives in

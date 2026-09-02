@@ -156,6 +156,31 @@ state via the old webhook, so both paths agree on a real event.
 Still to test: force-arm with a zone open, and the panic (coordinate with the security
 company).
 
+**2026-09-02 — a real panic, and what the recorder shows.** The alarm was triggered at
+07:58:09 (both partitions, 46 ms apart), disarmed at 07:58:14, and the old webhook sent
+`EMERGENCY! - Panic` followed by one push per panel area, 1 through 8. Three things are
+now settled:
+
+- **Zones 011/012 are the arm/disarm channels, confirmed.** Zone 011 pulsed at
+  07:58:12.9, 1.4 s before the disarm at 07:58:14.4 — a remote being used to disarm,
+  exactly as the IDS type 05 (Arm/Disarm) reading of the manuals predicted. They stay
+  excluded from the arming checks.
+- **The panic circuit is invisible to Home Assistant.** No zone changed state at the
+  trigger; the nearest activity was the garage PIR 21 s earlier. So a panic cannot be
+  identified from zone sensors, now or later, and the unnamed spares are not panic
+  inputs.
+- **`zone_in_alarm` was null on both panels** — which is *correct* for a panic, since no
+  zone was in alarm. Unlike `changed_by`, it is therefore unproven rather than dead, and
+  is left in place: if it populates on a genuine zone breach, that becomes the
+  panic-vs-breach distinction the webhook used to provide (a named zone means a breach,
+  no zone means a panic).
+
+The "Area 4"/"Area 5" oddity from the 2024 webhook captures is also explained: a panic
+broadcasts to all eight areas the panel supports, of which only two are in use.
+
+On the strength of the first two points the webhook was removed — it arrived *after* the
+integration and cost eight critical pushes for one event.
+
 ### Cutover (quiet day, single restart)
 
 All renames happen here, after the legacy manual panels are gone. The zone and device

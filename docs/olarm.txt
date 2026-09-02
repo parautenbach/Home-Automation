@@ -116,3 +116,55 @@ HA. The old webhook could (eventMsg "EMERGENCY! - Panic" vs "ALARM! - Area 1 - H
 but cost eight critical pushes per event, one per panel area, and was removed. The
 remaining hope is the panel's zone_in_alarm attribute populating on a real zone breach
 - it was null during the 2026-09-02 panic, which is correct, since no zone was involved.
+
+==========
+
+Migration to the official integration (2026-08/09)
+
+Replaced a custom REST + webhook integration with github.com/olarmtech/hacs-olarm.
+The shape of it, and the reasoning that is not obvious from the config:
+
+  * Two template alarm panels wrap the integration's own panels and own
+    alarm_control_panel.home / .flatlet. That is what let ~47 references, HomeKit's
+    accessories and the recorder history carry over untouched. They also add the code
+    prompt the integration's panels do not have (it validates in each action; the
+    template alarm panel does not check codes itself).
+  * The integration's panels keep their generated ids (home_area_01_home,
+    home_area_02_flatlet) and are only ever addressed by the template panels.
+  * HomeKit always offers night mode - the bridge cannot limit which states the Home
+    app shows - so both panels map arm_night onto stay (home) and away (flatlet).
+  * changed_by is always null, so who armed/disarmed comes from the HA context instead
+    (get_ha_actor in security.jinja). A name only appears when a person did it in HA.
+  * Zones belong to the device, not a partition, so the partition map lives in
+    security.jinja. Only zones 011/012 are ignored - see below.
+  * Bypass is a state, not an event, so the per-zone bypass/unbypass buttons are
+    wrapped in template switches.
+
+What the first real alarm showed (2026-09-02, an accidental panic):
+
+  * Zone 011 pulsed 1.4 s before the disarm, confirming zones 011/012 are the
+    arm/disarm channels the remote receivers drive (IDS X64 zone type 05), exactly as
+    the manuals predicted. They stay out of the arming checks.
+  * No zone moved at the trigger, so the panic circuit is invisible to HA. A panic
+    cannot be identified from zone sensors, and the unnamed spares are not panic inputs.
+  * zone_in_alarm was null on both panels, which is CORRECT for a panic - no zone was
+    involved. Unlike changed_by it is therefore unproven rather than dead, and is left
+    in place: if it populates on a real zone breach, that is the panic-vs-breach
+    distinction the old webhook used to give us.
+  * A panic broadcasts to all eight areas the panel supports, which explains the
+    "Area 4"/"Area 5" oddity in the 2024 webhook captures.
+  * The old webhook arrived AFTER the integration and sent one critical push per area,
+    so it was removed.
+
+Traps worth remembering:
+
+  * Do NOT drop the `code:` from the alarm_control_panel.alarm_disarm calls in
+    home.yaml. The template panels require a code; without it those disarms log
+    "invalid code" and silently do nothing.
+  * Removing config does not remove entities. The 18 input_boolean bypass helpers had
+    to be deleted by hand from the entity registry; automations were pruned by HA.
+  * Entity ids are generated once from the zone name and never regenerated. Zones added
+    later and named afterwards keep a placeholder id until you regenerate them.
+
+Still to verify: disarm from the HA UI with the code, and both panels in the Home app
+(including that picking Night arms stay/away rather than failing).

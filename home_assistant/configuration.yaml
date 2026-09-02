@@ -6,7 +6,7 @@ homekit: !include homekit.yaml
 # https://www.home-assistant.io/docs/configuration/basic/
 homeassistant:
   name: Home
-  # internal_url: !secret homeassistant_internal_url
+  internal_url: !secret homeassistant_internal_url
   latitude: !secret home_latitude
   longitude: !secret home_longitude
   elevation: !secret home_elevation

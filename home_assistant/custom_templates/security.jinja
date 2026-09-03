@@ -117,14 +117,17 @@ The olarm integration's changed_by attribute is always null (verified for both
 ha-initiated and app-initiated changes), so attribution comes from the ha context
 instead. Only a user id is trusted: a change made at the panel, on the keypad, on a
 remote or in the olarm app carries no ha user, and a slow round trip through the panel
-can outlive the context window too. An empty result therefore means "not known to be a
+can outlive the context window too - observed 2026-09-03, when an arm from the ui named
+the person but a disarm from the same ui did not, because a dropped mqtt connection
+delayed the state change well past the window. An empty result therefore means "not known to be a
 person", not "not a person" – so callers should omit the attribution, never assert that
 it happened at the panel.
 
 :param context: The context of the state change (e.g. trigger.to_state.context).
 
-:returns: The person's name, or an empty string. (A plain string, so this macro outputs
-          its result directly and needs no returns callback.)
+:returns: The person's first name, taken from the person entity whose user_id matches
+          the context, or an empty string. (A plain string, so this macro outputs its
+          result directly and needs no returns callback.)
 #}
 {%- macro get_ha_actor(context) -%}
   {%- if context.user_id -%}
@@ -133,7 +136,8 @@ it happened at the panel.
       | selectattr('attributes.user_id', 'eq', context.user_id)
       | list | first | default(none)
     -%}
-    {{- person.name if person else '' -}}
+    {#- first name only: these go into notifications, not a formal record -#}
+    {{- person.name.split(' ')[0] if person else '' -}}
   {%- endif -%}
 {%- endmacro -%}
 

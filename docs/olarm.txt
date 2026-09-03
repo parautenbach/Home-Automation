@@ -57,6 +57,39 @@ is where panic/fire/medical classification lives.
 
 ==========
 
+Commands and state travel different paths (observed 2026-09-03)
+
+Commands go out over the REST API (_api_send_action); state comes back over MQTT. They
+fail independently, which is confusing the first time you see it:
+
+  * disarmed the flatlet from the HA UI with the correct code. Olarm's own app showed
+    it disarmed immediately, but HA sat on "pending" for minutes. A page refresh did
+    not help - the state simply had not arrived. It then resolved on its own, and the
+    log showed:
+
+      WARNING (paho-mqtt-client-...) [olarmflowclient.olarmflowclient]
+      Disconnected from MQTT broker with code: 7
+
+    Code 7 is paho's MQTT_ERR_CONN_LOST: the connection dropped, rather than being
+    refused or rejected. The command had already succeeded over REST; only the
+    confirmation was stuck.
+
+Consequences worth remembering:
+
+  * a stale panel state in HA does not mean the command failed. Olarm's app is the
+    source of truth; check there before assuming.
+  * the integration exposes NO connectivity entity, so HA cannot tell you the feed is
+    stale. A panel can sit on a wrong state indefinitely with nothing flagging it.
+  * attribution suffers too. HA only keeps a service call's context on an entity for a
+    few seconds, so a delayed state change loses it: on this occasion an arm from the
+    UI named the person and a disarm from the same UI did not. get_ha_actor omits the
+    name rather than guessing, which is the safe failure.
+  * anything that must know whether a command took effect should wait for the state
+    rather than trust the call - as the presence automations do with their re-check,
+    and the bypass-garage flow does with the bypass sensor.
+
+==========
+
 The local route: the panel's RS485 bus
 
 The IDS X64 has two interfaces worth knowing about.

@@ -109,7 +109,10 @@ homeassistant:
 # generated ids.
 #
 # note: the template alarm panel does not validate the code itself – it passes whatever
-# was entered to the actions as `code`, so each action compares it explicitly.
+# was entered to the actions as `code`, so each action compares it explicitly and stops
+# with error: true on a mismatch. the error matters: a plain stop ends the script
+# successfully, so the frontend keeps the state it optimistically showed when the mode
+# was pressed and the card sits on the wrong state until the view is refreshed.
 # https://community.home-assistant.io/t/add-a-code-to-the-template-alarm-control-panel/602869
 #
 # this is an accident guard, not a security boundary: anybody with access to home
@@ -136,6 +139,7 @@ template:
                   level: warning
                   logger: "homeassistant.components.olarm"
               - stop: "Invalid code."
+                error: true
           - service: alarm_control_panel.alarm_arm_home
             target:
               entity_id: alarm_control_panel.home_area_01_home
@@ -150,6 +154,7 @@ template:
                   level: warning
                   logger: "homeassistant.components.olarm"
               - stop: "Invalid code."
+                error: true
           - service: alarm_control_panel.alarm_arm_away
             target:
               entity_id: alarm_control_panel.home_area_01_home
@@ -164,6 +169,7 @@ template:
                   level: warning
                   logger: "homeassistant.components.olarm"
               - stop: "Invalid code."
+                error: true
           - service: alarm_control_panel.alarm_disarm
             target:
               entity_id: alarm_control_panel.home_area_01_home
@@ -186,6 +192,7 @@ template:
                   level: warning
                   logger: "homeassistant.components.olarm"
               - stop: "Invalid code."
+                error: true
           - service: alarm_control_panel.alarm_arm_away
             target:
               entity_id: alarm_control_panel.home_area_02_flatlet
@@ -200,6 +207,7 @@ template:
                   level: warning
                   logger: "homeassistant.components.olarm"
               - stop: "Invalid code."
+                error: true
           - service: alarm_control_panel.alarm_disarm
             target:
               entity_id: alarm_control_panel.home_area_02_flatlet

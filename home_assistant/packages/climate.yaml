@@ -220,7 +220,13 @@ automation:
         minutes: "/30"
       - platform: homeassistant
         event: start
+    # a state change arriving while the sql query is still running would log an
+    # "Already running" warning. Dropping that run is the intended behaviour: room
+    # temperature cannot move meaningfully in the seconds between the two triggers, so
+    # the skipped refresh loses nothing and the next trigger picks it up. Queueing would
+    # just re-run the same query for the same answer.
     mode: single
+    max_exceeded: silent
     action:
       - service: homeassistant.update_entity
         target:

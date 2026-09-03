@@ -110,9 +110,23 @@ homeassistant:
 #
 # note: the template alarm panel does not validate the code itself – it passes whatever
 # was entered to the actions as `code`, so each action compares it explicitly and stops
-# with error: true on a mismatch. the error matters: a plain stop ends the script
-# successfully, so the frontend keeps the state it optimistically showed when the mode
-# was pressed and the card sits on the wrong state until the view is refreshed.
+# with error: true on a mismatch.
+#
+# a rejected code is only visible in the log. error: true marks the script as failed,
+# which shows in the trace, but it does not reach the caller: calling
+# alarm_control_panel.alarm_disarm from dev tools with a wrong code reports success
+# (verified 2026-09-03). the frontend is the same - the alarm card optimistically shows
+# whichever mode you pressed and only clears it on a state change, and a rejected code
+# changes no state, so the card sits on the wrong mode until the next state change or a
+# page refresh.
+#
+# so nothing downstream can tell a refused command from an accepted one. anything that
+# needs to know must check the resulting state rather than trust the call - the way the
+# bypass-garage flow in "Handle Alarm Notification Event" waits for the bypass sensor
+# instead of assuming the button press worked.
+# this is a gap in the template platform rather than intended design - other alarm
+# platforms do surface a rejection in the ui. reported but never triaged:
+# https://github.com/home-assistant/home-assistant.io/issues/23124 (closed as stale)
 # https://community.home-assistant.io/t/add-a-code-to-the-template-alarm-control-panel/602869
 #
 # this is an accident guard, not a security boundary: anybody with access to home

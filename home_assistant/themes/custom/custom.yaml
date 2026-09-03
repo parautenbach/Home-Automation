@@ -20,6 +20,53 @@ custom-light-mode:
                 min-width: fit-content;
             }
         }
+  # Stops custom:swipe-card's pagination bullets from swallowing clicks on the
+  # bottom of the cards they swipe between (chart legends, x-axis labels).
+  # swipe-card bundles Swiper 6, which renders .swiper-pagination as an absolute,
+  # full-width, z-index:10 strip at bottom:10px inside .swiper-container - it has
+  # no pointer-events guard, so it intercepts every click in that band. Swiper 6
+  # predates the --swiper-pagination-bottom variable and swipe-card only exports
+  # --swiper-theme-color, so there is no config or CSS-variable route to this.
+  # The padding goes on each slide's ha-card, not on .swiper-container: swipe-card
+  # sets class swiper-slide on the contained card elements themselves, so a $ hop
+  # reaches their ha-card and the reserved space lands inside the white card.
+  # Padding .swiper-container instead puts it outside, reading as a gap between
+  # cards, since the container is a bare div with no background of its own.
+  # autoHeight plus swipe-card's ResizeObserver -> swiper.update() then resizes
+  # the container to match. !important: the cards' own ha-card padding rules have
+  # equal specificity, as does Swiper's bundled `.swiper-container { padding: 0 }`.
+  # Grid and stack slides need the second selector: they render #root and no
+  # ha-card at all, so the ha-card rule matches nothing there. The two are
+  # mutually exclusive - a card has one or the other - so nothing gets padded
+  # twice. No card-type guard needed beyond that: neither .swiper-slide nor these
+  # selectors in combination exist for any other card, so this is inert elsewhere.
+  # Geometry is two knobs that must move together: the strip height and the
+  # bullets' bottom offset. Swiper puts the bullets at bottom:10px and they are
+  # 8px tall, so a 20px strip left just 2px above them and they visually touched
+  # the content - on tiles they landed right on the tile border. bottom:8px in a
+  # 34px strip leaves 18px above and 8px below, which suits cards with a
+  # background of their own, where the bullets sit on that background.
+  # Grid and stack slides have none, so their bullets sit in the whitespace
+  # between cards and want to look centred in it. Raising the strip also pushes
+  # the next card down, so the target moves with it: measured off a screenshot,
+  # the view leaves ~15px below the swipe-card and a grid's content box sits
+  # ~6.5px above the visible tile edge, which centres the bullets when the strip
+  # is roughly 2 x bottom + 23 - hence 44px on #root against bottom:8px.
+  # Verified on statistics-graph, mini-graph-card and grid+tile slides with a
+  # scratch A/B matrix in ui-lovelace/test.yaml, since removed.
+  # NOTE: not shared with the Slate dark theme (not in this repo) - port manually.
+  uix-card-yaml: |
+    ".": |
+      .swiper-container-horizontal > .swiper-pagination-bullets {
+        bottom: 8px !important;
+      }
+    ".swiper-slide $": |
+      ha-card {
+        padding-bottom: 34px !important;
+      }
+      #root {
+        padding-bottom: 44px !important;
+      }
   # Consolidates the input_datetime row mods that used to be duplicated per-card
   # (irrigation.yaml, main.yaml). No domain guard needed: ha-time-input/ha-date-input
   # simply don't exist in the DOM for non-input_datetime rows, so this is inert there.

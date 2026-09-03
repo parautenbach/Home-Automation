@@ -469,7 +469,7 @@ cards:
                 - binary_sensor.housekeeper_present
                 - input_boolean.contractor_mode
                 - input_boolean.guest_mode
-            hours_to_show: 1
+            hours_to_show: 24
       - type: entities
         title: Special Modes
         entities:

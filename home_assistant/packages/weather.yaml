@@ -653,30 +653,50 @@ template:
           raw_precipitation_entity: sensor.weather_station_precipitation
           event_rate_entity: sensor.raw_rain_rate
           # link for retrieving calibration data
-          # http://homeassistant.local:8123/history?entity_id=sensor.rain_24h%2Csensor.rain_24h_lts%2Csensor.rain_rate%2Csensor.daily_precipitation&start_date=2026-08-28T13%3A00%3A00.000Z&end_date=2026-08-30T16%3A00%3A00.000Z
+          # http://homeassistant.local:8123/history?entity_id=sensor.rain_24h%2Csensor.rain_24h_lts%2Csensor.rain_rate%2Csensor.daily_precipitation%2Csensor.weather_station_precipitation%2Csensor.precipitation_total%2Csensor.raw_rain_rate&start_date=2026-07-01T08%3A00%3A00.000Z&end_date=2026-09-03T21%3A59%3A00.000Z
           # ceilings are raw mm/h (event_rate_entity), not the calibrated rate, so changing
           # a gain doesn't shift which tier a tick lands in.
           #
-          # 2026-08-29: manual gauge, empty before the event and emptied again after the
-          # reading, held 2.0 mm at 06h30. The matching window — all of 08-28 plus 08-29 up
-          # to the 06:26 tick — is 16 raw ticks of 0.1 mm, 10 below 0.3 mm/h and 6 in the
-          # 0.3-2.0 mm/h tier, i.e. 1.6 mm raw booked as 4.56 mm. That's a blended gain of
-          # 1.25 where the tiers were delivering 2.85. Both tiers scaled by 0.4386 to
-          # preserve their ratio, since a single total can't separate them. (Note this is a
-          # longer window than sensor.rain_24h's 3.96 mm at the same moment, which starts
-          # after the first two ticks on 08-28.)
+          # 2026-09-03: RESET TO 1.0. the sensor now passes through raw, uncalibrated, and
+          # calibration starts over from the next rain event.
           #
-          # This reading outweighs the three earlier light-rain ones — a whole event rather
-          # than a tick or two each, where the gauge's own resolution dominated the ratio —
-          # but it is still a single event, and it assumes nothing fell on 08-27 or before
-          # since the gauge was emptied. Confirm against the next event before trusting it.
+          # the readings behind every earlier gain could not be reconciled with each other,
+          # and none of them can be trusted enough to carry forward:
+          #
+          #   3 light-rain readings  2.70x, 4.32x, 2.00x   a tick or two each, so the
+          #                                                gauge's own resolution dominated
+          #   2026-08-29             1.6 mm raw, gauge 2.0   booked 4.56 -> implied 0.4386
+          #   2026-09-03             1.2 mm raw, gauge 1.0   booked 3.28 -> implied 0.3049
+          #
+          # (09-03 window: gauge verified empty at 12h00 SAST, first tick 12h31, read at
+          # 16h31 with rain stopped since 16h25. booked 3.28 is the daily meter's 4.78 minus
+          # the 1.50 standing at 10h00, so it needs no tick decomposition.)
+          #
+          # those two whole-event scales differ by a third, and it is not even settled which
+          # gains were live when each was booked. two events cannot separate two tiers in any
+          # case: fitting both gives an exact solution with no residual to validate it, and
+          # moving each gauge reading by a quarter division swings it from 1.79/0.36 to
+          # 1.16/0.98 to a negative tier 2. building on that is building on noise.
+          #
+          # protocol for the next event, so the reading is actually usable:
+          #   - empty the gauge before it starts and note the time
+          #   - read it once the rain has stopped, note that time too
+          #   - pull sensor.weather_station_precipitation (raw) for that exact window, not
+          #     just the derived totals - at gain 1.0 booked == raw, so this is now a direct
+          #     raw-vs-gauge comparison with nothing to unwind
+          #   - prefer an event heavy in one rate tier; a mid-range mix cannot split them
+          #
+          # also unresolved: 5 raw ticks booked before 10h00 SAST on 09-03, on a morning with
+          # no rain and an empty gauge at noon. if those are false triggers - plausible on a
+          # piezo (wind, debris, a bird) - they inflate every light-rain reading above.
+          #
+          # the tier boundaries themselves (0.3 and 2.0 mm/h) are inherited guesses and have
+          # never been validated either. keep the structure, but do not treat them as known.
           gain_tiers:
             - ceiling: 0.3
-              # was 3.01 — avg of 2.70x, 4.32x, 2.00x across 3 light-rain readings; 3.5 before that
-              gain: 1.32
+              gain: 1.0
             - ceiling: 2.0
-              # was 2.56
-              gain: 1.12
+              gain: 1.0
           gain_unvalidated: 1.0
         state: >-
           {% from 'environment.jinja' import select_gain %}

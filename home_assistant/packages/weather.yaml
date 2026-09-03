@@ -652,12 +652,29 @@ template:
         variables:
           raw_precipitation_entity: sensor.weather_station_precipitation
           event_rate_entity: sensor.raw_rain_rate
+          # ceilings are raw mm/h (event_rate_entity), not the calibrated rate, so changing
+          # a gain doesn't shift which tier a tick lands in.
+          #
+          # 2026-08-29: manual gauge, empty before the event and emptied again after the
+          # reading, held 2.0 mm at 06h30. The matching window — all of 08-28 plus 08-29 up
+          # to the 06:26 tick — is 16 raw ticks of 0.1 mm, 10 below 0.3 mm/h and 6 in the
+          # 0.3-2.0 mm/h tier, i.e. 1.6 mm raw booked as 4.56 mm. That's a blended gain of
+          # 1.25 where the tiers were delivering 2.85. Both tiers scaled by 0.4386 to
+          # preserve their ratio, since a single total can't separate them. (Note this is a
+          # longer window than sensor.rain_24h's 3.96 mm at the same moment, which starts
+          # after the first two ticks on 08-28.)
+          #
+          # This reading outweighs the three earlier light-rain ones — a whole event rather
+          # than a tick or two each, where the gauge's own resolution dominated the ratio —
+          # but it is still a single event, and it assumes nothing fell on 08-27 or before
+          # since the gauge was emptied. Confirm against the next event before trusting it.
           gain_tiers:
             - ceiling: 0.3
-              # was 3.5 — avg of 2.70x, 4.32x, 2.00x across 3 light-rain readings
-              gain: 3.01
+              # was 3.01 — avg of 2.70x, 4.32x, 2.00x across 3 light-rain readings; 3.5 before that
+              gain: 1.32
             - ceiling: 2.0
-              gain: 2.56
+              # was 2.56
+              gain: 1.12
           gain_unvalidated: 1.0
         state: >-
           {% from 'environment.jinja' import select_gain %}

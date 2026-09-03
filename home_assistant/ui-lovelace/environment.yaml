@@ -1137,8 +1137,6 @@ cards:
               - entity: sensor.guest_bedroom_ht_temperature
                 name: Guest Bedroom
               - entity: sensor.bedroom_ht_temperature
-                name: Guest Bedroom
-              - entity: sensor.bedroom_ht_temperature
                 name: Bedroom
               - entity: sensor.braai_room_ht_temperature
                 name: Braai Room

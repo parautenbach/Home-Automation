@@ -652,6 +652,8 @@ template:
         variables:
           raw_precipitation_entity: sensor.weather_station_precipitation
           event_rate_entity: sensor.raw_rain_rate
+          # link for retrieving calibration data
+          # http://homeassistant.local:8123/history?entity_id=sensor.rain_24h%2Csensor.rain_24h_lts%2Csensor.rain_rate%2Csensor.daily_precipitation&start_date=2026-08-28T13%3A00%3A00.000Z&end_date=2026-08-30T16%3A00%3A00.000Z
           # ceilings are raw mm/h (event_rate_entity), not the calibrated rate, so changing
           # a gain doesn't shift which tier a tick lands in.
           #
@@ -976,6 +978,8 @@ template:
             {{ (spread_score * wind_score * 100) | round(0) }}
           {% endif %}
         availability: "{{ has_value(spread_entity) and has_value(wind_entity) }}"
+  # link for retrieving calibration data
+  # http://homeassistant.local:8123/history?entity_id=sensor.weather_station_temperature%2Csensor.weather_station_dew_point%2Csensor.dew_point_spread%2Csensor.wind_speed_filtered_km_h%2Csensor.fog_probability%2Cbinary_sensor.fog_conditions%2Csensor.openweathermap_cloud_coverage%2Csensor.weather_station_illuminance%2Cbinary_sensor.raining%2Cbinary_sensor.weather_station_moisture%2Csensor.rain_rate&start_date=2026-08-29T14%3A00%3A00.000Z&end_date=2026-09-01T21%3A59%3A00.000Z
   - binary_sensor:
       - name: "Fog Conditions"
         unique_id: "e5a3b0c6-9f4d-4c8a-be5d-3a0b4c7f9e2a"

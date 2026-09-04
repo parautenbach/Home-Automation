@@ -1370,9 +1370,12 @@ automation:
           # through to the amount. The sensor's own on/off state gates on a 12-36h window, which is
           # the Rain Expected notification's question rather than this brief's, so it isn't read here.
           rain_onset_today: >-
-            {% set onset = state_attr('binary_sensor.weather_forecast_precipitation_soon', 'onset') | as_datetime %}
+            {# onset is none whenever the forecast holds no wet hour at all, and
+               as_datetime raises on that rather than returning none - so test the
+               attribute before parsing it, not after #}
+            {% set onset = state_attr('binary_sensor.weather_forecast_precipitation_soon', 'onset') %}
             {% if onset %}
-              {% set onset = onset | as_local %}
+              {% set onset = onset | as_datetime | as_local %}
               {{ onset.strftime('%H:%M') if onset.date() == now().date() else '' }}
             {% endif %}
           today_high: "{{ daily['weather.openweathermap']['forecast'][0]['temperature'] | int(0) }}"

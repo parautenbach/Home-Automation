@@ -1747,7 +1747,15 @@ automation:
       - platform: state
         entity_id: binary_sensor.anybody_home
         to: "on"
+      - platform: state
+        entity_id: binary_sensor.home_zone_019_music_room_door
+        to: "on"
     condition:
+      - condition: state
+        entity_id: binary_sensor.home_zone_019_music_room_door
+        state: "on"
+        for:
+          minutes: 5
       # https://community.home-assistant.io/t/time-condition-inclusive-or-exclusive/205909/26
       - condition: template
         value_template: >-

@@ -724,7 +724,7 @@ automation:
       - service: notify.mobile_app_ceres
         data:
           title: "⛔️ System"
-          message: "Server will shut down in {{ timeout }} seconds."
+          message: "Server will shut down in {{ timeout }} sec."
           data:
             group: "system-general"
             url: homeassistant://navigate/lovelace-system/devices

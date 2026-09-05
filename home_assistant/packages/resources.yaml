@@ -1974,7 +1974,7 @@ automation:
             {% set temperature = states('sensor.inverter_temperature') | int(0) %}
             {% set load = states('sensor.home_power_kw') | float(0) | round(1) %}
             {% set cabinet_temp = states('sensor.cabinet_temperature') | float(0) | round(1) %}
-            The inverter has been running hot for {{ trigger.for.seconds // 60 }} minutes: It's currently at {{ temperature }} °C and under a load of {{ load }} kW. The cabinet is at {{ cabinet_temp }} °C.
+            The inverter has been running hot for {{ trigger.for.seconds // 60 }} min: It's currently at {{ temperature }} °C and under a load of {{ load }} kW. The cabinet is at {{ cabinet_temp }} °C.
           data:
             group: "home-electricity"
             url: homeassistant://navigate/lovelace-system/devices
@@ -2041,7 +2041,7 @@ automation:
             {% set temperature = states('sensor.battery_temperature') | int(0) %}
             {% set load = states('sensor.home_power_kw') | float(0) | round(1) %}
             {% set cabinet_temp = states('sensor.cabinet_temperature') | float(0) | round(1) %}
-            The inverter's battery has been running hot for {{ trigger.for.seconds // 60 }} minutes: It's currently at {{ temperature }} °C and under a load of {{ load }} kW.
+            The inverter's battery has been running hot for {{ trigger.for.seconds // 60 }} min: It's currently at {{ temperature }} °C and under a load of {{ load }} kW.
             The cabinet is at {{ cabinet_temp }} °C.
           data:
             group: "home-electricity"

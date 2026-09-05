@@ -1303,7 +1303,7 @@ automation:
         state: "on"
     action:
       - delay:
-          minutes: 15
+          minutes: 10
       - action: weather.get_forecasts
         target:
           entity_id: weather.openweathermap

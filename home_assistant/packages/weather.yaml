@@ -82,21 +82,41 @@ sensor:
     max_age:
       minutes: 60
 
-  - platform: filter
+  # Both of these were lowpass filters. An EMA is the wrong statistic for either: a wind
+  # speed is a 10-minute mean and a gust is the peak within the period, so the EMA was
+  # unbiased but jumpy for the mean, and plainly wrong for the max - measured on the
+  # 2026-09-04 data it lost 36% of the gust peak (26.3 km/h raw -> 16.8 km/h reported).
+  #
+  # Both read the RAW station entities. The WS90 already reduces its own ~8.8s sample
+  # window twice - 'sustained' is the mean of that window, 'gust' the max - so filtering
+  # first and aggregating second just attenuates the signal twice. The two channels are
+  # not interchangeable: a rolling max of the sustained channel cannot reproduce the gust
+  # channel (correlation peaks at 0.86), because the gust carries sub-8.8s detail that
+  # the sustained channel has already averaged away.
+  #
+  # sampling_size must exceed the number of samples in the window or max_age is never
+  # reached: 10 minutes at 8.8s is ~68 samples, so 200 leaves headroom if the WS90 ever
+  # reports faster.
+  - platform: statistics
     name: "Wind Speed Filtered"
     entity_id: sensor.weather_station_wind_speed_sustained
-    filters:
-      - filter: lowpass
-        time_constant: 10
-        precision: 2
+    state_characteristic: mean
+    sampling_size: 200
+    max_age:
+      minutes: 10
+    precision: 2
 
-  - platform: filter
+  # a single bad sample owns this for a full 10 minutes - on 2026-09-05 one reading held
+  # it at 37.8 km/h when the rest of the window supported ~23. That is inherent to a max
+  # and still better than smoothing every peak away; revisit only with labelled data
+  - platform: statistics
     name: "Wind Gust Filtered"
     entity_id: sensor.weather_station_wind_speed_gust
-    filters:
-      - filter: lowpass
-        time_constant: 10
-        precision: 2
+    state_characteristic: value_max
+    sampling_size: 200
+    max_age:
+      minutes: 10
+    precision: 2
 
   - platform: filter
     name: "Wind Direction Sin Filtered"
@@ -405,6 +425,68 @@ template:
           {{ (states(wind_gust_entity) | float(0) * 3.6) | round(1) }}
         availability: >-
           {{ has_value(wind_gust_entity) }}
+      # Benchmarking the station against the forecast, logged with wind direction so the
+      # deficit can be binned by quadrant. Measured 2026-09-04/05 in the E-SE quadrant the
+      # station reads ~41% of forecast sustained but ~105% of forecast gusts: site shelter,
+      # with gusts penetrating gaps in the trees while the steady flow is combed out. This
+      # is a comparison, not a calibration - neither reading needs correcting, and forecast
+      # agreement is not accuracy in either direction, since the forecast describes
+      # open-terrain 10m wind rather than this site.
+      #
+      # OWM's two wind sensors do not agree on units - wind_speed arrives in m/s while
+      # wind_gust_speed arrives already converted to km/h - so normalise off the reported
+      # unit rather than assuming either.
+      #
+      # a percentage, not a bare fraction: a template sensor with no unit_of_measurement is
+      # rendered as a state timeline instead of a graph. 41% also says what it means.
+      - name: "Wind Speed Forecast Ratio"
+        unique_id: "5a182b64-059e-4c41-b9f6-5663e5446481"
+        unit_of_measurement: "%"
+        icon: mdi:approximate-equal
+        # the states() calls stay in the state/attribute/availability templates rather
+        # than in variables, or the sensor stops tracking its sources and freezes
+        variables:
+          station_entity: sensor.wind_speed_filtered
+          forecast_entity: sensor.openweathermap_wind_speed
+        state: >-
+          {% set v = states(forecast_entity) | float(0) %}
+          {% set f = v * 3.6 if state_attr(forecast_entity, 'unit_of_measurement') == 'm/s' else v %}
+          {% set s = states(station_entity) | float(0) * 3.6 %}
+          {{ (100 * s / f) | round(1) if f > 0 else none }}
+        attributes:
+          station_kmh: "{{ (states(station_entity) | float(0) * 3.6) | round(1) }}"
+          forecast_kmh: >-
+            {% set v = states(forecast_entity) | float(0) %}
+            {{ (v * 3.6 if state_attr(forecast_entity, 'unit_of_measurement') == 'm/s' else v) | round(1) }}
+          wind_direction: "{{ states('sensor.wind_direction_filtered') | float(0) | round(0) }}"
+          compass_direction: "{{ states('sensor.wind_compass_direction') }}"
+        availability: >-
+          {% set v = states(forecast_entity) | float(0) %}
+          {% set f = v * 3.6 if state_attr(forecast_entity, 'unit_of_measurement') == 'm/s' else v %}
+          {{ has_value(station_entity) and has_value(forecast_entity) and f > 0 }}
+      - name: "Wind Gust Forecast Ratio"
+        unique_id: "b9d45ffc-7893-4d7b-b8d6-cb613fb04668"
+        unit_of_measurement: "%"
+        icon: mdi:approximate-equal
+        variables:
+          station_entity: sensor.wind_gust_filtered
+          forecast_entity: sensor.openweathermap_wind_gust_speed
+        state: >-
+          {% set v = states(forecast_entity) | float(0) %}
+          {% set f = v * 3.6 if state_attr(forecast_entity, 'unit_of_measurement') == 'm/s' else v %}
+          {% set s = states(station_entity) | float(0) * 3.6 %}
+          {{ (100 * s / f) | round(1) if f > 0 else none }}
+        attributes:
+          station_kmh: "{{ (states(station_entity) | float(0) * 3.6) | round(1) }}"
+          forecast_kmh: >-
+            {% set v = states(forecast_entity) | float(0) %}
+            {{ (v * 3.6 if state_attr(forecast_entity, 'unit_of_measurement') == 'm/s' else v) | round(1) }}
+          wind_direction: "{{ states('sensor.wind_direction_filtered') | float(0) | round(0) }}"
+          compass_direction: "{{ states('sensor.wind_compass_direction') }}"
+        availability: >-
+          {% set v = states(forecast_entity) | float(0) %}
+          {% set f = v * 3.6 if state_attr(forecast_entity, 'unit_of_measurement') == 'm/s' else v %}
+          {{ has_value(station_entity) and has_value(forecast_entity) and f > 0 }}
       - name: "Wind Direction Filtered"
         unique_id: "bc1a58b7-29b5-4100-9962-d1c99dbfe31a"
         unit_of_measurement: "°"

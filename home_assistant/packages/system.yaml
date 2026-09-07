@@ -241,13 +241,13 @@ template:
           timestamp: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"
           # no timestamp prefix: the logbook card renders its own date line, and
           # the timestamp is kept as an attribute for anything that needs it
-          full_message: "{{ notification_title }}\n{{ notification_message }} → {{ notification_target }}"
+          full_message: "{{ notification_title }}: {{ notification_message }} → {{ notification_target }}"
           # the state caps at 255 characters, so only the message is truncated:
           # truncating full_message as a whole would eat the target off the end,
           # which is the useful part. 254 rather than 255 leaves room for the
           # marker the state may append below
           short_message: >-
-            {%- set head = notification_title ~ '\n' -%}
+            {%- set head = notification_title ~ ': ' -%}
             {%- set tail = ' → ' ~ notification_target -%}
             {%- set budget = [254 - (head ~ tail) | length, 1] | max -%}
             {{ (head ~ (notification_message | truncate(budget, True, '…', 0)) ~ tail)

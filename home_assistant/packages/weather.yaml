@@ -1467,10 +1467,13 @@ automation:
           # a steady breeze. Scanning the whole of what's left of today doesn't fix that either: the
           # windiest hour often lands an hour or two after this notification, where it says nothing the
           # measured "right now" reading above hasn't already. Scan noon to sunset instead - the part of
-          # the day worth planning around - and keep the strongest hour in that window, plus the next
-          # forecast hour as a baseline, so the clause can say where the afternoon ends up and whether it
-          # gets there by building or easing. Speed stays none once the window has passed (a late
-          # wake-up, or sunset already behind us), and the clause is then dropped rather than guessed at.
+          # the day worth planning around - and keep the strongest hour in that window, so the clause can
+          # say where the afternoon ends up. It says only that, and never how it gets there: a trend verb
+          # would be read against the measured speed printed a clause earlier, and the two aren't
+          # comparable - the station sits sheltered and reads well under the forecast for sustained wind,
+          # so a flat forecast day next to a 3 km/h reading printed as "holding at 12 km/h". Speed stays
+          # none once the window has passed (a late wake-up, or sunset already behind us), and the clause
+          # is then dropped rather than guessed at.
           afternoon_wind: >-
             {# next_setting rolls to tomorrow once today's sunset is behind us, which would otherwise
                stretch the window across midnight - so a sunset that isn't today's means today's
@@ -1480,25 +1483,19 @@ automation:
             {% set sunset = next_setting | as_datetime | as_local if next_setting else none %}
             {% set in_window = sunset is not none and sunset.date() == now().date() %}
             {% set start = now().replace(hour=12, minute=0, second=0, microsecond=0) %}
-            {% set ns = namespace(speed=none, bearing=0, baseline=none) %}
+            {% set ns = namespace(speed=none, bearing=0) %}
             {% for f in hourly['weather.openweathermap']['forecast'] %}
               {% set dt = f.datetime | as_datetime | as_local %}
-              {# float(none) rather than float(0) so an hour reporting no wind at all is skipped
-                 outright: defaulted to zero it would silently become the baseline, and every
-                 afternoon would then read as building #}
+              {# float(none) rather than float(0) so an hour the forecast reports no wind for is
+                 skipped outright rather than read as a genuine dead calm #}
               {% set speed = f.wind_speed | float(none) %}
-              {% if speed is not none %}
-                {% if ns.baseline is none and dt >= now() %}
-                  {% set ns.baseline = speed %}
-                {% endif %}
-                {% if in_window and dt >= start and dt >= now() and dt <= sunset
-                      and (ns.speed is none or speed > ns.speed) %}
-                  {% set ns.speed = speed %}
-                  {% set ns.bearing = f.wind_bearing | float(0) %}
-                {% endif %}
+              {% if speed is not none and in_window and dt >= start and dt >= now() and dt <= sunset
+                    and (ns.speed is none or speed > ns.speed) %}
+                {% set ns.speed = speed %}
+                {% set ns.bearing = f.wind_bearing | float(0) %}
               {% endif %}
             {% endfor %}
-            {{ {'speed': ns.speed, 'bearing': ns.bearing, 'baseline': ns.baseline} }}
+            {{ {'speed': ns.speed, 'bearing': ns.bearing} }}
           afternoon_wind_state: >-
             {% from 'environment.jinja' import beaufort_scale %}
             {{ beaufort_scale(afternoon_wind.speed | float(0)) }}
@@ -1577,31 +1574,16 @@ automation:
                "no news" would be indistinguishable from a missing forecast, and knowing the afternoon
                stays light is itself worth confirming #}
             {% if afternoon_wind.speed is not none %}
-              {# the trend word compares forecast against forecast - the afternoon peak against the next
-                 forecast hour - never against the measured reading in the wind clause above: the station
-                 sits sheltered and reads well under the forecast for sustained wind, so that comparison
-                 would call a flat day a build. Under both a 5 km/h and a 25% change the shape isn't
-                 worth naming and it reads as holding; with no baseline hour at all the verb is dropped
-                 rather than guessed at #}
-              {% set base = afternoon_wind.baseline %}
-              {% if base is none %}
-                {% set trend = '' %}
-              {% elif afternoon_wind.speed - base >= 5 and afternoon_wind.speed >= base * 1.25 %}
-                {% set trend = 'Building to' %}
-              {% elif base - afternoon_wind.speed >= 5 and afternoon_wind.speed <= base * 0.8 %}
-                {% set trend = 'Easing to' %}
-              {% else %}
-                {% set trend = 'Holding at' %}
-              {% endif %}
               {# mirrors the now clause above, where a direction is meaningless for calm. The phrase is
-                 lowercased here because the trend verb takes the front of the sentence #}
+                 lowercased here because the article takes the front of the sentence #}
               {% if afternoon_wind_state == 'calm' %}
                 {% set wind_later_clause = 'Calm this afternoon.' %}
               {% else %}
                 {% set descriptor = (wind_phrases[afternoon_wind_state] | lower)
                                     ~ (' from the ' ~ afternoon_wind_dir if afternoon_wind_dir else '')
                                     ~ ' (' ~ afternoon_wind_speed ~ ')' %}
-                {% set wind_later_clause = (trend ~ ' a ' if trend else 'A ') ~ descriptor ~ ' this afternoon.' %}
+                {# 'Extreme storm' is the one phrase in the table that opens on a vowel #}
+                {% set wind_later_clause = ('An ' if descriptor[0] in 'aeiou' else 'A ') ~ descriptor ~ ' this afternoon.' %}
               {% endif %}
               {% set later_extras = later_extras + [wind_later_clause] %}
             {% endif %}

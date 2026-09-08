@@ -1753,14 +1753,25 @@ automation:
         entity_id: binary_sensor.anybody_home
         to: "on"
       - platform: state
-        entity_id: binary_sensor.home_zone_019_music_room_door
+        entity_id:
+          - binary_sensor.home_zone_019_music_room_door
+          - binary_sensor.home_zone_020_braai_room_door
         to: "on"
-    condition:
-      - condition: state
-        entity_id: binary_sensor.home_zone_019_music_room_door
-        state: "on"
         for:
-          minutes: 5
+          minutes: 2
+    condition:
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: binary_sensor.home_zone_019_music_room_door
+            state: "on"
+            for:
+              minutes: 2
+          - condition: state
+            entity_id: binary_sensor.home_zone_020_braai_room_door
+            state: "on"
+            for:
+              minutes: 2
       # https://community.home-assistant.io/t/time-condition-inclusive-or-exclusive/205909/26
       - condition: template
         value_template: >-
@@ -1796,6 +1807,30 @@ automation:
       # true if at least one forecast value has a precipitation value of greater or equal to 1 mm
       - condition: "{{ hourly['weather.openweathermap']['forecast'][0:5] | map(attribute='precipitation') | select('ge', 1) | list | length == 0 }}"
       - service: switch.turn_on
+        target:
+          entity_id: switch.bug_zapper
+
+  - alias: "Switch Off Bug Zapper When The Doors Are Closed"
+    id: "08dbbbaa-5708-4808-8441-57ddc69bd9a3"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.home_zone_019_music_room_door
+          - binary_sensor.home_zone_020_braai_room_door
+        to: "off"
+    condition:
+      - condition: state
+        entity_id: switch.bug_zapper
+        state: "on"
+      - condition: state
+        entity_id: binary_sensor.home_zone_019_music_room_door
+        state: "off"
+      - condition: state
+        entity_id: binary_sensor.home_zone_020_braai_room_door
+        state: "off"
+    action:
+      - service: switch.turn_off
         target:
           entity_id: switch.bug_zapper
 

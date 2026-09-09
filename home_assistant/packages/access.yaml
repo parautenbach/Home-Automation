@@ -91,7 +91,9 @@ template:
         icon: >-
           {%- from 'security.jinja' import get_cover_icon -%}
           {{ get_cover_icon('binary_sensor.main_gate_gate_status', 'binary_sensor.main_gate_alert', 'mdi:gate') }}
-        availability: "{{ not is_state('binary_sensor.main_gate_gate_status', 'unavailable') }}"
+        # has_value, not just a check for unavailable: at start-up the esphome sensor may not
+        # exist yet, and an unknown source state would otherwise render this cover as closed
+        availability: "{{ has_value('binary_sensor.main_gate_gate_status') }}"
   - cover:
       - name: "Garage Doors LHS"
         device_class: garage
@@ -118,7 +120,9 @@ template:
         icon: >-
           {%- from 'security.jinja' import get_cover_icon -%}
           {{ get_cover_icon('binary_sensor.garage_doors_lhs_status', 'binary_sensor.garage_doors_lhs_alert', 'mdi:garage') }}
-        availability: "{{ not is_state('binary_sensor.garage_doors_lhs_status', 'unavailable') }}"
+        # has_value, not just a check for unavailable: at start-up the esphome sensor may not
+        # exist yet, and an unknown source state would otherwise render this cover as closed
+        availability: "{{ has_value('binary_sensor.garage_doors_lhs_status') }}"
   - cover:
       - name: "Garage Doors RHS"
         device_class: garage
@@ -145,7 +149,9 @@ template:
         icon: >-
           {%- from 'security.jinja' import get_cover_icon -%}
           {{ get_cover_icon('binary_sensor.garage_doors_rhs_status', 'binary_sensor.garage_doors_rhs_alert', 'mdi:garage') }}
-        availability: "{{ not is_state('binary_sensor.garage_doors_rhs_status', 'unavailable') }}"
+        # has_value, not just a check for unavailable: at start-up the esphome sensor may not
+        # exist yet, and an unknown source state would otherwise render this cover as closed
+        availability: "{{ has_value('binary_sensor.garage_doors_rhs_status') }}"
   # example:
   # {
   #     "event_type": "amcrest",
@@ -417,6 +423,18 @@ automation:
         to: "open"
     mode: queued
     action:
+      # coming out of unavailable is the sensor reappearing, not the cover opening: after a
+      # restart or a dropped connection this would otherwise restart the timer and reset the
+      # opened time, making a cover that has been open for an hour look like it just opened.
+      # the timer says which of the two it is, because closing always cancels it:
+      #   open -> unavailable -> open: the timer is still running, so we were already timing
+      #     this open cover and the clock must be left alone.
+      #   closed -> unavailable -> open: the timer is idle, so the cover really was opened
+      #     while we couldn't see it, and now is the best estimate of when that happened.
+      - condition: template
+        value_template: >-
+          {{ (trigger.from_state is not none and trigger.from_state.state == 'closed')
+             or is_state('timer.' ~ trigger.entity_id | replace('cover.', '') ~ '_timer', 'idle') }}
       - service: timer.start
         target:
           entity_id: "timer.{{ trigger.entity_id | replace('cover.', '') }}_timer"
@@ -439,6 +457,11 @@ automation:
       - repeat:
           for_each: "{{ expand('group.covers_with_timers') | map(attribute='entity_id') | list }}"
           sequence:
+            # the sensors behind these covers report over the network, so a cover can still be
+            # unavailable at this point: wait for a real state instead of deciding on a blank one
+            - wait_template: "{{ has_value(repeat.item) }}"
+              timeout: "00:02:00"
+              continue_on_timeout: true
             # this will fire regardless of whether there's a timer running or it was disabled
             # the implication is: a disabled timer typically means we know a cover is open and that it's on purpose,
             # but we'll remind ourselves anyway, just in case
@@ -497,10 +520,16 @@ automation:
                 #       data:
                 #         duration: "00:05:00"
               else:
-                # if the cover got opened while the server was running, but closed while down
-                - service: timer.cancel
-                  target:
-                    entity_id: "timer.{{ repeat.item | replace('cover.', '') }}_timer"
+                # if the cover got opened while the server was running, but closed while down.
+                # only act on a cover that actually reports closed: one that never reported
+                # tells us nothing, so leave its restored timer running
+                - if:
+                    - condition: template
+                      value_template: "{{ is_state(repeat.item, 'closed') }}"
+                  then:
+                    - service: timer.cancel
+                      target:
+                        entity_id: "timer.{{ repeat.item | replace('cover.', '') }}_timer"
 
   - alias: "Cover Left Open Alert"
     id: "26bf6fd5-1caf-4c21-ac29-8cd7985b2de7"

@@ -97,6 +97,12 @@ sensor:
   # sampling_size must exceed the number of samples in the window or max_age is never
   # reached: 10 minutes at 8.8s is ~68 samples, so 200 leaves headroom if the WS90 ever
   # reports faster.
+  #
+  # keep_last_sample is what stops dead calm from reading as a fault. The station only emits a
+  # state change when the value changes, so a steady 0.0 adds no samples; on 2026-09-08 six calm
+  # spells emptied the 10-minute window and the sensor went unknown, taking apparent temperature,
+  # Beaufort, compass direction and fog probability unavailable with it - for up to 47 minutes,
+  # and precisely in the conditions fog needs. Holding the last sample reports the calm instead.
   - platform: statistics
     name: "Wind Speed Filtered"
     entity_id: sensor.weather_station_wind_speed_sustained
@@ -104,6 +110,7 @@ sensor:
     sampling_size: 200
     max_age:
       minutes: 10
+    keep_last_sample: true
     precision: 2
 
   # a single bad sample owns this for a full 10 minutes - on 2026-09-05 one reading held
@@ -116,6 +123,7 @@ sensor:
     sampling_size: 200
     max_age:
       minutes: 10
+    keep_last_sample: true
     precision: 2
 
   - platform: filter

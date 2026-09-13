@@ -480,7 +480,6 @@ cards:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if is_state(config.entity, 'off') else 'var(--custom-color-red)' }};
-                              }
                             }
                       - type: custom:template-entity-row
                         entity: alarm_control_panel.home
@@ -492,7 +491,6 @@ cards:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if is_state(config.entity, 'disarmed') else 'var(--custom-color-red)' }};
-                              }
                             }
                       - type: custom:template-entity-row
                         entity: binary_sensor.pieter_present
@@ -504,7 +502,6 @@ cards:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if is_state(config.entity, 'on') else 'var(--custom-color-red)' }};
-                              }
                             }
                       - type: custom:template-entity-row
                         entity: sensor.time
@@ -532,7 +529,6 @@ cards:
                                 {% set in_non_workday_range = today_at('10:00:00') <= now() <= today_at('17:00:00') %}
                                 {% set conditions_met = (is_workday and in_workday_range) or (not is_workday and in_non_workday_range) %}
                                 {{ 'var(--custom-color-green)' if conditions_met else 'var(--custom-color-red)' }};
-                              }
                             }
                   - type: custom:fold-entity-row
                     head:
@@ -549,7 +545,6 @@ cards:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if states(config.entity) | float(0) >= 24.5 else 'var(--custom-color-red)' }};
-                              }
                             }
                       - type: custom:template-entity-row
                         entity: sensor.inside_thermal_perception
@@ -562,7 +557,6 @@ cards:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if states(config.entity) in ['slightly_warm', 'increasing_discomfort', 'extremely_warm', 'danger_of_heatstroke'] else 'var(--custom-color-red)' }};
-                              }
                             }
                       - type: custom:template-entity-row
                         entity: sensor.outside_thermal_perception
@@ -575,7 +569,6 @@ cards:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if not states(config.entity) in ['slightly_cool', 'comfortable'] else 'var(--custom-color-red)' }};
-                              }
                             }
                       - type: custom:template-entity-row
                         entity: sensor.outside_temperature_filtered
@@ -597,7 +590,6 @@ cards:
                                 {% set outside_temp = states('sensor.outside_temperature_filtered') | float(0) %}
                                 {% set inside_temp = states('sensor.office_temperature') | float(0) %}
                                 {{ 'var(--custom-color-green)' if outside_temp >= inside_temp + 1 else 'var(--custom-color-red)' }};
-                              }
                             }
                       # inside
                       - type: custom:template-entity-row
@@ -611,7 +603,6 @@ cards:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if states('sensor.outside_temperature_change') | float(0) >= 1.0 else 'var(--custom-color-red)' }};
-                              }
                             }
                   - type: custom:fold-entity-row
                     head:
@@ -628,7 +619,6 @@ cards:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if states(config.entity) | float(0) <= 16.0 else 'var(--custom-color-red)' }};
-                              }
                             }
                       - type: custom:template-entity-row
                         entity: sensor.inside_thermal_perception
@@ -640,8 +630,7 @@ cards:
                         uix:
                           style: |
                             .state {
-                              color: {{ 'var(--custom-color-green)' if states(config.entity) in ['cool', 'cold'] else 'var(--custom-color-red)' }};
-                              }
+                              color: {{ 'var(--custom-color-green)' if states(config.entity) in ['cool', 'cold', 'very_cold', 'freezing'] else 'var(--custom-color-red)' }};
                             }
                       - type: custom:template-entity-row
                         entity: sensor.outside_thermal_perception
@@ -654,7 +643,6 @@ cards:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if not states(config.entity) in ['comfortable', 'slightly_warm'] else 'var(--custom-color-red)' }};
-                              }
                             }
                       # - type: custom:template-entity-row
                       #   entity: sensor.outside_temperature_filtered
@@ -676,7 +664,6 @@ cards:
                       #           {% set outside_temp = states('sensor.outside_temperature_filtered') | float(0) %}
                       #           {% set inside_temp = states('sensor.office_temperature') | float(0) %}
                       #           {{ 'var(--custom-color-green)' if outside_temp <= inside_temp - 3 else 'var(--custom-color-red)' }};
-                      #         }
                       #       }
                       # inside
                       # - type: custom:template-entity-row
@@ -690,7 +677,6 @@ cards:
                       #     style: |
                       #       .state {
                       #         color: {{ 'var(--custom-color-green)' if states('sensor.outside_temperature_change') | float(0) < -1.0 else 'var(--custom-color-red)' }};
-                      #         }
                       #       }
                   - type: custom:fold-entity-row
                     head:
@@ -707,7 +693,6 @@ cards:
                           style: |
                             .state {
                               color: {{ 'var(--custom-color-green)' if is_state('binary_sensor.grid_feed', 'on') else 'var(--custom-color-red)' }};
-                              }
                             }
       - type: history-graph
         hours_to_show: 24

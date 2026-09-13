@@ -1085,7 +1085,7 @@ automation:
             {% from 'utilities.jinja' import sec_to_hour_and_min %}
             {% set seconds = (as_timestamp(now_dt) - as_timestamp(trigger.from_state.last_changed)) | int %}
             {% set after = sec_to_hour_and_min(seconds) %}
-            {% set loadshedding = states('sensor.loadshedding_start_time') | as_datetime <= now_dt <= states('sensor.loadshedding_end_time') | as_datetime %}
+            {% set loadshedding = states('sensor.loadshedding_start_time') | as_datetime <= now_dt | as_datetime <= states('sensor.loadshedding_end_time') | as_datetime %}
             {% set reason = ' due to loadshedding' if loadshedding else '' %}
             {# a dead MQTT connection (bridge off) is an immediate, certain signal - no need to
                wait out the activity window for that case. but the connection can also stay up

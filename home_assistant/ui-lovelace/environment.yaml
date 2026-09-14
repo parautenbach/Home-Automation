@@ -171,8 +171,8 @@ cards:
                 name: Rain
                 state_content:
                   - label
-                  - rain_rate_with_unit
                   - rain_24h_with_unit
+                  - rain_rate_with_unit
                 tap_action:
                   action: more-info
                   entity: sensor.rain_24h

@@ -126,6 +126,21 @@ sensor:
     keep_last_sample: true
     precision: 2
 
+  # The raw WS90 index swings 2-8 within a minute. Measured on 2026-09-15 (08:00-12:38 SAST), the UV
+  # condition changed band 98 times on it. The 75th percentile over 15 minutes changed band 7 times
+  # and still reached high; a mean never got past moderate, and a max kept the single spikes.
+  - platform: statistics
+    name: "UV Index Filtered"
+    unique_id: "71846179-aa0c-4ba7-9c39-9361bc591e04"
+    entity_id: sensor.weather_station_uv_index
+    state_characteristic: percentile
+    percentile: 75
+    sampling_size: 200
+    max_age:
+      minutes: 15
+    keep_last_sample: true
+    precision: 1
+
   - platform: filter
     name: "Wind Direction Sin Filtered"
     entity_id: sensor.wind_direction_sin
@@ -568,7 +583,7 @@ template:
         unique_id: uv_condition
         icon: mdi:sun-wireless-outline
         variables:
-          uv_entity: sensor.weather_station_uv_index
+          uv_entity: sensor.uv_index_filtered
         state: >-
           {% set uv = states(uv_entity) | float(0) %}
           {% if uv < 1 %} no_uv
@@ -1363,13 +1378,18 @@ automation:
     initial_state: true
     trigger:
       - platform: numeric_state
-        entity_id: sensor.weather_station_uv_index
-        above: 7
+        entity_id: sensor.uv_index_filtered
+        above: 5
     mode: single
     condition:
       - condition: state
         entity_id: binary_sensor.raining
         state: "off"
+      # at most once a day - last_triggered is only set when the conditions pass
+      - condition: template
+        value_template: >-
+          {{ this.attributes.last_triggered is none or
+             this.attributes.last_triggered < today_at() }}
     action:
       - service: notify.family
         data:

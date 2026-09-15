@@ -38,7 +38,7 @@ badges:
           --uix-icon-color: {{ gradient_color(state, temp_degrees_c_human_map) }};
         }
   - type: entity
-    entity: sensor.weather_station_uv_index
+    entity: sensor.uv_index_filtered
     name: UV
     icon: mdi:sun-wireless-outline
     show_icon: true
@@ -229,7 +229,7 @@ cards:
                   - index
                 tap_action:
                   action: more-info
-                  entity: sensor.weather_station_uv_index
+                  entity: sensor.uv_index_filtered
                 uix:
                   style: |
                     :host {
@@ -347,7 +347,7 @@ cards:
                     entity: sensor.uv_condition
                     attribute: label
                     name: UV Risk
-                  - entity: sensor.weather_station_uv_index
+                  - entity: sensor.uv_index_filtered
                     name: UV Index
               - type: custom:fold-entity-row
                 head:
@@ -1308,7 +1308,7 @@ cards:
         name: UV Risk
         icon: mdi:sun-wireless-outline
         entities:
-          - entity: sensor.weather_station_uv_index
+          - entity: sensor.uv_index_filtered
             name: UV Index
           - entity: sensor.nighttime_number
             color: var(--custom-color-gray)

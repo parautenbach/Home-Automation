@@ -1305,9 +1305,9 @@ automation:
     variables:
       now_time: "{{ now().time() }}"
       # ask-to-enable opens 15 min before nap start, since she's often put down early;
-      # closes 30 min after nap start. ask-to-disable opens 75 min after
+      # closes 40 min after nap start. ask-to-disable opens 75 min after
       nap_ask_enable_start: "{{ ((states('input_datetime.baby_nap_start_time') | today_at) - timedelta(minutes=15)).time() }}"
-      nap_ask_enable_end: "{{ ((states('input_datetime.baby_nap_start_time') | today_at) + timedelta(minutes=30)).time() }}"
+      nap_ask_enable_end: "{{ ((states('input_datetime.baby_nap_start_time') | today_at) + timedelta(minutes=40)).time() }}"
       nap_dim_end: "{% from 'baby.jinja' import nap_restore_start_time %}{{ (nap_restore_start_time | as_function)() }}"
       nap_end: "{{ (states('input_datetime.baby_nap_end_time') | today_at).time() }}"
       # ask-to-enable opens 15 min before bedtime start, since she's often put down early
@@ -1431,7 +1431,7 @@ automation:
       now_time: "{{ now().time() }}"
       # same ask-enable windows as "Offer To Toggle Sleep Mode"
       nap_ask_enable_start: "{{ ((states('input_datetime.baby_nap_start_time') | today_at) - timedelta(minutes=15)).time() }}"
-      nap_ask_enable_end: "{{ ((states('input_datetime.baby_nap_start_time') | today_at) + timedelta(minutes=30)).time() }}"
+      nap_ask_enable_end: "{{ ((states('input_datetime.baby_nap_start_time') | today_at) + timedelta(minutes=40)).time() }}"
       bedtime_ask_enable_start: "{{ ((states('input_datetime.baby_bedtime_start_time') | today_at) - timedelta(minutes=15)).time() }}"
       lights_out: "{{ (states('input_datetime.lights_out_time') | today_at).time() }}"
     condition:

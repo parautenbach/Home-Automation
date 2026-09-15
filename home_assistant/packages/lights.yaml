@@ -1946,6 +1946,8 @@ automation:
   - alias: "Toggle Scullery Counter Lights"
     id: "e3e98123-f5b1-4d60-87ed-4d44c51957c9"
     initial_state: true
+    # queued, not single: a quick second press shouldn't be dropped while the first run waits
+    mode: queued
     trigger:
       - platform: state
         entity_id: event.kitchen_counter_lights
@@ -1959,6 +1961,18 @@ automation:
             entity_id: light.kitchen_counter
             state: "off"
     action:
+      # the rgbw2 toggles its own output locally, but the button event can reach ha before the
+      # light's new state does – mirroring straight away would copy the pre-press state and leave
+      # the counters inverted, so wait for the kitchen light to report its change first
+      - wait_for_trigger:
+          - platform: state
+            entity_id: light.kitchen_counter
+            to:
+              - "on"
+              - "off"
+        timeout: "00:00:02"
+        # the state may already have arrived before the event; then the current state is correct
+        continue_on_timeout: true
       # mirror the state
       - service: "light.turn_{{ states('light.kitchen_counter') }}"
         target:

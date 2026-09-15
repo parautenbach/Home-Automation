@@ -215,7 +215,9 @@ cards:
             tap_action:
               haptic: light
               action: call-service
-              service: light.toggle
+              # not light.toggle: with two entities it flips each one independently, so counters
+              # that are out of sync stay out of sync – drive both to the opposite of the kitchen's state
+              service: "[[[ return entity.state === 'on' ? 'light.turn_off' : 'light.turn_on'; ]]]"
               data:
                 entity_id:
                   - light.kitchen_counter

@@ -1309,8 +1309,10 @@ automation:
     id: "aff421a7-d99a-45c2-baa5-710b11d010b9"
     initial_state: true
     trigger:
+      # covered by the morning brief
       - platform: time
         at: "06:30:00"
+        enabled: false
       - platform: time
         at: "12:00:00"
       - platform: time

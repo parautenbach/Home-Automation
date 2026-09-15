@@ -493,13 +493,15 @@ pollen:
     [[[
       return entity.attributes.label;
     ]]]
+  # the card background is the fixed risk colour in both themes, so the text is a
+  # fixed white too - the theme's background colour turns dark under Slate
   styles:
     name:
-      - color: var(--primary-background-color)
+      - color: "#ffffff"
     icon:
-      - color: var(--primary-background-color)
+      - color: "#ffffff"
     label:
-      - color: var(--primary-background-color)
+      - color: "#ffffff"
     grid:
       - grid-template-areas: '"n" "i" "l"'
     card:

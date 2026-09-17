@@ -424,13 +424,16 @@ automation:
     mode: queued
     action:
       # coming out of unavailable is the sensor reappearing, not the cover opening: after a
-      # restart or a dropped connection this would otherwise restart the timer and reset the
-      # opened time, making a cover that has been open for an hour look like it just opened.
+      # dropped connection this would otherwise restart the timer and reset the opened time,
+      # making a cover that has been open for an hour look like it just opened.
       # the timer says which of the two it is, because closing always cancels it:
       #   open -> unavailable -> open: the timer is still running, so we were already timing
       #     this open cover and the clock must be left alone.
       #   closed -> unavailable -> open: the timer is idle, so the cover really was opened
       #     while we couldn't see it, and now is the best estimate of when that happened.
+      # this does not cover a restart: triggers are only attached once ha has started, so a
+      # cover that reports again during startup is never seen here. a cover opened while ha
+      # was down therefore gets no timer, only the startup notification, which is enough.
       - condition: template
         value_template: >-
           {{ (trigger.from_state is not none and trigger.from_state.state == 'closed')

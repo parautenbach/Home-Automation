@@ -1473,25 +1473,57 @@ automation:
           uv_label: "{{ state_attr('sensor.uv_condition', 'label') }}"
           pressure_state: "{{ states('sensor.air_pressure_trend') }}"
           pressure_label: "{{ state_attr('sensor.air_pressure_trend', 'label') }}"
+          # rain right now is the station's call, not the forecast's. recently raining rather than
+          # raining, as the piezo flickers off in the gaps between drizzle drops; the rate condition
+          # grades how heavy, and a gap in the drizzle reads as light
+          raining_now: "{{ is_state('binary_sensor.recently_raining', 'on') }}"
+          rain_now_state: "{{ states('sensor.rain_rate_condition') }}"
           # later (forecast, via the get_forecasts call above rather than any derived weather entity)
-          rain_today_mm: "{{ states('sensor.weather_forecast_precipitation_today') | float(0) | round(1) }}"
-          # the sensor's onset is the first wet hour anywhere in the next 36h, so when it lands today
-          # it already is this brief's rain start - but when it lands tomorrow there is no rain left
-          # today at all, and taking it regardless is what once printed a tomorrow-afternoon start
-          # next to today's 0.0 mm. Keep it only if it's today; otherwise the clause below falls
-          # through to the amount. The sensor's own on/off state gates on a 12-36h window, which is
-          # the Rain Expected notification's question rather than this brief's, so it isn't read here.
-          rain_onset_today: >-
-            {# onset is none whenever the forecast holds no wet hour at all, and
-               as_datetime raises on that rather than returning none - so test the
-               attribute before parsing it, not after #}
-            {% set onset = state_attr('binary_sensor.weather_forecast_precipitation_soon', 'onset') %}
-            {% if onset %}
-              {% set onset = onset | as_datetime | as_local %}
-              {{ onset.strftime('%H:%M') if onset.date() == now().date() else '' }}
-            {% endif %}
+          # what's left of today, from the hourly forecast. the daily forecast's condition and
+          # precipitation cover midnight to midnight, so rain that fell before this brief went out
+          # still counts there - a wet night ahead of a dry day once printed "Heavy rain later
+          # (14.6 mm)" when 0.3 mm remained. the window opens at the next hour: the hour in
+          # progress is what the station is measuring, and the forecast has no say over it. the
+          # onset is found here too rather than read from
+          # binary_sensor.weather_forecast_precipitation_soon, whose value can be an hour old.
+          #  - condition: the wettest condition still to come, ranked so the word says how
+          #    heavy (OWM's pouring/rainy split is taken to follow the same rain rate conventions
+          #    as sensor.rain_rate_condition); with no wet hour left, the most common condition
+          #  - mm: rain still to come today
+          #  - onset: HH:MM of the first wet hour, or '' if none
+          rest_of_today: >-
+            {% set wet_rank = ['snowy', 'rainy', 'snowy-rainy', 'pouring', 'hail', 'lightning-rainy'] %}
+            {% set ns = namespace(mm=0, wet=[], wettest=none, conditions=[]) %}
+            {% for f in hourly['weather.openweathermap']['forecast'] %}
+              {% set dt = f.datetime | as_datetime | as_local %}
+              {% if dt.date() == now().date() and dt > now() %}
+                {% set ns.mm = ns.mm + f.precipitation | float(0) %}
+                {% set ns.conditions = ns.conditions + [f.condition] %}
+                {% if f.condition in wet_rank %}
+                  {% set ns.wet = ns.wet + [dt] %}
+                  {% if ns.wettest is none or wet_rank.index(f.condition) > wet_rank.index(ns.wettest) %}
+                    {% set ns.wettest = f.condition %}
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+            {# ties go to the earlier condition, as unique keeps first occurrences in order #}
+            {% set common = namespace(condition=none, count=0) %}
+            {% for c in ns.conditions | unique %}
+              {% set count = ns.conditions | select('eq', c) | list | count %}
+              {% if count > common.count %}
+                {% set common.condition = c %}
+                {% set common.count = count %}
+              {% endif %}
+            {% endfor %}
+            {# empty only if the brief runs in the last hour of the day - the daily condition is
+               no stand-in, as it's the very midnight-to-midnight summary avoided above #}
+            {{ {
+              'condition': ns.wettest or common.condition or '',
+              'mm': ns.mm | round(1),
+              'onset': ns.wet[0].strftime('%H:%M') if ns.wet else ''
+            } }}
           today_high: "{{ daily['weather.openweathermap']['forecast'][0]['temperature'] | int(0) }}"
-          today_condition: "{{ daily['weather.openweathermap']['forecast'][0]['condition'] }}"
           # the daily forecast carries one representative wind for the whole day, which hides the shape
           # of it - a southeaster that builds through the afternoon and drops at sunset reads the same as
           # a steady breeze. Scanning the whole of what's left of today doesn't fix that either: the
@@ -1545,7 +1577,7 @@ automation:
               'pouring': 'heavy rain', 'rainy': 'rain', 'snowy': 'snow', 'snowy-rainy': 'sleet',
               'sunny': 'sunny', 'windy': 'windy', 'windy-variant': 'windy', 'exceptional': 'unusual weather'
             } %}
-            {% set later_condition = condition_words.get(today_condition, today_condition | replace('-', ' ')) %}
+            {% set later_condition = condition_words.get(rest_of_today.condition, rest_of_today.condition | replace('-', ' ')) %}
             {# how it feels reads as one sentence about the air, not two readings bolted together:
                the humidity word sits alongside the temperature word rather than trailing it with a
                percentage, which the dashboards carry anyway. The word is dropped entirely if the
@@ -1558,26 +1590,32 @@ automation:
                rather than displacing it, while fog that has only just crossed the bar drops to the
                trailing extras below. Under the bar nothing is said at all - that band is the
                merely-dewy one a calm night produces, where a fog warning is noise #}
-            {% if fog_chance == 'present' %}
+            {# rain qualifies the opening sentence the same way; the fog sensor is gated off while
+               it's recently been raining, so the two never meet #}
+            {% if raining_now %}
+              {% set now_clause = feel_clause ~ ' now, with ' ~ rain_now_state | replace('no_rain', 'light') ~ ' rain.' %}
+            {% elif fog_chance == 'present' %}
               {% set now_clause = feel_clause ~ ' now, with fog.' %}
             {% else %}
               {% set now_clause = feel_clause ~ ' now.' %}
             {% endif %}
-            {% if rain_onset_today %}
-              {% set later_clause = 'Rain expected around ' ~ rain_onset_today ~ ' (' ~ rain_today_mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
-            {% elif rain_today_mm > 0 %}
-              {# rain in today's daily total but no wet hour still to come - either it already fell,
-                 or it's too thin for the forecast to call any hour wet - so it reads as an
-                 amount, not a start. Conditions whose own word already carries precipitation
-                 take the amount directly ("Rain later (0.9 mm)"); anything else needs the rain
-                 said out loud, since "Partly cloudy" alone wouldn't imply it #}
-              {% if today_condition in ['hail', 'lightning-rainy', 'pouring', 'rainy', 'snowy', 'snowy-rainy'] %}
-                {% set later_clause = (later_condition | capitalize) ~ ' later (' ~ rain_today_mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
-              {% else %}
-                {% set later_clause = (later_condition | capitalize) ~ ' with some rain (' ~ rain_today_mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
-              {% endif %}
-            {% else %}
+            {# the condition is only wet when a wet hour is still to come, so the condition word
+               carries how heavy it is ("Heavy rain expected around 09:00") #}
+            {# rain the station is measuring now that the forecast carries into the next hour
+               continues rather than starts #}
+            {% set next_hour = (now() + timedelta(hours=1)).strftime('%H:00') %}
+            {% if raining_now and rest_of_today.onset == next_hour %}
+              {% set later_clause = (later_condition | capitalize) ~ ' expected to continue (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
+            {% elif rest_of_today.onset %}
+              {% set later_clause = (later_condition | capitalize) ~ ' expected around ' ~ rest_of_today.onset ~ ' (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
+            {% elif rest_of_today.mm > 0 %}
+              {# rain still to come but too thin for the forecast to call any hour wet, so
+                 "Partly cloudy" alone wouldn't imply it - it needs saying out loud #}
+              {% set later_clause = (later_condition | capitalize) ~ ' with some rain (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
+            {% elif rest_of_today.condition %}
               {% set later_clause = (later_condition | capitalize) ~ ' later, high of ' ~ today_high ~ '°C.' %}
+            {% else %}
+              {% set later_clause = 'High of ' ~ today_high ~ '°C.' %}
             {% endif %}
             {% if wind_state == 'calm' %}
               {% set wind_now_clause = 'Calm right now.' %}

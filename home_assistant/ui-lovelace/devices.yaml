@@ -65,10 +65,6 @@ cards:
           name: Pieter HomeKit Presence
         - entity: input_boolean.rouve_present
           name: Rouvé HomeKit Presence
-        - entity: input_boolean.inverter_temperature_notification_governor
-          name: Inverter Temperature Notification Governor
-        - entity: input_boolean.inverter_battery_temperature_notification_governor
-          name: Inverter Battery Temperature Notification Governor
         - entity: input_boolean.ac_maintenance_mode
           name: AC Maintenance Mode
     - type: glance
@@ -785,3 +781,13 @@ cards:
           average: true
           state: true
           labels_secondary: false
+      # the flags the hot/recovered notifications run off: read-only, hence here
+      # rather than in Controls above
+      - type: entities
+        show_header_toggle: false
+        state_color: true
+        entities:
+          - entity: binary_sensor.inverter_temperature_high
+            name: Inverter Hot
+          - entity: binary_sensor.inverter_battery_temperature_high
+            name: Inverter Battery Hot

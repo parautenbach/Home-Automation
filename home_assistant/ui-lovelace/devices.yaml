@@ -788,6 +788,6 @@ cards:
         state_color: true
         entities:
           - entity: binary_sensor.inverter_temperature_high
-            name: Inverter Hot
+            name: Inverter Temperature
           - entity: binary_sensor.inverter_battery_temperature_high
-            name: Inverter Battery Hot
+            name: Inverter Battery Temperature

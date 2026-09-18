@@ -68,6 +68,22 @@ sensor:
     system: linux
     scan_interval: 60
 
+rest:
+  # Clickatell One API (platform) balance; the legacy api.clickatell.com/rest endpoint rejects platform API keys
+  # https://docs.clickatell.com/channels/sms-channels/sms-api-reference/
+  - resource: "https://platform.clickatell.com/v1/balance"
+    scan_interval: 3600
+    headers:
+      Accept: "application/json"
+      Authorization: !secret clickatell_api_key
+    sensor:
+      - name: "Clickatell Balance"
+        unique_id: "d5fd6c62-c6e2-401a-a570-d0d3df8920c0"
+        icon: mdi:message-text
+        value_template: "{{ value_json.balance | round(2) }}"
+        unit_of_measurement: "ZAR"
+        device_class: monetary
+
 command_line:
   - sensor:
       name: server_cpu_temp
@@ -527,6 +543,24 @@ automation:
           data:
             group: "system-disk-space"
             url: homeassistant://navigate/lovelace-system/devices
+
+  - alias: "Notify When Clickatell Balance Is Low"
+    id: "09c6cd35-3d4b-4931-bef4-20eaa882a5b1"
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.clickatell_balance
+        below: 10
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "⚠️ System"
+          message: "Clickatell SMS balance is low: R{{ '%.2f' | format(states('sensor.clickatell_balance') | float) }}."
+          data:
+            group: "system-clickatell-balance"
+            actions:
+              - action: "URI"
+                title: "Top up"
+                uri: "https://app.clickatell.com"
 
   - alias: "Notify When Server Started After Being Shut Down Automatically"
     id: "cc787a25-6e55-4388-ab3c-68e9716bce50"

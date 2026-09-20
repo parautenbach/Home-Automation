@@ -16,7 +16,7 @@ badges:
           --uix-icon-color: {{ gradient_color(state, temp_degrees_c_human_map) }};
         }
   - type: entity
-    entity: sensor.outside_temperature
+    entity: sensor.outside_temperature_filtered
     name: Outside
     icon: mdi:weather-partly-cloudy
     show_icon: true
@@ -282,9 +282,9 @@ cards:
                   state-badge {
                     margin: 0;
                   }
-          - entity: sensor.inside_thermal_perception
-            name: Inside
-            icon: mdi:home-thermometer-outline
+          - entity: sensor.bedroom_thermal_perception
+            name: Bedroom
+            icon: mdi:bed-outline
             uix: &card_mod_comfort_style
               # #0484d9: blue
               # #3498db: light blue
@@ -350,7 +350,7 @@ cards:
                   state-badge {
                     margin: 0;
                   }
-          - entity: sensor.outside_temperature
+          - entity: sensor.outside_temperature_filtered
             name: "Outside"
             icon: mdi:thermometer
             uix: *card_mod_temp_style
@@ -382,7 +382,7 @@ cards:
               - entity: sensor.bedroom_ht_temperature
                 name: Bedroom
                 color: var(--custom-color-magenta)
-              - entity: sensor.outside_temperature
+              - entity: sensor.outside_temperature_filtered
                 name: Outside
                 color: var(--custom-color-red)
               - entity: sensor.nighttime_number

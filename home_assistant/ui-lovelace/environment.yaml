@@ -253,8 +253,14 @@ cards:
                     attribute: thermal_comfort_label
                   - entity: sensor.weather_station_humidity
                     name: Humidity
+                  - type: attribute
+                    entity: sensor.humidity_perception
+                    name: Humidity Perception
+                    attribute: label
                   - entity: sensor.weather_station_dew_point
                     name: Dew Point
+                  - entity: sensor.dew_point_spread
+                    name: Dew Point Spread
                   - type: attribute
                     entity: binary_sensor.fog_conditions
                     name: Fog Conditions

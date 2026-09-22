@@ -1316,27 +1316,29 @@ automation:
                       entity_id: light.rouve_bedside
                     data:
                       profile: low_shelly_duo
-              # - if:
-              #     - condition: state
-              #       entity_id: input_boolean.baby_sleep_mode
-              #       state: "off"
-              #     - condition: or
-              #       conditions:
-              #         - condition: state
-              #           entity_id:
-              #             - light.hallway
-              #           state: "off"
-              #         - condition: numeric_state
-              #           entity_id: light.hallway
-              #           attribute: brightness
-              #           below: 13  # 13/255 ~= 5%
-              #   then:
-              - service: light.turn_on
-                target:
-                  entity_id:
-                    - light.hallway
-                data:
-                  profile: low_tp_link_rgb
+              # the hallway reaches the nursery, so it stays off entirely while she's asleep:
+              # "Hallway Light On At Child Wake-up Time" is what turns it on
+              - if:
+                  - condition: state
+                    entity_id: input_boolean.baby_sleep_mode
+                    state: "off"
+                  - condition: or
+                    conditions:
+                      - condition: state
+                        entity_id:
+                          - light.hallway
+                        state: "off"
+                      - condition: numeric_state
+                        entity_id: light.hallway
+                        attribute: brightness
+                        below: 13  # 13/255 ~= 5%
+                then:
+                  - service: light.turn_on
+                    target:
+                      entity_id:
+                        - light.hallway
+                    data:
+                      profile: low_tp_link_rgb
               # - if:
               #     - condition: state
               #       entity_id: input_boolean.baby_sleep_mode
@@ -1418,8 +1420,8 @@ automation:
                   entity_id: light.foyer
                 data:
                   profile: normal_tp_link_rgb
-              # as above: dim until her wake-up time. this branch has no low turn-on of its
-              # own, so the else is what keeps the hallway lit at all here
+              # as above. deliberately no else: while she's asleep the hallway is left
+              # as it is rather than switched on dim
               - if:
                   - condition: state
                     entity_id: input_boolean.baby_sleep_mode
@@ -1430,12 +1432,40 @@ automation:
                       entity_id: light.hallway
                     data:
                       profile: normal_tp_link_rgb
-                else:
-                  - service: light.turn_on
-                    target:
-                      entity_id: light.hallway
-                    data:
-                      profile: low_tp_link_rgb
+
+  # the morning routine leaves the hallway off while she's asleep, because at normal
+  # brightness it reaches the nursery through her door. this is what turns it on instead.
+  # the other two triggers are for a morning she's up before her time: sleep mode clearing is
+  # the reliable signal, her bedlamp coming on the early one, since sleep mode only follows it
+  # two minutes later and that's two minutes of dark hallway on the way to her room
+  - alias: "Hallway Light On At Child Wake-up Time"
+    id: "510b85e2-2d20-4401-9087-33903943854f"
+    initial_state: true
+    trigger:
+      - platform: time
+        at: input_datetime.baby_wake_up_time
+      - platform: state
+        entity_id: input_boolean.baby_sleep_mode
+        to: "off"
+      - platform: state
+        entity_id: light.bedroom_bedlamp
+        to: "on"
+    condition:
+      # from when we're up until she's due up, so the two state triggers only count in the
+      # morning: her lamp comes on at bedtime and during night settles too. the time trigger
+      # lands on the closing edge, hence inclusive
+      # this assumes our wake-up time is before hers
+      - condition: template
+        value_template: >-
+          {% set our_wake_up_time = states('input_datetime.wake_up_time') | today_at %}
+          {% set baby_wake_up_time = states('input_datetime.baby_wake_up_time') | today_at %}
+          {{ our_wake_up_time <= now() <= baby_wake_up_time }}
+    action:
+      - service: light.turn_on
+        target:
+          entity_id: light.hallway
+        data:
+          profile: normal_tp_link_rgb
 
   - alias: "Wake-up Lights"
     id: "ca60418c-1870-4c55-845d-4d5eba9aea52"

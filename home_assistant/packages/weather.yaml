@@ -1022,6 +1022,24 @@ template:
           {% else %}
             {{ (t - dp) | round(1) }}
           {% endif %}
+  - trigger:
+      - trigger: time
+        at: "14:00:00"
+    sensor:
+      - name: "Afternoon Dew Point"
+        unique_id: "91be1015-de73-4ad2-8cdf-586aacf51261"
+        unit_of_measurement: "°C"
+        device_class: temperature
+        state_class: measurement
+        icon: mdi:thermometer-water
+        variables:
+          dew_point_entity: sensor.weather_station_dew_point
+        # reference for the overnight dew point trend: rising overnight meant fog, falling meant dew
+        # (28 Aug vs 25 Aug and 21 Sep). tracking only for now; nothing consumes this yet
+        # unavailable if the dew point is unavailable at 14:00, so yesterday's value never carries over
+        state: >-
+          {{ states(dew_point_entity) | float(none) }}
+        availability: "{{ has_value(dew_point_entity) }}"
   - sensor:
       - name: "Clear Sky Ratio"
         unique_id: "4b67a79b-b503-4ebf-a0ee-2f0773950e1c"

@@ -1293,7 +1293,7 @@ automation:
                     {{ event_body }} from {{ from_str }} until {{ to_str }}:
                   {%- endif %}
                   {%- for line in desc.split('\n') %}
-                    - {{ line }}
+                    - {{ line | trim('-') }}
                   {%- endfor %}
             # only a critical sound notification when it's not night
             - choose:

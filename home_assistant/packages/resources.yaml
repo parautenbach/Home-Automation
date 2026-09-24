@@ -1118,6 +1118,14 @@ automation:
     variables:
       # captured once here, at trigger time, and reused below for consistency
       now_dt: "{{ now() }}"
+    condition:
+      # only restore a cut we announced. a restart re-adds the grid feed as off until
+      # the first mqtt message, which triggers nothing, so the next "on" would report
+      # an outage nobody was told about, timed from the restart
+      - condition: template
+        value_template: >-
+          {{ trigger.to_state.state == 'off' or
+             as_timestamp(this.attributes.last_triggered, 0) >= as_timestamp(trigger.from_state.last_changed) }}
     mode: queued
     action:
       - service: notify.family

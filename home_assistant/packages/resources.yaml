@@ -1088,7 +1088,9 @@ alert:
     can_acknowledge: false
     title: "⚠️ System"
     message: >-
-      {% set minutes = (now() - states.binary_sensor.solarassistant_activity.last_changed).total_seconds() | multiply(1/60) | int or 1 %}
+      {# not last_changed, which a restart resets while the outage carries on #}
+      {% set last_ceased = states('sensor.solarassistant_activity_ceased_at') | as_timestamp(0) %}
+      {% set minutes = ((utcnow() | as_timestamp) - last_ceased) | multiply(1/60) | int or 1 %}
       [Test] The SolarAssistant bridge's activity has ceased {{ minutes }} min ago.
     done_message: >-
       {% set last_ceased = states('sensor.solarassistant_activity_ceased_at') | as_timestamp(0) %}
@@ -1625,7 +1627,9 @@ automation:
         data:
           title: "⚠️ System"
           message: >-
-            {% set minutes = (now() - states.binary_sensor.solarassistant_activity.last_changed).total_seconds() | multiply(1/60) | int or 1 %}
+            {# not last_changed, which a restart resets while the outage carries on #}
+            {% set last_ceased = states('input_datetime.solarassistant_activity_ceased') | as_timestamp %}
+            {% set minutes = ((now() | as_timestamp) - last_ceased) | multiply(1/60) | int or 1 %}
             The SolarAssistant bridge's activity has ceased {{ minutes }} min ago.
           data:
             group: "system-electricity"

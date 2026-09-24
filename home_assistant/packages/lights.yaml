@@ -1444,6 +1444,7 @@ automation:
     trigger:
       - platform: time
         at: input_datetime.baby_wake_up_time
+        id: wake_up_time
       - platform: state
         entity_id: input_boolean.baby_sleep_mode
         to: "off"
@@ -1453,13 +1454,17 @@ automation:
     condition:
       # from when we're up until she's due up, so the two state triggers only count in the
       # morning: her lamp comes on at bedtime and during night settles too. the time trigger
-      # lands on the closing edge, hence inclusive
+      # bypasses the window: it fires a few ms past the closing edge, which now() already exceeds
       # this assumes our wake-up time is before hers
-      - condition: template
-        value_template: >-
-          {% set our_wake_up_time = states('input_datetime.wake_up_time') | today_at %}
-          {% set baby_wake_up_time = states('input_datetime.baby_wake_up_time') | today_at %}
-          {{ our_wake_up_time <= now() <= baby_wake_up_time }}
+      - condition: or
+        conditions:
+          - condition: trigger
+            id: wake_up_time
+          - condition: template
+            value_template: >-
+              {% set our_wake_up_time = states('input_datetime.wake_up_time') | today_at %}
+              {% set baby_wake_up_time = states('input_datetime.baby_wake_up_time') | today_at %}
+              {{ our_wake_up_time <= now() <= baby_wake_up_time }}
     action:
       - service: light.turn_on
         target:

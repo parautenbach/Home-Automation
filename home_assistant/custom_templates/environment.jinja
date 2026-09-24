@@ -288,30 +288,75 @@ Display label for a wind speed's Beaufort scale tier.
 Rain outlook from an hourly forecast.
 
 :param forecast: hourly forecast list from weather.get_forecasts
-:returns: dict with 'hours' (count of rainy hours in the 12-36h planning
-          window) and 'onset' (datetime string of the first rainy hour from
-          now, or none).
+:returns: dict with 'hours' (count of likely wet hours in the planning window,
+          from 3h out to mid-morning tomorrow), 'onset' (datetime string
+          of the start of the first likely wet spell from now, or none), 'mm'
+          (rain from onset over the next 24h, or as much of it as the forecast
+          reaches) and 'mm_hours' (how many hours that is). both none under 12h.
 
-'hours' answers whether to notify, over the plan-ahead window. 'onset'
-answers when it starts, and so deliberately looks from now rather than from
-the window start - otherwise the 12h edge clips the leading edge of an event
-already underway and we name a time mid-band.
+the window runs from 3h out to 10:00 tomorrow: far enough ahead to act on,
+and it ends once the morning brief can take over. rain later tomorrow is left
+to tomorrow's own run, which will call it today.
+
+an hour has to be both wet and likely to count, as OWM calls an hour rainy
+for a trace.
+
+'onset' looks from now rather than from the window start, so the leading edge
+cannot clip a spell already under way. it is the first wet hour of the spell
+containing the first likely hour, not the first wet hour anywhere: rain firms
+up over a few hours, so the hour that clears the threshold sits mid-band, and
+a lone shower before it is a different event.
 #}
 {%- macro rain_outlook(forecast, returns) -%}
   {%- set wet = ['rainy', 'pouring', 'lightning-rainy', 'hail'] -%}
-  {%- set start = utcnow() + timedelta(hours=12) -%}
-  {%- set end = start + timedelta(hours=24) -%}
-  {%- set hours = forecast
-    | selectattr('datetime', '>=', start.isoformat())
-    | selectattr('datetime', '<',  end.isoformat())
-    | selectattr('condition', 'in', wet)
-    | list -%}
-  {%- set onset_hours = forecast
-    | selectattr('datetime', '>=', utcnow().isoformat())
-    | selectattr('datetime', '<',  end.isoformat())
-    | selectattr('condition', 'in', wet)
-    | list -%}
+  {%- set likely = 50 -%}
+  {%- set now_utc = utcnow() -%}
+  {%- set start = now_utc + timedelta(hours=3) -%}
+  {%- set end = today_at('10:00') + timedelta(days=1) -%}
+  {# one pass, so the count and the onset search share one idea of a wet hour.
+     datetimes are parsed rather than compared as strings: the forecast's
+     offset is not ours to assume #}
+  {%- set ns = namespace(hours=0, onset=none, spell=none, mm=0) -%}
+  {%- for f in forecast -%}
+    {%- set dt = f.datetime | as_datetime -%}
+    {%- set is_wet = f.condition in wet -%}
+    {%- set is_likely = is_wet and f.precipitation_probability | float(0) >= likely -%}
+    {%- if is_likely and dt >= start and dt < end -%}
+      {%- set ns.hours = ns.hours + 1 -%}
+    {%- endif -%}
+    {%- if dt >= now_utc and dt < end -%}
+      {%- if not is_wet -%}
+        {%- set ns.spell = none -%}
+      {%- else -%}
+        {%- if ns.spell is none -%}
+          {%- set ns.spell = f.datetime -%}
+        {%- endif -%}
+        {%- if is_likely and ns.onset is none -%}
+          {%- set ns.onset = ns.spell -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
 
-  {%- do returns({'hours': hours | count,
-                  'onset': onset_hours[0].datetime if onset_hours else none}) -%}
+  {# total rain over the 24h from onset, or as far as the forecast reaches,
+     with the hours it covers. totals from about 12h up hold steady between
+     forecasts where single hours do not, so 12h is the floor #}
+  {%- set onset_dt = ns.onset | as_datetime if ns.onset else none -%}
+  {%- set tail = ((forecast[-1].datetime | as_datetime - onset_dt).total_seconds() / 3600)
+                 | round | int + 1 if onset_dt else 0 -%}
+  {%- set mm_hours = [24, tail] | min -%}
+  {%- if mm_hours >= 12 -%}
+    {%- set stop = onset_dt + timedelta(hours=mm_hours) -%}
+    {%- for f in forecast -%}
+      {%- set dt = f.datetime | as_datetime -%}
+      {%- if dt >= onset_dt and dt < stop -%}
+        {%- set ns.mm = ns.mm + (f.precipitation | float(0)) -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+
+  {%- do returns({'hours': ns.hours,
+                  'onset': ns.onset,
+                  'mm': ns.mm | round(1) if mm_hours >= 12 else none,
+                  'mm_hours': mm_hours if mm_hours >= 12 else none}) -%}
 {%- endmacro -%}

@@ -24,7 +24,7 @@ illuminance:
       minutes: 5
 
 # why not just use binary_sensor.weather_forecast_precipitation_soon's last_changed?
-# because that sensor is a sliding-window sum recalculated every 5 minutes, so it can
+# because that sensor is a sliding-window sum recalculated every hour, so it can
 # flap on/off several times while the same rain event is still "coming" - last_changed
 # is not a reliable signal of "have we already told him about this"
 input_datetime:
@@ -295,23 +295,29 @@ template:
         data:
           type: hourly
         response_variable: hourly
+      # walk the forecast once here rather than in every template below
+      - variables:
+          outlook: >-
+            {% from 'environment.jinja' import rain_outlook %}
+            {% set rain_outlook_fn = rain_outlook | as_function %}
+            {{ rain_outlook_fn(hourly['weather.openweathermap']['forecast']) }}
     binary_sensor:
       - name: "Weather Forecast Precipitation Soon"
         unique_id: "949dd25e-35cf-4000-a3f9-f38ab20e112f"
         device_class: moisture
+        # 'off' has to mean no rain coming, not no forecast to go on. the
+        # probability is part of the contract: without it a trace reads as rain
+        availability: >-
+          {% set forecast = hourly.get('weather.openweathermap', {}).get('forecast', []) %}
+          {{ forecast | count > 0 and forecast[0].precipitation_probability is defined }}
         state: >-
-          {% from 'environment.jinja' import rain_outlook %}
-          {% set rain_outlook_fn = rain_outlook | as_function %}
-          {% set outlook = rain_outlook_fn(hourly['weather.openweathermap']['forecast']) %}
-          {# minimum rainy hours in the window to count as significant - a
+          {# minimum likely wet hours in the window to count as significant - a
              single rainy hour is a blip, not a reason to move the chores #}
           {{ outlook.hours >= 3 }}
         attributes:
-          onset: >-
-            {% from 'environment.jinja' import rain_outlook %}
-            {% set rain_outlook_fn = rain_outlook | as_function %}
-            {% set outlook = rain_outlook_fn(hourly['weather.openweathermap']['forecast']) %}
-            {{ outlook.onset }}
+          onset: "{{ outlook.onset }}"
+          mm: "{{ outlook.mm }}"
+          mm_hours: "{{ outlook.mm_hours }}"
   - binary_sensor:
       - name: "Low Light"
         # alternatives:
@@ -1341,7 +1347,7 @@ automation:
       - condition: state
         entity_id: binary_sensor.weather_forecast_precipitation_soon
         state: "on"
-      # the sensor is a sliding window recalculated every 5 minutes, so it can
+      # the sensor is a sliding window recalculated every hour, so it can
       # flap on/off during a multi-day rain spell - track our own notification
       # history instead of the sensor's last_changed, and only notify once a
       # day at most.
@@ -1367,20 +1373,28 @@ automation:
             {% if onset %}
               {% set onset_local = onset | as_datetime | as_local %}
               {% set rain_time = onset_local.strftime('%H:%M') %}
-              {% if onset_local.date() == now().date() %}
-                {% set time_phrase = "tonight" if onset_local.hour >= 18 else "later today" %}
-              {% elif onset_local.hour < 4 %}
-                {% set time_phrase = "overnight" %}
-              {% elif onset_local.hour < 7 %}
-                {% set time_phrase = "early morning" %}
-              {% elif onset_local.hour < 10 %}
-                {% set time_phrase = "early tomorrow" %}
-              {% elif onset_local.hour < 18 %}
-                {% set time_phrase = "later tomorrow" %}
+              {# a night runs to 04:00, so the small hours belong to the day
+                 before: shift by that much and the count is in nights. holds
+                 for the daytime triggers above - at a pre-dawn one, "tonight"
+                 and "today" would mean different days #}
+              {% set anchor = onset_local - timedelta(hours=4) %}
+              {% set days = (anchor.date() - now().date()).days %}
+              {% set evening = onset_local.hour >= 18 or onset_local.hour < 4 %}
+              {# the window stops at 10:00 tomorrow, so onset is today, tonight
+                 or tomorrow morning - nothing further out to name #}
+              {% if days <= 0 and evening %}
+                {% set time_phrase = "tonight" %}
+              {% elif days <= 0 %}
+                {% set time_phrase = "later today" %}
               {% else %}
-                {% set time_phrase = "tomorrow night" %}
+                {% set time_phrase = "early tomorrow" %}
               {% endif %}
-              Rain is expected {{ time_phrase }} around {{ rain_time }}. Plan accordingly.
+              {# quote the total the sensor measured, and the hours it covers #}
+              {% set mm = state_attr('binary_sensor.weather_forecast_precipitation_soon', 'mm') | float(0) %}
+              {% set mm_hours = state_attr('binary_sensor.weather_forecast_precipitation_soon', 'mm_hours') | int(0) %}
+              {% set figure = "less than 1 mm" if mm < 1 else "~%d mm" | format(mm | round(0)) %}
+              {% set amount = ", with %s over the following %d hours" | format(figure, mm_hours) if mm and mm_hours else "" %}
+              Rain is expected {{ time_phrase }} around {{ rain_time }}{{ amount }}. Plan accordingly.
             {% else %}
               Rain is expected, but timing is uncertain. Check the forecast and plan accordingly.
             {% endif %}

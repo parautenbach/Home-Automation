@@ -2029,7 +2029,7 @@ automation:
             {% set load = states('sensor.home_power_kw') | float(0) | round(1) %}
             {% set cabinet_temp = states('sensor.cabinet_temperature') | float(0) | round(1) %}
             {{ state_attr(trigger.entity_id, 'subject') }} has been running hot for {{ dwell }} min:
-            It's currently at {{ temperature }} °C, above the {{ threshold }} °C mark, and under a load of {{ load }} kW.
+            It's currently at {{ temperature }} °C (threshold: {{ threshold }} °C) and under a load of {{ load }} kW.
             The cabinet is at {{ cabinet_temp }} °C.
           data:
             group: "home-electricity"
@@ -2072,8 +2072,8 @@ automation:
             {# the sensor flags hot a dwell after the crossing and clears a settle after the one back, so undo both #}
             {# last_changed resets on a restart: an episode spanning one under-reports #}
             {% set seconds = ((trigger.to_state.last_changed - trigger.from_state.last_changed).total_seconds() + (dwell - settle) * 60) | int(0) %}
-            {{ state_attr(trigger.entity_id, 'subject') }} has cooled to {{ temperature }} °C
-            after {{ sec_to_hour_and_min(seconds) }} above {{ threshold }} °C.
+            {{ state_attr(trigger.entity_id, 'subject') }} has cooled to {{ temperature }} °C (threshold: {{ threshold }} °C)
+            after running hot for {{ sec_to_hour_and_min(seconds) }}.
             The load is {{ load }} kW. The cabinet is at {{ cabinet_temp }} °C.
           data:
             group: "home-electricity"

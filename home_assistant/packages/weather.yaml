@@ -1393,7 +1393,7 @@ automation:
               {% set mm = state_attr('binary_sensor.weather_forecast_precipitation_soon', 'mm') | float(0) %}
               {% set mm_hours = state_attr('binary_sensor.weather_forecast_precipitation_soon', 'mm_hours') | int(0) %}
               {% set figure = "less than 1 mm" if mm < 1 else "~%d mm" | format(mm | round(0)) %}
-              {% set amount = ", with %s over the following %d hours" | format(figure, mm_hours) if mm and mm_hours else "" %}
+              {% set amount = ", with %s over %d hours from then" | format(figure, mm_hours) if mm and mm_hours else "" %}
               Rain is expected {{ time_phrase }} around {{ rain_time }}{{ amount }}. Plan accordingly.
             {% else %}
               Rain is expected, but timing is uncertain. Check the forecast and plan accordingly.

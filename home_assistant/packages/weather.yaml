@@ -1464,10 +1464,15 @@ automation:
           # now (measured)
           current_temp: "{{ states('sensor.outside_temperature') | int(0) }}"
           heat_label: "{{ state_attr('sensor.outside_temperature', 'thermal_comfort_label') }}"
+          heat_state: "{{ states('sensor.outside_thermal_perception') }}"
           humidity_state: "{{ states('sensor.humidity_perception') }}"
+          # the two halves of the feel clause are joined with "but" when they disagree
+          # ("cold but comfortable"), so the pleasant tiers of each axis are named here
+          pleasant_heat: "{{ ['cool', 'slightly_cool', 'comfortable', 'slightly_warm'] }}"
+          pleasant_humidity: "{{ ['dry', 'very_comfortable', 'comfortable'] }}"
           # full adjectives for use in a sentence, keyed by perception state - distinct from the
           # sensor's 'label' attribute, which is a terse dashboard-tile value ("Ideal", "Muggy") that
-          # doesn't read as prose after "Feels very cold and ...". The humid end names the humidity
+          # doesn't read as prose after "It's very cold and ...". The humid end names the humidity
           # out loud, since "oppressive" alone would read as a comment on the heat.
           humidity_phrases: >-
             {{ {
@@ -1615,7 +1620,16 @@ automation:
                percentage, which the dashboards carry anyway. The word is dropped entirely if the
                perception is unknown, rather than leaving a dangling "and" #}
             {% set humidity_phrase = humidity_phrases.get(humidity_state, '') %}
-            {% set feel_clause = 'Feels ' ~ (heat_label | lower) ~ (' and ' ~ humidity_phrase if humidity_phrase else '') ~ ' at ' ~ current_temp ~ '°C' %}
+            {# "and" only holds when both words pull the same way; one pleasant and one not needs
+               "but" ("cold but comfortable"), and two words that agree outright ("comfortable and
+               comfortable") drop the humidity half #}
+            {% if humidity_phrase == heat_label | lower %}
+              {% set humidity_clause = '' %}
+            {% else %}
+              {% set conjunction = 'and' if (heat_state in pleasant_heat) == (humidity_state in pleasant_humidity) else 'but' %}
+              {% set humidity_clause = ' ' ~ conjunction ~ ' ' ~ humidity_phrase if humidity_phrase else '' %}
+            {% endif %}
+            {% set feel_clause = "It's " ~ (heat_label | lower) ~ humidity_clause ~ ' at ' ~ current_temp ~ '°C' %}
             {# fog_conditions is inferred from dew point spread + wind + moisture, not observed directly,
                and it's real-time only - there's no forecast for onset or when it would lift.
                The brief always opens with how it feels outside; confirmed fog qualifies that sentence

@@ -230,6 +230,20 @@ template:
             mdi:sleep-off
           {% endif %}
   - binary_sensor:
+      # stands in for light.bedroom_bedlamp where the sleep-mode automations ask if her room
+      # is lit: a night light doesn't count, anything brighter does. brightness only, so she
+      # can pick any colour
+      - name: "Nursery Lit"
+        unique_id: "60622665-82cd-40ca-b0d8-fdc6b52720f8"
+        icon: mdi:lightbulb-on-outline
+        # mirror the lamp: if unavailable read as unlit, a dropout would look like the light
+        # going out and arm sleep mode
+        availability: "{{ has_value('light.bedroom_bedlamp') }}"
+        state: >-
+          {# 26/255 ~= 10%, well clear of the 1% dim profiles and normal_bedlamp's 60% #}
+          {{ is_state('light.bedroom_bedlamp', 'on') and
+             state_attr('light.bedroom_bedlamp', 'brightness') | int(255) > 26 }}
+  - binary_sensor:
       - name: "Washing Machine Running"
         unique_id: "05b97764-d263-4719-8101-7410c6cdb775"
         device_class: running
@@ -411,7 +425,7 @@ automation:
         at: input_datetime.baby_wake_up_time
     condition:
       - condition: state
-        entity_id: light.bedroom_bedlamp
+        entity_id: binary_sensor.nursery_lit
         state: "off"
     action:
       # no real fade available on this lamp: script.fade_light's stepping doesn't take on
@@ -1219,15 +1233,15 @@ automation:
         entity_id: binary_sensor.baby_monitor_motion_alarm
         to: "on"
     condition:
-      # shared with "Turn On Bedroom Bedlamp When Sleep Mode Disabled", which has to restore
-      # the lamp across exactly this window: the lamp is what gates the alerts below, so a
-      # window it doesn't cover is one where nothing can stop them
+      # shared with "Turn On Bedroom Bedlamp When Sleep Mode Disabled": nursery lit gates the
+      # alerts below and only a normal-brightness restore clears it, so that automation has to
+      # cover this window or nothing ends them
       - condition: template
         value_template: >-
           {% from 'baby.jinja' import in_nursery_alert_window %}
           {{ (in_nursery_alert_window | as_function)() }}
       - condition: state
-        entity_id: light.bedroom_bedlamp
+        entity_id: binary_sensor.nursery_lit
         state: "off"
         for:
           minutes: 5
@@ -1296,10 +1310,11 @@ automation:
     id: "9cfa00dd-077d-48b2-842b-3cd7fb2d0133"
     trigger:
       - platform: state
-        entity_id: light.bedroom_bedlamp
+        entity_id: binary_sensor.nursery_lit
         to:
           - "on"
           - "off"
+        not_from: "unavailable"
         for:
           minutes: 5
     variables:
@@ -1331,7 +1346,7 @@ automation:
         #
         # truth table:
         #
-        # lamp | mode | e/d
+        # lit  | mode | e/d
         # -----------------
         # off  | off  | e
         # off  | on   | -
@@ -1340,7 +1355,7 @@ automation:
         - choose:
             - conditions:
                 - condition: state
-                  entity_id: light.bedroom_bedlamp
+                  entity_id: binary_sensor.nursery_lit
                   state: "off"
                 - condition: state
                   entity_id: input_boolean.baby_sleep_mode
@@ -1369,7 +1384,7 @@ automation:
                           volume: 0.1
             - conditions:
                 - condition: state
-                  entity_id: light.bedroom_bedlamp
+                  entity_id: binary_sensor.nursery_lit
                   state: "on"
                 - condition: state
                   entity_id: input_boolean.baby_sleep_mode
@@ -1423,7 +1438,7 @@ automation:
       # motion moments later can't race each other to the 10-minute mark
       - platform: template
         value_template: >-
-          {{ is_state('light.bedroom_bedlamp', 'off') and
+          {{ is_state('binary_sensor.nursery_lit', 'off') and
              is_state('binary_sensor.baby_monitor_motion_alarm', 'off') }}
         for:
           minutes: 5
@@ -1506,8 +1521,8 @@ automation:
           action: SLEEP_OFF
     condition:
       # the same window "Notify When Motion Detected In The Nursery" alerts in, because the
-      # lamp coming back on is what stops those alerts. restoring across a narrower window
-      # than they fire in leaves them running with nothing to end them
+      # lamp coming back up to normal is what stops those alerts. restoring across a
+      # narrower window than they fire in leaves them running with nothing to end them
       - condition: template
         value_template: >-
           {% from 'baby.jinja' import in_nursery_alert_window %}
@@ -1568,7 +1583,7 @@ automation:
         at: input_datetime.baby_nap_end_time
     condition:
       - condition: state
-        entity_id: light.bedroom_bedlamp
+        entity_id: binary_sensor.nursery_lit
         state: "off"
     action:
       - service: light.turn_on
@@ -1599,8 +1614,9 @@ automation:
     id: "120789be-ab7f-47d2-9690-1ff096db0490"
     trigger:
       - platform: state
-        entity_id: light.bedroom_bedlamp
+        entity_id: binary_sensor.nursery_lit
         to: "off"
+        not_from: "unavailable"
     conditions:
       - condition: time
         after: "18:55:00"
@@ -1621,9 +1637,11 @@ automation:
     id: "712eabae-eb11-4b0e-95c0-ffa645113ac7"
     initial_state: true
     trigger:
+      # nursery lit, not the lamp, so her night light isn't recoloured or timed out
       - platform: state
-        entity_id: light.bedroom_bedlamp
+        entity_id: binary_sensor.nursery_lit
         to: "on"
+        not_from: "unavailable"
     mode: single
     actions:
       - choose:
@@ -1666,8 +1684,9 @@ automation:
     initial_state: true
     trigger:
       - platform: state
-        entity_id: light.bedroom_bedlamp
+        entity_id: binary_sensor.nursery_lit
         to: "on"
+        not_from: "unavailable"
         for:
           # this must be longer than the force night light automation (30 sec)
           # and the offer to toggle sleep mode (1 min)

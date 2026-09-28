@@ -1449,8 +1449,9 @@ automation:
         entity_id: input_boolean.baby_sleep_mode
         to: "off"
       - platform: state
-        entity_id: light.bedroom_bedlamp
+        entity_id: binary_sensor.nursery_lit
         to: "on"
+        not_from: "unavailable"
     condition:
       # from when we're up until she's due up, so the two state triggers only count in the
       # morning: her lamp comes on at bedtime and during night settles too. the time trigger

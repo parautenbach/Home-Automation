@@ -47,8 +47,9 @@ asleep" and so is off during exactly the settling-in period we most want to hear
 Consumed by "Notify When Motion Detected In The Nursery", to decide when to alert, and by
 "Turn On Bedroom Bedlamp When Sleep Mode Disabled", to decide when ending the session must
 restore the lamp. Those two have to stay the same window: wherever the first is open and
-the second is not, disabling sleep mode leaves the lamp off, and since the lamp is what
-gates the alerts they carry on with nothing left to stop them.
+the second is not, disabling sleep mode leaves the room dark, and since
+binary_sensor.nursery_lit is what gates the alerts they carry on with nothing left to stop
+them. Only a normal-brightness restore closes that gate.
 
 :returns: True if now falls in the nap, bedtime or morning window.
 #}

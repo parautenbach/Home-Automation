@@ -382,7 +382,7 @@ automation:
                   seconds: 1
               - service: notify.mobile_app_ceres
                 data:
-                  title: "⚠️ Internet"
+                  title: "⚠️ Network"
                   message: >-
                     {% from 'utilities.jinja' import sec_to_hour_and_min %}
                     {% set input_datetime_entity_id = trigger.entity_id | replace('binary_sensor', 'input_datetime') ~ '_disconnected' %}
@@ -420,7 +420,7 @@ automation:
           {{ is_state(binary_sensor, 'off') }}
       - service: notify.mobile_app_ceres
         data:
-          title: "⚠️ Internet"
+          title: "⚠️ Network"
           message: >-
             {% set binary_sensor_entity_id = trigger.event.data.entity_id | replace('timer', 'binary_sensor') | replace('_disconnected', '') %}
             {% set extender_name = state_attr(binary_sensor_entity_id, 'friendly_name') | lower %}

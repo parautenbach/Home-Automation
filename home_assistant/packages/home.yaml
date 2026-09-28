@@ -1592,6 +1592,8 @@ automation:
         data:
           profile: normal_bedlamp
 
+  # this is the only automation that turns the light off
+  # relevant in case we wanted to allow her to keep the night light on through the night
   - alias: "Turn Off Bedroom Bedlamp When Sleep Mode Enabled"
     id: "8991ff53-d2c5-47f2-a6e5-7e196978400a"
     trigger:

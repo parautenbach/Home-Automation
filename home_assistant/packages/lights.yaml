@@ -2001,15 +2001,6 @@ automation:
     trigger:
       - platform: state
         entity_id: event.kitchen_counter_lights
-    conditions:
-      - condition: or
-        conditions:
-          - condition: state
-            entity_id: light.kitchen_counter
-            state: "on"
-          - condition: state
-            entity_id: light.kitchen_counter
-            state: "off"
     action:
       # the rgbw2 toggles its own output locally, but the button event can reach ha before the
       # light's new state does – mirroring straight away would copy the pre-press state and leave
@@ -2023,6 +2014,12 @@ automation:
         timeout: "00:00:02"
         # the state may already have arrived before the event; then the current state is correct
         continue_on_timeout: true
+      # checked after the wait, since the light can drop off while we wait
+      - condition: state
+        entity_id: light.kitchen_counter
+        state:
+          - "on"
+          - "off"
       # mirror the state
       - service: "light.turn_{{ states('light.kitchen_counter') }}"
         target:

@@ -137,17 +137,6 @@ cards:
               green: 10
               yellow: -10
               red: -100
-      # https://github.com/ulic75/power-flow-card#inverted-entities-example
-      # keeping this as a reference
-      # - type: custom:power-flow-card
-      #   entities:
-      #     grid: sensor.grid_power
-      #     battery: sensor.battery_power
-      #     battery_charge: sensor.battery_state_of_charge
-      #     solar: sensor.pv_power
-      #   inverted_entities: battery
-      #   watt_threshold: 1000
-      #   dashboard_link: /energy
       - type: custom:power-flow-card-plus
         use_new_flow_rate_model: true
         clickable_entities: true

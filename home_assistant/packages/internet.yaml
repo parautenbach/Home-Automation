@@ -141,6 +141,7 @@ sensor:
   # physical WAN port below that offload, so its counters reflect the true byte totals.
   - platform: snmp
     name: snmp_wan_in
+    unique_id: "50fe7ba0-52e6-409b-8955-75a7497b107f"
     host: 192.168.0.1
     community: !secret router_snmp_community
     version: 2c
@@ -149,6 +150,7 @@ sensor:
 
   - platform: snmp
     name: snmp_wan_out
+    unique_id: "c718a6e8-ec45-4269-95de-93b37f18c605"
     host: 192.168.0.1
     community: !secret router_snmp_community
     version: 2c
@@ -157,6 +159,7 @@ sensor:
 
   - platform: snmp
     name: snmp_wan_in_64
+    unique_id: "884a9792-269b-49f0-9dda-9dd6dd108527"
     host: 192.168.0.1
     community: !secret router_snmp_community
     version: 2c
@@ -165,6 +168,7 @@ sensor:
 
   - platform: snmp
     name: snmp_wan_out_64
+    unique_id: "3d85774a-9db1-44c9-8f8c-76a6547284ae"
     host: 192.168.0.1
     community: !secret router_snmp_community
     version: 2c
@@ -174,6 +178,7 @@ sensor:
   # alternative: https://community.home-assistant.io/t/snmp-bandwidth-monitor-using-statistics/96684/82
   - platform: statistics
     name: 'Internet Traffic In'
+    unique_id: "063f1aa4-7ba9-4962-a8ac-fb13743e2fae"
     entity_id: sensor.internet_speed_in
     state_characteristic: mean
     # it's a little unclear how to set this, but let's say if this updates every second,
@@ -185,6 +190,7 @@ sensor:
 
   - platform: statistics
     name: 'Internet Traffic Out'
+    unique_id: "3c9e1536-9c98-4457-b3d2-bd6563fa8879"
     entity_id: sensor.internet_speed_out
     state_characteristic: mean
     sampling_size: 100

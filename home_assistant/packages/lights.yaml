@@ -91,6 +91,7 @@ light:
     entity_id: switch.garage
   - platform: group
     name: Living Area Group
+    unique_id: "5f90999e-0ca2-41cf-8d43-abc684c988e3"
     entities:
       - light.foyer
       - light.dining_room
@@ -99,6 +100,7 @@ light:
       - light.office
   - platform: group
     name: Living Areas Ceiling Lights Group
+    unique_id: "5718372d-0238-4d96-9aab-2ec9e30ecbfd"
     entities:
       - light.dining_room
       - light.music_room
@@ -107,6 +109,7 @@ light:
   - platform: group
     # keep in sync with scene.normal_lights
     name: Normal Light Group
+    unique_id: "cc6d380e-6043-4e38-bf9d-78656cf59dc2"
     entities:
       - light.living_room_lamp
       - light.kitchen_counter
@@ -114,6 +117,7 @@ light:
       - light.corner_lights
   - platform: group
     name: Night Group
+    unique_id: "d4a176bc-0733-4e8a-ac57-b0a97e57cf14"
     entities:
       - light.foyer
       - light.kitchen_counter
@@ -121,21 +125,25 @@ light:
       - light.hallway
   - platform: group
     name: Yard Group
+    unique_id: "83f6546e-4b4d-48fc-86ce-298048fb8cb3"
     entities:
       - light.front_door
       - light.backyard
   - platform: group
     name: Inside Security Group
+    unique_id: "b64899a9-0c2b-43f7-880d-acb01360a5d9"
     entities:
       - light.foyer
       - light.living_room_lamp
   - platform: group
     name: Main Bedroom Group
+    unique_id: "a5b7fe0c-36fa-4ded-b65c-645f64971c26"
     entities:
       - light.pieter_bedside
       - light.rouve_bedside
   - platform: group
     name: Corner Lights
+    unique_id: "0df85c78-1a02-4bb4-b91a-02667ae1518e"
     entities:
       - light.dining_room_corner_light
       - light.music_room_corner_light

@@ -31,6 +31,7 @@ input_select:
 media_player:
   - platform: universal
     name: Living Room Universal
+    unique_id: "99a46fa1-6569-457b-822e-0119ea20343e"
     children:
       - media_player.living_room
     commands:
@@ -49,6 +50,7 @@ media_player:
     topic: shairport-sync/main-bedroom
   - platform: universal
     name: Main Bedroom Universal
+    unique_id: "f2aa17ee-fbe6-409b-bb28-b049c30775d6"
     children:
       - media_player.main_bedroom
     commands:
@@ -66,6 +68,7 @@ media_player:
 sensor:
   - platform: history_stats
     name: Apple TV Playing
+    unique_id: "6f747014-97bb-4fbb-a8c4-40c6b967b865"
     entity_id: media_player.living_room
     state: "playing"
     type: time

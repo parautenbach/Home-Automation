@@ -52,6 +52,7 @@ binary_sensor:
       outside_temperature_trend:
         entity_id: sensor.outside_temperature_filtered
         friendly_name: "Outside Temperature Trend"
+        unique_id: "6ad849bd-7aea-4f8b-b071-e987664da659"
         # 1 hours * 60 minutes * 60 seconds
         sample_duration: 3600
         # 1 degree in the last 3 hours
@@ -60,6 +61,7 @@ binary_sensor:
 sensor:
   - platform: history_stats
     name: Fair Weather Time
+    unique_id: "5de3186c-ed49-4717-812c-c2807d831070"
     entity_id: binary_sensor.is_fair_weather
     state: "on"
     type: time  # duration
@@ -68,6 +70,7 @@ sensor:
 
   - platform: filter
     name: outside_temperature_filtered
+    unique_id: "1a4458a6-d7db-4bf6-a3e3-61de529faef6"
     entity_id: sensor.outside_temperature
     filters:
       filter: lowpass
@@ -77,6 +80,7 @@ sensor:
   - platform: statistics
     entity_id: sensor.outside_temperature_filtered
     name: "Outside Temperature Change"
+    unique_id: "31f9302b-658e-419a-89a4-e706a2d14f97"
     # the difference between the newest and the oldest measurement
     state_characteristic: change
     max_age:
@@ -105,6 +109,7 @@ sensor:
   # and precisely in the conditions fog needs. Holding the last sample reports the calm instead.
   - platform: statistics
     name: "Wind Speed Filtered"
+    unique_id: "ddedeb37-4e34-4ceb-b412-07935ee2eb2a"
     entity_id: sensor.weather_station_wind_speed_sustained
     state_characteristic: mean
     sampling_size: 200
@@ -118,6 +123,7 @@ sensor:
   # and still better than smoothing every peak away; revisit only with labelled data
   - platform: statistics
     name: "Wind Gust Filtered"
+    unique_id: "fcd3a0ab-d322-4212-8fa1-bce6a03c3a3d"
     entity_id: sensor.weather_station_wind_speed_gust
     state_characteristic: value_max
     sampling_size: 200
@@ -143,6 +149,7 @@ sensor:
 
   - platform: filter
     name: "Wind Direction Sin Filtered"
+    unique_id: "efb3ab88-a20d-4507-9bf5-080a53070bf7"
     entity_id: sensor.wind_direction_sin
     filters:
       - filter: lowpass
@@ -151,6 +158,7 @@ sensor:
 
   - platform: filter
     name: "Wind Direction Cos Filtered"
+    unique_id: "dccaa1a0-ed08-437c-a429-5bda7ad3f454"
     entity_id: sensor.wind_direction_cos
     filters:
       - filter: lowpass

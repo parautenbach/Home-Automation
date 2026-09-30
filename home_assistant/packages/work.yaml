@@ -16,6 +16,7 @@ sensor:
   # https://community.home-assistant.io/t/prevent-zone-automation-from-triggering-when-briefly-entering-zone/360107/4
   - platform: history_stats
     name: Duration Pieter Work Cape Town
+    unique_id: "213cfbb7-8c6b-43f7-ad26-267638d9e56b"
     entity_id: person.pieter_rautenbach
     state: "Work (Takealot HQ)"
     type: time  # duration
@@ -24,6 +25,7 @@ sensor:
 
   - platform: history_stats
     name: Duration Pieter Work Stellenbosch
+    unique_id: "cff54a9e-0b67-49fa-8bd4-db9c01663e77"
     entity_id: person.pieter_rautenbach
     state: "Work (Takealot STB)"
     type: time  # duration
@@ -32,6 +34,7 @@ sensor:
 
   - platform: history_stats
     name: Duration Online Calls
+    unique_id: "ac81802e-1b1b-4f7d-b3ab-a731ced3e7d0"
     entity_id: binary_sensor.on_air
     state: "on"
     type: time  # duration

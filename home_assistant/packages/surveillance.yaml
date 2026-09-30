@@ -71,6 +71,7 @@ sensor:
 
   - platform: history_stats
     name: Foyer Motion Detections
+    unique_id: "9fc5b602-2036-4f1f-b245-90dbc70e18b8"
     entity_id: binary_sensor.foyer_motion_detected
     state: "on"
     type: count
@@ -79,6 +80,7 @@ sensor:
 
   - platform: history_stats
     name: Doorbell Motion Detections
+    unique_id: "e82fb054-2172-4e17-86de-19a5375c1ca8"
     entity_id: binary_sensor.doorbell_motion_detected
     state: "on"
     type: count

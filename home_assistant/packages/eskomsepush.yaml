@@ -41,6 +41,7 @@ sensor:
   # Eskom se Push sensor
   - platform: rest
     name: EskomSePush Allowance
+    unique_id: "f6cd58db-0a93-4891-93a5-5f7a88aa2225"
     # deprecated in v3 in favour of x-ratelimit-* response headers, which the HA rest platform doesn't expose to templates
     resource: "https://developer.sepush.co.za/business/3.0/api_allowance"
     headers:

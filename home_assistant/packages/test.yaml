@@ -17,6 +17,7 @@ input_number:
 alarm_control_panel:
   - platform: manual
     name: "Test"
+    unique_id: "b3b9d7ad-6d5d-4192-a33e-85d18a830f78"
     code: !secret alarm_code
     code_arm_required: true
     arming_time: 0
@@ -54,6 +55,7 @@ shell_command:
 light:
   - platform: group
     name: Test Group
+    unique_id: "96b0a76e-c957-4263-bb34-d97450284f13"
     entities:
       - light.dining_room
       - light.office

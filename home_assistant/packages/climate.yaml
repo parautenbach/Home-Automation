@@ -76,6 +76,7 @@ binary_sensor:
       inside_temperature_trend:
         entity_id: sensor.office_temperature
         friendly_name: "Inside Temperature Trend"
+        unique_id: "8d957bc1-aa67-462c-8c84-cd82000b8e8e"
         # 30 minutes * 60 seconds
         sample_duration: 1800
         # 1 degree in the last 30 min
@@ -84,6 +85,7 @@ binary_sensor:
 sensor:
   - platform: filter
     name: ambient_temperature_filtered
+    unique_id: "c5cdf15e-7bf6-4b77-b95c-82f8db950188"
     entity_id: sensor.conditions_temperature
     filters:
       filter: lowpass
@@ -93,6 +95,7 @@ sensor:
   - platform: statistics
     entity_id: sensor.office_temperature
     name: "Inside Temperature Change"
+    unique_id: "4c22be63-924a-4ae1-b299-cba945c05a98"
     # the difference between the newest and the oldest measurement
     state_characteristic: change
     max_age:
@@ -100,6 +103,7 @@ sensor:
 
   - platform: statistics
     name: "Bedroom Minimum Temperature (12 hours)"
+    unique_id: "578bb045-7aa9-4c27-9ac9-dde073d71a47"
     entity_id: sensor.bedroom_ht_temperature
     state_characteristic: value_min
     max_age:
@@ -108,6 +112,7 @@ sensor:
 
   - platform: statistics
     name: "Bedroom Maximum Temperature (12 hours)"
+    unique_id: "66e2f514-2d04-4daa-b5d0-f8cd60150f8b"
     entity_id: sensor.bedroom_ht_temperature
     state_characteristic: value_max
     max_age:
@@ -116,6 +121,7 @@ sensor:
 
   - platform: statistics
     name: "Bedroom Average Temperature (12 hours)"
+    unique_id: "a948e2ca-a870-4e4c-ac80-2280e1517d03"
     entity_id: sensor.bedroom_ht_temperature
     state_characteristic: average_linear
     max_age:

@@ -146,6 +146,7 @@ binary_sensor:
 
   - platform: group
     name: "Family Present"
+    unique_id: "e57ba3bc-c204-4859-9648-b4a9acb308f5"
     device_class: presence
     entities:
       - binary_sensor.pieter_present
@@ -163,6 +164,7 @@ sensor:
     end: "{{ today_at('17:00') }}"
   - platform: statistics
     name: 'Washing Machine Power 1min 90th Percentile'
+    unique_id: "d7f86c93-d664-486e-bf30-86c887b940ed"
     entity_id: sensor.washing_machine_power
     state_characteristic: percentile
     percentile: 90

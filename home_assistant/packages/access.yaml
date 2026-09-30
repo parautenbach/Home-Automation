@@ -36,6 +36,7 @@ timer:
 cover:
   - platform: group
     name: "Garage Doors"
+    unique_id: "5f3a9238-772d-4281-bf48-ad45284b745d"
     entities:
       - cover.garage_doors_lhs
       - cover.garage_doors_rhs

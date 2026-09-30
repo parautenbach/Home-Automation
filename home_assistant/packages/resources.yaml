@@ -863,6 +863,7 @@ sensor:
       precision: 0
   - platform: history_stats
     name: Daily Grid Feed Outage Time
+    unique_id: "8c980974-0ffc-4f84-8959-a787983d442d"
     entity_id: binary_sensor.grid_feed
     state: "off"
     type: time  # duration
@@ -882,6 +883,7 @@ sensor:
       hours: 3
   - platform: statistics
     name: 'PV Power 5min Average'
+    unique_id: "c25870ee-fc71-4aa4-bde2-b239a0397a52"
     entity_id: sensor.pv_power
     state_characteristic: mean
     precision: 0
@@ -890,6 +892,7 @@ sensor:
       minutes: 5
   - platform: statistics
     name: 'Solar Reserve Percentage 5min Average'
+    unique_id: "600cde3c-7380-4343-b4cc-935243b4bdce"
     entity_id: sensor.solar_reserve_percentage
     state_characteristic: mean
     precision: 0
@@ -898,6 +901,7 @@ sensor:
       minutes: 5
   - platform: statistics
     name: 'Home Power 5min Average'
+    unique_id: "222ab6f0-912b-4139-8a6b-41409682f3cd"
     entity_id: sensor.home_power
     state_characteristic: mean
     precision: 0
@@ -906,6 +910,7 @@ sensor:
       minutes: 5
   - platform: statistics
     name: 'Outbuilding Power 1min 90th Percentile'
+    unique_id: "1db9b650-2044-484f-a731-9016c1966715"
     entity_id: sensor.outbuilding_power_meter_channel_1_power
     state_characteristic: percentile
     percentile: 90
@@ -916,6 +921,7 @@ sensor:
   # we've tried median and a lowpass filter, but average seems to work best
   - platform: statistics
     name: 'Battery Change Of Charge Average'
+    unique_id: "8c9c62fb-eebf-4f48-bd2f-cad1f8b71c60"
     entity_id: sensor.battery_change_of_charge
     state_characteristic: mean
     precision: 0

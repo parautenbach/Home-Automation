@@ -1317,6 +1317,13 @@ automation:
         not_from: "unavailable"
         for:
           minutes: 5
+      # her light might stay on through a nap, so nursery lit may never go off to prompt the
+      # offer: ask at a fixed time as well, whatever the light
+      - platform: time
+        at:
+          - entity_id: input_datetime.baby_nap_start_time
+            offset: "00:30:00"
+        id: "nap_fallback"
     variables:
       now_time: "{{ now().time() }}"
       # ask-to-enable opens 15 min before nap start, since she's often put down early;
@@ -1352,11 +1359,17 @@ automation:
         # off  | on   | -
         # on   | off  | -
         # on   | on   | d
+        #
+        # except the nap fallback, which offers to enable whatever the light
         - choose:
             - conditions:
-                - condition: state
-                  entity_id: binary_sensor.nursery_lit
-                  state: "off"
+                - condition: or
+                  conditions:
+                    - condition: state
+                      entity_id: binary_sensor.nursery_lit
+                      state: "off"
+                    - condition: trigger
+                      id: "nap_fallback"
                 - condition: state
                   entity_id: input_boolean.baby_sleep_mode
                   state: "off"

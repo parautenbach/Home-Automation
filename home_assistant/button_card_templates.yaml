@@ -719,6 +719,56 @@ climate_timer:
   hold_action:
     action: more-info
     haptic: heavy
+light_timer:
+  # same pattern as climate_timer, but in the basic_small layout and with two durations
+  template: basic_small
+  variables:
+    light_entity: "[[[ return `${entity.entity_id}`.replace('timer.', 'light.').replace('_timer', ''); ]]]"
+    light_entity_state: "[[[ return states[variables.light_entity].state ]]]"
+    colour: |
+      [[[
+        if (variables.light_entity_state === 'on' && entity.state === 'active') {
+          return 'var(--state-binary_sensor-active-color)';
+        }
+        if (variables.light_entity_state === 'on') {
+          return 'var(--state-icon-color)';
+        }
+        return 'var(--state-unavailable-color)';
+      ]]]
+  icon: mdi:camera-timer
+  styles:
+    icon:
+      - color: "[[[ return variables.colour; ]]]"
+    name:
+      - color: "[[[ return variables.colour; ]]]"
+  tap_action:
+    action: javascript
+    haptic: light
+    javascript: |
+      [[[
+        if (variables.light_entity_state === "on") {
+          hass.callService("timer", "start", {
+            entity_id: entity.entity_id,
+            duration: "00:03:00"
+          });
+        }
+      ]]]
+  double_tap_action:
+    action: javascript
+    haptic: light
+    javascript: |
+      [[[
+        if (variables.light_entity_state === "on") {
+          hass.callService("timer", "start", {
+            entity_id: entity.entity_id,
+            duration: "00:15:00"
+          });
+        }
+      ]]]
+  hold_action:
+    # timer can be cancelled here
+    action: more-info
+    haptic: heavy
 fan_with_timer:
   variables:
     timer_entity: >

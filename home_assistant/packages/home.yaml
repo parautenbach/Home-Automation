@@ -1654,15 +1654,22 @@ automation:
     id: "712eabae-eb11-4b0e-95c0-ffa645113ac7"
     initial_state: true
     trigger:
-      # nursery lit, not the lamp, so her night light isn't recoloured or timed out
+      # off to on only: brightening a lamp that's already on is left alone, so a brighter
+      # light sticks when we need it (e.g. changing sheets)
       - platform: state
-        entity_id: binary_sensor.nursery_lit
+        entity_id: light.bedroom_bedlamp
+        from: "off"
         to: "on"
-        not_from: "unavailable"
     mode: single
     actions:
       - choose:
           conditions:
+            # only presses on the lamp itself: the dashboard sets a user and automations a
+            # parent. homekit (siri, the home app) sets neither, so it counts as the lamp
+            - condition: template
+              value_template: >-
+                {{ trigger.to_state.context.user_id is none and
+                   trigger.to_state.context.parent_id is none }}
             - condition: state
               entity_id: input_boolean.baby_sleep_mode
               state: "on"
@@ -1681,16 +1688,12 @@ automation:
                 {% set bedtime_dim_end = bedtime_ask_disable_start_fn() %}
                 {{ (nap_start <= now_time <= nap_dim_end) or (now_time >= bedtime_start or now_time <= bedtime_dim_end) }}
           sequence:
+            # brightness only, so she keeps her colour. no timer: a night light may stay on
             - service: light.turn_on
               target:
                 entity_id: light.bedroom_bedlamp
               data:
-                profile: night_bedlamp
-            - service: timer.start
-              target:
-                entity_id: timer.bedroom_bedlamp_timer
-              data:
-                duration: "00:00:30"
+                brightness: 3  # 3/255 ~= 1%, as night_bedlamp
         # deliberately no default: outside the dim windows, scenery's profile_default for this
         # lamp (normal_bedlamp) already normalises a plain turn-on, so there's nothing to add
 
@@ -1705,8 +1708,9 @@ automation:
         to: "on"
         not_from: "unavailable"
         for:
-          # this must be longer than the force night light automation (30 sec)
-          # and the offer to toggle sleep mode (1 min)
+          # the force night light automation dims the lamp at once when it's switched on at
+          # the lamp, so nursery lit is already off again. this must also be longer than the
+          # offer to toggle sleep mode (1 min)
           # otherwise this will never be true
           # it also means that if those automations function normally,
           # we won't accidentally disable sleep mode

@@ -182,38 +182,9 @@ cards:
                 icon: mdi:weather-night
               - type: custom:button-card
                 template:
-                  - basic_small
+                  - light_timer
                 entity: timer.bedroom_bedlamp_timer
                 name: Timer
-                icon: mdi:camera-timer
-                tap_action:
-                  action: javascript
-                  haptic: light
-                  javascript: |
-                    [[[
-                      if (states['light.bedroom_bedlamp'].state == "on") {
-                        hass.callService("timer", "start", {
-                          entity_id: entity.entity_id,
-                          duration: "00:03:00"
-                        });
-                      }
-                    ]]]
-                double_tap_action:
-                  action: javascript
-                  haptic: light
-                  javascript: |
-                    [[[
-                      if (states['light.bedroom_bedlamp'].state == "on") {
-                        hass.callService("timer", "start", {
-                          entity_id: entity.entity_id,
-                          duration: "00:15:00"
-                        });
-                      }
-                    ]]]
-                hold_action:
-                  # timer can be cancelled here
-                  action: more-info
-                  haptic: heavy
       - type: history-graph
         hours_to_show: 6
         entities:

@@ -1461,6 +1461,10 @@ automation:
         to: "on"
         not_from: "unavailable"
     condition:
+      # we're sleeping in, so keep the hallway dark too
+      - condition: state
+        entity_id: input_boolean.skip_next_wake_up_time
+        state: "off"
       # from when we're up until she's due up, so the two state triggers only count in the
       # morning: her lamp comes on at bedtime and during night settles too. the time trigger
       # bypasses the window: it fires a few ms past the closing edge, which now() already exceeds

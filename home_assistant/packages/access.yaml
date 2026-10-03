@@ -439,16 +439,17 @@ automation:
         value_template: >-
           {{ (trigger.from_state is not none and trigger.from_state.state == 'closed')
              or is_state('timer.' ~ trigger.entity_id | replace('cover.', '') ~ '_timer', 'idle') }}
-      - service: timer.start
-        target:
-          entity_id: "timer.{{ trigger.entity_id | replace('cover.', '') }}_timer"
-        data:
-          duration: "00:05:00"
+      # set before the timer starts, since the live activity reads it on the timer's start
       - service: input_datetime.set_datetime
         target:
           entity_id: "input_datetime.{{ trigger.entity_id | replace('cover.', '') }}_opened"
         data:
           datetime: "{{ now() }}"
+      - service: timer.start
+        target:
+          entity_id: "timer.{{ trigger.entity_id | replace('cover.', '') }}_timer"
+        data:
+          duration: "00:05:00"
 
   - alias: "Update Timers For Covers On Startup"
     id: "29fc90a8-8fd1-4aad-a803-81db261509f2"
@@ -489,7 +490,7 @@ automation:
                     data:
                       # group notifications by the timer entity
                       group: "timer.{{ repeat.item | replace('cover.', '') }}_timer"
-                      url: homeassistant://navigate/lovelace-main/main
+                      url: homeassistant://navigate/lovelace-main/security
                       actions:
                         - action: "CLOSE_COVER"
                           title: "Close now"
@@ -608,7 +609,7 @@ automation:
             # group notifications by the timer entity
             group: "{{ trigger.event.data.entity_id }}"
             tag: "{{ trigger.event.data.entity_id }}"
-            url: homeassistant://navigate/lovelace-main/main
+            url: homeassistant://navigate/lovelace-main/security
             actions:
               - action: "CLOSE_COVER"
                 title: "Close now"
@@ -711,6 +712,75 @@ automation:
         target:
           entity_id: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
 
+  # mirrors each cover timer as a live activity counting down to the next alert.
+  # following the timer covers opening, snoozing and the alert re-arming in one place.
+  # finished is ignored, since the alert restarts the timer a moment later
+  # https://companion.home-assistant.io/docs/notifications/live-activities/
+  - alias: "Show Cover Timer Live Activity"
+    id: "27966c7c-9df8-48c7-8dfd-4f44c652783a"
+    initial_state: true
+    trigger:
+      - platform: event
+        id: "timer"
+        event_type:
+          - timer.started
+          - timer.restarted
+          - timer.cancelled
+      # a cover closed while its timer is idle (between finishing and re-arming) fires no cancel
+      - platform: state
+        id: "closed"
+        entity_id:
+          - cover.main_gate
+          - cover.garage_doors_lhs
+          - cover.garage_doors_rhs
+        to: "closed"
+    mode: queued
+    variables:
+      timer_id: >-
+        {{ trigger.event.data.entity_id if trigger.id == 'timer' else trigger.entity_id | replace('cover.', 'timer.') ~ '_timer' }}
+      cover_id: "{{ timer_id | replace('timer.', 'cover.') | replace('_timer', '') }}"
+      # tags can't contain dots
+      tag: "live_{{ timer_id | replace('timer.', '') }}"
+    condition:
+      - condition: template
+        value_template: "{{ cover_id in state_attr('group.covers_with_timers', 'entity_id') }}"
+    action:
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.id == 'timer' and trigger.event.event_type != 'timer.cancelled' and is_state(cover_id, 'open') }}"
+            sequence:
+              - service: notify.mobile_app_ceres
+                data:
+                  # the title can't change once started
+                  title: >-
+                    {% if 'lhs' in cover_id %}
+                      Rouvé's garage door
+                    {% elif 'rhs' in cover_id %}
+                      Pieter's garage door
+                    {% else %}
+                      Main gate
+                    {% endif %}
+                  message: >-
+                    Open since {{ (states('input_datetime.' ~ cover_id | replace('cover.', '') ~ '_opened') | as_datetime).strftime('%H:%M') }}
+                  data:
+                    tag: "{{ tag }}"
+                    live_update: true
+                    chronometer: true
+                    when: "{{ as_timestamp(state_attr(timer_id, 'finishes_at')) | int }}"
+                    notification_icon: "{{ 'mdi:gate-open' if cover_id == 'cover.main_gate' else 'mdi:garage-open-variant' }}"
+                    notification_icon_color: "#03A9F4"
+                    # the default, but stated since the bar drains as the alert nears
+                    progress_bar_direction: decreasing
+                    silent: true
+                    url: /lovelace-main/security
+        default:
+          - service: notify.mobile_app_ceres
+            data:
+              message: "clear_notification"
+              data:
+                tag: "{{ tag }}"
+
   - alias: "Notify If Cover Was Left Open"
     id: "db54683c-0216-4985-9136-de81baee3e00"
     initial_state: true
@@ -766,7 +836,7 @@ automation:
             # cover.garage_doors_rhs -> timer.garage_doors_rhs_timer
             group: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
             tag: "{{ trigger.entity_id | replace('cover', 'timer') }}_timer"
-            url: homeassistant://navigate/lovelace-main/main
+            url: homeassistant://navigate/lovelace-main/security
 
   - alias: "Alert If Garages Opened Or Closed When Not Supposed To"
     id: "ad4db54e-fbb3-4377-9711-4731d58da0f5"
@@ -919,7 +989,7 @@ automation:
               message: "{{ message }}"
               data:
                 group: "{{ trigger.entity_id }}"
-                url: homeassistant://navigate/lovelace-main/main
+                url: homeassistant://navigate/lovelace-main/security
 
   - alias: "Alert When Cabinet Opened"
     id: "f9a95e6c-e0bf-45a4-bf5c-3b774ff3fd47"

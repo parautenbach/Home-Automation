@@ -232,6 +232,51 @@ script:
           data:
             group: "test"
 
+  # starts a 2 min countdown, updates it halfway, then ends it
+  # https://companion.home-assistant.io/docs/notifications/live-activities/
+  test_live_activity:
+    sequence:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Live Activity Test"
+          message: "Counting down"
+          data:
+            tag: test_live_activity
+            live_update: true
+            chronometer: true
+            when: 120
+            when_relative: true
+            notification_icon: mdi:test-tube
+            notification_icon_color: "#03A9F4"
+            url: /lovelace-test/test
+      - delay:
+          seconds: 60
+      - service: notify.mobile_app_ceres
+        data:
+          title: "Live Activity Test"
+          message: "Halfway"
+          data:
+            tag: test_live_activity
+            live_update: true
+            chronometer: true
+            when: 60
+            when_relative: true
+            notification_icon: mdi:test-tube
+            notification_icon_color: "#03A9F4"
+            silent: true
+            url: /lovelace-test/test
+      - delay:
+          seconds: 60
+      - service: script.test_live_activity_clear
+
+  test_live_activity_clear:
+    sequence:
+      - service: notify.mobile_app_ceres
+        data:
+          message: "clear_notification"
+          data:
+            tag: test_live_activity
+
 automation:
   - alias: "Handle Actionable Notification Action Data Event"
     id: "1a3eac29-c988-4117-a768-2fb940b546f6"

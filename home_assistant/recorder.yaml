@@ -86,7 +86,6 @@ exclude:
     - sensor.wind_direction_cos
     - sensor.wind_direction_cos_filtered
     # large attributes
-    - sensor.security_camera_snapshots
     - sensor.home_assistant
     - sensor.tmp
     - sensor.weather_tomorrow_hourly

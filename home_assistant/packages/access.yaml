@@ -761,11 +761,14 @@ automation:
                     {% else %}
                       Main gate
                     {% endif %}
-                  message: >-
-                    Open since {{ (states('input_datetime.' ~ cover_id | replace('cover.', '') ~ '_opened') | as_datetime).strftime('%H:%M') }}
+                  # required, but the chronometer takes its place on ios
+                  message: "Open"
                   data:
                     tag: "{{ tag }}"
                     live_update: true
+                    # top right on the lock screen, as the message is hidden by the chronometer
+                    critical_text: >-
+                      Since {{ (states('input_datetime.' ~ cover_id | replace('cover.', '') ~ '_opened') | as_datetime).strftime('%H:%M') }}
                     chronometer: true
                     when: "{{ as_timestamp(state_attr(timer_id, 'finishes_at')) | int }}"
                     notification_icon: "{{ 'mdi:gate-open' if cover_id == 'cover.main_gate' else 'mdi:garage-open-variant' }}"

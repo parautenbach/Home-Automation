@@ -1629,6 +1629,18 @@ automation:
         entity_id: binary_sensor.solarassistant_activity
         state: "off"
     action:
+      # flag and timer before the push, which can outlast the 1s before "resumes" runs
+      # when an outage ends right on the minute; it would then find no flag, and these
+      # would be set after it had already cleared them
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.solarassistant_ceased_notified
+      - service: timer.start
+        target:
+          entity_id: timer.solarassistant_inactivity
+        data:
+          # if changed here, change it in "Detect When SolarAssistant MQTT Bridge Activity Ceases" too
+          duration: "00:01:00"
       - service: notify.mobile_app_ceres
         data:
           title: "⚠️ System"
@@ -1641,15 +1653,6 @@ automation:
             group: "system-electricity"
             url: homeassistant://navigate/lovelace-system/devices
             tag: "solarassistant-activity"
-      - service: input_boolean.turn_on
-        target:
-          entity_id: input_boolean.solarassistant_ceased_notified
-      - service: timer.start
-        target:
-          entity_id: timer.solarassistant_inactivity
-        data:
-          # if changed here, change it in "Detect When SolarAssistant MQTT Bridge Activity Ceases" too
-          duration: "00:01:00"
 
   # todo:
   # 1. condition for low soc or low utilisation

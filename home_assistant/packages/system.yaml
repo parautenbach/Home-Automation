@@ -284,6 +284,12 @@ template:
     condition:
       - condition: template
         value_template: "{{ notification_message not in ['request_location_update', 'clear_notification'] }}"
+      # live activities are a status display, not a notification, and each update is a call
+      - condition: template
+        value_template: >-
+          {% set payload = trigger.event.data.service_data %}
+          {% set data = payload['data'] if payload is mapping and payload['data'] is mapping else {} %}
+          {{ not data.get('live_update', false) }}
     sensor:
       - name: Last Notification
         icon: mdi:email-alert-outline

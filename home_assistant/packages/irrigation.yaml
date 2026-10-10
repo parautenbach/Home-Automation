@@ -361,3 +361,62 @@ automation:
         - service: timer.cancel
           target:
             entity_id: "{{ trigger.entity_id | replace('switch', 'timer') }}"
+
+  # one live activity per run, counting down the zone that's on: that's the part of the
+  # garden that's wet now. a single tag, as the title can't change and a start per zone
+  # would spend the push-to-start budget. the run ends with the full cycle timer, for
+  # both a cycle and a single zone
+  # https://companion.home-assistant.io/docs/notifications/live-activities/
+  - alias: "Show Irrigation Live Activity"
+    id: "b365cc4c-31af-443e-b3b1-e6f6ce9bac52"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type:
+          - timer.started
+          - timer.restarted
+          - timer.cancelled
+          - timer.finished
+    variables:
+      zone_id: "{{ trigger.event.data.entity_id | replace('timer.', 'switch.') }}"
+    condition:
+      - condition: template
+        value_template: >-
+          {{ trigger.event.data.entity_id == 'timer.irrigation_full_cycle_runtime'
+             or zone_id in state_attr('group.irrigation_zones', 'entity_id') }}
+    mode: queued
+    action:
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: >-
+                  {{ trigger.event.data.entity_id == 'timer.irrigation_full_cycle_runtime'
+                     and trigger.event.event_type in ['timer.cancelled', 'timer.finished'] }}
+            sequence:
+              - service: notify.mobile_app_ceres
+                data:
+                  message: "clear_notification"
+                  data:
+                    tag: live_irrigation
+          - conditions:
+              - condition: template
+                value_template: >-
+                  {{ zone_id in state_attr('group.irrigation_zones', 'entity_id')
+                     and trigger.event.event_type in ['timer.started', 'timer.restarted'] }}
+            sequence:
+              - service: notify.mobile_app_ceres
+                data:
+                  title: "Irrigation"
+                  # required, but the chronometer takes its place on ios
+                  message: "Watering"
+                  data:
+                    tag: live_irrigation
+                    live_update: true
+                    # top right on the lock screen, as the message is hidden by the chronometer
+                    critical_text: "{{ state_attr(zone_id, 'friendly_name') }}"
+                    chronometer: true
+                    when: "{{ as_timestamp(state_attr(trigger.event.data.entity_id, 'finishes_at')) | int }}"
+                    notification_icon: mdi:sprinkler-variant
+                    notification_icon_color: "#2196F3"
+                    silent: true
+                    url: /lovelace-main/irrigation

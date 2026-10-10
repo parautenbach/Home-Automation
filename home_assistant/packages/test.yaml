@@ -239,10 +239,12 @@ script:
       - service: notify.mobile_app_ceres
         data:
           title: "Live Activity Test"
-          message: "Counting down"
+          # hidden by the chronometer on ios
+          message: "Test"
           data:
             tag: test_live_activity
             live_update: true
+            critical_text: "Counting down"
             chronometer: true
             when: 120
             when_relative: true
@@ -254,10 +256,12 @@ script:
       - service: notify.mobile_app_ceres
         data:
           title: "Live Activity Test"
-          message: "Halfway"
+          # hidden by the chronometer on ios
+          message: "Test"
           data:
             tag: test_live_activity
             live_update: true
+            critical_text: "Halfway"
             chronometer: true
             when: 60
             when_relative: true

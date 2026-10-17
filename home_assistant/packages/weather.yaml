@@ -1660,6 +1660,10 @@ automation:
             {% set next_hour = (now() + timedelta(hours=1)).strftime('%H:00') %}
             {% if raining_now and rest_of_today.onset == next_hour %}
               {% set later_clause = (later_condition | capitalize) ~ ' expected to continue (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
+            {# rain now with a forecast lull before the next wet hour - the next spell is more
+               of it, not a fresh start #}
+            {% elif raining_now and rest_of_today.onset %}
+              {% set later_clause = 'More ' ~ later_condition ~ ' expected around ' ~ rest_of_today.onset ~ ' (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
             {% elif rest_of_today.onset %}
               {% set later_clause = (later_condition | capitalize) ~ ' expected around ' ~ rest_of_today.onset ~ ' (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
             {% elif rest_of_today.mm > 0 %}

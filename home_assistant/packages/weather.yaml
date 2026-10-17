@@ -771,8 +771,9 @@ template:
         variables:
           raw_precipitation_entity: sensor.weather_station_precipitation
           event_rate_entity: sensor.raw_rain_rate
-          # link for retrieving calibration data
-          # http://homeassistant.local:8123/history?entity_id=sensor.rain_24h%2Csensor.rain_24h_lts%2Csensor.rain_rate%2Csensor.daily_precipitation%2Csensor.weather_station_precipitation%2Csensor.precipitation_total%2Csensor.raw_rain_rate&start_date=2026-07-01T08%3A00%3A00.000Z&end_date=2026-09-03T21%3A59%3A00.000Z
+          # link for retrieving rain calibration data
+          # minimal: http://homeassistant.local:8123/history?entity_id=sensor.rain_rate%2Csensor.daily_precipitation%2Csensor.raw_rain_rate&start_date=2026-10-11T22%3A00%3A00.000Z&end_date=2026-10-13T21%3A59%3A00.000Z
+          # with additional: http://homeassistant.local:8123/history?entity_id=sensor.rain_24h%2Csensor.rain_24h_lts%2Csensor.rain_rate%2Csensor.daily_precipitation%2Csensor.weather_station_precipitation%2Csensor.precipitation_total%2Csensor.raw_rain_rate&start_date=2026-07-01T08%3A00%3A00.000Z&end_date=2026-09-03T21%3A59%3A00.000Z
           # ceilings are raw mm/h (event_rate_entity), not the calibrated rate, so changing
           # a gain doesn't shift which tier a tick lands in.
           #
@@ -811,6 +812,12 @@ template:
           #
           # the tier boundaries themselves (0.3 and 2.0 mm/h) are inherited guesses and have
           # never been validated either. keep the structure, but do not treat them as known.
+          #
+          # 2026-10-12: 1.1 mm raw, gauge 5.0 (emptied before) -> 4.55x. fine rain, ~20h40 to
+          # 23h40, raw rate peaked at 1.1 mm/h. its mean raw rate (~0.4 mm/h) matches 09-03's
+          # (~0.3 mm/h), yet the two disagree by 5x, so nothing the station reports can tell
+          # them apart. left at 1.0: the piezo seems to under-read fine drops, and no gain
+          # tier can fix that.
           gain_tiers:
             - ceiling: 0.3
               gain: 1.0
@@ -1135,7 +1142,7 @@ template:
             {{ (spread_score * wind_score * 100) | round(0) }}
           {% endif %}
         availability: "{{ has_value(spread_entity) and has_value(wind_entity) }}"
-  # link for retrieving calibration data
+  # link for retrieving fog calibration data
   # http://homeassistant.local:8123/history?entity_id=sensor.weather_station_temperature%2Csensor.weather_station_dew_point%2Csensor.dew_point_spread%2Csensor.wind_speed_filtered_km_h%2Csensor.fog_probability%2Cbinary_sensor.fog_conditions%2Csensor.openweathermap_cloud_coverage%2Csensor.weather_station_illuminance%2Cbinary_sensor.raining%2Cbinary_sensor.weather_station_moisture%2Csensor.rain_rate%2Csensor.wind_speed_filtered%2Csensor.weather_station_wind_speed_gust%2Csensor.weather_station_wind_speed_sustained%2Csensor.afternoon_dew_point&start_date=2026-09-21T11%3A00%3A00.000Z&end_date=2026-09-22T21%3A59%3A00.000Z
   - binary_sensor:
       - name: "Fog Conditions"

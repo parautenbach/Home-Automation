@@ -1724,3 +1724,51 @@ automation:
           data:
             url: homeassistant://navigate/lovelace-main/environment
             group: "environment"
+      # trial: the same readings written up by claude, sent alongside the templated brief to
+      # compare the two. a failed call only skips this second notification
+      - service: ai_task.generate_data
+        continue_on_error: true
+        data:
+          task_name: "morning weather brief"
+          entity_id: ai_task.claude_haiku
+          instructions: >-
+            Write a short morning weather brief for a phone notification for someone in
+            Cape Town. Plain prose, no markdown, no greeting, at most about 60 words.
+            Open with how it feels outside right now, then the rest of today.
+            Always cover temperature, humidity, wind and skies. Use qualitative words
+            (humid, fresh, breezy) over raw percentages; give temperatures in °C and wind
+            in km/h. Mention rain timing and amount, fog, high UV or rapidly changing
+            pressure only when they matter. The weather station is sheltered and reads well
+            below the forecast for sustained wind, so don't compare the measured wind with
+            forecast wind speeds.
+
+            Right now (measured):
+            - temperature: {{ current_temp }}°C, feels {{ heat_label }}
+            - humidity: {{ state_attr('sensor.humidity_perception', 'label') }}
+            - wind: {{ state_attr('sensor.wind_condition_beaufort', 'label') }}, {{ wind_speed }}{{ ' from the ' ~ wind_dir if wind_dir }}
+            - raining: {{ state_attr('sensor.rain_rate_condition', 'label') if raining_now else 'no' }}
+            - fog chance: {{ fog_chance }}
+            - UV: {{ uv_label }}
+            - pressure: {{ pressure_label }}
+
+            Forecast for today: high of {{ today_high }}°C. Hourly for the rest of today:
+            {% for f in hourly['weather.openweathermap']['forecast'] %}
+            {%- set dt = f.datetime | as_datetime | as_local %}
+            {%- if dt.date() == now().date() and dt > now() %}
+            - {{ dt.strftime('%H:%M') }}: {{ f.condition }}, {{ f.temperature | round(0) }}°C,
+            {{ f.precipitation | float(0) }} mm rain, wind {{ f.wind_speed | float(0) | round(0) }} km/h
+            from {{ f.wind_bearing | float(0) | round(0) }}°, humidity {{ f.humidity }}%
+            {%- endif %}
+            {% endfor %}
+        response_variable: ai_brief
+      - if:
+          - condition: template
+            value_template: "{{ ai_brief is defined and ai_brief.data is string and ai_brief.data | trim | length > 0 }}"
+        then:
+          - service: notify.mobile_app_ceres
+            data:
+              title: "🤖 Weather Brief"
+              message: "{{ ai_brief.data | trim }}"
+              data:
+                url: homeassistant://navigate/lovelace-main/environment
+                group: "environment"

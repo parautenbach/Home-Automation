@@ -201,8 +201,8 @@ validated event rate, from an ordered list of rate tiers.
     {{ default_gain }}
   {%- else -%}
     {%- set event_rate = event_rate_state | float(0) -%}
-    {%- set match = tiers | selectattr('ceiling', '>', event_rate) | list | first -%}
-    {{ match.gain if match else default_gain }}
+    {%- set matches = tiers | selectattr('ceiling', '>', event_rate) | list -%}
+    {{ matches[0].gain if matches else default_gain }}
   {%- endif -%}
 {%- endmacro -%}
 

@@ -318,15 +318,16 @@ template:
   - trigger:
       - platform: event
         event_type: nursery_bed_checked
-    variables:
-      bed: "{{ trigger.event.data.bed if trigger.event.data.confidence == 'high' else this.state }}"
     sensor:
       - name: "Nursery Bed"
         unique_id: "23ca24c7-a987-43fb-a93b-ac602db20c74"
         icon: mdi:bed-outline
-        state: "{{ bed }}"
+        state: "{{ trigger.event.data.bed if trigger.event.data.confidence == 'high' else this.state }}"
         attributes:
+          # repeats the state's logic: block-level variables can't see this, and this.state
+          # here is still the state from before this event
           label: >-
+            {% set bed = trigger.event.data.bed if trigger.event.data.confidence == 'high' else this.state %}
             {% set labels = {
               'occupied': 'Occupied',
               'empty': 'Empty',

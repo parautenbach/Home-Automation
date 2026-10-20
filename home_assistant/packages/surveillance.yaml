@@ -239,6 +239,18 @@ camera:
   - platform: ffmpeg
     name: security_camera_last_clip
     input: /config/www/camera.security_camera_last.mp4
+  # what the nursery bed check sees: the right quarter of the frame is wall and the check pays
+  # per pixel, so crop that off, then downscale (keep in sync with scripts/sleep_eval/check.py)
+  - platform: proxy
+    name: nursery_bed_crop
+    entity_id: camera.baby_monitor_profile000
+    mode: crop
+    max_image_width: 1440
+    max_image_height: 1080
+  - platform: proxy
+    name: nursery_bed_check
+    entity_id: camera.nursery_bed_crop
+    max_image_width: 576
 
 shell_command:
   copy_last_security_camera_snapshot_image: "cp `ls -t /tmp/camera.security_camera_*.jpg | head -1` /config/www/camera.security_camera_last.jpg"

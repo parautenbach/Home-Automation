@@ -73,6 +73,10 @@ input_boolean:
   baby_sleep_mode:
     name: Baby's Sleep Mode
     icon: mdi:bell-sleep-outline
+  # a dim night light is kinder if she wakes in the night
+  child_keep_night_light:
+    name: Keep Child's Night Light On
+    icon: mdi:lightbulb-night-outline
   everyday_routine:
     name: Everyday Routine
     icon: mdi:sun-clock-outline
@@ -129,6 +133,14 @@ timer:
     duration: "00:30:00"
     restore: true
   main_bedroom_ac_timer:
+    duration: "00:30:00"
+    restore: true
+  # restored, so a restart doesn't reset the wait for the lamp to dim and go off once the
+  # child is asleep
+  bedroom_bedlamp_dim_timer:
+    duration: "00:10:00"
+    restore: true
+  bedroom_bedlamp_off_timer:
     duration: "00:30:00"
     restore: true
 
@@ -231,6 +243,23 @@ template:
           {% else %}
             mdi:sleep-off
           {% endif %}
+  - sensor:
+      # the nap and night schedule only, not what she's doing: see get_sleep_phase
+      - name: "Child Sleep Phase"
+        unique_id: "7fa26b31-d7d7-468d-9d7d-e4fec90dacb4"
+        icon: mdi:sleep
+        state: >-
+          {% from 'baby.jinja' import get_sleep_phase %}
+          {{ get_sleep_phase() }}
+        attributes:
+          label: >-
+            {% from 'baby.jinja' import get_sleep_phase %}
+            {% set labels = {
+              'sleep_time': 'Sleep Time',
+              'wake_up_time': 'Wake-Up Time',
+              'none': 'Awake Time'
+            } %}
+            {{ labels.get(get_sleep_phase(), 'Unknown') }}
   - binary_sensor:
       # stands in for light.bedroom_bedlamp where the sleep-mode automations ask if her room
       # is lit: a night light doesn't count, anything brighter does. brightness only, so she
@@ -284,6 +313,31 @@ template:
         unit_of_measurement: s
         icon: mdi:timer-outline
 
+  # set by "Check Whether Child Is In Bed": only a high-confidence answer changes the state,
+  # the attributes always hold the latest answer
+  - trigger:
+      - platform: event
+        event_type: nursery_bed_checked
+    variables:
+      bed: "{{ trigger.event.data.bed if trigger.event.data.confidence == 'high' else this.state }}"
+    sensor:
+      - name: "Nursery Bed"
+        unique_id: "23ca24c7-a987-43fb-a93b-ac602db20c74"
+        icon: mdi:bed-outline
+        state: "{{ bed }}"
+        attributes:
+          label: >-
+            {% set labels = {
+              'occupied': 'Occupied',
+              'empty': 'Empty',
+              'unclear': 'Unclear'
+            } %}
+            {{ labels.get(bed, 'Unknown') }}
+          bed: "{{ trigger.event.data.bed }}"
+          confidence: "{{ trigger.event.data.confidence }}"
+          evidence: "{{ trigger.event.data.evidence }}"
+          check: "{{ trigger.event.data.check }}"
+
   # https://community.home-assistant.io/t/time-elapsed-counter/139907/10
   # https://community.home-assistant.io/t/timer-and-stopwatch/188524/4
   # alternative: https://community.home-assistant.io/t/display-remaining-seconds-of-timer-in-frontend/119835/76
@@ -296,6 +350,65 @@ template:
         icon: mdi:timer-outline
 
 script:
+  # one vision check of the nursery bed; returns bed (occupied, empty, unclear or error),
+  # confidence and evidence (prompt validated in scripts/sleep_eval/check.py, keep in sync)
+  check_nursery_bed:
+    mode: parallel
+    sequence:
+      - service: ai_task.generate_data
+        continue_on_error: true
+        data:
+          task_name: "nursery bed check"
+          entity_id: ai_task.claude_sonnet
+          instructions: >-
+            This is a frame from a camera above a toddler's bed: infrared greyscale at night,
+            colour with a lamp on. Is the child in the bed?
+            - in_bed: you can see part of her in the bed (head, hair, face, a hand or a foot) or
+            a duvet or blanket is clearly raised over a body. She may be covered or not, can lie
+            in any direction, including with her head at the end nearest the camera, can sit,
+            kneel or stand, and may be motion-blurred.
+            - empty: no child in the bed. Made or rumpled bedding, blankets, pillows and plush
+            toys are not a child.
+            - unclear: you can't tell, e.g. too dark or blocked.
+            An adult in or beside the bed is not the child. Give the evidence in a few words.
+          structure:
+            bed:
+              required: true
+              selector:
+                select:
+                  options: ["in_bed", "empty", "unclear"]
+            confidence:
+              required: true
+              selector:
+                select:
+                  options: ["low", "medium", "high"]
+            evidence:
+              required: true
+              selector:
+                text:
+          attachments:
+            - media_content_id: media-source://camera/camera.nursery_bed_check
+              media_content_type: image/jpeg
+        response_variable: result
+      - variables:
+          answered: "{{ result is defined and result.data is mapping }}"
+          answer:
+            # the prompt keeps in_bed, as validated: it asks about the child, where occupied
+            # asks about the bed, which an adult, toys or a heaped duvet can occupy too.
+            # occupied is only the name for her being in it
+            bed: >-
+              {% if not answered %}
+                error
+              {% elif result.data.bed == 'in_bed' %}
+                occupied
+              {% else %}
+                {{ result.data.bed }}
+              {% endif %}
+            confidence: "{{ result.data.confidence if answered else 'none' }}"
+            evidence: "{{ result.data.evidence if answered else '' }}"
+      - stop: "checked"
+        response_variable: answer
+
   send_pieter_work_cape_town_to_home_eta:
     mode: single
     sequence:
@@ -1227,6 +1340,274 @@ automation:
       - service: script.turn_on
         entity_id: script.send_pieter_work_cape_town_to_home_eta
 
+  # feeds sensor.nursery_bed, which "Update Sleep Mode From Bed Checks And Motion" acts on
+  - alias: "Check Whether Child Is In Bed"
+    id: "ee89f5eb-4fba-44f2-ac8a-c440f7a60a9c"
+    initial_state: true
+    # the backstop trigger runs every minute, so keep enough traces to still see the checks
+    trace:
+      stored_traces: 100
+    trigger:
+      # a backstop in case motion is missed: whether one is due is up to the condition below
+      - platform: time_pattern
+        minutes: "/1"
+        id: "periodic"
+      # the motion sensor holds for ~30 s after movement stops, so this is ~90 s after she's back
+      # asleep or out of bed
+      - platform: state
+        entity_id: binary_sensor.baby_monitor_motion_alarm
+        to: "off"
+        for:
+          minutes: 1
+        id: "motion_stopped_short"
+      - platform: state
+        entity_id: binary_sensor.baby_monitor_motion_alarm
+        to: "off"
+        for:
+          minutes: 10
+        id: "motion_stopped_long"
+    variables:
+      phase: "{{ states('sensor.child_sleep_phase') }}"
+      # not a change that happened, but the one a check is looking for: sleep mode says which
+      # state she's in now, so the only change to look for is to the other one
+      next_transition: >-
+        {{ 'asleep_to_awake' if is_state('input_boolean.baby_sleep_mode', 'on') else 'awake_to_asleep' }}
+      # the longest we go without a check: 15 min while settling, 5 when she might wake, 30
+      # while asleep
+      backstop_minutes: >-
+        {% if next_transition == 'awake_to_asleep' %}
+          15
+        {% elif phase == 'wake_up_time' %}
+          5
+        {% else %}
+          30
+        {% endif %}
+      # counts from the last check of any kind, since it only runs when one is let through
+      minutes_since_last_check: >-
+        {% set last_check = this.attributes.last_triggered %}
+        {{ 9999 if last_check is none else ((now() - last_check).total_seconds() / 60) | round(1) }}
+    condition:
+      - condition: template
+        value_template: "{{ phase in ['sleep_time', 'wake_up_time'] }}"
+      - condition: or
+        conditions:
+          # awake to asleep: in bed after 10 min without motion. motion while settling already
+          # says she's awake, so only look once it's been quiet that long
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: "motion_stopped_long"
+              - condition: template
+                value_template: "{{ next_transition == 'awake_to_asleep' }}"
+          # asleep to awake: when she climbs out the motion stops, so look once it has. a burst
+          # that ends with her in bed means she just turned over
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: "motion_stopped_short"
+              - condition: template
+                value_template: "{{ next_transition == 'asleep_to_awake' }}"
+          - condition: and
+            conditions:
+              - condition: trigger
+                id: "periodic"
+              - condition: template
+                value_template: "{{ minutes_since_last_check >= backstop_minutes }}"
+    # each check opens an rtsp session (no onvif snapshot support), so never more than one
+    mode: queued
+    max: 3
+    action:
+      - service: script.check_nursery_bed
+        response_variable: answer
+      # every wrong answer in the eval was medium or low confidence: ask again before giving up
+      - if:
+          - condition: template
+            value_template: "{{ answer.confidence == 'high' }}"
+        then:
+          - event: nursery_bed_checked
+            event_data:
+              bed: "{{ answer.bed }}"
+              confidence: "{{ answer.confidence }}"
+              evidence: "{{ answer.evidence }}"
+              check: "{{ trigger.id }}"
+        else:
+          - delay:
+              minutes: 1
+          - service: script.check_nursery_bed
+            response_variable: recheck_answer
+          - event: nursery_bed_checked
+            event_data:
+              bed: "{{ recheck_answer.bed }}"
+              confidence: "{{ recheck_answer.confidence }}"
+              evidence: "{{ recheck_answer.evidence }}"
+              check: "{{ trigger.id }}_recheck"
+
+  # replaces the old lamp-based guesses: the lamp can be on at any time, so it says nothing
+  # about whether she's asleep
+  - alias: "Update Sleep Mode From Bed Checks And Motion"
+    id: "5e9c67f2-f1e2-46e3-9dc6-18af0dd5a18d"
+    initial_state: true
+    trigger:
+      # only a high-confidence answer is trusted, as in sensor.nursery_bed
+      - platform: event
+        event_type: nursery_bed_checked
+        event_data:
+          confidence: "high"
+        id: "trusted_bed_check"
+      # she's awake and busy in bed. the longest burst seen while settling was 4 min
+      - platform: state
+        entity_id: binary_sensor.baby_monitor_motion_alarm
+        to: "on"
+        for:
+          minutes: 5
+        id: "sustained_movement"
+      - platform: state
+        entity_id: sensor.child_sleep_phase
+        to: "none"
+        id: "sleep_time_over"
+    variables:
+      phase: "{{ states('sensor.child_sleep_phase') }}"
+      asleep: "{{ is_state('input_boolean.baby_sleep_mode', 'on') }}"
+      bed: "{{ trigger.event.data.bed if trigger.id == 'trusted_bed_check' else 'not_checked' }}"
+      # the check takes a while: still means no motion since 10 min before it was asked
+      still: >-
+        {{ is_state('binary_sensor.baby_monitor_motion_alarm', 'off') and
+           now() - states.binary_sensor.baby_monitor_motion_alarm.last_changed > timedelta(minutes=10) }}
+      # awake to asleep: in bed and still. asleep to awake: an empty bed at any time,
+      # sustained movement only when she might wake (in the night she resettles), or the nap
+      # or night is over without her having got up
+      reason: >-
+        {% if not asleep and phase in ['sleep_time', 'wake_up_time'] and bed == 'occupied' and still %}
+          fell_asleep
+        {% elif asleep and bed == 'empty' %}
+          out_of_bed
+        {% elif asleep and trigger.id == 'sustained_movement' and phase == 'wake_up_time' %}
+          awake_in_bed
+        {% elif asleep and trigger.id == 'sleep_time_over' %}
+          sleep_time_over
+        {% else %}
+          none
+        {% endif %}
+    condition:
+      - condition: template
+        value_template: "{{ reason != 'none' }}"
+    mode: queued
+    action:
+      - service: "input_boolean.turn_{{ 'on' if reason == 'fell_asleep' else 'off' }}"
+        target:
+          entity_id: input_boolean.baby_sleep_mode
+      # ios will only clear the most recent critical notification from a given tag
+      # https://companion.home-assistant.io/docs/notifications/notifications-basic
+      - service: notify.mobile_app_ceres
+        data:
+          message: "clear_notification"
+          data:
+            tag: "routine-bedtime"
+      - delay:
+          seconds: 5
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🛌 Sleep Mode"
+          message: >-
+            {% set messages = {
+                 'fell_asleep': 'Julia is asleep.',
+                 'out_of_bed': 'Julia is out of bed.',
+                 'awake_in_bed': 'Julia is awake.',
+                 'sleep_time_over': 'Sleep time is over.'
+               } %}
+            {{ messages[reason] }}
+          data:
+            actions:
+              - action: "{{ 'SLEEP_OFF' if reason == 'fell_asleep' else 'SLEEP_ON' }}"
+                title: "{{ 'Not asleep' if reason == 'fell_asleep' else 'Still asleep' }}"
+                icon: "{{ 'sfsymbols:sun.max' if reason == 'fell_asleep' else 'sfsymbols:moon.zzz' }}"
+            group: "routine-bedtime"
+            tag: "routine-bedtime"
+            url: homeassistant://navigate/lovelace-main/baby
+
+  # her lamp may be on when she falls asleep: dim it once she's had time to sleep deeply,
+  # then turn it off later unless we keep the night light. there's no real fade on this
+  # lamp, so it's a step. any motion starts the wait again, and nothing brightens it: if she
+  # turns it up, it stays until she's asleep again
+  - alias: "Start Or Cancel Bedroom Bedlamp Sleep Timers"
+    id: "5cbc04a8-9390-4cff-8209-91b553b693e1"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id:
+          - input_boolean.baby_sleep_mode
+          - binary_sensor.baby_monitor_motion_alarm
+          - binary_sensor.nursery_lit
+          - light.bedroom_bedlamp
+          - input_boolean.child_keep_night_light
+    variables:
+      asleep_and_still: >-
+        {{ is_state('input_boolean.baby_sleep_mode', 'on') and
+           is_state('binary_sensor.baby_monitor_motion_alarm', 'off') }}
+      # sleep mode only comes on after 10 min without motion, so the dim is 20 min in at first
+      dim_wanted: "{{ asleep_and_still and is_state('binary_sensor.nursery_lit', 'on') }}"
+      # 30 min after the dim, or after the night light was switched on
+      off_wanted: >-
+        {{ asleep_and_still and is_state('light.bedroom_bedlamp', 'on') and
+           is_state('binary_sensor.nursery_lit', 'off') and
+           is_state('input_boolean.child_keep_night_light', 'off') }}
+    mode: queued
+    action:
+      - if: "{{ dim_wanted and is_state('timer.bedroom_bedlamp_dim_timer', 'idle') }}"
+        then:
+          - service: timer.start
+            target:
+              entity_id: timer.bedroom_bedlamp_dim_timer
+      - if: "{{ not dim_wanted and not is_state('timer.bedroom_bedlamp_dim_timer', 'idle') }}"
+        then:
+          - service: timer.cancel
+            target:
+              entity_id: timer.bedroom_bedlamp_dim_timer
+      - if: "{{ off_wanted and is_state('timer.bedroom_bedlamp_off_timer', 'idle') }}"
+        then:
+          - service: timer.start
+            target:
+              entity_id: timer.bedroom_bedlamp_off_timer
+      - if: "{{ not off_wanted and not is_state('timer.bedroom_bedlamp_off_timer', 'idle') }}"
+        then:
+          - service: timer.cancel
+            target:
+              entity_id: timer.bedroom_bedlamp_off_timer
+
+  - alias: "Dim Bedroom Bedlamp When Child Is Asleep"
+    id: "12ef5d60-ea74-4405-b9fa-0e4baab55567"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.bedroom_bedlamp_dim_timer
+    action:
+      # brightness only, so she keeps her colour
+      - service: light.turn_on
+        target:
+          entity_id: light.bedroom_bedlamp
+        data:
+          brightness: 3  # 3/255 ~= 1%, as night_bedlamp
+
+  - alias: "Turn Off Bedroom Bedlamp When Child Is Asleep"
+    id: "99718763-7632-4076-ac24-978b67e8de11"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.bedroom_bedlamp_off_timer
+    condition:
+      # don't cut short a lamp timer someone set on purpose
+      - condition: state
+        entity_id: timer.bedroom_bedlamp_timer
+        state: "idle"
+    action:
+      - service: light.turn_off
+        target:
+          entity_id: light.bedroom_bedlamp
+
   - alias: "Notify When Motion Detected In The Nursery"
     id: "c85b1a55-74fe-4576-8ef4-346d1c94c31e"
     initial_state: true
@@ -1308,123 +1689,6 @@ automation:
         target:
           entity_id: input_boolean.baby_sleep_mode
 
-  - alias: "Offer To Toggle Sleep Mode"
-    id: "9cfa00dd-077d-48b2-842b-3cd7fb2d0133"
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.nursery_lit
-        to:
-          - "on"
-          - "off"
-        not_from: "unavailable"
-        for:
-          minutes: 5
-      # her light might stay on through a nap, so nursery lit may never go off to prompt the
-      # offer: ask at a fixed time as well, whatever the light
-      - platform: time
-        at:
-          - entity_id: input_datetime.baby_nap_start_time
-            offset: "00:30:00"
-        id: "nap_fallback"
-    variables:
-      now_time: "{{ now().time() }}"
-      # ask-to-enable opens 15 min before nap start, since she's often put down early;
-      # closes 40 min after nap start. ask-to-disable opens 75 min after
-      nap_ask_enable_start: "{{ ((states('input_datetime.baby_nap_start_time') | today_at) - timedelta(minutes=15)).time() }}"
-      nap_ask_enable_end: "{{ ((states('input_datetime.baby_nap_start_time') | today_at) + timedelta(minutes=40)).time() }}"
-      nap_dim_end: "{% from 'baby.jinja' import nap_restore_start_time %}{{ (nap_restore_start_time | as_function)() }}"
-      nap_end: "{{ (states('input_datetime.baby_nap_end_time') | today_at).time() }}"
-      # ask-to-enable opens 15 min before bedtime start, since she's often put down early
-      bedtime_ask_enable_start: "{{ ((states('input_datetime.baby_bedtime_start_time') | today_at) - timedelta(minutes=15)).time() }}"
-      lights_out: "{{ (states('input_datetime.lights_out_time') | today_at).time() }}"
-      # ask-to-disable opens 630 min (10.5 hours) after bedtime start
-      bed_ask_disable_start: "{% from 'baby.jinja' import bedtime_ask_disable_start_time %}{{ (bedtime_ask_disable_start_time | as_function)() }}"
-      wake_up: "{{ (states('input_datetime.baby_wake_up_time') | today_at).time() }}"
-      ask_enable_nap: "{{ nap_ask_enable_start <= now_time <= nap_ask_enable_end }}"
-      ask_disable_nap: "{{ nap_dim_end <= now_time <= nap_end }}"
-      ask_enable_bedtime: "{{ bedtime_ask_enable_start <= now_time <= lights_out }}"
-      ask_disable_bedtime: "{{ bed_ask_disable_start <= now_time <= wake_up }}"
-    condition:
-      - condition: template
-        value_template: >-
-          {{ ask_enable_nap or ask_disable_nap or ask_enable_bedtime or ask_disable_bedtime }}
-    actions:
-        # cannot template this, because the actions section's action and title isn't templateable
-        # - variables:
-        #     wanted_state: "{{ '' if states() and states() else '' }}"
-        #
-        # truth table:
-        #
-        # lit  | mode | e/d
-        # -----------------
-        # off  | off  | e
-        # off  | on   | -
-        # on   | off  | -
-        # on   | on   | d
-        #
-        # except the nap fallback, which offers to enable whatever the light
-        - choose:
-            - conditions:
-                - condition: or
-                  conditions:
-                    - condition: state
-                      entity_id: binary_sensor.nursery_lit
-                      state: "off"
-                    - condition: trigger
-                      id: "nap_fallback"
-                - condition: state
-                  entity_id: input_boolean.baby_sleep_mode
-                  state: "off"
-                - condition: template
-                  value_template: "{{ ask_enable_nap or ask_enable_bedtime }}"
-              sequence:
-                - service: notify.mobile_app_ceres
-                  data:
-                    title: "🛌 Sleep Mode"
-                    message: >-
-                      Would you like to enable sleep mode?
-                    data:
-                      actions:
-                        - action: "SLEEP_ON"
-                          title: "Enable"
-                      # action_data:
-                      #   wanted_state: "foo"
-                      group: "routine-bedtime"
-                      tag: "routine-bedtime"
-                      url: homeassistant://navigate/lovelace-main/baby
-                      push:
-                        sound:
-                          name: default
-                          critical: 1
-                          volume: 0.1
-            - conditions:
-                - condition: state
-                  entity_id: binary_sensor.nursery_lit
-                  state: "on"
-                - condition: state
-                  entity_id: input_boolean.baby_sleep_mode
-                  state: "on"
-                - condition: template
-                  value_template: "{{ ask_disable_nap or ask_disable_bedtime }}"
-              sequence:
-                - service: notify.mobile_app_ceres
-                  data:
-                    title: "🛌 Sleep Mode"
-                    message: >-
-                      Would you like to disable sleep mode?
-                    data:
-                      actions:
-                        - action: "SLEEP_OFF"
-                          title: "Disable"
-                      group: "routine-bedtime"
-                      tag: "routine-bedtime"
-                      url: homeassistant://navigate/lovelace-main/baby
-                      push:
-                        sound:
-                          name: default
-                          critical: 1
-                          volume: 0.1
-
   - alias: "Handle Sleep Mode From Alert Action"
     id: "7a1711ca-b9c7-4e2b-b5ba-1dce04aca077"
     initial_state: true
@@ -1443,59 +1707,6 @@ automation:
       - service: "input_boolean.turn_{{ trigger.id }}"
         target:
           entity_id: input_boolean.baby_sleep_mode
-
-  - alias: "Automatically Enable Sleep Mode When Lamp Off And No Motion"
-    id: "80903b7e-e94e-4a31-91ea-2569e5e42b56"
-    initial_state: true
-    trigger:
-      # single combined trigger, not two separate "for" timers, so the light
-      # turning off and the baby monitor's night mode falsely reporting
-      # motion moments later can't race each other to the 10-minute mark
-      - platform: template
-        value_template: >-
-          {{ is_state('binary_sensor.nursery_lit', 'off') and
-             is_state('binary_sensor.baby_monitor_motion_alarm', 'off') }}
-        for:
-          minutes: 5
-    variables:
-      now_time: "{{ now().time() }}"
-      # same ask-enable windows as "Offer To Toggle Sleep Mode"
-      nap_ask_enable_start: "{{ ((states('input_datetime.baby_nap_start_time') | today_at) - timedelta(minutes=15)).time() }}"
-      nap_ask_enable_end: "{{ ((states('input_datetime.baby_nap_start_time') | today_at) + timedelta(minutes=40)).time() }}"
-      bedtime_ask_enable_start: "{{ ((states('input_datetime.baby_bedtime_start_time') | today_at) - timedelta(minutes=15)).time() }}"
-      lights_out: "{{ (states('input_datetime.lights_out_time') | today_at).time() }}"
-    condition:
-      - condition: state
-        entity_id: input_boolean.baby_sleep_mode
-        state: "off"
-      - condition: template
-        value_template: >-
-          {{ (nap_ask_enable_start <= now_time <= nap_ask_enable_end) or
-             (bedtime_ask_enable_start <= now_time <= lights_out) }}
-    action:
-      - service: input_boolean.turn_on
-        target:
-          entity_id: input_boolean.baby_sleep_mode
-      # replace the "would you like to enable" offer with a statement that it already happened
-      - service: notify.mobile_app_ceres
-        data:
-          message: "clear_notification"
-          data:
-            tag: "routine-bedtime"
-      - delay:
-          seconds: 5
-      - service: notify.mobile_app_ceres
-        data:
-          title: "🛌 Sleep Mode"
-          message: >-
-            Sleep mode has been enabled automatically.
-          data:
-            actions:
-              - action: "SLEEP_OFF"
-                title: "Disable"
-            group: "routine-bedtime"
-            tag: "routine-bedtime"
-            url: homeassistant://navigate/lovelace-main/baby
 
   - alias: "Clear Nursery Motion Notifications When Sleep Mode Changes"
     id: "0898da8b-9333-4aa2-8ca7-46dcdd30a3ca"
@@ -1586,10 +1797,9 @@ automation:
         data:
           profile: normal_bedlamp
 
-  # the nap counterpart of "Child Wake-up Time": sleep mode is normally disabled manually
-  # (or by the bed occupancy automation) before nap end, which restores the lamp, but if
-  # that never happens the lamp would stay off. the safety net in
-  # "Turn Off Sleep Mode When Bedroom Bedlamp Remains On" picks up sleep mode afterwards.
+  # the nap counterpart of "Child Wake-up Time": sleep mode normally goes off when she gets
+  # up, which restores the lamp, but if she's still asleep at nap end the lamp would stay
+  # off. "Update Sleep Mode From Bed Checks And Motion" turns sleep mode off 15 min later.
   - alias: "Child Nap Wake-up Time"
     id: "43756d24-898a-4e10-89e1-409a883250d7"
     initial_state: true
@@ -1606,26 +1816,6 @@ automation:
           entity_id: light.bedroom_bedlamp
         data:
           profile: normal_bedlamp
-
-  # this is the only automation that turns the light off
-  # relevant in case we wanted to allow her to keep the night light on through the night
-  - alias: "Turn Off Bedroom Bedlamp When Sleep Mode Enabled"
-    id: "8991ff53-d2c5-47f2-a6e5-7e196978400a"
-    trigger:
-      - platform: state
-        entity_id: input_boolean.baby_sleep_mode
-        to: "on"
-    condition:
-      - condition: state
-        entity_id: light.bedroom_bedlamp
-        state: "on"
-      - condition: state
-        entity_id: timer.bedroom_bedlamp_timer
-        state: "idle"
-    action:
-      - service: light.turn_off
-        target:
-          entity_id: light.bedroom_bedlamp
 
   - alias: "Turn Off Nearby Lights When Bedroom Lamp Off"
     id: "120789be-ab7f-47d2-9690-1ff096db0490"
@@ -1696,70 +1886,6 @@ automation:
                 brightness: 3  # 3/255 ~= 1%, as night_bedlamp
         # deliberately no default: outside the dim windows, scenery's profile_default for this
         # lamp (normal_bedlamp) already normalises a plain turn-on, so there's nothing to add
-
-  # the purpose of this automation is to stop sleep tracking automatically
-  # when the light is turned on, but we forget to disable sleep mode
-  - alias: "Turn Off Sleep Mode When Bedroom Bedlamp Remains On"
-    id: "11eea35f-6477-4ac3-930e-9e688f3c697e"
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.nursery_lit
-        to: "on"
-        not_from: "unavailable"
-        for:
-          # the force night light automation dims the lamp at once when it's switched on at
-          # the lamp, so nursery lit is already off again. this must also be longer than the
-          # offer to toggle sleep mode (1 min)
-          # otherwise this will never be true
-          # it also means that if those automations function normally,
-          # we won't accidentally disable sleep mode
-          minutes: 2
-    conditions:
-      - condition: state
-        entity_id: input_boolean.baby_sleep_mode
-        state: "on"
-      # this is just for safety, in case there's an issue during night/nap time
-      # to prevent incorrectly turning off sleep mode. covers the tail of the nap (from 75 min
-      # in, with a grace overlap past nap end so that the lamp "Child Nap Wake-up Time" turns
-      # on at nap end still lands inside the window once the 2 min above have elapsed) and the
-      # tail of the night (from the dim-forcing window's end, with a small grace overlap past
-      # the next bedtime start)
-      - condition: template
-        value_template: >-
-          {% from 'baby.jinja' import nap_restore_start_time, bedtime_ask_disable_start_time %}
-          {% set nap_restore_start_fn = nap_restore_start_time | as_function %}
-          {% set bedtime_ask_disable_start_fn = bedtime_ask_disable_start_time | as_function %}
-          {% set now_time = now().time() %}
-          {% set nap_dim_end = nap_restore_start_fn() %}
-          {% set nap_safety_end = ((states('input_datetime.baby_nap_end_time') | today_at) + timedelta(minutes=15)).time() %}
-          {% set bedtime_dim_end = bedtime_ask_disable_start_fn() %}
-          {% set bedtime_safety_end = ((states('input_datetime.baby_bedtime_start_time') | today_at) + timedelta(minutes=10)).time() %}
-          {{ (nap_dim_end <= now_time <= nap_safety_end) or (bedtime_dim_end <= now_time <= bedtime_safety_end) }}
-    action:
-      - service: input_boolean.turn_off
-        entity_id: input_boolean.baby_sleep_mode
-      # ios will only clear the most recent critical notification from a given tag
-      # https://companion.home-assistant.io/docs/notifications/notifications-basic
-      - service: notify.mobile_app_ceres
-        data:
-          message: "clear_notification"
-          data:
-            tag: "routine-bedtime"
-      - delay:
-          seconds: 5
-      - service: notify.mobile_app_ceres
-        data:
-          title: "🛌 Sleep Mode"
-          message: >-
-            Sleep mode has been disabled automatically.
-          data:
-            actions:
-              - action: "SLEEP_ON"
-                title: "Enable"
-            group: "routine-bedtime"
-            tag: "routine-bedtime"
-            url: homeassistant://navigate/lovelace-main/baby
 
   - alias: "Update Baby Sleep Session Counter"
     id: "3d9714c9-dc53-4114-8df8-49a6efc98cc6"

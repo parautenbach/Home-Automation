@@ -66,3 +66,34 @@ them. Only a normal-brightness restore closes that gate.
                  (bedtime_start <= now_time <= lights_out) or
                  (morning_start <= now_time <= morning_end)) -%}
 {%- endmacro -%}
+
+{#
+Which part of the nap or night schedule we're in, for the nursery bed check and sleep mode.
+Only the clock: whether she's actually asleep is sleep mode's job.
+- sleep_time: from 15 minutes before the start (the outer padding, since she's often put
+  down early) until 30 minutes before the end
+- wake_up_time: from 30 minutes before the end (the waking lead) until 15 minutes after it
+  (the outer padding again), when she's most likely to get up, so it's checked more often
+
+When a short nap leaves no sleep time, it's all wake-up time.
+
+:returns: sleep_time, wake_up_time, or none outside naps and nights.
+#}
+{%- macro get_sleep_phase() -%}
+  {%- set now_time = now().time() -%}
+  {%- set outer_padding_delta = timedelta(minutes=15) -%}
+  {%- set waking_lead_delta = timedelta(minutes=30) -%}
+  {%- set nap_start = states('input_datetime.baby_nap_start_time') | today_at -%}
+  {%- set nap_end = states('input_datetime.baby_nap_end_time') | today_at -%}
+  {%- set night_start = states('input_datetime.baby_bedtime_start_time') | today_at -%}
+  {%- set wake_up = states('input_datetime.baby_wake_up_time') | today_at -%}
+  {%- if ((nap_end - waking_lead_delta).time() <= now_time <= (nap_end + outer_padding_delta).time()) or
+         ((wake_up - waking_lead_delta).time() <= now_time <= (wake_up + outer_padding_delta).time()) -%}
+    {{- 'wake_up_time' -}}
+  {%- elif ((nap_start - outer_padding_delta).time() <= now_time <= nap_end.time()) or
+           now_time >= (night_start - outer_padding_delta).time() or now_time <= wake_up.time() -%}
+    {{- 'sleep_time' -}}
+  {%- else -%}
+    {{- 'none' -}}
+  {%- endif -%}
+{%- endmacro -%}

@@ -129,6 +129,16 @@ cards:
         entities:
           - entity: input_boolean.baby_sleep_mode
             name: "Sleep Mode"
+          - entity: input_boolean.child_keep_night_light
+            name: "Keep Night Light On"
+          - type: attribute
+            entity: sensor.child_sleep_phase
+            name: "Sleep Phase"
+            attribute: label
+          - type: attribute
+            entity: sensor.nursery_bed
+            name: "In Bed"
+            attribute: label
           # - entity: binary_sensor.bed_occupancy_bed_occupied
           #   name: "In Bed"
           #   icon: mdi:bed

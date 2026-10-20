@@ -418,6 +418,67 @@ automation:
         double_press_profile: night_shelly_duo_rgb
         triple_press_profile: bright_shelly_duo
 
+  # temporary: collects nursery frames at the cadence a vision-based sleep sensor would use,
+  # with context in the filename, to build an eval set. not under www, so not served
+  # eval done: off so it doesn't compete with the bed check for the camera
+  - alias: "Capture Nursery Frames For Sleep Eval"
+    id: "dbc0fe41-5c0a-44da-865b-34569b678446"
+    initial_state: false
+    trigger:
+      - platform: time_pattern
+        minutes: "/5"
+        id: "periodic"
+      - platform: state
+        entity_id: binary_sensor.baby_monitor_motion_alarm
+        to: "on"
+        id: "motion"
+      - platform: state
+        entity_id: binary_sensor.baby_monitor_motion_alarm
+        to: "off"
+        for:
+          minutes: 10
+        id: "still"
+    condition:
+      # nap and night windows, padded 15 min either side
+      - condition: template
+        value_template: >-
+          {% set now_time = now().time() %}
+          {% set pad = timedelta(minutes=15) %}
+          {% set nap_start = ((states('input_datetime.baby_nap_start_time') | today_at) - pad).time() %}
+          {% set nap_end = ((states('input_datetime.baby_nap_end_time') | today_at) + pad).time() %}
+          {% set night_start = ((states('input_datetime.baby_bedtime_start_time') | today_at) - pad).time() %}
+          {% set night_end = ((states('input_datetime.baby_wake_up_time') | today_at) + pad).time() %}
+          {{ (nap_start <= now_time <= nap_end) or now_time >= night_start or now_time <= night_end }}
+      # motion comes in bursts: at most one motion frame per 2 min, whatever triggered last
+      - condition: template
+        value_template: >-
+          {{ trigger.id != 'motion' or this.attributes.last_triggered is none or
+             now() - this.attributes.last_triggered > timedelta(minutes=2) }}
+    # each snapshot opens an rtsp session (no onvif snapshot support), so never more than one
+    mode: queued
+    max: 3
+    action:
+      # stay clear of the motion alert's own snapshot
+      - if:
+          - condition: trigger
+            id: "motion"
+        then:
+          - delay:
+              seconds: 15
+      - variables:
+          motion: "{{ states('binary_sensor.baby_monitor_motion_alarm') }}"
+          still_min: >-
+            {{ 0 if motion == 'on' else
+               ((now() - states.binary_sensor.baby_monitor_motion_alarm.last_changed).total_seconds() / 60) | int }}
+          context: >-
+            {{ trigger.id }}_motion-{{ motion }}_still-{{ still_min }}_lit-{{ states('binary_sensor.nursery_lit') }}_sleep-{{ states('input_boolean.baby_sleep_mode') }}
+      - service: camera.snapshot
+        target:
+          entity_id: camera.baby_monitor_profile000
+        data:
+          filename: "/config/exports/sleep_eval/{{ now().strftime('%Y%m%d-%H%M%S') }}_{{ context }}.jpg"
+        continue_on_error: true
+
   - alias: "Handle Config Entry Discovered Event"
     id: "8d645365-8043-4edf-a2e8-cb89c8c2dbb0"
     initial_state: true

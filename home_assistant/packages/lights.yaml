@@ -1592,7 +1592,8 @@ automation:
               'light.led',
               'light.doorbell_ring_light',
               'light.doorbell_infrared',
-              'light.main_bedroom_group'
+              'light.main_bedroom_group',
+              'light.bedroom_bedlamp'
             ] %}
             {# exclude light groups #}
             {# https://community.home-assistant.io/t/count-lights-that-ar-not-a-group/342008/4 #}

@@ -701,10 +701,7 @@ automation:
             light: light.hallway
             target_brightness_pct: 0
             transition_duration: 60
-      # todo: make a group for all lights except bedlamps?
-      - service: light.turn_off
-        target:
-          entity_id: light.bedroom_bedlamp
+      # not her bedlamp: it may be her night light, and the sleep timers decide when it goes off
       - service: switch.turn_off
         target:
           entity_id: switch.bug_zapper
@@ -1345,9 +1342,6 @@ automation:
   - alias: "Check Whether Child Is In Bed"
     id: "ee89f5eb-4fba-44f2-ac8a-c440f7a60a9c"
     initial_state: true
-    # the backstop trigger runs every minute, so keep enough traces to still see the checks
-    trace:
-      stored_traces: 100
     trigger:
       # a backstop in case motion is missed: whether one is due is up to the condition below
       - platform: time_pattern
@@ -1448,6 +1442,10 @@ automation:
   - alias: "Update Sleep Mode From Bed Checks And Motion"
     id: "5e9c67f2-f1e2-46e3-9dc6-18af0dd5a18d"
     initial_state: true
+    # runs on every trusted check, so the default 5 only reaches back a few minutes before
+    # a change
+    trace:
+      stored_traces: 20
     trigger:
       # only a high-confidence answer is trusted, as in sensor.nursery_bed
       - platform: event
@@ -1520,7 +1518,15 @@ automation:
           data:
             actions:
               - action: "{{ 'SLEEP_OFF' if reason == 'fell_asleep' else 'SLEEP_ON' }}"
-                title: "{{ 'Not asleep' if reason == 'fell_asleep' else 'Still asleep' }}"
+                # what's actually happening if the guess was wrong
+                title: >-
+                  {% set titles = {
+                       'fell_asleep': 'Not asleep',
+                       'out_of_bed': 'Still in bed',
+                       'awake_in_bed': 'Still asleep',
+                       'sleep_time_over': 'Still asleep'
+                     } %}
+                  {{ titles[reason] }}
                 icon: "{{ 'sfsymbols:sun.max' if reason == 'fell_asleep' else 'sfsymbols:moon.zzz' }}"
             group: "routine-bedtime"
             tag: "routine-bedtime"
@@ -1617,18 +1623,12 @@ automation:
         entity_id: binary_sensor.baby_monitor_motion_alarm
         to: "on"
     condition:
-      # shared with "Turn On Bedroom Bedlamp When Sleep Mode Disabled": nursery lit gates the
-      # alerts below and only a normal-brightness restore clears it, so that automation has to
-      # cover this window or nothing ends them
+      # not gated on the lamp: she may keep a night light on, so it says nothing about
+      # whether we're in the room
       - condition: template
         value_template: >-
           {% from 'baby.jinja' import in_nursery_alert_window %}
           {{ (in_nursery_alert_window | as_function)() }}
-      - condition: state
-        entity_id: binary_sensor.nursery_lit
-        state: "off"
-        for:
-          minutes: 5
       - condition: state
         entity_id: sensor.ceres_battery_state
         state: 'Not Charging'  # Can be to Charging or Full
@@ -1655,7 +1655,7 @@ automation:
             # entity_id: camera.baby_monitor_profile000
             actions:
               - action: "SLEEP_OFF"
-                title: "Sleep off"
+                title: "Woken up"
             sound:
               # apple watch doesn't support custom sounds:
               # https://community.home-assistant.io/t/custom-notification-sounds-on-not-playing-on-apple-watch/540387
@@ -1747,9 +1747,7 @@ automation:
         event_data:
           action: SLEEP_OFF
     condition:
-      # the same window "Notify When Motion Detected In The Nursery" alerts in, because the
-      # lamp coming back up to normal is what stops those alerts. restoring across a
-      # narrower window than they fire in leaves them running with nothing to end them
+      # the same window "Notify When Motion Detected In The Nursery" alerts in
       - condition: template
         value_template: >-
           {% from 'baby.jinja' import in_nursery_alert_window %}
@@ -1818,23 +1816,26 @@ automation:
         data:
           profile: normal_bedlamp
 
-  - alias: "Turn Off Nearby Lights When Bedroom Lamp Off"
+  # her lamp can stay on as a night light, so it can't say when she's gone down: use her
+  # bedtime instead
+  - alias: "Dim Nearby Lights At Child Bedtime"
     id: "120789be-ab7f-47d2-9690-1ff096db0490"
     trigger:
-      - platform: state
-        entity_id: binary_sensor.nursery_lit
-        to: "off"
-        not_from: "unavailable"
-    conditions:
-      - condition: time
-        after: "18:55:00"
+      - platform: time
+        at: input_datetime.baby_bedtime_start_time
     actions:
-      - service: light.turn_on
-        target:
-          entity_id:
-            - light.hallway
-        data:
-          profile: low_tp_link_rgb
+      # dim only: turning it on here would light the hallway before anyone needs it
+      - if:
+          - condition: state
+            entity_id: light.hallway
+            state: "on"
+        then:
+          - service: light.turn_on
+            target:
+              entity_id:
+                - light.hallway
+            data:
+              profile: low_tp_link_rgb
       - service: light.turn_off
         target:
           entity_id:

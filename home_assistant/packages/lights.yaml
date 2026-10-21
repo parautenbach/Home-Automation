@@ -1443,9 +1443,7 @@ automation:
 
   # the morning routine leaves the hallway off while she's asleep, because at normal
   # brightness it reaches the nursery through her door. this is what turns it on instead.
-  # the other two triggers are for a morning she's up before her time: sleep mode clearing is
-  # the reliable signal, her bedlamp coming on the early one, since sleep mode only follows it
-  # two minutes later and that's two minutes of dark hallway on the way to her room
+  # the other trigger is for a morning she's up before her time
   - alias: "Hallway Light On At Child Wake-up Time"
     id: "510b85e2-2d20-4401-9087-33903943854f"
     initial_state: true
@@ -1456,17 +1454,13 @@ automation:
       - platform: state
         entity_id: input_boolean.baby_sleep_mode
         to: "off"
-      - platform: state
-        entity_id: binary_sensor.nursery_lit
-        to: "on"
-        not_from: "unavailable"
     condition:
       # we're sleeping in, so keep the hallway dark too
       - condition: state
         entity_id: input_boolean.skip_next_wake_up_time
         state: "off"
-      # from when we're up until she's due up, so the two state triggers only count in the
-      # morning: her lamp comes on at bedtime and during night settles too. the time trigger
+      # from when we're up until she's due up, so the sleep mode trigger only counts in the
+      # morning: it also goes off at night when she gets out of bed. the time trigger
       # bypasses the window: it fires a few ms past the closing edge, which now() already exceeds
       # this assumes our wake-up time is before hers
       - condition: or

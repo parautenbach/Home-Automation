@@ -261,14 +261,14 @@ template:
             } %}
             {{ labels.get(get_sleep_phase(), 'Unknown') }}
   - binary_sensor:
-      # stands in for light.bedroom_bedlamp where the sleep-mode automations ask if her room
-      # is lit: a night light doesn't count, anything brighter does. brightness only, so she
-      # can pick any colour
+      # whether her lamp is brighter than a night light, for the automations that dim or
+      # restore it. says nothing about whether she's asleep. brightness only, so she can
+      # pick any colour
       - name: "Nursery Lit"
         unique_id: "60622665-82cd-40ca-b0d8-fdc6b52720f8"
         icon: mdi:lightbulb-on-outline
         # mirror the lamp: if unavailable read as unlit, a dropout would look like the light
-        # going out and arm sleep mode
+        # going out
         availability: "{{ has_value('light.bedroom_bedlamp') }}"
         state: >-
           {# 26/255 ~= 10%, well clear of the 1% dim profiles and normal_bedlamp's 60% #}

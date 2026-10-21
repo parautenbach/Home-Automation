@@ -314,6 +314,115 @@ template:
           target: "{{ notification_target }}"
           timestamp: "{{ timestamp }}"
 
+  # ai task calls per model and per task. each is counted by the sensor named
+  # "<model> Calls" or "<task name> Calls" (i.e. sensor.<slug>_calls), and falls
+  # through to the matching other ... calls sensor without one
+  - trigger: &ai_task_triggers
+      # start and reload set a new sensor to 0 instead of unknown, and otherwise
+      # keep the restored count
+      - platform: homeassistant
+        event: start
+      - platform: event
+        event_type: event_template_reloaded
+      - platform: event
+        id: call
+        event_type: call_service
+        event_data:
+          domain: ai_task
+        variables:
+          # the model without its domain. entity_id is a string or a list (hence ids,
+          # of which the first is used). service_data is checked to be a dict before
+          # indexing it, since indexing a string falls back to its methods
+          ai_model: >-
+            {% set payload = trigger.event.data.service_data %}
+            {% set ids = payload['entity_id'] | default('') if payload is mapping else '' %}
+            {{ (ids if ids is string else ids | first | default('')) | replace('ai_task.', '') }}
+          # slugified to compare with the slug in a sensor's entity id; the same dict
+          # check applies
+          ai_task_name: >-
+            {% set payload = trigger.event.data.service_data %}
+            {{ (payload['task_name'] | default('') if payload is mapping else '') | slugify }}
+    condition:
+      - condition: template
+        value_template: "{{ trigger.id != 'call' or ai_model == 'claude_haiku' }}"
+    sensor:
+      - name: "Claude Haiku Calls"
+        unique_id: "f2133acc-86cc-47c2-92ab-6ec5848de9de"
+        icon: mdi:robot-outline
+        unit_of_measurement: calls
+        state_class: total_increasing
+        state: "{{ this.state | int(0) + (1 if trigger.id == 'call' else 0) }}"
+
+  - trigger: *ai_task_triggers
+    condition:
+      - condition: template
+        value_template: "{{ trigger.id != 'call' or ai_model == 'claude_sonnet' }}"
+    sensor:
+      - name: "Claude Sonnet Calls"
+        unique_id: "61a52105-a0a2-4867-83a0-6b63b3bfafa7"
+        icon: mdi:robot-outline
+        unit_of_measurement: calls
+        state_class: total_increasing
+        state: "{{ this.state | int(0) + (1 if trigger.id == 'call' else 0) }}"
+
+  - trigger: *ai_task_triggers
+    condition:
+      # no sensor of its own. not a check for unknown: that's also the state of a
+      # new sensor before its first count, which would then be counted twice
+      - condition: template
+        value_template: "{{ trigger.id != 'call' or ('sensor.' ~ ai_model ~ '_calls') not in states.sensor | map(attribute='entity_id') | list }}"
+    sensor:
+      - name: "Other AI Model Calls"
+        unique_id: "ba5acb66-624e-4dec-8f52-35ef10e65d28"
+        icon: mdi:robot-confused-outline
+        unit_of_measurement: calls
+        state_class: total_increasing
+        state: "{{ this.state | int(0) + (1 if trigger.id == 'call' else 0) }}"
+        attributes:
+          # the models counted here, i.e. those still needing a sensor of their own
+          models: "{{ ((this.attributes.models | default([])) + ([ai_model or 'unknown'] if trigger.id == 'call' else [])) | unique | sort | list }}"
+
+  - trigger: *ai_task_triggers
+    condition:
+      - condition: template
+        value_template: "{{ trigger.id != 'call' or ai_task_name == 'nursery_bed_check' }}"
+    sensor:
+      - name: "Nursery Bed Check Calls"
+        unique_id: "73204c12-c1d8-4679-b351-96655c114f4c"
+        icon: mdi:robot-outline
+        unit_of_measurement: calls
+        state_class: total_increasing
+        state: "{{ this.state | int(0) + (1 if trigger.id == 'call' else 0) }}"
+
+  - trigger: *ai_task_triggers
+    condition:
+      - condition: template
+        value_template: "{{ trigger.id != 'call' or ai_task_name == 'morning_weather_brief' }}"
+    sensor:
+      - name: "Morning Weather Brief Calls"
+        unique_id: "434e3326-8790-4325-999e-d71c33b3ad7d"
+        icon: mdi:robot-outline
+        unit_of_measurement: calls
+        state_class: total_increasing
+        state: "{{ this.state | int(0) + (1 if trigger.id == 'call' else 0) }}"
+
+  - trigger: *ai_task_triggers
+    condition:
+      # no sensor of its own. not a check for unknown: that's also the state of a
+      # new sensor before its first count, which would then be counted twice
+      - condition: template
+        value_template: "{{ trigger.id != 'call' or ('sensor.' ~ ai_task_name ~ '_calls') not in states.sensor | map(attribute='entity_id') | list }}"
+    sensor:
+      - name: "Other AI Task Calls"
+        unique_id: "600479fa-3330-4c28-b6cc-8205cc02a361"
+        icon: mdi:robot-confused-outline
+        unit_of_measurement: calls
+        state_class: total_increasing
+        state: "{{ this.state | int(0) + (1 if trigger.id == 'call' else 0) }}"
+        attributes:
+          # the task names counted here, i.e. those still needing a sensor of their own
+          tasks: "{{ ((this.attributes.tasks | default([])) + ([ai_task_name or 'unknown'] if trigger.id == 'call' else [])) | unique | sort | list }}"
+
   - sensor:
       - name: "Last Backup"
         unique_id: "a5adde93-fc14-4a94-a7b5-fe84fd2bef56"

@@ -302,6 +302,8 @@ cards:
                   type: section
                   label: Rain
                 entities:
+                  - entity: binary_sensor.weather_station_moisture
+                    name: Moisture
                   - entity: sensor.rain_rate
                     name: Rate
                   - type: attribute

@@ -1502,8 +1502,8 @@ automation:
           fog_chance: "{{ state_attr('binary_sensor.fog_conditions', 'chance') }}"
           compass_names: >-
             {{ {
-              'N': 'North', 'NE': 'Northeast', 'E': 'East', 'SE': 'Southeast',
-              'S': 'South', 'SW': 'Southwest', 'W': 'West', 'NW': 'Northwest'
+              'N': 'north', 'NE': 'northeast', 'E': 'east', 'SE': 'southeast',
+              'S': 'south', 'SW': 'southwest', 'W': 'west', 'NW': 'northwest'
             } }}
           # full phrases for use in sentences, keyed by beaufort tier - distinct from
           # sensor.wind_condition_beaufort's 'label' attribute, which is a terse
@@ -1732,9 +1732,12 @@ automation:
           task_name: "morning weather brief"
           entity_id: ai_task.claude_haiku
           instructions: >-
-            Write a short morning weather brief for a phone notification for someone in
-            Cape Town. Plain prose, no markdown, no greeting, at most about 60 words.
-            Open with how it feels outside right now, then the rest of today.
+            Write a short morning weather report for a phone notification for someone in
+            Cape Town. Plain prose, no markdown, no greeting, at most 40 words and under
+            250 characters. Report the weather only: no advice or suggestions (umbrellas,
+            jackets, sunscreen).
+            Open with how it feels outside right now, including whether it's raining,
+            then the rest of today.
             Always cover temperature, humidity, wind and skies. Use qualitative words
             (humid, fresh, breezy) over raw percentages; give temperatures in °C and wind
             in km/h. Mention rain timing and amount, fog, high UV or rapidly changing
@@ -1746,7 +1749,7 @@ automation:
             - temperature: {{ current_temp }}°C, feels {{ heat_label }}
             - humidity: {{ state_attr('sensor.humidity_perception', 'label') }}
             - wind: {{ state_attr('sensor.wind_condition_beaufort', 'label') }}, {{ wind_speed }}{{ ' from the ' ~ wind_dir if wind_dir }}
-            - raining: {{ state_attr('sensor.rain_rate_condition', 'label') if raining_now else 'no' }}
+            - raining: {{ 'yes, ' ~ rain_now_state | replace('no_rain', 'light') if raining_now else 'no' }}
             - fog chance: {{ fog_chance }}
             - UV: {{ uv_label }}
             - pressure: {{ pressure_label }}
@@ -1768,7 +1771,16 @@ automation:
           - service: notify.mobile_app_ceres
             data:
               title: "🤖 Weather Brief"
-              message: "{{ ai_brief.data | trim }}"
+              # ios push cuts the message at 256 characters, mid-word - so an overlong brief drops
+              # whole sentences to fit instead
+              message: >-
+                {% set text = ai_brief.data | trim %}
+                {% if text | length > 256 %}
+                  {% set end = text[:257].rfind('. ') %}
+                  {{ text[:end + 1] if end > 0 else text[:256] }}
+                {% else %}
+                  {{ text }}
+                {% endif %}
               data:
                 url: homeassistant://navigate/lovelace-main/environment
                 group: "environment"

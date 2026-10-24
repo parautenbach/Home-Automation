@@ -1576,6 +1576,15 @@ automation:
               'onset': ns.wet[0].strftime('%H:%M') if ns.wet else ''
             } }}
           today_high: "{{ daily['weather.openweathermap']['forecast'][0]['temperature'] | int(0) }}"
+          # plain-English names for the forecast conditions, shared by the templated brief and the
+          # claude one below so both say "heavy rain" rather than inventing a synonym for 'pouring'
+          condition_words: >-
+            {{ {
+              'clear-night': 'clear', 'cloudy': 'cloudy', 'fog': 'foggy', 'hail': 'hail',
+              'lightning': 'thunderstorms', 'lightning-rainy': 'thunderstorms', 'partlycloudy': 'partly cloudy',
+              'pouring': 'heavy rain', 'rainy': 'rain', 'snowy': 'snow', 'snowy-rainy': 'sleet',
+              'sunny': 'sunny', 'windy': 'windy', 'windy-variant': 'windy', 'exceptional': 'unusual weather'
+            } }}
           # the daily forecast carries one representative wind for the whole day, which hides the shape
           # of it - a southeaster that builds through the afternoon and drops at sunset reads the same as
           # a steady breeze. Scanning the whole of what's left of today doesn't fix that either: the
@@ -1623,12 +1632,6 @@ automation:
         data:
           title: "🌤️ Weather Brief"
           message: >-
-            {% set condition_words = {
-              'clear-night': 'clear', 'cloudy': 'cloudy', 'fog': 'foggy', 'hail': 'hail',
-              'lightning': 'thunderstorms', 'lightning-rainy': 'thunderstorms', 'partlycloudy': 'partly cloudy',
-              'pouring': 'heavy rain', 'rainy': 'rain', 'snowy': 'snow', 'snowy-rainy': 'sleet',
-              'sunny': 'sunny', 'windy': 'windy', 'windy-variant': 'windy', 'exceptional': 'unusual weather'
-            } %}
             {% set later_condition = condition_words.get(rest_of_today.condition, rest_of_today.condition | replace('-', ' ')) %}
             {# how it feels reads as one sentence about the air, not two readings bolted together:
                the humidity word sits alongside the temperature word rather than trailing it with a
@@ -1744,22 +1747,33 @@ automation:
             pressure only when they matter. The weather station is sheltered and reads well
             below the forecast for sustained wind, so don't compare the measured wind with
             forecast wind speeds.
+            Use the words given below for wind strength, sky condition and rain intensity -
+            they are the Beaufort and forecast terms and the dashboards use them too, so keep
+            them rather than reaching for a synonym ("faint", "westerlies", "shower"). Fog is
+            either happening now or only possible: say which, and don't hedge one that's
+            already there. Write times on the 24-hour clock (11:00, not 11am).
 
             Right now (measured):
-            - temperature: {{ current_temp }}°C, feels {{ heat_label }}
-            - humidity: {{ state_attr('sensor.humidity_perception', 'label') }}
-            - wind: {{ state_attr('sensor.wind_condition_beaufort', 'label') }}, {{ wind_speed }}{{ ' from the ' ~ wind_dir if wind_dir }}
-            - raining: {{ 'yes, ' ~ rain_now_state | replace('no_rain', 'light') if raining_now else 'no' }}
-            - fog chance: {{ fog_chance }}
-            - UV: {{ uv_label }}
-            - pressure: {{ pressure_label }}
+            - temperature: {{ current_temp }}°C, feels {{ heat_label | lower }}
+            - humidity: {{ humidity_phrases.get(humidity_state, humidity_state) }}
+            - wind: {{ wind_phrases[wind_state] | lower }}, {{ wind_speed }}{{ ' from the ' ~ wind_dir if wind_dir }}
+            - raining: {{ 'yes, ' ~ rain_now_state | replace('no_rain', 'light') ~ ' rain' if raining_now else 'no' }}
+            - fog: {{ 'yes, fog right now' if fog_chance == 'present' else ('no fog yet, but possible' if fog_chance == 'possible' else 'no') }}
+            - UV: {{ uv_label | lower }}
+            - pressure: {{ pressure_label | lower }}
 
-            Forecast for today: high of {{ today_high }}°C. Hourly for the rest of today:
+            Forecast for today: high of {{ today_high }}°C.
+            {%- if afternoon_wind.speed is not none %}
+            Windiest hour between noon and sunset: {{ wind_phrases[afternoon_wind_state] | lower }},
+            {{ afternoon_wind_speed }}{{ ' from the ' ~ afternoon_wind_dir if afternoon_wind_dir }}.
+            {%- endif %}
+            Hourly for the rest of today:
             {% for f in hourly['weather.openweathermap']['forecast'] %}
             {%- set dt = f.datetime | as_datetime | as_local %}
             {%- if dt.date() == now().date() and dt > now() %}
-            - {{ dt.strftime('%H:%M') }}: {{ f.condition }}, {{ f.temperature | round(0) }}°C,
-            {{ f.precipitation | float(0) }} mm rain, wind {{ f.wind_speed | float(0) | round(0) }} km/h
+            - {{ dt.strftime('%H:%M') }}: {{ condition_words.get(f.condition, f.condition | replace('-', ' ')) }},
+            {{ f.temperature | round(0) }}°C, {{ f.precipitation | float(0) }} mm rain,
+            wind {{ f.wind_speed | float(0) | round(0) }} km/h
             from {{ f.wind_bearing | float(0) | round(0) }}°, humidity {{ f.humidity }}%
             {%- endif %}
             {% endfor %}

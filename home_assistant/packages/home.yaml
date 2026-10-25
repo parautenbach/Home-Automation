@@ -99,13 +99,6 @@ input_boolean:
     name: Dishwasher Cleaning Reminder
     icon: mdi:reminder
 
-input_number:
-  baby_current_sleep_session:
-    name: Baby's Current Sleep Session
-    icon: mdi:timer-outline
-    min: 0
-    max: 86400
-
 notify:
   - name: family
     platform: group
@@ -172,6 +165,9 @@ sensor:
     state: "on"
     type: time
     # because we want to track across midnight; we're assuming they've woken up from the night session by 9 am
+    # reads short per sleep: sleep mode needs 10 min without motion before the bed check, so it
+    # comes on ~10 min after she fell asleep, up to ~25 when that check and its recheck aren't
+    # sure, or miss her, as the next one is only the 15 min backstop. accepted, it's consistent
     start: "{{ today_at('17:00') - timedelta(days=1) }}"
     end: "{{ today_at('17:00') }}"
   - platform: statistics
@@ -255,9 +251,9 @@ template:
           label: >-
             {% from 'baby.jinja' import get_sleep_phase %}
             {% set labels = {
-              'sleep_time': 'Sleep Time',
-              'wake_up_time': 'Wake-Up Time',
-              'none': 'Awake Time'
+              'sleep': 'Sleep',
+              'wake_up': 'Wake-Up',
+              'none': 'Awake'
             } %}
             {{ labels.get(get_sleep_phase(), 'Unknown') }}
   - binary_sensor:
@@ -308,10 +304,25 @@ template:
     sensor:
       - name: "Baby Last Sleep Session"
         unique_id: "27531163-2af9-4f3c-b67d-a75f78703705"
-        state: "{{ (trigger.to_state.last_updated | as_timestamp(0) - trigger.from_state.last_updated | as_timestamp(0)) | int(0) }}"
+        # from when she fell asleep, not when sleep mode came on
+        state: "{{ (trigger.to_state.last_updated - states('sensor.child_fell_asleep') | as_datetime).total_seconds() | int(0) }}"
         device_class: duration
         unit_of_measurement: s
         icon: mdi:timer-outline
+
+  - trigger:
+      - platform: state
+        entity_id: input_boolean.baby_sleep_mode
+        from: "off"
+        to: "on"
+    sensor:
+      - name: "Child Fell Asleep"
+        unique_id: "d7c36279-6e70-4ef9-98b4-a105b3b4f09b"
+        # sleep mode comes on after 10 min without motion, so the earliest she could have
+        # fallen asleep is when the motion stopped
+        state: "{{ states.binary_sensor.baby_monitor_motion_alarm.last_changed.isoformat() }}"
+        device_class: timestamp
+        icon: mdi:sleep
 
   # set by "Check Whether Child Is In Bed": only a high-confidence answer changes the state,
   # the attributes always hold the latest answer
@@ -338,14 +349,30 @@ template:
           confidence: "{{ trigger.event.data.confidence }}"
           evidence: "{{ trigger.event.data.evidence }}"
           check: "{{ trigger.event.data.check }}"
+          # when the state was last confirmed, even if unchanged
+          last_confident_check: >-
+            {{ now().isoformat() if trigger.event.data.confidence == 'high' else this.attributes.get('last_confident_check') }}
 
-  # https://community.home-assistant.io/t/time-elapsed-counter/139907/10
-  # https://community.home-assistant.io/t/timer-and-stopwatch/188524/4
-  # alternative: https://community.home-assistant.io/t/display-remaining-seconds-of-timer-in-frontend/119835/76
-  - sensor:
+  # from when she fell asleep, not when sleep mode came on. as it comes on, sensor.child_fell_asleep
+  # may still hold the previous sleep's time, so read the motion directly then
+  - trigger:
+      - platform: state
+        entity_id: input_boolean.baby_sleep_mode
+        id: "sleep_mode"
+      - platform: time_pattern
+        minutes: "/1"
+        id: "tick"
+    sensor:
       - name: "Baby Current Sleep Session"
         unique_id: "33230253-7dd3-4074-b4fd-d5d5406f7114"
-        state: "{{ max(states('input_number.baby_current_sleep_session') | int(0) - 1, 0) }}"
+        state: >-
+          {% if is_state('input_boolean.baby_sleep_mode', 'on') %}
+            {% set fell_asleep = states.binary_sensor.baby_monitor_motion_alarm.last_changed if trigger.id == 'sleep_mode'
+                                 else states('sensor.child_fell_asleep') | as_datetime %}
+            {{ (now() - fell_asleep).total_seconds() | int(0) }}
+          {% else %}
+            0
+          {% endif %}
         device_class: duration
         unit_of_measurement: s
         icon: mdi:timer-outline
@@ -354,7 +381,9 @@ script:
   # one vision check of the nursery bed; returns bed (occupied, empty, unclear or error),
   # confidence and evidence (prompt validated in scripts/sleep_eval/check.py, keep in sync)
   check_nursery_bed:
-    mode: parallel
+    # each check opens an rtsp session (no onvif snapshot support), so never more than one
+    mode: queued
+    max: 5
     sequence:
       - service: ai_task.generate_data
         continue_on_error: true
@@ -1338,7 +1367,11 @@ automation:
       - service: script.turn_on
         entity_id: script.send_pieter_work_cape_town_to_home_eta
 
-  # feeds sensor.nursery_bed, which "Update Sleep Mode From Bed Checks And Motion" acts on
+  # feeds sensor.nursery_bed, which "Update Sleep Mode From Bed Checks And Motion" acts on.
+  # checks only in the sleep and wake_up phases. settling: 10 min after motion stops, else
+  # every 15 min. asleep: ~90 s after motion stops, else every 30 min (5 in wake_up). plus
+  # "Notify When Motion Detected In The Nursery", when she isn't known to be in bed.
+  # history for debugging: http://homeassistant.local:8123/history?entity_id=input_boolean.baby_sleep_mode%2Csensor.child_sleep_phase%2Csensor.nursery_bed%2Cbinary_sensor.baby_monitor_motion_alarm&start_date=2026-10-20T17%3A00%3A00.000Z&end_date=2026-10-21T11%3A00%3A00.000Z
   - alias: "Check Whether Child Is In Bed"
     id: "ee89f5eb-4fba-44f2-ac8a-c440f7a60a9c"
     initial_state: true
@@ -1372,7 +1405,7 @@ automation:
       backstop_minutes: >-
         {% if next_transition == 'awake_to_asleep' %}
           15
-        {% elif phase == 'wake_up_time' %}
+        {% elif phase == 'wake_up' %}
           5
         {% else %}
           30
@@ -1383,7 +1416,7 @@ automation:
         {{ 9999 if last_check is none else ((now() - last_check).total_seconds() / 60) | round(1) }}
     condition:
       - condition: template
-        value_template: "{{ phase in ['sleep_time', 'wake_up_time'] }}"
+        value_template: "{{ phase in ['sleep', 'wake_up'] }}"
       - condition: or
         conditions:
           # awake to asleep: in bed after 10 min without motion. motion while settling already
@@ -1408,7 +1441,7 @@ automation:
                 id: "periodic"
               - condition: template
                 value_template: "{{ minutes_since_last_check >= backstop_minutes }}"
-    # each check opens an rtsp session (no onvif snapshot support), so never more than one
+    # a check takes a while: queue the triggers that arrive meanwhile instead of dropping them
     mode: queued
     max: 3
     action:
@@ -1476,11 +1509,11 @@ automation:
       # sustained movement only when she might wake (in the night she resettles), or the nap
       # or night is over without her having got up
       reason: >-
-        {% if not asleep and phase in ['sleep_time', 'wake_up_time'] and bed == 'occupied' and still %}
+        {% if not asleep and phase in ['sleep', 'wake_up'] and bed == 'occupied' and still %}
           fell_asleep
         {% elif asleep and bed == 'empty' %}
           out_of_bed
-        {% elif asleep and trigger.id == 'sustained_movement' and phase == 'wake_up_time' %}
+        {% elif asleep and trigger.id == 'sustained_movement' and phase == 'wake_up' %}
           awake_in_bed
         {% elif asleep and trigger.id == 'sleep_time_over' %}
           sleep_time_over
@@ -1506,11 +1539,11 @@ automation:
           seconds: 5
       - service: notify.mobile_app_ceres
         data:
-          title: "🛌 Sleep Mode"
+          title: "🛌 Sleep"
           message: >-
             {% set messages = {
                  'fell_asleep': 'Julia is asleep.',
-                 'out_of_bed': 'Julia is out of bed.',
+                 'out_of_bed': 'Julia is up.',
                  'awake_in_bed': 'Julia is awake.',
                  'sleep_time_over': 'Sleep time is over.'
                } %}
@@ -1622,27 +1655,71 @@ automation:
       - platform: state
         entity_id: binary_sensor.baby_monitor_motion_alarm
         to: "on"
+    variables:
+      at_nap: >-
+        {% from 'baby.jinja' import in_nursery_nap_window %}
+        {{ in_nursery_nap_window() | bool }}
+      at_bedtime: >-
+        {% from 'baby.jinja' import in_nursery_bedtime_window %}
+        {{ in_nursery_bedtime_window() | bool }}
+      # when this nap or night began. the morning window belongs to last night
+      session_start: >-
+        {% if at_nap %}
+          {{ states('input_datetime.baby_nap_start_time') | today_at }}
+        {% elif at_bedtime %}
+          {{ states('input_datetime.baby_bedtime_start_time') | today_at }}
+        {% else %}
+          {{ (states('input_datetime.baby_bedtime_start_time') | today_at) - timedelta(days=1) }}
+        {% endif %}
+      # she's slept and is up again: sleep mode went off since the session began
+      up_again: >-
+        {{ is_state('input_boolean.baby_sleep_mode', 'off') and
+           states.input_boolean.baby_sleep_mode.last_changed >= session_start | as_datetime }}
+      # a confident check has seen her in bed since the session began
+      known_in_bed: >-
+        {% set checked = state_attr('sensor.nursery_bed', 'last_confident_check') | as_datetime(none) %}
+        {{ is_state('sensor.nursery_bed', 'occupied') and
+           checked is not none and checked >= session_start | as_datetime }}
     condition:
       # not gated on the lamp: she may keep a night light on, so it says nothing about
       # whether we're in the room
       - condition: template
         value_template: >-
           {% from 'baby.jinja' import in_nursery_alert_window %}
-          {{ (in_nursery_alert_window | as_function)() }}
+          {{ in_nursery_alert_window() }}
+      # nothing more to hear about once she's up after a nap or the night. not at bedtime,
+      # where waking after going down is worth hearing about
+      - condition: template
+        value_template: "{{ at_bedtime or not up_again }}"
       - condition: state
         entity_id: sensor.ceres_battery_state
-        state: 'Not Charging'  # Can be to Charging or Full
+        # can be to Charging or Full
+        state: 'Not Charging'
     mode: single
     action:
+      # only when she's in bed. if that's not known, look now and alert only if she's there
+      # (or the check failed)
+      - if: "{{ not known_in_bed }}"
+        then:
+          - service: script.check_nursery_bed
+            response_variable: answer
+          - event: nursery_bed_checked
+            event_data:
+              bed: "{{ answer.bed }}"
+              confidence: "{{ answer.confidence }}"
+              evidence: "{{ answer.evidence }}"
+              check: "motion"
+          - if: "{{ answer.bed in ['empty', 'unclear'] }}"
+            then:
+              - stop: "Don't notify when not yet in bed"
       # only during night => critical?
       # example to split: "Alert If Garages Opened Or Closed When Not Supposed To"
-      # todo: family (check who's home?)
       # blocking call
       - service: script.take_snapshot
         data:
           camera_entity: camera.baby_monitor_profile000
           subdirectory: "baby_monitor"
-      - service: notify.mobile_app_ceres
+      - service: notify.family
         data:
           title: "👶 Nursery"
           message: "Motion detected!"
@@ -1751,7 +1828,7 @@ automation:
       - condition: template
         value_template: >-
           {% from 'baby.jinja' import in_nursery_alert_window %}
-          {{ (in_nursery_alert_window | as_function)() }}
+          {{ in_nursery_alert_window() }}
     action:
       - if:
           - "{{ is_state('timer.bedroom_bedlamp_timer', 'active') }}"
@@ -1888,25 +1965,6 @@ automation:
                 brightness: 3  # 3/255 ~= 1%, as night_bedlamp
         # deliberately no default: outside the dim windows, scenery's profile_default for this
         # lamp (normal_bedlamp) already normalises a plain turn-on, so there's nothing to add
-
-  - alias: "Update Baby Sleep Session Counter"
-    id: "3d9714c9-dc53-4114-8df8-49a6efc98cc6"
-    initial_state: true
-    trigger:
-      - platform: time_pattern
-        seconds: "/15"
-    mode: single
-    action:
-      - service: input_number.set_value
-        target:
-          entity_id: input_number.baby_current_sleep_session
-        data:
-          value: >-
-            {% if is_state('input_boolean.baby_sleep_mode', 'on') %}
-              {{ states('input_number.baby_current_sleep_session') | int(0) + 15 }}
-            {% else %}
-              0
-            {% endif %}
 
   - alias: "Turn On Bug Zapper"
     id: "dad30264-ab99-41df-83ee-a9ff0e768146"

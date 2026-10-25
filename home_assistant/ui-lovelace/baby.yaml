@@ -142,6 +142,9 @@ cards:
           # - entity: binary_sensor.bed_occupancy_bed_occupied
           #   name: "In Bed"
           #   icon: mdi:bed
+          - entity: sensor.child_fell_asleep
+            name: "Fell Asleep"
+            format: time
           - entity: sensor.baby_current_sleep_session
             name: "Current Sleep Session"
           - entity: sensor.baby_last_sleep_session

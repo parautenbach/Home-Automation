@@ -818,6 +818,12 @@ template:
           # (~0.3 mm/h), yet the two disagree by 5x, so nothing the station reports can tell
           # them apart. left at 1.0: the piezo seems to under-read fine drops, and no gain
           # tier can fix that.
+          #
+          # 2026-10-20/22: two windows, gauge emptied before each.
+          #   tue 19h04 to wed 10h00   3.6 mm raw, gauge 15.0 -> 4.17x (mostly drizzle)
+          #   wed 10h00 to thu 10h44   4.6 mm raw, gauge 5.0  -> 1.09x (3.4 mm at 2-7 mm/h)
+          # if heavy rain reads true, drizzle needs 6.7x in the first and 1.3x in the second.
+          # same as before: rate doesn't predict the drizzle error, so gains stay at 1.0.
           gain_tiers:
             - ceiling: 0.3
               gain: 1.0

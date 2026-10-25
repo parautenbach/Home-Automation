@@ -2106,6 +2106,8 @@ automation:
   - alias: "Turn Off AC Display"
     id: "75417e23-4953-49e4-ae38-2e6833081120"
     initial_state: true
+    # a later trigger, e.g. the ac turned on soon after the lights went off, starts the delay over
+    mode: restart
     trigger:
       - platform: state
         entity_id:
@@ -2126,6 +2128,8 @@ automation:
       - wait_template: "{{ not is_state('climate.main_bedroom_ac', 'off') }}"
         timeout: "00:00:15"
         continue_on_timeout: false
+      # a just-started unit can ignore the command or turn its display back on
+      - delay: "00:00:05"
       - service: switch.turn_off
         target:
           entity_id: switch.main_bedroom_ac_display

@@ -567,19 +567,19 @@ cards:
       - type: entities
         title: AI Calls
         entities:
-          - sensor.claude_haiku_calls
-          - sensor.claude_sonnet_calls
-          - sensor.other_ai_model_calls
+          - sensor.claude_haiku_calls_today
+          - sensor.claude_sonnet_calls_today
+          - sensor.other_ai_model_calls_today
           - type: attribute
-            entity: sensor.other_ai_model_calls
+            entity: sensor.other_ai_model_calls_today
             attribute: models
             name: Uncounted Models
           - type: section
-          - sensor.nursery_bed_check_calls
-          - sensor.morning_weather_brief_calls
-          - sensor.other_ai_task_calls
+          - sensor.nursery_bed_check_calls_today
+          - sensor.morning_weather_brief_calls_today
+          - sensor.other_ai_task_calls_today
           - type: attribute
-            entity: sensor.other_ai_task_calls
+            entity: sensor.other_ai_task_calls_today
             attribute: tasks
             name: Uncounted Tasks
       - type: statistics-graph
@@ -591,9 +591,9 @@ cards:
           - change
         days_to_show: 30
         entities:
-          - sensor.claude_haiku_calls
-          - sensor.claude_sonnet_calls
-          - sensor.other_ai_model_calls
+          - sensor.claude_haiku_calls_today
+          - sensor.claude_sonnet_calls_today
+          - sensor.other_ai_model_calls_today
   - type: vertical-stack
     cards:
       - type: custom:swipe-card

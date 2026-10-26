@@ -253,7 +253,7 @@ template:
             {% set labels = {
               'sleep': 'Sleep',
               'wake_up': 'Wake-Up',
-              'none': 'Awake'
+              'awake': 'Awake'
             } %}
             {{ labels.get(get_sleep_phase(), 'Unknown') }}
   - binary_sensor:

@@ -113,7 +113,7 @@ Only the clock: whether she's actually asleep is sleep mode's job.
 
 When a short nap leaves no sleep time, it's all wake-up time.
 
-:returns: sleep, wake_up, or none outside naps and nights.
+:returns: sleep, wake_up, or awake outside naps and nights.
 #}
 {%- macro get_sleep_phase() -%}
   {%- set now_time = now().time() -%}
@@ -130,6 +130,6 @@ When a short nap leaves no sleep time, it's all wake-up time.
            now_time >= (night_start - outer_padding_delta).time() or now_time <= wake_up.time() -%}
     {{- 'sleep' -}}
   {%- else -%}
-    {{- 'none' -}}
+    {{- 'awake' -}}
   {%- endif -%}
 {%- endmacro -%}

@@ -1619,6 +1619,7 @@ automation:
             actions:
               - action: "LIGHTS_OFF"
                 title: "Turn off"
+                icon: "sfsymbols:lightbulb.slash"
                 data:
                   entity_id: "{{ remaining_lights }}"
             sound:

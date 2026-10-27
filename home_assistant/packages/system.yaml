@@ -664,6 +664,7 @@ automation:
             actions:
               - action: "URI"
                 title: "Top up"
+                icon: "sfsymbols:creditcard"
                 uri: "https://app.clickatell.com"
 
   - alias: "Notify When Server Started After Being Shut Down Automatically"

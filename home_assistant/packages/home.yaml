@@ -955,6 +955,7 @@ automation:
             actions:
               - action: "DISABLE_CONTRACTOR_MODE"
                 title: "Disable"
+                icon: "sfsymbols:person.2.slash"
             # use threads but don't replace: we want to see whenever the state changed
             group: "contractor-mode"
             url: homeassistant://navigate/lovelace-main/main
@@ -975,6 +976,8 @@ automation:
             actions:
               - action: "ENABLE_CONTRACTOR_MODE"
                 title: "Enable"
+                icon: "sfsymbols:person.2"
+                authenticationRequired: true
             group: "contractor-mode"
             url: homeassistant://navigate/lovelace-main/main
 
@@ -1098,6 +1101,7 @@ automation:
             actions:
               - action: "DISABLE_CONTRACTOR_MODE"
                 title: "Disable"
+                icon: "sfsymbols:person.2.slash"
             group: "contractor-mode"
             url: homeassistant://navigate/lovelace-main/main
 
@@ -1157,6 +1161,7 @@ automation:
             actions:
               - action: "DISABLE_GUEST_MODE"
                 title: "Disable"
+                icon: "sfsymbols:person.2.slash"
             group: "guest-mode"
             url: homeassistant://navigate/lovelace-main/main
 
@@ -1176,6 +1181,8 @@ automation:
             actions:
               - action: "ENABLE_GUEST_MODE"
                 title: "Enable"
+                icon: "sfsymbols:person.2"
+                authenticationRequired: true
             group: "guest-mode"
             url: homeassistant://navigate/lovelace-main/main
 
@@ -1734,6 +1741,7 @@ automation:
             actions:
               - action: "SLEEP_OFF"
                 title: "Woken up"
+                icon: "sfsymbols:sun.max"
             sound:
               # apple watch doesn't support custom sounds:
               # https://community.home-assistant.io/t/custom-notification-sounds-on-not-playing-on-apple-watch/540387
@@ -2408,8 +2416,10 @@ automation:
             actions:
               - action: "TURN_OFF_AC"
                 title: "Turn off"
+                icon: "sfsymbols:power"
               - action: "TURN_OFF_AC_AND_DISABLE"
                 title: "Turn off and disable"
+                icon: "sfsymbols:nosign"
                 destructive: true
             action_data:
               entity_id: "climate.living_room_ac"
@@ -2744,6 +2754,7 @@ automation:
                 actions:
                   - action: "TRASH_PUT_OUT"
                     title: "Done"
+                    icon: "sfsymbols:trash"
                     destructive: true
                 group: "routine-trash"
                 tag: "routine-trash"
@@ -2812,6 +2823,7 @@ automation:
                 actions:
                   - action: "RECYCLING_PUT_OUT"
                     title: "Done"
+                    icon: "sfsymbols:arrow.3.trianglepath"
                     destructive: true
                 group: "routine-recycling"
                 tag: "routine-recycling"
@@ -3096,6 +3108,7 @@ automation:
             actions:
               - action: "TUMBLE_DRYER_CLEANED"
                 title: "Done"
+                icon: "sfsymbols:checkmark.circle"
                 destructive: true
             group: "routine-tumble-dryer"
             tag: "routine-tumble-dryer"
@@ -3124,6 +3137,7 @@ automation:
             actions:
               - action: "DISHWASHER_CLEANED"
                 title: "Done"
+                icon: "sfsymbols:checkmark.circle"
                 destructive: true
             group: "routine-dishwasher"
             tag: "routine-dishwasher"

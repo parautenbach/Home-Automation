@@ -325,12 +325,19 @@ automation:
                 actions:
                   - action: "PARTLY_OPEN_AND_CLOSE_GATE"
                     title: "Open and close (pedestrian)"
+                    icon: "sfsymbols:figure.walk.motion"
+                    authenticationRequired: true
                   - action: "PARTLY_OPEN_GATE"
                     title: "Open (pedestrian)"
+                    icon: "sfsymbols:pedestrian.gate.open"
+                    authenticationRequired: true
                   - action: "FULLY_OPEN_GATE"
                     title: "Open (fully)"
+                    icon: "sfsymbols:car"
+                    authenticationRequired: true
                   - action: "CLOSE_GATE"
                     title: "Close"
+                    icon: "sfsymbols:pedestrian.gate.closed"
         else:
           - service: notify.family
             data:
@@ -346,12 +353,19 @@ automation:
                 actions:
                   - action: "PARTLY_OPEN_AND_CLOSE_GATE"
                     title: "Open and close (pedestrian)"
+                    icon: "sfsymbols:figure.walk.motion"
+                    authenticationRequired: true
                   - action: "PARTLY_OPEN_GATE"
                     title: "Open (pedestrian)"
+                    icon: "sfsymbols:pedestrian.gate.open"
+                    authenticationRequired: true
                   - action: "FULLY_OPEN_GATE"
                     title: "Open (fully)"
+                    icon: "sfsymbols:car"
+                    authenticationRequired: true
                   - action: "CLOSE_GATE"
                     title: "Close"
+                    icon: "sfsymbols:pedestrian.gate.closed"
 
   - alias: "Handle Doorbell Alert Action"
     id: "c39b4bb0-9a1d-475c-ac7d-ee93fbee8e69"
@@ -494,12 +508,20 @@ automation:
                       actions:
                         - action: "CLOSE_COVER"
                           title: "Close now"
+                          # garage doors and the main gate share this alert
+                          icon: "{{ 'sfsymbols:door.garage.closed' if repeat.item | regex_search('lhs|rhs', ignorecase=True) else 'sfsymbols:pedestrian.gate.closed' }}"
                         - action: "EXTEND_COVER_TIMEOUT_10_MIN"
                           title: "Snooze for 10 min"
+                          icon: "sfsymbols:timer"
+                          authenticationRequired: true
                         - action: "EXTEND_COVER_TIMEOUT_30_MIN"
                           title: "Snooze for 30 min"
+                          icon: "sfsymbols:timer"
+                          authenticationRequired: true
                         - action: "DISABLE_COVER_TIMEOUT"
                           title: "Disable"
+                          icon: "sfsymbols:bell.slash"
+                          authenticationRequired: true
                       action_data:
                         # convert this to the cover entity to use in the automation that receives this
                         cover_id: "{{ repeat.item }}"
@@ -613,12 +635,20 @@ automation:
             actions:
               - action: "CLOSE_COVER"
                 title: "Close now"
+                # garage doors and the main gate share this alert
+                icon: "{{ 'sfsymbols:door.garage.closed' if trigger.event.data.entity_id | regex_search('lhs|rhs', ignorecase=True) else 'sfsymbols:pedestrian.gate.closed' }}"
               - action: "EXTEND_COVER_TIMEOUT_10_MIN"
                 title: "Snooze for 10 min"
+                icon: "sfsymbols:timer"
+                authenticationRequired: true
               - action: "EXTEND_COVER_TIMEOUT_30_MIN"
                 title: "Snooze for 30 min"
+                icon: "sfsymbols:timer"
+                authenticationRequired: true
               - action: "DISABLE_COVER_TIMEOUT"
                 title: "Disable"
+                icon: "sfsymbols:bell.slash"
+                authenticationRequired: true
             action_data:
               # convert this to the cover entity to use in the automation that receives this
               cover_id: "{{ trigger.event.data.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
@@ -898,6 +928,7 @@ automation:
                     actions:
                       - action: "CLOSE_COVER"
                         title: "Close now"
+                        icon: "sfsymbols:door.garage.closed"
                     action_data:
                       # convert this to the cover entity to use in the automation that receives this
                       cover_id: "{{ trigger.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"
@@ -980,6 +1011,7 @@ automation:
                     actions:
                       - action: "CLOSE_COVER"
                         title: "Close now"
+                        icon: "sfsymbols:pedestrian.gate.closed"
                     action_data:
                       # convert this to the cover entity to use in the automation that receives this
                       cover_id: "{{ trigger.entity_id | replace('_timer', '') | replace('timer', 'cover') }}"

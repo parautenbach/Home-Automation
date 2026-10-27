@@ -544,6 +544,7 @@ automation:
                       actions:
                         - action: "BATTERIES_REPLENISHED"
                           title: "Reset replenishment timer"
+                          icon: "sfsymbols:battery.100"
                           destructive: true
                       action_data:
                         entity_id: "{{ battery_entity_id }}"

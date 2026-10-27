@@ -459,10 +459,13 @@ automation:
             actions:
               - action: "GET_HELP"
                 title: "Get help!"
+                icon: "sfsymbols:phone.fill"
                 uri: "tel:+27218874777"
                 destructive: true
               - action: "DISARM_ALARM"
                 title: "Disarm"
+                icon: "sfsymbols:lock.open"
+                authenticationRequired: true
                 destructive: true
             action_data:
               # each panel now mirrors its own partition, so only the triggered
@@ -522,12 +525,16 @@ automation:
             actions:
               - action: "ARM_ALARM"
                 title: "Arm (full)"
+                icon: "sfsymbols:lock"
                 destructive: true
               - action: "ARM_ALARM_BYPASS_GARAGE"
                 title: "Arm (bypass garage)"
+                icon: "sfsymbols:lock.trianglebadge.exclamationmark"
                 destructive: true
               - action: "ENABLE_GUEST_MODE"
                 title: "Enable guest mode"
+                icon: "sfsymbols:person.2"
+                authenticationRequired: true
             action_data:
               entity_ids: "{{ ['alarm_control_panel.home'] }}"
             push:
@@ -591,6 +598,8 @@ automation:
                 actions:
                   - action: "DISARM_ALARM"
                     title: "Disarm"
+                    icon: "sfsymbols:lock.open"
+                    authenticationRequired: true
                     destructive: true
                 action_data:
                   entity_ids: "{{ ['alarm_control_panel.home'] }}"
@@ -708,6 +717,7 @@ automation:
             actions:
               - action: "ARM_STAY_ALARM"
                 title: "Arm (stay)"
+                icon: "sfsymbols:house"
                 destructive: true
             action_data:
               entity_ids: "{{ ['alarm_control_panel.home'] }}"
@@ -859,6 +869,7 @@ automation:
                     actions:
                       - action: "ARM_ALARM"
                         title: "Arm"
+                        icon: "sfsymbols:lock"
                         destructive: true
                     action_data:
                       entity_ids: "{{ [trigger.entity_id] }}"
@@ -873,12 +884,15 @@ automation:
                     actions:
                       - action: "ARM_ALARM"
                         title: "Arm (full)"
+                        icon: "sfsymbols:lock"
                         destructive: true
                       - action: "ARM_ALARM_BYPASS_GARAGE"
                         title: "Arm (bypass garage)"
+                        icon: "sfsymbols:lock.trianglebadge.exclamationmark"
                         destructive: true
                       - action: "ARM_STAY_ALARM"
                         title: "Arm (stay)"
+                        icon: "sfsymbols:house"
                         destructive: true
                     # https://companion.home-assistant.io/docs/notifications/actionable-notifications/
                     # https://community.home-assistant.io/t/custom-data-in-actionable-notification-on-ios/429748/2
@@ -901,6 +915,8 @@ automation:
                 actions:
                   - action: "DISARM_ALARM"
                     title: "Disarm"
+                    icon: "sfsymbols:lock.open"
+                    authenticationRequired: true
                     destructive: true
                 action_data:
                   entity_ids: "{{ [trigger.entity_id] }}"

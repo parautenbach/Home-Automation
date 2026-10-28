@@ -1548,6 +1548,7 @@ automation:
         data:
           title: "🛌 Sleep"
           message: >-
+            {% set motion_changed = (states.binary_sensor.baby_monitor_motion_alarm.last_changed | as_local).strftime('%H:%M') %}
             {% set messages = {
                  'fell_asleep': 'Julia fell asleep around ' ~ motion_changed ~ '.',
                  'out_of_bed': 'Julia is up.',
@@ -1555,7 +1556,6 @@ automation:
                  'sleep_time_over': 'Sleep time is over.'
                } %}
             {{ messages[reason] }}
-            {% set motion_changed = (states.binary_sensor.baby_monitor_motion_alarm.last_changed | as_local).strftime('%H:%M') %}
           data:
             actions:
               - action: "{{ 'SLEEP_OFF' if reason == 'fell_asleep' else 'SLEEP_ON' }}"

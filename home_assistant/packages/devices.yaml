@@ -420,24 +420,28 @@ automation:
     id: "6372b0f0-3a0b-4d16-9009-da03da974eb4"
     initial_state: true
     variables:
-      # excluding update entities, because for some reason that can be unavailable for longer/more frequently
-      # compared to other entities of the same devies. perhaps it has to do with how frequent the checks are,
-      # so it remains unavailable until the next check and not when the device has become available again.
-      # todo: once the water pulse counter has been installed it must be removed here.
+      # only report devices where no entity has a value (has_value also treats disabled entities as dead).
+      # partially unavailable devices are covered by the unavailable entities sensor.
+      # update entities are unavailable more often than the rest of their device, so they're ignored,
+      # as are buttons and events (no real state), like the unavailable entities sensor does.
+      # test entities are already excluded by the sensor.
       unavailable_devices: >-
-        {{
-          state_attr('sensor.unavailable_entities', 'unavailable')
-            | reject('match', 'update.*')
-            | reject('match', '.*test_.*')
-            | reject('match', '.*water_pulse_counter.*')
-            | reject('match', '.*sonoff_basic.*')
-            | map('device_id')
-            | reject('none')
-            | select('is_device_attr', 'disabled_by', None)
-            | unique
-            | sort
-            | list
-        }}
+        {% set candidates = state_attr('sensor.unavailable_entities', 'unavailable')
+              | map('device_id')
+              | reject('none')
+              | select('is_device_attr', 'disabled_by', None)
+              | unique
+              | list %}
+        {% set ns = namespace(devices=[]) %}
+        {% for d in candidates %}
+          {% set entities = device_entities(d) | reject('match', 'update\.|button\.|event\.') | list %}
+          {# a connectivity sensor that's off (e.g. esphome status) means disconnected, not alive #}
+          {% set disconnected = entities | select('is_state_attr', 'device_class', 'connectivity') | select('is_state', 'off') | list %}
+          {% if entities | select('has_value') | reject('in', disconnected) | list | count == 0 %}
+            {% set ns.devices = ns.devices + [d] %}
+          {% endif %}
+        {% endfor %}
+        {{ ns.devices | sort }}
     trigger:
       - platform: time
         at:

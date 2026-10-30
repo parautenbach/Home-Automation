@@ -55,11 +55,10 @@ Get a list of entity IDs given a list of states.
 
 :param state_list: A list of state values.
 
-:returns: A CSV string that can be split to get a proper list. Jinja's {{ }} outputs text and cannot output a list.
-
-:seealso: https://community.home-assistant.io/t/template-trigger-based-sensors-add-variables/657527/16
+:returns: A list of entity IDs.
+          Returns an empty list if no entities match.
 #}
-{%- macro get_entities_by_state(state_list) -%}
+{%- macro get_entities_by_state(state_list, returns) -%}
   {%- set exclusions = [
             'sensor.unavailable_entities',
             'number.living_room_ac_fan_speed',
@@ -73,14 +72,14 @@ Get a list of entity IDs given a list of states.
             'sensor.solar_reserve_percentage_5min_average',
             'sensor.pv_power_5min_average',
             'conversation.home_assistant'] -%}
-  {#- buttons and event entities don't have state – we don't care about those here -#}
-  {%- set reduced_list = states
-            | rejectattr('domain','search','button|event')
+  {#- buttons and events have no real state; update entities are unavailable more often than their device -#}
+  {%- do returns(states
+            | rejectattr('domain','search','button|event|update')
             | rejectattr('entity_id', 'in', exclusions)
+            | rejectattr('entity_id', 'search', 'test_')
             | selectattr('state', 'in', state_list)
             | map(attribute='entity_id')
-            | join(',') -%}
-  {{ reduced_list }}
+            | list) -%}
 {%- endmacro -%}
 
 {# Constant map of integrations. #}

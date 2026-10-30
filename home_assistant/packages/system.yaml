@@ -157,21 +157,24 @@ template:
       - name: Unavailable Entities
         icon: mdi:help-circle-outline
         state: >-
-          {%- from 'utilities.jinja' import get_entities_by_state -%}
-          {{ get_entities_by_state(['unavailable', 'unknown', 'none']).split(',') | length }}
+          {% from 'utilities.jinja' import get_entities_by_state %}
+          {% set get_entities_by_state_fn = get_entities_by_state | as_function %}
+          {{ get_entities_by_state_fn(['unavailable', 'unknown', 'none']) | count }}
         unit_of_measurement: entities
         state_class: measurement
         attributes:
-          # buttons don't have state – we don't care about buttons here
           unavailable: >-
-            {%- from 'utilities.jinja' import get_entities_by_state -%}
-            {{ get_entities_by_state(['unavailable']).split(',') }}
+            {% from 'utilities.jinja' import get_entities_by_state %}
+            {% set get_entities_by_state_fn = get_entities_by_state | as_function %}
+            {{ get_entities_by_state_fn(['unavailable']) }}
           unknown: >-
-            {%- from 'utilities.jinja' import get_entities_by_state -%}
-            {{ get_entities_by_state(['unknown']).split(',') }}
+            {% from 'utilities.jinja' import get_entities_by_state %}
+            {% set get_entities_by_state_fn = get_entities_by_state | as_function %}
+            {{ get_entities_by_state_fn(['unknown']) }}
           none: >-
-            {%- from 'utilities.jinja' import get_entities_by_state -%}
-            {{ get_entities_by_state(['none']).split(',') }}
+            {% from 'utilities.jinja' import get_entities_by_state %}
+            {% set get_entities_by_state_fn = get_entities_by_state | as_function %}
+            {{ get_entities_by_state_fn(['none']) }}
 
   - trigger:
     - platform: time_pattern

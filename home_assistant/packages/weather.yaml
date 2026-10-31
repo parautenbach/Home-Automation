@@ -226,6 +226,10 @@ template:
         minutes: "5"
       - platform: state
         entity_id: weather.openweathermap
+    # the forecast call fails when owm is unavailable
+    condition:
+      - condition: template
+        value_template: "{{ has_value('weather.openweathermap') }}"
     action:
       - service: weather.get_forecasts
         target:
@@ -233,6 +237,18 @@ template:
         data:
           type: hourly
         response_variable: hourly
+      - service: weather.get_forecasts
+        target:
+          entity_id: weather.openweathermap
+        data:
+          type: daily
+        response_variable: daily
+      # walk the forecast once here rather than in every template below
+      - variables:
+          outlook: >-
+            {% from 'environment.jinja' import rain_outlook %}
+            {% set rain_outlook_fn = rain_outlook | as_function %}
+            {{ rain_outlook_fn(hourly['weather.openweathermap']['forecast']) }}
     sensor:
       - name: Weather Tomorrow Hourly
         unique_id: "3e214cd0-be86-4ec9-b9ae-d9f7133a35a2"
@@ -243,21 +259,6 @@ template:
         attributes:
           forecast: "{{ hourly['weather.openweathermap']['forecast'][24:] }}"
           attribution: "{{ state_attr('sensor.weather_tomorrow_hourly', 'attribution') }}"
-  - trigger:
-      - platform: time_pattern
-        # every 5 minutes past the hour
-        hours: "*"
-        minutes: "5"
-      - platform: state
-        entity_id: weather.openweathermap
-    action:
-      - service: weather.get_forecasts
-        target:
-          entity_id: weather.openweathermap
-        data:
-          type: daily
-        response_variable: daily
-    sensor:
       - name: Weather Forecast Precipitation Today
         unique_id: "413a950a-150d-4faf-9f93-3d35b240dd5d"
         state: >-
@@ -289,26 +290,6 @@ template:
         device_class: temperature
         unit_of_measurement: °C
         icon: mdi:thermometer
-  - trigger:
-      - platform: time_pattern
-        # every 5 minutes past the hour
-        hours: "*"
-        minutes: "5"
-      - platform: state
-        entity_id: weather.openweathermap
-    action:
-      - service: weather.get_forecasts
-        target:
-          entity_id: weather.openweathermap
-        data:
-          type: hourly
-        response_variable: hourly
-      # walk the forecast once here rather than in every template below
-      - variables:
-          outlook: >-
-            {% from 'environment.jinja' import rain_outlook %}
-            {% set rain_outlook_fn = rain_outlook | as_function %}
-            {{ rain_outlook_fn(hourly['weather.openweathermap']['forecast']) }}
     binary_sensor:
       - name: "Weather Forecast Precipitation Soon"
         unique_id: "949dd25e-35cf-4000-a3f9-f38ab20e112f"

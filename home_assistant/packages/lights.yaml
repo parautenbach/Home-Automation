@@ -746,10 +746,7 @@ automation:
         event_type: timer.finished
         event_data:
           entity_id: timer.hallway_timer
-      - platform: event
-        event_type: timer.finished
-        event_data:
-          entity_id: timer.bedroom_bedlamp_timer
+      # not the bedroom bedlamp: its timer can also dim it, see home.yaml
     mode: parallel
     action:
       - service: light.turn_off

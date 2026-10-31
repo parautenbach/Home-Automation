@@ -128,7 +128,7 @@ cards:
       - type: entities
         entities:
           - entity: input_boolean.baby_sleep_mode
-            name: "Sleep Mode"
+            name: "Asleep"
           - entity: input_boolean.child_keep_night_light
             name: "Keep Night Light On"
           - type: attribute

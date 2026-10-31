@@ -128,14 +128,6 @@ timer:
   main_bedroom_ac_timer:
     duration: "00:30:00"
     restore: true
-  # restored, so a restart doesn't reset the wait for the lamp to dim and go off once the
-  # child is asleep
-  bedroom_bedlamp_dim_timer:
-    duration: "00:10:00"
-    restore: true
-  bedroom_bedlamp_off_timer:
-    duration: "00:30:00"
-    restore: true
 
 binary_sensor:
   # - platform: ffmpeg_noise
@@ -730,7 +722,7 @@ automation:
             light: light.hallway
             target_brightness_pct: 0
             transition_duration: 60
-      # not her bedlamp: it may be her night light, and the sleep timers decide when it goes off
+      # not her bedlamp: it may be her night light, and the sleep timer decides when it goes off
       - service: switch.turn_off
         target:
           entity_id: switch.bug_zapper
@@ -1568,7 +1560,14 @@ automation:
                        'sleep_time_over': 'Still asleep'
                      } %}
                   {{ titles[reason] }}
-                icon: "{{ 'sfsymbols:sun.max' if reason == 'fell_asleep' else 'sfsymbols:moon.zzz' }}"
+                icon: >-
+                  {% set icons = {
+                       'fell_asleep': 'sfsymbols:sun.max',
+                       'out_of_bed': 'sfsymbols:bed.double',
+                       'awake_in_bed': 'sfsymbols:moon.zzz',
+                       'sleep_time_over': 'sfsymbols:moon.zzz'
+                     } %}
+                  {{ icons[reason] }}
             group: "routine-bedtime"
             tag: "routine-bedtime"
             url: homeassistant://navigate/lovelace-main/baby
@@ -1576,8 +1575,9 @@ automation:
   # her lamp may be on when she falls asleep: dim it once she's had time to sleep deeply,
   # then turn it off later unless we keep the night light. there's no real fade on this
   # lamp, so it's a step. any motion starts the wait again, and nothing brightens it: if she
-  # turns it up, it stays until she's asleep again
-  - alias: "Start Or Cancel Bedroom Bedlamp Sleep Timers"
+  # turns it up, it stays until she's asleep again. both steps run on her lamp's own timer,
+  # so the dashboard shows the countdown. while she's awake a timer set by hand is left alone
+  - alias: "Start Or Cancel Bedroom Bedlamp Sleep Timer"
     id: "5cbc04a8-9390-4cff-8209-91b553b693e1"
     initial_state: true
     trigger:
@@ -1588,73 +1588,72 @@ automation:
           - binary_sensor.nursery_lit
           - light.bedroom_bedlamp
           - input_boolean.child_keep_night_light
+        # state changes only, not brightness
+        to: ~
     variables:
       asleep_and_still: >-
         {{ is_state('input_boolean.baby_sleep_mode', 'on') and
            is_state('binary_sensor.baby_monitor_motion_alarm', 'off') }}
       # sleep mode only comes on after 10 min without motion, so the dim is 20 min in at first
+      # lit means it's not dim, but at a higher brightness
       dim_wanted: "{{ asleep_and_still and is_state('binary_sensor.nursery_lit', 'on') }}"
       # 30 min after the dim, or after the night light was switched on
       off_wanted: >-
         {{ asleep_and_still and is_state('light.bedroom_bedlamp', 'on') and
            is_state('binary_sensor.nursery_lit', 'off') and
            is_state('input_boolean.child_keep_night_light', 'off') }}
+      running: "{{ not is_state('timer.bedroom_bedlamp_timer', 'idle') }}"
     mode: queued
     action:
-      - if: "{{ dim_wanted and is_state('timer.bedroom_bedlamp_dim_timer', 'idle') }}"
+      # restart when the lamp is dimmed or brightened, so the off step gets its full wait
+      - if: >-
+          {{ (dim_wanted or off_wanted) and
+             (not running or trigger.entity_id == 'binary_sensor.nursery_lit') }}
         then:
           - service: timer.start
             target:
-              entity_id: timer.bedroom_bedlamp_dim_timer
-      - if: "{{ not dim_wanted and not is_state('timer.bedroom_bedlamp_dim_timer', 'idle') }}"
+              entity_id: timer.bedroom_bedlamp_timer
+            data:
+              duration: "{{ '00:10:00' if dim_wanted else '00:30:00' }}"
+      # once she's asleep the wait is ours, and waking ends it
+      - if: >-
+          {{ not (dim_wanted or off_wanted) and running and
+             (is_state('input_boolean.baby_sleep_mode', 'on') or
+              trigger.entity_id == 'input_boolean.baby_sleep_mode') }}
         then:
           - service: timer.cancel
             target:
-              entity_id: timer.bedroom_bedlamp_dim_timer
-      - if: "{{ off_wanted and is_state('timer.bedroom_bedlamp_off_timer', 'idle') }}"
-        then:
-          - service: timer.start
-            target:
-              entity_id: timer.bedroom_bedlamp_off_timer
-      - if: "{{ not off_wanted and not is_state('timer.bedroom_bedlamp_off_timer', 'idle') }}"
-        then:
-          - service: timer.cancel
-            target:
-              entity_id: timer.bedroom_bedlamp_off_timer
+              entity_id: timer.bedroom_bedlamp_timer
 
-  - alias: "Dim Bedroom Bedlamp When Child Is Asleep"
+  # lights.yaml leaves this timer to us, since it may dim rather than turn off: when we keep
+  # the night light, or when she's asleep and still under a lit lamp, whoever set it
+  - alias: "Dim Or Turn Off Bedroom Bedlamp When Timer Finishes"
     id: "12ef5d60-ea74-4405-b9fa-0e4baab55567"
     initial_state: true
     trigger:
       - platform: event
         event_type: timer.finished
         event_data:
-          entity_id: timer.bedroom_bedlamp_dim_timer
+          entity_id: timer.bedroom_bedlamp_timer
     action:
-      # brightness only, so she keeps her colour
-      - service: light.turn_on
-        target:
-          entity_id: light.bedroom_bedlamp
-        data:
-          brightness: 3  # 3/255 ~= 1%, as night_bedlamp
-
-  - alias: "Turn Off Bedroom Bedlamp When Child Is Asleep"
-    id: "99718763-7632-4076-ac24-978b67e8de11"
-    initial_state: true
-    trigger:
-      - platform: event
-        event_type: timer.finished
-        event_data:
-          entity_id: timer.bedroom_bedlamp_off_timer
-    condition:
-      # don't cut short a lamp timer someone set on purpose
-      - condition: state
-        entity_id: timer.bedroom_bedlamp_timer
-        state: "idle"
-    action:
-      - service: light.turn_off
-        target:
-          entity_id: light.bedroom_bedlamp
+      - if: >-
+          {{ is_state('input_boolean.child_keep_night_light', 'on') or
+             (is_state('input_boolean.baby_sleep_mode', 'on') and
+              is_state('binary_sensor.baby_monitor_motion_alarm', 'off') and
+              is_state('binary_sensor.nursery_lit', 'on')) }}
+        then:
+          # brightness only, so she keeps her colour
+          - service: light.turn_on
+            target:
+              entity_id: light.bedroom_bedlamp
+            data:
+              # this means binary_sensor.nursery_lit will be off
+              # 3/255 ~= 1%, as night_bedlamp
+              brightness: 3
+        else:
+          - service: light.turn_off
+            target:
+              entity_id: light.bedroom_bedlamp
 
   - alias: "Notify When Motion Detected In The Nursery"
     id: "c85b1a55-74fe-4576-8ef4-346d1c94c31e"
@@ -1729,7 +1728,7 @@ automation:
           subdirectory: "baby_monitor"
       - service: notify.family
         data:
-          title: "👶 Nursery"
+          title: "🧸 Nursery"
           message: "Motion detected!"
           data:
             group: "nursery"

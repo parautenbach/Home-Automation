@@ -285,6 +285,22 @@ Display label for a wind speed's Beaufort scale tier.
 {%- endmacro -%}
 
 {#
+UV index tier.
+
+:param index: UV index.
+:returns: snake_case tier name, matching sensor.uv_condition's states.
+#}
+{%- macro uv_scale(index) -%}
+  {%- if index < 1 -%} no_uv
+  {%- elif index < 3 -%} low
+  {%- elif index < 6 -%} moderate
+  {%- elif index < 8 -%} high
+  {%- elif index < 11 -%} very_high
+  {%- else -%} extreme
+  {%- endif -%}
+{%- endmacro -%}
+
+{#
 Rain outlook from an hourly forecast.
 
 :param forecast: hourly forecast list from weather.get_forecasts

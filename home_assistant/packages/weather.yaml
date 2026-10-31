@@ -599,14 +599,8 @@ template:
         variables:
           uv_entity: sensor.uv_index_filtered
         state: >-
-          {% set uv = states(uv_entity) | float(0) %}
-          {% if uv < 1 %} no_uv
-          {% elif uv < 3 %} low
-          {% elif uv < 6 %} moderate
-          {% elif uv < 8 %} high
-          {% elif uv < 11 %} very_high
-          {% else %} extreme
-          {% endif %}
+          {% from 'environment.jinja' import uv_scale %}
+          {{ uv_scale(states(uv_entity) | float(0)) }}
         attributes:
           label: >-
             {% set labels = {
@@ -619,7 +613,7 @@ template:
             } %}
             {{ labels.get(this.state, 'Unknown') }}
           index: >-
-            {{ states(uv_entity) | int(0) }}
+            {{ states(uv_entity) | float(0) | round(1) }}
         availability: >-
           {{ has_value(uv_entity) }}
       - name: "Humidity Condition"
@@ -1432,9 +1426,13 @@ automation:
     id: "101c7f2d-6839-4a8c-be1a-0de46ed70477"
     initial_state: true
     trigger:
+      # the high band starts at 6, but above is exclusive - and the index is quantised to one
+      # decimal, so 5.9 is the last value below the band and "above 5.9" is "6.0 or more".
+      # Read off the condition sensor's own index so the alert and the band can't drift apart
       - platform: numeric_state
-        entity_id: sensor.uv_index_filtered
-        above: 5
+        entity_id: sensor.uv_condition
+        attribute: index
+        above: 5.9
     mode: single
     condition:
       - condition: state
@@ -1527,8 +1525,6 @@ automation:
           wind_dir: >-
             {% set abbr = state_attr('sensor.wind_condition_beaufort', 'compass_direction') %}
             {{ compass_names.get(abbr, abbr) }}
-          uv_state: "{{ states('sensor.uv_condition') }}"
-          uv_label: "{{ state_attr('sensor.uv_condition', 'label') }}"
           pressure_state: "{{ states('sensor.air_pressure_trend') }}"
           pressure_label: "{{ state_attr('sensor.air_pressure_trend', 'label') }}"
           # rain right now is the station's call, not the forecast's. recently raining rather than
@@ -1549,14 +1545,16 @@ automation:
           #    as sensor.rain_rate_condition); with no wet hour left, the most common condition
           #  - mm: rain still to come today
           #  - onset: HH:MM of the first wet hour, or '' if none
+          #  - uv_peak: the highest forecast UV index still to come
           rest_of_today: >-
             {% set wet_rank = ['snowy', 'rainy', 'snowy-rainy', 'pouring', 'hail', 'lightning-rainy'] %}
-            {% set ns = namespace(mm=0, wet=[], wettest=none, conditions=[]) %}
+            {% set ns = namespace(mm=0, wet=[], wettest=none, conditions=[], uv=0) %}
             {% for f in hourly['weather.openweathermap']['forecast'] %}
               {% set dt = f.datetime | as_datetime | as_local %}
               {% if dt.date() == now().date() and dt > now() %}
                 {% set ns.mm = ns.mm + f.precipitation | float(0) %}
                 {% set ns.conditions = ns.conditions + [f.condition] %}
+                {% set ns.uv = [ns.uv, f.uv_index | float(0)] | max %}
                 {% if f.condition in wet_rank %}
                   {% set ns.wet = ns.wet + [dt] %}
                   {% if ns.wettest is none or wet_rank.index(f.condition) > wet_rank.index(ns.wettest) %}
@@ -1579,9 +1577,17 @@ automation:
             {{ {
               'condition': ns.wettest or common.condition or '',
               'mm': ns.mm | round(1),
-              'onset': ns.wet[0].strftime('%H:%M') if ns.wet else ''
+              'onset': ns.wet[0].strftime('%H:%M') if ns.wet else '',
+              'uv_peak': ns.uv | round(1)
             } }}
           today_high: "{{ daily['weather.openweathermap']['forecast'][0]['temperature'] | int(0) }}"
+          # the forecast peak, not the reading at wake-up, which is 0 at this hour every day of
+          # the year. The brief warns that today burns; "High UV Notification" above says so again
+          # when it actually crosses, so no time is given here
+          uv_later: >-
+            {% from 'environment.jinja' import uv_scale %}
+            {% set band = uv_scale(rest_of_today.uv_peak | float(0)) | trim %}
+            {{ band | replace('_', ' ') if band in ['high', 'very_high', 'extreme'] else '' }}
           # plain-English names for the forecast conditions, shared by the templated brief and the
           # claude one below so both say "heavy rain" rather than inventing a synonym for 'pouring'
           condition_words: >-
@@ -1720,8 +1726,8 @@ automation:
             {% if fog_chance == 'possible' %}
               {% set now_extras = now_extras + ['Fog possible.'] %}
             {% endif %}
-            {% if uv_state in ['high', 'very_high', 'extreme'] %}
-              {% set now_extras = now_extras + ['UV ' ~ (uv_label | lower) ~ '.'] %}
+            {% if uv_later %}
+              {% set now_extras = now_extras + [(uv_later | capitalize) ~ ' UV expected.'] %}
             {% endif %}
             {% if pressure_state in ['rising_rapidly', 'falling_rapidly'] %}
               {% set now_extras = now_extras + ['Pressure ' ~ (pressure_label | lower) ~ '.'] %}
@@ -1777,11 +1783,13 @@ automation:
             and join them with "but" rather than "and" when one is pleasant and the other
             isn't ("cold but comfortable").
             Fog, UV and pressure are listed below only when they're worth a mention, so say
-            them whenever they appear. Fog already happening is part of conditions right
-            now and belongs in the first sentence; fog that's only possible is the heads-up
-            kind and gets its own short sentence between the two. Give the afternoon wind whenever it's listed, calm
-            included: leaving it out would read as a missing forecast rather than a quiet
-            afternoon.
+            them whenever they appear. The UV line is a warning about later today: give it
+            without a time, as a separate notification fires when it crosses. Fog already
+            happening is part of conditions right now and belongs in the first sentence; fog
+            that's only possible is the heads-up kind and gets its own short sentence between
+            the two. Give the afternoon wind whenever
+            it's listed, calm included: leaving it out would read as a missing forecast rather
+            than a quiet afternoon.
             Any rain still to come is worth saying, even a few tenths of a millimetre spread
             too thin for the forecast to call any hour wet - the sky condition alone won't
             imply it. If it's already raining, the next wet hour is more of the same rather
@@ -1803,11 +1811,11 @@ automation:
             {%- if fog_chance in ['present', 'possible'] %}
             - fog: {{ 'yes, fog right now' if fog_chance == 'present' else 'no fog yet, but possible' }}
             {%- endif %}
-            {%- if uv_state in ['high', 'very_high', 'extreme'] %}
-            - UV: {{ uv_label | lower }}
-            {%- endif %}
             {%- if pressure_state in ['rising_rapidly', 'falling_rapidly'] %}
             - pressure: {{ pressure_label | lower }}
+            {%- endif %}
+            {%- if uv_later %}
+            - UV: {{ uv_later }} UV expected later today
             {%- endif %}
 
             Forecast for today: high of {{ today_high }}°C.

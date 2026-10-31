@@ -1662,12 +1662,32 @@ automation:
                merely-dewy one a calm night produces, where a fog warning is noise #}
             {# rain qualifies the opening sentence the same way; the fog sensor is gated off while
                it's recently been raining, so the two never meet #}
-            {% if raining_now %}
-              {% set now_clause = feel_clause ~ ' now, with ' ~ rain_now_state | replace('no_rain', 'light') ~ ' rain.' %}
-            {% elif fog_chance == 'present' %}
-              {% set now_clause = feel_clause ~ ' now, with fog.' %}
+            {# wind belongs in the opening sentence rather than trailing it as one of its own:
+               two sentences each ending in "now" read as a single thought cut in half. It carries
+               an article here, the way the afternoon clause does #}
+            {% if wind_state == 'calm' %}
+              {% set wind_phrase = 'calm' %}
             {% else %}
-              {% set now_clause = feel_clause ~ ' now.' %}
+              {% set descriptor = (wind_phrases[wind_state] | lower)
+                                  ~ (' from the ' ~ wind_dir if wind_dir else '')
+                                  ~ ' (' ~ wind_speed ~ ')' %}
+              {% set wind_phrase = ('an ' if descriptor[0] in 'aeiou' else 'a ') ~ descriptor %}
+            {% endif %}
+            {# rain and fog join the same list, never both at once - the fog sensor is gated off
+               while it's recently been raining #}
+            {% if raining_now %}
+              {% set with_phrases = [rain_now_state | replace('no_rain', 'light') ~ ' rain', wind_phrase] %}
+            {% elif fog_chance == 'present' %}
+              {% set with_phrases = ['fog', wind_phrase] %}
+            {% else %}
+              {% set with_phrases = [wind_phrase] %}
+            {% endif %}
+            {# "with calm" doesn't stand up on its own the way "with a light breeze" does, so a
+               calm morning with nothing else to report joins on "and" instead #}
+            {% if wind_state == 'calm' and with_phrases | length == 1 %}
+              {% set now_clause = feel_clause ~ ' and calm.' %}
+            {% else %}
+              {% set now_clause = feel_clause ~ ' with ' ~ (with_phrases | join(' and ')) ~ '.' %}
             {% endif %}
             {# the condition is only wet when a wet hour is still to come, so the condition word
                carries how heavy it is ("Heavy rain expected around 09:00") #}
@@ -1675,33 +1695,28 @@ automation:
                continues rather than starts #}
             {% set next_hour = (now() + timedelta(hours=1)).strftime('%H:00') %}
             {% if raining_now and rest_of_today.onset == next_hour %}
-              {% set later_clause = (later_condition | capitalize) ~ ' expected to continue (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
+              {% set later_clause = (later_condition | capitalize) ~ ' expected to continue (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C' %}
             {# rain now with a forecast lull before the next wet hour - the next spell is more
                of it, not a fresh start #}
             {% elif raining_now and rest_of_today.onset %}
-              {% set later_clause = 'More ' ~ later_condition ~ ' expected around ' ~ rest_of_today.onset ~ ' (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
+              {% set later_clause = 'More ' ~ later_condition ~ ' expected around ' ~ rest_of_today.onset ~ ' (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C' %}
             {% elif rest_of_today.onset %}
-              {% set later_clause = (later_condition | capitalize) ~ ' expected around ' ~ rest_of_today.onset ~ ' (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
+              {% set later_clause = (later_condition | capitalize) ~ ' expected around ' ~ rest_of_today.onset ~ ' (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C' %}
             {% elif rest_of_today.mm > 0 %}
               {# rain still to come but too thin for the forecast to call any hour wet, so
                  "Partly cloudy" alone wouldn't imply it - it needs saying out loud #}
-              {% set later_clause = (later_condition | capitalize) ~ ' with some rain (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C.' %}
+              {% set later_clause = (later_condition | capitalize) ~ ' with some rain (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C' %}
             {% elif rest_of_today.condition %}
-              {% set later_clause = (later_condition | capitalize) ~ ' later, high of ' ~ today_high ~ '°C.' %}
+              {% set later_clause = (later_condition | capitalize) ~ ' later, high of ' ~ today_high ~ '°C' %}
             {% else %}
-              {% set later_clause = 'High of ' ~ today_high ~ '°C.' %}
-            {% endif %}
-            {% if wind_state == 'calm' %}
-              {% set wind_now_clause = 'Calm right now.' %}
-            {% elif wind_dir %}
-              {% set wind_now_clause = wind_phrases[wind_state] ~ ' from the ' ~ wind_dir ~ ' (' ~ wind_speed ~ ') right now.' %}
-            {% else %}
-              {% set wind_now_clause = wind_phrases[wind_state] ~ ' right now (' ~ wind_speed ~ ').' %}
+              {% set later_clause = 'High of ' ~ today_high ~ '°C' %}
             {% endif %}
             {# the brief reads as two blocks: everything measured right now, then everything
-               forecast for the rest of today. Wind, fog, UV and pressure are all current
-               readings and belong with the opening sentence, not stranded behind the forecast #}
-            {% set now_extras = [wind_now_clause] %}
+               forecast for the rest of today. Fog and pressure are current readings and
+               belong with the opening sentence, not stranded behind the forecast.
+               The UV warning is the one forecast item among them, and sits here rather than
+               in the forecast sentence because it's a heads-up, like fog #}
+            {% set now_extras = [] %}
             {% if fog_chance == 'possible' %}
               {% set now_extras = now_extras + ['Fog possible.'] %}
             {% endif %}
@@ -1711,25 +1726,28 @@ automation:
             {% if pressure_state in ['rising_rapidly', 'falling_rapidly'] %}
               {% set now_extras = now_extras + ['Pressure ' ~ (pressure_label | lower) ~ '.'] %}
             {% endif %}
-            {% set later_extras = [] %}
-            {# always stated whenever the window still has hours in it, including for a quiet day:
-               "no news" would be indistinguishable from a missing forecast, and knowing the afternoon
-               stays light is itself worth confirming #}
+            {# the afternoon wind closes the forecast sentence rather than taking one of its own:
+               the brief is one sentence for now and one for later, with only the optional
+               heads-ups between them. Always stated whenever the window still has hours in it,
+               including for a quiet day: "no news" would be indistinguishable from a missing
+               forecast, and knowing the afternoon stays light is itself worth confirming #}
             {% if afternoon_wind.speed is not none %}
-              {# mirrors the now clause above, where a direction is meaningless for calm. The phrase is
-                 lowercased here because the article takes the front of the sentence #}
+              {# mirrors the now clause above, where a direction is meaningless for calm #}
               {% if afternoon_wind_state == 'calm' %}
-                {% set wind_later_clause = 'Calm this afternoon.' %}
+                {% set afternoon_phrase = ', calm this afternoon' %}
               {% else %}
                 {% set descriptor = (wind_phrases[afternoon_wind_state] | lower)
                                     ~ (' from the ' ~ afternoon_wind_dir if afternoon_wind_dir else '')
                                     ~ ' (' ~ afternoon_wind_speed ~ ')' %}
-                {# 'Extreme storm' is the one phrase in the table that opens on a vowel #}
-                {% set wind_later_clause = ('An ' if descriptor[0] in 'aeiou' else 'A ') ~ descriptor ~ ' this afternoon.' %}
+                {# 'extreme storm' is the one phrase in the table that opens on a vowel #}
+                {# "and", not "with": the forecast sentence may already carry a "with some rain" #}
+                {% set afternoon_phrase = ', and ' ~ ('an ' if descriptor[0] in 'aeiou' else 'a ')
+                                          ~ descriptor ~ ' this afternoon' %}
               {% endif %}
-              {% set later_extras = later_extras + [wind_later_clause] %}
+            {% else %}
+              {% set afternoon_phrase = '' %}
             {% endif %}
-            {{ ([now_clause] + now_extras + [later_clause] + later_extras) | join(' ') }}
+            {{ ([now_clause] + now_extras + [later_clause ~ afternoon_phrase ~ '.']) | join(' ') }}
           data:
             url: homeassistant://navigate/lovelace-main/environment
             group: "environment"
@@ -1745,7 +1763,10 @@ automation:
             Cape Town. Plain prose, no markdown, no greeting, at most 40 words and under
             250 characters. Report the weather only: no advice or suggestions (umbrellas,
             jackets, sunscreen).
-            Open with how it feels outside right now, then the rest of today.
+            Two sentences: one for conditions right now, one for the rest of today, in that
+            order. Wind belongs inside those sentences - the measured wind in the first, the
+            afternoon wind closing the second - never in a sentence of its own. Only the
+            optional heads-ups below may sit between the two, as a short sentence each.
             Report only what is the case, never the absence of something: no "not raining",
             "no fog". Wind is always reported, calm included - "calm" is a state of its own,
             not an absence.
@@ -1756,7 +1777,9 @@ automation:
             and join them with "but" rather than "and" when one is pleasant and the other
             isn't ("cold but comfortable").
             Fog, UV and pressure are listed below only when they're worth a mention, so say
-            them whenever they appear. Give the afternoon wind whenever it's listed, calm
+            them whenever they appear. Fog already happening is part of conditions right
+            now and belongs in the first sentence; fog that's only possible is the heads-up
+            kind and gets its own short sentence between the two. Give the afternoon wind whenever it's listed, calm
             included: leaving it out would read as a missing forecast rather than a quiet
             afternoon.
             Any rain still to come is worth saying, even a few tenths of a millimetre spread

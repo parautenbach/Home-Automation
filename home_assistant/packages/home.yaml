@@ -1901,13 +1901,18 @@ automation:
         data:
           profile: normal_bedlamp
 
-  # her lamp can stay on as a night light, so it can't say when she's gone down: use her
-  # bedtime instead
+  # her lamp can stay on as a night light, so it can't say when she's gone down: the bed
+  # check does, and her bedtime is only the window that counts in. both in one trigger, so
+  # that a bed still reading occupied from a nap she wasn't seen getting out of dims as the
+  # window opens – on a state trigger that bed never changes, so nothing would dim all night
   - alias: "Dim Nearby Lights At Child Bedtime"
     id: "120789be-ab7f-47d2-9690-1ff096db0490"
     trigger:
-      - platform: time
-        at: input_datetime.baby_bedtime_start_time
+      - platform: template
+        value_template: >-
+          {% from 'baby.jinja' import in_nursery_bedtime_window %}
+          {{ is_state('sensor.nursery_bed', 'occupied') and
+             in_nursery_bedtime_window() | bool }}
     actions:
       # dim only: turning it on here would light the hallway before anyone needs it
       - if:

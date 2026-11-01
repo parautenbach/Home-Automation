@@ -109,6 +109,13 @@ All credentials and location data are in `home_assistant/secrets.yaml` (git-igno
 
 `home_assistant/blueprints/automation/` contains two Shelly button blueprints (`shelly_button.yaml`, `shelly_bt_button.yaml`) used to configure physical button behaviours without duplicating automation logic.
 
+## Commits
+
+Keep commit messages short: a subject line, and a body only for what the diff and its
+comments don't already say (why a threshold, an alternative that was rejected, an
+assumption that was validated). Never restate what the code does or repeat a comment.
+The same goes for PR descriptions and any write-up of a change.
+
 ## Hardware Integrations
 
 | System | Detail |

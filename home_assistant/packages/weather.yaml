@@ -31,6 +31,14 @@ input_datetime:
   rain_expected_notification_sent:
     has_date: true
     has_time: true
+  # one gate per UV band: moderate crosses in the morning and high only hours later on the
+  # same day, so a single daily gate would swallow the second alert
+  uv_moderate_notification_sent:
+    has_date: true
+    has_time: true
+  uv_high_notification_sent:
+    has_date: true
+    has_time: true
 
 utility_meter:
   daily_precipitation:
@@ -1403,37 +1411,58 @@ automation:
         data:
           datetime: "{{ now() }}"
 
-  - alias: "High UV Notification"
+  - alias: "UV Notification"
     id: "101c7f2d-6839-4a8c-be1a-0de46ed70477"
     initial_state: true
     trigger:
-      # the high band starts at 6, but above is exclusive - and the index is quantised to one
-      # decimal, so 5.9 is the last value below the band and "above 5.9" is "6.0 or more".
+      # sunscreen is advised from index 3, where the moderate band starts, and the burn risk
+      # steps up again at 6. Both crossings are worth a word, because the alert is about when
+      # it happens - but above is exclusive, and the index is quantised to one decimal, so 2.9
+      # is the last value below moderate and "above 2.9" is "3.0 or more".
       # Read off the condition sensor's own index so the alert and the band can't drift apart
       - platform: numeric_state
         entity_id: sensor.uv_condition
         attribute: index
+        above: 2.9
+        id: "moderate"
+      - platform: numeric_state
+        entity_id: sensor.uv_condition
+        attribute: index
         above: 5.9
-    mode: single
+        id: "high"
+    # a jump straight past both thresholds fires both triggers at once; queue them so each
+    # band gets its say and stamps its own gate. They share a tag, so the high notification
+    # replaces the moderate one on the lock screen
+    mode: queued
+    max: 2
+    variables:
+      sent_entity: "input_datetime.uv_{{ trigger.id }}_notification_sent"
     condition:
       - condition: state
         entity_id: binary_sensor.raining
         state: "off"
-      # at most once a day - last_triggered is only set when the conditions pass
+      # at most once a day per band: the helper is only ever set to the time of a notification,
+      # so a stamp older than this morning's midnight means this band hasn't spoken today.
+      # The timestamp attribute, not the state string, which is naive local time
       - condition: template
         value_template: >-
-          {{ this.attributes.last_triggered is none or
-             this.attributes.last_triggered < today_at() }}
+          {{ state_attr(sent_entity, 'timestamp') | float(0) < today_at().timestamp() }}
     action:
       - service: notify.family
         data:
           title: "☀️ Health"
           message: >-
-            UV radiation is high. Remember to apply sunscreen.
+            UV radiation is {{ state_attr('sensor.uv_condition', 'label') | lower }}.
+            Remember to apply sunscreen.
           data:
             group: "environment"
             tag: "environment-uv"
             url: homeassistant://navigate/lovelace-main/environment
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: "{{ sent_entity }}"
+        data:
+          datetime: "{{ now() }}"
 
   - alias: "Morning Weather Brief"
     id: "9c0ff371-189f-4573-8745-17b538695d46"
@@ -1563,12 +1592,13 @@ automation:
             } }}
           today_high: "{{ daily['weather.openweathermap']['forecast'][0]['temperature'] | int(0) }}"
           # the forecast peak, not the reading at wake-up, which is 0 at this hour every day of
-          # the year. The brief warns that today burns; "High UV Notification" above says so again
-          # when it actually crosses, so no time is given here
+          # the year. Moderate and up, where sunscreen is advised. The brief warns that today
+          # burns; "UV Notification" above says so again when it actually crosses, so no
+          # time is given here
           uv_later: >-
             {% from 'environment.jinja' import uv_scale %}
             {% set band = uv_scale(rest_of_today.uv_peak | float(0)) | trim %}
-            {{ band | replace('_', ' ') if band in ['high', 'very_high', 'extreme'] else '' }}
+            {{ band | replace('_', ' ') if band in ['moderate', 'high', 'very_high', 'extreme'] else '' }}
           # plain-English names for the forecast conditions, shared by the templated brief and the
           # claude one below so both say "heavy rain" rather than inventing a synonym for 'pouring'
           condition_words: >-

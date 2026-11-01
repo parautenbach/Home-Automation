@@ -512,11 +512,11 @@ automation:
                           icon: "{{ 'sfsymbols:door.garage.closed' if repeat.item | regex_search('lhs|rhs', ignorecase=True) else 'sfsymbols:pedestrian.gate.closed' }}"
                         - action: "EXTEND_COVER_TIMEOUT_10_MIN"
                           title: "Snooze for 10 min"
-                          icon: "sfsymbols:timer"
+                          icon: "sfsymbols:10.circle"
                           authenticationRequired: true
                         - action: "EXTEND_COVER_TIMEOUT_30_MIN"
                           title: "Snooze for 30 min"
-                          icon: "sfsymbols:timer"
+                          icon: "sfsymbols:30.circle"
                           authenticationRequired: true
                         - action: "DISABLE_COVER_TIMEOUT"
                           title: "Disable"
@@ -639,11 +639,11 @@ automation:
                 icon: "{{ 'sfsymbols:door.garage.closed' if trigger.event.data.entity_id | regex_search('lhs|rhs', ignorecase=True) else 'sfsymbols:pedestrian.gate.closed' }}"
               - action: "EXTEND_COVER_TIMEOUT_10_MIN"
                 title: "Snooze for 10 min"
-                icon: "sfsymbols:timer"
+                icon: "sfsymbols:10.circle"
                 authenticationRequired: true
               - action: "EXTEND_COVER_TIMEOUT_30_MIN"
                 title: "Snooze for 30 min"
-                icon: "sfsymbols:timer"
+                icon: "sfsymbols:30.circle"
                 authenticationRequired: true
               - action: "DISABLE_COVER_TIMEOUT"
                 title: "Disable"

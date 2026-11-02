@@ -92,12 +92,15 @@ input_boolean:
   disable_auto_on_ac:
     name: Disable Auto On AC
     icon: mdi:hvac-off
-  tumble_dryer_cleaning_reminder:
-    name: Tumble Dryer Cleaning Reminder
-    icon: mdi:reminder
-  dishwasher_cleaning_reminder:
-    name: Dishwasher Cleaning Reminder
-    icon: mdi:reminder
+
+# cycles since the last cleaning
+counter:
+  tumble_dryer_cycles:
+    name: Tumble Dryer Cycles
+    icon: mdi:tumble-dryer
+  dishwasher_cycles:
+    name: Dishwasher Cycles
+    icon: mdi:dishwasher
 
 notify:
   - name: family
@@ -2885,16 +2888,6 @@ automation:
         event_data:
           action: RECYCLING_PUT_OUT
         id: "recycling"
-      - platform: event
-        event_type: mobile_app_notification_action
-        event_data:
-          action: TUMBLE_DRYER_CLEANED
-        id: "tumble_dryer_cleaning"
-      - platform: event
-        event_type: mobile_app_notification_action
-        event_data:
-          action: DISHWASHER_CLEANED
-        id: "dishwasher_cleaning"
     action:
       - service: input_boolean.turn_off
         target:
@@ -3107,32 +3100,64 @@ automation:
             tag: "chores-dishwasher"
             url: homeassistant://navigate/lovelace-main/main
 
-  - alias: "Enable Large Appliance Cleaning Reminders"
+  # counted regardless of guest mode, unlike the done notifications
+  - alias: "Count Large Appliance Cycles"
     id: "90b46a3f-f909-4208-a65c-02b3daf5b3ca"
     initial_state: true
     trigger:
-      - platform: time
-        at: "08:00:00"
-    condition:
-      - condition: template
-        value_template: "{{ now().day == 15 }}"
+      - platform: state
+        entity_id: binary_sensor.tumble_dryer_running
+        from: "on"
+        to: "off"
+        id: "tumble_dryer"
+      - platform: state
+        entity_id: binary_sensor.dishwasher_running
+        from: "on"
+        to: "off"
+        id: "dishwasher"
     action:
-      - service: input_boolean.turn_on
+      - service: counter.increment
         target:
-          entity_id:
-            - input_boolean.tumble_dryer_cleaning_reminder
-            - input_boolean.dishwasher_cleaning_reminder
+          entity_id: "counter.{{ trigger.id }}_cycles"
 
+  - alias: "Reset Large Appliance Cycles"
+    id: "f91071b4-479d-48fa-8dcb-24aeb496fdad"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: TUMBLE_DRYER_CLEANED
+        id: "tumble_dryer"
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: DISHWASHER_CLEANED
+        id: "dishwasher"
+    action:
+      - service: counter.reset
+        target:
+          entity_id: "counter.{{ trigger.id }}_cycles"
+      # the action only dismisses it on the phone that tapped done
+      - service: notify.family
+        data:
+          message: "clear_notification"
+          data:
+            tag: "routine-{{ trigger.id | replace('_', '-') }}"
+
+  # nags after every further cycle and daily until cleaned
   - alias: "Check And Clean Tumble Dryer Heat Exchanger"
     id: "9af047f9-49fa-4518-a7bb-350b437ca9f3"
     initial_state: true
     trigger:
+      - platform: state
+        entity_id: counter.tumble_dryer_cycles
       - platform: time
         at: "12:00:00"
     condition:
-      - condition: state
-        entity_id: input_boolean.tumble_dryer_cleaning_reminder
-        state: "on"
+      - condition: numeric_state
+        entity_id: counter.tumble_dryer_cycles
+        above: 6
       - condition: state
         entity_id: binary_sensor.anybody_home
         state: "on"
@@ -3156,12 +3181,14 @@ automation:
     id: "08f2c851-8775-498e-b2ff-ee570c00cf9d"
     initial_state: true
     trigger:
+      - platform: state
+        entity_id: counter.dishwasher_cycles
       - platform: time
         at: "19:00:00"
     condition:
-      - condition: state
-        entity_id: input_boolean.dishwasher_cleaning_reminder
-        state: "on"
+      - condition: numeric_state
+        entity_id: counter.dishwasher_cycles
+        above: 9
       - condition: state
         entity_id: binary_sensor.anybody_home
         state: "on"

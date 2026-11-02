@@ -31,12 +31,12 @@ input_datetime:
   rain_expected_notification_sent:
     has_date: true
     has_time: true
-  # one gate per UV band: moderate crosses in the morning and high only hours later on the
-  # same day, so a single daily gate would swallow the second alert
-  uv_moderate_notification_sent:
+  # one gate per piece of advice: sunscreen crosses in the morning and shade only hours
+  # later on the same day, so a single daily gate would swallow the second alert
+  uv_sunscreen_notification_sent:
     has_date: true
     has_time: true
-  uv_high_notification_sent:
+  uv_shade_notification_sent:
     has_date: true
     has_time: true
 
@@ -1415,24 +1415,26 @@ automation:
     id: "101c7f2d-6839-4a8c-be1a-0de46ed70477"
     initial_state: true
     trigger:
-      # sunscreen is advised from index 3, where the moderate band starts, and the burn risk
-      # steps up again at 6. Both crossings are worth a word, because the alert is about when
-      # it happens - but above is exclusive, and the index is quantised to one decimal, so 2.9
+      # sunscreen is advised from index 3, where the moderate band starts. from 8, the WHO
+      # asks for more than sunscreen: midday sun is to be avoided and shade is not optional,
+      # which is why the second gate sits there and not at 6, where the advice would only
+      # repeat itself. Both crossings are worth a word, because the alert is about when it
+      # happens - but above is exclusive, and the index is quantised to one decimal, so 2.9
       # is the last value below moderate and "above 2.9" is "3.0 or more".
       # Read off the condition sensor's own index so the alert and the band can't drift apart
       - platform: numeric_state
         entity_id: sensor.uv_condition
         attribute: index
         above: 2.9
-        id: "moderate"
+        id: "sunscreen"
       - platform: numeric_state
         entity_id: sensor.uv_condition
         attribute: index
-        above: 5.9
-        id: "high"
+        above: 7.9
+        id: "shade"
     # a jump straight past both thresholds fires both triggers at once; queue them so each
-    # band gets its say and stamps its own gate. They share a tag, so the high notification
-    # replaces the moderate one on the lock screen
+    # gate gets its say and stamps its own helper. They share a tag, so the shade notification
+    # replaces the sunscreen one on the lock screen
     mode: queued
     max: 2
     variables:
@@ -1441,8 +1443,8 @@ automation:
       - condition: state
         entity_id: binary_sensor.raining
         state: "off"
-      # at most once a day per band: the helper is only ever set to the time of a notification,
-      # so a stamp older than this morning's midnight means this band hasn't spoken today.
+      # at most once a day per gate: the helper is only ever set to the time of a notification,
+      # so a stamp older than this morning's midnight means this gate hasn't spoken today.
       # The timestamp attribute, not the state string, which is naive local time
       - condition: template
         value_template: >-
@@ -1453,7 +1455,8 @@ automation:
           title: "☀️ Health"
           message: >-
             UV radiation is {{ state_attr('sensor.uv_condition', 'label') | lower }}.
-            Remember to apply sunscreen.
+            {{ 'Stay in the shade and keep applying sunscreen, or stay indoors.'
+               if trigger.id == 'shade' else 'Remember to apply sunscreen.' }}
           data:
             group: "environment"
             tag: "environment-uv"

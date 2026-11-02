@@ -129,8 +129,6 @@ cards:
         entities:
           - entity: input_boolean.baby_sleep_mode
             name: "Asleep"
-          - entity: input_boolean.child_keep_night_light
-            name: "Keep Night Light On"
           - type: attribute
             entity: sensor.child_sleep_phase
             name: "Sleep Phase"
@@ -436,6 +434,8 @@ cards:
           type: section
           label: Times
         entities:
+          - entity: input_boolean.child_keep_night_light
+            name: "Keep Night Light On"
           - entity: input_datetime.baby_nap_start_time
             name: "Nap Start Time"
             icon: mdi:power-sleep

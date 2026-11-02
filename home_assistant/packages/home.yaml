@@ -172,6 +172,9 @@ sensor:
     sampling_size: 100
     max_age:
       seconds: 30
+    # the plug only sends a fresh reading once a minute while the draw is steady, so the window
+    # empties and the percentile would read unknown mid-cycle
+    keep_last_sample: true
 
 template:
   - binary_sensor:
@@ -269,7 +272,9 @@ template:
         delay_on: "00:01:00"
         # works in conjunction with the power filter sensor to coincide with the machine's own cycle end beep
         delay_off: "00:01:00"
-        state: "{{ states('sensor.washing_machine_power_1min_90th_percentile') | float(0) > 70 }}"
+        # well clear of standby (~2 W) and the motor-off dips (~4 W), and under the ~55 W tumble
+        # phases that a higher threshold chopped into separate runs
+        state: "{{ states('sensor.washing_machine_power_1min_90th_percentile') | float(0) > 20 }}"
   - binary_sensor:
       - name: "Tumble Dryer Running"
         unique_id: "a957a399-7e18-4f67-b2a4-4bc9979971c8"

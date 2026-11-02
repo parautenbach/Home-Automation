@@ -1732,7 +1732,7 @@ automation:
         data:
           camera_entity: camera.baby_monitor_profile000
           subdirectory: "baby_monitor"
-      - service: notify.family
+      - service: notify.mobile_app_ceres
         data:
           title: "🧸 Nursery"
           message: "Motion detected!"

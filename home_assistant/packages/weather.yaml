@@ -1706,39 +1706,40 @@ automation:
             {% else %}
               {% set now_clause = feel_clause ~ ' with ' ~ (with_phrases | join(' and ')) ~ '.' %}
             {% endif %}
+            {# UV qualifies the sky rather than the high - a cool clear day burns - so it rides in
+               the condition's bracket, joining the mm there when there's rain to report. With no
+               condition to carry it, the high is the only host left #}
+            {% set uv_item = [uv_later ~ ' UV'] if uv_later else [] %}
+            {% set wet_paren = ' (' ~ ([rest_of_today.mm ~ ' mm'] + uv_item) | join(', ') ~ ')' %}
+            {% set dry_paren = ' (' ~ (uv_item | join) ~ ')' if uv_item else '' %}
             {# the condition is only wet when a wet hour is still to come, so the condition word
                carries how heavy it is ("Heavy rain expected around 09:00") #}
             {# rain the station is measuring now that the forecast carries into the next hour
                continues rather than starts #}
             {% set next_hour = (now() + timedelta(hours=1)).strftime('%H:00') %}
             {% if raining_now and rest_of_today.onset == next_hour %}
-              {% set later_clause = (later_condition | capitalize) ~ ' expected to continue (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C' %}
+              {% set later_clause = (later_condition | capitalize) ~ ' expected to continue' ~ wet_paren ~ ', high of ' ~ today_high ~ '°C' %}
             {# rain now with a forecast lull before the next wet hour - the next spell is more
                of it, not a fresh start #}
             {% elif raining_now and rest_of_today.onset %}
-              {% set later_clause = 'More ' ~ later_condition ~ ' expected around ' ~ rest_of_today.onset ~ ' (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C' %}
+              {% set later_clause = 'More ' ~ later_condition ~ ' expected around ' ~ rest_of_today.onset ~ wet_paren ~ ', high of ' ~ today_high ~ '°C' %}
             {% elif rest_of_today.onset %}
-              {% set later_clause = (later_condition | capitalize) ~ ' expected around ' ~ rest_of_today.onset ~ ' (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C' %}
+              {% set later_clause = (later_condition | capitalize) ~ ' expected around ' ~ rest_of_today.onset ~ wet_paren ~ ', high of ' ~ today_high ~ '°C' %}
             {% elif rest_of_today.mm > 0 %}
               {# rain still to come but too thin for the forecast to call any hour wet, so
                  "Partly cloudy" alone wouldn't imply it - it needs saying out loud #}
-              {% set later_clause = (later_condition | capitalize) ~ ' with some rain (' ~ rest_of_today.mm ~ ' mm), high of ' ~ today_high ~ '°C' %}
+              {% set later_clause = (later_condition | capitalize) ~ ' with some rain' ~ wet_paren ~ ', high of ' ~ today_high ~ '°C' %}
             {% elif rest_of_today.condition %}
-              {% set later_clause = (later_condition | capitalize) ~ ' later, high of ' ~ today_high ~ '°C' %}
+              {% set later_clause = (later_condition | capitalize) ~ ' later' ~ dry_paren ~ ', high of ' ~ today_high ~ '°C' %}
             {% else %}
-              {% set later_clause = 'High of ' ~ today_high ~ '°C' %}
+              {% set later_clause = 'High of ' ~ today_high ~ '°C' ~ dry_paren %}
             {% endif %}
             {# the brief reads as two blocks: everything measured right now, then everything
                forecast for the rest of today. Fog and pressure are current readings and
-               belong with the opening sentence, not stranded behind the forecast.
-               The UV warning is the one forecast item among them, and sits here rather than
-               in the forecast sentence because it's a heads-up, like fog #}
+               belong with the opening sentence, not stranded behind the forecast #}
             {% set now_extras = [] %}
             {% if fog_chance == 'possible' %}
               {% set now_extras = now_extras + ['Fog possible.'] %}
-            {% endif %}
-            {% if uv_later %}
-              {% set now_extras = now_extras + [(uv_later | capitalize) ~ ' UV expected.'] %}
             {% endif %}
             {% if pressure_state in ['rising_rapidly', 'falling_rapidly'] %}
               {% set now_extras = now_extras + ['Pressure ' ~ (pressure_label | lower) ~ '.'] %}
@@ -1794,13 +1795,15 @@ automation:
             and join them with "but" rather than "and" when one is pleasant and the other
             isn't ("cold but comfortable").
             Fog, UV and pressure are listed below only when they're worth a mention, so say
-            them whenever they appear. The UV line is a warning about later today: give it
-            without a time, as a separate notification fires when it crosses. Fog already
-            happening is part of conditions right now and belongs in the first sentence; fog
-            that's only possible is the heads-up kind and gets its own short sentence between
-            the two. Give the afternoon wind whenever
-            it's listed, calm included: leaving it out would read as a missing forecast rather
-            than a quiet afternoon.
+            them whenever they appear. UV is a warning about later today and qualifies the sky
+            rather than the high - a cool clear day burns - so put it in brackets after the
+            sky condition in the second sentence ("sunny later (extreme UV)"), joining
+            whatever else that bracket carries. Give it without a time, as a separate
+            notification fires when it crosses, and without the index. Fog already happening
+            is part of conditions right now and belongs in the first sentence; fog that's
+            only possible is the heads-up kind and gets its own short sentence between the
+            two. Give the afternoon wind whenever it's listed, calm included: leaving it out
+            would read as a missing forecast rather than a quiet afternoon.
             Any rain still to come is worth saying, even a few tenths of a millimetre spread
             too thin for the forecast to call any hour wet - the sky condition alone won't
             imply it. If it's already raining, the next wet hour is more of the same rather

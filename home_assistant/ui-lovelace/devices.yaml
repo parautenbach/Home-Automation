@@ -707,6 +707,10 @@ cards:
             name: Battery status
           - entity: sensor.last_boot
             name: Last boot
+          - entity: sensor.home_assistant_uptime
+            name: HA last started
+          - entity: input_datetime.home_assistant_shut_down_time
+            name: HA last shut down
       - type: history-graph
         hours_to_show: 24
         entities:

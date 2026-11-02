@@ -39,6 +39,16 @@ input_boolean:
   server_shut_down_automatically:
     name: Server Shut Down Automatically
     icon: mdi:server
+  home_assistant_shut_down_cleanly:
+    name: Home Assistant Shut Down Cleanly
+    icon: mdi:power
+
+input_datetime:
+  home_assistant_shut_down_time:
+    name: Home Assistant Shut Down Time
+    has_date: true
+    has_time: true
+    icon: mdi:power-plug-off
 
 sensor:
   - platform: time_date
@@ -670,23 +680,60 @@ automation:
                 icon: "sfsymbols:creditcard"
                 uri: "https://app.clickatell.com"
 
-  - alias: "Notify When Server Started After Being Shut Down Automatically"
-    id: "cc787a25-6e55-4388-ab3c-68e9716bce50"
+  # only a clean stop gets here, so the flag staying off is what tells the start
+  # notification below that HA was killed
+  - alias: "Store When Home Assistant Shuts Down"
+    id: "aaebbd5f-3f68-44da-b73e-70c71a2e3211"
+    initial_state: true
+    trigger:
+      - platform: homeassistant
+        event: shutdown
+    mode: single
+    action:
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.home_assistant_shut_down_time
+        data:
+          timestamp: "{{ now().timestamp() }}"
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.home_assistant_shut_down_cleanly
+
+  - alias: "Notify When Home Assistant Started"
+    id: "c18685fe-afb2-4890-a363-e4c4135127db"
+    initial_state: true
     trigger:
       - platform: homeassistant
         event: start
     mode: single
-    condition:
-      - condition: state
-        entity_id: input_boolean.server_shut_down_automatically
-        state: "on"
+    variables:
+      shut_down_cleanly: "{{ is_state('input_boolean.home_assistant_shut_down_cleanly', 'on') }}"
+      shut_down_automatically: "{{ is_state('input_boolean.server_shut_down_automatically', 'on') }}"
+      # both as timestamps: the uptime sensor is tz-aware and the input_datetime isn't.
+      # now() stands in for the start time until the sensor is up, and for the shut-down
+      # time when there isn't one, which reads as no downtime
+      downtime: >-
+        {% set started = (states('sensor.home_assistant_uptime') | as_datetime(now())).timestamp() %}
+        {% set stopped = state_attr('input_datetime.home_assistant_shut_down_time', 'timestamp') | float(started) %}
+        {{ (started - stopped) | int }}
     action:
+      # first, so a failed notification can't leave a flag on for the next start to read as
+      # a clean stop or a power failure. the variables above are already rendered
       - service: input_boolean.turn_off
-        entity_id: input_boolean.server_shut_down_automatically
+        entity_id:
+          - input_boolean.home_assistant_shut_down_cleanly
+          - input_boolean.server_shut_down_automatically
       - service: notify.mobile_app_ceres
         data:
-          title: "✅ System"
-          message: "Server started."
+          title: "{{ '✅' if shut_down_cleanly else '⚠️' }} System"
+          message: >-
+            {% from 'utilities.jinja' import sec_to_hour_and_min %}
+            {% if shut_down_cleanly %}
+              {% set downtime_text = "after " ~ sec_to_hour_and_min(downtime) %}
+            {% else %}
+              {% set downtime_text = "after an unclean shutdown" %}
+            {% endif %}
+            {% set power_failure_text = "The server was shut down automatically after losing power." if shut_down_automatically else "" %}
+            Home Assistant is back {{ downtime_text }}. {{ power_failure_text }}
           data:
             group: "system-general"
             url: homeassistant://navigate/lovelace-system/devices

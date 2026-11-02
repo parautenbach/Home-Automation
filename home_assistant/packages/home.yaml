@@ -1763,16 +1763,27 @@ automation:
 
   # the alert above is switched off by hand when one of us settles her in the room, where our
   # own movement sets it off
-  - alias: "Re-enable Nursery Motion Alerts At Window Start"
+  - alias: "Re-enable Nursery Motion Alerts"
     id: "63985a30-cc4b-4499-8d21-23011e695fdc"
     initial_state: true
     trigger:
-      # not the morning window: that's the tail of a night that may still have one of us in
-      # the room
+      # each start twice, as a fallback if HA is down for one
       - platform: time
         at:
           - entity_id: input_datetime.baby_nap_start_time
+            offset: "-00:30:00"
+          - entity_id: input_datetime.baby_nap_start_time
+            offset: "-00:15:00"
           - entity_id: input_datetime.baby_bedtime_start_time
+            offset: "-00:30:00"
+          - entity_id: input_datetime.baby_bedtime_start_time
+            offset: "-00:15:00"
+    condition:
+      # turn_on is a no-op when it's already on, so this is only to keep last_triggered and
+      # the traces meaning a mute was cleared
+      - condition: state
+        entity_id: automation.notify_when_motion_detected_in_the_nursery
+        state: "off"
     action:
       - service: automation.turn_on
         target:

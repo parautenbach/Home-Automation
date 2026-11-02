@@ -432,10 +432,19 @@ cards:
       - type: custom:fold-entity-row
         head:
           type: section
-          label: Times
+          label: Overrides
         entities:
+          - entity: automation.notify_when_motion_detected_in_the_nursery
+            name: "Motion Alerts"
+            icon: mdi:motion-sensor
           - entity: input_boolean.child_keep_night_light
             name: "Keep Night Light On"
+            icon: mdi:weather-night
+      - type: custom:fold-entity-row
+        head:
+          type: section
+          label: Times
+        entities:
           - entity: input_datetime.baby_nap_start_time
             name: "Nap Start Time"
             icon: mdi:power-sleep

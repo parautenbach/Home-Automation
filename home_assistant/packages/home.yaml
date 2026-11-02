@@ -1662,7 +1662,8 @@ automation:
 
   - alias: "Notify When Motion Detected In The Nursery"
     id: "c85b1a55-74fe-4576-8ef4-346d1c94c31e"
-    initial_state: true
+    # the state needs to survive a restart to prevent turning this on accidentally when it
+    # was disabled on purpose
     trigger:
       - platform: state
         entity_id: binary_sensor.baby_monitor_motion_alarm
@@ -1759,6 +1760,23 @@ automation:
               url: !secret baby_monitor_last_snapshot_url
               hide-thumbnail: false
               lazy: false
+
+  # the alert above is switched off by hand when one of us settles her in the room, where our
+  # own movement sets it off
+  - alias: "Re-enable Nursery Motion Alerts At Window Start"
+    id: "63985a30-cc4b-4499-8d21-23011e695fdc"
+    initial_state: true
+    trigger:
+      # not the morning window: that's the tail of a night that may still have one of us in
+      # the room
+      - platform: time
+        at:
+          - entity_id: input_datetime.baby_nap_start_time
+          - entity_id: input_datetime.baby_bedtime_start_time
+    action:
+      - service: automation.turn_on
+        target:
+          entity_id: automation.notify_when_motion_detected_in_the_nursery
 
   - alias: "Update Sleep Mode Based On Bed Occupancy"
     id: "106574a8-11b2-4679-aff1-f5b25b8e0b74"

@@ -413,7 +413,7 @@ automation:
                     tag: live_irrigation
                     live_update: true
                     # top right on the lock screen, as the message is hidden by the chronometer
-                    critical_text: "{{ state_attr(zone_id, 'friendly_name') }}"
+                    critical_text: "{{ state_attr(zone_id, 'friendly_name') | replace('Irrigation ', '') }}"
                     chronometer: true
                     when: "{{ as_timestamp(state_attr(trigger.event.data.entity_id, 'finishes_at')) | int }}"
                     notification_icon: mdi:sprinkler-variant

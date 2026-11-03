@@ -252,6 +252,13 @@ scenery:
       hs_color: [0, 100]  # red
       brightness: 3  # 3/255 ~= 1%
       transition: 2
+    # no colour, so the lamp keeps hers
+    - name: night_brightness_only_bedlamp
+      brightness: 3  # 3/255 ~= 1%
+      transition: 2
+    - name: normal_brightness_only_bedlamp
+      brightness: 153  # 153/255 = 60%
+      transition: 2
     # test and compare
     - name: bright_shelly_duo
       color_temp_kelvin: 4200

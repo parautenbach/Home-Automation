@@ -1549,7 +1549,6 @@ automation:
           profile: normal_tp_link_rgb
 
   # set up automation on device to immediately update the sensors
-  # todo: switch off all lights except rouvé's (if on), or at least notify of lights still on
   - alias: "Switch Off Bedlamp When Plugging In Phone"
     id: "ffd14255-4539-43e3-b9a5-be8b82a6b5b6"
     trigger:
@@ -1613,7 +1612,9 @@ automation:
         data:
           title: "💡 Lights"
           message: >-
-            The following lights are still on:
+            {% set singular = 'Do you want to turn off this light?' -%}
+            {% set plural = 'Do you want to turn off these lights?' -%}
+            {{ singular if remaining_lights | length == 1 else plural }}
             {%- for light_entity in remaining_lights %}
               - {{ state_attr(light_entity, 'friendly_name') | replace(' Lights', '') | replace(' Light', '') }}
             {%- endfor %}

@@ -262,6 +262,15 @@ cards:
           sort:
             - "state"
             - "name"
+          # the card's defaults are saturated web colours; same thresholds, theme colours
+          colors:
+            steps:
+              - value: 20
+                color: var(--custom-color-red)
+              - value: 55
+                color: var(--custom-color-yellow)
+              - value: 100
+                color: var(--custom-color-green)
         - type: custom:auto-entities
           card:
             type: entities

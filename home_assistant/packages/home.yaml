@@ -1573,11 +1573,17 @@ automation:
         data:
           title: "🛌 Sleep"
           message: >-
+            {% from 'utilities.jinja' import sec_to_hour_and_min %}
             {% set motion_changed = (states.binary_sensor.baby_monitor_motion_alarm.last_changed | as_local).strftime('%H:%M') %}
+            {# set as sleep mode went off, before the delay above. in the sleep phase she's up
+               in the night and will settle again, so it's not her whole sleep #}
+            {% set slept = states('sensor.baby_last_sleep_session') | int(0) %}
+            {% set slept_for = ' after ' ~ sec_to_hour_and_min(slept)
+                               if slept > 0 and phase in ['wake_up', 'awake'] else '' %}
             {% set messages = {
                  'fell_asleep': 'Julia fell asleep around ' ~ motion_changed ~ '.',
-                 'out_of_bed': 'Julia is up.',
-                 'awake_in_bed': 'Julia woke around ' ~ motion_changed ~ '.',
+                 'out_of_bed': 'Julia is up' ~ slept_for ~ '.',
+                 'awake_in_bed': 'Julia woke around ' ~ motion_changed ~ slept_for ~ '.',
                  'sleep_time_over': 'Sleep time is over.'
                } %}
             {{ messages[reason] }}

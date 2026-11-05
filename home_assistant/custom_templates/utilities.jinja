@@ -135,7 +135,7 @@ Return the first integration associated with an entity or device.
         {#- config_entry_attr raises on none, unlike device_attr -#}
         {%- set domain = config_entry_attr(config_entry, 'domain') if config_entry else none -%}
         {%- if domain -%}
-          {{ _INTEGRATION_LABELS.get(domain) }}
+          {{ _INTEGRATION_LABELS.get(domain, domain | replace('_', ' ') | title) }}
         {%- else -%}
           Derived / Helper
         {%- endif -%}

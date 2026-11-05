@@ -93,8 +93,6 @@ lovelace:
       type: module
     - url: /hacsfiles/energy-flow-card-plus/energy-flow-card-plus.js
       type: module
-    - url: /hacsfiles/energy-period-selector-plus/energy-period-selector-plus.js
-      type: module
     - url: /hacsfiles/lovelace-home-feed-card/lovelace-home-feed-card.js
       type: module
     - url: /hacsfiles/lovelace-auto-entities/auto-entities.js

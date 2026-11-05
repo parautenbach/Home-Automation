@@ -474,7 +474,6 @@ cards:
   - type: vertical-stack
     cards:
       - type: energy-date-selection
-      # - type: custom:energy-period-selector-plus
       # - type: energy-distribution
       #   link_dashboard: true
       # this seems a bit broken

@@ -165,6 +165,16 @@ sensor:
     # sure, or miss her, as the next one is only the 15 min backstop. accepted, it's consistent
     start: "{{ today_at('17:00') - timedelta(days=1) }}"
     end: "{{ today_at('17:00') }}"
+  # the camera reports motion in 30-70 s pulses, so lying awake shows as many short bursts
+  # rather than one long one
+  - platform: history_stats
+    unique_id: "e9beceb9-586e-45ec-b80d-6e18a8bc1dc0"
+    name: Nursery Motion Bursts
+    entity_id: binary_sensor.baby_monitor_motion_alarm
+    state: "on"
+    type: count
+    start: "{{ now() - timedelta(minutes=10) }}"
+    end: "{{ now() }}"
   - platform: statistics
     name: 'Washing Machine Power 1min 90th Percentile'
     unique_id: "d7f86c93-d664-486e-bf30-86c887b940ed"
@@ -1503,13 +1513,18 @@ automation:
         event_data:
           confidence: "high"
         id: "trusted_bed_check"
-      # she's awake and busy in bed. the longest burst seen while settling was 4 min
+      # she's awake and busy in bed: one long burst (the longest seen while settling was
+      # 4 min), or many short ones (asleep it's at most 2 in 10 min, awake 5-9)
       - platform: state
         entity_id: binary_sensor.baby_monitor_motion_alarm
         to: "on"
         for:
           minutes: 5
         id: "sustained_movement"
+      - platform: numeric_state
+        entity_id: sensor.nursery_motion_bursts
+        above: 3
+        id: "frequent_movement"
       # a cap on the checks that carry on past the end, should none ever see her up: 30 min
       # into the awake phase, which starts 15 min after the end (get_sleep_phase's padding)
       - platform: time
@@ -1528,14 +1543,14 @@ automation:
         {{ is_state('binary_sensor.baby_monitor_motion_alarm', 'off') and
            now() - states.binary_sensor.baby_monitor_motion_alarm.last_changed > timedelta(minutes=10) }}
       # awake to asleep: in bed and still. asleep to awake: an empty bed at any time, or
-      # sustained movement only when she might wake or is past the end (in the night she
+      # busy movement only when she might wake or is past the end (in the night she
       # resettles), or 30 min past the end: she may sleep on, so the checks carry on until then
       reason: >-
         {% if not asleep and phase in ['sleep', 'wake_up'] and bed == 'occupied' and still %}
           fell_asleep
         {% elif asleep and bed == 'empty' %}
           out_of_bed
-        {% elif asleep and trigger.id == 'sustained_movement' and phase in ['wake_up', 'awake'] %}
+        {% elif asleep and trigger.id in ['sustained_movement', 'frequent_movement'] and phase in ['wake_up', 'awake'] %}
           awake_in_bed
         {% elif asleep and trigger.id == 'sleep_time_over' %}
           sleep_time_over
@@ -1868,6 +1883,38 @@ automation:
       - service: "input_boolean.turn_{{ trigger.id }}"
         target:
           entity_id: input_boolean.baby_sleep_mode
+
+  # "Update Sleep Mode From Bed Checks And Motion" says how long she slept when it turns sleep
+  # mode off. this covers the dashboard and the notification actions
+  - alias: "Notify Sleep Duration When Sleep Mode Turned Off By Hand"
+    id: "e961cbc1-68e0-404d-be37-279ab985c54c"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: input_boolean.baby_sleep_mode
+        from: "on"
+        to: "off"
+    condition:
+      # "Update Sleep Mode From Bed Checks And Motion" decides whether she's asleep. if this
+      # change's context doesn't match that automation's latest run, it didn't make the
+      # change, so it was done by hand
+      - condition: template
+        value_template: >-
+          {{ trigger.to_state.context.id !=
+             states.automation.update_sleep_mode_from_bed_checks_and_motion.context.id }}
+    action:
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🛌 Sleep"
+          message: >-
+            {% from 'utilities.jinja' import sec_to_hour_and_min %}
+            {# sensor.baby_last_sleep_session updates on this same change, so it may not be set yet #}
+            {% set slept = (trigger.to_state.last_changed - states('sensor.child_fell_asleep') | as_datetime).total_seconds() | int(0) %}
+            Julia slept for {{ sec_to_hour_and_min(slept) }}.
+          data:
+            group: "routine-bedtime"
+            tag: "routine-bedtime"
+            url: homeassistant://navigate/lovelace-main/baby
 
   - alias: "Clear Nursery Motion Notifications When Sleep Mode Changes"
     id: "0898da8b-9333-4aa2-8ca7-46dcdd30a3ca"

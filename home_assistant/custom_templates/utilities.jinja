@@ -132,7 +132,8 @@ Return the first integration associated with an entity or device.
 
     {%- if not raw_integration -%}
         {%- set config_entry = device_attr(device_or_entity_id, 'primary_config_entry') -%}
-        {%- set domain = config_entry_attr(config_entry, 'domain') -%}
+        {#- config_entry_attr raises on none, unlike device_attr -#}
+        {%- set domain = config_entry_attr(config_entry, 'domain') if config_entry else none -%}
         {%- if domain -%}
           {{ _INTEGRATION_LABELS.get(domain) }}
         {%- else -%}

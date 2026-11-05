@@ -1557,21 +1557,36 @@ automation:
           #    heavy (OWM's pouring/rainy split is taken to follow the same rain rate conventions
           #    as sensor.rain_rate_condition); with no wet hour left, the most common condition
           #  - mm: rain still to come today
-          #  - onset: HH:MM of the first wet hour, or '' if none
+          #  - onset: HH:MM of the first wet hour (at least 0.1 mm), or '' if none
+          #  - possible: a likely (50%+) hour with a trace or a wet label; only said when
+          #    nothing firmer is
           #  - uv_peak: the highest forecast UV index still to come
           rest_of_today: >-
             {% set wet_rank = ['snowy', 'rainy', 'snowy-rainy', 'pouring', 'hail', 'lightning-rainy'] %}
-            {% set ns = namespace(mm=0, wet=[], wettest=none, conditions=[], uv=0) %}
+            {% set ns = namespace(mm=0, wet=[], wettest=none, conditions=[], uv=0, possible=false) %}
             {% for f in hourly['weather.openweathermap']['forecast'] %}
               {% set dt = f.datetime | as_datetime | as_local %}
               {% if dt.date() == now().date() and dt > now() %}
-                {% set ns.mm = ns.mm + f.precipitation | float(0) %}
-                {% set ns.conditions = ns.conditions + [f.condition] %}
+                {% set mm = f.precipitation | float(0) %}
+                {% set ns.mm = ns.mm + mm %}
                 {% set ns.uv = [ns.uv, f.uv_index | float(0)] | max %}
-                {% if f.condition in wet_rank %}
+                {# a wet label on a dry hour doesn't name the sky, or a day of 0.0 mm rainy
+                   hours would read "rain later" #}
+                {% if mm >= 0.1 or f.condition not in wet_rank %}
+                  {% set ns.conditions = ns.conditions + [f.condition] %}
+                {% endif %}
+                {# a trace, or a wet label with no rain to speak of, is only a chance of rain,
+                   and only when the forecast rates it likely #}
+                {% if (mm > 0 or f.condition in wet_rank) and f.precipitation_probability | float(0) >= 50 %}
+                  {% set ns.possible = true %}
+                {% endif %}
+                {# an hour is wet by its rain, not its label: owm calls an hour rainy with 0.0 mm,
+                   and drizzle can come under cloudy #}
+                {% if mm >= 0.1 %}
                   {% set ns.wet = ns.wet + [dt] %}
-                  {% if ns.wettest is none or wet_rank.index(f.condition) > wet_rank.index(ns.wettest) %}
-                    {% set ns.wettest = f.condition %}
+                  {% set condition = f.condition if f.condition in wet_rank else 'rainy' %}
+                  {% if ns.wettest is none or wet_rank.index(condition) > wet_rank.index(ns.wettest) %}
+                    {% set ns.wettest = condition %}
                   {% endif %}
                 {% endif %}
               {% endif %}
@@ -1591,6 +1606,7 @@ automation:
               'condition': ns.wettest or common.condition or '',
               'mm': ns.mm | round(1),
               'onset': ns.wet[0].strftime('%H:%M') if ns.wet else '',
+              'possible': ns.possible,
               'uv_peak': ns.uv | round(1)
             } }}
           today_high: "{{ daily['weather.openweathermap']['forecast'][0]['temperature'] | int(0) }}"
@@ -1732,6 +1748,14 @@ automation:
               {# rain still to come but too thin for the forecast to call any hour wet, so
                  "Partly cloudy" alone wouldn't imply it - it needs saying out loud #}
               {% set later_clause = (later_condition | capitalize) ~ ' with some rain' ~ wet_paren ~ ', high of ' ~ today_high ~ '°C' %}
+            {# below that, no time or amount: a trace supports neither #}
+            {% elif rest_of_today.possible %}
+              {% set chance = 'an outside chance of ' ~ ('more ' if raining_now else '') ~ 'rain' %}
+              {% if rest_of_today.condition %}
+                {% set later_clause = (later_condition | capitalize) ~ ' later with ' ~ chance ~ dry_paren ~ ', high of ' ~ today_high ~ '°C' %}
+              {% else %}
+                {% set later_clause = 'High of ' ~ today_high ~ '°C with ' ~ chance ~ dry_paren %}
+              {% endif %}
             {% elif rest_of_today.condition %}
               {% set later_clause = (later_condition | capitalize) ~ ' later' ~ dry_paren ~ ', high of ' ~ today_high ~ '°C' %}
             {% else %}
@@ -1778,79 +1802,54 @@ automation:
         continue_on_error: true
         data:
           task_name: "morning weather brief"
-          entity_id: ai_task.claude_haiku
-          instructions: >-
-            Write a short morning weather report for a phone notification for someone in
-            Cape Town. Plain prose, no markdown, no greeting, at most 40 words and under
-            250 characters. Report the weather only: no advice or suggestions (umbrellas,
-            jackets, sunscreen).
-            Two sentences: one for conditions right now, one for the rest of today, in that
-            order. Wind belongs inside those sentences - the measured wind in the first, the
-            afternoon wind closing the second - never in a sentence of its own. Only the
-            optional heads-ups below may sit between the two, as a short sentence each.
-            Report only what is the case, never the absence of something: no "not raining",
-            "no fog". Wind is always reported, calm included - "calm" is a state of its own,
-            not an absence.
-            Always cover temperature, humidity, wind and skies. Use qualitative words
-            (humid, fresh, breezy) over raw percentages; give temperatures in °C and wind
-            in km/h. The temperature and humidity words open the brief together: drop the
-            humidity one when it repeats the temperature one ("comfortable and comfortable"),
-            and join them with "but" rather than "and" when one is pleasant and the other
-            isn't ("cold but comfortable").
-            Fog, UV and pressure are listed below only when they're worth a mention, so say
-            them whenever they appear. UV is a warning about later today and qualifies the sky
-            rather than the high - a cool clear day burns - so put it in brackets after the
-            sky condition in the second sentence ("sunny later (extreme UV)"), joining
-            whatever else that bracket carries. Give it without a time, as a separate
-            notification fires when it crosses, and without the index. Fog already happening
-            is part of conditions right now and belongs in the first sentence; fog that's
-            only possible is the heads-up kind and gets its own short sentence between the
-            two. Give the afternoon wind whenever it's listed, calm included: leaving it out
-            would read as a missing forecast rather than a quiet afternoon.
-            Any rain still to come is worth saying, even a few tenths of a millimetre spread
-            too thin for the forecast to call any hour wet - the sky condition alone won't
-            imply it. If it's already raining, the next wet hour is more of the same rather
-            than a fresh start: say the rain continues, or that there's more of it at that
-            hour.
-            The weather station is sheltered and reads well below the forecast for sustained
-            wind, so don't compare the measured wind with forecast wind speeds.
-            Use the words given below for wind strength, sky condition and rain intensity -
-            they are the Beaufort and forecast terms and the dashboards use them too, so keep
-            them rather than reaching for a synonym ("faint", "westerlies", "shower"). Fog, when
-            there is any to report, is either happening now or only possible: say which, and
-            don't hedge one that's already there. Write times on the 24-hour clock (11:00, not 11am).
+          entity_id: ai_task.claude_sonnet
+          # literal, so the data keeps one item per line
+          instructions: |-
+            Write this morning's weather brief for someone in Cape Town, as a phone
+            notification. Decide what matters most about today and lead with it; leave out
+            what doesn't matter. Always touch on temperature, humidity, wind and the sky.
+            Weather only, no advice.
+
+            Style: plain prose, no markdown or greeting, under 250 characters. Qualitative
+            words over percentages; °C, km/h and the 24-hour clock. Directions in lowercase
+            ("from the west"). Keep the wind, sky and rain words given below, as the
+            dashboards use them too.
+
+            About the data:
+            - the weather station is sheltered and reads well under the forecast for
+              sustained wind, so the two speeds aren't comparable
+            - the forecast labels an hour rain even for a trace; we don't count an hour under
+              0.1 mm as wet in any way that matters
+            - a separate notification fires when UV crosses into moderate and very high
 
             Right now (measured):
+            {#- claude uses the terms we use on the dashboards #}
             - temperature: {{ current_temp }}°C, feels {{ heat_label | lower }}
             - humidity: {{ humidity_phrases.get(humidity_state, humidity_state) }}
             - wind: {{ wind_phrases[wind_state] | lower }}, {{ wind_speed }}{{ ' from the ' ~ wind_dir if wind_dir and wind_state != 'calm' }}
-            - raining: {{ 'yes, ' ~ rain_now_state | replace('no_rain', 'light') ~ ' rain' if raining_now else 'no' }}
-            {%- if fog_chance in ['present', 'possible'] %}
-            - fog: {{ 'yes, fog right now' if fog_chance == 'present' else 'no fog yet, but possible' }}
-            {%- endif %}
-            {%- if pressure_state in ['rising_rapidly', 'falling_rapidly'] %}
+            - raining: {{ rain_now_state | replace('no_rain', 'light') ~ ' rain' if raining_now else 'no' }}
+            - fog: {{ {'present': 'yes', 'possible': 'possible'}.get(fog_chance, 'no') }}
             - pressure: {{ pressure_label | lower }}
-            {%- endif %}
-            {%- if uv_later %}
-            - UV: {{ uv_later }} UV expected later today
-            {%- endif %}
+            - rain yesterday: {{ states('sensor.weather_forecast_precipitation_yesterday') | float(0) }} mm
 
-            Forecast for today: high of {{ today_high }}°C.
-            {%- if rest_of_today.mm > 0 %}
-            Rain still to come: {{ rest_of_today.mm }} mm{{ ', first wet hour ' ~ rest_of_today.onset if rest_of_today.onset else ', spread too thin for any hour to be called wet' }}.
-            {%- endif %}
+            Forecast for the rest of today:
+            - high: {{ today_high }}°C
+            - UV peak: {{ rest_of_today.uv_peak }} ({{ uv_later or 'low' }})
+            - rain: {{ rest_of_today.mm }} mm in all{{ ', first hour of 0.1 mm or more at ' ~ rest_of_today.onset if rest_of_today.onset }}
             {%- if afternoon_wind.speed is not none %}
-            Windiest hour between noon and sunset: {{ wind_phrases[afternoon_wind_state] | lower }},
-            {{ afternoon_wind_speed }}{{ ' from the ' ~ afternoon_wind_dir if afternoon_wind_dir and afternoon_wind_state != 'calm' }}.
+            - windiest hour between noon and sunset: {{ wind_phrases[afternoon_wind_state] | lower }},
+              {{ afternoon_wind_speed }}{{ ' from the ' ~ afternoon_wind_dir if afternoon_wind_dir and afternoon_wind_state != 'calm' }}
             {%- endif %}
-            Hourly for the rest of today:
+            - hourly:
+            {#- we don't need the full 48 hours, and times are converted to local so the
+                model can't get the conversion wrong #}
             {% for f in hourly['weather.openweathermap']['forecast'] %}
             {%- set dt = f.datetime | as_datetime | as_local %}
             {%- if dt.date() == now().date() and dt > now() %}
-            - {{ dt.strftime('%H:%M') }}: {{ condition_words.get(f.condition, f.condition | replace('-', ' ')) }},
-            {{ f.temperature | round(0) }}°C, {{ f.precipitation | float(0) }} mm rain,
-            wind {{ f.wind_speed | float(0) | round(0) }} km/h
-            from {{ f.wind_bearing | float(0) | round(0) }}°, humidity {{ f.humidity }}%
+              - {{ dt.strftime('%H:%M') }}: {{ condition_words.get(f.condition, f.condition | replace('-', ' ')) }},
+                {{ f.temperature | round(0) }}°C, {{ f.precipitation | float(0) }} mm rain
+                ({{ f.precipitation_probability | int(0) }}% chance), wind {{ f.wind_speed | float(0) | round(0) }} km/h
+                from {{ f.wind_bearing | float(0) | round(0) }}°, humidity {{ f.humidity }}%
             {%- endif %}
             {% endfor %}
         response_variable: ai_brief

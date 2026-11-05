@@ -215,7 +215,7 @@ automation:
         event: start
       - platform: time_pattern
         minutes: "/15"
-    # a start run can still be waiting on push when the next slot fires
+    # a start and /15 run can coincide and log a warning
     mode: restart
     action:
       # https://companion.home-assistant.io/docs/notifications/notification-commands#request-location-updates

@@ -131,7 +131,11 @@ Return the first integration associated with an entity or device.
     {%- set raw_integration = identifiers[0] if identifiers else none -%}
 
     {%- if not raw_integration -%}
-        {%- set config_entry = device_attr(device_or_entity_id, 'primary_config_entry') -%}
+        {%- set primary_config_entry = device_attr(device_or_entity_id, 'primary_config_entry') -%}
+        {#- a device registered before HA recorded primary entries (created_at 1970) has none until it reconnects -#}
+        {%- set config_entries = (device_attr(device_or_entity_id, 'config_entries') or []) | list -%}
+        {%- set first_config_entry = config_entries[0] if config_entries else none -%}
+        {%- set config_entry = primary_config_entry or first_config_entry -%}
         {#- config_entry_attr raises on none, unlike device_attr -#}
         {%- set domain = config_entry_attr(config_entry, 'domain') if config_entry else none -%}
         {%- if domain -%}

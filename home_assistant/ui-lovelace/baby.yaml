@@ -229,13 +229,7 @@ cards:
                   }
                   div:nth-child(3) {
                     color:
-                      {%- set daytime_map =
-                            {
-                              'unknown': '',
-                              'Day':   '#ff9800',
-                              'Night': '#3498db'
-                            }
-                        -%}
+                      {%- from 'dynamic_colors.jinja' import daytime_map -%}
                       {%- set state = states(config.entity) -%}
                       {{ daytime_map[state] }};
                   }
@@ -248,18 +242,9 @@ cards:
                 .: |
                   div:nth-child(3) {
                     color:
-                      {# https://www.sciencedirect.com/science/article/pii/S0378778819314070 #}
-                      {%- set comfort_map =
-                            {
-                              'unknown': '',
-                              'spring':  '#70a03c',
-                              'summer':  '#e74c3c',
-                              'autumn':  '#ff9800',
-                              'winter':  '#0484d9'
-                            }
-                        -%}
+                      {%- from 'dynamic_colors.jinja' import season_map -%}
                       {%- set state = states(config.entity) -%}
-                      {{ comfort_map[state] }};
+                      {{ season_map[state] }};
                   }
                   state-badge {
                     margin: 0;
@@ -268,37 +253,13 @@ cards:
             name: Bedroom
             icon: mdi:bed-outline
             uix: &card_mod_comfort_style
-              # #0484d9: blue
-              # #3498db: light blue
-              # #34dbd5: cyan
-              # #70a03c: green
-              # #ff9800: orange
-              # #e74c3c: red
-              # #db200b: dark red
               style:
                 .: |
                   div:nth-child(3) {
                     color:
-                      {# https://www.sciencedirect.com/science/article/pii/S0378778819314070 #}
-                      {# below 'cold' the ramp turns icy rather than darker: a deeper blue
-                         loses too much contrast to stay legible on the dark theme #}
-                      {%- set comfort_map =
-                            {
-                              'unknown':               '',
-                              'freezing':              '#7fc4ff',
-                              'very_cold':             '#5aa9f0',
-                              'cold':                  '#0484d9',
-                              'cool':                  '#3498db',
-                              'slightly_cool':         '#34dbd5',
-                              'comfortable':           '#70a03c',
-                              'slightly_warm':         '#ff9800',
-                              'increasing_discomfort': '#e74c3c',
-                              'extremely_warm':        '#db200b',
-                              'danger_of_heatstroke':  '#db200b'
-                            }
-                        -%}
+                      {%- from 'dynamic_colors.jinja' import thermal_perception_map -%}
                       {%- set state = states(config.entity) -%}
-                      {{ comfort_map[state] }};
+                      {{ thermal_perception_map[state] }};
                     {# a template entity's state is not translated by the frontend, so the raw
                        snake_case tier would show: hide it and print the label attribute instead #}
                     font-size: 0;

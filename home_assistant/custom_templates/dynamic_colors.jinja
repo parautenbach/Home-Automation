@@ -78,6 +78,59 @@
             }
 %}
 
+{# Thermal perception colors, keyed to the *_thermal_perception sensors' states.
+   https://www.sciencedirect.com/science/article/pii/S0378778819314070
+   Below 'cold' the ramp turns icy rather than darker: a deeper blue loses too much contrast
+   to stay legible on the dark theme.
+
+   #7fc4ff: pale icy blue
+   #5aa9f0: icy blue
+   #0484d9: blue
+   #3498db: light blue
+   #34dbd5: cyan
+   #70a03c: green
+   #ff9800: orange
+   #e74c3c: red
+   #db200b: dark red #}
+{% set thermal_perception_map =
+            {
+                "unknown":               "var(--disabled-text-color)",
+                "unavailable":           "var(--disabled-text-color)",
+                "freezing":              "#7fc4ff",
+                "very_cold":             "#5aa9f0",
+                "cold":                  "#0484d9",
+                "cool":                  "#3498db",
+                "slightly_cool":         "#34dbd5",
+                "comfortable":           "#70a03c",
+                "slightly_warm":         "#ff9800",
+                "increasing_discomfort": "#e74c3c",
+                "extremely_warm":        "#db200b",
+                "danger_of_heatstroke":  "#db200b"
+            }
+%}
+
+{# Season colors, keyed to sensor.season's state. #}
+{% set season_map =
+            {
+                "unknown":     "var(--disabled-text-color)",
+                "unavailable": "var(--disabled-text-color)",
+                "spring":      "#70a03c",
+                "summer":      "#e74c3c",
+                "autumn":      "#ff9800",
+                "winter":      "#0484d9"
+            }
+%}
+
+{# Day/night colors. #}
+{% set daytime_map =
+            {
+                "unknown":     "var(--disabled-text-color)",
+                "unavailable": "var(--disabled-text-color)",
+                "Day":         "#ff9800",
+                "Night":       "#3498db"
+            }
+%}
+
 {# Wind speed (m/s), plateaued at the same thresholds as sensor.wind_condition_beaufort. #}
 {% set wind_speed_ms_map =
             {

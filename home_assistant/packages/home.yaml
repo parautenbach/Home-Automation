@@ -1525,6 +1525,12 @@ automation:
         entity_id: sensor.nursery_motion_bursts
         above: 3
         id: "frequent_movement"
+      # movement that started before she may wake is ignored, and neither trigger above
+      # fires again while it carries on, so look again as the phase starts
+      - platform: state
+        entity_id: sensor.child_sleep_phase
+        to: "wake_up"
+        id: "wake_up_started"
       # a cap on the checks that carry on past the end, should none ever see her up: 30 min
       # into the awake phase, which starts 15 min after the end (get_sleep_phase's padding)
       - platform: time
@@ -1542,6 +1548,11 @@ automation:
       still: >-
         {{ is_state('binary_sensor.baby_monitor_motion_alarm', 'off') and
            now() - states.binary_sensor.baby_monitor_motion_alarm.last_changed > timedelta(minutes=10) }}
+      # what the movement triggers look for, as they stand now
+      restless: >-
+        {{ states('sensor.nursery_motion_bursts') | int(0) > 3 or
+           (is_state('binary_sensor.baby_monitor_motion_alarm', 'on') and
+            now() - states.binary_sensor.baby_monitor_motion_alarm.last_changed >= timedelta(minutes=5)) }}
       # awake to asleep: in bed and still. asleep to awake: an empty bed at any time, or
       # busy movement only when she might wake or is past the end (in the night she
       # resettles), or 30 min past the end: she may sleep on, so the checks carry on until then
@@ -1551,6 +1562,8 @@ automation:
         {% elif asleep and bed == 'empty' %}
           out_of_bed
         {% elif asleep and trigger.id in ['sustained_movement', 'frequent_movement'] and phase in ['wake_up', 'awake'] %}
+          awake_in_bed
+        {% elif asleep and trigger.id == 'wake_up_started' and restless %}
           awake_in_bed
         {% elif asleep and trigger.id == 'sleep_time_over' %}
           sleep_time_over
@@ -1590,9 +1603,12 @@ automation:
           message: >-
             {% from 'utilities.jinja' import sec_to_hour_and_min %}
             {% set motion_changed = (states.binary_sensor.baby_monitor_motion_alarm.last_changed | as_local).strftime('%H:%M') %}
-            {# set as sleep mode went off, before the delay above. in the sleep phase she's up
-               in the night and will settle again, so it's not her whole sleep #}
-            {% set slept = states('sensor.baby_last_sleep_session') | int(0) %}
+            {# set as sleep mode went off, before the delay above. its state is in the unit
+               the ui shows. in the sleep phase she's up in the night and will settle again,
+               so it's not her whole sleep #}
+            {% set unit = state_attr('sensor.baby_last_sleep_session', 'unit_of_measurement') %}
+            {% set seconds_per_unit = {'s': 1, 'min': 60, 'h': 3600, 'd': 86400}.get(unit, 1) %}
+            {% set slept = (states('sensor.baby_last_sleep_session') | float(0) * seconds_per_unit) | int(0) %}
             {% set slept_for = ' after ' ~ sec_to_hour_and_min(slept)
                                if slept > 0 and phase in ['wake_up', 'awake'] else '' %}
             {% set messages = {

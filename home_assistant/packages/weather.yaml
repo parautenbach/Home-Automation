@@ -184,6 +184,10 @@ sensor:
 template:
   - weather:
       - name: "Forecast Tomorrow"
+        # empty when owm returns 24 hours or fewer; rendered first, so the [0] lookups are skipped
+        availability: >-
+          {% set forecast = state_attr('sensor.weather_tomorrow_hourly', 'forecast') | default([], true) %}
+          {{ forecast | count > 0 }}
         condition_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['condition'] }}"
         temperature_template: "{{ state_attr('sensor.weather_tomorrow_hourly', 'forecast')[0]['temperature'] }}"
         temperature_unit: °C

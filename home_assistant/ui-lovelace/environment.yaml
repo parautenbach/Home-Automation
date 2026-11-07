@@ -855,20 +855,41 @@ cards:
           pagination:
             type: 'bullets'
         cards:
-          - type: custom:weather-chart-card
+          - type: custom:weather-chart-card-ha
+            title: ""
+            # no option to hide the big current-condition icon, and its
+            # section keeps a fixed height, so drop the whole section
+            uix: &weather_chart_hide_main_icon
+              style: |
+                .main {
+                  display: none;
+                }
             entity: weather.openweathermap
-            show_main: false
+            # the fork's show_main also hides the attributes
+            show_temperature: false
+            show_current_condition: false
+            show_uv: false
             show_wind_gust_speed: true
             show_visibility: true
             animated_icons: true
+            icons_size: 25
             forecast:
               type: daily
               style: style2
               show_probability: true
-          - type: custom:weather-chart-card
+              use_color_thresholds: false
+              show_wind_direction: false
+              show_date_labels: false
+          - type: custom:weather-chart-card-ha
+            title: ""
+            uix: *weather_chart_hide_main_icon
             entity: weather.openweathermap
             animated_icons: true
-            show_main: false
+            icons_size: 25
+            # the fork's show_main also hides the attributes
+            show_temperature: false
+            show_current_condition: false
+            show_uv: false
             show_wind_gust_speed: true
             forecast:
               type: hourly
@@ -876,6 +897,8 @@ cards:
               # labels_font_size: 8
               number_of_forecasts: 6
               show_probability: true
+              use_color_thresholds: false
+              show_wind_direction: false
       # https://github.com/bramkragten/weather-card
       # old option 2
       # - type: custom:weather-card
@@ -1452,17 +1475,28 @@ cards:
         camera_view: live
         show_name: false
         show_state: false
-      - type: custom:weather-chart-card
-        entity: weather.openweathermapstrand
-        animated_icons: true
-        show_main: false
-        show_wind_gust_speed: true
-        forecast:
-          type: hourly
-          style: style2
-          # labels_font_size: 8
-          number_of_forecasts: 6
-          show_probability: true
+      # uix only attaches to this card inside a swipe-card
+      - type: custom:swipe-card
+        cards:
+          - type: custom:weather-chart-card-ha
+            title: ""
+            uix: *weather_chart_hide_main_icon
+            entity: weather.openweathermapstrand
+            animated_icons: true
+            icons_size: 25
+            # the fork's show_main also hides the attributes
+            show_temperature: false
+            show_current_condition: false
+            show_uv: false
+            show_wind_gust_speed: true
+            forecast:
+              type: hourly
+              style: style2
+              # labels_font_size: 8
+              number_of_forecasts: 6
+              show_probability: true
+              use_color_thresholds: false
+              show_wind_direction: false
       - type: entities
         show_header_toggle: false
         entities:

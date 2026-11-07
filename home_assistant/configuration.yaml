@@ -104,7 +104,7 @@ lovelace:
       type: module
     - url: /hacsfiles/lovelace-template-entity-row/template-entity-row.js
       type: module
-    - url: /hacsfiles/weather-chart-card/weather-chart-card.js
+    - url: /hacsfiles/weather-chart-card-ha/weather-chart-card-ha.js
       type: module
     - url: /hacsfiles/logbook-card/logbook-card.js
       type: module

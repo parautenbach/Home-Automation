@@ -583,21 +583,16 @@ automation:
         entity_id: binary_sensor.nursery_lit
         state: "off"
     action:
-      # no real fade available on this lamp: script.fade_light's stepping doesn't take on
-      # it and it ignores transition, so this is a deliberate two-step instead – a dim
-      # half minute to wake to, then the normal brightness
-      - service: light.turn_on
+      # on at 1% in normal_bedlamp's 3333 K, then up to its 60% over half a minute
+      - service: script.turn_on
         target:
-          entity_id: light.bedroom_bedlamp
+          entity_id: script.fade_light
         data:
-          profile: low_bedlamp  # 3/255 ~= 1%
-      - delay:
-          seconds: 30
-      - service: light.turn_on
-        target:
-          entity_id: light.bedroom_bedlamp
-        data:
-          profile: normal_bedlamp  # 3333 K at 153/255 = 60%
+          variables:
+            light: light.bedroom_bedlamp
+            initial_profile: low_bedlamp
+            target_brightness_pct: 60
+            transition_duration: 60
 
   - alias: "Auto Disarm Alarm"
     id: "de011906-64da-4e0f-8d6b-219a0ded1ee4"
@@ -1643,8 +1638,8 @@ automation:
             url: homeassistant://navigate/lovelace-main/baby
 
   # her lamp may be on when she falls asleep: dim it once she's had time to sleep deeply,
-  # then turn it off later unless we keep the night light. there's no real fade on this
-  # lamp, so it's a step. any motion starts the wait again, and nothing brightens it: if she
+  # then turn it off later unless we keep the night light. the dim fades over a minute, the
+  # off is a step. any motion starts the wait again, and nothing brightens it: if she
   # turns it up, it stays until she's asleep again. both steps run on her lamp's own timer,
   # so the dashboard shows the countdown. while she's awake a timer set by hand is left alone
   - alias: "Start Or Cancel Bedroom Bedlamp Sleep Timer"
@@ -1721,12 +1716,16 @@ automation:
               is_state('binary_sensor.baby_monitor_motion_alarm', 'off') and
               is_state('binary_sensor.nursery_lit', 'on')) }}
         then:
-          # so she keeps her colour. this means binary_sensor.nursery_lit will be off
-          - service: light.turn_on
+          # brightness only, so she keeps her colour. 1% is night_brightness_only_bedlamp's 3/255,
+          # so binary_sensor.nursery_lit goes off on the way down
+          - service: script.turn_on
             target:
-              entity_id: light.bedroom_bedlamp
+              entity_id: script.fade_light
             data:
-              profile: night_brightness_only_bedlamp
+              variables:
+                light: light.bedroom_bedlamp
+                target_brightness_pct: 1
+                transition_duration: 60
         else:
           - service: light.turn_off
             target:

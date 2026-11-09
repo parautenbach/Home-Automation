@@ -583,7 +583,7 @@ automation:
         entity_id: binary_sensor.nursery_lit
         state: "off"
     action:
-      # on at 1% in normal_bedlamp's 3333 K, then up to its 60% over half a minute
+      # on at 1% in normal_bedlamp's 3333 K, then up to its 60% over a minute
       - service: script.turn_on
         target:
           entity_id: script.fade_light

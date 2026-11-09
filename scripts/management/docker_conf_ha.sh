@@ -15,6 +15,7 @@ DOCKER_RUN_ARGS="
 --privileged
 --network=host
 --restart=unless-stopped
+--stop-timeout=300
 -e TZ=Africa/Johannesburg
 -v ${HA_CONFIG_DIR}:/config
 -v /mnt/nas:/mnt/nas

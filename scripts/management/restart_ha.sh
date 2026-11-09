@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker restart homeassistant && docker logs -n 10 -f homeassistant
+docker restart -t 300 homeassistant && docker logs -n 10 -f homeassistant

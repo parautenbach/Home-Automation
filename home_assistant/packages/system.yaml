@@ -708,11 +708,11 @@ automation:
     variables:
       shut_down_cleanly: "{{ is_state('input_boolean.home_assistant_shut_down_cleanly', 'on') }}"
       shut_down_automatically: "{{ is_state('input_boolean.server_shut_down_automatically', 'on') }}"
-      # both as timestamps: the uptime sensor is tz-aware and the input_datetime isn't.
-      # now() stands in for the start time until the sensor is up, and for the shut-down
-      # time when there isn't one, which reads as no downtime
+      # now() rather than the uptime sensor, which is set early in startup and misses the
+      # slow integrations. as timestamps, since the input_datetime isn't tz-aware. a missing
+      # shut-down time reads as no downtime
       downtime: >-
-        {% set started = (states('sensor.home_assistant_uptime') | as_datetime(now())).timestamp() %}
+        {% set started = now().timestamp() %}
         {% set stopped = state_attr('input_datetime.home_assistant_shut_down_time', 'timestamp') | float(started) %}
         {{ (started - stopped) | int }}
     action:

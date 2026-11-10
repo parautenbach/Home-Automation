@@ -1669,8 +1669,11 @@ automation:
            is_state('binary_sensor.baby_monitor_motion_alarm', 'off') and
            now() - states.binary_sensor.baby_monitor_motion_alarm.last_changed >= timedelta(minutes=10) }}
       # sleep mode only comes on after 10 min without motion, so the dim is 20 min in at first
-      # lit means it's not dim, but at a higher brightness
-      dim_wanted: "{{ asleep_and_still and is_state('binary_sensor.nursery_lit', 'on') }}"
+      # lit means it's not dim, but at a higher brightness. not while she may wake: that's
+      # her wake-up light, and she's still asleep under it
+      dim_wanted: >-
+        {{ asleep_and_still and is_state('binary_sensor.nursery_lit', 'on') and
+           not is_state('sensor.child_sleep_phase', 'wake_up') }}
       # 30 min after the dim, or after the night light was switched on
       off_wanted: >-
         {{ asleep_and_still and is_state('light.bedroom_bedlamp', 'on') and

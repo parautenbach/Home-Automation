@@ -1,0 +1,35 @@
+# Contract for the smoke escalation automations: every entity they read, in the
+# state they read it in before anything happens. Checked against production by
+# the drift checker, never regenerated from it.
+
+sensor.smoke_detectors_in_alarm:
+  state: "0"
+  attributes:
+    detectors:
+      - binary_sensor.kitchen_smoke
+      - binary_sensor.braai_room_smoke
+      - binary_sensor.garage_smoke
+    in_alarm: []
+    unavailable_count: 0
+    unavailable: []
+
+timer.smoke_escalation:
+  state: idle
+
+binary_sensor.anybody_home:
+  state: "off"
+
+input_boolean.smoke_escalation_test_mode:
+  state: "off"
+
+# the run record, stamped by start_smoke_escalation and read by the escalation
+input_boolean.smoke_escalation_run_is_test:
+  state: "off"
+
+# a button's state is the timestamp of its last press; unknown means never pressed
+# since startup, which is what the escalation's "already escalated" guard reads.
+button.home_user_panic:
+  state: unknown
+
+binary_sensor.nighttime:
+  state: "off"

@@ -67,6 +67,41 @@ cards:
           name: Rouvé HomeKit Presence
         - entity: input_boolean.ac_maintenance_mode
           name: AC Maintenance Mode
+    # rehearsing the fire escalation. Run Test arms test mode and starts a 30 sec
+    # countdown: everything behaves as it would for real except the panic, the tenant sms
+    # and the gate. the toggle is for a longer, hands-on rehearsal and lapses after 5 min.
+    # see tests/manual_smoke_escalation.md.
+    - type: entities
+      show_header_toggle: false
+      title: Smoke Escalation
+      entities:
+        - entity: script.test_smoke_escalation
+          name: Perform Smoke Test
+        - entity: input_boolean.smoke_escalation_test_mode
+          name: Test Mode
+        # what the countdown in flight was stamped as. the row above can move under you
+        # mid-rehearsal; this cannot, and it is what the escalation reads. simple-entity
+        # because a plain row renders a toggle, and only a countdown start may write it.
+        - type: simple-entity
+          entity: input_boolean.smoke_escalation_run_is_test
+          name: Run Is Test
+        # secondary lines rather than the more-info dialog: the attributes are two taps
+        # and a scroll down there, behind the state's own history.
+        - type: custom:template-entity-row
+          entity: sensor.smoke_detectors_in_alarm
+          name: Detectors In Alarm
+          secondary: "{{ state_attr('sensor.smoke_detectors_in_alarm', 'in_alarm_names') }}"
+        # without this a detector that drops offline while in alarm reads as a bare 0 –
+        # "nothing wrong" next to a countdown that is still running.
+        - type: custom:template-entity-row
+          entity: sensor.smoke_detectors_in_alarm
+          name: Unavailable Detectors
+          state: "{{ state_attr('sensor.smoke_detectors_in_alarm', 'unavailable_count') }}"
+          secondary: "{{ state_attr('sensor.smoke_detectors_in_alarm', 'unavailable_names') }}"
+        - entity: timer.smoke_escalation
+          name: Alerting In
+          type: custom:timer-bar-card
+          bar_radius: 4px
     - type: glance
       entities:
         - entity: sensor.pieter_activity_type

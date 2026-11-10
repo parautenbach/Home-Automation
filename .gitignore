@@ -13,4 +13,8 @@ home_assistant/google_calendars.yaml
 .vscode
 .idea
 graphify-out
+.venv-tests
+tests/testing_config
+.pytest_cache
+__pycache__
 .sync

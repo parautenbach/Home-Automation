@@ -388,6 +388,28 @@ cards:
           #     service: shell_command.mute_smoke_alarm  # or another script
           #     data:
           #       host: shellyflood...
+      # hold plus confirm, same as the panic tile above: a stray tap must not be able to
+      # call off a dispatch.
+      - type: tile
+        entity: timer.smoke_escalation
+        name: "Cancel Fire Escalation"
+        icon: mdi:fire-off
+        color: orange
+        visibility:
+          - condition: state
+            entity: timer.smoke_escalation
+            state: "active"
+        tap_action:
+          action: none
+        icon_tap_action:
+          action: none
+        hold_action:
+          action: call-service
+          # the script, not timer.cancel: it also clears the prompt, confirms what was
+          # called off, and ends a rehearsal cleanly.
+          service: script.cancel_smoke_escalation
+          confirmation:
+            text: "This will stop the smoke alarm from raising a panic. The security company will not be alerted. Are you sure?"
       - type: horizontal-stack
         title: Events
         cards:

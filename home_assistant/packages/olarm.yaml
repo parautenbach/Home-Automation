@@ -446,7 +446,8 @@ automation:
           # todo: specialise alert according to a panic, fire, medical alarm
           #       if we have this, we can e.g. contact the fire department or call for an ambulance automatically
           #       or maybe the security company will already triage this when receiving the panic signal
-          #       can also trigger the fire alarm here if one of the smoke sensors went off and isn't muted after a set time
+          # a panic trips both partitions, so this runs twice. a fire raises one too
+          # (safety.yaml), with its own messaging first – so no fire wording here.
           message: "{{ message }}"
           data:
             group: "home-security"
@@ -726,6 +727,48 @@ automation:
                 name: default
                 critical: 1
                 volume: 0.3
+
+  # the general "get the security company out" action, for any alert where that is the
+  # right response. it only presses the panic button; anything needing more – a fire
+  # needs the tenant warned, the gap opened, the lights on – wants its own action, the
+  # way ESCALATE_SMOKE_ALARM does in safety.yaml.
+  - alias: "Raise Panic From Alert Action"
+    id: "28287b67-25c4-4e6d-b1de-ac52d079ae89"
+    initial_state: true
+    trace:
+      stored_traces: 20
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: ALERT_SECURITY_COMPANY
+    mode: single
+    action:
+      # a panic on an already-triggered panel adds nothing: the control room has the
+      # signal. say so rather than no-op, or the tap looks broken.
+      - if:
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: alarm_control_panel.home
+                state: "triggered"
+              - condition: state
+                entity_id: alarm_control_panel.flatlet
+                state: "triggered"
+        then:
+          - service: notify.mobile_app_ceres
+            data:
+              title: "🚨 Security"
+              message: >-
+                The alarm is already triggered, so the security company has been alerted
+                already. No panic was raised.
+              data:
+                group: "home-security"
+                url: homeassistant://navigate/lovelace-main/security
+          - stop: "The alarm is already triggered."
+      - service: button.press
+        target:
+          entity_id: button.home_user_panic
 
   - alias: "Handle Alarm Notification Event"
     id: "c7a55b28-a909-4cf0-8f91-23f1d8a0e45a"

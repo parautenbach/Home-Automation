@@ -1,3 +1,16 @@
+homeassistant:
+  customize:
+    # the shelly integration names these from the device plus the entity, which comes out
+    # as "Kitchen Smoke smoke" and "Garage Smoke Detector Garage Smoke smoke". they show
+    # up in the logbook, in more-info and in the card rows that list which detector is in
+    # alarm, so they are worth fixing here rather than working around.
+    binary_sensor.kitchen_smoke:
+      friendly_name: Kitchen Smoke Detector
+    binary_sensor.braai_room_smoke:
+      friendly_name: Braai Room Smoke Detector
+    binary_sensor.garage_smoke:
+      friendly_name: Garage Smoke Detector
+
 input_boolean:
   kitchen_smoke_detector_reminder:
     name: Kitchen Smoke Detector Reminder
@@ -8,10 +21,344 @@ input_boolean:
   garage_smoke_detector_reminder:
     name: Garage Smoke Detector Reminder
     icon: mdi:reminder
+  # arming switch: rehearse without the outward-facing half – no panic, no tenant sms,
+  # no gate. yours to turn on and off; only the 5 min backstop clears it, so a session of
+  # attempts keeps its arming. forgotten, it would stamp a real fire as a drill.
+  smoke_escalation_test_mode:
+    name: Smoke Escalation Test Mode
+    icon: mdi:test-tube
+  # run record: what the countdown in flight already is, written by
+  # script.start_smoke_escalation and nothing else. the switch above is what the *next*
+  # run should be and anyone may flip it at any moment; this cannot be reached mid-run,
+  # so nothing can turn a drill into a real dispatch. set at every countdown start and
+  # cleared when that run ends, so it only ever describes a countdown in flight.
+  smoke_escalation_run_is_test:
+    name: Smoke Escalation Run Is Test
+    icon: mdi:test-tube-empty
 
 shell_command:
   # https://community.home-assistant.io/t/shelly-plus-smoke-silence-alarm/747472
   mute_smoke_alarm: "curl -X POST -d '{\"id\": 1, \"method\": \"Smoke.Mute\", \"params\": {\"id\": 0}}' http://{{ host }}/rpc"
+
+timer:
+  # the window in which a pending panic can still be cancelled; on expiry one is raised.
+  # restore, so an ha restart mid-countdown does not silently drop the escalation.
+  smoke_escalation:
+    name: Smoke Escalation
+    restore: true
+
+template:
+  # membership comes from the device class, so a fourth detector needs no config change.
+  # computed in the state/attribute templates: a states() call parked in variables: would
+  # freeze this sensor. depends on the shelly integration setting device_class: smoke –
+  # an empty `detectors` attribute means that broke and nothing will escalate.
+  - sensor:
+      - name: "Smoke Detectors In Alarm"
+        unique_id: "d148f66f-d8ac-4585-a6fe-7d4e9ecc347c"
+        icon: mdi:smoke-detector-variant-alert
+        state: >-
+          {{ states.binary_sensor
+             | selectattr('attributes.device_class', 'defined')
+             | selectattr('attributes.device_class', 'eq', 'smoke')
+             | selectattr('state', 'eq', 'on')
+             | list | count }}
+        attributes:
+          detectors: >-
+            {{ states.binary_sensor
+               | selectattr('attributes.device_class', 'defined')
+               | selectattr('attributes.device_class', 'eq', 'smoke')
+               | map(attribute='entity_id') | list }}
+          in_alarm: >-
+            {{ states.binary_sensor
+               | selectattr('attributes.device_class', 'defined')
+               | selectattr('attributes.device_class', 'eq', 'smoke')
+               | selectattr('state', 'eq', 'on')
+               | map(attribute='entity_id') | list }}
+          # the lists above are for debugging, these for the cards, which say "detectors"
+          # and so should name detectors. " Smoke Detector" comes off because the row
+          # already says it: "Kitchen, Garage", and "Kitchen 1, Kitchen 2" if two ever
+          # share a room. names are readable at all only because of the customize block
+          # at the top of this file.
+          in_alarm_names: >-
+            {{ states.binary_sensor
+               | selectattr('attributes.device_class', 'defined')
+               | selectattr('attributes.device_class', 'eq', 'smoke')
+               | selectattr('state', 'eq', 'on')
+               | map(attribute='name') | map('replace', ' Smoke Detector', '')
+               | join(', ') }}
+          unavailable_names: >-
+            {{ states.binary_sensor
+               | selectattr('attributes.device_class', 'defined')
+               | selectattr('attributes.device_class', 'eq', 'smoke')
+               | selectattr('state', 'in', ['unavailable', 'unknown'])
+               | map(attribute='name') | map('replace', ' Smoke Detector', '')
+               | join(', ') }}
+          # what the cancel condition reads, and what the card shows
+          unavailable_count: >-
+            {{ states.binary_sensor
+               | selectattr('attributes.device_class', 'defined')
+               | selectattr('attributes.device_class', 'eq', 'smoke')
+               | selectattr('state', 'in', ['unavailable', 'unknown'])
+               | list | count }}
+          unavailable: >-
+            {{ states.binary_sensor
+               | selectattr('attributes.device_class', 'defined')
+               | selectattr('attributes.device_class', 'eq', 'smoke')
+               | selectattr('state', 'in', ['unavailable', 'unknown'])
+               | map(attribute='entity_id') | list }}
+
+script:
+  # starts the countdown and puts up the prompt that calls it off. shared by the first
+  # detector going into alarm and by Run Test.
+  start_smoke_escalation:
+    alias: "Start Smoke Escalation"
+    mode: single
+    fields:
+      duration:
+        description: "Seconds to wait before raising a panic."
+        example: 180
+    variables:
+      test_mode: "{{ is_state('input_boolean.smoke_escalation_test_mode', 'on') }}"
+      # variables render in order, so this can build on the one above
+      prefix: "{{ '[Test]' if test_mode else '' }}"
+    sequence:
+      # stamp the run record before the countdown exists – the only place it is written.
+      # the escalation reads the record from here on, never the switch, so whatever
+      # happens to the switch during the countdown cannot reach this run.
+      - service: "input_boolean.turn_{{ 'on' if test_mode else 'off' }}"
+        target:
+          entity_id: input_boolean.smoke_escalation_run_is_test
+      - service: timer.start
+        target:
+          entity_id: timer.smoke_escalation
+        data:
+          # in seconds
+          duration: "{{ duration }}"
+      # not critical on purpose: ios cannot clear or replace critical notifications, and
+      # this one must vanish when acted on. the smoke alert before it does the breaking
+      # through.
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🔥 Safety"
+          message: >-
+            {% set seconds = duration | int %}
+            {# not sec_to_hour_and_min: it floors to whole minutes, so a 90 sec countdown
+               would read as "1 min" #}
+            {% set countdown = seconds ~ ' sec' if seconds < 120 else (seconds // 60) ~ ' min' %}
+            {{ prefix }} The security company will be alerted in {{ countdown }} unless this is cancelled.
+          data:
+            group: "home-safety"
+            tag: "smoke-escalation"
+            url: homeassistant://navigate/lovelace-main/security
+            # both directions in one place. on the prompt rather than the smoke alert so
+            # a monthly self-test notification cannot carry a one-tap panic: a self-test
+            # never starts a countdown.
+            actions:
+              # fire-specific id: its handler raises a smoke escalation, which is the
+              # wrong response to anything else. the general one is ALERT_SECURITY_COMPANY.
+              - action: "ESCALATE_SMOKE_ALARM"
+                title: "Alert security company"
+                icon: "sfsymbols:exclamationmark.shield"
+                authenticationRequired: true
+                destructive: true
+              - action: "CANCEL_SMOKE_ESCALATION"
+                title: "Cancel escalation"
+                icon: "sfsymbols:xmark.shield"
+                authenticationRequired: true
+
+  # rehearses everything downstream of the trigger. to cover the trigger too, arm test
+  # mode by hand and force a detector to 'on' in dev tools > states, then set it back –
+  # never by adding a permanent device_class: smoke entity, which would be counted for
+  # real. see tests/manual_smoke_escalation.md.
+  test_smoke_escalation:
+    alias: "Test Smoke Escalation"
+    mode: single
+    sequence:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.smoke_escalation_test_mode
+      # blocking: it only starts the timer and sends the prompt.
+      - service: script.start_smoke_escalation
+        data:
+            # fixed, and no field: a script with fields prompts for them when run from a
+            # dashboard row, and this should be one tap.
+            duration: 30
+
+  # the single place an escalation is cancelled, shared by the notification action and
+  # the dashboard tile: a bare timer.cancel leaves no message and no way to end a
+  # rehearsal cleanly.
+  cancel_smoke_escalation:
+    alias: "Cancel Smoke Escalation"
+    mode: single
+    # the run record, not the switch: this only runs against a countdown, and what
+    # matters is what that countdown was.
+    variables:
+      test_mode: "{{ is_state('input_boolean.smoke_escalation_run_is_test', 'on') }}"
+      prefix: "{{ '[Test]' if test_mode else '' }}"
+    sequence:
+      - service: timer.cancel
+        target:
+          entity_id: timer.smoke_escalation
+      - service: notify.mobile_app_ceres
+        data:
+          message: "clear_notification"
+          data:
+            tag: "smoke-escalation"
+      - delay:
+          seconds: 1
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🔥 Safety"
+          # report detection, not noise: the detector may have been hushed, and a hush is
+          # a 10 min snooze rather than a resolution.
+          message: >-
+            {% set detecting = states('sensor.smoke_detectors_in_alarm') | int(0) > 0 %}
+            {{ prefix }} The escalation has been cancelled. No panic will be raised.
+            {{ 'Smoke is still being detected.' if detecting else '' }}
+          data:
+            group: "home-safety"
+            url: homeassistant://navigate/lovelace-main/security
+      # the tenant was warned when the detector tripped, so take it back. nothing to take
+      # back after a rehearsal: they were never told. same reading of the count as the
+      # message above – cancelling is a decision about the response, not about the smoke,
+      # and a detector still in alarm is not an all-clear to hand anyone.
+      - if: "{{ not test_mode }}"
+        then:
+          - service: script.turn_on
+            target:
+              entity_id: script.notify_tenant
+            data:
+              variables:
+                message: >-
+                  {% set detecting = states('sensor.smoke_detectors_in_alarm') | int(0) > 0 %}
+                  {% set still = 'Smoke is still being detected. Please stay ready to evacuate.' %}
+                  {% set cleared = 'The smoke alarm has been cleared. There is no need to evacuate.' %}
+                  {{ still if detecting else cleared }}
+      # a rehearsal ends here: clear the run record, never the arming switch. the switch
+      # is the human's, and consuming it meant every attempt had to be re-armed – which
+      # is how a drill went out for real on 2026-09-18.
+      - if: "{{ test_mode }}"
+        then:
+          - service: input_boolean.turn_off
+            target:
+              entity_id: input_boolean.smoke_escalation_run_is_test
+
+  # the single place a smoke-driven panic is raised. humans are told before the button is
+  # pressed, because the panic trips both partitions.
+  escalate_smoke_alarm:
+    alias: "Escalate Smoke Alarm"
+    mode: single
+    # supplied by the caller, never read here: by the time this runs the arming switch
+    # may have moved. callers after a countdown pass the run record; the second-detector
+    # shortcut, which has no countdown, passes the switch.
+    fields:
+      test_mode:
+        description: "True to rehearse: no panic, no tenant SMS, no gate."
+        example: false
+    variables:
+      prefix: "{{ '[Test]' if test_mode else '' }}"
+    sequence:
+      # a button holds the timestamp of its last press: a cheap guard against the timer
+      # and the second-detector shortcut escalating the same fire.
+      - condition: template
+        value_template: >-
+          {{ states('button.home_user_panic') in ['unknown', 'unavailable', '']
+             or now() - (states('button.home_user_panic') | as_datetime) > timedelta(minutes=5) }}
+      - service: timer.cancel
+        target:
+          entity_id: timer.smoke_escalation
+      # the cancel window has closed – take the prompt away.
+      - service: notify.mobile_app_ceres
+        data:
+          message: "clear_notification"
+          data:
+            tag: "smoke-escalation"
+      # same wait as in "Alert When Smoke Detected": a clear followed straight away by a
+      # send has been seen to take the new notification with it.
+      - delay:
+          seconds: 1
+      # the panic trips the flatlet's partition anyway, with a message about their own
+      # alarm – which is the wrong story.
+      - if: "{{ not test_mode }}"
+        then:
+          - service: script.turn_on
+            target:
+              entity_id: script.notify_tenant
+            data:
+              variables:
+                message: >-
+                  The smoke alarm has not been cleared. A panic has been raised and the
+                  security company is being dispatched. Please evacuate.
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🚨 Safety"
+          message: >-
+            {% set outcome = 'would have been raised and the security company dispatched'
+                             if test_mode
+                             else 'has been raised and the security company is being dispatched' %}
+            {{ prefix }} The smoke alarm was not cleared. A panic {{ outcome }}.
+          data:
+            group: "home-safety"
+            url: homeassistant://navigate/lovelace-main/security
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 0.3
+            actions:
+              - action: "GET_HELP"
+                title: "Get help!"
+                icon: "sfsymbols:phone.fill"
+                uri: "tel:+27218874777"
+                destructive: true
+      # the irreversible one first: everything below can wait a service call.
+      - if: "{{ not test_mode }}"
+        then:
+          - service: button.press
+            target:
+              entity_id: button.home_user_panic
+      # light the escape route and the yard for whoever arrives; daylight needs neither.
+      # olarm.yaml does the yard lights too, but only once the panel reports triggered.
+      #
+      # before the gap below, not after: "Switch On Front Door Light When Any Cover
+      # Opened" (lights.yaml) reacts to the gate opening at night with a 3 min timer that
+      # would switch the light off partway through a fire. it only acts when the light is
+      # off, so turning the yard group on first takes it out of the picture.
+      - if:
+          - condition: state
+            entity_id: binary_sensor.nighttime
+            state: "on"
+        then:
+          - service: light.turn_on
+            target:
+              entity_id:
+                - light.yard_group
+                - light.night_group
+      # hvac recirculates smoke, so shut it down – but not before escalating. the acs
+      # only run when somebody is home, which is the 3 min countdown rather than the
+      # 90 sec one, so there is time; and a drill or a burnt slice of toast should not
+      # leave the house without cooling.
+      - if: "{{ not test_mode }}"
+        then:
+          - service: climate.turn_off
+            target:
+              entity_id:
+                - climate.living_room_ac
+                - climate.main_bedroom_ac
+          # a person-sized gap is a far smaller exposure than the main gate, and enough
+          # for armed response arriving on foot. non-blocking: the gap takes 5 sec of
+          # switch presses and nothing waits on the gate motor.
+          - service: script.turn_on
+            target:
+              entity_id: script.open_pedestrian_gap
+      # a rehearsal ends here: clear the run record, never the arming switch. the switch
+      # is the human's, and consuming it meant every attempt had to be re-armed – which
+      # is how a drill went out for real on 2026-09-18.
+      - if: "{{ test_mode }}"
+        then:
+          - service: input_boolean.turn_off
+            target:
+              entity_id: input_boolean.smoke_escalation_run_is_test
 
 automation:
   - alias: "Alert When Water Detected"
@@ -72,6 +419,9 @@ automation:
         allowed_methods:
           - GET
         id: "test_garage_smoke"
+    # a fire sets off more than one detector, and the delay below is long enough that
+    # single mode would drop the second.
+    mode: queued
     action:
       # clear the test notification
       # we do it this way instead of replacing the notification lower down, because we don't want to replace real notifications
@@ -100,6 +450,11 @@ automation:
             {% else %}
               {% set entity_id = trigger.entity_id %}
             {% endif %}
+            {# a forced detector state during a rehearsal comes through the "real"
+               trigger, so the webhook check above does not catch it #}
+            {% if is_state('input_boolean.smoke_escalation_test_mode', 'on') %}
+              {% set prefix = '[Test]' %}
+            {% endif %}
             {% set area = area_name(entity_id) | lower %}
             {{ prefix }} Smoke has been detected in the {{ area }}!
           data:
@@ -113,18 +468,25 @@ automation:
             actions:
               - action: "GET_HELP"
                 title: "Get help!"
+                icon: "sfsymbols:phone.fill"
                 uri: "tel:+27218874777"
                 destructive: true
-            # todo: alert security company
-            # request logged with olarm to see if they can provide an http request for a panic
-            # for event automation:
-            # - service: alarm_control_panel.alarm_trigger
-            #   target:
-            #     entity_id: alarm_control_panel.home
-            # data:
-            #   actions:
-            #     - action: "ALERT_SECURITY_COMPANY"
-            #       title: "Alert security company"
+      # every detector, not only the garage one next to them: smoke in the house still
+      # concerns them – same property, same way out. every way out of the countdown
+      # tells them how it ended. not during a rehearsal: they are not part of one.
+      - if:
+          - >-
+            {{ 'test' not in trigger.id
+               and not is_state('input_boolean.smoke_escalation_test_mode', 'on') }}
+        then:
+          - service: script.turn_on
+            target:
+              entity_id: script.notify_tenant
+            data:
+              variables:
+                message: >-
+                  Smoke has been detected in the {{ area_name(trigger.entity_id) | lower }}.
+                  Please be ready to evacuate.
       - if:
           - "{{ 'test' in trigger.id }}"
         then:
@@ -133,6 +495,423 @@ automation:
               entity_id: >-
                 {% set reminder_entity = trigger.id | replace('test_', 'input_boolean.') ~ '_detector_reminder' %}
                 {{ reminder_entity }}
+
+  # driven by the count sensor, not the detectors, so a self-test cannot start a
+  # countdown: a test raises smoke.alarm_test, never smoke.alarm, so the binary sensors
+  # stay off. https://shelly-api-docs.shelly.cloud/gen2/ComponentsAndServices/Smoke/
+  - alias: "Start Smoke Escalation"
+    id: "b91bdf98-8f34-468a-b588-b4b268ce5cd1"
+    initial_state: true
+    trace:
+      stored_traces: 20
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.smoke_detectors_in_alarm
+        above: 0
+    condition:
+      # a second detector skips the countdown rather than restarting it, in "Escalate
+      # Smoke Alarm When A Second Detector Trips" – which owns the crossing of 1.
+      - condition: state
+        entity_id: timer.smoke_escalation
+        state: "idle"
+      # 0 -> 2 in one change crosses both thresholds and both automations run, order
+      # undefined. without this a countdown could start after the panic had gone out.
+      - condition: state
+        entity_id: sensor.smoke_detectors_in_alarm
+        state: "1"
+    mode: single
+    action:
+      # blocking: it only starts the timer and sends the prompt.
+      - service: script.start_smoke_escalation
+        data:
+            # away: nothing benign makes smoke and nobody can hush it – just long enough
+            # to cancel remotely after checking a camera. home: long enough to realise it
+            # is the toast, deal with it, and reach a phone.
+            duration: "{{ 90 if is_state('binary_sensor.anybody_home', 'off') else 180 }}"
+
+  # a countdown in flight does not survive a restart: the timer does, and HA finishes it
+  # on startup, but it fires timer.finished during component setup – before automations
+  # attach, which they defer until EVENT_HOMEASSISTANT_STARTED. nothing hears it. this
+  # picks the escalation back up, and covers smoke that started while ha was down too.
+  - alias: "Resume Smoke Escalation After Restart"
+    id: "09112fc8-58d0-45fb-b23c-9579c3eaa7cc"
+    initial_state: true
+    trace:
+      stored_traces: 20
+    trigger:
+      - platform: homeassistant
+        event: start
+    mode: single
+    action:
+      # wait for the detectors rather than guess at a delay: until the shelly integration
+      # has set up they are missing and the count reads 0.
+      - wait_template: >-
+          {{ state_attr('sensor.smoke_detectors_in_alarm', 'detectors') | count > 0
+             and state_attr('sensor.smoke_detectors_in_alarm', 'unavailable_count') == 0 }}
+        timeout: "00:02:00"
+        continue_on_timeout: true
+      # in the main sequence, after the wait, so they are evaluated against the settled
+      # state – and so a false one stops the run rather than falling through.
+      - condition: numeric_state
+        entity_id: sensor.smoke_detectors_in_alarm
+        above: 0
+      - condition: state
+        entity_id: timer.smoke_escalation
+        state: "idle"
+      # a restored timer that expired during the downtime may already have escalated;
+      # do not stack a second countdown behind a panic that has gone out.
+      - condition: template
+        value_template: >-
+          {{ states('button.home_user_panic') in ['unknown', 'unavailable', '']
+             or now() - (states('button.home_user_panic') | as_datetime) > timedelta(minutes=5) }}
+      # a fresh countdown rather than escalating outright: whatever was lost, there
+      # should still be a window to call it off.
+      - service: script.start_smoke_escalation
+        data:
+          duration: "{{ 90 if is_state('binary_sensor.anybody_home', 'off') else 180 }}"
+
+  - alias: "Escalate Smoke Alarm When A Second Detector Trips"
+    id: "d2ac5554-a947-4f45-b1b5-d4e996d97122"
+    initial_state: true
+    trace:
+      stored_traces: 20
+    # smoke in two rooms is not a cooking accident: skip the countdown. the threshold is
+    # two of however many detectors exist, so adding one changes nothing here.
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.smoke_detectors_in_alarm
+        above: 1
+    mode: single
+    action:
+      # blocking: the escalation's steps and any failure land in this trace.
+      - service: script.escalate_smoke_alarm
+        data:
+          # the switch, not the run record: no countdown on this path, so nothing has
+          # elapsed between the decision and the action.
+          test_mode: "{{ is_state('input_boolean.smoke_escalation_test_mode', 'on') }}"
+
+  - alias: "Raise Panic When Smoke Escalation Expires"
+    id: "4221201c-8ba5-49b4-93d2-8a035847d26f"
+    initial_state: true
+    trace:
+      stored_traces: 20
+    trigger:
+      - platform: event
+        event_type: timer.finished
+        event_data:
+          entity_id: timer.smoke_escalation
+    mode: single
+    action:
+      # blocking: the escalation's steps and any failure land in this trace.
+      - service: script.escalate_smoke_alarm
+        data:
+          # what this countdown was stamped as, not what the switch says now.
+          test_mode: "{{ is_state('input_boolean.smoke_escalation_run_is_test', 'on') }}"
+
+  - alias: "Cancel Smoke Escalation When Smoke Clears"
+    id: "7d2c0eef-252a-45ae-b7ec-7994f65f1489"
+    initial_state: true
+    trace:
+      stored_traces: 20
+    # a plain state trigger, not numeric_state below 1: that fires only on crossing, so a
+    # detector that went unavailable while in alarm (count already 0) and came back "off"
+    # would never re-trigger it. attribute changes fire this, which is what the recovery
+    # is: the count stays 0 while `unavailable` empties.
+    trigger:
+      - platform: state
+        entity_id: sensor.smoke_detectors_in_alarm
+    condition:
+      - condition: state
+        entity_id: timer.smoke_escalation
+        state: "active"
+      # false when the count sensor is itself unavailable or unknown, so a template error
+      # or reload leaves the countdown running rather than calling it off. it self-heals:
+      # the sensor coming back is another change, which re-triggers this.
+      - condition: numeric_state
+        entity_id: sensor.smoke_detectors_in_alarm
+        below: 1
+      # a detector dropping offline mid-alarm is what a fire looks like, not what a
+      # cleared alarm looks like. cost: an unrelated flat battery blocks the auto-cancel
+      # and leaves the prompt to a human – devices.yaml will have flagged it long before.
+      - condition: template
+        value_template: >-
+          {{ state_attr('sensor.smoke_detectors_in_alarm', 'unavailable_count') == 0 }}
+    mode: single
+    action:
+      - service: timer.cancel
+        target:
+          entity_id: timer.smoke_escalation
+      - service: notify.mobile_app_ceres
+        data:
+          message: "clear_notification"
+          data:
+            tag: "smoke-escalation"
+      - delay:
+          seconds: 1
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🔥 Safety"
+          message: >-
+            {% set prefix = '' %}
+            {% if is_state('input_boolean.smoke_escalation_run_is_test', 'on') %}
+              {% set prefix = '[Test]' %}
+            {% endif %}
+            {{ prefix }} The smoke has cleared. The escalation has been cancelled and no panic
+            will be raised.
+          data:
+            group: "home-safety"
+            url: homeassistant://navigate/lovelace-main/security
+      # closes the warning the tenant got when the detector tripped.
+      - if: "{{ not is_state('input_boolean.smoke_escalation_run_is_test', 'on') }}"
+        then:
+          - service: script.turn_on
+            target:
+              entity_id: script.notify_tenant
+            data:
+              variables:
+                message: >-
+                  The smoke has cleared. There is no need to evacuate.
+      # own wording, so it does not go through script.cancel_smoke_escalation – but a
+      # rehearsal still ends here.
+      - if: "{{ is_state('input_boolean.smoke_escalation_run_is_test', 'on') }}"
+        then:
+          - service: input_boolean.turn_off
+            target:
+              entity_id: input_boolean.smoke_escalation_run_is_test
+
+  - alias: "Escalate Smoke Alarm From Alert Action"
+    id: "6e9cf386-4a30-4fb2-983b-fbe308d6327e"
+    initial_state: true
+    trace:
+      stored_traces: 20
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: ESCALATE_SMOKE_ALARM
+    mode: single
+    action:
+      # blocking: the escalation's steps and any failure land in this trace.
+      - service: script.escalate_smoke_alarm
+        data:
+          # what this countdown was stamped as, not what the switch says now.
+          test_mode: "{{ is_state('input_boolean.smoke_escalation_run_is_test', 'on') }}"
+
+  # a panic raised by hand – dashboard tile, remote, panel – must stop the countdown, or
+  # it expires later onto a stale prompt. a no-op when the escalation raised it: the timer
+  # is already cancelled by then.
+  - alias: "Cancel Smoke Escalation When Panic Raised"
+    id: "971e2838-1956-4ac1-8295-679457cc1935"
+    initial_state: true
+    trace:
+      stored_traces: 20
+    trigger:
+      - platform: state
+        entity_id: button.home_user_panic
+        not_to:
+          - "unknown"
+          - "unavailable"
+    condition:
+      - condition: state
+        entity_id: timer.smoke_escalation
+        state: "active"
+      # the state is the timestamp of the last press, and the restored value arrives as a
+      # state change on startup – only a fresh one is a press. generous on purpose: a live
+      # press lands in milliseconds, and a restored timestamp this recent means a panic
+      # really was raised a moment ago, which is worth cancelling either way.
+      - condition: template
+        value_template: >-
+          {% set pressed = trigger.to_state.state | as_datetime %}
+          {{ pressed is not none and now() - pressed < timedelta(seconds=60) }}
+    mode: single
+    action:
+      - service: timer.cancel
+        target:
+          entity_id: timer.smoke_escalation
+      - service: notify.mobile_app_ceres
+        data:
+          message: "clear_notification"
+          data:
+            tag: "smoke-escalation"
+      - delay:
+          seconds: 1
+      # the prompt vanishing with nothing in its place reads as a bug. not a cancellation
+      # message: the countdown stopped because help is already on its way.
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🚨 Safety"
+          message: >-
+            A panic has been raised by hand, so the smoke countdown has been stopped.
+          data:
+            group: "home-safety"
+            url: homeassistant://navigate/lovelace-main/security
+      # not an all-clear: a panic by hand means someone decided it is real, and the tenant
+      # is still holding a warning to be ready.
+      - if: "{{ not is_state('input_boolean.smoke_escalation_run_is_test', 'on') }}"
+        then:
+          - service: script.turn_on
+            target:
+              entity_id: script.notify_tenant
+            data:
+              variables:
+                message: >-
+                  A panic has been raised and the security company is being dispatched.
+                  Please evacuate.
+      - if: "{{ is_state('input_boolean.smoke_escalation_run_is_test', 'on') }}"
+        then:
+          - service: input_boolean.turn_off
+            target:
+              entity_id: input_boolean.smoke_escalation_run_is_test
+
+  - alias: "Cancel Smoke Escalation From Alert Action"
+    id: "7a2d263a-2159-4f94-bee9-7285a61a9f67"
+    initial_state: true
+    trace:
+      stored_traces: 20
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: CANCEL_SMOKE_ESCALATION
+    mode: single
+    action:
+      # blocking: the cancel's steps and any failure land in this trace.
+      - service: script.cancel_smoke_escalation
+
+  # backstop for a switch left on by hand: forgotten, it would stamp a real fire as a
+  # drill. clearing it mid-rehearsal is harmless, since the run record describes the
+  # countdown in flight and nothing here can reach it. the start trigger is needed
+  # because a "for:" window does not survive a restart.
+  - alias: "Disable Stale Smoke Escalation Test Mode"
+    id: "5f8e2c31-4b7a-4e19-a6d8-9c0b3e5f7a24"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: input_boolean.smoke_escalation_test_mode
+        to: "on"
+        for:
+          minutes: 5
+      # restarts the 5 min window after each countdown, so a session of attempts keeps
+      # its arming and a switch left on after the last one still lapses
+      - platform: state
+        entity_id: timer.smoke_escalation
+        to: "idle"
+        for:
+          minutes: 5
+      - platform: homeassistant
+        event: start
+    condition:
+      - condition: state
+        entity_id: input_boolean.smoke_escalation_test_mode
+        state: "on"
+      # never mid-countdown. harmless to the run in flight, which the run record already
+      # describes, but it takes the arming away from the next attempt and claims the
+      # switch was "left on" when it is in use – a countdown in progress is in use, not stale.
+      - condition: state
+        entity_id: timer.smoke_escalation
+        state: "idle"
+    mode: single
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.smoke_escalation_test_mode
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🔥 Safety"
+          message: "[Test] Smoke escalation test mode was left on and has been turned off."
+          data:
+            group: "home-safety"
+            url: homeassistant://navigate/lovelace-main/security
+
+  # the record describes a countdown in flight, so an idle timer means there is nothing
+  # left to describe. the four exits clear it themselves; this catches a rehearsal that
+  # ended any other way – a restart mid-countdown, a timer reload, timer.cancel by hand –
+  # which would otherwise leave it on for good. same 5 min as the switch backstop, and
+  # for the same reason the start trigger is there: a "for:" window does not survive a
+  # restart. not sooner, because the exits read the record after their own timer.cancel.
+  - alias: "Clear Stale Smoke Escalation Run Record"
+    id: "6ac1d4db-1f41-48ee-acfd-f898aeef3f1b"
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: timer.smoke_escalation
+        to: "idle"
+        for:
+          minutes: 5
+      - platform: homeassistant
+        event: start
+    condition:
+      - condition: state
+        entity_id: input_boolean.smoke_escalation_run_is_test
+        state: "on"
+      - condition: state
+        entity_id: timer.smoke_escalation
+        state: "idle"
+    mode: single
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.smoke_escalation_run_is_test
+
+  # mirrors the countdown as a live activity, so the time left to call it off is on the
+  # lock screen. every way an escalation ends either cancels or finishes the timer
+  # https://companion.home-assistant.io/docs/notifications/live-activities/
+  - alias: "Show Smoke Escalation Live Activity"
+    id: "185ad503-4de8-425b-823b-9eb7ebb28947"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type:
+          - timer.started
+          - timer.restarted
+          - timer.cancelled
+          - timer.finished
+        event_data:
+          entity_id: timer.smoke_escalation
+        id: "timer"
+      # a countdown that ended while ha was down leaves a chronometer counting on the
+      # lock screen with nothing behind it: timer.finished is fired during component
+      # setup, before any automation has attached to hear it.
+      - platform: homeassistant
+        event: start
+        id: "restart"
+    mode: queued
+    action:
+      - choose:
+          - conditions: >-
+              {{ trigger.id == 'timer'
+                 and trigger.event.event_type in ['timer.started', 'timer.restarted'] }}
+            sequence:
+              - service: notify.mobile_app_ceres
+                data:
+                  # the title can't change once started, but the run record is stamped first
+                  title: "{{ '[Test] ' if is_state('input_boolean.smoke_escalation_run_is_test', 'on') else '' }}Smoke escalation"
+                  # required, but the chronometer takes its place on ios
+                  message: "Escalating"
+                  data:
+                    tag: live_smoke_escalation
+                    live_update: true
+                    # top right on the lock screen, as the message is hidden by the chronometer
+                    critical_text: >-
+                      Panic at {{ (state_attr('timer.smoke_escalation', 'finishes_at') | as_datetime | as_local).strftime('%H:%M') }}
+                    chronometer: true
+                    when: "{{ as_timestamp(state_attr('timer.smoke_escalation', 'finishes_at')) | int }}"
+                    notification_icon: mdi:smoke-detector-variant-alert
+                    notification_icon_color: "#F44336"
+                    # the smoke alert and the prompt already make the noise
+                    silent: true
+                    url: /lovelace-main/security
+          - conditions: "{{ trigger.id == 'timer' }}"
+            sequence: &clear_live_activity
+              - service: notify.mobile_app_ceres
+                data:
+                  message: "clear_notification"
+                  data:
+                    tag: live_smoke_escalation
+          # on a restart, only when nothing is counting: an activity raised before the
+          # restart is still correct, and ios still has it on the lock screen.
+          - conditions: "{{ not is_state('timer.smoke_escalation', 'active') }}"
+            sequence: *clear_live_activity
 
   - alias: "Enable Smoke Detector Testing Reminders"
     id: "6e3c5bfb-6830-4aa4-b70c-bd53db3b51a6"

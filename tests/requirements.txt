@@ -1,0 +1,13 @@
+# Home Assistant's own pytest plugin, which replaced
+# pytest-homeassistant-custom-component from 2026.11. Pinned to the HA version running
+# in production: bump both together, since the plugin pins an exact `homeassistant==`.
+# Find versions with
+#
+#   pip index versions pytest-homeassistant
+#
+# HA 2026.3+ needs Python 3.14.
+pytest-homeassistant==2026.11.0   # homeassistant==2026.11.0
+
+# tests/mutate.py passes --timeout to cap a mutation that hangs. The old plugin pulled
+# this in; pytest-homeassistant does not.
+pytest-timeout==2.4.0

@@ -1079,35 +1079,36 @@ timer:
     duration: "00:01:00"
     restore: true
 
-alert:
-  # kept alongside the automation-based detection (below) for a side-by-side
-  # comparison; "experimental" tag distinguishes its notifications from those.
-  # self-contained on purpose - it reads only binary_sensor.solarassistant_activity
-  # and its own sensor.solarassistant_activity_ceased_at, never the timer, the
-  # input_boolean or the input_datetime that drive the automation-based mechanism
-  solarassistant_inactivity:
-    name: "SolarAssistant Inactivity"
-    entity_id: binary_sensor.solarassistant_activity
-    state: "off"
-    repeat: 1  # every 1 min
-    skip_first: true  # but not immediately
-    can_acknowledge: false
-    title: "⚠️ System"
-    message: >-
-      {# not last_changed, which a restart resets while the outage carries on #}
-      {% set last_ceased = states('sensor.solarassistant_activity_ceased_at') | as_timestamp(0) %}
-      {% set minutes = ((utcnow() | as_timestamp) - last_ceased) | multiply(1/60) | int or 1 %}
-      [Test] The SolarAssistant bridge's activity has ceased {{ minutes }} min ago.
-    done_message: >-
-      {% set last_ceased = states('sensor.solarassistant_activity_ceased_at') | as_timestamp(0) %}
-      {% set minutes = (((utcnow() | as_timestamp) - last_ceased) // 60) | int if last_ceased else 0 %}
-      [Test] The SolarAssistant bridge's activity has been resumed after {{ minutes }} min.
-    data:
-      group: "system-electricity"
-      url: homeassistant://navigate/lovelace-system/devices
-      tag: "solarassistant-activity-alert"
-    notifiers:
-      - mobile_app_ceres
+# disabled: the alert integration is deprecated
+# alert:
+#   # kept alongside the automation-based detection (below) for a side-by-side
+#   # comparison; "experimental" tag distinguishes its notifications from those.
+#   # self-contained on purpose - it reads only binary_sensor.solarassistant_activity
+#   # and its own sensor.solarassistant_activity_ceased_at, never the timer, the
+#   # input_boolean or the input_datetime that drive the automation-based mechanism
+#   solarassistant_inactivity:
+#     name: "SolarAssistant Inactivity"
+#     entity_id: binary_sensor.solarassistant_activity
+#     state: "off"
+#     repeat: 1  # every 1 min
+#     skip_first: true  # but not immediately
+#     can_acknowledge: false
+#     title: "⚠️ System"
+#     message: >-
+#       {# not last_changed, which a restart resets while the outage carries on #}
+#       {% set last_ceased = states('sensor.solarassistant_activity_ceased_at') | as_timestamp(0) %}
+#       {% set minutes = ((utcnow() | as_timestamp) - last_ceased) | multiply(1/60) | int or 1 %}
+#       [Test] The SolarAssistant bridge's activity has ceased {{ minutes }} min ago.
+#     done_message: >-
+#       {% set last_ceased = states('sensor.solarassistant_activity_ceased_at') | as_timestamp(0) %}
+#       {% set minutes = (((utcnow() | as_timestamp) - last_ceased) // 60) | int if last_ceased else 0 %}
+#       [Test] The SolarAssistant bridge's activity has been resumed after {{ minutes }} min.
+#     data:
+#       group: "system-electricity"
+#       url: homeassistant://navigate/lovelace-system/devices
+#       tag: "solarassistant-activity-alert"
+#     notifiers:
+#       - mobile_app_ceres
 
 automation:
   - alias: "Notify If Grid Feed Status Changed"

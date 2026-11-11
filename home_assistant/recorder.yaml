@@ -67,6 +67,7 @@ exclude:
     - sensor.ceres_last_update_trigger
     - sensor.rouve_storage
     - sensor.motion_detected_last_relative
+    - sensor.child_last_moved
     - sensor.outbuilding_power_meter_channel_1_voltage
     - sensor.outbuilding_power_meter_channel_2_voltage
     - sensor.outbuilding_power_meter_channel_2_power

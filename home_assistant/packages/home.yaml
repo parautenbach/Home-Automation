@@ -334,6 +334,19 @@ template:
         device_class: timestamp
         icon: mdi:sleep
 
+  # the motion sensor's last_changed resets on a restart or a camera drop-out
+  - trigger:
+      - platform: state
+        entity_id: binary_sensor.baby_monitor_motion_alarm
+        from: "on"
+        to: "off"
+    sensor:
+      - name: "Child Last Moved"
+        unique_id: "d6bcedbf-3ad6-4ffc-8ae2-c563b5072aab"
+        state: "{{ trigger.to_state.last_changed.isoformat() }}"
+        device_class: timestamp
+        icon: mdi:motion-sensor
+
   # set by "Check Whether Child Is In Bed": only a high-confidence answer changes the state,
   # the attributes always hold the latest answer
   - trigger:

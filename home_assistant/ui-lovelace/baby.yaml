@@ -143,6 +143,9 @@ cards:
           - entity: sensor.child_fell_asleep
             name: "Fell Asleep"
             format: time
+          - entity: sensor.child_last_moved
+            name: "Last Moved"
+            format: relative
           - entity: sensor.baby_current_sleep_session
             name: "Current Sleep Session"
           - entity: sensor.baby_last_sleep_session

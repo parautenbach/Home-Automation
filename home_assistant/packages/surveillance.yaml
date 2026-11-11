@@ -395,9 +395,17 @@ automation:
               # content-type: jpg
               hide-thumbnail: false
               lazy: false
+            # guest mode is handled in home.yaml, the alert in olarm.yaml.
             actions:
               - action: "ENABLE_GUEST_MODE"
                 title: "Enable guest mode"
+                icon: "sfsymbols:person.2"
+                authenticationRequired: true
+              - action: "ALERT_SECURITY_COMPANY"
+                title: "Alert security company"
+                icon: "sfsymbols:exclamationmark.shield"
+                authenticationRequired: true
+                destructive: true
 
   - alias: "Foyer Motion Detected Last"
     id: "ef364d58-2cb7-4d5b-8e96-8724c132365a"

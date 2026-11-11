@@ -110,6 +110,8 @@ template:
 script:
   # starts the countdown and puts up the prompt that calls it off. shared by the first
   # detector going into alarm and by Run Test.
+  # debugging:
+  # http://homeassistant.local:8123/history?entity_id=input_boolean.smoke_escalation_test_mode%2Cinput_boolean.smoke_escalation_run_is_test%2Ctimer.smoke_escalation%2Cbinary_sensor.kitchen_smoke%2Cbinary_sensor.garage_smoke%2Cbinary_sensor.braai_room_smoke&start_date=2026-11-10T22%3A00%3A00.000Z&end_date=2026-11-11T21%3A59%3A59.999Z
   start_smoke_escalation:
     alias: "Start Smoke Escalation"
     mode: single

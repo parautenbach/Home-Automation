@@ -31,18 +31,18 @@ cards:
             show_name: false
             columns: 2
             entities:
-              - entity: sensor.daily_internet_usage_in
+              - entity: sensor.daily_internet_usage_in_64
                 name: Today
-              - entity: sensor.daily_internet_usage_out
+              - entity: sensor.daily_internet_usage_out_64
                 name: Today
           - type: glance
             title: This Month
             show_name: false
             columns: 2
             entities:
-              - entity: sensor.monthly_internet_usage_in
+              - entity: sensor.monthly_internet_usage_in_64
                 name: This Month
-              - entity: sensor.monthly_internet_usage_out
+              - entity: sensor.monthly_internet_usage_out_64
                 name: This Month
       - type: custom:mini-graph-card
         name: Traffic
@@ -295,8 +295,8 @@ cards:
   - type: statistics-graph
     title: Daily Usage
     entities:
-      - sensor.daily_internet_usage_in
-      - sensor.daily_internet_usage_out
+      - sensor.daily_internet_usage_in_64
+      - sensor.daily_internet_usage_out_64
     days_to_show: 7
     period: day
     chart_type: bar

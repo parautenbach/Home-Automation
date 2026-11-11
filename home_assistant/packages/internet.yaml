@@ -6,27 +6,6 @@ homeassistant:
     sensor.internet_speed_out:
       friendly_name: 'Upload Traffic'
       icon: mdi:upload
-    # kept for reference/comparison against the 64-bit sensors below; safe to remove after ~2026-10
-    sensor.internet_usage_in:
-      friendly_name: 'Download Usage'
-      icon: mdi:download
-    sensor.internet_usage_out:
-      friendly_name: 'Upload Usage'
-      icon: mdi:upload
-    sensor.daily_internet_usage_in:
-      friendly_name: 'Daily Downloads'
-      icon: mdi:download
-      state_class: total_increasing
-    sensor.daily_internet_usage_out:
-      friendly_name: 'Daily Uploads'
-      icon: mdi:upload
-      state_class: total_increasing
-    sensor.monthly_internet_usage_in:
-      friendly_name: 'Monthly Downloads'
-      icon: mdi:download
-    sensor.monthly_internet_usage_out:
-      friendly_name: 'Monthly Uploads'
-      icon: mdi:upload
     sensor.internet_usage_in_64:
       friendly_name: 'Download Usage'
       icon: mdi:download
@@ -100,22 +79,6 @@ timer:
     restore: true
 
 utility_meter:
-  daily_internet_usage_in:
-    unique_id: "f6f3293b-81e9-4427-95ad-ed467f642ee3"
-    source: sensor.internet_usage_in
-    cycle: daily
-  monthly_internet_usage_in:
-    unique_id: "692217cc-cb53-4ade-aaf2-a7810c1dd287"
-    source: sensor.internet_usage_in
-    cycle: monthly
-  daily_internet_usage_out:
-    unique_id: "f967f73e-cd3e-428d-873e-0f11ce703c7e"
-    source: sensor.internet_usage_out
-    cycle: daily
-  monthly_internet_usage_out:
-    unique_id: "00f46f8f-f570-4e3f-a883-7b747d36d47f"
-    source: sensor.internet_usage_out
-    cycle: monthly
   daily_internet_usage_in_64:
     unique_id: "aa255d75-688e-4c43-97f4-ed3db54c0997"
     source: sensor.internet_usage_in_64
@@ -139,24 +102,6 @@ sensor:
   # undercount real usage - hardware NAT/flow offload fast-paths established connections straight
   # through the switch silicon, bypassing ppp0's kernel stats entirely. eth4 (ifIndex 14) is the
   # physical WAN port below that offload, so its counters reflect the true byte totals.
-  - platform: snmp
-    name: snmp_wan_in
-    unique_id: "50fe7ba0-52e6-409b-8955-75a7497b107f"
-    host: 192.168.0.1
-    community: !secret router_snmp_community
-    version: 2c
-    baseoid: 1.3.6.1.2.1.2.2.1.10.14  # ifInOctets.14: eth4
-    unit_of_measurement: octets
-
-  - platform: snmp
-    name: snmp_wan_out
-    unique_id: "c718a6e8-ec45-4269-95de-93b37f18c605"
-    host: 192.168.0.1
-    community: !secret router_snmp_community
-    version: 2c
-    baseoid: 1.3.6.1.2.1.2.2.1.16.14  # ifOutOctets.14: eth4
-    unit_of_measurement: octets
-
   - platform: snmp
     name: snmp_wan_in_64
     unique_id: "884a9792-269b-49f0-9dda-9dd6dd108527"
@@ -240,27 +185,19 @@ template:
           {{ (((to - from) * 8) / time_delta / 1000000) | round(3) if time_delta > 0 else 0 }}
         device_class: data_rate
         unit_of_measurement: 'Mbit/s'
-  - sensor:
-      - name: "Internet Usage In"
-        unique_id: "09c36e4d-7db9-4499-8dbf-99e43452adfd"
-        state: "{{ ((states('sensor.snmp_wan_in')  | float(0) ) / 1000000000 ) }}"
-        device_class: data_size
-        unit_of_measurement: 'GB'
-  - sensor:
-      - name: "Internet Usage Out"
-        unique_id: "09ec3858-8705-4503-a162-afebb2808d27"
-        state: "{{ ((states('sensor.snmp_wan_out') | float(0) ) / 1000000000 ) }}"
-        device_class: data_size
-        unit_of_measurement: 'GB'
+  # a 0 while snmp is down reads as a counter reset to the meters, which then re-add the whole
+  # counter when it's back (e.g. during a router update)
   - sensor:
       - name: "Internet Usage In (64)"
         unique_id: "ca6f49a3-33a5-44d8-b6e7-8051c58967ff"
+        availability: "{{ states('sensor.snmp_wan_in_64') | is_number }}"
         state: "{{ ((states('sensor.snmp_wan_in_64')  | float(0) ) / 1000000000 ) }}"
         device_class: data_size
         unit_of_measurement: 'GB'
   - sensor:
       - name: "Internet Usage Out (64)"
         unique_id: "cb3f34c4-23ad-44d9-a52e-2aa716666025"
+        availability: "{{ states('sensor.snmp_wan_out_64') | is_number }}"
         state: "{{ ((states('sensor.snmp_wan_out_64') | float(0) ) / 1000000000 ) }}"
         device_class: data_size
         unit_of_measurement: 'GB'

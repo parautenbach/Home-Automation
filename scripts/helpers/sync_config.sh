@@ -18,4 +18,4 @@ if [ -f /tmp/home_assistant/.deleted ]; then
     rm -f /tmp/home_assistant/.deleted
 fi
 
-chown -R home_assistant:home_assistant /tmp/home_assistant/
+chown -R homeassistant:homeassistant /tmp/home_assistant/

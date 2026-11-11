@@ -1821,6 +1821,9 @@ automation:
               - action: "SLEEP_OFF"
                 title: "Woken up"
                 icon: "sfsymbols:sun.max"
+              - action: "MUTE_NURSERY_MOTION"
+                title: "Mute"
+                icon: "sfsymbols:bell.slash"
             sound:
               # apple watch doesn't support custom sounds:
               # https://community.home-assistant.io/t/custom-notification-sounds-on-not-playing-on-apple-watch/540387
@@ -1834,6 +1837,33 @@ automation:
               url: !secret baby_monitor_last_snapshot_url
               hide-thumbnail: false
               lazy: false
+
+  # the same mute as switching the alert off on the dashboard
+  - alias: "Mute Nursery Motion Alerts From Alert Action"
+    id: "7d32c330-29a0-4830-9286-6a7be31af19d"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: MUTE_NURSERY_MOTION
+    action:
+      - service: automation.turn_off
+        target:
+          entity_id: automation.notify_when_motion_detected_in_the_nursery
+      # same tag, so it replaces the motion alert. sent where the alert goes, so whoever else
+      # gets it knows one of us muted it
+      - service: notify.mobile_app_ceres
+        data:
+          title: "🧸 Nursery"
+          message: >-
+            {% from 'security.jinja' import get_ha_actor %}
+            {% set actor = get_ha_actor(trigger.event.context) %}
+            Motion alerts muted{{ ' by ' ~ actor if actor else '' }} until the next nap or bedtime.
+          data:
+            group: "nursery"
+            tag: "nursery"
+            url: homeassistant://navigate/lovelace-main/baby
 
   # the alert above is switched off by hand when one of us settles her in the room, where our
   # own movement sets it off

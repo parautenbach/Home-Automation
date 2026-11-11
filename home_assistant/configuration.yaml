@@ -9,6 +9,7 @@ homeassistant:
   internal_url: !secret homeassistant_internal_url
   latitude: !secret home_latitude
   longitude: !secret home_longitude
+  # this is not amsl, contrary to the docs; it's above ground level
   elevation: !secret home_elevation
   country: ZA
   unit_system: metric

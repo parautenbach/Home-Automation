@@ -658,7 +658,13 @@ automation:
               sound:
                 name: default
                 critical: 1
-                volume: 0.3
+                # louder with each 5 min repeat, up to full volume by the third.
+                # from the time open, so the alert after a snooze is already loud
+                volume: >-
+                  {% set last_opened_entity = trigger.event.data.entity_id | replace('_timer', '_opened') | replace('timer.', 'input_datetime.') %}
+                  {% set minutes_open = (as_timestamp(utcnow()) - as_timestamp(states(last_opened_entity))) / 60 %}
+                  {% set repeats = [((minutes_open - 5) // 5) | int, 3] | min %}
+                  {{ (0.3 + 0.7 * repeats / 3) | round(2) }}
       - service: timer.start
         target:
           entity_id: "{{ trigger.event.data.entity_id }}"

@@ -85,6 +85,13 @@ exclude:
     - sensor.wind_direction_sin_filtered
     - sensor.wind_direction_cos
     - sensor.wind_direction_cos_filtered
+    # history duplicated by another entity
+    - sensor.wind_speed_filtered
+    - sensor.snmp_wan_in_64
+    - sensor.snmp_wan_out_64
+    - sensor.internet_usage_in_64
+    - sensor.internet_usage_out_64
+    - sensor.home_energy_other
     # large attributes
     - sensor.home_assistant
     - sensor.tmp

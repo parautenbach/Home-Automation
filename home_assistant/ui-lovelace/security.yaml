@@ -136,7 +136,9 @@ cards:
             entity_id: button.home_user_panic
           confirmation:
             text: "This will raise a panic alarm and the security company will respond. Are you sure?"
+      # one panel, two partitions
       - type: history-graph
+        title: Partitions
         hours_to_show: 24
         entities:
           - entity: alarm_control_panel.home
@@ -152,6 +154,15 @@ cards:
               --state-alarm_control_panel-disarmed-color: #40b100;
               --state-alarm_control_panel-triggered-color: #135dd8;
             }
+      # the remotes pulse these zones on arm/disarm, so they explain most changes above
+      - type: history-graph
+        title: Remote Activity
+        hours_to_show: 24
+        entities:
+          - entity: binary_sensor.home_zone_011_p1_remotes
+            name: Home
+          - entity: binary_sensor.home_zone_012_p2_remotes
+            name: Flatlet
       # the alarm_zone template derives the label from the zone's friendly name and
       # spells out the state, so each zone here is usually just its entity. the order is
       # deliberate: doors by zone, PIRs grouped by area, laid out across then down.
@@ -177,7 +188,7 @@ cards:
             template: alarm_zone
             entity: binary_sensor.home_zone_020_braai_room_door
       - type: history-graph
-        title: Activity
+        title: Door Activity
         hours_to_show: 24
         entities:
           - entity: binary_sensor.home_zone_001_front_door
@@ -427,6 +438,16 @@ cards:
               end_date: true
               entity_name: true
               separator: true
+            # the panel cards' colours, until the overrides move to the theme
+            uix:
+              style: |
+                :host {
+                  --state-alarm_control_panel-armed_home-color: #ffa800;
+                  --state-alarm_control_panel-armed_away-color: #aa0000;
+                  --state-alarm_control_panel-armed_custom_bypass-color: #aa0000;
+                  --state-alarm_control_panel-disarmed-color: #40b100;
+                  --state-alarm_control_panel-triggered-color: #135dd8;
+                }
             entities:
               - entity: binary_sensor.doorbell_rang
                 label: Doorbell

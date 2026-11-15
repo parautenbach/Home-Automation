@@ -20,6 +20,7 @@ TESTS_ROOT = Path(__file__).resolve().parent
 REPO_ROOT = TESTS_ROOT.parent
 PACKAGES = REPO_ROOT / "home_assistant" / "packages"
 FIXTURES = TESTS_ROOT / "fixtures"
+CUSTOM_TEMPLATES = REPO_ROOT / "home_assistant" / "custom_templates"
 
 
 class PlaceholderSecrets:

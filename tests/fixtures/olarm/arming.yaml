@@ -1,0 +1,42 @@
+# everything the arming automations read: both panels disarmed, the doors closed,
+# nothing bypassed, and pieter at home with nobody else
+alarm_control_panel.home:
+  state: disarmed
+alarm_control_panel.flatlet:
+  state: disarmed
+binary_sensor.home_zone_001_front_door:
+  state: "off"
+  attributes:
+    friendly_name: Front Door
+    device_class: door
+binary_sensor.home_zone_001_bypass_front_door:
+  state: "off"
+button.home_zone_001_bypass_front_door:
+  state: unknown
+binary_sensor.home_zone_007_kitchen_door:
+  state: "off"
+  attributes:
+    friendly_name: Kitchen Door
+    device_class: door
+binary_sensor.home_zone_007_bypass_kitchen_door:
+  state: "off"
+button.home_zone_007_bypass_kitchen_door:
+  state: unknown
+binary_sensor.home_zone_004_living_area:
+  state: "off"
+  attributes:
+    friendly_name: Living Area PIR
+    device_class: motion
+binary_sensor.home_zone_004_bypass_living_area:
+  state: "off"
+binary_sensor.home_zone_018_flatlet:
+  state: "off"
+  attributes:
+    friendly_name: Flatlet PIR
+    device_class: motion
+binary_sensor.home_zone_018_bypass_flatlet:
+  state: "off"
+binary_sensor.pieter_present:
+  state: "on"
+binary_sensor.anybody_home:
+  state: "on"

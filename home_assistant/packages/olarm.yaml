@@ -154,6 +154,10 @@ template:
                   logger: "homeassistant.components.olarm"
               - stop: "Invalid code."
                 error: true
+          # the mode a stall needs to know (see "Notify When Alarm Arming Stalls")
+          - event: alarm_arm_requested
+            event_data:
+              mode: "home"
           - service: alarm_control_panel.alarm_arm_home
             target:
               entity_id: alarm_control_panel.home_area_01_home
@@ -169,6 +173,9 @@ template:
                   logger: "homeassistant.components.olarm"
               - stop: "Invalid code."
                 error: true
+          - event: alarm_arm_requested
+            event_data:
+              mode: "away"
           - service: alarm_control_panel.alarm_arm_away
             target:
               entity_id: alarm_control_panel.home_area_01_home
@@ -514,28 +521,52 @@ automation:
       - condition: state
         entity_id: alarm_control_panel.home
         state: "disarmed"
+      # an open door blocks arming, so say so now rather than after driving off
+      - variables:
+          # anchored for the stall alert below
+          open_doors: &open_doors >-
+            {%- from 'security.jinja' import get_active_zones -%}
+            {%- set get_active_zones_fn = get_active_zones | as_function -%}
+            {{ get_active_zones_fn('home', 'doors') }}
+          bypass_doors_actions: &bypass_doors_actions >-
+            {%- if open_doors -%}
+              {{ [{'action': 'ARM_ALARM_BYPASS_DOORS',
+                   'title': 'Arm (bypass open doors)',
+                   'icon': 'sfsymbols:door.left.hand.open',
+                   'destructive': true}] }}
+            {%- else -%}
+              {{ [] }}
+            {%- endif -%}
       - service: notify.mobile_app_ceres
         data:
           title: "🔒 Security"
           message: >-
             The last person left home. Would you like to arm the alarm?
+            {%- if open_doors %}
+
+            The following doors are open:
+              {%- for door in open_doors %}
+              - {{ door }}
+              {%- endfor %}
+            {%- endif %}
           data:
             group: "home-security"
             tag: "arm-alarm-reminder"
             url: homeassistant://navigate/lovelace-main/security
-            actions:
-              - action: "ARM_ALARM"
-                title: "Arm (full)"
-                icon: "sfsymbols:lock"
-                destructive: true
-              - action: "ARM_ALARM_BYPASS_GARAGE"
-                title: "Arm (bypass garage)"
-                icon: "sfsymbols:lock.trianglebadge.exclamationmark"
-                destructive: true
-              - action: "ENABLE_GUEST_MODE"
-                title: "Enable guest mode"
-                icon: "sfsymbols:person.2"
-                authenticationRequired: true
+            actions: >-
+              {{ bypass_doors_actions + [
+                   {'action': 'ARM_ALARM',
+                    'title': 'Arm (full)',
+                    'icon': 'sfsymbols:lock',
+                    'destructive': true},
+                   {'action': 'ARM_ALARM_BYPASS_GARAGE',
+                    'title': 'Arm (bypass garage)',
+                    'icon': 'sfsymbols:lock.trianglebadge.exclamationmark',
+                    'destructive': true},
+                   {'action': 'ENABLE_GUEST_MODE',
+                    'title': 'Enable guest mode',
+                    'icon': 'sfsymbols:person.2',
+                    'authenticationRequired': true}] }}
             action_data:
               entity_ids: "{{ ['alarm_control_panel.home'] }}"
             push:
@@ -609,6 +640,88 @@ automation:
                     name: default
                     critical: 1
                     volume: 0.3
+
+  # an arm sent from ha sets the integration's panel to pending until the panel reports
+  # a different area state. a refused arm (an open door) leaves it on notready, so it
+  # stays pending and "Alarm State Changed" never fires. upstream:
+  # https://github.com/OlarmTech/hacs-olarm/issues/63
+  # with no exit delay the panel confirms an arm within seconds.
+  # an arm from a remote or the keypad never goes pending, so a refusal there can't be
+  # seen at all. home only: the flatlet has no doors, just one motion sensor.
+  - alias: "Notify When Alarm Arming Stalls"
+    id: "42ac5942-bcd3-4aec-9d64-9e76341435de"
+    initial_state: true
+    trace:
+      stored_traces: 20
+    trigger:
+      - platform: event
+        event_type: alarm_arm_requested
+    # a retry restarts the wait
+    mode: restart
+    action:
+      - wait_template: "{{ is_state('alarm_control_panel.home', 'armed_' ~ trigger.event.data.mode) }}"
+        timeout: "00:00:30"
+        continue_on_timeout: true
+      - condition: template
+        value_template: "{{ not wait.completed }}"
+      - variables:
+          mode: "{{ trigger.event.data.mode }}"
+          open_doors: *open_doors
+          bypass_doors_actions: *bypass_doors_actions
+          retry_action: >-
+            {%- if mode == 'away' -%}
+              {{ {'action': 'ARM_ALARM',
+                  'title': 'Arm (full)',
+                  'icon': 'sfsymbols:lock',
+                  'destructive': true} }}
+            {%- else -%}
+              {{ {'action': 'ARM_STAY_ALARM',
+                  'title': 'Arm (stay)',
+                  'icon': 'sfsymbols:house',
+                  'destructive': true} }}
+            {%- endif -%}
+      # same tag as the arm prompts, so a later successful arm clears this too
+      - service: notify.mobile_app_ceres
+        data:
+          message: "clear_notification"
+          data:
+            tag: "arm-alarm-reminder"
+      - delay:
+          seconds: 1
+      - condition: template
+        value_template: "{{ not is_state('alarm_control_panel.home', 'armed_' ~ mode) }}"
+      # a stay arm is for when we're inside, so the doors get closed, not bypassed
+      - service: notify.mobile_app_ceres
+        data:
+          title: "⛔️ Security"
+          message: >-
+            The home's alarm couldn't arm.
+            {%- if open_doors %}
+
+            The following doors are still open:
+              {%- for door in open_doors %}
+              - {{ door }}
+              {%- endfor %}
+            {%- if mode == 'home' %}
+
+            Close them and try again.
+            {%- endif %}
+            {%- else %} No door is open, so check the panel.
+            {%- endif %}
+          data:
+            group: "home-security"
+            tag: "arm-alarm-reminder"
+            url: homeassistant://navigate/lovelace-main/security
+            actions: >-
+              {%- set bypass = bypass_doors_actions if mode == 'away' else [] -%}
+              {{ bypass + [retry_action] }}
+            action_data:
+              entity_ids: "{{ ['alarm_control_panel.home'] }}"
+            push:
+              sound:
+                name: default
+                critical: 1
+                volume: 0.3
 
   - alias: "Turn On Yard Lights If Alarm Triggered"
     id: "50147e47-23b5-4ed4-973c-0c1e5243c731"
@@ -796,6 +909,11 @@ automation:
         event_data:
           action: ARM_ALARM_BYPASS_GARAGE
         id: "arm_away_bypass_garage"
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: ARM_ALARM_BYPASS_DOORS
+        id: "arm_away_bypass_doors"
     condition:
       - condition: template
         value_template: >-
@@ -831,9 +949,50 @@ automation:
                     group: "home-security"
                     url: homeassistant://navigate/lovelace-main/security
               - stop: "Garage bypass was not confirmed."
+      - if: "{{ trigger.id.endswith('_bypass_doors') }}"
+        then:
+          # re-read the open doors now rather than trust the alert: one may have been
+          # closed since. buttons and bypass sensors are matched by zone number, as in
+          # security.jinja, since their name suffixes are inconsistent upstream
+          - variables:
+              door_ids: >-
+                {%- from 'security.jinja' import get_active_zone_ids -%}
+                {%- set get_active_zone_ids_fn = get_active_zone_ids | as_function -%}
+                {{ get_active_zone_ids_fn('home', 'doors') }}
+              zone_numbers: >-
+                {{ door_ids | map('regex_findall', 'zone_(\d+)') | map('first') | list }}
+              bypass_buttons: >-
+                {{ states.button
+                   | selectattr('entity_id', 'match', '^button\.home_zone_(' ~ zone_numbers | join('|') ~ ')_bypass')
+                   | map(attribute='entity_id') | list }}
+              bypass_sensors: >-
+                {{ states.binary_sensor
+                   | selectattr('entity_id', 'match', '^binary_sensor\.home_zone_(' ~ zone_numbers | join('|') ~ ')_bypass')
+                   | map(attribute='entity_id') | list }}
+          - if: "{{ door_ids | count > 0 }}"
+            then:
+              - service: button.press
+                target:
+                  entity_id: "{{ bypass_buttons }}"
+              # counted against the doors, so a sensor that failed to match can't pass as confirmed
+              - wait_template: >-
+                  {{ bypass_sensors | select('is_state', 'on') | list | count == door_ids | count }}
+                timeout: "00:00:15"
+                continue_on_timeout: true
+              - if: "{{ not wait.completed }}"
+                then:
+                  - service: notify.mobile_app_ceres
+                    data:
+                      title: "⛔️ Security"
+                      message: >-
+                        The open doors couldn't be bypassed, so the alarm wasn't armed.
+                      data:
+                        group: "home-security"
+                        url: homeassistant://navigate/lovelace-main/security
+                  - stop: "Door bypass was not confirmed."
       # the template panels require a code, so pass it (the underlying olarm panels
       # don't, but nothing calls those directly)
-      - service: "alarm_control_panel.alarm_{{ trigger.id | replace('_bypass_garage', '') }}"
+      - service: "alarm_control_panel.alarm_{{ trigger.id | regex_replace('_bypass_\\w+$', '') }}"
         target:
           entity_id: "{{ trigger.event.data.action_data.entity_ids }}"
         data:

@@ -12,7 +12,9 @@ import yaml
 from homeassistant.setup import async_setup_component
 from pytest_homeassistant.common import async_fire_time_changed
 
-from harness import FIXTURES, domain_config, find_automation
+from homeassistant.helpers.template import _get_hass_loader
+
+from harness import CUSTOM_TEMPLATES, FIXTURES, domain_config, find_automation
 
 
 @pytest.fixture
@@ -89,3 +91,16 @@ def settle(hass, freezer):
         await hass.async_block_till_done()
 
     return _settle
+
+
+@pytest.fixture
+def custom_templates(hass):
+    """Make home_assistant/custom_templates importable from templates.
+
+    HA reads them from the config dir, which in tests is not the real one, so the
+    sources are handed to its loader directly.
+    """
+    _get_hass_loader(hass).sources = {
+        str(path.relative_to(CUSTOM_TEMPLATES)): path.read_text()
+        for path in CUSTOM_TEMPLATES.rglob("*.jinja")
+    }

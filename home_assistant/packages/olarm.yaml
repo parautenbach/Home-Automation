@@ -960,14 +960,14 @@ automation:
                 {%- set get_active_zone_ids_fn = get_active_zone_ids | as_function -%}
                 {{ get_active_zone_ids_fn('home', 'doors') }}
               zone_numbers: >-
-                {{ door_ids | map('regex_findall', 'zone_(\d+)') | map('first') | list }}
+                {{ door_ids | map('regex_findall', 'zone_([0-9]+)') | map('first') | list }}
               bypass_buttons: >-
                 {{ states.button
-                   | selectattr('entity_id', 'match', '^button\.home_zone_(' ~ zone_numbers | join('|') ~ ')_bypass')
+                   | selectattr('entity_id', 'match', '^button[.]home_zone_(' ~ zone_numbers | join('|') ~ ')_bypass')
                    | map(attribute='entity_id') | list }}
               bypass_sensors: >-
                 {{ states.binary_sensor
-                   | selectattr('entity_id', 'match', '^binary_sensor\.home_zone_(' ~ zone_numbers | join('|') ~ ')_bypass')
+                   | selectattr('entity_id', 'match', '^binary_sensor[.]home_zone_(' ~ zone_numbers | join('|') ~ ')_bypass')
                    | map(attribute='entity_id') | list }}
           - if: "{{ door_ids | count > 0 }}"
             then:
@@ -992,7 +992,7 @@ automation:
                   - stop: "Door bypass was not confirmed."
       # the template panels require a code, so pass it (the underlying olarm panels
       # don't, but nothing calls those directly)
-      - service: "alarm_control_panel.alarm_{{ trigger.id | regex_replace('_bypass_\\w+$', '') }}"
+      - service: "alarm_control_panel.alarm_{{ trigger.id | regex_replace('_bypass_[A-Za-z0-9_]+$', '') }}"
         target:
           entity_id: "{{ trigger.event.data.action_data.entity_ids }}"
         data:

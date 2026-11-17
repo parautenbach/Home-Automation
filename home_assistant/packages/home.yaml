@@ -1586,16 +1586,14 @@ automation:
       - service: "input_boolean.turn_{{ 'on' if reason == 'fell_asleep' else 'off' }}"
         target:
           entity_id: input_boolean.baby_sleep_mode
-      # still asleep at the cap: wake her with the lamp, as at nap end. her colour if it's on
+      # still asleep at the cap: wake her with the lamp, as at nap end
       - if: "{{ reason == 'sleep_time_over' and is_state('binary_sensor.nursery_lit', 'off') }}"
         then:
           - service: light.turn_on
             target:
               entity_id: light.bedroom_bedlamp
             data:
-              profile: >-
-                {{ 'normal_brightness_only_bedlamp' if is_state('light.bedroom_bedlamp', 'on')
-                   else 'normal_bedlamp' }}
+              profile: normal_bedlamp
       # ios will only clear the most recent critical notification from a given tag
       # https://companion.home-assistant.io/docs/notifications/notifications-basic
       - service: notify.mobile_app_ceres
@@ -2047,8 +2045,10 @@ automation:
       - condition: state
         entity_id: binary_sensor.nursery_lit
         state: "off"
-      # the profile's colour only if it was off: an on lamp keeps hers
+      # waking her is in normal light. while dim, the profile's colour only if it was off:
+      # an on lamp keeps hers
       - if:
+          - "{{ dim }}"
           - condition: state
             entity_id: light.bedroom_bedlamp
             state: "on"
@@ -2057,7 +2057,7 @@ automation:
             target:
               entity_id: light.bedroom_bedlamp
             data:
-              profile: "{{ 'night_brightness_only_bedlamp' if dim else 'normal_brightness_only_bedlamp' }}"
+              profile: night_brightness_only_bedlamp
         else:
           - service: light.turn_on
             target:

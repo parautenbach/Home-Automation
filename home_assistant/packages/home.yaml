@@ -3336,7 +3336,7 @@ automation:
         data:
           title: "♨️ Tumble Dryer"
           message: >-
-            Time to check the heat exchanger and clean it carefully if necessary.
+            Time to check the heat exchanger and clean it carefully if necessary ({{ states('counter.tumble_dryer_cycles') }} cycles).
           data:
             actions:
               - action: "TUMBLE_DRYER_CLEANED"
@@ -3367,7 +3367,7 @@ automation:
         data:
           title: "🍽️ Dishwasher"
           message: >-
-            Time to clean the dishwasher's filter.
+            Time to clean the dishwasher's filter ({{ states('counter.dishwasher_cycles') }} cycles).
           data:
             actions:
               - action: "DISHWASHER_CLEANED"

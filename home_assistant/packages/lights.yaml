@@ -755,6 +755,9 @@ automation:
       - platform: state
         entity_id: binary_sensor.anybody_home
         to: "on"
+        not_from:
+          - "unavailable"
+          - "unknown"
     condition:
       - condition: state
         entity_id: binary_sensor.anybody_home
@@ -852,6 +855,9 @@ automation:
         # pieter and rouve (for now)
         entity_id: binary_sensor.family_present
         to: "on"
+        not_from:
+          - "unavailable"
+          - "unknown"
     mode: single
     condition:
       - condition: state
@@ -980,6 +986,9 @@ automation:
       - platform: state
         entity_id: binary_sensor.anybody_home
         to: "on"
+        not_from:
+          - "unavailable"
+          - "unknown"
       - platform: state
         entity_id: sensor.ceres_battery_state
         to: 'Not Charging'

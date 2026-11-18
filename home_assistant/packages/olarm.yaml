@@ -584,6 +584,9 @@ automation:
       - platform: state
         entity_id: binary_sensor.pieter_present
         to: "on"
+        not_from:
+          - "unavailable"
+          - "unknown"
     condition:
       - condition: not
         conditions:
@@ -766,6 +769,9 @@ automation:
         entity_id:
           - binary_sensor.pieter_present
         to: "on"
+        not_from:
+          - "unavailable"
+          - "unknown"
         for:
           minutes: 5
         id: "arrived_home"

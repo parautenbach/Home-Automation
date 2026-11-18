@@ -191,18 +191,33 @@ sensor:
 
 template:
   - binary_sensor:
-      # https://www.home-assistant.io/integrations/bayesian/
+      # rules are in check_presence
       - name: "Pieter Present"
-        # DO NOT change this to an or condition
-        # false positives for not being home will trigger automations when it changes to home
+        variables:
+          homekit_entity: input_boolean.pieter_present
+          person_entity: person.pieter_rautenbach
+          ssid_entity: sensor.ceres_ssid
+          home_ssid: !secret home_ssid
         state: >-
-          {{ is_state("input_boolean.pieter_present", "on") or
-             is_state("person.pieter_rautenbach", "home") }}
+          {% from 'presence.jinja' import check_presence %}
+          {{ check_presence(homekit_entity, person_entity, ssid_entity, home_ssid, this.state) }}
+        # a lost source reads as unavailable, not a departure; arrival automations ignore changes from unavailable.
+        # wifi is left out: without it, arrivals only confirm later
+        availability: >-
+          {{ has_value(homekit_entity) and has_value(person_entity) }}
   - binary_sensor:
+      # same as pieter present
       - name: "Rouvé Present"
+        variables:
+          homekit_entity: input_boolean.rouve_present
+          person_entity: person.rouve_rautenbach
+          ssid_entity: sensor.rouve_ssid
+          home_ssid: !secret home_ssid
         state: >-
-          {{ is_state("input_boolean.rouve_present", "on") or
-             is_state("person.rouve_rautenbach", "home") }}
+          {% from 'presence.jinja' import check_presence %}
+          {{ check_presence(homekit_entity, person_entity, ssid_entity, home_ssid, this.state) }}
+        availability: >-
+          {{ has_value(homekit_entity) and has_value(person_entity) }}
   - binary_sensor:
       - name: "Tenant Present"
         delay_off:
@@ -230,6 +245,15 @@ template:
           {% else %}
             mdi:home
           {% endif %}
+        # only off when we know everyone left, so a lost presence source doesn't trigger away mode
+        availability: >-
+          {% set armed_away = is_state('alarm_control_panel.home', 'armed_away') %}
+          {% set pieter_present = is_state('binary_sensor.pieter_present', 'on') %}
+          {% set rouve_present = is_state('binary_sensor.rouve_present', 'on') %}
+          {% set guest_mode = is_state('input_boolean.guest_mode', 'on') %}
+          {% set contractor_mode = is_state('input_boolean.contractor_mode', 'on') %}
+          {% set presence_known = has_value('binary_sensor.pieter_present') and has_value('binary_sensor.rouve_present') %}
+          {{ armed_away or pieter_present or rouve_present or guest_mode or contractor_mode or presence_known }}
   - binary_sensor:
       # because baby, every day is a workday :-D
       - name: "Wake-Up Routine Day"
@@ -765,6 +789,9 @@ automation:
           - binary_sensor.pieter_present
           - binary_sensor.rouve_present
         to: "on"
+        not_from:
+          - "unavailable"
+          - "unknown"
     mode: single
     condition:
       - condition: or
@@ -826,7 +853,9 @@ automation:
         entity_id: binary_sensor.pieter_present
         to: "on"
         # prevent false positive due to flaky connectivity or after loadshedding and sensors being unavailable
-        not_from: "unavailable"
+        not_from:
+          - "unavailable"
+          - "unknown"
     mode: single
     condition:
       - condition: and
@@ -846,11 +875,9 @@ automation:
       # what if the presence sensor is slow to update, so we trigger motion before we're detected as home?
       # i don't think it's a good idea to have a motion trigger and then choose between the wait below and one for presence
       # rather use a recency check
-      # keep in sync with the garage door template
       - wait_template: >-
-          {% set last_motion_detected = (now() - states.binary_sensor.doorbell_motion_detected.last_updated).total_seconds() %}
-          {{ is_state('binary_sensor.doorbell_motion_detected', 'on') or
-             (is_state('binary_sensor.doorbell_motion_detected', 'off') and last_motion_detected <= 30) }}
+          {% from 'security.jinja' import check_doorbell_arrival %}
+          {{ check_doorbell_arrival() }}
         timeout: "00:01:00"
         continue_on_timeout: false
       - wait_template: "{{ is_state('alarm_control_panel.home', 'disarmed') }}"
@@ -889,7 +916,9 @@ automation:
         entity_id: binary_sensor.pieter_present
         to: "on"
         # prevent false positive due to flaky connectivity or after loadshedding and sensors being unavailable
-        not_from: "unavailable"
+        not_from:
+          - "unavailable"
+          - "unknown"
     mode: single
     condition:
       - condition: and
@@ -940,11 +969,9 @@ automation:
           #   entity_id: alarm_control_panel.home
           #   state: "disarmed"
     action:
-      # keep in sync with the main gate template
       - wait_template: >-
-          {% set last_motion_detected = (now() - states.binary_sensor.doorbell_motion_detected.last_updated).total_seconds() %}
-          {{ is_state('binary_sensor.doorbell_motion_detected', 'on') or
-             (is_state('binary_sensor.doorbell_motion_detected', 'off') and last_motion_detected <= 30) }}
+          {% from 'security.jinja' import check_doorbell_arrival %}
+          {{ check_doorbell_arrival() }}
         timeout: "00:01:00"
         continue_on_timeout: false
       - wait_template: "{{ is_state('alarm_control_panel.home', 'disarmed') }}"
@@ -1155,6 +1182,9 @@ automation:
       - platform: state
         entity_id: binary_sensor.family_present
         to: "on"
+        not_from:
+          - "unavailable"
+          - "unknown"
     condition:
       - condition: state
         entity_id: input_boolean.guest_mode
@@ -2198,6 +2228,9 @@ automation:
       - platform: state
         entity_id: binary_sensor.anybody_home
         to: "on"
+        not_from:
+          - "unavailable"
+          - "unknown"
       - platform: state
         entity_id:
           - binary_sensor.home_zone_019_music_room_door
@@ -2371,6 +2404,9 @@ automation:
           - binary_sensor.pieter_present
           # - binary_sensor.rouve_present
         to: "on"
+        not_from:
+          - "unavailable"
+          - "unknown"
         id: "presence"
       - platform: state
         entity_id: alarm_control_panel.home
@@ -2929,6 +2965,9 @@ automation:
       - platform: state
         entity_id: binary_sensor.pieter_present
         to: "on"
+        not_from:
+          - "unavailable"
+          - "unknown"
     condition:
       - condition: state
         entity_id: input_boolean.trash_reminder
@@ -2998,6 +3037,9 @@ automation:
       - platform: state
         entity_id: binary_sensor.pieter_present
         to: "on"
+        not_from:
+          - "unavailable"
+          - "unknown"
     condition:
       - condition: state
         entity_id: input_boolean.recycling_reminder

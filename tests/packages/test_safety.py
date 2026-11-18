@@ -84,6 +84,22 @@ async def test_starts_a_3_minute_countdown_when_somebody_is_home(
     assert countdown_starts[0].data["duration"] == 180
 
 
+@pytest.mark.parametrize("presence", ["unavailable", "unknown"])
+async def test_starts_a_90_second_countdown_when_presence_is_unknown(
+    hass, countdown_starts, presence
+):
+    """anybody_home goes unavailable when a presence source is lost and nobody is known
+    to be home, so it must not get the longer countdown meant for someone at home."""
+    hass.states.async_set("binary_sensor.anybody_home", presence)
+    await hass.async_block_till_done()
+
+    hass.states.async_set("sensor.smoke_detectors_in_alarm", "1")
+    await hass.async_block_till_done()
+
+    assert len(countdown_starts) == 1
+    assert countdown_starts[0].data["duration"] == 90
+
+
 async def test_a_second_detector_does_not_restart_a_running_countdown(
     hass, countdown_starts
 ):
@@ -1080,6 +1096,21 @@ async def test_smoke_still_present_after_a_restart_reopens_a_countdown(resumes):
     """timer.finished for a restored timer is fired during component setup, before any
     automation has attached, so the escalation it should have triggered is lost."""
     starts = await resumes(1)
+
+    assert len(starts) == 1
+    assert starts[0].data["duration"] == 90
+
+
+async def test_a_restart_with_somebody_home_resumes_a_3_minute_countdown(resumes):
+    starts = await resumes(1, binary_sensor__anybody_home="on")
+
+    assert len(starts) == 1
+    assert starts[0].data["duration"] == 180
+
+
+async def test_a_restart_before_presence_is_known_resumes_a_90_second_countdown(resumes):
+    """Presence is most likely still unavailable straight after a restart."""
+    starts = await resumes(1, binary_sensor__anybody_home="unavailable")
 
     assert len(starts) == 1
     assert starts[0].data["duration"] == 90

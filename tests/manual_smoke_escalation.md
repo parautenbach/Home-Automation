@@ -310,7 +310,7 @@ Test: its countdown blocks yours from starting.
 **Steps:**
 1. Dev Tools → States: set `binary_sensor.kitchen_smoke` to `on`.
 2. Watch `sensor.smoke_detectors_in_alarm` go to 1 and Run Is Test to `on`.
-3. Let the countdown run out (90 sec if nobody home, 3 min if somebody is).
+3. Let the countdown run out (3 min if somebody is home, otherwise 90 sec, including when presence is unknown).
 4. Set `binary_sensor.kitchen_smoke` back to `off`.
 
 **Postconditions** — three notifications, in order:

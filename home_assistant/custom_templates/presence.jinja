@@ -1,0 +1,32 @@
+{# https://www.home-assistant.io/docs/configuration/templating/#reusing-templates #}
+
+{#
+Check whether a person is home, confirmed by more than one source.
+
+Arriving needs two of HomeKit, GPS and WiFi to agree, or GPS home on its own for 5 min, so a
+GPS jump near home doesn't count. Leaving needs both HomeKit and GPS away, so a WiFi drop
+can't flip it (false departures re-trigger arrival automations).
+
+Wifi only counts towards arriving: being on the home SSID means home, but being off it doesn't
+mean away (WiFi off, low power mode, out of range in the garden, or a stale sensor).
+
+:param homekit_entity: The input boolean set by the HomeKit arrive/leave automations.
+:param person_entity: The person entity, home when GPS puts them in the home zone.
+:param ssid_entity: The companion app's SSID sensor for their phone.
+:param home_ssid: The home WiFi's SSID.
+:param current_state: The presence sensor's own state (this.state), as rules differ for arriving and leaving.
+
+:returns: True if present, else False.
+#}
+{%- macro check_presence(homekit_entity, person_entity, ssid_entity, home_ssid, current_state) -%}
+  {%- set homekit = is_state(homekit_entity, 'on') -%}
+  {%- set gps = is_state(person_entity, 'home') -%}
+  {%- set wifi = is_state(ssid_entity, home_ssid) -%}
+  {%- set gps_held = gps and now() - states[person_entity].last_changed >= timedelta(minutes=5) -%}
+  {%- set votes = [homekit, gps, wifi] | select | list | count -%}
+  {%- if current_state == 'on' -%}
+    {{ homekit or gps }}
+  {%- else -%}
+    {{ votes >= 2 or gps_held }}
+  {%- endif -%}
+{%- endmacro -%}

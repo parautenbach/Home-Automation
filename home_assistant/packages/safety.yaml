@@ -528,8 +528,8 @@ automation:
         data:
             # away: nothing benign makes smoke and nobody can hush it – just long enough
             # to cancel remotely after checking a camera. home: long enough to realise it
-            # is the toast, deal with it, and reach a phone.
-            duration: "{{ 90 if is_state('binary_sensor.anybody_home', 'off') else 180 }}"
+            # is the toast, deal with it, and reach a phone. unknown presence counts as away.
+            duration: "{{ 180 if is_state('binary_sensor.anybody_home', 'on') else 90 }}"
 
   # a countdown in flight does not survive a restart: the timer does, and HA finishes it
   # on startup, but it fires timer.finished during component setup – before automations
@@ -570,7 +570,7 @@ automation:
       # should still be a window to call it off.
       - service: script.start_smoke_escalation
         data:
-          duration: "{{ 90 if is_state('binary_sensor.anybody_home', 'off') else 180 }}"
+          duration: "{{ 180 if is_state('binary_sensor.anybody_home', 'on') else 90 }}"
 
   - alias: "Escalate Smoke Alarm When A Second Detector Trips"
     id: "d2ac5554-a947-4f45-b1b5-d4e996d97122"

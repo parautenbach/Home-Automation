@@ -1238,6 +1238,9 @@ automation:
       - platform: state
         entity_id: binary_sensor.anybody_home
         to: "on"
+        not_from:
+          - "unavailable"
+          - "unknown"
     condition:
       - condition: state
         entity_id: binary_sensor.grid_feed

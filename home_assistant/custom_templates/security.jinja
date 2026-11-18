@@ -206,3 +206,19 @@ Get a list of currently bypassed alarm zones for a partition.
   {%- endfor -%}
   {%- do returns(ns.names) -%}
 {%- endmacro -%}
+
+{#
+Check whether the doorbell camera saw someone at the gate, to confirm an arrival.
+
+Motion can only confirm the arrival while the doorbell is online, so this passes when it's
+offline and the arrival goes ahead without it.
+
+:returns: True if there is motion now or in the last 30 s, or the doorbell is offline, else False.
+#}
+{%- macro check_doorbell_arrival() -%}
+  {%- set doorbell_online = is_state('binary_sensor.doorbell_online', 'on') -%}
+  {%- set motion_now = is_state('binary_sensor.doorbell_motion_detected', 'on') -%}
+  {%- set last_motion_detected = (now() - states.binary_sensor.doorbell_motion_detected.last_updated).total_seconds() -%}
+  {%- set motion_recent = is_state('binary_sensor.doorbell_motion_detected', 'off') and last_motion_detected <= 30 -%}
+  {{ not doorbell_online or motion_now or motion_recent }}
+{%- endmacro -%}

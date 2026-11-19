@@ -50,6 +50,17 @@ input_datetime:
     name: "Lights Out Time"
     has_time: true
     icon: mdi:lightbulb-off-outline
+  # last done, for the time-based washing machine maintenance
+  washing_machine_drum_cleaned:
+    name: "Washing Machine Drum Cleaned"
+    has_date: true
+    has_time: true
+    icon: mdi:washing-machine
+  washing_machine_drain_filter_cleaned:
+    name: "Washing Machine Drain Filter Cleaned"
+    has_date: true
+    has_time: true
+    icon: mdi:washing-machine
 
 input_boolean:
   pieter_present:
@@ -3257,7 +3268,7 @@ automation:
         data:
           title: "🧺 Washing Machine"
           message: >-
-            A cycle has finished.
+            A cycle has finished. Wipe the door seal and detergent drawer, then leave both open to dry.
           data:
             group: "chores"
             tag: "chores-washing-machine"
@@ -3276,19 +3287,35 @@ automation:
     # conditions:
     #   - condition: template
     #     value_template: "{{ trigger.from_state.state not in ['unknown', 'unavailable'] }}"
-    condition:
+    actions:
+      # counted regardless of guest mode
+      - service: counter.increment
+        target:
+          entity_id: counter.tumble_dryer_cycles
       - condition: state
         entity_id: input_boolean.guest_mode
         state: "off"
-    actions:
+      # one notification when cleaning is also due
+      - variables:
+          cycles: "{{ states('counter.tumble_dryer_cycles') | int }}"
+          clean: "{{ cycles > 6 }}"
       - service: notify.family
         data:
           title: "♨️ Tumble Dryer"
           message: >-
             A cycle has finished. Remember to clean the door filter.
+            {%- if clean %} Also check the heat exchanger and clean it carefully if necessary ({{ cycles }} cycles).{% endif %}
           data:
-            group: "chores"
-            tag: "chores-tumble-dryer"
+            actions: >-
+              {%- set done = {
+                'action': 'TUMBLE_DRYER_CLEANED',
+                'title': 'Done',
+                'icon': 'sfsymbols:checkmark.circle',
+                'destructive': true
+              } -%}
+              {{ [done] if clean else [] }}
+            group: "{{ 'routine-tumble-dryer' if clean else 'chores' }}"
+            tag: "{{ 'routine-tumble-dryer' if clean else 'chores-tumble-dryer' }}"
             url: homeassistant://navigate/lovelace-main/main
 
   - alias: "Notify When Dishwasher Is Done"
@@ -3299,40 +3326,36 @@ automation:
         entity_id: binary_sensor.dishwasher_running
         from: "on"
         to: "off"
-    condition:
+    actions:
+      # counted regardless of guest mode
+      - service: counter.increment
+        target:
+          entity_id: counter.dishwasher_cycles
       - condition: state
         entity_id: input_boolean.guest_mode
         state: "off"
-    actions:
+      # one notification when cleaning is also due
+      - variables:
+          cycles: "{{ states('counter.dishwasher_cycles') | int }}"
+          clean: "{{ cycles > 9 }}"
       - service: notify.family
         data:
           title: "🍽️ Dishwasher"
           message: >-
             A cycle has finished.
+            {%- if clean %} Time to clean the filter ({{ cycles }} cycles).{% endif %}
           data:
-            group: "chores"
-            tag: "chores-dishwasher"
+            actions: >-
+              {%- set done = {
+                'action': 'DISHWASHER_CLEANED',
+                'title': 'Done',
+                'icon': 'sfsymbols:checkmark.circle',
+                'destructive': true
+              } -%}
+              {{ [done] if clean else [] }}
+            group: "{{ 'routine-dishwasher' if clean else 'chores' }}"
+            tag: "{{ 'routine-dishwasher' if clean else 'chores-dishwasher' }}"
             url: homeassistant://navigate/lovelace-main/main
-
-  # counted regardless of guest mode, unlike the done notifications
-  - alias: "Count Large Appliance Cycles"
-    id: "90b46a3f-f909-4208-a65c-02b3daf5b3ca"
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.tumble_dryer_running
-        from: "on"
-        to: "off"
-        id: "tumble_dryer"
-      - platform: state
-        entity_id: binary_sensor.dishwasher_running
-        from: "on"
-        to: "off"
-        id: "dishwasher"
-    action:
-      - service: counter.increment
-        target:
-          entity_id: "counter.{{ trigger.id }}_cycles"
 
   - alias: "Reset Large Appliance Cycles"
     id: "f91071b4-479d-48fa-8dcb-24aeb496fdad"
@@ -3359,13 +3382,100 @@ automation:
           data:
             tag: "routine-{{ trigger.id | replace('_', '-') }}"
 
-  # nags after every further cycle and daily until cleaned
+  - alias: "Reset Washing Machine Maintenance"
+    id: "a068627b-4c8e-4a82-bee7-a094897b0d23"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: WASHING_MACHINE_DRUM_CLEANED
+        id: "drum"
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: WASHING_MACHINE_DRAIN_FILTER_CLEANED
+        id: "drain_filter"
+    action:
+      - service: input_datetime.set_datetime
+        target:
+          entity_id: "input_datetime.washing_machine_{{ trigger.id }}_cleaned"
+        data:
+          datetime: "{{ now() }}"
+      # the action only dismisses it on the phone that tapped done
+      - service: notify.family
+        data:
+          message: "clear_notification"
+          data:
+            tag: "routine-washing-machine-{{ trigger.id | replace('_', '-') }}"
+
+  # monthly, nags daily until done
+  - alias: "Clean Washing Machine Drum"
+    id: "4ea4f3c3-a72d-463c-a8ff-14d398af3591"
+    initial_state: true
+    trigger:
+      - platform: time
+        at: "12:00:00"
+    condition:
+      - condition: template
+        value_template: >-
+          {% set cleaned = states('input_datetime.washing_machine_drum_cleaned') | as_datetime | as_local %}
+          {{ now() - cleaned > timedelta(days=30) }}
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "on"
+    actions:
+      - service: notify.family
+        data:
+          title: "🧺 Washing Machine"
+          message: >-
+            Time to run an empty 90°C programme to clean the drum.
+          data:
+            actions:
+              - action: "WASHING_MACHINE_DRUM_CLEANED"
+                title: "Done"
+                icon: "sfsymbols:checkmark.circle"
+                destructive: true
+            group: "routine-washing-machine-drum"
+            tag: "routine-washing-machine-drum"
+            url: homeassistant://navigate/lovelace-main/main
+
+  # quarterly for heavy use, nags daily until done
+  - alias: "Clean Washing Machine Drain Filter"
+    id: "6453b802-9b70-448f-9cbe-f9f49498b9c3"
+    initial_state: true
+    trigger:
+      - platform: time
+        at: "12:00:00"
+    condition:
+      - condition: template
+        value_template: >-
+          {% set cleaned = states('input_datetime.washing_machine_drain_filter_cleaned') | as_datetime | as_local %}
+          {{ now() - cleaned > timedelta(days=91) }}
+      - condition: state
+        entity_id: binary_sensor.anybody_home
+        state: "on"
+    actions:
+      - service: notify.family
+        data:
+          title: "🧺 Washing Machine"
+          message: >-
+            Time to clean the drain pump filter behind the flap at the bottom front. Keep towels and a shallow tray ready for the water.
+          data:
+            actions:
+              - action: "WASHING_MACHINE_DRAIN_FILTER_CLEANED"
+                title: "Done"
+                icon: "sfsymbols:checkmark.circle"
+                destructive: true
+            group: "routine-washing-machine-drain-filter"
+            tag: "routine-washing-machine-drain-filter"
+            url: homeassistant://navigate/lovelace-main/main
+
+  # nags daily until cleaned; the done notifications nag after every further cycle
   - alias: "Check And Clean Tumble Dryer Heat Exchanger"
     id: "9af047f9-49fa-4518-a7bb-350b437ca9f3"
     initial_state: true
     trigger:
-      - platform: state
-        entity_id: counter.tumble_dryer_cycles
       - platform: time
         at: "12:00:00"
     condition:
@@ -3395,8 +3505,6 @@ automation:
     id: "08f2c851-8775-498e-b2ff-ee570c00cf9d"
     initial_state: true
     trigger:
-      - platform: state
-        entity_id: counter.dishwasher_cycles
       - platform: time
         at: "19:00:00"
     condition:

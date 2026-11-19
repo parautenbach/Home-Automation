@@ -753,8 +753,11 @@ cards:
             name: Last boot
           - entity: sensor.home_assistant_uptime
             name: HA last started
-          - entity: input_datetime.home_assistant_shut_down_time
+          - type: simple-entity
+            entity: input_datetime.home_assistant_shut_down_time
             name: HA last shut down
+            tap_action:
+              action: none
       - type: history-graph
         hours_to_show: 24
         entities:

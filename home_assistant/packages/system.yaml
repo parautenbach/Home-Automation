@@ -45,10 +45,10 @@ input_boolean:
 
 input_datetime:
   home_assistant_shut_down_time:
-    name: Home Assistant Shut Down Time
+    name: Home Assistant Stop Time
     has_date: true
     has_time: true
-    icon: mdi:power-plug-off
+    icon: mdi:stop-circle-outline
 
 sensor:
   - platform: time_date

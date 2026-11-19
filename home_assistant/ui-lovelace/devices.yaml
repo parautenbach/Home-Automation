@@ -708,6 +708,7 @@ cards:
           - entity: sensor.network_throughput_out_enp3s0
             name: Network throughput out
           - entity: sensor.last_backup
+            format: datetime
             uix:
               style:
                 hui-generic-entity-row:
@@ -726,6 +727,7 @@ cards:
                         color: {{ "var(--custom-color-red)" if not is_state('binary_sensor.no_recent_backup', 'off') }};
                       }
           - entity: sensor.last_db_backup
+            format: datetime
             uix:
               style:
                 hui-generic-entity-row:
@@ -751,13 +753,18 @@ cards:
             name: Battery status
           - entity: sensor.last_boot
             name: Last boot
-          - entity: sensor.home_assistant_uptime
-            name: HA last started
+            icon: mdi:power
+            format: datetime
           - type: simple-entity
             entity: input_datetime.home_assistant_shut_down_time
-            name: HA last shut down
+            name: HA last stopped
+            icon: mdi:stop-circle-outline
             tap_action:
               action: none
+          - entity: sensor.home_assistant_uptime
+            name: HA last started
+            icon: mdi:play-circle-outline
+            format: datetime
       - type: history-graph
         hours_to_show: 24
         entities:

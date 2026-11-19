@@ -2662,8 +2662,8 @@ automation:
             {% else %}
               {% set reason = trigger.id | replace("_", " ") | replace("temp", "temperature") | replace(" based", "-based")%}
             {% endif %}
-            The living room's AC is {{ mode }} ({{ reason }}). It's {{ inside_temp }} inside
-            ({{ inside_perception }}) and {{ outside_temp }} outside ({{ outside_perception }}).
+            The living room's AC is {{ mode }} ({{ reason }}). It's {{ inside_perception }} inside
+            ({{ inside_temp }}) and {{ outside_perception }} outside ({{ outside_temp }}).
             Please close all doors and windows.
           data:
             url: homeassistant://navigate/lovelace-main/environment

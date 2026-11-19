@@ -353,6 +353,9 @@ script:
           entity_id: "{{ camera_entity }}"
         data:
           filename: "{{ filename }}"
+        # fix for the issue (https://github.com/rroller/dahua/issues/290#event-31767543315) i reported on before
+        # https://github.com/rroller/dahua/pull/758
+        # ha's own 10 s snapshot timeout still raises; the pr doesn't cover it, but the copy still runs
         continue_on_error: true
       - service: shell_command.copy_last_snapshot_image
         data:

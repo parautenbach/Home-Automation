@@ -174,8 +174,12 @@ sensor:
     # reads short per sleep: sleep mode needs 10 min without motion before the bed check, so it
     # comes on ~10 min after she fell asleep, up to ~25 when that check and its recheck aren't
     # sure, or miss her, as the next one is only the 15 min backstop. accepted, it's consistent
-    start: "{{ today_at('17:00') - timedelta(days=1) }}"
-    end: "{{ today_at('17:00') }}"
+    # from the last 17:00, not today's: today_at rolls over at midnight
+    start: >-
+      {% set delta_days = 1 if now() < today_at('17:00') else 0 %}
+      {{ today_at('17:00') - timedelta(days=delta_days) }}
+    end: >-
+      {{ now() }}
   # the camera reports motion in 30-70 s pulses, so lying awake shows as many short bursts
   # rather than one long one
   - platform: history_stats

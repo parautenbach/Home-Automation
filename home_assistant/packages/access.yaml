@@ -292,12 +292,19 @@ automation:
           - condition: template
             value_template: "{{ snapshot_age > 2 or snapshot_age < 0 }}"
         then:
-          - service: script.take_snapshot
+          # workaround: ideally a blocking call, but continue_on_error only catches ha errors, so
+          # the camera's 400 would stop this automation and the ring notification with it.
+          - service: script.turn_on
+            target:
+              entity_id: script.take_snapshot
             data:
-              camera_entity: camera.doorbell
-              subdirectory: "doorbell"
-          - delay:
-              seconds: 1
+              variables:
+                camera_entity: camera.doorbell
+                subdirectory: "doorbell"
+          # the copy is the script's last step, so off means the file is in place
+          - wait_template: "{{ is_state('script.take_snapshot', 'off') }}"
+            timeout:
+              seconds: 3
       - service: shell_command.get_doorbell_snapshot_mtime
         response_variable: result_new
       - variables:

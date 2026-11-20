@@ -1,0 +1,62 @@
+# https://esphome.io/components/sensor/hydreon_rgxx.html
+# hydreon rg-15: optical, no moving parts. serial on j2 at 9600 baud
+
+substitutions:
+  device_name_upper: "Rain Gauge"
+  device_name_lower: "rain_gauge"
+
+esphome:
+  name: rain-gauge
+
+esp32:
+  board: nodemcu-32s
+  framework:
+    type: esp-idf
+
+<<: !include common.yaml
+
+# uart2, so the logger keeps uart0
+uart:
+  id: ${device_name_lower}_uart
+  rx_pin: 16
+  tx_pin: 17
+  baud_rate: 9600
+
+binary_sensor:
+  - platform: status
+    id: ${device_name_lower}_status
+    name: "${device_name_upper} Status"
+
+  - platform: hydreon_rgxx
+    too_cold:
+      name: "${device_name_upper} Too Cold"
+    lens_bad:
+      name: "${device_name_upper} Lens Bad"
+    em_sat:
+      name: "${device_name_upper} Emitter Saturated"
+
+sensor:
+  - platform: hydreon_rgxx
+    model: "RG_15"
+    resolution: high
+    update_interval: 60s
+    # since the last poll
+    acc:
+      name: "${device_name_upper} Accumulation"
+      id: ${device_name_lower}_accumulation
+    # since the current event started
+    event_acc:
+      name: "${device_name_upper} Event Accumulation"
+      id: ${device_name_lower}_event_accumulation
+    # since power-on, so it resets on reboot
+    total_acc:
+      name: "${device_name_upper} Total"
+      id: ${device_name_lower}_total
+    r_int:
+      name: "${device_name_upper} Rain Intensity"
+      id: ${device_name_lower}_rain_intensity
+
+switch:
+  - platform: restart
+    id: ${device_name_lower}_restart
+    name: "${device_name_upper} Restart"

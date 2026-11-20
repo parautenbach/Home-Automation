@@ -1693,11 +1693,9 @@ automation:
             tag: "routine-bedtime"
             url: homeassistant://navigate/lovelace-main/baby
 
-  # her lamp may be on when she falls asleep: dim it once she's had time to sleep deeply,
-  # then turn it off later unless we keep the night light. the dim fades over a minute, the
-  # off is a step. any motion starts the wait again, and nothing brightens it: if she
-  # turns it up, it stays until she's asleep again. both steps run on her lamp's own timer,
-  # so the dashboard shows the countdown. while she's awake a timer set by hand is left alone
+  # when she's asleep, we dim her lamp (over 1 min), then turn it off 30 min later, unless keep
+  # night light is on. both use her lamp's timer, so the dashboard shows the countdown. we never
+  # turn her lamp up: if she does, we leave it until she's asleep again.
   - alias: "Start Or Cancel Bedroom Bedlamp Sleep Timer"
     id: "5cbc04a8-9390-4cff-8209-91b553b693e1"
     initial_state: true
@@ -1711,46 +1709,71 @@ automation:
           - input_boolean.child_keep_night_light
         # state changes only, not brightness
         to: ~
-      # 10 min without motion. a template, not a for, so a restart doesn't lose it: last_changed
-      # restarts too, so it just comes 10 min after
+      # fires once there's been no motion for 10 min. a template instead of a for, so it still fires
+      # after a restart.
       - platform: template
         value_template: >-
           {{ is_state('binary_sensor.baby_monitor_motion_alarm', 'off') and
              now() - states.binary_sensor.baby_monitor_motion_alarm.last_changed >= timedelta(minutes=10) }}
+      # she's restless: the same triggers as "Update Sleep Mode From Bed Checks And Motion".
+      - platform: state
+        entity_id: binary_sensor.baby_monitor_motion_alarm
+        to: "on"
+        for:
+          minutes: 5
+        id: "sustained_movement"
+      - platform: numeric_state
+        entity_id: sensor.nursery_motion_bursts
+        above: 3
+        id: "frequent_movement"
     variables:
-      # still as in fell_asleep: sleep mode lags her waking, so a lull in her moving
-      # doesn't count
+      # we only start the timer when she's asleep and hasn't moved for 10 min. sleep mode on its own
+      # isn't proof she's asleep: at night it stays on even if she wakes up.
       asleep_and_still: >-
         {{ is_state('input_boolean.baby_sleep_mode', 'on') and
            is_state('binary_sensor.baby_monitor_motion_alarm', 'off') and
            now() - states.binary_sensor.baby_monitor_motion_alarm.last_changed >= timedelta(minutes=10) }}
-      # sleep mode only comes on after 10 min without motion, so the dim is 20 min in at first
-      # lit means it's not dim, but at a higher brightness. not while she may wake: that's
-      # her wake-up light, and she's still asleep under it
+      # we want to dim her lamp 20 min after she falls asleep, or any time after that, if it's
+      # brighter than a night light. not during her wake-up phase: then it's her wake-up light.
       dim_wanted: >-
         {{ asleep_and_still and is_state('binary_sensor.nursery_lit', 'on') and
            not is_state('sensor.child_sleep_phase', 'wake_up') }}
-      # 30 min after the dim, or after the night light was switched on
+      # we want to turn her lamp off once it's at night-light level, unless keep night light is on.
       off_wanted: >-
         {{ asleep_and_still and is_state('light.bedroom_bedlamp', 'on') and
            is_state('binary_sensor.nursery_lit', 'off') and
            is_state('input_boolean.child_keep_night_light', 'off') }}
-      running: "{{ not is_state('timer.bedroom_bedlamp_timer', 'idle') }}"
+      # she's restless: more than 3 bursts of motion in 10 min, or one lasting 5 min.
+      restless: >-
+        {{ states('sensor.nursery_motion_bursts') | int(0) > 3 or
+           (is_state('binary_sensor.baby_monitor_motion_alarm', 'on') and
+            now() - states.binary_sensor.baby_monitor_motion_alarm.last_changed >= timedelta(minutes=5)) }}
+      # she moved, but she's asleep and not restless: she's just stirring in her sleep, which she
+      # does every 5-9 min. that shouldn't cancel the timer.
+      motion_pulse_while_asleep: >-
+        {{ trigger.entity_id == 'binary_sensor.baby_monitor_motion_alarm' and
+           is_state('input_boolean.baby_sleep_mode', 'on') and not restless }}
+      # the timer is running, whether we started it or someone set it by hand.
+      timer_running: "{{ not is_state('timer.bedroom_bedlamp_timer', 'idle') }}"
     mode: queued
     action:
-      # restart when the lamp is dimmed or brightened, so the off step gets its full wait
+      # start the timer: 10 min to dim, 30 min to turn off. if it's already running, leave it,
+      # unless her lamp was just dimmed or turned up: then restart the timer, to 30 min before
+      # turning it off, or 10 min before dimming it again.
       - if: >-
           {{ (dim_wanted or off_wanted) and
-             (not running or trigger.entity_id == 'binary_sensor.nursery_lit') }}
+             (not timer_running or trigger.entity_id == 'binary_sensor.nursery_lit') }}
         then:
           - service: timer.start
             target:
               entity_id: timer.bedroom_bedlamp_timer
             data:
               duration: "{{ '00:10:00' if dim_wanted else '00:30:00' }}"
-      # once she's asleep the wait is ours, and waking ends it
+      # cancel the timer if it's no longer time to dim or turn off, and she isn't just stirring:
+      # she's restless, someone changed her lamp, or sleep mode turned off. if she's awake, we
+      # leave a timer set by hand alone.
       - if: >-
-          {{ not (dim_wanted or off_wanted) and running and
+          {{ not (dim_wanted or off_wanted or motion_pulse_while_asleep) and timer_running and
              (is_state('input_boolean.baby_sleep_mode', 'on') or
               trigger.entity_id == 'input_boolean.baby_sleep_mode') }}
         then:
@@ -1758,8 +1781,9 @@ automation:
             target:
               entity_id: timer.bedroom_bedlamp_timer
 
-  # lights.yaml leaves this timer to us, since it may dim rather than turn off: when we keep
-  # the night light, or when she's asleep and still under a lit lamp, whoever set it
+  # runs whenever her lamp's timer finishes, even if it was started from lights.yaml.
+  # "Switch Off Light When Timer Expires" in lights.yaml skips her lamp, so this one decides
+  # whether to dim it or turn it off.
   - alias: "Dim Or Turn Off Bedroom Bedlamp When Timer Finishes"
     id: "12ef5d60-ea74-4405-b9fa-0e4baab55567"
     initial_state: true
@@ -1768,15 +1792,23 @@ automation:
         event_type: timer.finished
         event_data:
           entity_id: timer.bedroom_bedlamp_timer
+    variables:
+      # she's restless (as in "Start Or Cancel Bedroom Bedlamp Sleep Timer"). if she's only stirring
+      # when the timer ends, we still dim.
+      restless: >-
+        {{ states('sensor.nursery_motion_bursts') | int(0) > 3 or
+           (is_state('binary_sensor.baby_monitor_motion_alarm', 'on') and
+            now() - states.binary_sensor.baby_monitor_motion_alarm.last_changed >= timedelta(minutes=5)) }}
     action:
+      # dim her lamp if keep night light is on, or if she's asleep, not restless and the lamp is
+      # bright. otherwise turn it off: it's already dimmed, or someone set the timer while she was awake.
       - if: >-
           {{ is_state('input_boolean.child_keep_night_light', 'on') or
-             (is_state('input_boolean.baby_sleep_mode', 'on') and
-              is_state('binary_sensor.baby_monitor_motion_alarm', 'off') and
+             (is_state('input_boolean.baby_sleep_mode', 'on') and not restless and
               is_state('binary_sensor.nursery_lit', 'on')) }}
         then:
-          # brightness only, so she keeps her colour. 1% is night_brightness_only_bedlamp's 3/255,
-          # so binary_sensor.nursery_lit goes off on the way down
+          # change only the brightness, so she keeps her colour. 1% matches night_brightness_only_bedlamp
+          # (3/255), so binary_sensor.nursery_lit turns off as it fades.
           - service: script.turn_on
             target:
               entity_id: script.fade_light

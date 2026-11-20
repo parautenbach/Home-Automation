@@ -43,3 +43,31 @@ async def test_a_lamp_lit_in_the_night_is_dimmed(hass, asleep_and_still):
     await lamp_brightens(hass, "sleep")
     assert hass.states.get(TIMER).state == "active"
     assert hass.states.get(TIMER).attributes["duration"] == "0:10:00"
+
+
+async def test_a_pulse_while_asleep_keeps_the_wait(hass, asleep_and_still):
+    hass.states.async_set("sensor.nursery_motion_bursts", "0")
+    await lamp_brightens(hass, "sleep")
+    hass.states.async_set("sensor.nursery_motion_bursts", "1")
+    hass.states.async_set("binary_sensor.baby_monitor_motion_alarm", "on")
+    await hass.async_block_till_done()
+    assert hass.states.get(TIMER).state == "active"
+
+
+async def test_frequent_movement_ends_the_wait(hass, asleep_and_still):
+    hass.states.async_set("sensor.nursery_motion_bursts", "3")
+    await lamp_brightens(hass, "sleep")
+    hass.states.async_set("binary_sensor.baby_monitor_motion_alarm", "on")
+    hass.states.async_set("sensor.nursery_motion_bursts", "4")
+    await hass.async_block_till_done()
+    assert hass.states.get(TIMER).state == "idle"
+
+
+async def test_sustained_movement_ends_the_wait(hass, settle, asleep_and_still):
+    hass.states.async_set("sensor.nursery_motion_bursts", "0")
+    await lamp_brightens(hass, "sleep")
+    hass.states.async_set("binary_sensor.baby_monitor_motion_alarm", "on")
+    await hass.async_block_till_done()
+    assert hass.states.get(TIMER).state == "active"
+    await settle(timedelta(minutes=5, seconds=1))
+    assert hass.states.get(TIMER).state == "idle"
